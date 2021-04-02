@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 public class ResourceContainerTest {
 
     /**
-     * this test verifies the correct increase of resource
+     * this test verifies the correct increase of resource.
      */
     @Test
     void correctIncrease(){
@@ -23,7 +23,7 @@ public class ResourceContainerTest {
     }
 
     /**
-     * this test verifies the correct decrease of resource
+     * this test verifies the correct decrease of resource.
      */
     @Test
     void correctDecrease(){
@@ -31,25 +31,22 @@ public class ResourceContainerTest {
         ResourceContainer r = new ResourceContainer(Resource.COIN, 3);
 
         assertEquals(3, r.getAmount());
-
         assertEquals(0, r.decreaseAmount(1));
+        /*
+         @return 0 because getAmount() > @param amount.
+         */
+
         assertEquals(2, r.getAmount());
-        /*
-         the ResourceContainer had amount == 3. After a decrease of 1, amount == 2 and the method @return 0 because
-         the amount was successfully decreased
-         */
-
         assertEquals(1, r.decreaseAmount(3));
-        assertEquals(0, r.getAmount());
         /*
-         after another decrease of 3, the ResourceContainer is now empty and the method @return 3 - 2 -> 1,
-         which is the amount of resource still not decremented
+         @return 3 - 2 -> 1 because getAmount() < @param amount.
          */
 
+        assertEquals(0, r.getAmount());
         assertEquals(4, r.decreaseAmount(4));
         assertEquals(0, r.getAmount());
         /*
-         from now on, the ResourceContainer is empty so every decreaseAmount() call @return always @param amount
+         @return 4 - 0 -> 4 because getAmount == 0
          */
     }
 }
