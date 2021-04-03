@@ -5,7 +5,7 @@ package it.polimi.ingsw.model;
  */
 public class ResourceContainer {
 
-    private Resource resource;
+    private final Resource resource;
     private int amount;
 
     /**
