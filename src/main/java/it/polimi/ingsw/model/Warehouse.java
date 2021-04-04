@@ -9,7 +9,7 @@ import it.polimi.ingsw.exceptions.ImpossibleSwitchDepotException;
  * Warehouse is player's warehouse. It has two attributes: a WarehouseDepot[3] warehouseDepots and an ArrayList</ExtraDepot>
  * which is initialized after player actives an ExtraDepotLeaderCard.
  */
-public class Warehouse {
+public class Warehouse{
 
     private final WarehouseDepot[] warehouseDepots;
     private ArrayList <ExtraDepot> extraDepots;
@@ -66,6 +66,7 @@ public class Warehouse {
                 return extraDepot.getAmount();
         return 0;
     }
+
 
     /**
      * @param resource stands for the type of resource to count in warehouseDepots.
@@ -262,7 +263,7 @@ public class Warehouse {
      * this method switch an ExtraDepot with an empty WarehouseDepot.
      * @param extraDepotPos stands for position of the ExtraDepot in extraDepots to switch.
      * @param warehouseDepotPos stands for position of the empty WarehouseDepot in warehouseDepots to switch.
-     * @throws  ImpossibleSwitchDepotException if the switch is not possible.
+     * @throws ImpossibleSwitchDepotException if the switch is not possible.
      */
     private void switchExtraDepotWithEmptyWarehouseDepot(int extraDepotPos, int warehouseDepotPos) throws ImpossibleSwitchDepotException{
         for (int i = 0; i < 3; i++){
@@ -290,7 +291,7 @@ public class Warehouse {
      * this method switch a WarehouseDepot with an ExtraDepot.
      * @param warehouseDepotPos stands for position of the WarehouseDepot in warehouseDepots to switch.
      * @param extraDepotPos stands for position of the ExtraDepot in extraDepots to switch.
-     * @throws  ImpossibleSwitchDepotException if thw switch is not possible.
+     * @throws ImpossibleSwitchDepotException if thw switch is not possible.
      */
     private void switchWarehouseDepotWithExtraDepot(int warehouseDepotPos, int extraDepotPos) throws ImpossibleSwitchDepotException{
         extraDepotPos -= 3;
@@ -323,7 +324,7 @@ public class Warehouse {
      * this method switch two Depot.
      * @param depot1 stands for position of the first Depot in Warehouse to switch.
      * @param depot2 stands for position of the second Depot in Warehouse to switch.
-     * @throws ImpossibleSwitchDepotException if the switch is not possible
+     * @throws ImpossibleSwitchDepotException if the switch is not possible.
      * if @param is 0 stands for the first WarehouseDepot, 1 for the second one, 2 for the third one,
      * 3 for the first ExtraDepot, 4 for the second ExtraDepot.
      */
@@ -338,6 +339,66 @@ public class Warehouse {
             switchWarehouseDepotWithExtraDepot(depot1, depot2);
         else
             switchWarehouseDepotWithExtraDepot(depot2, depot1);
+    }
+
+    /**
+     * @return a copy of Warehouse.
+     * create a new Warehouse and firstly copies this.resource of third WarehouseDepot, than of second, than of first,
+     * at the end of ExtraDepot, if exist.
+     */
+    public Warehouse copyThisWarehouse() throws ImpossibleSwitchDepotException{
+        Warehouse w = new Warehouse();
+        copySpecificWarehouseDepot(w, 2);
+        copySpecificWarehouseDepot(w, 1);
+        copySpecificWarehouseDepot(w, 0);
+        copyExtraDepots(w);
+        return w;
+    }
+
+    /**
+     * @param w is Warehouse which is copying this.Warehouse.
+     * @param depot stands for position in warehouseDepots.
+     * @throws ImpossibleSwitchDepotException
+     * this method evaluates which resource is contained in @param depot WarehouseDepot and increase @param w
+     */
+    private void copySpecificWarehouseDepot(Warehouse w, int depot) throws ImpossibleSwitchDepotException{
+        for(Resource resource: Resource.values()) {
+            if (this.getDepotPosition(resource) == depot) {
+                int amount = getNumOfResourceInWarehouseDepots(resource);
+                w.increaseResource(resource);
+                w.switchDepots(0, depot);
+                /*
+                 first resource is increased in first WarehouseDepot and switched to @param depot WarehouseDepot
+                 */
+                for (int i = 1; i < amount; i++) {
+                    w.increaseResource(resource);
+                    /*
+                     remaining resource are increased directly inserted in right WarehouseDepot
+                     */
+                }
+            }
+        }
+    }
+
+    /**
+     * @param w is Warehouse which is copying this.Warehouse.
+     * this method evaluates if exist resources in ExtraDepot and, in case, increase @param w with that resource
+     * by its amount in this.Warehouse.
+     */
+    private void copyExtraDepots(Warehouse w){
+        if(this.existExtraDepot()){
+            for(Resource resource: Resource.values()){
+                int amount = this.getNumOfResourceInExtraDepots(resource);
+                if(amount > 0) {
+                    w.addExtraDepot(resource);
+                    for (int i = 0; i < amount; i++)
+                        w.increaseResource(resource);
+                    /*
+                     create a new ExtraDepot and increase with right resource
+                     */
+                }
+            }
+        }
     }
 
     /**

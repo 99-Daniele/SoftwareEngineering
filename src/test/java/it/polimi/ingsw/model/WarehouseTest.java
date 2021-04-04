@@ -65,7 +65,6 @@ public class WarehouseTest {
         /*
          getNumOfResource(r4) @return 0 because there are already 3 different type of resource in the Warehouse
          */
-
     }
 
     /**
@@ -543,5 +542,105 @@ public class WarehouseTest {
         assertEquals(1, w.getNumOfResource(r2));
         assertEquals(2, w.getNumOfResource(r3));
         assertEquals(2, w.getNumOfResource(r4));
+    }
+
+    /**
+     * this test verifies the correct copying of Warehouse if not exist ExtraDepot
+     */
+    @Test
+    void correctWarehouseCopyNoExtraDepot() throws ImpossibleSwitchDepotException{
+
+        Warehouse w1 = new Warehouse();
+        Warehouse w2;
+
+        assertTrue(w1.increaseResource(r1));
+        assertTrue(w1.increaseResource(r2));
+        assertTrue(w1.increaseResource(r2));
+        assertTrue(w1.increaseResource(r3));
+        assertEquals(1, w1.getNumOfResource(r1));
+        assertEquals(2, w1.getNumOfResource(r2));
+        assertEquals(1, w1.getNumOfResource(r3));
+
+        w2 = w1.copyThisWarehouse();
+        assertEquals(1, w2.getNumOfResource(r1));
+        assertEquals(2, w2.getNumOfResource(r2));
+        assertEquals(1, w1.getNumOfResource(r3));
+
+        assertTrue(w1.increaseResource(r3));
+        assertEquals(2, w1.getNumOfResource(r3));
+        assertEquals(1, w2.getNumOfResource(r3));
+
+        assertEquals(0, w2.decreaseResource(r3, 1));
+        assertFalse(w1.increaseResource(r4));
+        assertTrue(w2.increaseResource(r4));
+        assertEquals(0, w1.getNumOfResource(r4));
+        assertEquals(1, w2.getNumOfResource(r4));
+
+    }
+
+    /**
+     * this test verifies the correct copying of Warehouse if exist ExtraDepot
+     */
+    @Test
+    void correctWarehouseCopyWithExtraDepot() throws ImpossibleSwitchDepotException{
+
+        Warehouse w1 = new Warehouse();
+        Warehouse w2;
+
+        assertTrue(w1.increaseResource(r1));
+        assertFalse(w1.increaseResource(r1));
+        w1.addExtraDepot(r1);
+        w1.addExtraDepot(r2);
+        assertTrue(w1.increaseResource(r1));
+        assertTrue(w1.increaseResource(r2));
+        assertTrue(w1.increaseResource(r2));
+        assertTrue(w1.increaseResource(r3));
+        assertTrue(w1.increaseResource(r4));
+        assertEquals(2, w1.getNumOfResource(r1));
+        assertEquals(2, w1.getNumOfResource(r2));
+        assertEquals(1, w1.getNumOfResource(r3));
+        assertEquals(1, w1.getNumOfResource(r4));
+
+        w2 = w1.copyThisWarehouse();
+        assertEquals(2, w2.getNumOfResource(r1));
+        assertEquals(2, w2.getNumOfResource(r2));
+        assertEquals(1, w2.getNumOfResource(r3));
+        assertEquals(1, w2.getNumOfResource(r4));
+
+        assertFalse(w1.increaseResource(r2));
+        assertFalse(w2.increaseResource(r2));
+        assertTrue(w2.increaseResource(r1));
+        assertEquals(2, w1.getNumOfResource(r1));
+        assertEquals(3, w2.getNumOfResource(r1));
+    }
+
+    /**
+     * this test calculates the sum of all resource in Warehouse
+     */
+    @Test
+    void calculateSumResources(){
+
+        Warehouse w = new Warehouse();
+
+        w.addExtraDepot(r1);
+        w.addExtraDepot(r2);
+        assertTrue(w.increaseResource(r1));
+        assertTrue(w.increaseResource(r1));
+        assertTrue(w.increaseResource(r3));
+        assertTrue(w.increaseResource(r1));
+        assertTrue(w.increaseResource(r1));
+        assertTrue(w.increaseResource(r2));
+        assertTrue(w.increaseResource(r4));
+        assertTrue(w.increaseResource(r4));
+
+        assertEquals(4, w.getNumOfResource(r1));
+        assertEquals(1, w.getNumOfResource(r2));
+        assertEquals(1, w.getNumOfResource(r3));
+        assertEquals(2, w.getNumOfResource(r4));
+
+        assertEquals(8, w.sumWarehouseResource());
+
+        assertTrue(w.increaseResource(r4));
+        assertEquals(9, w.sumWarehouseResource());
     }
 }
