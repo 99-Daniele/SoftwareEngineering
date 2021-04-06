@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import it.polimi.ingsw.exceptions.InsufficientResourceException;
 import org.junit.jupiter.api.Test;
 
 import it.polimi.ingsw.exceptions.ImpossibleSwitchDepotException;
@@ -291,6 +293,27 @@ public class WarehouseTest {
         /*
          @return 5 - 3 -> 2 because getNumOfResource(r4) < @param amount
          */
+    }
+
+    /**
+     * this test verifies the correct decrease of Warehouse by decreaseResource() method in Cost
+     */
+    @Test
+    void decreaseResourceByCost() throws InsufficientResourceException {
+
+        Strongbox s = new Strongbox();
+        Warehouse w = new Warehouse();
+        Cost c = new Cost();
+
+        c.addResource(r1, 1);
+        c.addResource(r2, 1);
+        w.increaseResource(r1);
+        w.increaseResource(r2);
+        w.increaseResource(r2);
+
+        c.decreaseResource(w, s, 1);
+        assertEquals(0, w.getNumOfResource(r1));
+        assertEquals(1, w.getNumOfResource(r2));
     }
 
     /**
@@ -642,5 +665,8 @@ public class WarehouseTest {
 
         assertTrue(w.increaseResource(r4));
         assertEquals(9, w.sumWarehouseResource());
+
+        assertEquals(0, w.decreaseResource(r1, 3));
+        assertEquals(6, w.sumWarehouseResource());
     }
 }
