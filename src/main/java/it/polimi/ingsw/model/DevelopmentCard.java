@@ -44,9 +44,15 @@ public class DevelopmentCard {
         return faithPointsGiven;
     }
 
-    public boolean discount(){
-        return true;
+    public boolean discount(Resource resource){
+        if(resourceCost.getNumOfResource(resource) > 0) {
+            resourceCost.discount(resource);
+            return true;
+        }
+        return false;
     }
 
-    public void recount(){}
+    public void recount(Resource resource){
+        resourceCost.recount(resource);
+    }
 }

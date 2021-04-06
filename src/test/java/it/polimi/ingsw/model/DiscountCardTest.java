@@ -6,10 +6,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import it.polimi.ingsw.exceptions.InsufficientCardsException;
 import it.polimi.ingsw.exceptions.InsufficientResourceException;
 
-public class AdditionalProductionPowerCardTest {
+public class DiscountCardTest {
 
     /**
-     * this test tries to activate AdditionalProductionPowerCard if player has not enough resources
+     * this test tries to activate DiscountCard if player has not enough resources
      */
     @Test
     void incorrectActivationCardInsufficientResources(){
@@ -23,7 +23,7 @@ public class AdditionalProductionPowerCardTest {
         s.increaseResourceType(r1, 2);
         LeaderRequirements l = new LeaderRequirements();
 
-        LeaderCard card = new AdditionalProductionPowerCard(r1, c, 2);
+        LeaderCard card = new DiscountCard(r1, c, 2);
 
         InsufficientResourceException thrown =
                 assertThrows(InsufficientResourceException.class, () -> card.activateCard(w, s, l));
@@ -33,7 +33,7 @@ public class AdditionalProductionPowerCardTest {
     }
 
     /**
-     * this test tries to activate AdditionalProductionPowerCard if player has not enough cards
+     * this test tries to activate DiscountCard if player has not enough cards
      */
     @Test
     void incorrectActivationCardInsufficientCards(){
@@ -50,7 +50,7 @@ public class AdditionalProductionPowerCardTest {
         Strongbox s = new Strongbox();
         LeaderRequirements l = new LeaderRequirements();
 
-        LeaderCard card = new AdditionalProductionPowerCard(r1, leaderRequirements, 2);
+        LeaderCard card = new DiscountCard(r1, leaderRequirements, 2);
 
         InsufficientCardsException thrown =
                 assertThrows(InsufficientCardsException.class, () -> card.activateCard(w, s, l));
@@ -60,7 +60,7 @@ public class AdditionalProductionPowerCardTest {
     }
 
     /**
-     * this test verifies the correct activation of AdditionalProductionPowerCard
+     * this test verifies the correct activation of DiscountCard
      */
     @Test
     void correctActivation() throws InsufficientResourceException, InsufficientCardsException{
@@ -75,21 +75,25 @@ public class AdditionalProductionPowerCardTest {
         s.increaseResourceType(r1, 3);
         LeaderRequirements l = new LeaderRequirements();
 
-        LeaderCard card = new AdditionalProductionPowerCard(r2, c, 2);
+        LeaderCard card = new DiscountCard(r2, c, 2);
 
         card.activateCard(w, s, l);
     }
 
-
-
     /**
-     * this test tries to use additionalProductionPower if player has not enough resources
+     * this test verify the correct discount
      */
     @Test
-    void incorrectAdditionalProductionPower() throws InsufficientResourceException, InsufficientCardsException{
+    void correctDiscount() throws InsufficientResourceException, InsufficientCardsException {
 
         Resource r1 = Resource.COIN;
-        Resource r2 = Resource.STONE;
+        Resource r2 = Resource.SHIELD;
+        Cost c1 = new Cost();
+        c1.addResource(r1, 2);
+        Cost c2 = new Cost();
+        Cost c3 = new Cost();
+        DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1);
+
         Cost c = new Cost();
         c.addResource(r1, 3);
 
@@ -98,25 +102,38 @@ public class AdditionalProductionPowerCardTest {
         s.increaseResourceType(r1, 3);
         LeaderRequirements l = new LeaderRequirements();
 
-        LeaderCard card = new AdditionalProductionPowerCard(r2, c, 2);
+        LeaderCard card1 = new DiscountCard(r1, c, 2);
+        LeaderCard card2 = new DiscountCard(r2, c, 2);
 
-        card.activateCard(w, s, l);
+        card1.activateCard(w, s, l);
+        card2.activateCard(w, s, l);
 
-        InsufficientResourceException thrown =
-                assertThrows(InsufficientResourceException.class, () -> card.additionalProductionPower(w, s, 1, r2));
-        String expectedMessage = "Non hai abbastanza risorse per effettuare questa operazione";
-        String actualMessage = thrown.getMessage();
-        assertTrue(actualMessage.contains(expectedMessage));
+        assertTrue(card1.discount(developmentCard));
+        assertFalse(card2.discount(developmentCard));
+        /*
+         developmentCard now costs 1 r1
+         */
+
+        assertTrue(card1.discount(developmentCard));
+        assertFalse(card1.discount(developmentCard));
+        /*
+         developmentCard noe costs 0 r1
+         */
     }
 
     /**
-     * this test verifies the correct operation of AdditionalProductionPower
+     * this test verify the correct recount
      */
     @Test
-    void correctAdditionalProductionPower() throws InsufficientResourceException, InsufficientCardsException {
+    void correctRecount() throws InsufficientResourceException, InsufficientCardsException {
 
         Resource r1 = Resource.COIN;
-        Resource r2 = Resource.STONE;
+        Cost c1 = new Cost();
+        c1.addResource(r1, 1);
+        Cost c2 = new Cost();
+        Cost c3 = new Cost();
+        DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1);
+
         Cost c = new Cost();
         c.addResource(r1, 3);
 
@@ -125,16 +142,24 @@ public class AdditionalProductionPowerCardTest {
         s.increaseResourceType(r1, 3);
         LeaderRequirements l = new LeaderRequirements();
 
-        LeaderCard card = new AdditionalProductionPowerCard(r1, c, 2);
-
-        assertEquals(0, card.additionalProductionPower(w, s, 2, r2));
-        assertEquals(3, s.getNumOfResource(r1));
-        assertEquals(0, s.getNumOfResource(r2));
+        LeaderCard card = new DiscountCard(r1, c, 2);
 
         card.activateCard(w, s, l);
 
-        assertEquals(1, card.additionalProductionPower(w, s, 2, r2));
-        assertEquals(2, s.getNumOfResource(r1));
-        assertEquals(1, s.getNumOfResource(r2));
+        assertTrue(card.discount(developmentCard));
+        assertFalse(card.discount(developmentCard));
+        /*
+         developmentCard now costs 0 r1
+         */
+
+        card.recount(developmentCard);
+        /*
+         developmentCard now costs 1 r1
+         */
+
+        assertTrue(card.discount(developmentCard));
+        /*
+         developmentCard now costs 0 r1
+         */
     }
 }
