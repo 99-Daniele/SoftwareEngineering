@@ -2,6 +2,10 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.exceptions.InsufficientResourceException;
 
+/**
+ * AdditionalProductionPowerCard is a type of LeaderCard with the effect to give player an additional production power
+ * which convert a specific resource in a resource chosen by player and 1 faith point
+ */
 public class AdditionalProductionPowerCard extends LeaderCard{
 
     public AdditionalProductionPowerCard(Resource resource, Cost resourceCost, int victoryPoints) {
@@ -22,7 +26,7 @@ public class AdditionalProductionPowerCard extends LeaderCard{
      */
     @Override
     public int additionalProductionPower(Warehouse w, Strongbox s, int choice, Resource resource) throws InsufficientResourceException{
-        if(isActive()) {
+        if(this.isActive()) {
             if (choice == 1) {
                 if (w.decreaseResource(this.getResource(), 1) == 1) {
                     if (s.decreaseResourceType(this.getResource(), 1) == 1)

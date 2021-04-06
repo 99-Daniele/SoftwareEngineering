@@ -105,6 +105,11 @@ public class DiscountCardTest {
         LeaderCard card1 = new DiscountCard(r1, c, 2);
         LeaderCard card2 = new DiscountCard(r2, c, 2);
 
+        assertFalse(card1.discount(developmentCard));
+        /*
+         card is yet inactive
+         */
+
         card1.activateCard(w, s, l);
         card2.activateCard(w, s, l);
 

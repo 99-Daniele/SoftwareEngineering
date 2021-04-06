@@ -130,6 +130,9 @@ public class AdditionalProductionPowerCardTest {
         assertEquals(0, card.additionalProductionPower(w, s, 2, r2));
         assertEquals(3, s.getNumOfResource(r1));
         assertEquals(0, s.getNumOfResource(r2));
+        /*
+         card is yet inactive
+         */
 
         card.activateCard(w, s, l);
 

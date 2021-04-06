@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model;
 
+/**
+ * DiscountCard is a type of LeaderCard with the effect to discount by 1 specific resource the buying of a DevelopmentCard
+ */
 public class DiscountCard extends LeaderCard{
 
     public DiscountCard(Resource resource, Cost resourceCost, int victoryPoints) {
@@ -16,11 +19,14 @@ public class DiscountCard extends LeaderCard{
      */
     @Override
     public boolean discount(DevelopmentCard card) {
-        return card.discount(this.getResource());
+        if(this.isActive())
+            return card.discount(this.getResource());
+        return false;
     }
 
     /**
-     * @param card is DevelopmentCard to be increased by 1
+     * @param card is DevelopmentCard to be increased by 1.
+     * this method can only be called after a discount() call
      */
     @Override
     public void recount(DevelopmentCard card) {
