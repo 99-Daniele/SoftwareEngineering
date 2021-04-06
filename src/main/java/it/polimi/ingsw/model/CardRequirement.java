@@ -11,10 +11,9 @@ public class CardRequirement {
     private int maxLevel;
 
     /**
-     *
-     * @param color identifies the color of the Cards
-     * @param numOfCards identifies the number of cards.
-     * @param maxLevel identifies the max level of cards.
+     * @param color identifies the color of cards.
+     * @param numOfCards identifies the required number of cards.
+     * @param maxLevel identifies the required max level of cards.
      */
     public CardRequirement(Color color, int numOfCards, int maxLevel) {
         this.color = color;
@@ -23,14 +22,12 @@ public class CardRequirement {
     }
 
     /**
-     *
-     * @param color identifies the color of the Cards
-     * @param maxLevel identifies the max level of cards.
+     * @param card is a player's DevelopmentCard
      */
-    public CardRequirement(Color color, int maxLevel) {
-        this.color = color;
+    public CardRequirement(DevelopmentCard card) {
+        this.color = card.getColor();
         this.numOfCards = 1;
-        this.maxLevel = maxLevel;
+        this.maxLevel = card.getLevel();
     }
 
     /**
@@ -58,7 +55,8 @@ public class CardRequirement {
      * @param maxLevel identifies the max level of the card.
      */
     public void setMaxLevel(int maxLevel) {
-        this.maxLevel = maxLevel;
+        if(maxLevel > this.maxLevel)
+            this.maxLevel = maxLevel;
     }
 
     /**
