@@ -1,9 +1,12 @@
 package it.polimi.ingsw.model;
 
-
+/**
+ * Market is the unique instance of market in Game
+ */
 public class Market {
-    private static final int row=3;
-    private static final int column=4;
+
+    private static final int row = 3;
+    private static final int column = 4;
     private Marble[][] marketTray;
     private Marble externalMarble;
 
@@ -73,21 +76,21 @@ public class Market {
      * this private method set the marble that is situated in the side slide.
      * @param numOfMarbles contains the amount of marble for each color.
      */
-        private void externalMarbleSet(int[] numOfMarbles)
-        {
-            if(numOfMarbles[0]>0)
-                externalMarble= new RedMarble();
-            if(numOfMarbles[5]>0)
-                externalMarble=new WhiteMarble();
-            if(numOfMarbles[2]>0)
-                externalMarble=new ResourceMarble(Resource.SHIELD);
-            if(numOfMarbles[1]>0)
-                externalMarble=new ResourceMarble(Resource.COIN);
-            if(numOfMarbles[3]>0)
-                externalMarble=new ResourceMarble(Resource.STONE);
-            if(numOfMarbles[4]>0)
-                externalMarble=new ResourceMarble(Resource.SERVANT);
-        }
+    private void externalMarbleSet(int[] numOfMarbles)
+    {
+        if(numOfMarbles[0]>0)
+            externalMarble= new RedMarble();
+        if(numOfMarbles[5]>0)
+            externalMarble=new WhiteMarble();
+        if(numOfMarbles[2]>0)
+            externalMarble=new ResourceMarble(Resource.SHIELD);
+        if(numOfMarbles[1]>0)
+            externalMarble=new ResourceMarble(Resource.COIN);
+        if(numOfMarbles[3]>0)
+            externalMarble=new ResourceMarble(Resource.STONE);
+        if(numOfMarbles[4]>0)
+            externalMarble=new ResourceMarble(Resource.SERVANT);
+    }
 
     /**
      * this method allows the caller to get all the marbles inside a selected column.
@@ -95,8 +98,7 @@ public class Market {
      * @return a vector of Marble.
      * @throws ArrayIndexOutOfBoundsException activated when the selectedColumn doesn't exist in the market.
      */
-    public Marble[] getColumnMarbles(int selectedColumn) throws ArrayIndexOutOfBoundsException
-    {
+    public Marble[] getColumnMarbles(int selectedColumn) throws ArrayIndexOutOfBoundsException {
         try{
             Marble[] marketCopy= new Marble[row];
             for(int i=0; i<row; i++)
@@ -115,8 +117,7 @@ public class Market {
      * @return a vector of Marbles.
      * @throws ArrayIndexOutOfBoundsException activated when the selectedRow doesn't exist in the market.
      */
-    public Marble[] getRowMarbles(int selectedRow) throws ArrayIndexOutOfBoundsException
-    {
+    public Marble[] getRowMarbles(int selectedRow) throws ArrayIndexOutOfBoundsException {
         try {
             Marble[] marketCopy= new Marble[column];
             for (int i = 0; i < column; i++)
@@ -136,8 +137,7 @@ public class Market {
      * @param selectedColumn number of column that will be slided
      * @throws ArrayIndexOutOfBoundsException activated when the selectedColumn doesn't exist in the market.
      */
-    public void slideColumn(int selectedColumn) throws ArrayIndexOutOfBoundsException
-    {
+    public void slideColumn(int selectedColumn) throws ArrayIndexOutOfBoundsException {
             try{
                 Marble marble;
                 marble=this.externalMarble;
@@ -160,8 +160,7 @@ public class Market {
      * @param selectedRow number of the row that will be slided
      * @throws ArrayIndexOutOfBoundsException activated when the selectedRow doesn't exist in the market.
      */
-    public void slideRow(int selectedRow) throws ArrayIndexOutOfBoundsException
-    {
+    public void slideRow(int selectedRow) throws ArrayIndexOutOfBoundsException {
             try {
                 Marble marble;
                 marble = this.externalMarble;

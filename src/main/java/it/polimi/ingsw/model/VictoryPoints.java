@@ -6,12 +6,6 @@ public class VictoryPoints {
     private int victoryPointsByFaithTrack;
     private int victoryPointsByCards;
 
-    public VictoryPoints() {
-        victoryPointsByFaithTrack = 0;
-        victoryPointsByVaticanReport = 0;
-        victoryPointsByCards = 0;
-    }
-
     public void increaseVictoryPointsByVaticanReport(int victoryPointsByVaticanReport){
         this.victoryPointsByVaticanReport += victoryPointsByVaticanReport;
     }
