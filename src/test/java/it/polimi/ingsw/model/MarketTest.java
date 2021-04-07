@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 import static org.junit.jupiter.api.Assertions.*;
 
 
+import it.polimi.ingsw.exceptions.WrongParametersException;
 import org.junit.jupiter.api.Test;
 
 
@@ -37,6 +38,24 @@ public class MarketTest {
     }
 
     /**
+     * this test tries to slide a not existing row in Market
+     */
+    @Test
+    void WrongParametersSlide(){
+
+        Market market = new Market();
+        assertNotNull(market);
+
+        WrongParametersException thrown =
+                assertThrows(WrongParametersException.class, () -> market.slideRow2(0));
+
+        String expectedMessage = "Questi parametri non sono validi";
+        String actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+
+    }
+
+    /**
      * checking if a row remain unchanged after a different row has been slided.
      * checking if a row change after being slided.
      * @throws ArrayIndexOutOfBoundsException activated when the selectedColumn or selectedRow doesn't exist in the market.
@@ -56,6 +75,33 @@ public class MarketTest {
 
         //checking if a row change after being slided.
         market.slideRow(2);
+        change = market.getRowMarbles(2);
+        for (int i = 0; i < column; i++) {
+            if (marble[i] != change[i])
+                assertFalse(false);
+        }
+    }
+
+    /**
+     * checking if a row remain unchanged after a different row has been slided.
+     * checking if a row change after being slided.
+     * @throws WrongParametersException activated when the selectedColumn or selectedRow doesn't exist in the market.
+     */
+    @Test
+    public void slideRowMarketTest2() throws WrongParametersException {
+        Market market = new Market();
+        assertNotNull(market);
+
+        //checking if a row remain unchanged after a different row has been slided.
+        Marble[] marble = market.getRowMarbles(2);
+        market.slideRow2(3);
+        Marble[] change = market.getRowMarbles(2);
+        for (int i = 0; i < column; i++) {
+            assertEquals(marble[i], change[i]);
+        }
+
+        //checking if a row change after being slided.
+        market.slideRow2(2);
         change = market.getRowMarbles(2);
         for (int i = 0; i < column; i++) {
             if (marble[i] != change[i])

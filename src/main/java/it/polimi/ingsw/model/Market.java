@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.exceptions.WrongParametersException;
+
 /**
  * Market is the unique instance of market in Game
  */
@@ -173,5 +175,16 @@ public class Market {
             catch (ArrayIndexOutOfBoundsException e){
                 throw new ArrayIndexOutOfBoundsException(e.getMessage());
             }
+    }
+
+    public void slideRow2(int selectedRow) throws WrongParametersException {
+        if(selectedRow < 1 || selectedRow > 3)
+            throw new WrongParametersException();
+        Marble marble = this.externalMarble;
+        this.externalMarble = marketTray[selectedRow-1][0];
+        for (int i = 0; i <column-1; i++) {
+            this.marketTray[selectedRow-1][i] = this.marketTray[selectedRow-1][i+1];
         }
+        marketTray[selectedRow-1][column-1] = marble;
+    }
 }
