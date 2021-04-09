@@ -29,7 +29,7 @@ public class Market {
     {
         // this array indicate the amount of marble for each color when the market is still empty.
         int[] numOfMarbles={1,2,2,2,2,4};
-        boolean enough = false;
+        boolean enough;
         // this attribute indicate the number of the marble(0 = RED, 1=YELLOW, 2=BLUE, 3=GREY, 4=PURPLE, 5=WHITE).
         int random;
         marketTray = new Marble[row][column];
@@ -100,17 +100,15 @@ public class Market {
      * @return a vector of Marble.
      * @throws ArrayIndexOutOfBoundsException activated when the selectedColumn doesn't exist in the market.
      */
-    public Marble[] getColumnMarbles(int selectedColumn) throws ArrayIndexOutOfBoundsException {
-        try{
-            Marble[] marketCopy= new Marble[row];
-            for(int i=0; i<row; i++)
-            {
-                marketCopy[i]=marketTray[i][selectedColumn-1];
-            }
-            return marketCopy;
-        }catch (ArrayIndexOutOfBoundsException e){
-            throw new ArrayIndexOutOfBoundsException(e.getMessage());
+    public Marble[] getColumnMarbles(int selectedColumn) throws WrongParametersException {
+        if (selectedColumn<1 || selectedColumn>4)
+        throw new WrongParametersException();
+        Marble[] marketCopy= new Marble[row];
+        for(int i=0; i<row; i++)
+        {
+            marketCopy[i]=marketTray[i][selectedColumn-1];
         }
+        return marketCopy;
     }
 
     /**
@@ -119,16 +117,13 @@ public class Market {
      * @return a vector of Marbles.
      * @throws ArrayIndexOutOfBoundsException activated when the selectedRow doesn't exist in the market.
      */
-    public Marble[] getRowMarbles(int selectedRow) throws ArrayIndexOutOfBoundsException {
-        try {
-            Marble[] marketCopy= new Marble[column];
-            for (int i = 0; i < column; i++)
-                marketCopy[i] = marketTray[selectedRow - 1][i];
-            return marketCopy;
-        }catch (ArrayIndexOutOfBoundsException e)
-        {
-            throw new ArrayIndexOutOfBoundsException(e.getMessage());
-        }
+    public Marble[] getRowMarbles(int selectedRow) throws WrongParametersException {
+        if (selectedRow<1 || selectedRow>3)
+        throw new WrongParametersException();
+        Marble[] marketCopy= new Marble[column];
+        for (int i = 0; i < column; i++)
+            marketCopy[i] = marketTray[selectedRow - 1][i];
+        return marketCopy;
     }
 
 
@@ -139,20 +134,17 @@ public class Market {
      * @param selectedColumn number of column that will be slided
      * @throws ArrayIndexOutOfBoundsException activated when the selectedColumn doesn't exist in the market.
      */
-    public void slideColumn(int selectedColumn) throws ArrayIndexOutOfBoundsException {
-            try{
-                Marble marble;
-                marble=this.externalMarble;
-                this.externalMarble= marketTray[row-1][selectedColumn-1];
-                for(int i=row-1; i>0; i--)
-                {
-                    this.marketTray[i][selectedColumn-1]=this.marketTray[i-1][selectedColumn-1];
-                }
-                marketTray[0][selectedColumn-1]=marble;
-            }catch (ArrayIndexOutOfBoundsException e)
-            {
-                throw new ArrayIndexOutOfBoundsException(e.getMessage());
-            }
+    public void slideColumn(int selectedColumn) throws WrongParametersException {
+        if (selectedColumn<1 || selectedColumn>4)
+            throw new WrongParametersException();
+        Marble marble;
+        marble=this.externalMarble;
+        this.externalMarble= marketTray[row-1][selectedColumn-1];
+        for(int i=row-1; i>0; i--)
+        {
+            this.marketTray[i][selectedColumn-1]=this.marketTray[i-1][selectedColumn-1];
+        }
+        marketTray[0][selectedColumn-1]=marble;
     }
 
     /**
@@ -162,19 +154,16 @@ public class Market {
      * @param selectedRow number of the row that will be slided
      * @throws ArrayIndexOutOfBoundsException activated when the selectedRow doesn't exist in the market.
      */
-    public void slideRow(int selectedRow) throws ArrayIndexOutOfBoundsException {
-            try {
-                Marble marble;
-                marble = this.externalMarble;
-                this.externalMarble = marketTray[selectedRow-1][0];
-                for (int i = 0; i <column-1; i++) {
-                    this.marketTray[selectedRow-1][i] = this.marketTray[selectedRow-1][i+1];
-                }
-                marketTray[selectedRow-1][column-1] = marble;
-            }
-            catch (ArrayIndexOutOfBoundsException e){
-                throw new ArrayIndexOutOfBoundsException(e.getMessage());
-            }
+    public void slideRow(int selectedRow) throws WrongParametersException {
+        if(selectedRow < 1 || selectedRow > 3)
+            throw new WrongParametersException();
+        Marble marble;
+        marble = this.externalMarble;
+        this.externalMarble = marketTray[selectedRow-1][0];
+        for (int i = 0; i <column-1; i++) {
+            this.marketTray[selectedRow-1][i] = this.marketTray[selectedRow-1][i+1];
+        }
+        marketTray[selectedRow-1][column-1] = marble;
     }
 
     public void slideRow2(int selectedRow) throws WrongParametersException {

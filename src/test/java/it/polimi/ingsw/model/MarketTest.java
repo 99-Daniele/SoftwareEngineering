@@ -17,7 +17,7 @@ public class MarketTest {
      * @throws ArrayIndexOutOfBoundsException activated when the selectedColumn or selectedRow doesn't exist in the market.
      */
     @Test
-    void slideColumnMarketTest() throws ArrayIndexOutOfBoundsException {
+    void slideColumnMarketTest() throws WrongParametersException {
         Market market = new Market();
         assertNotNull(market);
 
@@ -47,7 +47,7 @@ public class MarketTest {
         assertNotNull(market);
 
         WrongParametersException thrown =
-                assertThrows(WrongParametersException.class, () -> market.slideRow2(0));
+                assertThrows(WrongParametersException.class, () -> market.slideRow(0));
 
         String expectedMessage = "Questi parametri non sono validi";
         String actualMessage = thrown.getMessage();
@@ -61,7 +61,7 @@ public class MarketTest {
      * @throws ArrayIndexOutOfBoundsException activated when the selectedColumn or selectedRow doesn't exist in the market.
      */
     @Test
-    public void slideRowMarketTest() throws ArrayIndexOutOfBoundsException {
+    public void slideRowMarketTest() throws WrongParametersException {
         Market market = new Market();
         assertNotNull(market);
 
@@ -94,14 +94,14 @@ public class MarketTest {
 
         //checking if a row remain unchanged after a different row has been slided.
         Marble[] marble = market.getRowMarbles(2);
-        market.slideRow2(3);
+        market.slideRow(3);
         Marble[] change = market.getRowMarbles(2);
         for (int i = 0; i < column; i++) {
             assertEquals(marble[i], change[i]);
         }
 
         //checking if a row change after being slided.
-        market.slideRow2(2);
+        market.slideRow(2);
         change = market.getRowMarbles(2);
         for (int i = 0; i < column; i++) {
             if (marble[i] != change[i])
@@ -114,7 +114,7 @@ public class MarketTest {
      * @throws ArrayIndexOutOfBoundsException activated when the selectedColumn or selectedRow doesn't exist in the market.
      */
     @Test
-    void marketCreationTest() throws ArrayIndexOutOfBoundsException {
+    void marketCreationTest() throws WrongParametersException {
         Market market = new Market();
         Marble[] selectedRow = new Marble[column];
         int red = 0;
@@ -160,7 +160,7 @@ public class MarketTest {
      * @throws ArrayIndexOutOfBoundsException activated when the selectedColumn or selectedRow doesn't exist in the market.
      */
     @Test
-    void wrongIndexSelectedTest() throws ArrayIndexOutOfBoundsException{
+    void wrongIndexSelectedTest() throws WrongParametersException {
         Market market=new Market();
         assertNotNull(market);
 
@@ -182,19 +182,19 @@ public class MarketTest {
         }
 
         //trying to select out of bound index
-        ArrayIndexOutOfBoundsException thrown =
-                assertThrows(ArrayIndexOutOfBoundsException.class, () -> market.slideColumn(5));
-        assertTrue(thrown.getMessage().contains("Index 4 out of bounds for length 4"));
+        WrongParametersException thrown =
+                assertThrows(WrongParametersException.class, () -> market.slideColumn(5));
+        assertTrue(thrown.getMessage().contains("Questi parametri non sono validi"));
 
-        ArrayIndexOutOfBoundsException thrown1 =
-                assertThrows(ArrayIndexOutOfBoundsException.class, () -> market.getRowMarbles(0));
-        String expectedMessage1 = "Index -1 out of bounds for length 3";
+        WrongParametersException thrown1 =
+                assertThrows(WrongParametersException.class, () -> market.getRowMarbles(0));
+        String expectedMessage1 = "Questi parametri non sono validi";
         String actualMessage1 = thrown1.getMessage();
         assertTrue(actualMessage1.contains(expectedMessage1));
 
-        ArrayIndexOutOfBoundsException thrown2 =
-                assertThrows(ArrayIndexOutOfBoundsException.class, () -> market.slideRow(5));
-        String expectedMessage2 = "Index 4 out of bounds for length 3";
+        WrongParametersException thrown2 =
+                assertThrows(WrongParametersException.class, () -> market.slideRow(5));
+        String expectedMessage2 = "Questi parametri non sono validi";
         String actualMessage2 = thrown2.getMessage();
         assertTrue(actualMessage2.contains(expectedMessage2));
 
