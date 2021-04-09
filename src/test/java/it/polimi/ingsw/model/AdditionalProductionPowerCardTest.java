@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.exceptions.ActiveLeaderCardException;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,6 +31,7 @@ public class AdditionalProductionPowerCardTest {
         String expectedMessage = "Non hai abbastanza risorse per effettuare questa operazione";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
+        assertFalse(card.isActive());
     }
 
     /**
@@ -57,13 +59,42 @@ public class AdditionalProductionPowerCardTest {
         String expectedMessage = "Non hai abbastanza carte per effettuare questa operazione";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
+        assertFalse(card.isActive());
+    }
+
+    /**
+     * this test tries to activate an already active AdditionalProductionPowerCard
+     */
+    @Test
+    void incorrectActivationCardActive() throws InsufficientResourceException, InsufficientCardsException, ActiveLeaderCardException {
+
+        Resource r1 = Resource.COIN;
+        Resource r2 = Resource.STONE;
+        Cost c = new Cost();
+        c.addResource(r1, 3);
+
+        Warehouse w = new Warehouse();
+        Strongbox s = new Strongbox();
+        s.increaseResourceType(r1, 3);
+        LeaderRequirements l = new LeaderRequirements();
+
+        LeaderCard card = new AdditionalProductionPowerCard(r2, c, 2);
+        card.activateCard(w, s, l);
+        assertTrue(card.isActive());
+
+        ActiveLeaderCardException thrown =
+                assertThrows(ActiveLeaderCardException.class, () -> card.activateCard(w, s, l));
+
+        String expectedMessage = "Questa carta è stata già attivata in precedenza";
+        String actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
     }
 
     /**
      * this test verifies the correct activation of AdditionalProductionPowerCard
      */
     @Test
-    void correctActivation() throws InsufficientResourceException, InsufficientCardsException{
+    void correctActivation() throws InsufficientResourceException, InsufficientCardsException, ActiveLeaderCardException {
 
         Resource r1 = Resource.COIN;
         Resource r2 = Resource.STONE;
@@ -78,15 +109,14 @@ public class AdditionalProductionPowerCardTest {
         LeaderCard card = new AdditionalProductionPowerCard(r2, c, 2);
 
         card.activateCard(w, s, l);
+        assertTrue(card.isActive());
     }
 
-
-
     /**
-     * this test tries to use additionalProductionPower if player has not enough resources
+     * this test tries to use AdditionalProductionPower if player has not enough resources
      */
     @Test
-    void incorrectAdditionalProductionPower() throws InsufficientResourceException, InsufficientCardsException{
+    void incorrectAdditionalProductionPower() throws InsufficientResourceException, InsufficientCardsException, ActiveLeaderCardException {
 
         Resource r1 = Resource.COIN;
         Resource r2 = Resource.STONE;
@@ -113,7 +143,7 @@ public class AdditionalProductionPowerCardTest {
      * this test verifies the correct operation of AdditionalProductionPower
      */
     @Test
-    void correctAdditionalProductionPower() throws InsufficientResourceException, InsufficientCardsException {
+    void correctAdditionalProductionPower() throws InsufficientResourceException, InsufficientCardsException, ActiveLeaderCardException {
 
         Resource r1 = Resource.COIN;
         Resource r2 = Resource.STONE;

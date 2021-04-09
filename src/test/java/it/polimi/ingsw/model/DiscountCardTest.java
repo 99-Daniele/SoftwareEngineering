@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.exceptions.ActiveLeaderCardException;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,6 +31,7 @@ public class DiscountCardTest {
         String expectedMessage = "Non hai abbastanza risorse per effettuare questa operazione";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
+        assertFalse(card.isActive());
     }
 
     /**
@@ -57,13 +59,42 @@ public class DiscountCardTest {
         String expectedMessage = "Non hai abbastanza carte per effettuare questa operazione";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
+        assertFalse(card.isActive());
+    }
+
+    /**
+     * this test tries to activate an already active DiscountCard
+     */
+    @Test
+    void incorrectActivationCardActive() throws InsufficientResourceException, InsufficientCardsException, ActiveLeaderCardException {
+
+        Resource r1 = Resource.COIN;
+        Resource r2 = Resource.STONE;
+        Cost c = new Cost();
+        c.addResource(r1, 3);
+
+        Warehouse w = new Warehouse();
+        Strongbox s = new Strongbox();
+        s.increaseResourceType(r1, 3);
+        LeaderRequirements l = new LeaderRequirements();
+
+        LeaderCard card = new DiscountCard(r2, c, 2);
+        card.activateCard(w, s, l);
+        assertTrue(card.isActive());
+
+        ActiveLeaderCardException thrown =
+                assertThrows(ActiveLeaderCardException.class, () -> card.activateCard(w, s, l));
+
+        String expectedMessage = "Questa carta è stata già attivata in precedenza";
+        String actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
     }
 
     /**
      * this test verifies the correct activation of DiscountCard
      */
     @Test
-    void correctActivation() throws InsufficientResourceException, InsufficientCardsException{
+    void correctActivation() throws InsufficientResourceException, InsufficientCardsException, ActiveLeaderCardException {
 
         Resource r1 = Resource.COIN;
         Resource r2 = Resource.STONE;
@@ -78,13 +109,14 @@ public class DiscountCardTest {
         LeaderCard card = new DiscountCard(r2, c, 2);
 
         card.activateCard(w, s, l);
+        assertTrue(card.isActive());
     }
 
     /**
      * this test verify the correct discount
      */
     @Test
-    void correctDiscount() throws InsufficientResourceException, InsufficientCardsException {
+    void correctDiscount() throws InsufficientResourceException, InsufficientCardsException, ActiveLeaderCardException {
 
         Resource r1 = Resource.COIN;
         Resource r2 = Resource.SHIELD;
@@ -130,7 +162,7 @@ public class DiscountCardTest {
      * this test verify the correct recount
      */
     @Test
-    void correctRecount() throws InsufficientResourceException, InsufficientCardsException {
+    void correctRecount() throws InsufficientResourceException, InsufficientCardsException, ActiveLeaderCardException {
 
         Resource r1 = Resource.COIN;
         Cost c1 = new Cost();

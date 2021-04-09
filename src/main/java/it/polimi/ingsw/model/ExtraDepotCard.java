@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.exceptions.ActiveLeaderCardException;
 import it.polimi.ingsw.exceptions.InsufficientCardsException;
 import it.polimi.ingsw.exceptions.InsufficientResourceException;
 
@@ -27,7 +28,8 @@ public class ExtraDepotCard extends LeaderCard{
      * ExtraDepot in player's warehouse
      */
     @Override
-    public void activateCard(Warehouse w, Strongbox s, LeaderRequirements l) throws InsufficientResourceException, InsufficientCardsException {
+    public void activateCard(Warehouse w, Strongbox s, LeaderRequirements l)
+            throws InsufficientResourceException, InsufficientCardsException, ActiveLeaderCardException {
         super.activateCard(w, s, l);
         w.addExtraDepot(this.getResource());
     }

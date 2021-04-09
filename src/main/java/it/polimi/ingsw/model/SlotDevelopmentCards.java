@@ -7,16 +7,34 @@ import java.util.LinkedList;
 
 public class SlotDevelopmentCards {
 
-    private LinkedList<DevelopmentCard> developmentCards = new LinkedList<>();
+    private LinkedList<DevelopmentCard> developmentCards;
+    private boolean empty;
+
+    public SlotDevelopmentCards() {
+        developmentCards = new LinkedList<>();
+        empty = true;
+    }
+
+    public boolean isEmpty() {
+        return empty;
+    }
 
     /**
      * @param card is the DevelopmentCard to be added
-     * @throws WrongDevelopmentCardsSlotException if @param card has not required level
+     * @return false if @param card has not required level, otherwise @return true
      */
-    public void addDevelopmentCard(DevelopmentCard card)  throws WrongDevelopmentCardsSlotException {
-        if(getRequiredLevel() != card.getLevel())
+    public boolean haveRequiredLevel(DevelopmentCard card){
+        return (getRequiredLevel() == card.getLevel());
+    }
+
+    /**
+     * @param card is the DevelopmentCard to be added
+     */
+    public void addDevelopmentCard(DevelopmentCard card) throws WrongDevelopmentCardsSlotException {
+        if(!haveRequiredLevel(card))
             throw new WrongDevelopmentCardsSlotException();
         developmentCards.add(card);
+        empty = false;
     }
 
     /**
@@ -36,7 +54,7 @@ public class SlotDevelopmentCards {
      * this method @return the required level of a DevelopmentCard which can be added in SlotDevelopmentCards
      */
     private int getRequiredLevel(){
-        if(developmentCards.size() == 0)
+        if(isEmpty())
             return 1;
         return developmentCards.getLast().getLevel() +1;
     }
@@ -48,6 +66,10 @@ public class SlotDevelopmentCards {
     public void updateLeaderRequirements(LeaderRequirements leaderRequirements){
         for (DevelopmentCard card: developmentCards)
             leaderRequirements.addCardRequirement(card);
+    }
+
+    public int getNumOfCards(){
+        return developmentCards.size();
     }
 
     /**

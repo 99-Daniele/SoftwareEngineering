@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.exceptions.ActiveLeaderCardException;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,7 +13,7 @@ public class LeaderCardTest {
      * this test verifies the correct overriding of the 4 type of leaderCard
      */
     @Test
-    void correctOverriding() throws InsufficientResourceException, InsufficientCardsException {
+    void correctOverriding() throws InsufficientResourceException, InsufficientCardsException, ActiveLeaderCardException {
 
         Resource r1 = Resource.COIN;
         Resource r2 = Resource.SHIELD;

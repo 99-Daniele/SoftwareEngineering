@@ -16,7 +16,7 @@ public class VictoryPoints {
      * @param victoryPointsByVaticanReport is the victory points related to the vatican section
      */
     public void increaseVictoryPointsByVaticanReport(int victoryPointsByVaticanReport){
-        this.victoryPointsByVaticanReport+=victoryPointsByVaticanReport;
+        this.victoryPointsByVaticanReport += victoryPointsByVaticanReport;
     }
 
     /**
@@ -24,15 +24,15 @@ public class VictoryPoints {
      * @param victoryPointsByFaithTrack is the victory points related to the section in which it is located
      */
     public void setVictoryPointsByFaithTrack(int victoryPointsByFaithTrack){
-        this.victoryPointsByFaithTrack=victoryPointsByFaithTrack;
+        this.victoryPointsByFaithTrack = victoryPointsByFaithTrack;
     }
 
     /**
      * method that set the value of victory points related to the cards
      * @param victoryPointsByCards is the victory points related to all the cards that the player has
      */
-    public void setVictoryPointsByCards(int victoryPointsByCards){
-        this.victoryPointsByCards=victoryPointsByCards;
+    public void increaseVictoryPointsByCards(int victoryPointsByCards){
+        this.victoryPointsByCards += victoryPointsByCards;
     }
 
     /**
@@ -40,7 +40,7 @@ public class VictoryPoints {
      * @return the sum of all the victory points
      */
     public int sumVictoryPoints(){
-        return victoryPointsByCards+victoryPointsByVaticanReport+victoryPointsByFaithTrack;
+        return (victoryPointsByCards + victoryPointsByVaticanReport + victoryPointsByFaithTrack);
     }
 
     public int getVictoryPointsByVaticanReport() {

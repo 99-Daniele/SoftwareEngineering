@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.exceptions.ActiveLeaderCardException;
 import it.polimi.ingsw.exceptions.InsufficientCardsException;
 import it.polimi.ingsw.exceptions.InsufficientResourceException;
 
@@ -48,7 +49,9 @@ public abstract class LeaderCard {
     }
 
     public int getVictoryPoints() {
-        return victoryPoints;
+        if(isActive())
+            return victoryPoints;
+        return 0;
     }
 
     public boolean isActive() {
@@ -65,7 +68,9 @@ public abstract class LeaderCard {
      * without doing anything.
      */
     public void activateCard(Warehouse w, Strongbox s, LeaderRequirements l)
-            throws InsufficientResourceException, InsufficientCardsException{
+            throws InsufficientResourceException, InsufficientCardsException, ActiveLeaderCardException {
+        if(isActive())
+            throw new ActiveLeaderCardException();
         if(leaderRequirements == null) {
             if (resourceCost.enoughResource(w, s)) {
                 this.active = true;
