@@ -47,6 +47,14 @@ public class PlayerBoard extends SimplePlayerBoard{
     }
 
     /**
+     * @param resource stands for the type of resource to increase by 1 in Warehouse.
+     * @return false if @param resource has to be discarded
+     */
+    public boolean increaseWarehouse(Resource resource){
+        return warehouse.increaseResource(resource);
+    }
+
+    /**
      * @param depot1 stands for position of the first Depot in Warehouse to switch.
      * @param depot2 stands for position of the second Depot in Warehouse to switch.
      * @throws ImpossibleSwitchDepotException if the switch is not possible.
@@ -260,7 +268,7 @@ public class PlayerBoard extends SimplePlayerBoard{
      * @return Resource.WHITE if the LeaderCard is not a WhiteConversionCard, otherwise @return a Resource
      */
     public Resource whiteConversion(int chosenLeaderCard){
-        return leaderCards.get(chosenLeaderCard -1).whiteConversion();
+        return leaderCards.get(chosenLeaderCard).whiteConversion();
     }
 
     /**
