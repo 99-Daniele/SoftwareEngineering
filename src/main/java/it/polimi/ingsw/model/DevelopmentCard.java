@@ -61,113 +61,6 @@ public class DevelopmentCard {
     }
 
     /**
-     *this method control if there are enough resources in warehouse or strongbox. If yes, discard the resources.
-     * @param w indicate the resources in the warehouse.
-     * @param s indicates the resources in the strongbox.
-     * @param choice if 1, indicate that the resources in warehouse will be the first to be decreased. Else, strongbox is the first.
-     * @param productionActivate if true indicate that i want to active a card. Else, i want to buy a card.
-     * @throws InsufficientResourceException thrown when there aren't enough resources.
-     */
-    private void controlDiscardResource(Warehouse w, Strongbox s, int choice,boolean productionActivate) throws InsufficientResourceException {
-        Cost cost;
-        if (productionActivate) cost=productionPowerResourceRequired;
-        else cost=resourceCost;
-        if (controlFromOne(w, s, choice,cost))
-            for (Resource resource : Resource.values())
-                discardFromOne(w,s,choice,cost,resource);
-        else if (!controlFromTwo(w,s,choice,cost)) {
-            throw new InsufficientResourceException();
-        } else {
-            for (Resource resource : Resource.values())
-                discardFromTwo(w,s,choice,cost,resource);
-        }
-    }
-
-    /**
-     * this method allow to control if there are enough resources, in the strongbox and warehouse, to activate or buy a development card.
-     * @param w indicate the resources in the warehouse
-     * @param s indicates the resources in the strongbox
-     * @param choice if 1, indicate that the resources in warehouse will be the first to be decreased. Else, strongbox is the first.
-     * @param cost indicate the resources required to activate or buy a development card.
-     * @return true if there are enough resources in the warehouse and strongbox.
-     */
-    private boolean controlFromTwo(Warehouse w,Strongbox s,int choice,Cost cost) {
-        for (Resource resource:Resource.values())
-        switch (choice) {
-                case 1:
-                    if (s.getNumOfResource(resource) < cost.getNumOfResource(resource) - w.getNumOfResource(resource))
-                            return false;
-                case 2:
-                    if (w.getNumOfResource(resource) < cost.getNumOfResource(resource) - s.getNumOfResource(resource))
-                            return false;
-            }
-        return true;
-    }
-
-    /**
-     * this method to control if there are enough resources, in the strongbox or warehouse(depending on choice), to activate or buy a card.
-     * @param w indicate the resources in the warehouse.
-     * @param s indicates the resources in the strongbox.
-     * @param choice if 1, indicate that the resources in warehouse will be the first to be decreased. Else, strongbox is the first.
-     * @param cost indicate the resources required to activate or buy a development card.
-     * @return true if there are enough resources in the warehouse or strongbox, depending on the attribute choice.
-     *         Else false.
-     */
-    private boolean controlFromOne(Warehouse w,Strongbox s,int choice,Cost cost) {
-        for (Resource resource:Resource.values())
-        switch (choice) {
-            case 1:
-                if (w.getNumOfResource(resource) < cost.getNumOfResource(resource))
-                    return false;
-            case 2:
-                if (s.getNumOfResource(resource) < cost.getNumOfResource(resource))
-                    return false;
-        }
-        return true;
-    }
-
-    /**
-     * this method decrease the quantity of a specific resource from the warehouse or strongbox, depending on choice.
-     * @param w indicate the resources in the warehouse
-     * @param s indicates the resources in the strongbox
-     * @param choice if 1, indicate that the resources in warehouse will be the first to be decreased. Else, strongbox is the first.
-     * @param cost indicate the resources required to activate or buy a development card.
-     * @param resource indicate the specific resource.
-     */
-    private void discardFromOne(Warehouse w,Strongbox s,int choice,Cost cost,Resource resource) {
-        if (choice == 1)
-            w.decreaseResource(resource, cost.getNumOfResource(resource));
-        else s.decreaseResourceType(resource, cost.getNumOfResource(resource));
-    }
-
-    /**
-     * this method decrease the quantity of a specific resource from the warehouse and strongbox.
-     * @param w indicate the resources in the warehouse.
-     * @param s indicates the resources in the strongbox.
-     * @param choice if 1, indicate that the resources in warehouse will be the first to be decreased. Else, strongbox is the first.
-     * @param cost indicate the resources required to activate or buy a development card.
-     * @param resource indicate the specific resource.
-     */
-    private void discardFromTwo(Warehouse w,Strongbox s,int choice,Cost cost,Resource resource){
-        if (cost.getNumOfResource(resource)>0)
-            if (choice==1)
-            {
-                if (cost.getNumOfResource(resource) - w.getNumOfResource(resource)>0)
-                    s.decreaseResourceType(resource, cost.getNumOfResource(resource) - w.getNumOfResource(resource));
-                if( w.getNumOfResource(resource)>cost.getNumOfResource(resource))
-                    discardFromOne(w,s,choice,cost,resource);
-                else w.decreaseResource(resource,w.getNumOfResource(resource));
-            } else {
-                if (cost.getNumOfResource(resource) - s.getNumOfResource(resource)>0)
-                    w.decreaseResource(resource, cost.getNumOfResource(resource) - s.getNumOfResource(resource));
-                if( s.getNumOfResource(resource)>cost.getNumOfResource(resource))
-                    discardFromOne(w,s,choice,cost,resource);
-                else s.decreaseResourceType(resource, s.getNumOfResource(resource));
-            }
-    }
-
-
-    /**
      * this method active a development card.
      * @param w indicate the resources in the warehouse.
      * @param s indicates the resources in the strongbox.
@@ -182,6 +75,21 @@ public class DevelopmentCard {
             s.increaseResourceType(resource,productionPowerResourceGiven.getNumOfResource(resource));
         }
         return faithPointsGiven;
+    }
+
+    /**
+     *this method control if there are enough resources in warehouse or strongbox. If yes, discard the resources.
+     * @param w indicate the resources in the warehouse.
+     * @param s indicates the resources in the strongbox.
+     * @param choice if 1, indicate that the resources in warehouse will be the first to be decreased. Else, strongbox is the first.
+     * @param productionActivate if true indicate that i want to active a card. Else, i want to buy a card.
+     * @throws InsufficientResourceException thrown when there aren't enough resources.
+     */
+    private void controlDiscardResource(Warehouse w, Strongbox s, int choice,boolean productionActivate) throws InsufficientResourceException {
+        Cost cost;
+        if(productionActivate)cost=productionPowerResourceRequired;
+        else cost=resourceCost;
+        cost.decreaseResource(w,s,choice);
     }
 
     /**
