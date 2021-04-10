@@ -51,7 +51,12 @@ public class SlotDevelopmentCards {
         return developmentCards.getLast().activateProduction(w, s, choice);
     }
 
-
+    public void removeProductionPowerResource(Warehouse w, Strongbox s)
+            throws InsufficientResourceException{
+        if(isEmpty())
+            return;
+        developmentCards.getLast().controlDiscardResource(w, s, 1, true);
+    }
 
     /**
      * @return 1 if slotDevelopmentCards is empty, or @return level +1 of last added DevelopmentCard

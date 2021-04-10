@@ -8,7 +8,7 @@ public class SimplePlayerBoard{
         return faithPoints;
     }
 
-    public void increaseFaithPoints() {
-        faithPoints++;
+    public void increaseFaithPoints(int faithPoints) {
+        this.faithPoints += faithPoints;
     }
 }

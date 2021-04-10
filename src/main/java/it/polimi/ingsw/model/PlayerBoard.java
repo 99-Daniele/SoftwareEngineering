@@ -59,22 +59,66 @@ public class PlayerBoard extends SimplePlayerBoard{
      * @param card is DevelopmentCard to buy
      * @param slot is player's choice about in which slot @param card will be inserted
      * @param choice is player's choice about which between warehouse and strongbox has the priority to be decreased
-     * @throws WrongDevelopmentCardsSlotException if chosen slot can't contain @param card
      * @throws InsufficientResourceException if player has not enough resources to buy @param card
      */
     public void buyDevelopmentCard(DevelopmentCard card, int slot, int choice)
-            throws WrongDevelopmentCardsSlotException, InsufficientResourceException {
-        if(!(slotDevelopmentCards[slot -1].haveRequiredLevel(card)))
-            throw new WrongDevelopmentCardsSlotException();
+            throws InsufficientResourceException {
         card.buyCard(warehouse, strongbox, choice);
-        slotDevelopmentCards[slot -1].addDevelopmentCard(card);
+        slotDevelopmentCards[slot].addDevelopmentCard(card);
         victoryPoints.increaseVictoryPointsByCards(card.getVictoryPoints());
     }
 
     /**
-     * @return true if player has enough resource to activate all chosen production powers together
+     * @param card is DevelopmentCard to buy
+     * @return true if player has enough resources
      */
-    public boolean enoughTotalProductionPowerResource(){ return false;}
+    public boolean isBuyable(DevelopmentCard card){
+        return card.isBuyable(warehouse, strongbox);
+    }
+
+    /**
+     * @param card is DevelopmentCard to buy
+     * @param slots is an ArrayList <Integer>
+     * for each slot verifies if @param card has the required level and in case add to @param slots
+     */
+    public void findAvailableSlot(DevelopmentCard card, ArrayList<Integer> slots){
+        for(int i = 0; i < 3; i++){
+            if(slotDevelopmentCards[i].haveRequiredLevel(card))
+                slots.add(i);
+        }
+    }
+
+    /**
+     * @param choice summarize all player's choices about which production powers activate
+     * @throws InsufficientResourceException if player has not enough resources to activate all production powers together
+     * @throws ImpossibleSwitchDepotException by the signature of copyThisWarehouse()
+     * this method firstly creates copies of player's warehouse and strongbox, and then, for each chosen production power,
+     * decrease those copy's resources by the amount required. If no InsufficientResourceException is thrown during controls
+     * then player has enough resource to activate all chosen production power together.
+     * if player chose to activate a production power which not exist (empty SlotDevelopmentCards, or AdditionalPowerCard
+     * which not exist or is not active) the method do nothing without throwing any exception like player has never chose them.
+     */
+    public void enoughTotalProductionPowerResource(PowerProductionPlayerChoice choice)
+            throws InsufficientResourceException, ImpossibleSwitchDepotException {
+        Warehouse w;
+        w = warehouse.copyThisWarehouse();
+        Strongbox s;
+        s = strongbox.copyThisStrongbox();
+        if(choice.isFirstPower())
+            slotDevelopmentCards[0].removeProductionPowerResource(w, s);
+        if(choice.isSecondPower())
+            slotDevelopmentCards[1].removeProductionPowerResource(w, s);
+        if(choice.isThirdPower())
+            slotDevelopmentCards[2].removeProductionPowerResource(w, s);
+        if(choice.isBasicPower())
+            decreaseWarehouseResource(choice.getResources()[0], choice.getResources()[1], w, s);
+        if(choice.isFirstAdditionalPower())
+            if(leaderCards.size() > 0)
+                leaderCards.get(0).decreaseProductionPowerResources(w, s, 1, choice.getAdditionalResource1());
+        if(choice.isSecondPower())
+            if(leaderCards.size() > 1)
+                leaderCards.get(1).decreaseProductionPowerResources(w, s, 1, choice.getAdditionalResource2());
+    }
 
     /**
      * @param r1 is player's choice to a resource to be removed
@@ -87,9 +131,39 @@ public class PlayerBoard extends SimplePlayerBoard{
     }
 
     /**
-     * this method activate the production of all production powers chosen by player
+     * @param choice summarize all player's choices about which production powers activate
+     * @return true if player has increased his faith points
+     * @throws InsufficientResourceException by the signature of activateProductionCard()
+     * this method is called after enoughTotalResource so is certified that player has enough resources.
+     * for each chosen production power activate the production.
+     * if a chosen production power not exist the method do nothing.
+     * if player has increased his faith points, calls increaseFaithPoints() method.
      */
-    public void activateProduction(){}
+    public boolean activateProduction(PowerProductionPlayerChoice choice) throws InsufficientResourceException {
+        int faithPoints = 0;
+        if(choice.isFirstPower())
+            faithPoints += slotDevelopmentCards[0].activateProductionActiveCard(warehouse, strongbox, choice.getChoice());
+        if(choice.isSecondPower())
+            faithPoints += slotDevelopmentCards[1].activateProductionActiveCard(warehouse, strongbox, choice.getChoice());
+        if(choice.isThirdPower())
+            faithPoints += slotDevelopmentCards[2].activateProductionActiveCard(warehouse, strongbox, choice.getChoice());
+        if(choice.isBasicPower())
+            activateBasicProduction(choice.getResources()[0], choice.getResources()[1], choice.getResources()[2],
+                    warehouse, strongbox, choice.getChoice());
+        if(choice.isFirstAdditionalPower())
+            if(leaderCards.size() > 0)
+                faithPoints += leaderCards.get(0).additionalProductionPower(warehouse, strongbox,
+                        choice.getChoice(), choice.getAdditionalResource1());
+        if(choice.isSecondPower())
+            if(leaderCards.size() > 1)
+                faithPoints += leaderCards.get(1).additionalProductionPower(warehouse, strongbox,
+                        choice.getChoice(), choice.getAdditionalResource2());
+        if(faithPoints > 0) {
+            increaseFaithPoints(faithPoints);
+            return true;
+        }
+        return false;
+    }
 
     /**
      * @param r1 is player's choice to a resource to be removed
@@ -121,9 +195,9 @@ public class PlayerBoard extends SimplePlayerBoard{
      * this method decrease firstly @param w and then, if necessary, @param s
      */
     private void decreaseWarehouseResource(Resource r1, Resource r2, Warehouse w, Strongbox s){
-        if(w.decreaseResource(r1, 1) > 0)
+        if (w.decreaseResource(r1, 1) > 0)
             s.decreaseResourceType(r1, 1);
-        if(w.decreaseResource(r2, 1) > 0)
+        if (w.decreaseResource(r2, 1) > 0)
             s.decreaseResourceType(r2, 1);
     }
 

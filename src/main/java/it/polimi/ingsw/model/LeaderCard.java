@@ -88,6 +88,8 @@ public abstract class LeaderCard {
         }
     }
 
+    public void decreaseProductionPowerResources(Warehouse w, Strongbox s, int choice, Resource resource) throws InsufficientResourceException{}
+
     /**
      * @param w is player's warehouse
      * @param s is player's strongbox

@@ -49,6 +49,10 @@ public class DevelopmentCard {
         return victoryPoints;
     }
 
+    public boolean isBuyable(Warehouse w, Strongbox s){
+        return resourceCost.enoughResource(w, s);
+    }
+
     /**
      * this method allows to buy a new card from the deck.
      * @param w indicate the resources in the warehouse.
@@ -70,10 +74,7 @@ public class DevelopmentCard {
      */
     public int activateProduction(Warehouse w, Strongbox s, int choice) throws InsufficientResourceException{
         controlDiscardResource(w,s,choice,true);
-        for (Resource resource : Resource.values())
-        {
-            s.increaseResourceType(resource,productionPowerResourceGiven.getNumOfResource(resource));
-        }
+        productionPowerResourceGiven.increaseResource(s);
         return faithPointsGiven;
     }
 
@@ -85,7 +86,8 @@ public class DevelopmentCard {
      * @param productionActivate if true indicate that i want to active a card. Else, i want to buy a card.
      * @throws InsufficientResourceException thrown when there aren't enough resources.
      */
-    private void controlDiscardResource(Warehouse w, Strongbox s, int choice,boolean productionActivate) throws InsufficientResourceException {
+    public void controlDiscardResource(Warehouse w, Strongbox s, int choice,boolean productionActivate)
+            throws InsufficientResourceException {
         Cost cost;
         if(productionActivate)cost=productionPowerResourceRequired;
         else cost=resourceCost;

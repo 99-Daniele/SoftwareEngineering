@@ -13,6 +13,7 @@ public class PowerProductionPlayerChoice {
     private Resource additionalResource1;
     private boolean secondAdditionalPower;
     private Resource additionalResource2;
+    private int choice;
 
     public boolean isFirstPower() {
         return firstPower;
@@ -81,5 +82,13 @@ public class PowerProductionPlayerChoice {
     public void setSecondAdditionalPower(Resource resource){
         secondAdditionalPower = true;
         additionalResource2 = resource;
+    }
+
+    public int getChoice() {
+        return choice;
+    }
+
+    public void setChoice(int choice) {
+        this.choice = choice;
     }
 }

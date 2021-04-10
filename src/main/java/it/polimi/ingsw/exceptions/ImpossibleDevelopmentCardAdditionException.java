@@ -1,9 +1,7 @@
 package it.polimi.ingsw.exceptions;
 
 /**
- * this exceptions is thrown when try to insert DevelopmentCard in SlotDevelopmentCards which already contains
- * DevelopmentCard with equals or higher level or try to insert DevelopmentCard in SlotDevelopmentCards with higher
- * level than required level
+ * this exceptions is thrown when there are no available slots to insert DevelopmentCard
  */
 public class ImpossibleDevelopmentCardAdditionException extends Exception{
 
