@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.exceptions.InsufficientResourceException;
-import it.polimi.ingsw.exceptions.WrongDevelopmentCardsSlotException;
 
 import java.util.LinkedList;
 
@@ -30,11 +29,12 @@ public class SlotDevelopmentCards {
     /**
      * @param card is the DevelopmentCard to be added
      */
-    public void addDevelopmentCard(DevelopmentCard card) throws WrongDevelopmentCardsSlotException {
+    public boolean addDevelopmentCard(DevelopmentCard card){
         if(!haveRequiredLevel(card))
-            throw new WrongDevelopmentCardsSlotException();
+            return false;
         developmentCards.add(card);
         empty = false;
+        return true;
     }
 
     /**
@@ -46,8 +46,12 @@ public class SlotDevelopmentCards {
      * this method calls activateProduction() of the last added card in SlotDevelopmentCards
      */
     public int activateProductionActiveCard(Warehouse w, Strongbox s, int choice) throws InsufficientResourceException{
+        if(isEmpty())
+            return 0;
         return developmentCards.getLast().activateProduction(w, s, choice);
     }
+
+
 
     /**
      * @return 1 if slotDevelopmentCards is empty, or @return level +1 of last added DevelopmentCard
