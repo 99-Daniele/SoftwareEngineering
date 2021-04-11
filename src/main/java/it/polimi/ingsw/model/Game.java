@@ -19,7 +19,7 @@ public abstract class Game {
      */
     public Game(int numOfPlayers) {
         market = new Market();
-        faithTrack = new FaithTrack();
+        faithTrack =new FaithTrack();
         this.numOfPlayers = numOfPlayers;
         currentPlayer = 0;
         leaderCards = new ArrayList<>(16);
@@ -175,7 +175,7 @@ public abstract class Game {
             throws InsufficientResourceException, ImpossibleSwitchDepotException {
         players.get(currentPlayer).enoughTotalProductionPowerResource(choice);
         if(players.get(currentPlayer).activateProduction(choice))
-            faithTrackMovement(currentPlayer);
+            faithTrackMovement();
     }
 
     /**
@@ -200,11 +200,58 @@ public abstract class Game {
         players.get(currentPlayer).discardLeaderCard(chosenLeaderCard);
     }
 
-    public void faithTrackMovement(int chosenPlayer){}
+    /**
+     * method that sets the current player's victory points related to the position in the Faith Track and controls if
+     * the player is in or beyond the pope space and if it's true it increases the victory points of all the players in the vatican section
+     */
+    public void faithTrackMovement(){
+        faithTrack.victoryPointsFaithTrack(players.get(currentPlayer).getVictoryPoints(), players.get(currentPlayer).getFaithPoints());
+        if(faithTrack.reachPope(players.get(currentPlayer).getFaithPoints()))
+        {
+            for(PlayerBoard player:players)
+            {
+                faithTrack.victoryPointsVaticanReport(player.getVictoryPoints(), player.getFaithPoints());
+            }
+            faithTrack.DecreaseRemainingPope();
+        }
+    }
 
-    public void faithTrackMovementExceptCurrentPlayer(){}
+    /**
+     *
+     * @param position the position in the arraylist
+     * @return
+     */
+    public PlayerBoard getPlayer(int position){
+        return players.get(position);
+    }
 
-    public void verifyPopeSectionExceptCurrentPlayer(){}
+    public FaithTrack getFaithTrack(){
+        return faithTrack;
+    }
+
+    /**
+     * method that sets the victory points related to the position in the Faith Track of all the players expect the current player and controls if
+     * the players are in or beyond the pope space and if it's true it increases the victory points of all the players in the vatican section
+     */
+    public void faithTrackMovementExceptCurrentPlayer(){
+        int counter;
+        int flag=0;
+        for(counter=0; counter<numOfPlayers; counter++)
+        {
+            if (counter!=currentPlayer)
+            {
+                faithTrack.victoryPointsFaithTrack(players.get(counter).getVictoryPoints(), players.get(counter).getFaithPoints());
+                if (faithTrack.reachPope(players.get(counter).getFaithPoints()))
+                    flag=1;
+            }
+        }
+        if (flag==1)
+        {
+            for (PlayerBoard player: players)
+                faithTrack.victoryPointsVaticanReport(player.getVictoryPoints(), player.getFaithPoints());
+            faithTrack.DecreaseRemainingPope();
+        }
+    }
 
     /**
      * @return 1 if white marble has to be discarded, otherwise @return 0 if successfully increased to current player
