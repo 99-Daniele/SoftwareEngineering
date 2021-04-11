@@ -195,7 +195,7 @@ public abstract class Game {
     public void discardLeaderCard(int chosenLeaderCard)
             throws ActiveLeaderCardException, AlreadyDiscardLeaderCardException {
         players.get(currentPlayer).discardLeaderCard(chosenLeaderCard);
-        faithTrackMovement(currentPlayer);
+        faithTrackMovement();
     }
 
     /**
@@ -217,7 +217,7 @@ public abstract class Game {
     /**
      *
      * @param position the position in the arraylist
-     * @return
+     * @return PlayerBoard in @param position
      */
     public PlayerBoard getPlayer(int position){
         return players.get(position);
