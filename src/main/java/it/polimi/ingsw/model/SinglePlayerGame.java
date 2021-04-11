@@ -18,7 +18,15 @@ public class SinglePlayerGame extends Game{
 
     public void shuffleActions(){}
 
-    public void LudovicoFaithTrackMovement(){}
+    /**
+     * method that looks if ludovico reached the pope space and if true check it out if player is in the vatican section and increase is victory points
+     */
+    public void LudovicoFaithTrackMovement(){
+        if (getFaithTrack().reachPope(ludovico.getFaithPoints()))
+        {
+            getFaithTrack().victoryPointsVaticanReport(getPlayer(0).getVictoryPoints(),getPlayer(0).getFaithPoints());
+        }
+    }
 
     public void discardDeckDevelopmentCards(Color color){}
 
