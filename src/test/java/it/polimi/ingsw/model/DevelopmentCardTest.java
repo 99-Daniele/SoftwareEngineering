@@ -147,6 +147,32 @@ public class DevelopmentCardTest {
         assertEquals(1,strongbox.getNumOfResource(Resource.SHIELD));
         assertEquals(2,strongbox.getNumOfResource(Resource.SERVANT));
     }
+
+    /**
+     * this test verifies if a card is buyable
+     */
+    @Test
+    void isCardBuyable(){
+
+        warehouse.increaseResource(Resource.SERVANT);
+        warehouse.increaseResource(Resource.COIN);
+        warehouse.increaseResource(Resource.COIN);
+        warehouse.increaseResource(Resource.SHIELD);
+        warehouse.increaseResource(Resource.SHIELD);
+        warehouse.increaseResource(Resource.SHIELD);
+        strongbox.increaseResourceType(Resource.COIN,3);
+        strongbox.increaseResourceType(Resource.STONE,1);
+
+        cost.addResource(Resource.COIN,5);
+        cost.addResource(Resource.SERVANT,1);
+        cost.addResource(Resource.SHIELD,3);
+        assertTrue(developmentCard.isBuyable(warehouse, strongbox));
+
+        cost.addResource(Resource.COIN,6);
+        cost.addResource(Resource.SERVANT,2);
+        cost.addResource(Resource.SHIELD,2);
+        assertFalse(developmentCard.isBuyable(warehouse, strongbox));
+    }
 }
 
 

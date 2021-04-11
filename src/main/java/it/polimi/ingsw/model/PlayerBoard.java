@@ -9,7 +9,7 @@ public class PlayerBoard extends SimplePlayerBoard{
     private final String nickname;
     private Warehouse warehouse;
     private Strongbox strongbox;
-    private SlotDevelopmentCards[] slotDevelopmentCards;
+    private SlotDevelopmentCards[] slotDevelopmentCards = new SlotDevelopmentCards[3];
     private ArrayList<LeaderCard> leaderCards;
     private VictoryPoints victoryPoints;
 
@@ -18,21 +18,15 @@ public class PlayerBoard extends SimplePlayerBoard{
         this.nickname = nickname;
         warehouse = new Warehouse();
         strongbox = new Strongbox();
-        slotDevelopmentCards = new SlotDevelopmentCards[3];
+        slotDevelopmentCards[0] = new SlotDevelopmentCards();
+        slotDevelopmentCards[1] = new SlotDevelopmentCards();
+        slotDevelopmentCards[2] = new SlotDevelopmentCards();
         leaderCards = new ArrayList<>();
         victoryPoints = new VictoryPoints();
     }
 
     public String getNickname() {
         return nickname;
-    }
-
-    public Warehouse getWarehouse() {
-        return warehouse;
-    }
-
-    public Strongbox getStrongbox() {
-        return strongbox;
     }
 
     public VictoryPoints getVictoryPoints() {
@@ -68,12 +62,30 @@ public class PlayerBoard extends SimplePlayerBoard{
      * @param slot is player's choice about in which slot @param card will be inserted
      * @param choice is player's choice about which between warehouse and strongbox has the priority to be decreased
      * @throws InsufficientResourceException if player has not enough resources to buy @param card
+     * if exists active DiscountCard @param card resourceCost could be discounted. In case player has still not enough resources,
+     * @param card resourceCost return to original and card is not bought by player.
      */
     public void buyDevelopmentCard(DevelopmentCard card, int slot, int choice)
-            throws InsufficientResourceException {
-        card.buyCard(warehouse, strongbox, choice);
-        slotDevelopmentCards[slot].addDevelopmentCard(card);
-        victoryPoints.increaseVictoryPointsByCards(card.getVictoryPoints());
+            throws InsufficientResourceException, ImpossibleDevelopmentCardAdditionException {
+        boolean discount1 = false;
+        boolean discount2 = false;
+        if(leaderCards.size() > 0)
+            discount1 = leaderCards.get(0).discount(card);
+        if(leaderCards.size() > 1)
+            discount2 = leaderCards.get(1).discount(card);
+        if(isBuyable(card)){
+            if(!(slotDevelopmentCards[slot].addDevelopmentCard(card)))
+                throw new ImpossibleDevelopmentCardAdditionException();
+            card.buyCard(warehouse, strongbox, choice);
+            victoryPoints.increaseVictoryPointsByCards(card.getVictoryPoints());
+        }
+        else {
+            if (discount1)
+                leaderCards.get(0).recount(card);
+            if (discount2)
+                leaderCards.get(1).recount(card);
+            throw new InsufficientResourceException();
+        }
     }
 
     /**
@@ -86,14 +98,16 @@ public class PlayerBoard extends SimplePlayerBoard{
 
     /**
      * @param card is DevelopmentCard to buy
-     * @param slots is an ArrayList <Integer>
+     * @return  an Integer list of slots where @card can be inserted
      * for each slot verifies if @param card has the required level and in case add to @param slots
      */
-    public void findAvailableSlot(DevelopmentCard card, ArrayList<Integer> slots){
+    public ArrayList<Integer> findAvailableSlot(DevelopmentCard card){
+        ArrayList<Integer> slots = new ArrayList<>();
         for(int i = 0; i < 3; i++){
             if(slotDevelopmentCards[i].haveRequiredLevel(card))
                 slots.add(i);
         }
+        return slots;
     }
 
     /**
@@ -106,7 +120,7 @@ public class PlayerBoard extends SimplePlayerBoard{
      * if player chose to activate a production power which not exist (empty SlotDevelopmentCards, or AdditionalPowerCard
      * which not exist or is not active) the method do nothing without throwing any exception like player has never chose them.
      */
-    public void enoughTotalProductionPowerResource(PowerProductionPlayerChoice choice)
+    private void enoughTotalProductionPowerResource(PowerProductionPlayerChoice choice)
             throws InsufficientResourceException, ImpossibleSwitchDepotException {
         Warehouse w;
         w = warehouse.copyThisWarehouse();
@@ -118,8 +132,11 @@ public class PlayerBoard extends SimplePlayerBoard{
             slotDevelopmentCards[1].removeProductionPowerResource(w, s);
         if(choice.isThirdPower())
             slotDevelopmentCards[2].removeProductionPowerResource(w, s);
-        if(choice.isBasicPower())
+        if(choice.isBasicPower()) {
+            if(!enoughBasicProductionResource(choice.getResources()[0], choice.getResources()[1]))
+                throw new InsufficientResourceException();
             decreaseWarehouseResource(choice.getResources()[0], choice.getResources()[1], w, s);
+        }
         if(choice.isFirstAdditionalPower())
             if(leaderCards.size() > 0)
                 leaderCards.get(0).decreaseProductionPowerResources(w, s, 1, choice.getAdditionalResource1());
@@ -142,12 +159,16 @@ public class PlayerBoard extends SimplePlayerBoard{
      * @param choice summarize all player's choices about which production powers activate
      * @return true if player has increased his faith points
      * @throws InsufficientResourceException by the signature of activateProductionCard()
-     * this method is called after enoughTotalResource so is certified that player has enough resources.
+     * @throws ImpossibleSwitchDepotException by signature of enoughTotalProductionPower()
+     * this method firstly verifies if player has enough resources. if player has no enough resources throw an exception
+     * without doing anything.
      * for each chosen production power activate the production.
      * if a chosen production power not exist the method do nothing.
      * if player has increased his faith points, calls increaseFaithPoints() method.
      */
-    public boolean activateProduction(PowerProductionPlayerChoice choice) throws InsufficientResourceException {
+    public boolean activateProduction(PowerProductionPlayerChoice choice) throws
+            InsufficientResourceException, ImpossibleSwitchDepotException {
+        enoughTotalProductionPowerResource(choice);
         int faithPoints = 0;
         if(choice.isFirstPower())
             faithPoints += slotDevelopmentCards[0].activateProductionActiveCard(warehouse, strongbox, choice.getChoice());
@@ -261,6 +282,7 @@ public class PlayerBoard extends SimplePlayerBoard{
         if(leaderCards.get(chosenLeaderCard -1).isActive())
             throw new ActiveLeaderCardException();
         leaderCards.remove(chosenLeaderCard -1);
+        increaseFaithPoints(1);
     }
 
     /**
@@ -268,7 +290,9 @@ public class PlayerBoard extends SimplePlayerBoard{
      * @return Resource.WHITE if the LeaderCard is not a WhiteConversionCard, otherwise @return a Resource
      */
     public Resource whiteConversion(int chosenLeaderCard){
-        return leaderCards.get(chosenLeaderCard).whiteConversion();
+        if(leaderCards.size() > 0)
+            return leaderCards.get(chosenLeaderCard -1).whiteConversion();
+        return Resource.WHITE;
     }
 
     /**

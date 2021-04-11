@@ -18,6 +18,8 @@ public class WhiteConversionCard extends LeaderCard{
      */
     @Override
     public Resource whiteConversion() {
-        return this.getResource();
+        if(isActive())
+            return this.getResource();
+        return Resource.WHITE;
     }
 }

@@ -6,15 +6,14 @@ import java.util.LinkedList;
 
 public class SlotDevelopmentCards {
 
-    private LinkedList<DevelopmentCard> developmentCards;
+    private LinkedList<DevelopmentCard> developmentCards = new LinkedList<>();
     private boolean empty;
 
     public SlotDevelopmentCards() {
-        developmentCards = new LinkedList<>();
         empty = true;
     }
 
-    public boolean isEmpty() {
+    private boolean isEmpty() {
         return empty;
     }
 
@@ -51,6 +50,11 @@ public class SlotDevelopmentCards {
         return developmentCards.getLast().activateProduction(w, s, choice);
     }
 
+    /**
+     * @param w is player's warehouse
+     * @param s is player's strongbox
+     * @throws InsufficientResourceException if there are not enough resource to activate production power
+     */
     public void removeProductionPowerResource(Warehouse w, Strongbox s)
             throws InsufficientResourceException{
         if(isEmpty())

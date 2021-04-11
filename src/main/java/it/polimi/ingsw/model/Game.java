@@ -129,14 +129,13 @@ public abstract class Game {
          */
 
         PlayerBoard player = players.get(currentPlayer);
-        ArrayList <Integer> slots = new ArrayList<>();
         if(!(player.isBuyable(card)))
             throw new InsufficientResourceException();
             /*
             evaluates if player has enough resources
             */
 
-        player.findAvailableSlot(card, slots);
+        ArrayList <Integer> slots = player.findAvailableSlot(card);
         if (slots.size() == 0)
             throw new ImpossibleDevelopmentCardAdditionException();
             /*
@@ -168,12 +167,10 @@ public abstract class Game {
      * @param choice summarize all player's choices about which production powers activate
      * @throws InsufficientResourceException if player has not enough resources to activate all production powers together
      * @throws ImpossibleSwitchDepotException by the signature of enoughTotalProductionPowerResource()
-     * this method firstly evaluates if current player has enough resources to activate all production powers together,
-     * then, if yes, activate them and if player increased his faith points, calls faithTrackMovement
+     * this method activate all production powers together and if player has increased his faith points, calls faithTrackMovement
      */
     public void activateProduction(PowerProductionPlayerChoice choice)
             throws InsufficientResourceException, ImpossibleSwitchDepotException {
-        players.get(currentPlayer).enoughTotalProductionPowerResource(choice);
         if(players.get(currentPlayer).activateProduction(choice))
             faithTrackMovement(currentPlayer);
     }
@@ -198,6 +195,7 @@ public abstract class Game {
     public void discardLeaderCard(int chosenLeaderCard)
             throws ActiveLeaderCardException, AlreadyDiscardLeaderCardException {
         players.get(currentPlayer).discardLeaderCard(chosenLeaderCard);
+        faithTrackMovement(currentPlayer);
     }
 
     public void faithTrackMovement(int chosenPlayer){}
