@@ -5,8 +5,14 @@ package it.polimi.ingsw.model;
  */
 public class RedMarble extends Marble {
 
+    /**
+     * @param game is Game
+     * @return 0
+     * this method move current player in FaithTrack by 1.
+     */
     @Override
-    public void useMarble(Game game) {
-        super.useMarble(game);
+    public int useMarble(Game game){
+        game.faithTrackMovement();
+        return 0;
     }
 }

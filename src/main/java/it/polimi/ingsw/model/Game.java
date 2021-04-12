@@ -26,6 +26,33 @@ public abstract class Game {
     }
 
     /**
+     * @param color is the color of DevelopmentCards contained in deck
+     * @return the first not empty deck which contains DevelopmentCards of @param color, or the last deck of same kind of cards.
+     */
+    public Deck getColorDeck(Color color){
+        int i;
+        for(i = 0; i < 4; i++) {
+            if (deck[0][i].getColor() == color && !(deck[0][i].isEmpty()))
+                return deck[0][i];
+        }
+        if(!deck[1][i].isEmpty())
+            return deck[1][i];
+        return deck[2][i];
+    }
+
+    /**
+     * @return true if there are 0 remaining DevelopmentCards of one kind of color. In this case, SinglePlayerGame finish.
+     */
+    public boolean zeroRemainingColorCards(){
+        for(int i = 0; i < 4; i++) {
+            if (deck[0][i].isEmpty() && deck[1][i].isEmpty() && deck[2][i].isEmpty())
+                return true;
+        }
+        return false;
+
+    }
+
+    /**
      * @param nickname is player chosen nickname
      * @throws AlreadyTakenNicknameException if @param nickname is already taken by another player
      */
@@ -53,7 +80,7 @@ public abstract class Game {
      * shift current player to his subsequent or return to first player
      */
     public void nextPlayer() {
-        if(currentPlayer < numOfPlayers)
+        if(currentPlayer < numOfPlayers -1)
             currentPlayer++;
         else
             currentPlayer = 0;
@@ -72,10 +99,14 @@ public abstract class Game {
      * @param isRow is true if current player has selected a market row, is false if current player has selected a market column
      * @param choice is current player's choice of market row or column
      * @throws WrongParametersException if current player has inserted wrong parameters
+     * this method takes marbles selected by players and ask the order to play them.
+     * at the end if there are any discarded marbles, increase faith points of other players by the amount of them and
+     * calls fatihTrackMovementExceptCurrentPlayer() method
      */
     public void takeMarketMarble(boolean isRow, int choice) throws WrongParametersException {
         Marble [] marbles;
         Marble chosenMarble;
+        int sumDiscardedMarbles = 0;
         if(isRow) {
             marbles = market.getRowMarbles(choice);
         }
@@ -84,7 +115,13 @@ public abstract class Game {
         }
         for(int i = 0; i < marbles.length; i++){
             chosenMarble = askPlayerChosenMarble(marbles);
-            chosenMarble.useMarble(this);
+            sumDiscardedMarbles += chosenMarble.useMarble(this);
+        }
+        if(sumDiscardedMarbles > 0) {
+            for(int i = 0; i < numOfPlayers; i++)
+                if(i != currentPlayer)
+                    getPlayer(i).increaseFaithPoints(sumDiscardedMarbles);
+            faithTrackMovementExceptCurrentPlayer();
         }
     }
 
@@ -252,9 +289,11 @@ public abstract class Game {
     }
 
     /**
-     * @return 1 if white marble has to be discarded, otherwise @return 0 if successfully increased to current player
+     * @return 1 if white marble has to be discarded, otherwise @return 0 if successfully increased to current player's
      * Warehouse or if white marble is not converted at all.
-     * this method verifies if exist WhiteConversionCard active for current player and in case convert white marble.
+     * this method verifies if exist WhiteConversionCard active for current player and in case convert white marble and
+     * increase Warehouse.
+     * instead if not exist active WhiteConversionMarble does nothing
      */
     public int whiteConversion(){
         Resource r1 = players.get(currentPlayer).whiteConversion(0);

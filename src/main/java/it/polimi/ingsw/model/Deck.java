@@ -20,9 +20,17 @@ public class Deck {
     }
 
     /**
-     * this method prepare deck to start a new game. The four cards in developmentCards are switched randomly
+     * this method prepare deck to start a new game. The four cards in developmentCards are shuffled randomly
      */
-    public void prepareDeck(){}
+    public void prepareDeck(){
+        ArrayList<DevelopmentCard> newDevelopmentCards = new ArrayList<>();
+        for(int count = 4; count > 0; count--){
+            int i = (int) (Math.random() * count);
+            DevelopmentCard card = developmentCards.remove(i);
+            newDevelopmentCards.add(card);
+        }
+        developmentCards = newDevelopmentCards;
+    }
 
     public Color getColor() {
         return color;
