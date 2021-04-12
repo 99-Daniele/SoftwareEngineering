@@ -7,7 +7,7 @@ public class LudovicoMoveAndShuffleAction extends Action{
      * this method move ludovico in FaithTrack by 1 and shuffle actions
      */
     @Override
-    public void actionTrigger(SinglePlayerGame game) {
+    public void actionTrigger(LightSinglePlayerGame game) {
         game.LudovicoFaithTrackMovement(1);
         game.shuffleActions();
     }

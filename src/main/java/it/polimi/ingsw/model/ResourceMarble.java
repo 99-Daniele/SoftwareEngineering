@@ -17,7 +17,7 @@ public class ResourceMarble extends Marble {
      * this method increase Warehouse of this.resource.
      */
     @Override
-    public boolean useMarble(Game game) {
+    public boolean useMarble(LightGame game) {
         return game.getCurrentPlayer().increaseWarehouse(resource);
     }
 }

@@ -11,7 +11,7 @@ public class RedMarble extends Marble {
      * this method move current player in FaithTrack by 1.
      */
     @Override
-    public boolean useMarble(Game game){
+    public boolean useMarble(LightGame game){
         game.getCurrentPlayer().increaseFaithPoints(1);
         game.faithTrackMovement();
         return false;

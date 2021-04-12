@@ -5,5 +5,5 @@ package it.polimi.ingsw.model;
  */
 public abstract class Marble {
 
-    public abstract boolean useMarble(Game game);
+    public abstract boolean useMarble(LightGame game);
 }

@@ -13,7 +13,7 @@ public class WhiteMarble extends Marble {
      * if there is no active WhiteConversionCard does nothing.
      */
     @Override
-    public boolean useMarble(Game game) {
+    public boolean useMarble(LightGame game) {
         Resource r1 = game.getCurrentPlayer().whiteConversion(0);
         Resource r2 = game.getCurrentPlayer().whiteConversion(1);
         if(r1 != Resource.WHITE && r2 != Resource.WHITE) {

@@ -1,11 +1,10 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.exceptions.AlreadyFinishedGameException;
 import it.polimi.ingsw.exceptions.EmptyDevelopmentCardDeckException;
 
 import java.util.ArrayList;
 
-public class SinglePlayerGame extends Game{
+public class SinglePlayerGame extends Game implements LightSinglePlayerGame{
 
     private ArrayList<Action> actions = new ArrayList<>();
     private SimplePlayerBoard ludovico;
@@ -52,6 +51,7 @@ public class SinglePlayerGame extends Game{
     /**
      * this method move the first action to last position
      */
+    @Override
     public void moveToLastAction(){
         Action firstToLastAction = actions.remove(0);
         actions.add(firstToLastAction);
@@ -61,6 +61,7 @@ public class SinglePlayerGame extends Game{
      * this method creates a new ArrayList</Action> and for each action remove a random one from actions and add to newActions.
      * then set actions as newActions
      */
+    @Override
     public void shuffleActions(){
         ArrayList<Action> newActions = new ArrayList<>();
         for(int count = 7; count > 0; count--){
@@ -76,6 +77,7 @@ public class SinglePlayerGame extends Game{
      * this method increase ludovico faith points and then looks if ludovico reached the pope space and if true
      * check it out if player is in the vatican section and increase his victory points
      */
+    @Override
     public void LudovicoFaithTrackMovement(int faithPoints){
         ludovico.increaseFaithPoints(faithPoints);
         if (getFaithTrack().reachPope(ludovico.getFaithPoints()))
@@ -90,6 +92,7 @@ public class SinglePlayerGame extends Game{
      * this method finds the first not empty decks which contains DevelopmentCards of @param color and discard the first
      * two DevelopmentCard contained. if during discarding there are not anymore DevelopmentCards, method do nothing.
      */
+    @Override
     public void discardDeckDevelopmentCards(Color color) throws EmptyDevelopmentCardDeckException {
         Deck colorDeck = getColorDeck(color);
         if(colorDeck.isEmpty())

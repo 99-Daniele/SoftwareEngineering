@@ -4,7 +4,7 @@ import it.polimi.ingsw.exceptions.*;
 
 import java.util.ArrayList;
 
-public abstract class Game {
+public abstract class Game implements LightGame{
 
     private ArrayList<PlayerBoard> players = new ArrayList<>();
     private Market market;
@@ -211,6 +211,7 @@ public abstract class Game {
      * method that sets the current player's victory points related to the position in the Faith Track and controls if
      * the player is in or beyond the pope space and if it's true it increases the victory points of all the players in the vatican section
      */
+    @Override
     public void faithTrackMovement(){
         faithTrack.victoryPointsFaithTrack(getCurrentPlayer().getVictoryPoints(), getCurrentPlayer().getFaithPoints());
         if(faithTrack.reachPope(getCurrentPlayer().getFaithPoints()))
@@ -232,6 +233,7 @@ public abstract class Game {
         return players.get(position);
     }
 
+    @Override
     public PlayerBoard getCurrentPlayer(){
         return players.get(currentPlayer);
     }
@@ -264,10 +266,16 @@ public abstract class Game {
         }
     }
 
+    @Override
     public Resource askWhiteMarbleResourceConversionToPlayer(Resource r1, Resource r2){
         return r1;
     }
 
+    /**
+     * @return the winner of the game
+     * this method find the player with more victory points. In case more players have both max victory points, find
+     * which one has more amount of resources.
+     */
     public SimplePlayerBoard endGame() {
         int maxVictoryPoints = 0;
         int maxNumOfResources = 0;

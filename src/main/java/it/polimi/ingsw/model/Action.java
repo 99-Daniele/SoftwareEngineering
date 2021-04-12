@@ -5,5 +5,5 @@ import it.polimi.ingsw.exceptions.EmptyDevelopmentCardDeckException;
 
 public abstract class Action {
 
-    public abstract void actionTrigger(SinglePlayerGame game) throws EmptyDevelopmentCardDeckException;
+    public abstract void actionTrigger(LightSinglePlayerGame game) throws EmptyDevelopmentCardDeckException;
 }
