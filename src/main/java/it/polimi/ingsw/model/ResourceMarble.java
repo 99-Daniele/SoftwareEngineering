@@ -13,11 +13,11 @@ public class ResourceMarble extends Marble {
 
     /**
      * @param game is Game
-     * @return 1 if the marble has to be discarded, otherwise @return 0
+     * @return true if the marble has to be discarded, otherwise @return false
      * this method increase Warehouse of this.resource.
      */
     @Override
-    public int useMarble(Game game) {
-        return game.increaseWarehouse(resource);
+    public boolean useMarble(Game game) {
+        return game.getCurrentPlayer().increaseWarehouse(resource);
     }
 }

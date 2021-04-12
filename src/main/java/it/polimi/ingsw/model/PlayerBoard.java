@@ -62,8 +62,8 @@ public class PlayerBoard extends SimplePlayerBoard{
      * @param slot is player's choice about in which slot @param card will be inserted
      * @param choice is player's choice about which between warehouse and strongbox has the priority to be decreased
      * @throws InsufficientResourceException if player has not enough resources to buy @param card
-     * if exists active DiscountCard @param card resourceCost could be discounted. In case player has still not enough resources,
-     * @param card resourceCost return to original and card is not bought by player.
+     * if exists active DiscountCard @param card resourceCost could be discounted. In case player has still not enough
+     * resources, @param card resourceCost return to original and card is not bought by player.
      */
     public void buyDevelopmentCard(DevelopmentCard card, int slot, int choice)
             throws InsufficientResourceException, ImpossibleDevelopmentCardAdditionException {
@@ -98,7 +98,7 @@ public class PlayerBoard extends SimplePlayerBoard{
 
     /**
      * @param card is DevelopmentCard to buy
-     * @return  an Integer list of slots where @card can be inserted
+     * @return an ArrayList </Integer> of slots where @card can be inserted
      * for each slot verifies if @param card has the required level and in case add to @param slots
      */
     public ArrayList<Integer> findAvailableSlot(DevelopmentCard card){

@@ -7,12 +7,13 @@ public class RedMarble extends Marble {
 
     /**
      * @param game is Game
-     * @return 0
+     * @return false
      * this method move current player in FaithTrack by 1.
      */
     @Override
-    public int useMarble(Game game){
+    public boolean useMarble(Game game){
+        game.getCurrentPlayer().increaseFaithPoints(1);
         game.faithTrackMovement();
-        return 0;
+        return false;
     }
 }

@@ -91,52 +91,41 @@ public abstract class Game {
      * @param card2 is the LeaderCard chosen by current player
      */
     public void selectCurrentPlayerLeaderCards(LeaderCard card1, LeaderCard card2){
-        players.get(currentPlayer).addLeaderCard(card1);
-        players.get(currentPlayer).addLeaderCard(card2);
+        getCurrentPlayer().addLeaderCard(card1);
+        getCurrentPlayer().addLeaderCard(card2);
     }
 
     /**
      * @param isRow is true if current player has selected a market row, is false if current player has selected a market column
      * @param choice is current player's choice of market row or column
      * @throws WrongParametersException if current player has inserted wrong parameters
-     * this method takes marbles selected by players and ask the order to play them.
+     * this method return marbles selected by players and ask the order to play them.
      * at the end if there are any discarded marbles, increase faith points of other players by the amount of them and
      * calls fatihTrackMovementExceptCurrentPlayer() method
      */
-    public void takeMarketMarble(boolean isRow, int choice) throws WrongParametersException {
+    public Marble[] takeMarketMarble(boolean isRow, int choice) throws WrongParametersException {
         Marble [] marbles;
-        Marble chosenMarble;
-        int sumDiscardedMarbles = 0;
         if(isRow) {
             marbles = market.getRowMarbles(choice);
+            market.slideRow(choice);
         }
         else {
             marbles = market.getColumnMarbles(choice);
+            market.slideColumn(choice);
         }
-        for(int i = 0; i < marbles.length; i++){
-            chosenMarble = askPlayerChosenMarble(marbles);
-            sumDiscardedMarbles += chosenMarble.useMarble(this);
-        }
-        if(sumDiscardedMarbles > 0) {
-            for(int i = 0; i < numOfPlayers; i++)
-                if(i != currentPlayer)
-                    getPlayer(i).increaseFaithPoints(sumDiscardedMarbles);
-            faithTrackMovementExceptCurrentPlayer();
-        }
-    }
-
-    public Marble askPlayerChosenMarble(Marble[] marbles){
-        return marbles[0];
+        return marbles;
     }
 
     /**
-     * @param resource stands for the type of resource to increase by 1 in current player Warehouse.
-     * @return 1 if @param resource has to be discarded, otherwise @return 0
+     * @param amount is the amount of marbles to be discarded by current player
+     * this method increase faith points of other player and move them in FaithTrack
      */
-    public int increaseWarehouse(Resource resource){
-        if(players.get(currentPlayer).increaseWarehouse(resource))
-            return 0;
-        return 1;
+    public void discardMarbles(int amount){
+        for(int i = 0; i < numOfPlayers; i++) {
+            if (i != currentPlayer)
+                getPlayer(i).increaseFaithPoints(amount);
+        }
+        faithTrackMovementExceptCurrentPlayer();
     }
 
     /**
@@ -152,52 +141,35 @@ public abstract class Game {
      * @param deckRow is the row of the chosen deck
      * @param deckColumn is the column of the chosen deck
      * @param choice is player's choice about which between warehouse and strongbox has the priority to be decreased
+     * @param slot is player's choice about in which slot want to insert the chosen card
      * @throws InsufficientResourceException if player has not enough resources
      * @throws ImpossibleDevelopmentCardAdditionException if is not possible to add the card in player's slots
      * @throws EmptyDevelopmentCardDeckException if player has chosen an empty deck
      * this method firstly verifies if buying is possible and then remove DevelopmentCard from the deck
      * where it was contained.
      */
-    public void buyDevelopmentCard(int deckRow, int deckColumn, int choice)
+    public void buyDevelopmentCard(int deckRow, int deckColumn, int choice, int slot)
             throws InsufficientResourceException, ImpossibleDevelopmentCardAdditionException, EmptyDevelopmentCardDeckException {
         DevelopmentCard card = deck[deckRow][deckColumn].getFirstCard();
-        /*
-         verifies that the deck is not empty and get the first card
-         */
-
-        PlayerBoard player = players.get(currentPlayer);
-        if(!(player.isBuyable(card)))
+        if(!(getCurrentPlayer().isBuyable(card)))
             throw new InsufficientResourceException();
-            /*
-            evaluates if player has enough resources
-            */
-
-        ArrayList <Integer> slots = player.findAvailableSlot(card);
-        if (slots.size() == 0)
-            throw new ImpossibleDevelopmentCardAdditionException();
-            /*
-            evaluates if player has at least one available slot to insert the card
-            */
-
-        else if(slots.size() == 1) {
-            player.buyDevelopmentCard(card, slots.get(0), choice);
-            deck[deckRow][deckColumn].removeDevelopmentCard();
-            /*
-             if there is only one, directly insert in it
-             */
-        }
-        else {
-            int slot = askSlotToPlayer(slots);
-            player.buyDevelopmentCard(card, slot, choice);
-            deck[deckRow][deckColumn].removeDevelopmentCard();
-            /*
-             ask player to indicate one of available slots and then insert the card in the chosen slot
-             */
-        }
+        getCurrentPlayer().buyDevelopmentCard(card, slot, choice);
+        deck[deckRow][deckColumn].removeDevelopmentCard();
     }
 
-    private int askSlotToPlayer(ArrayList<Integer> slots){
-        return slots.get(0);
+    /**
+     * @param deckRow is the row of the chosen deck
+     * @param deckColumn is the column of the chosen deck
+     * @return an ArrayList </Integer> of slots where @card can be inserted
+     * @throws EmptyDevelopmentCardDeckException if player has chosen an empty deck
+     * @throws InsufficientResourceException if player has not enough resources
+     */
+    private ArrayList<Integer> findAvailableSlots(int deckRow, int deckColumn)
+            throws EmptyDevelopmentCardDeckException, InsufficientResourceException {
+        DevelopmentCard card = deck[deckRow][deckColumn].getFirstCard();
+        if(!(getCurrentPlayer().isBuyable(card)))
+            throw new InsufficientResourceException();
+        return getCurrentPlayer().findAvailableSlot(card);
     }
 
     /**
@@ -208,7 +180,7 @@ public abstract class Game {
      */
     public void activateProduction(PowerProductionPlayerChoice choice)
             throws InsufficientResourceException, ImpossibleSwitchDepotException {
-        if(players.get(currentPlayer).activateProduction(choice))
+        if(getCurrentPlayer().activateProduction(choice))
             faithTrackMovement();
     }
 
@@ -221,7 +193,7 @@ public abstract class Game {
      */
     public void activateLeaderCard(int chosenLeaderCard)
             throws InsufficientResourceException, AlreadyDiscardLeaderCardException, ActiveLeaderCardException, InsufficientCardsException {
-        players.get(currentPlayer).activateLeaderCard(chosenLeaderCard);
+        getCurrentPlayer().activateLeaderCard(chosenLeaderCard);
     }
 
     /**
@@ -231,7 +203,7 @@ public abstract class Game {
      */
     public void discardLeaderCard(int chosenLeaderCard)
             throws ActiveLeaderCardException, AlreadyDiscardLeaderCardException {
-        players.get(currentPlayer).discardLeaderCard(chosenLeaderCard);
+        getCurrentPlayer().discardLeaderCard(chosenLeaderCard);
         faithTrackMovement();
     }
 
@@ -240,8 +212,8 @@ public abstract class Game {
      * the player is in or beyond the pope space and if it's true it increases the victory points of all the players in the vatican section
      */
     public void faithTrackMovement(){
-        faithTrack.victoryPointsFaithTrack(players.get(currentPlayer).getVictoryPoints(), players.get(currentPlayer).getFaithPoints());
-        if(faithTrack.reachPope(players.get(currentPlayer).getFaithPoints()))
+        faithTrack.victoryPointsFaithTrack(getCurrentPlayer().getVictoryPoints(), getCurrentPlayer().getFaithPoints());
+        if(faithTrack.reachPope(getCurrentPlayer().getFaithPoints()))
         {
             for(PlayerBoard player:players)
             {
@@ -258,6 +230,10 @@ public abstract class Game {
      */
     public PlayerBoard getPlayer(int position){
         return players.get(position);
+    }
+
+    public PlayerBoard getCurrentPlayer(){
+        return players.get(currentPlayer);
     }
 
     public FaithTrack getFaithTrack(){
@@ -288,46 +264,27 @@ public abstract class Game {
         }
     }
 
-    /**
-     * @return 1 if white marble has to be discarded, otherwise @return 0 if successfully increased to current player's
-     * Warehouse or if white marble is not converted at all.
-     * this method verifies if exist WhiteConversionCard active for current player and in case convert white marble and
-     * increase Warehouse.
-     * instead if not exist active WhiteConversionMarble does nothing
-     */
-    public int whiteConversion(){
-        Resource r1 = players.get(currentPlayer).whiteConversion(0);
-        Resource r2 = players.get(currentPlayer).whiteConversion(1);
-        int discardMarble = 0;
-        if(r1 != Resource.WHITE && r2 != Resource.WHITE){
-            Resource chosen = askWhiteMarbleResourceConversionToPlayer(r1, r2);
-            discardMarble = increaseWarehouse(chosen);
-            /*
-             exist 2 active WhiteConversionCard for current player. Ask to the player to indicate to which resource wants to convert.
-             Then increase chosen resource to current player Warehouse. If the increase is not successfully discardMarble = 1,
-             otherwise discardMarble = 0.
-             */
-        }
-        else if(r1 != Resource.WHITE)
-            discardMarble = increaseWarehouse(r1);
-        else if(r2 != Resource.WHITE)
-            discardMarble = increaseWarehouse(r2);
-        /*
-         player has 1 active WhiteConversionCard. Directly increase converted resource to current player Warehouse.
-         if the increase is not successfully discardMarble = 1, otherwise discardMarble = 0.
-         */
-
-        return discardMarble;
-        /*
-         if player has no active WhiteConversionCard discardMarble remains 0
-         */
-    }
-
-    private Resource askWhiteMarbleResourceConversionToPlayer(Resource r1, Resource r2){
+    public Resource askWhiteMarbleResourceConversionToPlayer(Resource r1, Resource r2){
         return r1;
     }
 
-    public SimplePlayerBoard endGame(){
-        return players.get(0);
+    public SimplePlayerBoard endGame() {
+        int maxVictoryPoints = 0;
+        int maxNumOfResources = 0;
+        PlayerBoard winner = getPlayer(0);
+        for (PlayerBoard player : players) {
+            if (player.sumVictoryPoints() > maxVictoryPoints) {
+                maxVictoryPoints = player.sumVictoryPoints();
+                maxNumOfResources = player.sumTotalResource();
+                winner = player;
+            }
+            else if(player.sumVictoryPoints() == maxVictoryPoints){
+                if(player.sumTotalResource() > maxNumOfResources){
+                    maxNumOfResources = player.sumTotalResource();
+                    winner = player;
+                }
+            }
+        }
+        return winner;
     }
 }

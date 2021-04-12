@@ -116,6 +116,9 @@ public class SinglePlayerGame extends Game{
 
     @Override
     public SimplePlayerBoard endGame() {
-        return super.endGame();
+        if(getCurrentPlayer().haveSevenDevelopmentCards() || getCurrentPlayer().getFaithPoints() >= 20)
+            return getCurrentPlayer();
+        else
+            return ludovico;
     }
 }

@@ -8,10 +8,4 @@ public class MultiPlayerGame extends Game{
 
     @Override
     public void startGame() {    }
-
-
-    @Override
-    public PlayerBoard endGame() {
-        return (PlayerBoard) super.endGame();
-    }
 }
