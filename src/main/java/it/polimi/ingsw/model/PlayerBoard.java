@@ -34,10 +34,12 @@ public class PlayerBoard extends SimplePlayerBoard{
     }
 
     /**
-     * @param card is a LeaderCard chosen by player at the beginning
+     * @param card1 is the first LeaderCard chosen by player at the beginning
+     * @param card2 is the second LeaderCard chosen by player at the beginning
      */
-    public void addLeaderCard(LeaderCard card){
-        leaderCards.add(card);
+    public void addLeaderCard(LeaderCard card1, LeaderCard card2){
+        leaderCards.add(card1);
+        leaderCards.add(card2);
     }
 
     /**

@@ -44,7 +44,7 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame{
      */
     public void triggerFirstAction() throws EmptyDevelopmentCardDeckException {
         actions.get(0).actionTrigger(this);
-        if(zeroRemainingColorCards() || getFaithTrack().ZeroRemainingPope() || getPlayer(0).haveSevenDevelopmentCards())
+        if(zeroRemainingColorCards() || getFaithTrack().zeroRemainingPope() || getPlayer(0).haveSevenDevelopmentCards())
             endGame();
     }
 

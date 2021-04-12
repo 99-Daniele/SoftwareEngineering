@@ -91,8 +91,7 @@ public abstract class Game implements LightGame{
      * @param card2 is the LeaderCard chosen by current player
      */
     public void selectCurrentPlayerLeaderCards(LeaderCard card1, LeaderCard card2){
-        getCurrentPlayer().addLeaderCard(card1);
-        getCurrentPlayer().addLeaderCard(card2);
+        getCurrentPlayer().addLeaderCard(card1, card2);
     }
 
     /**

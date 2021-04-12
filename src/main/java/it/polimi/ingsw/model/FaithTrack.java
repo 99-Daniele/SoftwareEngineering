@@ -36,11 +36,8 @@ public class FaithTrack {
      *
      * @return boolean that is true if the number of pope is zero, otherwise false
      */
-    public boolean ZeroRemainingPope(){
-        if(remainingPopes==0)
-            return true;
-        else
-            return false;
+    public boolean zeroRemainingPope(){
+        return remainingPopes == 0;
     }
 
     /**
@@ -87,10 +84,7 @@ public class FaithTrack {
      */
     public boolean reachPope(int FaithTrackPoints){
         if(remainingPopes!=0)
-            if(vaticanReportSections[3-remainingPopes].IsPlayerInPopeSpace(FaithTrackPoints))
-                return true;
-            else
-                return false;
+            return vaticanReportSections[3 - remainingPopes].IsPlayerInPopeSpace(FaithTrackPoints);
         else
             return false;
     }

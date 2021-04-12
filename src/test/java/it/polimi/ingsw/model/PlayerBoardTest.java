@@ -106,8 +106,9 @@ public class PlayerBoardTest {
         DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 3, c2, c3, 2);
 
         LeaderRequirements leaderRequirements = new LeaderRequirements();
-        LeaderCard leaderCard = new DiscountCard(r1, leaderRequirements, 1);
-        p.addLeaderCard(leaderCard);
+        LeaderCard leaderCard1 = new DiscountCard(r1, leaderRequirements, 1);
+        LeaderCard leaderCard2 = new DiscountCard(r1, leaderRequirements, 1);
+        p.addLeaderCard(leaderCard1, leaderCard2);
         p.activateLeaderCard(1);
 
         assertEquals(3, c1.getNumOfResource(r1));
@@ -138,8 +139,9 @@ public class PlayerBoardTest {
         DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 3, c2, c3, 2);
 
         LeaderRequirements leaderRequirements = new LeaderRequirements();
-        LeaderCard leaderCard = new DiscountCard(r1, leaderRequirements, 1);
-        p.addLeaderCard(leaderCard);
+        LeaderCard leaderCard1 = new DiscountCard(r1, leaderRequirements, 1);
+        LeaderCard leaderCard2 = new DiscountCard(r1, leaderRequirements, 1);
+        p.addLeaderCard(leaderCard1, leaderCard2);
         p.activateLeaderCard(1);
 
         assertEquals(2, c1.getNumOfResource(r1));
@@ -295,8 +297,9 @@ public class PlayerBoardTest {
         p.buyDevelopmentCard(developmentCard, 0, 1);
 
         LeaderRequirements leaderRequirements = new LeaderRequirements();
-        LeaderCard leaderCard = new AdditionalProductionPowerCard(r2, leaderRequirements, 1);
-        p.addLeaderCard(leaderCard);
+        LeaderCard leaderCard1 = new AdditionalProductionPowerCard(r2, leaderRequirements, 1);
+        LeaderCard leaderCard2 = new DiscountCard(r1, leaderRequirements, 1);
+        p.addLeaderCard(leaderCard1, leaderCard2);
         p.activateLeaderCard(1);
 
         PowerProductionPlayerChoice playerChoice = new PowerProductionPlayerChoice();
@@ -344,8 +347,9 @@ public class PlayerBoardTest {
         p.buyDevelopmentCard(developmentCard, 0, 1);
 
         LeaderRequirements leaderRequirements = new LeaderRequirements();
-        LeaderCard leaderCard = new AdditionalProductionPowerCard(r2, leaderRequirements, 1);
-        p.addLeaderCard(leaderCard);
+        LeaderCard leaderCard1 = new AdditionalProductionPowerCard(r2, leaderRequirements, 1);
+        LeaderCard leaderCard2 = new DiscountCard(r1, leaderRequirements, 1);
+        p.addLeaderCard(leaderCard1, leaderCard2);
         p.activateLeaderCard(1);
 
         PowerProductionPlayerChoice playerChoice = new PowerProductionPlayerChoice();
@@ -378,13 +382,14 @@ public class PlayerBoardTest {
         PlayerBoard p = new PlayerBoard("p1");
 
         LeaderRequirements leaderRequirements = new LeaderRequirements();
-        LeaderCard leaderCard = new AdditionalProductionPowerCard(r2, leaderRequirements, 1);
-        p.addLeaderCard(leaderCard);
+        LeaderCard leaderCard1 = new AdditionalProductionPowerCard(r2, leaderRequirements, 1);
+        LeaderCard leaderCard2 = new DiscountCard(r1, leaderRequirements, 1);
+        p.addLeaderCard(leaderCard1, leaderCard2);
 
         p.discardLeaderCard(1);
 
         AlreadyDiscardLeaderCardException thrown =
-                assertThrows(AlreadyDiscardLeaderCardException.class, () -> p.activateLeaderCard(1));
+                assertThrows(AlreadyDiscardLeaderCardException.class, () -> p.activateLeaderCard(2));
 
         String expectedMessage = "Questa carta è stata già scartata in precedenza";
         String actualMessage = thrown.getMessage();
@@ -401,8 +406,9 @@ public class PlayerBoardTest {
         PlayerBoard p = new PlayerBoard("p1");
 
         LeaderRequirements leaderRequirements = new LeaderRequirements();
-        LeaderCard leaderCard = new AdditionalProductionPowerCard(r2, leaderRequirements, 1);
-        p.addLeaderCard(leaderCard);
+        LeaderCard leaderCard1 = new AdditionalProductionPowerCard(r2, leaderRequirements, 1);
+        LeaderCard leaderCard2 = new DiscountCard(r1, leaderRequirements, 1);
+        p.addLeaderCard(leaderCard1, leaderCard2);
 
         assertEquals(0, p.getVictoryPoints().getVictoryPointsByCards());
         p.activateLeaderCard(1);
@@ -419,8 +425,9 @@ public class PlayerBoardTest {
         PlayerBoard p = new PlayerBoard("p1");
 
         LeaderRequirements leaderRequirements = new LeaderRequirements();
-        LeaderCard leaderCard = new AdditionalProductionPowerCard(r2, leaderRequirements, 1);
-        p.addLeaderCard(leaderCard);
+        LeaderCard leaderCard1 = new AdditionalProductionPowerCard(r2, leaderRequirements, 1);
+        LeaderCard leaderCard2 = new DiscountCard(r1, leaderRequirements, 1);
+        p.addLeaderCard(leaderCard1, leaderCard2);
 
         p.activateLeaderCard(1);
 
@@ -441,13 +448,14 @@ public class PlayerBoardTest {
         PlayerBoard p = new PlayerBoard("p1");
 
         LeaderRequirements leaderRequirements = new LeaderRequirements();
-        LeaderCard leaderCard = new AdditionalProductionPowerCard(r2, leaderRequirements, 1);
-        p.addLeaderCard(leaderCard);
+        LeaderCard leaderCard1 = new AdditionalProductionPowerCard(r2, leaderRequirements, 1);
+        LeaderCard leaderCard2= new DiscountCard(r1, leaderRequirements, 1);
+        p.addLeaderCard(leaderCard1, leaderCard2);
 
-        p.discardLeaderCard(1);
+        p.discardLeaderCard(2);
 
         AlreadyDiscardLeaderCardException thrown =
-                assertThrows(AlreadyDiscardLeaderCardException.class, () -> p.discardLeaderCard(1));
+                assertThrows(AlreadyDiscardLeaderCardException.class, () -> p.discardLeaderCard(2));
 
         String expectedMessage = "Questa carta è stata già scartata in precedenza";
         String actualMessage = thrown.getMessage();
@@ -463,12 +471,15 @@ public class PlayerBoardTest {
         PlayerBoard p = new PlayerBoard("p1");
 
         LeaderRequirements leaderRequirements = new LeaderRequirements();
-        LeaderCard leaderCard = new AdditionalProductionPowerCard(r2, leaderRequirements, 1);
-        p.addLeaderCard(leaderCard);
+        LeaderCard leaderCard1 = new AdditionalProductionPowerCard(r2, leaderRequirements, 1);
+        LeaderCard leaderCard2 = new AdditionalProductionPowerCard(r2, leaderRequirements, 1);
+        p.addLeaderCard(leaderCard1, leaderCard2);
 
         assertEquals(0, p.getFaithPoints());
         p.discardLeaderCard(1);
         assertEquals(1, p.getFaithPoints());
+        p.discardLeaderCard(1);
+        assertEquals(2, p.getFaithPoints());
     }
 
     /**
@@ -483,8 +494,7 @@ public class PlayerBoardTest {
         LeaderRequirements leaderRequirements = new LeaderRequirements();
         LeaderCard leaderCard1 = new AdditionalProductionPowerCard(r1, leaderRequirements, 1);
         LeaderCard leaderCard2 = new WhiteConversionCard(r1, leaderRequirements, 1);
-        p.addLeaderCard(leaderCard1);
-        p.addLeaderCard(leaderCard2);
+        p.addLeaderCard(leaderCard1, leaderCard2);
 
         assertSame(Resource.WHITE, p.whiteConversion(1));
         assertSame(Resource.WHITE, p.whiteConversion(2));

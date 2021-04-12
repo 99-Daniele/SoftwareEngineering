@@ -6,9 +6,7 @@ public class PowerProductionPlayerChoice {
     private boolean secondPower;
     private boolean thirdPower;
     private boolean basicPower;
-    private Resource basicResource1;
-    private Resource basicResource2;
-    private Resource basicResource3;
+    private Resource[] basicResources;
     private boolean firstAdditionalPower;
     private Resource additionalResource1;
     private boolean secondAdditionalPower;
@@ -44,18 +42,15 @@ public class PowerProductionPlayerChoice {
     }
 
     public Resource[] getResources(){
-        Resource[] resources = new Resource[3];
-        resources[0] = basicResource1;
-        resources[1] = basicResource2;
-        resources[2] = basicResource3;
-        return resources;
+        return basicResources;
     }
 
     public void setBasicPower(Resource r1, Resource r2, Resource r3){
+        basicResources = new Resource[3];
         basicPower = true;
-        basicResource1 = r1;
-        basicResource2 = r2;
-        basicResource3 = r3;
+        basicResources[0] = r1;
+        basicResources[1] = r2;
+        basicResources[2] = r3;
     }
 
     public boolean isFirstAdditionalPower() {

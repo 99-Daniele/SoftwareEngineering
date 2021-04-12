@@ -1,7 +1,5 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.exceptions.EmptyDevelopmentCardDeckException;
-
 public class MultiPlayerGame extends Game{
 
     public MultiPlayerGame(int numOfPlayers) {
@@ -10,4 +8,9 @@ public class MultiPlayerGame extends Game{
 
     @Override
     public void startGame() {    }
+
+    @Override
+    public PlayerBoard endGame() {
+        return new PlayerBoard("p");
+    }
 }

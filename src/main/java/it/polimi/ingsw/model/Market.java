@@ -20,7 +20,6 @@ public class Market {
         prepareMarket();
    }
 
-
     /**
      * this method allows the constructor to create the market. This method build a matrix 3X4 of marbles and a slot for the side slide.
      * The market is build randomly with the amount of marbles available.
