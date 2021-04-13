@@ -129,6 +129,21 @@ public abstract class Game implements LightGame{
     }
 
     /**
+     *
+     * @return arraylist of 4 leader cards
+     */
+    public ArrayList<LeaderCard> possibleCardLeader()
+    {
+        ArrayList<LeaderCard> NewLeaderCards=new ArrayList<>();
+        for(int count=0; count<4; count++)
+        {
+            int i = (int) (Math.random() * leaderCards.size());
+            NewLeaderCards.add(leaderCards.remove(i));
+        }
+        return NewLeaderCards;
+    }
+
+    /**
      * @param nickname is player chosen nickname
      * @throws AlreadyTakenNicknameException if @param nickname is already taken by another player
      */

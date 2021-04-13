@@ -14,7 +14,9 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame{
     }
 
     @Override
-    public void startGame() {    }
+    public void startGame() {
+        prepareActions();
+    }
 
     /**
      * this method creates the 7 actions of SinglePlayerGame, add to actions and shuffle them
@@ -88,33 +90,25 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame{
 
     /**
      * @param color stands for the kind of DevelopmentCards to discard from his deck
-     * @throws EmptyDevelopmentCardDeckException by the signature of removeDevelopmentCard
-     * this method finds the first not empty decks which contains DevelopmentCards of @param color and discard the first
-     * two DevelopmentCard contained. if during discarding there are not anymore DevelopmentCards, method do nothing.
+     * this method receives the deck and remove the card if possible otherwise it asks a new deck and remove the card.
+     * If during discarding there are not anymore DevelopmentCards, method do nothing.
      */
     @Override
     public void discardDeckDevelopmentCards(Color color) throws EmptyDevelopmentCardDeckException {
         Deck colorDeck = getColorDeck(color);
-        if(colorDeck.isEmpty())
-            return;
-            /*
-             if there is no deck which contains DevelopmentCards of @param color, do nothing.
-            */
+        int count=0;
+        int eccCount=0;
 
-        colorDeck.removeDevelopmentCard();
-        if(colorDeck.isEmpty()) {
-            colorDeck = getColorDeck(color);
-            /*
-             if after one discard the deck is empty, find another one of the same kind but with higher level.
-             */
-
-            if (colorDeck.isEmpty())
-                return;
-                /*
-                 if there is no deck which contains DevelopmentCards of @param color, do nothing.
-                */
+        while (count<2 && eccCount<2)
+        {
+            try{
+                colorDeck.removeDevelopmentCard();
+                count++;
+            }catch (EmptyDevelopmentCardDeckException e){
+                colorDeck=getColorDeck(color);
+                eccCount++;
+            }
         }
-        colorDeck.removeDevelopmentCard();
     }
 
     @Override

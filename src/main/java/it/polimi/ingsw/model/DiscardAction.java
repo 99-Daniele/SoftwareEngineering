@@ -17,8 +17,7 @@ public class DiscardAction extends Action{
      * this method discard the two lowest level cards with this.color and move the action to last position
      */
     @Override
-    public void actionTrigger(LightSinglePlayerGame game)
-            throws EmptyDevelopmentCardDeckException {
+    public void actionTrigger(LightSinglePlayerGame game) {
         game.discardDeckDevelopmentCards(color);
         game.moveToLastAction();
     }
