@@ -23,6 +23,22 @@ public abstract class Game implements LightGame{
         this.numOfPlayers = numOfPlayers;
         currentPlayer = 0;
         leaderCards = new ArrayList<>(16);
+        createDecks();
+    }
+
+    private void createDecks(){
+        deck[0][0]=new Deck(Color.GREEN,1);
+        deck[0][1]=new Deck(Color.PURPLE,1);
+        deck[0][2]=new Deck(Color.BLUE,1);
+        deck[0][3]=new Deck(Color.YELLOW,1);
+        deck[1][0]=new Deck(Color.GREEN,2);
+        deck[1][1]=new Deck(Color.PURPLE,2);
+        deck[1][2]=new Deck(Color.BLUE,2);
+        deck[1][3]=new Deck(Color.YELLOW,2);
+        deck[2][0]=new Deck(Color.GREEN,3);
+        deck[2][1]=new Deck(Color.PURPLE,3);
+        deck[2][2]=new Deck(Color.BLUE,3);
+        deck[2][3]=new Deck(Color.YELLOW,3);
     }
 
     /**
@@ -30,14 +46,16 @@ public abstract class Game implements LightGame{
      * @return the first not empty deck which contains DevelopmentCards of @param color, or the last deck of same kind of cards.
      */
     public Deck getColorDeck(Color color){
-        int i;
+        int i,colorcol;
         for(i = 0; i < 4; i++) {
-            if (deck[0][i].getColor() == color && !(deck[0][i].isEmpty()))
-                return deck[0][i];
+            if (deck[0][i].getColor() == color)
+                colorcol=i;
         }
-        if(!deck[1][i].isEmpty())
-            return deck[1][i];
-        return deck[2][i];
+        if (!deck[0][colorcol].isEmpty())
+            return deck[0][colorcol];
+        if(!deck[1][colorcol].isEmpty())
+            return deck[1][colorcol];
+        return deck[2][colorcol];
     }
 
     /**
