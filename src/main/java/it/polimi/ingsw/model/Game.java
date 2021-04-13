@@ -101,6 +101,11 @@ public abstract class Game implements LightGame{
         return leaderCards.remove(i);
     }
 
+    public Deck getDeck(int line, int column)
+    {
+        return deck[line][column];
+    }
+
     /**
      * @param color is the color of DevelopmentCards contained in deck
      * @return the first not empty deck which contains DevelopmentCards of @param color, or the last deck of same kind of cards.
@@ -129,10 +134,9 @@ public abstract class Game implements LightGame{
     }
 
     /**
-     *
      * @return arraylist of 4 leader cards
      */
-    public ArrayList<LeaderCard> possibleCardLeader()
+    public synchronized ArrayList<LeaderCard> possibleCardLeader()
     {
         ArrayList<LeaderCard> NewLeaderCards=new ArrayList<>();
         for(int count=0; count<4; count++)

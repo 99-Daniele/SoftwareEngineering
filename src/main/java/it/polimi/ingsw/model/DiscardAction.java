@@ -13,7 +13,6 @@ public class DiscardAction extends Action{
 
     /**
      * @param game is SinglePlayerGame
-     * @throws EmptyDevelopmentCardDeckException by the signature of discardDeckDevelopmentCard
      * this method discard the two lowest level cards with this.color and move the action to last position
      */
     @Override

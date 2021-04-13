@@ -7,7 +7,7 @@ import it.polimi.ingsw.exceptions.EmptyDevelopmentCardDeckException;
  */
 public interface LightSinglePlayerGame {
 
-    void discardDeckDevelopmentCards(Color color) throws EmptyDevelopmentCardDeckException;
+    void discardDeckDevelopmentCards(Color color);
 
     void moveToLastAction();
 

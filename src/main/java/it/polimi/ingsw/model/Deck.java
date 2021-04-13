@@ -72,4 +72,13 @@ public class Deck {
         if(developmentCards.size() == 0)
             this.empty = true;
     }
+
+    /**
+     *
+     * @return the number of cards in the deck
+     */
+    public int numberOfCards()
+    {
+        return developmentCards.size();
+    }
 }

@@ -11,17 +11,17 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame{
 
     public SinglePlayerGame() {
         super(1);
+        prepareActions();
     }
 
     @Override
     public void startGame() {
-        prepareActions();
     }
 
     /**
      * this method creates the 7 actions of SinglePlayerGame, add to actions and shuffle them
      */
-    public void prepareActions(){
+    private void prepareActions(){
         Action action1 = new DiscardAction(Color.BLUE);
         Action action2 = new DiscardAction(Color.GREEN);
         Action action3 = new DiscardAction(Color.YELLOW);
@@ -42,9 +42,8 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame{
     /**
      * method trigger the first action. If after the trigger, there zero remaining cards of one color, or player has seven cards,
      * or someone have reached the last pope space, calls endGame()
-     * @throws EmptyDevelopmentCardDeckException by signature of actionTrigger()
      */
-    public void triggerFirstAction() throws EmptyDevelopmentCardDeckException {
+    public void triggerFirstAction() {
         actions.get(0).actionTrigger(this);
         if(zeroRemainingColorCards() || getFaithTrack().zeroRemainingPope() || getPlayer(0).haveSevenDevelopmentCards())
             endGame();
@@ -94,7 +93,7 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame{
      * If during discarding there are not anymore DevelopmentCards, method do nothing.
      */
     @Override
-    public void discardDeckDevelopmentCards(Color color) throws EmptyDevelopmentCardDeckException {
+    public void discardDeckDevelopmentCards(Color color){
         Deck colorDeck = getColorDeck(color);
         int count=0;
         int eccCount=0;
