@@ -1,0 +1,54 @@
+[
+  {
+    "resource": "SHIELD",
+    "leaderRequirements": {
+      "cardRequirements": [
+        {
+          "color": "YELLOW",
+          "numOfCards": "1",
+          "maxLevel": "2"
+        }
+      ]
+    },
+    "victoryPoints": "4"
+  },
+  {
+    "resource": "SERVANT",
+    "leaderRequirements": {
+      "cardRequirements": [
+        {
+          "color": "BLUE",
+          "numOfCards": "1",
+          "maxLevel": "2"
+        }
+      ]
+    },
+    "victoryPoints": "4"
+  },
+  {
+    "resource": "STONE",
+    "leaderRequirements": {
+      "cardRequirements": [
+        {
+          "color": "PURPLE",
+          "numOfCards": "1",
+          "maxLevel": "2"
+        }
+      ]
+    },
+    "victoryPoints": "4"
+  },
+  {
+    "resource": "COIN",
+    "leaderRequirements": {
+      "cardRequirements": [
+        {
+          "color": "GREEN",
+          "numOfCards": "1",
+          "maxLevel": "2"
+        }
+      ]
+    },
+    "victoryPoints": "4"
+  }
+]

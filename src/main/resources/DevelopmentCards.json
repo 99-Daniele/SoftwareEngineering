@@ -1,0 +1,1643 @@
+[
+  {
+    "color": "GREEN",
+    "level": "1",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "2"
+        }
+      ]
+    },
+    "victoryPoints": "1",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": []
+    },
+    "faithPointsGiven": "1"
+  },
+  {
+    "color": "GREEN",
+    "level": "1",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "SERVANT",
+          "amount": "1"
+        },{
+          "resource": "SHIELD",
+          "amount": "1"
+        },
+        {
+          "resource": "STONE",
+          "amount": "1"
+        }
+      ]
+    },
+    "victoryPoints": "2",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "SERVANT",
+          "amount": "1"
+        }
+      ]
+    },
+    "faithPointsGiven": "0"
+  },
+  {
+    "color": "GREEN",
+    "level": "1",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "3"
+        }
+      ]
+    },
+    "victoryPoints": "3",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "SERVANT",
+          "amount": "2"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "1"
+        },
+        {
+          "resource": "SHIELD",
+          "amount": "1"
+        },
+        {
+          "resource": "STONE",
+          "amount": "1"
+        }
+      ]
+    },
+    "faithPointsGiven": "0"
+  },
+  {
+    "color": "GREEN",
+    "level": "1",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "2"
+        },
+        {
+          "resource": "COIN",
+          "amount": "2"
+        }
+      ]
+    },
+    "victoryPoints": "4",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "1"
+        },
+        {
+          "resource": "SERVANT",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "2"
+        }
+      ]
+    },
+    "faithPointsGiven": "1"
+  },
+  {
+    "color": "PURPLE",
+    "level": "1",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "SERVANT",
+          "amount": "2"
+        }
+      ]
+    },
+    "victoryPoints": "1",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": []
+    },
+    "faithPointsGiven": "1"
+  },
+  {
+    "color": "PURPLE",
+    "level": "1",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "SERVANT",
+          "amount": "1"
+        },
+        {
+          "resource": "SHIELD",
+          "amount": "1"
+        },
+        {
+          "resource": "COIN",
+          "amount": "1"
+        }
+      ]
+    },
+    "victoryPoints": "2",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "1"
+        }
+      ]
+    },
+    "faithPointsGiven": "0"
+  },
+  {
+    "color": "PURPLE",
+    "level": "1",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "SERVANT",
+          "amount": "3"
+        }
+      ]
+    },
+    "victoryPoints": "3",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "2"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "SERVANT",
+          "amount": "1"
+        },
+        {
+          "resource": "SHIELD",
+          "amount": "1"
+        },
+        {
+          "resource": "STONE",
+          "amount": "1"
+        }
+      ]
+    },
+    "faithPointsGiven": "0"
+  },
+
+  {
+    "color": "PURPLE",
+    "level": "1",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "SERVANT",
+          "amount": "2"
+        },
+        {
+          "resource": "STONE",
+          "amount": "2"
+        }
+      ]
+    },
+    "victoryPoints": "4",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "1"
+        },
+        {
+          "resource": "SHIELD",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "2"
+        }
+      ]
+    },
+    "faithPointsGiven": "1"
+  },
+  {
+    "color": "BLUE",
+    "level": "1",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "2"
+        }
+      ]
+    },
+    "victoryPoints": "1",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": []
+    },
+    "faithPointsGiven": "1"
+  },
+  {
+    "color": "BLUE",
+    "level": "1",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "SERVANT",
+          "amount": "1"
+        },
+        {
+          "resource": "STONE",
+          "amount": "1"
+        },
+        {
+          "resource": "COIN",
+          "amount": "1"
+        }
+      ]
+    },
+    "victoryPoints": "2",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "SERVANT",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "1"
+        }
+      ]
+    },
+    "faithPointsGiven": "0"
+  },
+  {
+    "color": "BLUE",
+    "level": "1",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "3"
+        }
+      ]
+    },
+    "victoryPoints": "3",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "2"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "1"
+        },
+        {
+          "resource": "SHIELD",
+          "amount": "1"
+        },
+        {
+          "resource": "SERVANT",
+          "amount": "1"
+        }
+      ]
+    },
+    "faithPointsGiven": "0"
+  },
+
+  {
+    "color": "BLUE",
+    "level": "1",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "2"
+        },
+        {
+          "resource": "SERVANT",
+          "amount": "2"
+        }
+      ]
+    },
+    "victoryPoints": "4",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "1"
+        },
+        {
+          "resource": "SHIELD",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "SERVANT",
+          "amount": "2"
+        }
+      ]
+    },
+    "faithPointsGiven": "1"
+  },
+  {
+    "color": "YELLOW",
+    "level": "1",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "2"
+        }
+      ]
+    },
+    "victoryPoints": "1",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "SERVANT",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": []
+    },
+    "faithPointsGiven": "1"
+  },
+  {
+    "color": "YELLOW",
+    "level": "1",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "1"
+        },
+        {
+          "resource": "SHIELD",
+          "amount": "1"
+        },
+        {
+          "resource": "COIN",
+          "amount": "1"
+        }
+      ]
+    },
+    "victoryPoints": "2",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "1"
+        }
+      ]
+    },
+    "faithPointsGiven": "0"
+  },
+  {
+    "color": "YELLOW",
+    "level": "1",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "3"
+        }
+      ]
+    },
+    "victoryPoints": "3",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "2"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "1"
+        },
+        {
+          "resource": "SERVANT",
+          "amount": "1"
+        },
+        {
+          "resource": "STONE",
+          "amount": "1"
+        }
+      ]
+    },
+    "faithPointsGiven": "0"
+  },
+  {
+    "color": "YELLOW",
+    "level": "1",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "2"
+        },
+        {
+          "resource": "STONE",
+          "amount": "2"
+        }
+      ]
+    },
+    "victoryPoints": "4",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "1"
+        },
+        {
+          "resource": "SERVANT",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "2"
+        }
+      ]
+    },
+    "faithPointsGiven": "1"
+  },
+  {
+    "color": "GREEN",
+    "level": "2",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "4"
+        }
+      ]
+    },
+    "victoryPoints": "5",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": []
+    },
+    "faithPointsGiven": "2"
+  },
+
+  {
+    "color": "GREEN",
+    "level": "2",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "3"
+        },
+        {
+          "resource": "SERVANT",
+          "amount": "2"
+        }
+      ]
+    },
+    "victoryPoints": "6",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "1"
+        },
+        {
+          "resource": "SERVANT",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "3"
+        }
+      ]
+    },
+    "faithPointsGiven": "0"
+  },
+
+  {
+    "color": "GREEN",
+    "level": "2",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "5"
+        }
+      ]
+    },
+    "victoryPoints": "7",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "2"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "2"
+        }
+      ]
+    },
+    "faithPointsGiven": "2"
+  },
+
+  {
+    "color": "GREEN",
+    "level": "2",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "3"
+        },
+        {
+          "resource": "COIN",
+          "amount": "3"
+        }
+      ]
+    },
+    "victoryPoints": "8",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "2"
+        }
+      ]
+    },
+    "faithPointsGiven": "1"
+  },
+  {
+    "color": "PURPLE",
+    "level": "2",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "SERVANT",
+          "amount": "4"
+        }
+      ]
+    },
+    "victoryPoints": "5",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": []
+    },
+    "faithPointsGiven": "2"
+  },
+
+  {
+    "color": "PURPLE",
+    "level": "2",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "SERVANT",
+          "amount": "3"
+        },
+        {
+          "resource": "COIN",
+          "amount": "2"
+        }
+      ]
+    },
+    "victoryPoints": "6",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "1"
+        },
+        {
+          "resource": "SERVANT",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "3"
+        }
+      ]
+    },
+    "faithPointsGiven": "0"
+  },
+
+  {
+    "color": "PURPLE",
+    "level": "2",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "SERVANT",
+          "amount": "5"
+        }
+      ]
+    },
+    "victoryPoints": "7",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "2"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "2"
+        }
+      ]
+    },
+    "faithPointsGiven": "2"
+  },
+
+  {
+    "color": "PURPLE",
+    "level": "2",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "3"
+        },
+        {
+          "resource": "SERVANT",
+          "amount": "3"
+        }
+      ]
+    },
+    "victoryPoints": "8",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "SERVANT",
+          "amount": "2"
+        }
+      ]
+    },
+    "faithPointsGiven": "1"
+  },
+  {
+    "color": "BLUE",
+    "level": "2",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "4"
+        }
+      ]
+    },
+    "victoryPoints": "5",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "SERVANT",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": []
+    },
+    "faithPointsGiven": "2"
+  },
+  {
+    "color": "BLUE",
+    "level": "2",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "3"
+        },
+        {
+          "resource": "STONE",
+          "amount": "2"
+        }
+      ]
+    },
+    "victoryPoints": "6",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "1"
+        },
+        {
+          "resource": "STONE",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "SERVANT",
+          "amount": "3"
+        }
+      ]
+    },
+    "faithPointsGiven": "0"
+  },
+
+  {
+    "color": "BLUE",
+    "level": "2",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "5"
+        }
+      ]
+    },
+    "victoryPoints": "7",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "SERVANT",
+          "amount": "2"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "2"
+        }
+      ]
+    },
+    "faithPointsGiven": "2"
+  },
+
+  {
+    "color": "BLUE",
+    "level": "2",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "3"
+        },
+        {
+          "resource": "COIN",
+          "amount": "3"
+        }
+      ]
+    },
+    "victoryPoints": "8",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "SERVANT",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "2"
+        }
+      ]
+    },
+    "faithPointsGiven": "1"
+  },
+  {
+    "color": "YELLOW",
+    "level": "2",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "4"
+        }
+      ]
+    },
+    "victoryPoints": "5",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": []
+    },
+    "faithPointsGiven": "2"
+  },
+  {
+    "color": "YELLOW",
+    "level": "2",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "3"
+        },
+        {
+          "resource": "SHIELD",
+          "amount": "2"
+        }
+      ]
+    },
+    "victoryPoints": "6",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "1"
+        },
+        {
+          "resource": "STONE",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "3"
+        }
+      ]
+    },
+    "faithPointsGiven": "0"
+  },
+  {
+    "color": "YELLOW",
+    "level": "2",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "5"
+        }
+      ]
+    },
+    "victoryPoints": "7",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "2"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "SERVANT",
+          "amount": "2"
+        }
+      ]
+    },
+    "faithPointsGiven": "2"
+  },
+  {
+    "color": "YELLOW",
+    "level": "2",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "3"
+        },
+        {
+          "resource": "SERVANT",
+          "amount": "3"
+        }
+      ]
+    },
+    "victoryPoints": "8",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "2"
+        }
+      ]
+    },
+    "faithPointsGiven": "1"
+  },
+  {
+    "color": "GREEN",
+    "level": "3",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "6"
+        }
+      ]
+    },
+    "victoryPoints": "9",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "2"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "3"
+        }
+      ]
+    },
+    "faithPointsGiven": "2"
+  },
+
+  {
+    "color": "GREEN",
+    "level": "3",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "5"
+        },
+        {
+          "resource": "SERVANT",
+          "amount": "2"
+        }
+      ]
+    },
+    "victoryPoints": "10",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "1"
+        },
+        {
+          "resource": "SERVANT",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "2"
+        },
+        {
+          "resource": "STONE",
+          "amount": "2"
+        }
+      ]
+    },
+    "faithPointsGiven": "1"
+  },
+
+  {
+    "color": "GREEN",
+    "level": "3",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "7"
+        }
+      ]
+    },
+    "victoryPoints": "11",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "SERVANT",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "1"
+        }
+      ]
+    },
+    "faithPointsGiven": "3"
+  },
+
+  {
+    "color": "GREEN",
+    "level": "3",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "4"
+        },
+        {
+          "resource": "COIN",
+          "amount": "4"
+        }
+      ]
+    },
+    "victoryPoints": "12",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "3"
+        },
+        {
+          "resource": "SHIELD",
+          "amount": "1"
+        }
+      ]
+    },
+    "faithPointsGiven": "0"
+  },
+  {
+    "color": "PURPLE",
+    "level": "3",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "SERVANT",
+          "amount": "6"
+        }
+      ]
+    },
+    "victoryPoints": "9",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "2"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "3"
+        }
+      ]
+    },
+    "faithPointsGiven": "2"
+  },
+
+  {
+    "color": "PURPLE",
+    "level": "3",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "SERVANT",
+          "amount": "5"
+        },
+        {
+          "resource": "COIN",
+          "amount": "2"
+        }
+      ]
+    },
+    "victoryPoints": "10",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "1"
+        },
+        {
+          "resource": "SHIELD",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "2"
+        },
+        {
+          "resource": "SERVANT",
+          "amount": "2"
+        }
+      ]
+    },
+    "faithPointsGiven": "1"
+  },
+
+  {
+    "color": "PURPLE",
+    "level": "3",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "SERVANT",
+          "amount": "7"
+        }
+      ]
+    },
+    "victoryPoints": "11",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "1"
+        }
+      ]
+    },
+    "faithPointsGiven": "3"
+  },
+
+  {
+    "color": "PURPLE",
+    "level": "3",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "4"
+        },
+        {
+          "resource": "SERVANT",
+          "amount": "4"
+        }
+      ]
+    },
+    "victoryPoints": "12",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "3"
+        },
+        {
+          "resource": "SERVANT",
+          "amount": "1"
+        }
+      ]
+    },
+    "faithPointsGiven": "0"
+  },
+  {
+    "color": "BLUE",
+    "level": "3",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "6"
+        }
+      ]
+    },
+    "victoryPoints": "9",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "SERVANT",
+          "amount": "2"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "3"
+        }
+      ]
+    },
+    "faithPointsGiven": "2"
+  },
+  {
+    "color": "BLUE",
+    "level": "3",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "5"
+        },
+        {
+          "resource": "STONE",
+          "amount": "2"
+        }
+      ]
+    },
+    "victoryPoints": "10",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "1"
+        },
+        {
+          "resource": "SHIELD",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "SERVANT",
+          "amount": "2"
+        },
+        {
+          "resource": "STONE",
+          "amount": "2"
+        }
+      ]
+    },
+    "faithPointsGiven": "1"
+  },
+
+  {
+    "color": "BLUE",
+    "level": "3",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "7"
+        }
+      ]
+    },
+    "victoryPoints": "11",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "1"
+        }
+      ]
+    },
+    "faithPointsGiven": "3"
+  },
+
+  {
+    "color": "BLUE",
+    "level": "3",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "4"
+        },
+        {
+          "resource": "COIN",
+          "amount": "4"
+        }
+      ]
+    },
+    "victoryPoints": "12",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "SERVANT",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "3"
+        },
+        {
+          "resource": "COIN",
+          "amount": "1"
+        }
+      ]
+    },
+    "faithPointsGiven": "0"
+  },
+  {
+    "color": "YELLOW",
+    "level": "3",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "6"
+        }
+      ]
+    },
+    "victoryPoints": "9",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "2"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "SERVANT",
+          "amount": "3"
+        }
+      ]
+    },
+    "faithPointsGiven": "2"
+  },
+  {
+    "color": "YELLOW",
+    "level": "3",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "5"
+        },
+        {
+          "resource": "SERVANT",
+          "amount": "2"
+        }
+      ]
+    },
+    "victoryPoints": "10",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "1"
+        },
+        {
+          "resource": "SERVANT",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "2"
+        },
+        {
+          "resource": "COIN",
+          "amount": "2"
+        }
+      ]
+    },
+    "faithPointsGiven": "1"
+  },
+  {
+    "color": "YELLOW",
+    "level": "3",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "7"
+        }
+      ]
+    },
+    "victoryPoints": "11",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "SERVANT",
+          "amount": "1"
+        }
+      ]
+    },
+    "faithPointsGiven": "3"
+  },
+  {
+    "color": "YELLOW",
+    "level": "3",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "4"
+        },
+        {
+          "resource": "SERVANT",
+          "amount": "4"
+        }
+      ]
+    },
+    "victoryPoints": "12",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "SERVANT",
+          "amount": "3"
+        },
+        {
+          "resource": "STONE",
+          "amount": "1"
+        }
+      ]
+    },
+    "faithPointsGiven": "0"
+  }
+]

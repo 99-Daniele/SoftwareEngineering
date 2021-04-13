@@ -2,7 +2,14 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.exceptions.*;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
 
 public abstract class Game implements LightGame{
 
@@ -17,15 +24,20 @@ public abstract class Game implements LightGame{
     /**
      * @param numOfPlayers is the chosen number of players
      */
-    public Game(int numOfPlayers) {
+    public Game(int numOfPlayers){
         market = new Market();
         faithTrack =new FaithTrack();
         this.numOfPlayers = numOfPlayers;
         currentPlayer = 0;
-        leaderCards = new ArrayList<>(16);
         createDecks();
+        leaderCards = new ArrayList<>(16);
+        createLeaderCards();
     }
 
+    /**
+     * this method method creates all 12 decks and all 48 DevelopmentCards parsing by Json file.
+     * then add each card to is correct deck and prepare all decks.
+     */
     private void createDecks(){
         deck[0][0]=new Deck(Color.GREEN,1);
         deck[0][1]=new Deck(Color.PURPLE,1);
@@ -39,6 +51,54 @@ public abstract class Game implements LightGame{
         deck[2][1]=new Deck(Color.PURPLE,3);
         deck[2][2]=new Deck(Color.BLUE,3);
         deck[2][3]=new Deck(Color.YELLOW,3);
+        try {
+            Gson gson = new Gson();
+            JsonReader reader = new JsonReader(new FileReader("src/main/resources/DevelopmentCards.json"));
+            DevelopmentCard[] developmentCards = gson.fromJson(reader, DevelopmentCard[].class);
+            int i = 0;
+            for(int j = 0; j < 3; j++){
+                for (int k = 0; k < 4; k++){
+                    for(int h = 0; h < 4; h++) {
+                        deck[j][k].addDevelopmentCard(developmentCards[i]);
+                        i++;
+                    }
+                    deck[j][k].prepareDeck();
+                }
+            }
+        } catch (IOException | WrongDevelopmentCardInsertionException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * this method creates the list of 16 LeaderCards by paring Json File
+     */
+    private void createLeaderCards(){
+        try {
+            Gson gson = new Gson();
+            JsonReader reader1 = new JsonReader(new FileReader("src/main/resources/DiscountCards.json"));
+            LeaderCard[] discountCards = gson.fromJson(reader1, DiscountCard[].class);
+            JsonReader reader2 = new JsonReader(new FileReader("src/main/resources/ExtraDepotCards.json"));
+            LeaderCard[] extraDepotCards = gson.fromJson(reader2, ExtraDepotCard[].class);
+            JsonReader reader3 = new JsonReader(new FileReader("src/main/resources/WhiteConversionCards.json"));
+            LeaderCard[] whiteConversionCards = gson.fromJson(reader3, WhiteConversionCard[].class);
+            JsonReader reader4 = new JsonReader(new FileReader("src/main/resources/AdditionalProductionPowerCards.json"));
+            LeaderCard[] additionalProductionPowerCards = gson.fromJson(reader4, AdditionalProductionPowerCard[].class);
+            leaderCards.addAll(Arrays.asList(discountCards).subList(0, 4));
+            leaderCards.addAll(Arrays.asList(extraDepotCards).subList(0, 4));
+            leaderCards.addAll(Arrays.asList(whiteConversionCards).subList(0, 4));
+            leaderCards.addAll(Arrays.asList(additionalProductionPowerCards).subList(0, 4));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * @return one casual LeaderCard from leaderCards
+     */
+    public LeaderCard getCasualLeaderCard(){
+        int i = (int) (Math.random() * leaderCards.size());
+        return leaderCards.remove(i);
     }
 
     /**
@@ -46,16 +106,14 @@ public abstract class Game implements LightGame{
      * @return the first not empty deck which contains DevelopmentCards of @param color, or the last deck of same kind of cards.
      */
     public Deck getColorDeck(Color color){
-        int i,colorcol;
-        for(i = 0; i < 4; i++) {
-            if (deck[0][i].getColor() == color)
-                colorcol=i;
-        }
-        if (!deck[0][colorcol].isEmpty())
-            return deck[0][colorcol];
-        if(!deck[1][colorcol].isEmpty())
-            return deck[1][colorcol];
-        return deck[2][colorcol];
+        int i = 0;
+        while(deck[0][i].getColor() != color)
+            i++;
+        if (!deck[0][i].isEmpty())
+            return deck[0][i];
+        if(!deck[1][i].isEmpty())
+            return deck[1][i];
+        return deck[2][i];
     }
 
     /**

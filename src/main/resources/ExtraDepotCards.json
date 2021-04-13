@@ -1,0 +1,50 @@
+[
+  {
+    "resource": "STONE",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "5"
+        }
+      ]
+    },
+    "victoryPoints": "3"
+  },
+  {
+    "resource": "SERVANT",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "5"
+        }
+      ]
+    },
+    "victoryPoints": "3"
+  },
+  {
+    "resource": "SHIELD",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "SERVANT",
+          "amount": "5"
+        }
+      ]
+    },
+    "victoryPoints": "3"
+  },
+  {
+    "resource": "COIN",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "5"
+        }
+      ]
+    },
+    "victoryPoints": "3"
+  }
+]

@@ -2,7 +2,7 @@ package it.polimi.ingsw.model;
 
 public class MultiPlayerGame extends Game{
 
-    public MultiPlayerGame(int numOfPlayers) {
+    public MultiPlayerGame(int numOfPlayers){
         super(numOfPlayers);
     }
 
