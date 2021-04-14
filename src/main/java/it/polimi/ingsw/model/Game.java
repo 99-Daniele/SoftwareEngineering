@@ -2,7 +2,6 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.exceptions.*;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;

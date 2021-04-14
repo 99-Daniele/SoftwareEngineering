@@ -13,10 +13,10 @@ public class LeaderRequirements {
     /**
      * @param color is the type of color required
      * @param numOfCards is the num of cards of @param color required
-     * @param maxLevel is the max level of cards of @param color required
+     * @param requiredLevel is the level of card of @param color required
      */
-    public void createCardRequirement(Color color, int numOfCards, int maxLevel) {
-        CardRequirement cardRequirement = new CardRequirement(color, numOfCards, maxLevel);
+    public void createCardRequirement(Color color, int numOfCards, int requiredLevel) {
+        CardRequirement cardRequirement = new CardRequirement(color, numOfCards, requiredLevel);
         cardRequirements.add(cardRequirement);
     }
 
@@ -29,7 +29,7 @@ public class LeaderRequirements {
         for(CardRequirement cardRequirement: cardRequirements){
             if(cardRequirement.getColor() == card.getColor()){
                 cardRequirement.increaseNumOfCards();
-                cardRequirement.setMaxLevel(card.getLevel());
+                cardRequirement.addLevel(card.getLevel());
                 return;
             }
         }
@@ -40,12 +40,13 @@ public class LeaderRequirements {
     /**
      * @param leaderRequirements stands for player's set of cards
      * @return true if player has enough required cards, otherwise @return false
-     * this method verifies if @param leaderRequirements has more numOfCards and maxLevel than this for each color CardRequirement
+     * this method verifies if @param leaderRequirements has more numOfCards than this for each color CardRequirement
+     * and contains all required levels.
      */
     public boolean enoughCardRequirements(LeaderRequirements leaderRequirements){
         for(Color color: Color.values()){
-            if(this.getNumOfCards(color) > leaderRequirements.getNumOfCards(color)
-                && this.getMaxLevelOfCards(color) > leaderRequirements.getMaxLevelOfCards(color))
+            if(leaderRequirements.getNumOfCards(color) < this.getNumOfCards(color)
+                || !(this.getCardRequirement(color).enoughLevels(leaderRequirements.getCardRequirement(color))))
                 return false;
         }
         return true;
@@ -64,14 +65,14 @@ public class LeaderRequirements {
     }
 
     /**
-     * @param color stands for the color of cards to get maxLevel
-     * @return the max level among cards of @param color
+     * @param color stands for the color of CardRequirement to find
+     * @return the CardRequirement whit @param color, or if not exist an empty CardRequirement
      */
-    public int getMaxLevelOfCards(Color color){
+    public CardRequirement getCardRequirement(Color color){
         for(CardRequirement cardRequirement: cardRequirements) {
             if (cardRequirement.getColor() == color)
-                return cardRequirement.getMaxLevel();
+                return cardRequirement;
         }
-        return 0;
+        return new CardRequirement(color, 0, 0);
     }
 }
