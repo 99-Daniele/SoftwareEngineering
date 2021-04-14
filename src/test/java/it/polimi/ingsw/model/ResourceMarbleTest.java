@@ -13,12 +13,7 @@ public class ResourceMarbleTest {
     void ControlIncrease() throws AlreadyTakenNicknameException {
         ResourceMarble resourceMarble=new ResourceMarble(Resource.COIN);
         ResourceMarble resourceMarble1=new ResourceMarble(Resource.SHIELD);
-        Game game=new Game(1) {
-            @Override
-            public void startGame() {
-
-            }
-        };
+        Game game=new MultiPlayerGame(3);
         game.createPlayer("user");
         assertTrue(resourceMarble1.useMarble(game));
         assertTrue(resourceMarble.useMarble(game));

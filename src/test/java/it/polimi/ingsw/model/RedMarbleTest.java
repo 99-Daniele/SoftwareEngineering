@@ -14,12 +14,7 @@ public class RedMarbleTest {
     @Test
     void Control() throws AlreadyTakenNicknameException {
         RedMarble redMarble=new RedMarble();
-        Game game=new Game(3) {
-            @Override
-            public void startGame() {
-
-            }
-        };
+        Game game=new MultiPlayerGame(3);
         game.createPlayer("user1");
         game.createPlayer("user2");
         game.createPlayer("user3");

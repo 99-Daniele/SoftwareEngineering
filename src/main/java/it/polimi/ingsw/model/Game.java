@@ -168,8 +168,6 @@ public abstract class Game implements LightGame{
         return false;
     }
 
-    public abstract void startGame();
-
     /**
      * shift current player to his subsequent or return to first player
      */
@@ -369,7 +367,7 @@ public abstract class Game implements LightGame{
      * this method find the player with more victory points. In case more players have both max victory points, find
      * which one has more amount of resources.
      */
-    public SimplePlayerBoard endGame() {
+    public PlayerBoard endGame() {
         int maxVictoryPoints = 0;
         int maxNumOfResources = 0;
         PlayerBoard winner = getPlayer(0);

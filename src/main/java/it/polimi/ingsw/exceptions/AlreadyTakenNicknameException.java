@@ -6,6 +6,6 @@ package it.polimi.ingsw.exceptions;
 public class AlreadyTakenNicknameException extends Exception{
 
     public AlreadyTakenNicknameException(){
-        super("Questa nickname è già stato scelto.");
+        super("Questo nickname è già stato scelto.");
     }
 }
