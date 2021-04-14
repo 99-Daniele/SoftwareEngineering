@@ -13,7 +13,7 @@ public class ResourceMarble extends Marble {
 
     /**
      * @param game is Game
-     * @return true if the marble has to be discarded, otherwise @return false
+     * @return true if resource is correctly increased, otherwise @return false
      * this method increase Warehouse of this.resource.
      */
     @Override

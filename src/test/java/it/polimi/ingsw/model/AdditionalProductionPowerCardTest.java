@@ -113,6 +113,67 @@ public class AdditionalProductionPowerCardTest {
     }
 
     /**
+     * this test tries to decrease resources if player has not enough resources
+     */
+    @Test
+    void incorrectDecreaselProductionPowerResources()
+            throws InsufficientResourceException, InsufficientCardsException, ActiveLeaderCardException {
+
+        Resource r1 = Resource.COIN;
+        Resource r2 = Resource.STONE;
+        Cost c = new Cost();
+        c.addResource(r1, 3);
+
+        Warehouse w = new Warehouse();
+        Strongbox s = new Strongbox();
+        s.increaseResourceType(r1, 3);
+        LeaderRequirements l = new LeaderRequirements();
+
+        LeaderCard card = new AdditionalProductionPowerCard(r2, c, 2);
+
+        card.activateCard(w, s, l);
+
+        InsufficientResourceException thrown =
+                assertThrows(InsufficientResourceException.class, () -> card.decreaseProductionPowerResources(w, s, 1, r2));
+        String expectedMessage = "Non hai abbastanza risorse per effettuare questa operazione";
+        String actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    /**
+     * this test verifies the correct operation of AdditionalProductionPower
+     */
+    @Test
+    void correctDecreaselProductionPowerResources()
+            throws InsufficientResourceException, InsufficientCardsException, ActiveLeaderCardException {
+
+        Resource r1 = Resource.COIN;
+        Resource r2 = Resource.STONE;
+        Cost c = new Cost();
+        c.addResource(r1, 3);
+
+        Warehouse w = new Warehouse();
+        Strongbox s = new Strongbox();
+        s.increaseResourceType(r1, 3);
+        LeaderRequirements l = new LeaderRequirements();
+
+        LeaderCard card = new AdditionalProductionPowerCard(r1, c, 2);
+
+        card.decreaseProductionPowerResources(w, s, 2, r2);
+        assertEquals(3, s.getNumOfResource(r1));
+        assertEquals(0, s.getNumOfResource(r2));
+        /*
+         card is yet inactive
+         */
+
+        card.activateCard(w, s, l);
+
+        card.decreaseProductionPowerResources(w, s, 2, r2);
+        assertEquals(2, s.getNumOfResource(r1));
+        assertEquals(0, s.getNumOfResource(r2));
+    }
+
+    /**
      * this test tries to use AdditionalProductionPower if player has not enough resources
      */
     @Test

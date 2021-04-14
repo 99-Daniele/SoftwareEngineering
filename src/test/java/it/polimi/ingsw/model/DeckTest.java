@@ -9,10 +9,34 @@ import it.polimi.ingsw.exceptions.EmptyDevelopmentCardDeckException;
 public class DeckTest {
 
     /**
-     * this test tries to add wrong DevelopmentCard
+     * this test tries to add DevelopmentCard with wrong color
      */
     @Test
-    void wrongAdditionDevelopmentCard(){
+    void incorrectAdditionDevelopmentCardWrongColor(){
+
+        Cost c1 = new Cost();
+        Cost c2 = new Cost();
+        Cost c3 = new Cost();
+        DevelopmentCard developmentCard = new DevelopmentCard(Color.GREEN, 1, c1, 1, c2, c3, 1);
+
+        Deck d = new Deck(Color.BLUE, 1);
+
+        WrongDevelopmentCardInsertionException thrown =
+                assertThrows(WrongDevelopmentCardInsertionException.class, () -> d.addDevelopmentCard(developmentCard));
+        /*
+         developmentCard has color = GREEN while deck has color = BLUE
+         */
+
+        String expectedMessage = "Questa carta non può essere inserita in questo mazzetto";
+        String actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    /**
+     * this test tries to add DevelopmentCard with wrong level
+     */
+    @Test
+    void incorrectAdditionDevelopmentCardWrongLevel(){
 
         Resource r1 = Resource.COIN;
         Cost c1 = new Cost();
@@ -112,13 +136,16 @@ public class DeckTest {
 
         assertSame(developmentCard1, d.getFirstCard());
         assertNotSame(developmentCard2, d.getFirstCard());
+        assertEquals(2, d.numberOfCards());
 
         d.removeDevelopmentCard();
 
         assertNotSame(developmentCard1, d.getFirstCard());
         assertSame(developmentCard2, d.getFirstCard());
+        assertEquals(1, d.numberOfCards());
 
         d.removeDevelopmentCard();
         assertTrue(d.isEmpty());
+        assertEquals(0, d.numberOfCards());
     }
 }

@@ -5,5 +5,8 @@ package it.polimi.ingsw.model;
  */
 public abstract class Marble {
 
+    /**
+     * @return false if the marble has to be discarded
+     */
     public abstract boolean useMarble(LightGame game);
 }

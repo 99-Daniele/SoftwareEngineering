@@ -99,7 +99,7 @@ public class DevelopmentCardTest {
      * @throws InsufficientResourceException thrown when there aren't enough resources.
      */
     @Test
-    void productionChoice2() throws InsufficientResourceException {
+    void productionChoice() throws InsufficientResourceException {
         setEmpty();
         warehouse.increaseResource(Resource.STONE);
         strongbox.increaseResourceType(Resource.COIN,5);

@@ -1,7 +1,14 @@
 package it.polimi.ingsw.model;
 
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
 import it.polimi.ingsw.exceptions.*;
 import org.junit.jupiter.api.Test;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -52,19 +59,75 @@ class GameTest {
      * this test verifies the correct creations of decks.
      */
     @Test
-    void createDecks()
-            throws EmptyDevelopmentCardDeckException{
+    void createDecks() throws EmptyDevelopmentCardDeckException{
 
-        Game game = new SinglePlayerGame();
+        Game game = new MultiPlayerGame(2);
         assertFalse(game.zeroRemainingColorCards());
-        assertEquals(1, game.getColorDeck(c1).getFirstCard().getLevel());
-        assertEquals(1, game.getColorDeck(c2).getFirstCard().getLevel());
-        assertEquals(1, game.getColorDeck(c3).getFirstCard().getLevel());
-        assertEquals(1, game.getColorDeck(c4).getFirstCard().getLevel());
-        assertSame(Color.GREEN, game.getColorDeck(c1).getFirstCard().getColor());
-        assertSame(Color.PURPLE, game.getColorDeck(c2).getFirstCard().getColor());
-        assertSame(Color.BLUE, game.getColorDeck(c3).getFirstCard().getColor());
-        assertSame(Color.YELLOW, game.getColorDeck(c4).getFirstCard().getColor());
+
+        assertEquals(1, game.getDeck(0, 0).getFirstCard().getLevel());
+        assertEquals(1, game.getDeck(0, 1).getFirstCard().getLevel());
+        assertEquals(1, game.getDeck(0, 2).getFirstCard().getLevel());
+        assertEquals(1, game.getDeck(0, 3).getFirstCard().getLevel());
+
+        assertSame(Color.GREEN, game.getDeck(0, 0).getFirstCard().getColor());
+        assertSame(Color.PURPLE, game.getDeck(0, 1).getFirstCard().getColor());
+        assertSame(Color.BLUE, game.getDeck(0, 2).getFirstCard().getColor());
+        assertSame(Color.YELLOW, game.getDeck(0, 3).getFirstCard().getColor());
+
+        assertEquals(4, game.getDeck(0, 0).numberOfCards());
+        assertEquals(4, game.getDeck(0, 1).numberOfCards());
+        assertEquals(4, game.getDeck(0, 2).numberOfCards());
+        assertEquals(4, game.getDeck(0, 3).numberOfCards());
+
+        assertEquals(2, game.getDeck(1, 0).getFirstCard().getLevel());
+        assertEquals(2, game.getDeck(1, 1).getFirstCard().getLevel());
+        assertEquals(2, game.getDeck(1, 2).getFirstCard().getLevel());
+        assertEquals(2, game.getDeck(1, 3).getFirstCard().getLevel());
+
+        assertSame(Color.GREEN, game.getDeck(1, 0).getFirstCard().getColor());
+        assertSame(Color.PURPLE, game.getDeck(1, 1).getFirstCard().getColor());
+        assertSame(Color.BLUE, game.getDeck(1, 2).getFirstCard().getColor());
+        assertSame(Color.YELLOW, game.getDeck(1, 3).getFirstCard().getColor());
+
+        assertEquals(4, game.getDeck(1, 0).numberOfCards());
+        assertEquals(4, game.getDeck(1, 1).numberOfCards());
+        assertEquals(4, game.getDeck(1, 2).numberOfCards());
+        assertEquals(4, game.getDeck(1, 3).numberOfCards());
+
+        assertEquals(3, game.getDeck(2, 0).getFirstCard().getLevel());
+        assertEquals(3, game.getDeck(2, 1).getFirstCard().getLevel());
+        assertEquals(3, game.getDeck(2, 2).getFirstCard().getLevel());
+        assertEquals(3, game.getDeck(2, 3).getFirstCard().getLevel());
+
+        assertSame(Color.GREEN, game.getDeck(2, 0).getFirstCard().getColor());
+        assertSame(Color.PURPLE, game.getDeck(2, 1).getFirstCard().getColor());
+        assertSame(Color.BLUE, game.getDeck(2, 2).getFirstCard().getColor());
+        assertSame(Color.YELLOW, game.getDeck(2, 3).getFirstCard().getColor());
+
+        assertEquals(4, game.getDeck(2, 0).numberOfCards());
+        assertEquals(4, game.getDeck(2, 1).numberOfCards());
+        assertEquals(4, game.getDeck(2, 2).numberOfCards());
+        assertEquals(4, game.getDeck(2, 3).numberOfCards());
+    }
+
+    /**
+     * this test verifies the correct parsing from Json File DevelopmentCards.json
+     */
+    @Test
+    void correctJsonParsingDevelopmentCards() throws IOException {
+
+        Gson gson = new Gson();
+        JsonReader reader = new JsonReader(new FileReader("src/main/resources/DevelopmentCards.json"));
+        DevelopmentCard[] developmentCards = gson.fromJson(reader, DevelopmentCard[].class);
+
+        assertSame(Color.GREEN, developmentCards[0].getColor());
+        assertEquals(1, developmentCards[0].getLevel());
+
+        assertSame(Color.YELLOW, developmentCards[47].getColor());
+        assertEquals(3, developmentCards[47].getLevel());
+
+        assertSame(Color.PURPLE, developmentCards[23].getColor());
+        assertEquals(2, developmentCards[23].getLevel());
     }
 
     /**
@@ -73,13 +136,15 @@ class GameTest {
     @Test
     void getCasualLeaderCards(){
 
-        Game game = new SinglePlayerGame();
-        LeaderCard card1 = game.getCasualLeaderCard();
-        LeaderCard card2 = game.getCasualLeaderCard();
-        LeaderCard card3 = game.getCasualLeaderCard();
-        assertNotSame(card1, card2);
-        assertNotSame(card1, card3);
-        assertNotSame(card2, card3);
+        Game game = new MultiPlayerGame(3);
+
+        ArrayList<LeaderCard> cards = game.possibleCardLeader();
+        assertNotSame(cards.get(0), cards.get(1));
+        assertNotSame(cards.get(0), cards.get(2));
+        assertNotSame(cards.get(0), cards.get(3));
+        assertNotSame(cards.get(1), cards.get(2));
+        assertNotSame(cards.get(1), cards.get(3));
+        assertNotSame(cards.get(2), cards.get(3));
     }
 
     /**

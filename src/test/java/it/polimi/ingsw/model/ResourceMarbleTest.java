@@ -12,12 +12,13 @@ public class ResourceMarbleTest {
     @Test
     void ControlIncrease() throws AlreadyTakenNicknameException {
         ResourceMarble resourceMarble=new ResourceMarble(Resource.COIN);
-        ResourceMarble resourceMarble1=new ResourceMarble(Resource.SHIELD);
+        ResourceMarble resourceMarble2=new ResourceMarble(Resource.SHIELD);
         Game game=new MultiPlayerGame(3);
         game.createPlayer("user");
-        assertTrue(resourceMarble1.useMarble(game));
         assertTrue(resourceMarble.useMarble(game));
-        assertTrue(resourceMarble.useMarble(game));
+        assertFalse(resourceMarble.useMarble(game));
+        assertTrue(resourceMarble2.useMarble(game));
+        assertTrue(resourceMarble2.useMarble(game));
         assertEquals(3,game.getCurrentPlayer().sumTotalResource());
     }
 }

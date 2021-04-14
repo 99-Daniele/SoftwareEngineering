@@ -93,7 +93,7 @@ public class PlayerBoardTest {
      * this test tries to buy an expensive development card if there is an active DiscountCard
      */
     @Test
-    void incorrectBuyDevelopmentCardNowEnoughResourceWithDiscountCard()
+    void incorrectBuyDevelopmentCardNotEnoughResourceWithDiscountCard()
             throws InsufficientResourceException, AlreadyDiscardLeaderCardException, ActiveLeaderCardException, InsufficientCardsException {
 
         PlayerBoard p = new PlayerBoard("p1");
@@ -120,6 +120,10 @@ public class PlayerBoardTest {
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
         assertEquals(3, c1.getNumOfResource(r1));
+        /*
+         DevelopmentCard has been discounted but since it wasn't bought by player, because he hasn't enough resource,
+         it return to his original cost.
+         */
     }
 
     /**
@@ -152,7 +156,7 @@ public class PlayerBoardTest {
         p.buyDevelopmentCard(developmentCard, 0, 1);
         assertEquals(1, c1.getNumOfResource(r1));
         /*
-         developmentCard resourceCost has been decreased by 1
+         developmentCard resourceCost has been decreased by 1 during the buying
          */
     }
 
@@ -374,7 +378,7 @@ public class PlayerBoardTest {
     }
 
     /**
-     * this test trie to activate a previously discarded LeaderCArd
+     * this test trie to activate a previously discarded LeaderCard
      */
     @Test
     void discardedLeaderCardActivation() throws ActiveLeaderCardException, AlreadyDiscardLeaderCardException {

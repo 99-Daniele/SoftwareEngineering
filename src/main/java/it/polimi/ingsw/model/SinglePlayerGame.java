@@ -15,6 +15,10 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame{
         ludovico = new SimplePlayerBoard();
     }
 
+    public SimplePlayerBoard getLudovico() {
+        return ludovico;
+    }
+
     /**
      * this method creates the 7 actions of SinglePlayerGame, add to actions and shuffle them
      */
@@ -110,6 +114,6 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame{
         if(getCurrentPlayer().haveSevenDevelopmentCards() || getCurrentPlayer().getFaithPoints() >= 20)
             return getCurrentPlayer();
         else
-            return (PlayerBoard) ludovico;
+            return null;
     }
 }

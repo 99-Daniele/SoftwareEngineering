@@ -20,6 +20,9 @@ public class ResourceContainerTest {
 
         r.increaseAmount(999999999);
         assertEquals(1000000000, r.getAmount());
+        /*
+         resource container can contains unlimited resources
+         */
     }
 
     /**

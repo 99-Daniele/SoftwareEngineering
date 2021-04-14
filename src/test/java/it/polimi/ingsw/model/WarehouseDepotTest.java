@@ -14,6 +14,7 @@ public class WarehouseDepotTest {
         WarehouseDepot d = new WarehouseDepot(1);
 
         assertTrue(d.isEmpty());
+        assertEquals(1, d.getMaxAmount());
     }
 
     /**

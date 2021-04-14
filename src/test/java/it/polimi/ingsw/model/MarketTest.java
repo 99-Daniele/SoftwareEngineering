@@ -83,40 +83,13 @@ public class MarketTest {
     }
 
     /**
-     * checking if a row remain unchanged after a different row has been slided.
-     * checking if a row change after being slided.
-     * @throws WrongParametersException activated when the selectedColumn or selectedRow doesn't exist in the market.
-     */
-    @Test
-    public void slideRowMarketTest2() throws WrongParametersException {
-        Market market = new Market();
-        assertNotNull(market);
-
-        //checking if a row remain unchanged after a different row has been slided.
-        Marble[] marble = market.getRowMarbles(2);
-        market.slideRow(3);
-        Marble[] change = market.getRowMarbles(2);
-        for (int i = 0; i < column; i++) {
-            assertEquals(marble[i], change[i]);
-        }
-
-        //checking if a row change after being slided.
-        market.slideRow(2);
-        change = market.getRowMarbles(2);
-        for (int i = 0; i < column; i++) {
-            if (marble[i] != change[i])
-                assertFalse(false);
-        }
-    }
-
-    /**
      * checking if the market has been prepared with the correct amount of Marbles and color of Marbles.
      * @throws ArrayIndexOutOfBoundsException activated when the selectedColumn or selectedRow doesn't exist in the market.
      */
     @Test
     void marketCreationTest() throws WrongParametersException {
         Market market = new Market();
-        Marble[] selectedRow = new Marble[column];
+        Marble[] selectedRow;
         int red = 0;
         int white = 0;
         int resource=0;

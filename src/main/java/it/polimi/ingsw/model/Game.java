@@ -92,16 +92,7 @@ public abstract class Game implements LightGame{
         }
     }
 
-    /**
-     * @return one casual LeaderCard from leaderCards
-     */
-    public LeaderCard getCasualLeaderCard(){
-        int i = (int) (Math.random() * leaderCards.size());
-        return leaderCards.remove(i);
-    }
-
-    public Deck getDeck(int line, int column)
-    {
+    public Deck getDeck(int line, int column) {
         return deck[line][column];
     }
 

@@ -14,6 +14,8 @@ public class ExtraDepotTest {
         ExtraDepot d = new ExtraDepot(Resource.COIN);
 
         assertTrue(d.isEmpty());
+        assertEquals(2, d.getMaxAmount());
+        assertSame(Resource.COIN, d.getResource());
     }
 
     /**

@@ -79,7 +79,7 @@ public class DevelopmentCard {
     }
 
     /**
-     *this method control if there are enough resources in warehouse or strongbox. If yes, discard the resources.
+     *  this method control if there are enough resources in warehouse or strongbox. If yes, discard the resources.
      * @param w indicate the resources in the warehouse.
      * @param s indicates the resources in the strongbox.
      * @param choice if 1, indicate that the resources in warehouse will be the first to be decreased. Else, strongbox is the first.

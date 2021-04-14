@@ -10,13 +10,11 @@ public class Deck {
     private final Color color;
     private final int level;
     private ArrayList<DevelopmentCard> developmentCards;
-    private boolean empty;
 
     public Deck(Color color, int level) {
         this.color = color;
         this.level = level;
         developmentCards = new ArrayList<>();
-        this.empty = true;
     }
 
     /**
@@ -37,7 +35,7 @@ public class Deck {
     }
 
     public boolean isEmpty() {
-        return empty;
+        return developmentCards.size() == 0;
     }
 
     /**
@@ -47,7 +45,6 @@ public class Deck {
     public void addDevelopmentCard(DevelopmentCard developmentCard) throws WrongDevelopmentCardInsertionException {
         if(developmentCard.getColor() != this.color || developmentCard.getLevel() != this.level)
             throw new WrongDevelopmentCardInsertionException();
-        this.empty = false;
         developmentCards.add(developmentCard);
     }
 
@@ -69,8 +66,6 @@ public class Deck {
         if(isEmpty())
             throw new EmptyDevelopmentCardDeckException();
         developmentCards.remove(0);
-        if(developmentCards.size() == 0)
-            this.empty = true;
     }
 
     /**

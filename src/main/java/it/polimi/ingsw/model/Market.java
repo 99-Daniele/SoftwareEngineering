@@ -34,7 +34,6 @@ public class Market {
         marketTray = new Marble[row][column];
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < column; j++) {
-                enough=false;
                 do {
                     random = (int) (Math.random() * 6);
                     enough = setCell(i,j,random,numOfMarbles);
