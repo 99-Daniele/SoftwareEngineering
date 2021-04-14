@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import java.util.ArrayList;
+
 /**
  * CardRequirement is a particular requirements about one type of color of cards. It has how much of color cards are needed
  * and which is their maxLevel required
@@ -8,17 +10,17 @@ public class CardRequirement {
 
     private final Color color;
     private int numOfCards;
-    private int maxLevel;
+    private ArrayList<Integer> levels = new ArrayList<>();
 
     /**
      * @param color identifies the color of cards.
      * @param numOfCards identifies the required number of cards.
-     * @param maxLevel identifies the required max level of cards.
+     * @param requiredLevel identifies the required level of cards.
      */
-    public CardRequirement(Color color, int numOfCards, int maxLevel) {
+    public CardRequirement(Color color, int numOfCards, int requiredLevel) {
         this.color = color;
         this.numOfCards = numOfCards;
-        this.maxLevel = maxLevel;
+        this.levels.add(requiredLevel);
     }
 
     /**
@@ -27,7 +29,7 @@ public class CardRequirement {
     public CardRequirement(DevelopmentCard card) {
         this.color = card.getColor();
         this.numOfCards = 1;
-        this.maxLevel = card.getLevel();
+        this.levels.add(card.getLevel());
     }
 
     /**
@@ -45,24 +47,38 @@ public class CardRequirement {
     }
 
     /**
-     * @return the max Level among the cards.
-     */
-    public int getMaxLevel() {
-        return maxLevel;
-    }
-
-    /**
-     * @param maxLevel identifies the max level of the card.
-     */
-    public void setMaxLevel(int maxLevel) {
-        if(maxLevel > this.maxLevel)
-            this.maxLevel = maxLevel;
-    }
-
-    /**
      * this method increase the number of cards by 1 unit.
      */
     public void increaseNumOfCards(){
         numOfCards++;
+    }
+
+    /**
+     * @param level is the level of added DevelopmentCard.
+     */
+    public void addLevel(int level) {
+        levels.add(level);
+    }
+
+    /**
+     * @param requiredLevel is the required level
+     * @return true if this.levels contains @param requiredLevel. If @param requiredLevel == 0 always @return true.
+     */
+    public boolean containsLevel(int requiredLevel) {
+        if(requiredLevel == 0)
+            return true;
+        return levels.contains(requiredLevel);
+    }
+
+    /**
+     * @param cardRequirement is the CardRequirement to compare
+     * @return true if @param CardRequirement has all required levels
+     */
+    public boolean enoughLevels(CardRequirement cardRequirement){
+        for (Integer level: levels){
+            if(!(cardRequirement.containsLevel(level)))
+                return false;
+        }
+        return true;
     }
 }

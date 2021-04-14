@@ -6,12 +6,12 @@
         {
           "color": "YELLOW",
           "numOfCards": "1",
-          "maxLevel": "1"
+          "levels": [0]
         },
         {
           "color": "GREEN",
           "numOfCards": "1",
-          "maxLevel": "1"
+          "levels": [0]
         }
       ]
     },
@@ -24,12 +24,12 @@
         {
           "color": "BLUE",
           "numOfCards": "1",
-          "maxLevel": "1"
+          "levels": [0]
         },
         {
           "color": "PURPLE",
           "numOfCards": "1",
-          "maxLevel": "1"
+          "levels": [0]
         }
       ]
     },
@@ -42,12 +42,12 @@
         {
           "color": "BLUE",
           "numOfCards": "1",
-          "maxLevel": "1"
+          "levels": [0]
         },
         {
           "color": "GREEN",
           "numOfCards": "1",
-          "maxLevel": "1"
+          "levels": [0]
         }
       ]
     },
@@ -60,12 +60,12 @@
         {
           "color": "YELLOW",
           "numOfCards": "1",
-          "maxLevel": "1"
+          "levels": [0]
         },
         {
           "color": "PURPLE",
           "numOfCards": "1",
-          "maxLevel": "1"
+          "levels": [0]
         }
       ]
     },
