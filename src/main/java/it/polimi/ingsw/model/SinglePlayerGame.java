@@ -12,6 +12,7 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame{
     public SinglePlayerGame() {
         super(1);
         prepareActions();
+        ludovico = new SimplePlayerBoard();
     }
 
     @Override
@@ -45,8 +46,6 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame{
      */
     public void triggerFirstAction() {
         actions.get(0).actionTrigger(this);
-        if(zeroRemainingColorCards() || getFaithTrack().zeroRemainingPope() || getPlayer(0).haveSevenDevelopmentCards())
-            endGame();
     }
 
     /**
@@ -81,9 +80,9 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame{
     @Override
     public void LudovicoFaithTrackMovement(int faithPoints){
         ludovico.increaseFaithPoints(faithPoints);
-        if (getFaithTrack().reachPope(ludovico.getFaithPoints()))
-        {
+        if (getFaithTrack().reachPope(ludovico.getFaithPoints())) {
             getFaithTrack().victoryPointsVaticanReport(getPlayer(0).getVictoryPoints(),getPlayer(0).getFaithPoints());
+            getFaithTrack().DecreaseRemainingPope();
         }
     }
 
