@@ -3,66 +3,15 @@ package it.polimi.ingsw.model;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-import it.polimi.ingsw.exceptions.WrongDevelopmentCardInsertionException;
 import it.polimi.ingsw.exceptions.EmptyDevelopmentCardDeckException;
 
 public class DeckTest {
-
-    /**
-     * this test tries to add DevelopmentCard with wrong color
-     */
-    @Test
-    void incorrectAdditionDevelopmentCardWrongColor(){
-
-        Cost c1 = new Cost();
-        Cost c2 = new Cost();
-        Cost c3 = new Cost();
-        DevelopmentCard developmentCard = new DevelopmentCard(Color.GREEN, 1, c1, 1, c2, c3, 1);
-
-        Deck d = new Deck(Color.BLUE, 1);
-
-        WrongDevelopmentCardInsertionException thrown =
-                assertThrows(WrongDevelopmentCardInsertionException.class, () -> d.addDevelopmentCard(developmentCard));
-        /*
-         developmentCard has color = GREEN while deck has color = BLUE
-         */
-
-        String expectedMessage = "Questa carta non può essere inserita in questo mazzetto";
-        String actualMessage = thrown.getMessage();
-        assertTrue(actualMessage.contains(expectedMessage));
-    }
-
-    /**
-     * this test tries to add DevelopmentCard with wrong level
-     */
-    @Test
-    void incorrectAdditionDevelopmentCardWrongLevel(){
-
-        Resource r1 = Resource.COIN;
-        Cost c1 = new Cost();
-        c1.addResource(r1, 1);
-        Cost c2 = new Cost();
-        Cost c3 = new Cost();
-        DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 2, c1, 1, c2, c3, 1);
-
-        Deck d = new Deck(Color.BLUE, 1);
-
-        WrongDevelopmentCardInsertionException thrown =
-                assertThrows(WrongDevelopmentCardInsertionException.class, () -> d.addDevelopmentCard(developmentCard));
-        /*
-         developmentCard has level = 2 while deck has level = 1
-         */
-
-        String expectedMessage = "Questa carta non può essere inserita in questo mazzetto";
-        String actualMessage = thrown.getMessage();
-        assertTrue(actualMessage.contains(expectedMessage));
-    }
-
+    
     /**
      * this test verifies the correct addition of DevelopmentCard
      */
     @Test
-    void correctAdditionDevelopmentCard() throws WrongDevelopmentCardInsertionException, EmptyDevelopmentCardDeckException {
+    void correctAdditionDevelopmentCard() throws EmptyDevelopmentCardDeckException {
 
         Resource r1 = Resource.COIN;
         Cost c1 = new Cost();
@@ -119,7 +68,7 @@ public class DeckTest {
      * this test verifies the correct removing of the first card of Deck
      */
     @Test
-    void correctRemoveFirstCard() throws WrongDevelopmentCardInsertionException, EmptyDevelopmentCardDeckException {
+    void correctRemoveFirstCard() throws EmptyDevelopmentCardDeckException {
 
         Resource r1 = Resource.COIN;
         Cost c1 = new Cost();

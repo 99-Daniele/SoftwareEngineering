@@ -64,7 +64,7 @@ public abstract class Game implements LightGame{
                     deck[j][k].prepareDeck();
                 }
             }
-        } catch (IOException | WrongDevelopmentCardInsertionException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

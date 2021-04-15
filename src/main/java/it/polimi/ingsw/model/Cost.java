@@ -113,6 +113,7 @@ public class Cost {
         for (ResourceContainer resourceContainer: resourceContainers)
             if(resourceContainer.getResource() == resource) {
                 resourceContainer.increaseAmount(amount);
+                return;
             }
         ResourceContainer container = new ResourceContainer(resource, amount);
         resourceContainers.add(container);

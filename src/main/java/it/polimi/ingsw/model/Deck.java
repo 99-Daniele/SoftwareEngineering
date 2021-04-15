@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.exceptions.EmptyDevelopmentCardDeckException;
-import it.polimi.ingsw.exceptions.WrongDevelopmentCardInsertionException;
 
 import java.util.ArrayList;
 
@@ -40,11 +39,8 @@ public class Deck {
 
     /**
      * @param developmentCard is a developmentCard with same this.color and this.level
-     * @throws WrongDevelopmentCardInsertionException if developmentCard has different color or level
      */
-    public void addDevelopmentCard(DevelopmentCard developmentCard) throws WrongDevelopmentCardInsertionException {
-        if(developmentCard.getColor() != this.color || developmentCard.getLevel() != this.level)
-            throw new WrongDevelopmentCardInsertionException();
+    public void addDevelopmentCard(DevelopmentCard developmentCard) {
         developmentCards.add(developmentCard);
     }
 
