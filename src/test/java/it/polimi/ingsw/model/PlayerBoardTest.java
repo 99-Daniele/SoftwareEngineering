@@ -48,12 +48,12 @@ public class PlayerBoardTest {
         Cost c3 = new Cost();
 
         DevelopmentCard developmentCard1 = new DevelopmentCard(Color.BLUE, 1, c1, 3, c2, c3, 2);
-        p.buyDevelopmentCard(developmentCard1, 0, 1);
+        p.buyDevelopmentCard(developmentCard1, 1, 1);
 
         DevelopmentCard developmentCard2 = new DevelopmentCard(Color.BLUE, 1, c1, 3, c2, c3, 2);
 
         ImpossibleDevelopmentCardAdditionException thrown =
-                assertThrows(ImpossibleDevelopmentCardAdditionException.class, () -> p.buyDevelopmentCard(developmentCard2, 0, 1));
+                assertThrows(ImpossibleDevelopmentCardAdditionException.class, () -> p.buyDevelopmentCard(developmentCard2, 1, 1));
 
         String expectedMessage = "Non puoi comprare questa carta";
         String actualMessage = thrown.getMessage();
@@ -81,7 +81,7 @@ public class PlayerBoardTest {
          p has no cards so there 3 available slot.
          */
 
-        p.buyDevelopmentCard(developmentCard, 0, 1);
+        p.buyDevelopmentCard(developmentCard, 1, 1);
         assertEquals(3, p.getVictoryPoints().getVictoryPointsByCards());
         assertEquals(2, p.findAvailableSlot(developmentCard).size());
         /*
@@ -153,7 +153,7 @@ public class PlayerBoardTest {
          p has 1 r1 and developmentCard costs 2 r1, but there is an active DiscountCard, so p can buy developmentCard
          */
 
-        p.buyDevelopmentCard(developmentCard, 0, 1);
+        p.buyDevelopmentCard(developmentCard, 1, 1);
         assertEquals(1, c1.getNumOfResource(r1));
         /*
          developmentCard resourceCost has been decreased by 1 during the buying
@@ -181,24 +181,24 @@ public class PlayerBoardTest {
 
         DevelopmentCard card2 = new DevelopmentCard(Color.YELLOW, 1, c2, 3, c1, c3, 2);
         assertEquals(2, p.findAvailableSlot(card2).size());
-        assertEquals(0, p.findAvailableSlot(card2).get(0));
-        assertEquals(2, p.findAvailableSlot(card2).get(1));
+        assertEquals(2, p.findAvailableSlot(card2).get(0));
+        assertEquals(3, p.findAvailableSlot(card2).get(1));
         /*
          available slots to insert card2 are first slot (0) and third (2)
          */
 
-        p.buyDevelopmentCard(card2, 0, 1);
+        p.buyDevelopmentCard(card2, 2, 1);
         DevelopmentCard card3 = new DevelopmentCard(Color.PURPLE, 1, c1, 3, c2, c3, 2);
         assertEquals(1, p.findAvailableSlot(card3).size());
-        assertEquals(2, p.findAvailableSlot(card3).get(0));
+        assertEquals(3, p.findAvailableSlot(card3).get(0));
         /*
          there is one available slot: the third one
          */
 
         DevelopmentCard card4 = new DevelopmentCard(Color.PURPLE, 2, c1, 3, c2, c3, 2);
         assertEquals(2, p.findAvailableSlot(card4).size());
-        assertEquals(0, p.findAvailableSlot(card4).get(0));
-        assertEquals(1, p.findAvailableSlot(card4).get(1));
+        assertEquals(1, p.findAvailableSlot(card4).get(0));
+        assertEquals(2, p.findAvailableSlot(card4).get(1));
         /*
          available slots to insert card4 are first and second slot, where there are level 1 cards
          */
@@ -226,7 +226,7 @@ public class PlayerBoardTest {
         c2.addResource(r1, 2);
         Cost c3 = new Cost();
         DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1);
-        p.buyDevelopmentCard(developmentCard, 0, 1);
+        p.buyDevelopmentCard(developmentCard, 1, 1);
 
         PowerProductionPlayerChoice playerChoice = new PowerProductionPlayerChoice();
         playerChoice.setFirstPower();
@@ -259,7 +259,7 @@ public class PlayerBoardTest {
         c2.addResource(r1, 1);
         Cost c3 = new Cost();
         DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1);
-        p.buyDevelopmentCard(developmentCard, 0, 1);
+        p.buyDevelopmentCard(developmentCard, 1, 1);
 
         PowerProductionPlayerChoice playerChoice = new PowerProductionPlayerChoice();
         playerChoice.setFirstPower();
@@ -298,7 +298,7 @@ public class PlayerBoardTest {
         c2.addResource(r1, 1);
         Cost c3 = new Cost();
         DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1);
-        p.buyDevelopmentCard(developmentCard, 0, 1);
+        p.buyDevelopmentCard(developmentCard, 1, 1);
 
         LeaderRequirements leaderRequirements = new LeaderRequirements();
         LeaderCard leaderCard1 = new AdditionalProductionPowerCard(r2, leaderRequirements, 1);
@@ -348,7 +348,7 @@ public class PlayerBoardTest {
         Cost c3 = new Cost();
         c3.addResource(r1, 1);
         DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 0);
-        p.buyDevelopmentCard(developmentCard, 0, 1);
+        p.buyDevelopmentCard(developmentCard, 1, 1);
 
         LeaderRequirements leaderRequirements = new LeaderRequirements();
         LeaderCard leaderCard1 = new AdditionalProductionPowerCard(r2, leaderRequirements, 1);
@@ -487,7 +487,7 @@ public class PlayerBoardTest {
     }
 
     /**
-     * this test verifies the correct return of whiteConversion
+     * this test verifies the correct return of isWhiteConver
      */
     @Test
     void correctWhiteConversion()
@@ -500,13 +500,53 @@ public class PlayerBoardTest {
         LeaderCard leaderCard2 = new WhiteConversionCard(r1, leaderRequirements, 1);
         p.addLeaderCard(leaderCard1, leaderCard2);
 
-        assertFalse(p.isWhiteConversionLeaderCardActive(0));
         assertFalse(p.isWhiteConversionLeaderCardActive(1));
+        assertFalse(p.isWhiteConversionLeaderCardActive(2));
 
         p.activateLeaderCard(1);
         p.activateLeaderCard(2);
-        assertFalse(p.isWhiteConversionLeaderCardActive(0));
-        assertTrue(p.isWhiteConversionLeaderCardActive(1));
+        assertFalse(p.isWhiteConversionLeaderCardActive(1));
+        assertTrue(p.isWhiteConversionLeaderCardActive(2));
+    }
+
+    /**
+     * this test tries to get an already discarded LeaderCard
+     */
+    @Test
+    void alreadyDiscardedGetLeaderCard() throws ActiveLeaderCardException, AlreadyDiscardLeaderCardException {
+
+        PlayerBoard p = new PlayerBoard("p1");
+
+        LeaderRequirements leaderRequirements = new LeaderRequirements();
+        LeaderCard leaderCard1 = new AdditionalProductionPowerCard(r2, leaderRequirements, 1);
+        LeaderCard leaderCard2= new DiscountCard(r1, leaderRequirements, 1);
+        p.addLeaderCard(leaderCard1, leaderCard2);
+
+        p.discardLeaderCard(2);
+
+        AlreadyDiscardLeaderCardException thrown =
+                assertThrows(AlreadyDiscardLeaderCardException.class, () -> p.getLeaderCard(2));
+
+        String expectedMessage = "Questa carta è stata già scartata in precedenza";
+        String actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    /**
+     * this test verifies the correct getting of LeaderCard
+     */
+    @Test
+    void correctGetLeaderCard() throws AlreadyDiscardLeaderCardException {
+
+        PlayerBoard p = new PlayerBoard("p1");
+
+        LeaderRequirements leaderRequirements = new LeaderRequirements();
+        LeaderCard leaderCard1 = new AdditionalProductionPowerCard(r2, leaderRequirements, 1);
+        LeaderCard leaderCard2 = new AdditionalProductionPowerCard(r2, leaderRequirements, 1);
+        p.addLeaderCard(leaderCard1, leaderCard2);
+
+        assertSame(leaderCard1, p.getLeaderCard(1));
+        assertSame(leaderCard2, p.getLeaderCard(2));
     }
 
     /**
@@ -522,27 +562,27 @@ public class PlayerBoardTest {
         Cost c3 = new Cost();
 
         DevelopmentCard developmentCard1 = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 0);
-        p.buyDevelopmentCard(developmentCard1, 0, 1);
+        p.buyDevelopmentCard(developmentCard1, 1, 1);
 
         DevelopmentCard developmentCard2 = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 0);
-        p.buyDevelopmentCard(developmentCard2, 1, 1);
+        p.buyDevelopmentCard(developmentCard2, 2, 1);
 
         DevelopmentCard developmentCard3= new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 0);
-        p.buyDevelopmentCard(developmentCard3, 2, 1);
+        p.buyDevelopmentCard(developmentCard3, 3, 1);
 
         DevelopmentCard developmentCard4 = new DevelopmentCard(Color.BLUE, 2, c1, 1, c2, c3, 0);
-        p.buyDevelopmentCard(developmentCard4, 0, 1);
+        p.buyDevelopmentCard(developmentCard4, 1, 1);
 
         DevelopmentCard developmentCard5 = new DevelopmentCard(Color.BLUE, 2, c1, 1, c2, c3, 0);
-        p.buyDevelopmentCard(developmentCard5, 1, 1);
+        p.buyDevelopmentCard(developmentCard5, 2, 1);
 
         DevelopmentCard developmentCard6 = new DevelopmentCard(Color.BLUE, 3, c1, 1, c2, c3, 0);
-        p.buyDevelopmentCard(developmentCard6, 0, 1);
+        p.buyDevelopmentCard(developmentCard6, 1, 1);
 
         assertFalse(p.haveSevenDevelopmentCards());
 
         DevelopmentCard developmentCard7 = new DevelopmentCard(Color.BLUE, 2, c1, 1, c2, c3, 0);
-        p.buyDevelopmentCard(developmentCard7, 2, 1);
+        p.buyDevelopmentCard(developmentCard7, 3, 1);
         assertTrue(p.haveSevenDevelopmentCards());
     }
 

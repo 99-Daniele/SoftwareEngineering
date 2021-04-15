@@ -17,20 +17,20 @@ public class WhiteMarble extends Marble {
      */
     @Override
     public boolean useMarble(LightGame game) {
-        if(game.isActiveWhiteConversionCard(0) && game.isActiveWhiteConversionCard(1)) {
+        if(game.isActiveWhiteConversionCard(1) && game.isActiveWhiteConversionCard(2)) {
             return true;
         }
-        else if(game.isActiveWhiteConversionCard(0)) {
+        else if(game.isActiveWhiteConversionCard(1)) {
             try {
-                LeaderCard card = game.getCurrentPlayerLeaderCard(0);
+                LeaderCard card = game.getCurrentPlayerLeaderCard(1);
                 game.whiteMarbleConversion(card);
             } catch (AlreadyDiscardLeaderCardException e) {
                 e.printStackTrace();
             }
         }
-        else if(game.isActiveWhiteConversionCard(1)){
+        else if(game.isActiveWhiteConversionCard(2)){
             try {
-                LeaderCard card = game.getCurrentPlayerLeaderCard(1);
+                LeaderCard card = game.getCurrentPlayerLeaderCard(2);
                 game.whiteMarbleConversion(card);
             } catch (AlreadyDiscardLeaderCardException e) {
                 e.printStackTrace();

@@ -76,7 +76,7 @@ public class PlayerBoard extends SimplePlayerBoard{
         if(leaderCards.size() > 1)
             discount2 = leaderCards.get(1).discount(card);
         if(isBuyable(card)){
-            if(!(slotDevelopmentCards[slot].addDevelopmentCard(card)))
+            if(!(slotDevelopmentCards[slot -1].addDevelopmentCard(card)))
                 throw new ImpossibleDevelopmentCardAdditionException();
             card.buyCard(warehouse, strongbox, choice);
             victoryPoints.increaseVictoryPointsByCards(card.getVictoryPoints());
@@ -105,8 +105,8 @@ public class PlayerBoard extends SimplePlayerBoard{
      */
     public ArrayList<Integer> findAvailableSlot(DevelopmentCard card){
         ArrayList<Integer> slots = new ArrayList<>();
-        for(int i = 0; i < 3; i++){
-            if(slotDevelopmentCards[i].haveRequiredLevel(card))
+        for(int i = 1; i < 4; i++){
+            if(slotDevelopmentCards[i -1].haveRequiredLevel(card))
                 slots.add(i);
         }
         return slots;
@@ -293,9 +293,9 @@ public class PlayerBoard extends SimplePlayerBoard{
      * if it isn't an active WhiteConversionCard or even not exist a LeaderCArd, @return false
      */
     public boolean isWhiteConversionLeaderCardActive(int chosenLeaderCard){
-       if(leaderCards.size() > chosenLeaderCard)
-           return leaderCards.get(chosenLeaderCard).whiteConversion();
-       return false;
+       if(leaderCards.size() < chosenLeaderCard)
+           return false;
+       return leaderCards.get(chosenLeaderCard -1).whiteConversion();
     }
 
     /**
@@ -303,10 +303,10 @@ public class PlayerBoard extends SimplePlayerBoard{
      * @return the chosen LeaderCard
      */
     public LeaderCard getLeaderCard(int chosenLeaderCard) throws AlreadyDiscardLeaderCardException {
-        if(leaderCards.size() > chosenLeaderCard)
-            return leaderCards.get(chosenLeaderCard);
-        else
+        if (leaderCards.size() < chosenLeaderCard)
             throw new AlreadyDiscardLeaderCardException();
+        else
+            return leaderCards.get(chosenLeaderCard -1);
     }
 
     /**

@@ -10,6 +10,26 @@ import it.polimi.ingsw.exceptions.InsufficientResourceException;
 public class ExtraDepotCardTest {
 
     /**
+     * this test verifies the return of victory points if ExtraDepotCard is active or not
+     */
+    @Test
+    void getVictoryPoints() throws InsufficientResourceException, InsufficientCardsException, ActiveLeaderCardException {
+
+        Resource r1 = Resource.COIN;
+        Cost c = new Cost();
+        LeaderCard card = new ExtraDepotCard(r1, c, 2);
+
+        assertEquals(0, card.getVictoryPoints());
+
+        Warehouse w = new Warehouse();
+        Strongbox s = new Strongbox();
+        LeaderRequirements l = new LeaderRequirements();
+        card.activateCard(w, s, l);
+
+        assertEquals(2, card.getVictoryPoints());
+    }
+
+    /**
      * this test tries to activate ExtraDepotCard if player has not enough resources
      */
     @Test

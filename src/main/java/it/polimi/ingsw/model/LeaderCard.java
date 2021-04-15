@@ -48,6 +48,9 @@ public abstract class LeaderCard {
         return resource;
     }
 
+    /**
+     * @return 0 if LeaderCard is not active, otherwise @return its victory points
+     */
     public int getVictoryPoints() {
         if(isActive())
             return victoryPoints;

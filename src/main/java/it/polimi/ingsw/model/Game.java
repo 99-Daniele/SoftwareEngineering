@@ -173,7 +173,7 @@ public abstract class Game implements LightGame{
      * @param card2 is the LeaderCard chosen to be added current PlayerBoard
      */
     public void selectCurrentPlayerLeaderCards(LeaderCard card1, LeaderCard card2){
-        getCurrentPlayer().addLeaderCard(card1, card2);
+        players.get(currentPlayer).addLeaderCard(card1, card2);
     }
 
     /**
@@ -182,8 +182,8 @@ public abstract class Game implements LightGame{
      */
     public LeaderCard[] getCurrentPlayerActiveLeaderCards() throws AlreadyDiscardLeaderCardException {
         LeaderCard[] currentPlayerLeaderCards = new LeaderCard[2];
-        currentPlayerLeaderCards[0] = getCurrentPlayer().getLeaderCard(0);
-        currentPlayerLeaderCards[1] = getCurrentPlayer().getLeaderCard(1);
+        currentPlayerLeaderCards[0] = players.get(currentPlayer).getLeaderCard(1);
+        currentPlayerLeaderCards[1] = players.get(currentPlayer).getLeaderCard(2);
         return currentPlayerLeaderCards;
     }
 
@@ -214,7 +214,7 @@ public abstract class Game implements LightGame{
      */
     @Override
     public boolean isActiveWhiteConversionCard(int chosenLeaderCard) {
-        return getCurrentPlayer().isWhiteConversionLeaderCardActive(chosenLeaderCard);
+        return players.get(currentPlayer).isWhiteConversionLeaderCardActive(chosenLeaderCard);
     }
 
     /**
@@ -223,7 +223,7 @@ public abstract class Game implements LightGame{
      */
     @Override
     public LeaderCard getCurrentPlayerLeaderCard(int chosenLeaderCard) throws AlreadyDiscardLeaderCardException {
-        return getCurrentPlayer().getLeaderCard(chosenLeaderCard);
+        return players.get(currentPlayer).getLeaderCard(chosenLeaderCard);
     }
     /**
      * @param resource stands for the type of resource to increase by 1 in Warehouse.
@@ -231,11 +231,11 @@ public abstract class Game implements LightGame{
      */
     @Override
     public boolean increaseWarehouse(Resource resource) {
-        return getCurrentPlayer().increaseWarehouse(resource);
+        return players.get(currentPlayer).increaseWarehouse(resource);
     }
 
     /**
-     * @param leaderCard is the chosen LeaderCard to convert white marble
+     * @param leaderCard is the chosen WhiteConversionCard to convert white marble
      * this method try to increase current player warehouse by 1 LeaderCard resource. If it isn't possible
      * increase other players faith points by 1.
      */
@@ -249,13 +249,13 @@ public abstract class Game implements LightGame{
     public void increaseOneFaithPointOtherPlayers() {
         for(int i = 0; i < numOfPlayers; i++) {
             if (i != currentPlayer)
-                getPlayer(i).increaseFaithPoints(1);
+                players.get(i).increaseFaithPoints(1);
         }
     }
 
     @Override
     public void increaseOneFaithPointCurrentPlayer() {
-        getCurrentPlayer().increaseFaithPoints(1);
+        players.get(currentPlayer).increaseFaithPoints(1);
     }
 
     /**
@@ -281,9 +281,9 @@ public abstract class Game implements LightGame{
     public void buyDevelopmentCard(int deckRow, int deckColumn, int choice, int slot)
             throws InsufficientResourceException, ImpossibleDevelopmentCardAdditionException, EmptyDevelopmentCardDeckException {
         DevelopmentCard card = deck[deckRow][deckColumn].getFirstCard();
-        if(!(getCurrentPlayer().isBuyable(card)))
+        if(!(players.get(currentPlayer).isBuyable(card)))
             throw new InsufficientResourceException();
-        getCurrentPlayer().buyDevelopmentCard(card, slot, choice);
+        players.get(currentPlayer).buyDevelopmentCard(card, slot, choice);
         deck[deckRow][deckColumn].removeDevelopmentCard();
     }
 
@@ -297,9 +297,9 @@ public abstract class Game implements LightGame{
     private ArrayList<Integer> findAvailableSlots(int deckRow, int deckColumn)
             throws EmptyDevelopmentCardDeckException, InsufficientResourceException {
         DevelopmentCard card = deck[deckRow][deckColumn].getFirstCard();
-        if(!(getCurrentPlayer().isBuyable(card)))
+        if(!(players.get(currentPlayer).isBuyable(card)))
             throw new InsufficientResourceException();
-        return getCurrentPlayer().findAvailableSlot(card);
+        return players.get(currentPlayer).findAvailableSlot(card);
     }
 
     /**
@@ -310,7 +310,7 @@ public abstract class Game implements LightGame{
      */
     public void activateProduction(PowerProductionPlayerChoice choice)
             throws InsufficientResourceException, ImpossibleSwitchDepotException {
-        if(getCurrentPlayer().activateProduction(choice))
+        if(players.get(currentPlayer).activateProduction(choice))
             faithTrackMovement();
     }
 
@@ -323,7 +323,7 @@ public abstract class Game implements LightGame{
      */
     public void activateLeaderCard(int chosenLeaderCard)
             throws InsufficientResourceException, AlreadyDiscardLeaderCardException, ActiveLeaderCardException, InsufficientCardsException {
-        getCurrentPlayer().activateLeaderCard(chosenLeaderCard );
+        players.get(currentPlayer).activateLeaderCard(chosenLeaderCard );
     }
 
     /**
@@ -333,7 +333,7 @@ public abstract class Game implements LightGame{
      */
     public void discardLeaderCard(int chosenLeaderCard)
             throws ActiveLeaderCardException, AlreadyDiscardLeaderCardException {
-        getCurrentPlayer().discardLeaderCard(chosenLeaderCard);
+        players.get(currentPlayer).discardLeaderCard(chosenLeaderCard);
         faithTrackMovement();
     }
 
@@ -343,8 +343,8 @@ public abstract class Game implements LightGame{
      */
     @Override
     public void faithTrackMovement(){
-        faithTrack.victoryPointsFaithTrack(getCurrentPlayer().getVictoryPoints(), getCurrentPlayer().getFaithPoints());
-        if(faithTrack.reachPope(getCurrentPlayer().getFaithPoints()))
+        faithTrack.victoryPointsFaithTrack(players.get(currentPlayer).getVictoryPoints(), players.get(currentPlayer).getFaithPoints());
+        if(faithTrack.reachPope(players.get(currentPlayer).getFaithPoints()))
         {
             for(PlayerBoard player:players)
             {
@@ -355,7 +355,6 @@ public abstract class Game implements LightGame{
     }
 
     /**
-     *
      * @param position the position in the arraylist
      * @return PlayerBoard in @param position
      */
@@ -363,6 +362,9 @@ public abstract class Game implements LightGame{
         return players.get(position);
     }
 
+    /**
+     * @return PlayerBoard in current position
+     */
     public PlayerBoard getCurrentPlayer(){
         return players.get(currentPlayer);
     }
@@ -399,7 +401,7 @@ public abstract class Game implements LightGame{
     public PlayerBoard endGame() {
         int maxVictoryPoints = 0;
         int maxNumOfResources = 0;
-        PlayerBoard winner = getPlayer(0);
+        PlayerBoard winner = players.get(0);
         for (PlayerBoard player : players) {
             if (player.sumVictoryPoints() > maxVictoryPoints) {
                 maxVictoryPoints = player.sumVictoryPoints();
