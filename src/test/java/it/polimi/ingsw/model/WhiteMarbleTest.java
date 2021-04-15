@@ -65,11 +65,11 @@ public class WhiteMarbleTest {
          nothing has changed
          */
 
-        game.faithTrackMovementExceptCurrentPlayer();
+        game.faithTrackMovementAllPlayer();
         assertEquals(3, game.getPlayer(1).getFaithPoints());
         assertEquals(1, game.getPlayer(1).getVictoryPoints().getVictoryPointsByFaithTrack());
         /*
-         only after faithTrackMovementExceptCurrentPlayer() other player victoryPoints could increased
+         only after faithTrackMovementAllPlayer() other player victoryPoints could increased
          */
     }
 }

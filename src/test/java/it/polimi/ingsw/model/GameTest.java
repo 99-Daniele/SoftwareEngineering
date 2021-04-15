@@ -183,20 +183,20 @@ class GameTest {
 
     /**
      * test that controls if it sets the victory points related to the position in the faith track of all the player
-     * except the current and if it increases the victory points of all the players in the vatican section
+     * and if it increases the victory points of all the players in the vatican section
      */
     @Test
-    void faithTrackMovementExceptCurrentPlayer() throws AlreadyTakenNicknameException {
+    void faithTrackMovementAllPlayer() throws AlreadyTakenNicknameException {
 
         Game game = new MultiPlayerGame(2);
         game.createPlayer("Daniele");
         game.createPlayer("Matteo");
         game.getPlayer(0).increaseFaithPoints(4);
         game.getPlayer(1).increaseFaithPoints(10);
-        game.faithTrackMovementExceptCurrentPlayer();
+        game.faithTrackMovementAllPlayer();
         assertEquals(0, game.getPlayer(0).getVictoryPoints().getVictoryPointsByVaticanReport());
         assertEquals(2, game.getPlayer(1).getVictoryPoints().getVictoryPointsByVaticanReport());
-        assertEquals(0, game.getPlayer(0).getVictoryPoints().getVictoryPointsByFaithTrack());
+        assertEquals(1, game.getPlayer(0).getVictoryPoints().getVictoryPointsByFaithTrack());
         assertEquals(4, game.getPlayer(1).getVictoryPoints().getVictoryPointsByFaithTrack());
     }
 

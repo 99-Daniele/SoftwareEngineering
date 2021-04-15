@@ -372,20 +372,16 @@ public abstract class Game implements LightGame{
     }
 
     /**
-     * method that sets the victory points related to the position in the Faith Track of all the players expect the current player and controls if
+     * method that sets the victory points related to the position in the Faith Track of all the players and controls if
      * the players are in or beyond the pope space and if it's true it increases the victory points of all the players in the vatican section
      */
-    public void faithTrackMovementExceptCurrentPlayer(){
-        int counter;
+    public void faithTrackMovementAllPlayer(){
         int flag=0;
-        for(counter=0; counter<numOfPlayers; counter++)
+        for(PlayerBoard player: players)
         {
-            if (counter!=currentPlayer)
-            {
-                faithTrack.victoryPointsFaithTrack(players.get(counter).getVictoryPoints(), players.get(counter).getFaithPoints());
-                if (faithTrack.reachPope(players.get(counter).getFaithPoints()))
+                faithTrack.victoryPointsFaithTrack(player.getVictoryPoints(), player.getFaithPoints());
+                if (faithTrack.reachPope(player.getFaithPoints()))
                     flag=1;
-            }
         }
         if (flag==1)
         {
