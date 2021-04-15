@@ -20,7 +20,7 @@ class GameTest {
     @Test
     void alreadyTakenNicknamePlayer() throws AlreadyTakenNicknameException {
 
-        Game game = new MultiPlayerGame(2);
+        Game game = new Game(2);
         game.createPlayer("Daniele");
 
         AlreadyTakenNicknameException thrown =
@@ -36,7 +36,7 @@ class GameTest {
     @Test
     void createPlayer(){
 
-        Game game = new MultiPlayerGame(2);
+        Game game = new Game(2);
         try{
             game.createPlayer("Daniele");
             assertSame("Daniele", game.getPlayer(0).getNickname());
@@ -56,7 +56,7 @@ class GameTest {
     @Test
     void createDecks() throws EmptyDevelopmentCardDeckException{
 
-        Game game = new MultiPlayerGame(2);
+        Game game = new Game(2);
         assertFalse(game.zeroRemainingColorCards());
 
         assertEquals(1, game.getDeck(0, 0).getFirstCard().getLevel());
@@ -172,7 +172,7 @@ class GameTest {
     @Test
     void getCorrectColorDeck() throws EmptyDevelopmentCardDeckException {
 
-        Game game = new MultiPlayerGame(2);
+        Game game = new Game(2);
 
         assertSame(game.getDeck(0, 0), game.getColorDeck(Color.GREEN));
         assertSame(game.getDeck(0, 1), game.getColorDeck(Color.PURPLE));
@@ -213,7 +213,7 @@ class GameTest {
     @Test
     void zeroRemainingColorCards() throws EmptyDevelopmentCardDeckException {
 
-        Game game = new MultiPlayerGame(2);
+        Game game = new Game(2);
         assertFalse(game.zeroRemainingColorCards());
 
         game.getDeck(0,0).removeDevelopmentCard();
@@ -237,7 +237,7 @@ class GameTest {
     @Test
     void getCasualLeaderCards(){
 
-        Game game = new MultiPlayerGame(3);
+        Game game = new Game(3);
 
         ArrayList<LeaderCard> cards = game.possibleCardLeader();
         assertNotSame(cards.get(0), cards.get(1));
@@ -254,7 +254,7 @@ class GameTest {
     @Test
     void correctNextPlayer() throws AlreadyTakenNicknameException {
 
-        Game game = new MultiPlayerGame(4);
+        Game game = new Game(4);
         game.createPlayer("Alfredo");
         game.createPlayer("Gustavo");
         game.createPlayer("Domenico");
@@ -284,7 +284,7 @@ class GameTest {
     @Test
     void selectActivateAndGetCurrentPlayerLeaderCards() throws AlreadyTakenNicknameException, AlreadyDiscardLeaderCardException, InsufficientResourceException, InsufficientCardsException, ActiveLeaderCardException {
 
-        Game game = new MultiPlayerGame(2);
+        Game game = new Game(2);
         game.createPlayer("Paolo");
 
         Cost c = new Cost();
@@ -308,7 +308,7 @@ class GameTest {
     @Test
     void numOfTakenMarbles() throws WrongParametersException {
 
-        Game game = new MultiPlayerGame(3);
+        Game game = new Game(3);
 
         Marble[] rowMarbles = game.takeMarketMarble(true, 1);
         assertEquals(4, rowMarbles.length);
@@ -323,7 +323,7 @@ class GameTest {
     @Test
     void correctWhiteMarbleConversion() throws AlreadyTakenNicknameException {
 
-        Game game = new MultiPlayerGame(2);
+        Game game = new Game(2);
         game.createPlayer("Angelo");
         game.createPlayer("Gustavo");
 
@@ -348,7 +348,7 @@ class GameTest {
     @Test
     void otherPlayersIncreaseFaithPoints() throws AlreadyTakenNicknameException {
 
-        Game game = new MultiPlayerGame(4);
+        Game game = new Game(4);
         game.createPlayer("Enrico");
         game.createPlayer("Pietro");
         game.createPlayer("Angela");
@@ -397,7 +397,7 @@ class GameTest {
     @Test
     void notEnoughResourceBuyDevelopmentCard() throws AlreadyTakenNicknameException {
 
-        Game game = new MultiPlayerGame(2);
+        Game game = new Game(2);
         game.createPlayer("Roberta");
 
         InsufficientResourceException thrown =
@@ -414,7 +414,7 @@ class GameTest {
     @Test
     void wrongSlotDevelopmentCards() throws AlreadyTakenNicknameException, InsufficientResourceException, AlreadyDiscardLeaderCardException, ActiveLeaderCardException, InsufficientCardsException, ImpossibleDevelopmentCardAdditionException, EmptyDevelopmentCardDeckException {
 
-        Game game = new MultiPlayerGame(2);
+        Game game = new Game(2);
         game.createPlayer("Roberta");
 
         Cost c = new Cost();
@@ -459,7 +459,7 @@ class GameTest {
     void updateAfterBuyDevelopmentCard()
             throws AlreadyTakenNicknameException, InsufficientResourceException, EmptyDevelopmentCardDeckException, ImpossibleDevelopmentCardAdditionException, InsufficientCardsException, ActiveLeaderCardException, AlreadyDiscardLeaderCardException {
 
-        Game game = new MultiPlayerGame(2);
+        Game game = new Game(2);
         game.createPlayer("Roberta");
 
         Cost c = new Cost();
@@ -496,7 +496,7 @@ class GameTest {
     @Test
     void faithTrackMovementAfterDiscardLeaderCard() throws AlreadyTakenNicknameException, ActiveLeaderCardException, AlreadyDiscardLeaderCardException {
 
-        Game game = new MultiPlayerGame(4);
+        Game game = new Game(4);
         game.createPlayer("Gianfranco");
 
         Cost c = new Cost();
@@ -519,7 +519,7 @@ class GameTest {
     @Test
     void faithTrackMovement() throws AlreadyTakenNicknameException {
 
-        Game game = new MultiPlayerGame(2);
+        Game game = new Game(2);
         game.createPlayer("Daniele");
         game.createPlayer("Matteo");
 
@@ -555,7 +555,7 @@ class GameTest {
     @Test
     void faithTrackMovementAllPlayer() throws AlreadyTakenNicknameException {
 
-        Game game = new MultiPlayerGame(2);
+        Game game = new Game(2);
         game.createPlayer("Daniele");
         game.createPlayer("Matteo");
         game.getPlayer(0).increaseFaithPoints(4);
@@ -574,7 +574,7 @@ class GameTest {
     void endGameWinner()
             throws AlreadyTakenNicknameException, InsufficientResourceException, ImpossibleDevelopmentCardAdditionException, ImpossibleSwitchDepotException {
 
-        Game game = new MultiPlayerGame(4);
+        Game game = new Game(4);
         game.createPlayer("Daniele");
         game.createPlayer("Matteo");
         game.createPlayer("Luca");

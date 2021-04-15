@@ -10,7 +10,7 @@ import java.util.Arrays;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 
-public abstract class Game implements LightGame{
+public class Game implements LightGame{
 
     private ArrayList<PlayerBoard> players = new ArrayList<>();
     private Market market;

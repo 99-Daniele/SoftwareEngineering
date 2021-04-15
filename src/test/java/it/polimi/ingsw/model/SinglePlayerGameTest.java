@@ -52,7 +52,7 @@ class SinglePlayerGameTest {
     void sevenCardsWinner()
             throws InsufficientResourceException, ImpossibleDevelopmentCardAdditionException, AlreadyTakenNicknameException {
 
-        Game singlePlayerGame = new SinglePlayerGame();
+        SinglePlayerGame singlePlayerGame = new SinglePlayerGame();
         singlePlayerGame.createPlayer("Giorgio");
 
         Cost c1 = new Cost();
@@ -77,8 +77,11 @@ class SinglePlayerGameTest {
         DevelopmentCard developmentCard6 = new DevelopmentCard(Color.BLUE, 3, c1, 1, c2, c3, 0);
         singlePlayerGame.getCurrentPlayer().buyDevelopmentCard(developmentCard6, 1, 1);
 
+        assertFalse(singlePlayerGame.isEndGame());
+
         DevelopmentCard developmentCard7 = new DevelopmentCard(Color.BLUE, 2, c1, 1, c2, c3, 0);
         singlePlayerGame.getCurrentPlayer().buyDevelopmentCard(developmentCard7, 3, 1);
+        assertTrue(singlePlayerGame.isEndGame());
 
         PlayerBoard winner = singlePlayerGame.endGame();
         assertNotNull(winner);
@@ -92,23 +95,34 @@ class SinglePlayerGameTest {
     @Test
     void endFaithTrackWinner() throws AlreadyTakenNicknameException {
 
-        Game singlePlayerGame = new SinglePlayerGame();
+        SinglePlayerGame singlePlayerGame = new SinglePlayerGame();
         singlePlayerGame.createPlayer("Giorgio");
-        singlePlayerGame.getCurrentPlayer().increaseFaithPoints(21);
+
+        singlePlayerGame.getCurrentPlayer().increaseFaithPoints(10);
+        singlePlayerGame.faithTrackMovement();
+
+        singlePlayerGame.getCurrentPlayer().increaseFaithPoints(8);
+        singlePlayerGame.faithTrackMovement();
+
+        singlePlayerGame.getCurrentPlayer().increaseFaithPoints(7);
+        singlePlayerGame.faithTrackMovement();
+
+        assertTrue(singlePlayerGame.getFaithTrack().zeroRemainingPope());
+        assertTrue(singlePlayerGame.isEndGame());
 
         PlayerBoard winner = singlePlayerGame.endGame();
         assertNotNull(winner);
         assertSame("Giorgio", winner.getNickname());
-        assertTrue(singlePlayerGame.getCurrentPlayer().getFaithPoints() >= 20);
+        assertTrue(singlePlayerGame.getFaithTrack().zeroRemainingPope());
     }
 
     /**
-     * this test verifies if player loses if has less than 7 DevelopmentCsrds and less than 20 faithPoints
+     * this test verifies if player loses if has less than 7 DevelopmentCards and less than 20 faithPoints
      */
     @Test
     void playerLost() throws AlreadyTakenNicknameException {
 
-        Game singlePlayerGame = new SinglePlayerGame();
+        SinglePlayerGame singlePlayerGame = new SinglePlayerGame();
         singlePlayerGame.createPlayer("Giorgio");
 
         PlayerBoard winner = singlePlayerGame.endGame();
