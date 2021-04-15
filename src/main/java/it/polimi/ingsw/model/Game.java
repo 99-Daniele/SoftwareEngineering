@@ -369,6 +369,9 @@ public abstract class Game implements LightGame{
         return players.get(currentPlayer);
     }
 
+    /**
+     * @return FaithTrack of game
+     */
     public FaithTrack getFaithTrack(){
         return faithTrack;
     }
@@ -391,6 +394,15 @@ public abstract class Game implements LightGame{
                 faithTrack.victoryPointsVaticanReport(player.getVictoryPoints(), player.getFaithPoints());
             faithTrack.DecreaseRemainingPope();
         }
+    }
+
+    /**
+     * @return true if it's end game
+     */
+    public boolean isEndGame(){
+        if(faithTrack.zeroRemainingPope() || players.get(currentPlayer).haveSevenDevelopmentCards())
+            return true;
+        return false;
     }
 
     /**
