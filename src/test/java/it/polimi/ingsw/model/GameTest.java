@@ -418,24 +418,31 @@ class GameTest {
         game.createPlayer("Roberta");
 
         Cost c = new Cost();
-        LeaderCard leaderCard1 = new ExtraDepotCard(Resource.STONE, c, 1);
-        LeaderCard leaderCard2 = new ExtraDepotCard(Resource.SERVANT, c, 1);
+        LeaderCard leaderCard1 = new ExtraDepotCard(Resource.COIN, c, 1);
+        LeaderCard leaderCard2 = new ExtraDepotCard(Resource.SHIELD, c, 1);
         game.selectCurrentPlayerLeaderCards(leaderCard1, leaderCard2);
         game.activateLeaderCard(1);
         game.activateLeaderCard(2);
 
         game.increaseWarehouse(Resource.SERVANT);
-        game.increaseWarehouse(Resource.SERVANT);
-        game.increaseWarehouse(Resource.SERVANT);
         game.increaseWarehouse(Resource.COIN);
         game.increaseWarehouse(Resource.COIN);
         game.increaseWarehouse(Resource.STONE);
-        game.increaseWarehouse(Resource.STONE);
+        game.increaseWarehouse(Resource.SHIELD);
+        game.increaseWarehouse(Resource.SHIELD);
         game.increaseWarehouse(Resource.SHIELD);
         game.increaseWarehouse(Resource.SHIELD);
         game.increaseWarehouse(Resource.SHIELD);
 
+
         game.buyDevelopmentCard(0, 0, 1, 1);
+
+        game.increaseWarehouse(Resource.SERVANT);
+        game.increaseWarehouse(Resource.COIN);
+        game.increaseWarehouse(Resource.COIN);
+        game.increaseWarehouse(Resource.SHIELD);
+        game.increaseWarehouse(Resource.SHIELD);
+        game.increaseWarehouse(Resource.SHIELD);
 
         ImpossibleDevelopmentCardAdditionException thrown =
                 assertThrows(ImpossibleDevelopmentCardAdditionException.class, () -> game.buyDevelopmentCard(0, 0, 1, 1));
