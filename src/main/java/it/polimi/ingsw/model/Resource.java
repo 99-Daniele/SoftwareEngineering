@@ -8,6 +8,5 @@ public enum Resource {
     COIN,
     SHIELD,
     SERVANT,
-    STONE,
-    WHITE
+    STONE
 }

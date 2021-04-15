@@ -126,8 +126,7 @@ public abstract class Game implements LightGame{
     /**
      * @return arraylist of 4 leader cards
      */
-    public synchronized ArrayList<LeaderCard> possibleCardLeader()
-    {
+    public synchronized ArrayList<LeaderCard> possibleCardLeader() {
         ArrayList<LeaderCard> NewLeaderCards=new ArrayList<>();
         for(int count=0; count<4; count++)
         {
@@ -170,11 +169,22 @@ public abstract class Game implements LightGame{
     }
 
     /**
-     * @param card1 is the LeaderCard chosen by current player
-     * @param card2 is the LeaderCard chosen by current player
+     * @param card1 is the LeaderCard chosen to be added current PlayerBoard
+     * @param card2 is the LeaderCard chosen to be added current PlayerBoard
      */
     public void selectCurrentPlayerLeaderCards(LeaderCard card1, LeaderCard card2){
         getCurrentPlayer().addLeaderCard(card1, card2);
+    }
+
+    /**
+     * @return the two actives LeaderCards of current player
+     * @throws AlreadyDiscardLeaderCardException if chosen LeaderCArd was previously discarded
+     */
+    public LeaderCard[] getCurrentPlayerActiveLeaderCards() throws AlreadyDiscardLeaderCardException {
+        LeaderCard[] currentPlayerLeaderCards = new LeaderCard[2];
+        currentPlayerLeaderCards[0] = getCurrentPlayer().getLeaderCard(0);
+        currentPlayerLeaderCards[1] = getCurrentPlayer().getLeaderCard(1);
+        return currentPlayerLeaderCards;
     }
 
     /**
@@ -199,15 +209,53 @@ public abstract class Game implements LightGame{
     }
 
     /**
-     * @param amount is the amount of marbles to be discarded by current player
-     * this method increase faith points of other player and move them in FaithTrack
+     * @param chosenLeaderCard is one player's LeaderCard
+     * @return true if the chosen LeaderCard is an active WhiteConversionCard
      */
-    public void discardMarbles(int amount){
+    @Override
+    public boolean isActiveWhiteConversionCard(int chosenLeaderCard) {
+        return getCurrentPlayer().isWhiteConversionLeaderCardActive(chosenLeaderCard);
+    }
+
+    /**
+     * @param chosenLeaderCard is one player's LeaderCard
+     * @return current player chosen LeaderCard
+     */
+    @Override
+    public LeaderCard getCurrentPlayerLeaderCard(int chosenLeaderCard) throws AlreadyDiscardLeaderCardException {
+        return getCurrentPlayer().getLeaderCard(chosenLeaderCard);
+    }
+    /**
+     * @param resource stands for the type of resource to increase by 1 in Warehouse.
+     * @return false if @param resource has to be discarded
+     */
+    @Override
+    public boolean increaseWarehouse(Resource resource) {
+        return getCurrentPlayer().increaseWarehouse(resource);
+    }
+
+    /**
+     * @param leaderCard is the chosen LeaderCard to convert white marble
+     * this method try to increase current player warehouse by 1 LeaderCard resource. If it isn't possible
+     * increase other players faith points by 1.
+     */
+    @Override
+    public void whiteMarbleConversion(LeaderCard leaderCard){
+        if(!(increaseWarehouse(leaderCard.getResource())))
+            increaseOneFaithPointOtherPlayers();
+    }
+
+    @Override
+    public void increaseOneFaithPointOtherPlayers() {
         for(int i = 0; i < numOfPlayers; i++) {
             if (i != currentPlayer)
-                getPlayer(i).increaseFaithPoints(amount);
+                getPlayer(i).increaseFaithPoints(1);
         }
-        faithTrackMovementExceptCurrentPlayer();
+    }
+
+    @Override
+    public void increaseOneFaithPointCurrentPlayer() {
+        getCurrentPlayer().increaseFaithPoints(1);
     }
 
     /**
@@ -275,7 +323,7 @@ public abstract class Game implements LightGame{
      */
     public void activateLeaderCard(int chosenLeaderCard)
             throws InsufficientResourceException, AlreadyDiscardLeaderCardException, ActiveLeaderCardException, InsufficientCardsException {
-        getCurrentPlayer().activateLeaderCard(chosenLeaderCard);
+        getCurrentPlayer().activateLeaderCard(chosenLeaderCard );
     }
 
     /**
@@ -315,7 +363,6 @@ public abstract class Game implements LightGame{
         return players.get(position);
     }
 
-    @Override
     public PlayerBoard getCurrentPlayer(){
         return players.get(currentPlayer);
     }
@@ -346,11 +393,6 @@ public abstract class Game implements LightGame{
                 faithTrack.victoryPointsVaticanReport(player.getVictoryPoints(), player.getFaithPoints());
             faithTrack.DecreaseRemainingPope();
         }
-    }
-
-    @Override
-    public Resource askWhiteMarbleResourceConversionToPlayer(Resource r1, Resource r2){
-        return r1;
     }
 
     /**

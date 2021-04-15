@@ -80,6 +80,25 @@ public class LeaderCardTest {
          other cards do nothing
          */
 
+        card1.decreaseProductionPowerResources(w, s, 2);
+        assertEquals(1, s.getNumOfResource(r1));
+        assertEquals(1, s.getNumOfResource(r2));
+
+        card2.decreaseProductionPowerResources(w, s, 2);
+        assertEquals(1, s.getNumOfResource(r1));
+        assertEquals(1, s.getNumOfResource(r2));
+
+        card3.decreaseProductionPowerResources(w, s, 2);
+        assertEquals(1, s.getNumOfResource(r1));
+        assertEquals(1, s.getNumOfResource(r2));
+
+        card4.decreaseProductionPowerResources(w, s, 2);
+        assertEquals(1, s.getNumOfResource(r1));
+        assertEquals(1, s.getNumOfResource(r2));
+        /*
+         card1 is AdditionalProductionPowerCard so decrease by 1 r1, other cards do nothing
+         */
+
         assertFalse(card1.discount(developmentCard));
         assertTrue(card2.discount(developmentCard));
         assertFalse(card3.discount(developmentCard));
@@ -88,12 +107,12 @@ public class LeaderCardTest {
          card2 is DiscountCard so decrease by 1 r1 the cost of developmentCard and @return true, other cards @return false
          */
 
-        assertEquals(Resource.WHITE, card1.whiteConversion());
-        assertEquals(Resource.WHITE, card2.whiteConversion());
-        assertEquals(Resource.COIN, card3.whiteConversion());
-        assertEquals(Resource.WHITE, card4.whiteConversion());
+        assertFalse(card1.whiteConversion());
+        assertFalse(card2.whiteConversion());
+        assertTrue(card3.whiteConversion());
+        assertFalse(card4.whiteConversion());
         /*
-         card3 is WhiteConversionCard so @return this.resource, other cards @return Resource.WHITE
+         card3 is WhiteConversionCard so @return true because is active, other cards @return false
          */
     }
 

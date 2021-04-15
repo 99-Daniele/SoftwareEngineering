@@ -13,11 +13,13 @@ public class ResourceMarble extends Marble {
 
     /**
      * @param game is Game
-     * @return true if resource is correctly increased, otherwise @return false
-     * this method increase Warehouse of this.resource.
+     * @return false because marble can't be converted
+     * this method increase Warehouse of this.resource. If it isn't possible, increase other player faith points by 1.
      */
     @Override
     public boolean useMarble(LightGame game) {
-        return game.getCurrentPlayer().increaseWarehouse(resource);
+        if(!(game.increaseWarehouse(resource)))
+            game.increaseOneFaithPointOtherPlayers();
+        return false;
     }
 }

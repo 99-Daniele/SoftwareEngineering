@@ -11,14 +11,49 @@ public class ResourceMarbleTest {
      */
     @Test
     void ControlIncrease() throws AlreadyTakenNicknameException {
-        ResourceMarble resourceMarble=new ResourceMarble(Resource.COIN);
-        ResourceMarble resourceMarble2=new ResourceMarble(Resource.SHIELD);
+
+        Marble resourceMarble=new ResourceMarble(Resource.COIN);
+        Marble resourceMarble2=new ResourceMarble(Resource.SHIELD);
+
         Game game=new MultiPlayerGame(3);
         game.createPlayer("user");
-        assertTrue(resourceMarble.useMarble(game));
+        game.createPlayer("user2");
+        game.createPlayer("user3");
+
+        game.getPlayer(1).increaseFaithPoints(3);
+        game.getPlayer(2).increaseFaithPoints(3);
+        assertEquals(0, game.getPlayer(0).getFaithPoints());
+        assertEquals(3, game.getPlayer(1).getFaithPoints());
+        assertEquals(3, game.getPlayer(2).getFaithPoints());
+
         assertFalse(resourceMarble.useMarble(game));
-        assertTrue(resourceMarble2.useMarble(game));
-        assertTrue(resourceMarble2.useMarble(game));
+        assertFalse(resourceMarble2.useMarble(game));
+        assertFalse(resourceMarble2.useMarble(game));
+
         assertEquals(3,game.getCurrentPlayer().sumTotalResource());
+        assertEquals(3, game.getPlayer(1).getFaithPoints());
+        assertEquals(3, game.getPlayer(2).getFaithPoints());
+        assertEquals(0, game.getPlayer(1).getVictoryPoints().getVictoryPointsByFaithTrack());
+        assertEquals(0, game.getPlayer(2).getVictoryPoints().getVictoryPointsByFaithTrack());
+
+        assertFalse(resourceMarble2.useMarble(game));
+        assertEquals(3,game.getCurrentPlayer().sumTotalResource());
+        assertEquals(4, game.getPlayer(1).getFaithPoints());
+        assertEquals(4, game.getPlayer(2).getFaithPoints());
+        assertEquals(0, game.getPlayer(1).getVictoryPoints().getVictoryPointsByFaithTrack());
+        assertEquals(0, game.getPlayer(2).getVictoryPoints().getVictoryPointsByFaithTrack());
+        /*
+         this resource can't be increased in current player's warehouse. So other players increase their faith points,
+         but not their victory points
+         */
+
+        game.faithTrackMovementExceptCurrentPlayer();
+        assertEquals(4, game.getPlayer(1).getFaithPoints());
+        assertEquals(4, game.getPlayer(2).getFaithPoints());
+        assertEquals(1, game.getPlayer(1).getVictoryPoints().getVictoryPointsByFaithTrack());
+        assertEquals(1, game.getPlayer(2).getVictoryPoints().getVictoryPointsByFaithTrack());
+        /*
+         only after faithTrackMovementExceptCurrentPlayer() other player victoryPoints could increased
+         */
     }
 }

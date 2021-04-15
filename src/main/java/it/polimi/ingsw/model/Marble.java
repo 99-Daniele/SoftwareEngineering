@@ -6,7 +6,7 @@ package it.polimi.ingsw.model;
 public abstract class Marble {
 
     /**
-     * @return false if the marble has to be discarded
+     * @return true if player has to chose in which resource convert the marble
      */
     public abstract boolean useMarble(LightGame game);
 }

@@ -116,7 +116,7 @@ public class AdditionalProductionPowerCardTest {
      * this test tries to decrease resources if player has not enough resources
      */
     @Test
-    void incorrectDecreaselProductionPowerResources()
+    void incorrectDecreaseProductionPowerResources()
             throws InsufficientResourceException, InsufficientCardsException, ActiveLeaderCardException {
 
         Resource r1 = Resource.COIN;
@@ -134,7 +134,7 @@ public class AdditionalProductionPowerCardTest {
         card.activateCard(w, s, l);
 
         InsufficientResourceException thrown =
-                assertThrows(InsufficientResourceException.class, () -> card.decreaseProductionPowerResources(w, s, 1, r2));
+                assertThrows(InsufficientResourceException.class, () -> card.decreaseProductionPowerResources(w, s, 1));
         String expectedMessage = "Non hai abbastanza risorse per effettuare questa operazione";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
@@ -144,7 +144,7 @@ public class AdditionalProductionPowerCardTest {
      * this test verifies the correct operation of AdditionalProductionPower
      */
     @Test
-    void correctDecreaselProductionPowerResources()
+    void correctDecreaseProductionPowerResources()
             throws InsufficientResourceException, InsufficientCardsException, ActiveLeaderCardException {
 
         Resource r1 = Resource.COIN;
@@ -159,7 +159,7 @@ public class AdditionalProductionPowerCardTest {
 
         LeaderCard card = new AdditionalProductionPowerCard(r1, c, 2);
 
-        card.decreaseProductionPowerResources(w, s, 2, r2);
+        card.decreaseProductionPowerResources(w, s, 2);
         assertEquals(3, s.getNumOfResource(r1));
         assertEquals(0, s.getNumOfResource(r2));
         /*
@@ -168,7 +168,7 @@ public class AdditionalProductionPowerCardTest {
 
         card.activateCard(w, s, l);
 
-        card.decreaseProductionPowerResources(w, s, 2, r2);
+        card.decreaseProductionPowerResources(w, s, 2);
         assertEquals(2, s.getNumOfResource(r1));
         assertEquals(0, s.getNumOfResource(r2));
     }

@@ -141,10 +141,10 @@ public class PlayerBoard extends SimplePlayerBoard{
         }
         if(choice.isFirstAdditionalPower())
             if(leaderCards.size() > 0)
-                leaderCards.get(0).decreaseProductionPowerResources(w, s, 1, choice.getAdditionalResource1());
+                leaderCards.get(0).decreaseProductionPowerResources(w, s, 1);
         if(choice.isSecondPower())
             if(leaderCards.size() > 1)
-                leaderCards.get(1).decreaseProductionPowerResources(w, s, 1, choice.getAdditionalResource2());
+                leaderCards.get(1).decreaseProductionPowerResources(w, s, 1);
     }
 
     /**
@@ -288,13 +288,25 @@ public class PlayerBoard extends SimplePlayerBoard{
     }
 
     /**
-     * @param chosenLeaderCard is player's choice about which leader card to discard
-     * @return Resource.WHITE if the LeaderCard is not a WhiteConversionCard, otherwise @return a Resource
+     * @param chosenLeaderCard is the position of one player's LeaderCard
+     * @return true if the chosen LeaderCard is an active WhiteConversionCard
+     * if it isn't an active WhiteConversionCard or even not exist a LeaderCArd, @return false
      */
-    public Resource whiteConversion(int chosenLeaderCard){
-        if(leaderCards.size() > 0)
-            return leaderCards.get(chosenLeaderCard -1).whiteConversion();
-        return Resource.WHITE;
+    public boolean isWhiteConversionLeaderCardActive(int chosenLeaderCard){
+       if(leaderCards.size() > chosenLeaderCard)
+           return leaderCards.get(chosenLeaderCard).whiteConversion();
+       return false;
+    }
+
+    /**
+     * @param chosenLeaderCard is the position of the chosen LeaderCard
+     * @return the chosen LeaderCard
+     */
+    public LeaderCard getLeaderCard(int chosenLeaderCard) throws AlreadyDiscardLeaderCardException {
+        if(leaderCards.size() > chosenLeaderCard)
+            return leaderCards.get(chosenLeaderCard);
+        else
+            throw new AlreadyDiscardLeaderCardException();
     }
 
     /**

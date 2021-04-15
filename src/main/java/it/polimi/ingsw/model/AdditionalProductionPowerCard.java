@@ -17,7 +17,7 @@ public class AdditionalProductionPowerCard extends LeaderCard{
     }
 
     @Override
-    public void decreaseProductionPowerResources(Warehouse w, Strongbox s, int choice, Resource resource)
+    public void decreaseProductionPowerResources(Warehouse w, Strongbox s, int choice)
             throws InsufficientResourceException {
         if(this.isActive()) {
             if (choice == 1) {
@@ -48,7 +48,7 @@ public class AdditionalProductionPowerCard extends LeaderCard{
     @Override
     public int additionalProductionPower(Warehouse w, Strongbox s, int choice, Resource resource) throws InsufficientResourceException{
         if(this.isActive()) {
-            decreaseProductionPowerResources(w, s, choice, resource);
+            decreaseProductionPowerResources(w, s, choice);
             s.increaseResourceType(resource, 1);
             return 1;
         }

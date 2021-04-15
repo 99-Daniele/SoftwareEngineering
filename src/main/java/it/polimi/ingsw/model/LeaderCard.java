@@ -88,7 +88,7 @@ public abstract class LeaderCard {
         }
     }
 
-    public void decreaseProductionPowerResources(Warehouse w, Strongbox s, int choice, Resource resource) throws InsufficientResourceException{}
+    public void decreaseProductionPowerResources(Warehouse w, Strongbox s, int choice) throws InsufficientResourceException{}
 
     /**
      * @param w is player's warehouse
@@ -103,11 +103,11 @@ public abstract class LeaderCard {
     }
 
     /**
-     * @return Resource.WHITE in standard method
+     * @return if the white marble can be converted.
      * this is the standard method of whiteConversion() which will be @Override by the specific card
      */
-    public Resource whiteConversion(){
-        return Resource.WHITE;
+    public boolean whiteConversion(){
+        return false;
     }
 
     /**

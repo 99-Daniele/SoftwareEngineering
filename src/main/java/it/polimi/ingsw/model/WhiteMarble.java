@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.exceptions.AlreadyDiscardLeaderCardException;
+
 /**
  * this class represent the white marble.
  */
@@ -7,24 +9,33 @@ public class WhiteMarble extends Marble {
 
     /**
      * @param game is Game
-     * @return true if the marble has to be discarded, otherwise @return false
-     * this method verifies if there are any active WhiteConversionCard and in case, there are two ask player which one
-     * to use. Then increase Warehouse.
+     * @return true if player has to chose which LeaderCard use to convert, otherwise @return false
+     * this method verifies if there are two active WhiteConversionCard and in case, @return true.
+     * if there is only one active WhiteConversionCard increase player's warehouse by card resource and in case it
+     * isn't possible, increase other players faith points by 1.
      * if there is no active WhiteConversionCard does nothing.
      */
     @Override
     public boolean useMarble(LightGame game) {
-        Resource r1 = game.getCurrentPlayer().whiteConversion(0);
-        Resource r2 = game.getCurrentPlayer().whiteConversion(1);
-        if(r1 != Resource.WHITE && r2 != Resource.WHITE) {
-            Resource chosen = game.askWhiteMarbleResourceConversionToPlayer(r1, r2);
-            return game.getCurrentPlayer().increaseWarehouse(chosen);
+        if(game.isActiveWhiteConversionCard(0) && game.isActiveWhiteConversionCard(1)) {
+            return true;
         }
-        else if(r1 != Resource.WHITE)
-            return game.getCurrentPlayer().increaseWarehouse(r1);
-        else if(r2 != Resource.WHITE)
-            return game.getCurrentPlayer().increaseWarehouse(r2);
-        else
-            return false;
+        else if(game.isActiveWhiteConversionCard(0)) {
+            try {
+                LeaderCard card = game.getCurrentPlayerLeaderCard(0);
+                game.whiteMarbleConversion(card);
+            } catch (AlreadyDiscardLeaderCardException e) {
+                e.printStackTrace();
+            }
+        }
+        else if(game.isActiveWhiteConversionCard(1)){
+            try {
+                LeaderCard card = game.getCurrentPlayerLeaderCard(1);
+                game.whiteMarbleConversion(card);
+            } catch (AlreadyDiscardLeaderCardException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
     }
 }

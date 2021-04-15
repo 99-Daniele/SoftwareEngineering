@@ -13,13 +13,8 @@ public class WhiteConversionCard extends LeaderCard{
         super(resource, leaderRequirements, victoryPoints);
     }
 
-    /**
-     * @return this.resource, instead of Resource.WHITE
-     */
     @Override
-    public Resource whiteConversion() {
-        if(isActive())
-            return this.getResource();
-        return Resource.WHITE;
+    public boolean whiteConversion() {
+        return isActive();
     }
 }

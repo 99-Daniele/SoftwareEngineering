@@ -500,13 +500,13 @@ public class PlayerBoardTest {
         LeaderCard leaderCard2 = new WhiteConversionCard(r1, leaderRequirements, 1);
         p.addLeaderCard(leaderCard1, leaderCard2);
 
-        assertSame(Resource.WHITE, p.whiteConversion(1));
-        assertSame(Resource.WHITE, p.whiteConversion(2));
+        assertFalse(p.isWhiteConversionLeaderCardActive(0));
+        assertFalse(p.isWhiteConversionLeaderCardActive(1));
 
         p.activateLeaderCard(1);
         p.activateLeaderCard(2);
-        assertSame(Resource.WHITE, p.whiteConversion(1));
-        assertSame(r1, p.whiteConversion(2));
+        assertFalse(p.isWhiteConversionLeaderCardActive(0));
+        assertTrue(p.isWhiteConversionLeaderCardActive(1));
     }
 
     /**
