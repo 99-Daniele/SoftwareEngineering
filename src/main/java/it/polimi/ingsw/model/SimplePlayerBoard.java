@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model;
 
+/**
+ * SimplePlayerBoard is Ludovico PlayerBoard. It can only increase his faith points.
+ */
 public class SimplePlayerBoard{
 
     private int faithPoints;

@@ -239,7 +239,7 @@ class GameTest {
 
         Game game = new Game(3);
 
-        ArrayList<LeaderCard> cards = game.possibleCardLeader();
+        ArrayList<LeaderCard> cards = game.casualLeaderCards();
         assertNotSame(cards.get(0), cards.get(1));
         assertNotSame(cards.get(0), cards.get(2));
         assertNotSame(cards.get(0), cards.get(3));
@@ -378,7 +378,7 @@ class GameTest {
         assertEquals(0, game.getPlayer(2).getVictoryPoints().getVictoryPointsByFaithTrack());
         assertEquals(0, game.getPlayer(3).getVictoryPoints().getVictoryPointsByFaithTrack());
 
-        game.faithTrackMovementAllPlayer();
+        game.faithTrackMovementAllPlayers();
 
         assertEquals(0, game.getPlayer(0).getFaithPoints());
         assertEquals(3, game.getPlayer(1).getFaithPoints());
@@ -560,7 +560,7 @@ class GameTest {
         game.createPlayer("Matteo");
         game.getPlayer(0).increaseFaithPoints(4);
         game.getPlayer(1).increaseFaithPoints(10);
-        game.faithTrackMovementAllPlayer();
+        game.faithTrackMovementAllPlayers();
         assertEquals(0, game.getPlayer(0).getVictoryPoints().getVictoryPointsByVaticanReport());
         assertEquals(2, game.getPlayer(1).getVictoryPoints().getVictoryPointsByVaticanReport());
         assertEquals(1, game.getPlayer(0).getVictoryPoints().getVictoryPointsByFaithTrack());
@@ -572,7 +572,7 @@ class GameTest {
      */
     @Test
     void endGameWinner()
-            throws AlreadyTakenNicknameException, InsufficientResourceException, ImpossibleDevelopmentCardAdditionException, ImpossibleSwitchDepotException {
+            throws AlreadyTakenNicknameException, InsufficientResourceException, ImpossibleDevelopmentCardAdditionException{
 
         Game game = new Game(4);
         game.createPlayer("Daniele");

@@ -2,7 +2,7 @@ package it.polimi.ingsw.model;
 
 /**
  * WarehouseDepot is the standard Depot in Warehouse. It has 3 possible maxAmount(1, 2 or 3) and its resource attribute
- * could change during the game
+ * could change during the game.
  */
 public class WarehouseDepot extends Depot{
 

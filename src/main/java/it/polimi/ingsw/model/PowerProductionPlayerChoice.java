@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model;
 
+/**
+ * PowerProductionPlayerChoice is the summary of all player choice about which production powers activate.
+ */
 public class PowerProductionPlayerChoice {
 
     private boolean firstPower;
@@ -45,6 +48,12 @@ public class PowerProductionPlayerChoice {
         return basicResources;
     }
 
+    /**
+     * @param r1 is player's chosen resource to decrease by 1.
+     * @param r2 is player's chosen resource to decrease by 1.
+     * @param r3 is player's chosen resource to increase by 1.
+     * this method set player choices about basic production power.
+     */
     public void setBasicPower(Resource r1, Resource r2, Resource r3){
         basicResources = new Resource[3];
         basicPower = true;
@@ -61,6 +70,10 @@ public class PowerProductionPlayerChoice {
         return additionalResource1;
     }
 
+    /**
+     * @param resource is player's chosen resource to increase by 1.
+     * this method set player chosen resource about additional production power of first LeaderCard.
+     */
     public void setFirstAdditionalPower(Resource resource){
         firstAdditionalPower = true;
         additionalResource1 = resource;
@@ -74,6 +87,10 @@ public class PowerProductionPlayerChoice {
         return additionalResource2;
     }
 
+    /**
+     * @param resource is player's chosen resource to increase by 1.
+     * this method set player chosen resource about additional production power of second LeaderCard.
+     */
     public void setSecondAdditionalPower(Resource resource){
         secondAdditionalPower = true;
         additionalResource2 = resource;

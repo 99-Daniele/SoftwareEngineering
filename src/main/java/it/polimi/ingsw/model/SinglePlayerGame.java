@@ -4,15 +4,20 @@ import it.polimi.ingsw.exceptions.EmptyDevelopmentCardDeckException;
 
 import java.util.ArrayList;
 
+/**
+ * SinglePlayerGame is main class which handle all different phases of a match if player has chosen to play alone.
+ */
 public class SinglePlayerGame extends Game implements LightSinglePlayerGame{
 
     private ArrayList<Action> actions = new ArrayList<>();
-    private SimplePlayerBoard ludovico;
+    private final SimplePlayerBoard ludovico = new SimplePlayerBoard();
 
+    /**
+     * the constructor calls the super method with @param numOfPlayers = 1. Then create and shuffle the 7 actions.
+     */
     public SinglePlayerGame() {
         super(1);
         prepareActions();
-        ludovico = new SimplePlayerBoard();
     }
 
     public SimplePlayerBoard getLudovico() {
@@ -20,7 +25,7 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame{
     }
 
     /**
-     * this method creates the 7 actions of SinglePlayerGame, add to actions and shuffle them
+     * this method creates the 7 actions of SinglePlayerGame, add to actions and shuffle them.
      */
     private void prepareActions(){
         Action action1 = new DiscardAction(Color.BLUE);
@@ -41,15 +46,14 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame{
     }
 
     /**
-     * method trigger the first action. If after the trigger, there zero remaining cards of one color, or player has seven cards,
-     * or someone have reached the last pope space, calls endGame()
+     * this method trigger the first action.
      */
     public void triggerFirstAction() {
         actions.get(0).actionTrigger(this);
     }
 
     /**
-     * this method move the first action to last position
+     * this method move the first action to last position.
      */
     @Override
     public void moveToLastAction(){
@@ -58,8 +62,8 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame{
     }
 
     /**
-     * this method creates a new ArrayList</Action> and for each action remove a random one from actions and add to newActions.
-     * then set actions as newActions
+     * this method shuffle actions, creating a new ArrayList</Action>.
+     * for each action remove a random one from actions and add to newActions, then set actions as newActions.
      */
     @Override
     public void shuffleActions(){
@@ -73,9 +77,9 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame{
     }
 
     /**
-     * @param faithPoints is the amount of faith points given by action
+     * @param faithPoints is the amount of faith points given by action.
      * this method increase ludovico faith points and then looks if ludovico reached the pope space and if true
-     * check it out if player is in the vatican section and increase his victory points
+     * check it out if player is in the vatican section and increase his victory points.
      */
     @Override
     public void LudovicoFaithTrackMovement(int faithPoints){
@@ -87,7 +91,7 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame{
     }
 
     /**
-     * @param color stands for the kind of DevelopmentCards to discard from his deck
+     * @param color stands for the kind of DevelopmentCards to discard from his deck.
      * this method receives the deck and remove the card if possible otherwise it asks a new deck and remove the card.
      * If during discarding there are not anymore DevelopmentCards, method do nothing.
      */
@@ -110,7 +114,8 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame{
     }
 
     /**
-     * @return true if it's end game
+     * @return true if SinglePlayerGame is ended. It could be ended if player has 7 DevelopmentCards, or one between
+     * player and Ludovico has reached the end of the FaithTrack, or there are zero remaining DevelopmentCards of one color.
      */
     @Override
     public boolean isEndGame(){
@@ -119,6 +124,9 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame{
         return false;
     }
 
+    /**
+     * @return player if he win the SinglePlayerGame
+     */
     @Override
     public PlayerBoard endGame() {
         if(getCurrentPlayer().haveSevenDevelopmentCards() || getCurrentPlayer().getFaithPoints() >= 20)

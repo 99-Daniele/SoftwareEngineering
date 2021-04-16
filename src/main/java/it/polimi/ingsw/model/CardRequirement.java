@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 /**
  * CardRequirement is a particular requirements about one type of color of cards. It has how much of color cards are needed
- * and which is their maxLevel required
+ * and which levels are required.
  */
 public class CardRequirement {
 
     private final Color color;
     private int numOfCards;
-    private ArrayList<Integer> levels = new ArrayList<>();
+    private final ArrayList<Integer> levels = new ArrayList<>();
 
     /**
      * @param color identifies the color of cards.
@@ -24,7 +24,7 @@ public class CardRequirement {
     }
 
     /**
-     * @param card is a player's DevelopmentCard
+     * @param card is a player's DevelopmentCard.
      */
     public CardRequirement(DevelopmentCard card) {
         this.color = card.getColor();
@@ -33,14 +33,14 @@ public class CardRequirement {
     }
 
     /**
-     * @return the color of the cards
+     * @return the color of the cards.
      */
     public Color getColor() {
         return color;
     }
 
     /**
-     * @return the number of cards
+     * @return the number of cards.
      */
     public int getNumOfCards() {
         return numOfCards;
@@ -61,7 +61,7 @@ public class CardRequirement {
     }
 
     /**
-     * @param requiredLevel is the required level
+     * @param requiredLevel is the required level.
      * @return true if this.levels contains @param requiredLevel. If @param requiredLevel == 0 always @return true.
      */
     public boolean containsLevel(int requiredLevel) {
@@ -71,8 +71,8 @@ public class CardRequirement {
     }
 
     /**
-     * @param cardRequirement is the CardRequirement to compare
-     * @return true if @param CardRequirement has all required levels
+     * @param cardRequirement is the CardRequirement to compare.
+     * @return true if @param CardRequirement has all required levels.
      */
     public boolean enoughLevels(CardRequirement cardRequirement){
         for (Integer level: levels){

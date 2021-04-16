@@ -47,7 +47,7 @@ public class ResourceMarbleTest {
          but not their victory points
          */
 
-        game.faithTrackMovementAllPlayer();
+        game.faithTrackMovementAllPlayers();
         assertEquals(4, game.getPlayer(1).getFaithPoints());
         assertEquals(4, game.getPlayer(2).getFaithPoints());
         assertEquals(1, game.getPlayer(1).getVictoryPoints().getVictoryPointsByFaithTrack());

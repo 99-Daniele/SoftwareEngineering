@@ -3,7 +3,7 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.exceptions.WrongParametersException;
 
 /**
- * Market is the unique instance of market in Game
+ * Market is the market of Game.
  */
 public class Market {
 
@@ -21,11 +21,11 @@ public class Market {
    }
 
     /**
-     * this method allows the constructor to create the market. This method build a matrix 3X4 of marbles and a slot for the side slide.
+     * this method allows the constructor to create the market.
+     * this method build a matrix 3X4 of marbles and a slot for the side slide.
      * The market is build randomly with the amount of marbles available.
      */
-    public void prepareMarket()
-    {
+    public void prepareMarket() {
         // this array indicate the amount of marble for each color when the market is still empty.
         int[] numOfMarbles={1,2,2,2,2,4};
         boolean enough;
@@ -49,10 +49,9 @@ public class Market {
      * @param j column of the market.
      * @param random number of the marble(0 = RED, 1=YELLOW, 2=BLUE, 3=GREY, 4=PURPLE, 5=WHITE).
      * @param numOfMarble vector of the amount of marble for each color.
-     * @return true if there are still Marble of that color left, Else false.
+     * @return true if there are still Marble of that color left, else false.
      */
-    private boolean setCell(int i, int j, int random,int[] numOfMarble)
-    {
+    private boolean setCell(int i, int j, int random,int[] numOfMarble) {
         if (numOfMarble[random]>0) {
             numOfMarble[random]--;
             if (random == 0)
@@ -76,8 +75,7 @@ public class Market {
      * this private method set the marble that is situated in the side slide.
      * @param numOfMarbles contains the amount of marble for each color.
      */
-    private void externalMarbleSet(int[] numOfMarbles)
-    {
+    private void externalMarbleSet(int[] numOfMarbles) {
         if(numOfMarbles[0]>0)
             externalMarble= new RedMarble();
         if(numOfMarbles[5]>0)
@@ -96,7 +94,7 @@ public class Market {
      * this method allows the caller to get all the marbles inside a selected column.
      * @param selectedColumn this is the column where the caller wants all the marbles.
      * @return a vector of Marble.
-     * @throws ArrayIndexOutOfBoundsException activated when the selectedColumn doesn't exist in the market.
+     * @throws WrongParametersException activated when the selectedColumn doesn't exist in the market.
      */
     public Marble[] getColumnMarbles(int selectedColumn) throws WrongParametersException {
         if (selectedColumn<1 || selectedColumn>4)
@@ -113,7 +111,7 @@ public class Market {
      * this method allows the caller to get all the marbles inside a selected row.
      * @param selectedRow this is the row where the caller wants all the marbles.
      * @return a vector of Marbles.
-     * @throws ArrayIndexOutOfBoundsException activated when the selectedRow doesn't exist in the market.
+     * @throws WrongParametersException activated when the selectedRow doesn't exist in the market.
      */
     public Marble[] getRowMarbles(int selectedRow) throws WrongParametersException {
         if (selectedRow<1 || selectedRow>3)
@@ -129,8 +127,8 @@ public class Market {
      * this method allows the caller to slide the selected column(of the market)of one position upwards,
      * the last marble of the column gets out of the matrix and will placed to the side slide,
      * the current element on the side slide gets placed to the first slot of the column.
-     * @param selectedColumn number of column that will be slided
-     * @throws ArrayIndexOutOfBoundsException activated when the selectedColumn doesn't exist in the market.
+     * @param selectedColumn number of column that will be slided.
+     * @throws WrongParametersException activated when the selectedColumn doesn't exist in the market.
      */
     public void slideColumn(int selectedColumn) throws WrongParametersException {
         if (selectedColumn<1 || selectedColumn>4)
@@ -138,8 +136,7 @@ public class Market {
         Marble marble;
         marble=this.externalMarble;
         this.externalMarble= marketTray[row-1][selectedColumn-1];
-        for(int i=row-1; i>0; i--)
-        {
+        for(int i=row-1; i>0; i--) {
             this.marketTray[i][selectedColumn-1]=this.marketTray[i-1][selectedColumn-1];
         }
         marketTray[0][selectedColumn-1]=marble;
@@ -149,8 +146,8 @@ public class Market {
      * this method allows the caller to slide the selected row of the market of one position to the left,
      * the first marble of the column gets out of the matrix and will placed to the side slide,
      * the current element in the side slide gets placed to the last slot of the row.
-     * @param selectedRow number of the row that will be slided
-     * @throws ArrayIndexOutOfBoundsException activated when the selectedRow doesn't exist in the market.
+     * @param selectedRow number of the row that will be slided.
+     * @throws WrongParametersException activated when the selectedRow doesn't exist in the market.
      */
     public void slideRow(int selectedRow) throws WrongParametersException {
         if(selectedRow < 1 || selectedRow > 3)

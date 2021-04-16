@@ -3,13 +3,14 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.exceptions.AlreadyDiscardLeaderCardException;
 
 /**
- * this class represent the white marble.
+ * WhiteMarble is the Marble which can be converted into ResourceMable if player has at least one active WhiteConversionCard.
+ * otherwise does nothing.
  */
 public class WhiteMarble extends Marble {
 
     /**
-     * @param game is Game
-     * @return true if player has to chose which LeaderCard use to convert, otherwise @return false
+     * @param game is Game.
+     * @return true if player has to chose which LeaderCard use to convert, otherwise @return false.
      * this method verifies if there are two active WhiteConversionCard and in case, @return true.
      * if there is only one active WhiteConversionCard increase player's warehouse by card resource and in case it
      * isn't possible, increase other players faith points by 1.

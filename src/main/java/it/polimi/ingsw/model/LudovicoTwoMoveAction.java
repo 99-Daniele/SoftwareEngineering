@@ -1,10 +1,13 @@
 package it.polimi.ingsw.model;
 
+/**
+ * LudovicoTwoMoveAction is the Action that move ludovico in FaithTrack by 2.
+ */
 public class LudovicoTwoMoveAction extends Action{
 
     /**
-     * @param game is SinglePlayerGame
-     * this method move ludovico in FaithTrack by 2 and move the action to last position
+     * @param game is SinglePlayerGame.
+     * this method move ludovico in FaithTrack by 2 and move the action to last position.
      */
     @Override
     public void actionTrigger(LightSinglePlayerGame game) {

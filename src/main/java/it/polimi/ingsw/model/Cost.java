@@ -4,9 +4,13 @@ import it.polimi.ingsw.exceptions.InsufficientResourceException;
 
 import java.util.ArrayList;
 
+/**
+ * Cost is the class that represent the generic cost. This class always receives player's resources and increase or decrease
+ * them by required resources.
+ */
 public class Cost {
 
-    private ArrayList<ResourceContainer> resourceContainers = new ArrayList<>();
+    private final ArrayList<ResourceContainer> resourceContainers = new ArrayList<>();
 
     /**
      * @param resource stands for the type of resource to count.
@@ -35,9 +39,9 @@ public class Cost {
     }
 
     /**
-     * @param strongbox is player's strongbox
-     * this method increases @param strongbox resources by an amount equal to Cost
-     * Cost remain unchanged
+     * @param strongbox is player's strongbox.
+     * this method increases @param strongbox resources by an amount equal to Cost.
+     * Cost remain unchanged.
      */
     public void  increaseResource(Strongbox strongbox){
         for(Resource resource: Resource.values()){
@@ -50,7 +54,7 @@ public class Cost {
      * @param strongbox is player's Strongbox.
      * @param choice refers to a player's choice. If @param choice == 1, the player has chosen to firstly decreased
      * resource from @param warehouse and then, if necessary, from @param strongbox, vice versa if @param choice == 2.
-     * @throws InsufficientResourceException if player has not enough resources
+     * @throws InsufficientResourceException if player has not enough resources.
      * this method, firstly evaluates if the player has enough resources and then decreases his resources for an
      * amount equal to Cost.
      * Cost remain unchanged.
@@ -139,7 +143,7 @@ public class Cost {
     }
 
     /**
-     * @param resource stands fot the type of resource to increase by 1
+     * @param resource stands fot the type of resource to increase by 1.
      */
     public void recount(Resource resource){
         addResource(resource, 1);

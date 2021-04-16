@@ -4,6 +4,9 @@ import it.polimi.ingsw.exceptions.EmptyDevelopmentCardDeckException;
 
 import java.util.ArrayList;
 
+/**
+ * Deck is one of 12 Decks in Game. It contains at the beginning 4 DevelopmentCards, all with same color and level.
+ */
 public class Deck {
 
     private final Color color;
@@ -17,7 +20,7 @@ public class Deck {
     }
 
     /**
-     * this method prepare deck to start a new game. The four cards in developmentCards are shuffled randomly
+     * this method prepare deck to start a new game. The four cards in developmentCards are shuffled randomly.
      */
     public void prepareDeck(){
         ArrayList<DevelopmentCard> newDevelopmentCards = new ArrayList<>();
@@ -38,15 +41,15 @@ public class Deck {
     }
 
     /**
-     * @param developmentCard is a developmentCard with same this.color and this.level
+     * @param developmentCard is a developmentCard with same this.color and this.level.
      */
     public void addDevelopmentCard(DevelopmentCard developmentCard) {
         developmentCards.add(developmentCard);
     }
 
     /**
-     * @return the first DevelopmentCard of Deck
-     * @throws EmptyDevelopmentCardDeckException if Deck is already empty
+     * @return the first DevelopmentCard of Deck.
+     * @throws EmptyDevelopmentCardDeckException if Deck is already empty.
      */
     public DevelopmentCard getFirstCard() throws EmptyDevelopmentCardDeckException {
         if(isEmpty())
@@ -55,8 +58,8 @@ public class Deck {
     }
 
     /**
-     * this method remove the first DevelopmentCard of Deck
-     * @throws EmptyDevelopmentCardDeckException if Deck is already empty
+     * this method remove the first DevelopmentCard of Deck.
+     * @throws EmptyDevelopmentCardDeckException if Deck is already empty.
      */
     public void removeDevelopmentCard() throws EmptyDevelopmentCardDeckException{
         if(isEmpty())
@@ -65,11 +68,9 @@ public class Deck {
     }
 
     /**
-     *
-     * @return the number of cards in the deck
+     * @return the number of cards in the deck.
      */
-    public int numberOfCards()
-    {
+    public int numberOfCards() {
         return developmentCards.size();
     }
 }

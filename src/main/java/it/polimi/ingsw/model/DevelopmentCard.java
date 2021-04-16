@@ -2,9 +2,8 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.exceptions.InsufficientResourceException;
 
-
 /**
- * DevelopmentCard is one of 64 cards contained in Deck
+ * DevelopmentCard is one of 48 cards buyable by players.
  */
 public class DevelopmentCard {
 
@@ -12,7 +11,7 @@ public class DevelopmentCard {
     private final int level;
     private final Cost resourceCost;
     private final int victoryPoints;
-    private Cost productionPowerResourceRequired;
+    private final Cost productionPowerResourceRequired;
     private final Cost productionPowerResourceGiven;
     private final int faithPointsGiven;
 
@@ -27,36 +26,31 @@ public class DevelopmentCard {
         this.faithPointsGiven = faithPointsGiven;
     }
 
-
-    /**
-     * @return the color of the card
-     */
     public Color getColor() {
         return color;
     }
 
-    /**
-     * @return the level of the card
-     */
     public int getLevel() {
         return level;
     }
 
-    /**
-     * @return return the victory points of the card
-     */
     public int getVictoryPoints() {
         return victoryPoints;
     }
 
+    /**
+     * @param w is player's warehouse
+     * @param s is player's strongbox
+     * @return true if player has enough resources to buy this card
+     */
     public boolean isBuyable(Warehouse w, Strongbox s){
         return resourceCost.enoughResource(w, s);
     }
 
     /**
      * this method allows to buy a new card from the deck.
-     * @param w indicate the resources in the warehouse.
-     * @param s indicates the resources in the strongbox.
+     * @param w is player's warehouse.
+     * @param s is player's strongbox.
      * @param choice if 1, indicate that the resources in warehouse will be the first to be decreased. Else, strongbox is the first.
      * @throws InsufficientResourceException thrown when there aren't enough resources.
      */
@@ -65,9 +59,9 @@ public class DevelopmentCard {
     }
 
     /**
-     * this method active a development card.
-     * @param w indicate the resources in the warehouse.
-     * @param s indicates the resources in the strongbox.
+     * this method active the production of a this card.
+     * @param w is player's warehouse.
+     * @param s is player's strongbox.
      * @param choice if 1, indicate that the resources in warehouse will be the first to be decreased. Else, strongbox is the first.
      * @return the faith points of the card.
      * @throws InsufficientResourceException thrown when there aren't enough resources.
@@ -79,17 +73,17 @@ public class DevelopmentCard {
     }
 
     /**
-     *  this method control if there are enough resources in warehouse or strongbox. If yes, discard the resources.
-     * @param w indicate the resources in the warehouse.
-     * @param s indicates the resources in the strongbox.
+     * this method control if there are enough resources in warehouse or strongbox. If yes, discard the resources.
+     * @param w is player's warehouse.
+     * @param s is player's strongbox.
      * @param choice if 1, indicate that the resources in warehouse will be the first to be decreased. Else, strongbox is the first.
-     * @param productionActivate if true indicate that i want to active a card. Else, i want to buy a card.
+     * @param isPowerProduction if true indicate that i want to active a card. Else, i want to buy a card.
      * @throws InsufficientResourceException thrown when there aren't enough resources.
      */
-    public void controlDiscardResource(Warehouse w, Strongbox s, int choice,boolean productionActivate)
+    public void controlDiscardResource(Warehouse w, Strongbox s, int choice, boolean isPowerProduction)
             throws InsufficientResourceException {
         Cost cost;
-        if(productionActivate)cost=productionPowerResourceRequired;
+        if(isPowerProduction)cost=productionPowerResourceRequired;
         else cost=resourceCost;
         cost.decreaseResource(w,s,choice);
     }

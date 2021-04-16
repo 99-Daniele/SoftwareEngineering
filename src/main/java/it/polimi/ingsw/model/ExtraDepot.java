@@ -2,7 +2,7 @@ package it.polimi.ingsw.model;
 
 /**
  * ExtraDepot is a Depot which could be added after an activation of a ExtraDepotCard by the player. It always has
- * maxAmount == 2 and its attribute resource can't be modified
+ * maxAmount == 2 and its attribute resource can't be modified.
  */
 public class ExtraDepot extends Depot{
 

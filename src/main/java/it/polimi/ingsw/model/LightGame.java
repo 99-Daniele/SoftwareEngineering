@@ -7,17 +7,17 @@ import it.polimi.ingsw.exceptions.AlreadyDiscardLeaderCardException;
  */
 public interface LightGame {
 
-    void faithTrackMovement();
-
-    boolean isActiveWhiteConversionCard(int chosenLeaderCard);
-
-    LeaderCard getCurrentPlayerLeaderCard(int chosenLeaderCard) throws AlreadyDiscardLeaderCardException;
-
     boolean increaseWarehouse(Resource resource);
-
-    void whiteMarbleConversion(LeaderCard leaderCard);
 
     void increaseOneFaithPointOtherPlayers();
 
     void increaseOneFaithPointCurrentPlayer();
+
+    LeaderCard getCurrentPlayerLeaderCard(int chosenLeaderCard) throws AlreadyDiscardLeaderCardException;
+
+    void faithTrackMovement();
+
+    boolean isActiveWhiteConversionCard(int chosenLeaderCard);
+
+    void whiteMarbleConversion(LeaderCard leaderCard);
 }

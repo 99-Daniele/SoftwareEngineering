@@ -2,17 +2,18 @@ package it.polimi.ingsw.model;
 
 /**
  * FaithTrack represents the faith track and it has 3 attributes:
- * remainingPopes that indicate the remaining popes
- * vaticanReportSections that is an array of VaticanReportSection
- * faithTrackVictoryPointsSection that is an array of Section
+ * remainingPopes that indicate the remaining popes.
+ * vaticanReportSections that is an array of VaticanReportSection.
+ * faithTrackVictoryPointsSection that is an array of Section.
  */
 public class FaithTrack {
+
     private int remainingPopes;
     private final VaticanReportSection[] vaticanReportSections;
     private final Section[] faithTrackVictoryPointsSection;
 
     /**
-     * constructor that creates the different section and vatican section and set remainingPopes to 3
+     * constructor that creates the different section and vatican section and set remainingPopes to 3.
      */
     public FaithTrack(){
         remainingPopes=3;
@@ -33,15 +34,14 @@ public class FaithTrack {
     }
 
     /**
-     *
-     * @return boolean that is true if the number of pope is zero, otherwise false
+     * @return boolean that is true if the number of pope is zero, otherwise false.
      */
     public boolean zeroRemainingPope(){
         return remainingPopes == 0;
     }
 
     /**
-     * method that decrease the number of pope by one and cannot go below zero
+     * method that decrease the number of pope by one but not below zero.
      */
     public void DecreaseRemainingPope(){
         if(remainingPopes>0)
@@ -51,9 +51,9 @@ public class FaithTrack {
     }
 
     /**
-     * method that set the value of my victory points related the position in the faith track
-     * @param victoryPoints are the victory points of the player
-     * @param playerFaithPoints are the player's faith points which describe the position in the faith track
+     * method that set the value of my victory points related the position in the faith track.
+     * @param victoryPoints are the victory points of the player.
+     * @param playerFaithPoints are the player's faith points which describe the position in the faith track.
      */
     public void victoryPointsFaithTrack(VictoryPoints victoryPoints, int playerFaithPoints){
         for(Section section:faithTrackVictoryPointsSection)
@@ -66,9 +66,9 @@ public class FaithTrack {
     }
 
     /**
-     * method that increase my victory points if i am in or beyond the vatican section and there is the pope
-     * @param victoryPoints are the victory points of the player
-     * @param playerFaithTrackPoints are the player's faith points which describe the position in the faith track
+     * method that increase my victory points if i am in or beyond the vatican section and there is the pope.
+     * @param victoryPoints are the victory points of the player.
+     * @param playerFaithTrackPoints are the player's faith points which describe the position in the faith track.
      */
     public void victoryPointsVaticanReport (VictoryPoints victoryPoints, int playerFaithTrackPoints){
         if(remainingPopes!=0)
@@ -79,8 +79,8 @@ public class FaithTrack {
 
     /**
      *
-     * @param FaithTrackPoints are the player's faith points which describe the position in the faith track
-     * @return true if in or beyond pope space
+     * @param FaithTrackPoints are the player's faith points which describe the position in the faith track.
+     * @return true if in or beyond pope space.
      */
     public boolean reachPope(int FaithTrackPoints){
         if(remainingPopes!=0)

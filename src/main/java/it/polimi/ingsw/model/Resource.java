@@ -1,12 +1,12 @@
 package it.polimi.ingsw.model;
 
 /**
- * Resource is a enum that identifies the type of resource
+ * Resource is a enumeration which represents the 4 type of resources.
  */
 public enum Resource {
 
     COIN,
-    SHIELD,
     SERVANT,
+    SHIELD,
     STONE
 }

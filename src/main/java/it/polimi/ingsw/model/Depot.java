@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model;
 
 /**
- * Depot is a container of only one type of resource whit its amount limited to maxAmount.
+ * Depot is a container of only one type of resource with its amount limited to maxAmount.
  */
 public abstract class Depot{
 
@@ -38,7 +38,7 @@ public abstract class Depot{
     }
 
     /**
-     * @param amount set the new amount of Depot. @param amount is always less than maxAmount
+     * @param amount set the new amount of Depot. @param amount is previously verified to be less than maxAmount.
      * if @param amount == 0 also set Depot as empty.
      */
     public void setAmount(int amount) {

@@ -4,15 +4,24 @@ import it.polimi.ingsw.exceptions.*;
 
 import java.util.ArrayList;
 
+/**
+ * PlayerBoard is the board of the player. Contains his nickname, his warehouse, his strongbox, his owned DevelopmentCards,
+ * his owned LeaderCards and summarize of his VictoryPoints.
+ */
 public class PlayerBoard extends SimplePlayerBoard{
 
     private final String nickname;
-    private Warehouse warehouse;
-    private Strongbox strongbox;
-    private SlotDevelopmentCards[] slotDevelopmentCards = new SlotDevelopmentCards[3];
-    private ArrayList<LeaderCard> leaderCards;
-    private VictoryPoints victoryPoints;
+    private final Warehouse warehouse;
+    private final Strongbox strongbox;
+    private final SlotDevelopmentCards[] slotDevelopmentCards = new SlotDevelopmentCards[3];
+    private final ArrayList<LeaderCard> leaderCards;
+    private final VictoryPoints victoryPoints;
 
+    /**
+     * @param nickname is player chosen nickname which was previously verified to be unique among other players.
+     * the constructor call SimplePlayerBoard constructor, and then initialized nickname, Warehouse, Strongbox, the 3
+     * SlotDevelopmentCards, the list of LeaderCards and the VictoryPoints.
+     */
     public PlayerBoard(String nickname) {
         super();
         this.nickname = nickname;
@@ -34,8 +43,8 @@ public class PlayerBoard extends SimplePlayerBoard{
     }
 
     /**
-     * @param card1 is the first LeaderCard chosen by player at the beginning
-     * @param card2 is the second LeaderCard chosen by player at the beginning
+     * @param card1 is the first LeaderCard chosen by player at the beginning.
+     * @param card2 is the second LeaderCard chosen by player at the beginning.
      */
     public void addLeaderCard(LeaderCard card1, LeaderCard card2){
         leaderCards.add(card1);
@@ -44,7 +53,7 @@ public class PlayerBoard extends SimplePlayerBoard{
 
     /**
      * @param resource stands for the type of resource to increase by 1 in Warehouse.
-     * @return false if @param resource has to be discarded
+     * @return false if @param resource has to be discarded.
      */
     public boolean increaseWarehouse(Resource resource){
         return warehouse.increaseResource(resource);
@@ -60,11 +69,11 @@ public class PlayerBoard extends SimplePlayerBoard{
     }
 
     /**
-     * @param card is DevelopmentCard to buy
-     * @param slot is player's choice about in which slot @param card will be inserted
-     * @param choice is player's choice about which between warehouse and strongbox has the priority to be decreased
-     * @throws InsufficientResourceException if player has not enough resources to buy @param card
-     * if exists active DiscountCard @param card resourceCost could be discounted. In case player has still not enough
+     * @param card is DevelopmentCard to buy.
+     * @param slot is player's choice about in which slot @param card will be inserted.
+     * @param choice is player's choice about which between warehouse and strongbox has the priority to be decreased.
+     * @throws InsufficientResourceException if player has not enough resources to buy @param card.
+     * if exists active DiscountCard @param card resourceCost could be discounted. In case player has still not enough.
      * resources, @param card resourceCost return to original and card is not bought by player.
      */
     public void buyDevelopmentCard(DevelopmentCard card, int slot, int choice)
@@ -91,17 +100,17 @@ public class PlayerBoard extends SimplePlayerBoard{
     }
 
     /**
-     * @param card is DevelopmentCard to buy
-     * @return true if player has enough resources
+     * @param card is DevelopmentCard to buy.
+     * @return true if player has enough resources.
      */
     public boolean isBuyable(DevelopmentCard card){
         return card.isBuyable(warehouse, strongbox);
     }
 
     /**
-     * @param card is DevelopmentCard to buy
-     * @return an ArrayList </Integer> of slots where @card can be inserted
-     * for each slot verifies if @param card has the required level and in case add to @param slots
+     * @param card is DevelopmentCard to buy.
+     * @return an ArrayList </Integer> of slots where @card can be inserted.
+     * for each slot verifies if @param card has the required level and in case add to @param slots.
      */
     public ArrayList<Integer> findAvailableSlot(DevelopmentCard card){
         ArrayList<Integer> slots = new ArrayList<>();
@@ -113,17 +122,17 @@ public class PlayerBoard extends SimplePlayerBoard{
     }
 
     /**
-     * @param choice summarize all player's choices about which production powers activate
-     * @throws InsufficientResourceException if player has not enough resources to activate all production powers together
-     * @throws ImpossibleSwitchDepotException by the signature of copyThisWarehouse()
+     * @param choice summarize all player's choices about which production powers activate.
+     * @throws InsufficientResourceException if player has not enough resources to activate all production powers together.
      * this method firstly creates copies of player's warehouse and strongbox, and then, for each chosen production power,
-     * decrease those copy's resources by the amount required. If no InsufficientResourceException is thrown during controls
-     * then player has enough resource to activate all chosen production power together.
+     * decrease those copy's resources by the amount required.
+     * if no InsufficientResourceException is thrown during controls then player has enough resource to activate all
+     * chosen production power together.
      * if player chose to activate a production power which not exist (empty SlotDevelopmentCards, or AdditionalPowerCard
      * which not exist or is not active) the method do nothing without throwing any exception like player has never chose them.
      */
     private void enoughTotalProductionPowerResource(PowerProductionPlayerChoice choice)
-            throws InsufficientResourceException, ImpossibleSwitchDepotException {
+            throws InsufficientResourceException{
         Warehouse w;
         w = warehouse.copyThisWarehouse();
         Strongbox s;
@@ -148,9 +157,9 @@ public class PlayerBoard extends SimplePlayerBoard{
     }
 
     /**
-     * @param r1 is player's choice to a resource to be removed
-     * @param r2 is player's choice to a resource to be removed
-     * @return true if has at least 1 @param r1 and @param r2
+     * @param r1 is player's choice to a resource to be removed.
+     * @param r2 is player's choice to a resource to be removed.
+     * @return true if has at least 1 @param r1 and @param r2.
      */
     private boolean enoughBasicProductionResource(Resource r1, Resource r2){
         return (((warehouse.getNumOfResource(r1) > 0) || (strongbox.getNumOfResource(r1) > 0))
@@ -158,10 +167,9 @@ public class PlayerBoard extends SimplePlayerBoard{
     }
 
     /**
-     * @param choice summarize all player's choices about which production powers activate
-     * @return true if player has increased his faith points
-     * @throws InsufficientResourceException by the signature of activateProductionCard()
-     * @throws ImpossibleSwitchDepotException by signature of enoughTotalProductionPower()
+     * @param choice summarize all player's choices about which production powers activate.
+     * @return true if player has increased his faith points.
+     * @throws InsufficientResourceException by the signature of activateProductionCard().
      * this method firstly verifies if player has enough resources. if player has no enough resources throw an exception
      * without doing anything.
      * for each chosen production power activate the production.
@@ -169,7 +177,7 @@ public class PlayerBoard extends SimplePlayerBoard{
      * if player has increased his faith points, calls increaseFaithPoints() method.
      */
     public boolean activateProduction(PowerProductionPlayerChoice choice) throws
-            InsufficientResourceException, ImpossibleSwitchDepotException {
+            InsufficientResourceException{
         enoughTotalProductionPowerResource(choice);
         int faithPoints = 0;
         if(choice.isFirstPower())
@@ -197,13 +205,13 @@ public class PlayerBoard extends SimplePlayerBoard{
     }
 
     /**
-     * @param r1 is player's choice to a resource to be removed
-     * @param r2 is player's choice to a resource to be removed
-     * @param r3 is player's choice to a resource to be added
-     * @param w is a warehouse
-     * @param s is a strongbox
-     * @param choice is player's choice about which between @param w and @param s has the priority to be decreased
-     * @throws InsufficientResourceException if w and s has not enough resources
+     * @param r1 is player's choice to a resource to be removed.
+     * @param r2 is player's choice to a resource to be removed.
+     * @param r3 is player's choice to a resource to be added.
+     * @param w is a warehouse.
+     * @param s is a strongbox.
+     * @param choice is player's choice about which between @param w and @param s has the priority to be decreased.
+     * @throws InsufficientResourceException if @param w and @param s has not enough resources.
      */
     private void activateBasicProduction(Resource r1, Resource r2, Resource r3, Warehouse w, Strongbox s, int choice)
             throws InsufficientResourceException {
@@ -219,11 +227,11 @@ public class PlayerBoard extends SimplePlayerBoard{
     }
 
     /**
-     * @param r1 is player's choice to a resource to be removed
-     * @param r2 is player's choice to a resource to be removed
-     * @param w is a warehouse
-     * @param s is a strongbox
-     * this method decrease firstly @param w and then, if necessary, @param s
+     * @param r1 is player's choice to a resource to be removed.
+     * @param r2 is player's choice to a resource to be removed.
+     * @param w is a warehouse.
+     * @param s is a strongbox.
+     * this method decrease firstly @param w and then, if necessary, @param s.
      */
     private void decreaseWarehouseResource(Resource r1, Resource r2, Warehouse w, Strongbox s){
         if (w.decreaseResource(r1, 1) > 0)
@@ -233,11 +241,11 @@ public class PlayerBoard extends SimplePlayerBoard{
     }
 
     /**
-     * @param r1 is player's choice to a resource to be removed
-     * @param r2 is player's choice to a resource to be removed
-     * @param w is a warehouse
-     * @param s is a strongbox
-     * this method decrease firstly @param s and then, if necessary, @param w
+     * @param r1 is player's choice to a resource to be removed.
+     * @param r2 is player's choice to a resource to be removed.
+     * @param w is a warehouse.
+     * @param s is a strongbox.
+     * this method decrease firstly @param s and then, if necessary, @param w.
      */
     private void decreaseStrongboxResource(Resource r1, Resource r2, Warehouse w, Strongbox s){
         if(s.decreaseResourceType(r1, 1) > 0)
@@ -247,11 +255,11 @@ public class PlayerBoard extends SimplePlayerBoard{
     }
 
     /**
-     * @param chosenLeaderCard is player's choice about which leader card to activate
-     * @throws InsufficientResourceException if player has not enough resources
-     * @throws InsufficientCardsException if player has not enough cards
-     * @throws AlreadyDiscardLeaderCardException if player already discard this LeaderCard previously
-     * @throws ActiveLeaderCardException if this LeaderCard is already active
+     * @param chosenLeaderCard is player's choice about which leader card to activate.
+     * @throws InsufficientResourceException if player has not enough resources.
+     * @throws InsufficientCardsException if player has not enough cards.
+     * @throws AlreadyDiscardLeaderCardException if player already discard this LeaderCard previously.
+     * @throws ActiveLeaderCardException if this LeaderCard is already active.
      */
     public void activateLeaderCard(int chosenLeaderCard) throws InsufficientResourceException, InsufficientCardsException,
             AlreadyDiscardLeaderCardException, ActiveLeaderCardException {
@@ -263,7 +271,7 @@ public class PlayerBoard extends SimplePlayerBoard{
     }
 
     /**
-     * @return a summary of player owned DevelopmentCards
+     * @return a summary of player owned DevelopmentCards.
      */
     private LeaderRequirements createMyLeaderRequirements(){
         LeaderRequirements leaderRequirements = new LeaderRequirements();
@@ -273,9 +281,9 @@ public class PlayerBoard extends SimplePlayerBoard{
     }
 
     /**
-     * @param chosenLeaderCard is player's choice about which leader card to discard
-     * @throws AlreadyDiscardLeaderCardException if player already discard this LeaderCard previously
-     * @throws ActiveLeaderCardException if this LeaderCard is already active
+     * @param chosenLeaderCard is player's choice about which leader card to discard.
+     * @throws AlreadyDiscardLeaderCardException if player already discard this LeaderCard previously.
+     * @throws ActiveLeaderCardException if this LeaderCard is already active.
      */
     public void discardLeaderCard(int chosenLeaderCard)
             throws AlreadyDiscardLeaderCardException, ActiveLeaderCardException {
@@ -288,9 +296,9 @@ public class PlayerBoard extends SimplePlayerBoard{
     }
 
     /**
-     * @param chosenLeaderCard is the position of one player's LeaderCard
-     * @return true if the chosen LeaderCard is an active WhiteConversionCard
-     * if it isn't an active WhiteConversionCard or even not exist a LeaderCArd, @return false
+     * @param chosenLeaderCard is the position of one player's LeaderCard.
+     * @return true if the chosen LeaderCard is an active WhiteConversionCard.
+     * if it isn't an active WhiteConversionCard or even not exist a LeaderCard, @return false.
      */
     public boolean isWhiteConversionLeaderCardActive(int chosenLeaderCard){
        if(leaderCards.size() < chosenLeaderCard)
@@ -299,8 +307,8 @@ public class PlayerBoard extends SimplePlayerBoard{
     }
 
     /**
-     * @param chosenLeaderCard is the position of the chosen LeaderCard
-     * @return the chosen LeaderCard
+     * @param chosenLeaderCard is the position of the chosen LeaderCard.
+     * @return the chosen LeaderCard.
      */
     public LeaderCard getLeaderCard(int chosenLeaderCard) throws AlreadyDiscardLeaderCardException {
         if (leaderCards.size() < chosenLeaderCard)
@@ -310,7 +318,7 @@ public class PlayerBoard extends SimplePlayerBoard{
     }
 
     /**
-     * @return true if player has 7 DevelopmentCards, otherwise @return false
+     * @return true if player has 7 DevelopmentCards, otherwise @return false.
      */
     public boolean haveSevenDevelopmentCards(){
         int count = 0;
@@ -320,14 +328,14 @@ public class PlayerBoard extends SimplePlayerBoard{
     }
 
     /**
-     * @return the sum of all victoryPoints of player
+     * @return the sum of all victoryPoints of player.
      */
     public int sumVictoryPoints(){
         return victoryPoints.sumVictoryPoints();
     }
 
     /**
-     * @return the total amount of resource owned by player
+     * @return the total amount of resource owned by player.
      */
     public int sumTotalResource(){
         return (warehouse.sumWarehouseResource() + strongbox.sumStrongboxResource());
