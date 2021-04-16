@@ -1,8 +1,8 @@
 package it.polimi.ingsw.model.faithTrackTests;
 
 import it.polimi.ingsw.model.faithTrack.VaticanReportSection;
-import org.junit.jupiter.api.Test;
 
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class VaticanReportSectionTest {

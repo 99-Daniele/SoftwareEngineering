@@ -1,20 +1,15 @@
 package it.polimi.ingsw.model.leaderCardsTests;
 
-import it.polimi.ingsw.exceptions.ActiveLeaderCardException;
-import it.polimi.ingsw.model.developmentCards.Color;
-import it.polimi.ingsw.model.developmentCards.DevelopmentCard;
-import it.polimi.ingsw.model.leaderCards.DiscountCard;
-import it.polimi.ingsw.model.leaderCards.LeaderCard;
-import it.polimi.ingsw.model.leaderCards.LeaderRequirements;
-import it.polimi.ingsw.model.player.Strongbox;
-import it.polimi.ingsw.model.player.Warehouse;
-import it.polimi.ingsw.model.resourceContainers.Cost;
-import it.polimi.ingsw.model.resourceContainers.Resource;
+import it.polimi.ingsw.exceptions.*;
+
+import it.polimi.ingsw.model.developmentCards.*;
+import it.polimi.ingsw.model.leaderCards.*;
+import it.polimi.ingsw.model.player.*;
+import it.polimi.ingsw.model.resourceContainers.*;
+
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-import it.polimi.ingsw.exceptions.InsufficientCardsException;
-import it.polimi.ingsw.exceptions.InsufficientResourceException;
 
 public class DiscountCardTest {
 

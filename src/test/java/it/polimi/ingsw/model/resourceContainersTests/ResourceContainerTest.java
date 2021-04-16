@@ -1,10 +1,9 @@
 package it.polimi.ingsw.model.resourceContainersTests;
 
-import static org.junit.jupiter.api.Assertions.*;
+import it.polimi.ingsw.model.resourceContainers.*;
 
-import it.polimi.ingsw.model.resourceContainers.Resource;
-import it.polimi.ingsw.model.resourceContainers.ResourceContainer;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ResourceContainerTest {
 

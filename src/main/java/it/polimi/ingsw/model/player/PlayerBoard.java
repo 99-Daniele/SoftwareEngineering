@@ -1,9 +1,14 @@
 package it.polimi.ingsw.model.player;
 
-import it.polimi.ingsw.exceptions.*;
+import it.polimi.ingsw.exceptions.ImpossibleDevelopmentCardAdditionException;
+import it.polimi.ingsw.exceptions.InsufficientResourceException;
+import it.polimi.ingsw.exceptions.InsufficientCardsException;
+import it.polimi.ingsw.exceptions.ImpossibleSwitchDepotException;
+import it.polimi.ingsw.exceptions.ActiveLeaderCardException;
+import it.polimi.ingsw.exceptions.AlreadyDiscardLeaderCardException;
+
 import it.polimi.ingsw.model.developmentCards.DevelopmentCard;
-import it.polimi.ingsw.model.leaderCards.LeaderCard;
-import it.polimi.ingsw.model.leaderCards.LeaderRequirements;
+import it.polimi.ingsw.model.leaderCards.*;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 
 import java.util.ArrayList;

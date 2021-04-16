@@ -3,11 +3,10 @@ package it.polimi.ingsw.model.leaderCards;
 import it.polimi.ingsw.exceptions.ActiveLeaderCardException;
 import it.polimi.ingsw.exceptions.InsufficientCardsException;
 import it.polimi.ingsw.exceptions.InsufficientResourceException;
+
 import it.polimi.ingsw.model.developmentCards.DevelopmentCard;
-import it.polimi.ingsw.model.player.Strongbox;
-import it.polimi.ingsw.model.player.Warehouse;
-import it.polimi.ingsw.model.resourceContainers.Cost;
-import it.polimi.ingsw.model.resourceContainers.Resource;
+import it.polimi.ingsw.model.player.*;
+import it.polimi.ingsw.model.resourceContainers.*;
 
 /**
  * LeaderCard is one of 16 cards created at the beginning by Game. It has 4 standard methods which will be @Override

@@ -1,25 +1,23 @@
 package it.polimi.ingsw.model.gamesTests;
 
-import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
 import it.polimi.ingsw.exceptions.*;
-import it.polimi.ingsw.model.developmentCards.Color;
-import it.polimi.ingsw.model.developmentCards.DevelopmentCard;
+
+import it.polimi.ingsw.model.developmentCards.*;
 import it.polimi.ingsw.model.games.Game;
-import it.polimi.ingsw.model.games.SinglePlayerGame;
 import it.polimi.ingsw.model.leaderCards.*;
 import it.polimi.ingsw.model.market.Marble;
-import it.polimi.ingsw.model.player.PlayerBoard;
-import it.polimi.ingsw.model.player.PowerProductionPlayerChoice;
-import it.polimi.ingsw.model.resourceContainers.Cost;
-import it.polimi.ingsw.model.resourceContainers.Resource;
-import org.junit.jupiter.api.Test;
+import it.polimi.ingsw.model.player.*;
+import it.polimi.ingsw.model.resourceContainers.*;
+
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameTest {

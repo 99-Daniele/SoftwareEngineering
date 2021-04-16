@@ -1,11 +1,12 @@
 package it.polimi.ingsw.model.marketTests;
-import static org.junit.jupiter.api.Assertions.*;
 
 import it.polimi.ingsw.exceptions.AlreadyTakenNicknameException;
+
 import it.polimi.ingsw.model.games.Game;
-import it.polimi.ingsw.model.market.Marble;
-import it.polimi.ingsw.model.market.RedMarble;
+import it.polimi.ingsw.model.market.*;
+
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class RedMarbleTest {

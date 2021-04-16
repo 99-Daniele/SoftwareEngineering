@@ -3,9 +3,9 @@ package it.polimi.ingsw.model.player;
 import java.util.ArrayList;
 
 import it.polimi.ingsw.exceptions.ImpossibleSwitchDepotException;
-import it.polimi.ingsw.model.player.depots.ExtraDepot;
+
+import it.polimi.ingsw.model.player.depots.*;
 import it.polimi.ingsw.model.resourceContainers.Resource;
-import it.polimi.ingsw.model.player.depots.WarehouseDepot;
 
 /**
  * Warehouse is player's warehouse. It has two attributes: a WarehouseDepot[3] warehouseDepots and an ArrayList</ExtraDepot>

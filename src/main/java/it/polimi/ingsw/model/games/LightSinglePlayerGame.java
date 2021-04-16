@@ -11,7 +11,7 @@ public interface LightSinglePlayerGame {
 
     void moveToLastAction();
 
-    void LudovicoFaithTrackMovement(int faithPoints);
+    void LorenzoFaithTrackMovement(int faithPoints);
 
     void shuffleActions();
 }

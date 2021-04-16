@@ -1,14 +1,9 @@
 package it.polimi.ingsw.model.games;
 
 import it.polimi.ingsw.exceptions.EmptyDevelopmentCardDeckException;
-import it.polimi.ingsw.model.actions.Action;
-import it.polimi.ingsw.model.actions.DiscardAction;
-import it.polimi.ingsw.model.actions.LudovicoMoveAndShuffleAction;
-import it.polimi.ingsw.model.actions.LudovicoTwoMoveAction;
-import it.polimi.ingsw.model.developmentCards.Color;
-import it.polimi.ingsw.model.developmentCards.Deck;
-import it.polimi.ingsw.model.player.PlayerBoard;
-import it.polimi.ingsw.model.player.SimplePlayerBoard;
+import it.polimi.ingsw.model.actions.*;;
+import it.polimi.ingsw.model.developmentCards.*;
+import it.polimi.ingsw.model.player.*;
 
 import java.util.ArrayList;
 
@@ -18,7 +13,7 @@ import java.util.ArrayList;
 public class SinglePlayerGame extends Game implements LightSinglePlayerGame {
 
     private ArrayList<Action> actions = new ArrayList<>();
-    private final SimplePlayerBoard ludovico = new SimplePlayerBoard();
+    private final SimplePlayerBoard LorenzoIlMagnifico = new SimplePlayerBoard();
 
     /**
      * the constructor calls the super method with @param numOfPlayers = 1. Then create and shuffle the 7 actions.
@@ -28,8 +23,8 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame {
         prepareActions();
     }
 
-    public SimplePlayerBoard getLudovico() {
-        return ludovico;
+    public SimplePlayerBoard getLorenzoIlMagnifico() {
+        return LorenzoIlMagnifico;
     }
 
     /**
@@ -40,9 +35,9 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame {
         Action action2 = new DiscardAction(Color.GREEN);
         Action action3 = new DiscardAction(Color.YELLOW);
         Action action4 = new DiscardAction(Color.PURPLE);
-        Action action5 = new LudovicoMoveAndShuffleAction();
-        Action action6 = new LudovicoTwoMoveAction();
-        Action action7 = new LudovicoTwoMoveAction();
+        Action action5 = new LorenzoMoveAndShuffleAction();
+        Action action6 = new LorenzoTwoMoveAction();
+        Action action7 = new LorenzoTwoMoveAction();
         actions.add(action1);
         actions.add(action2);
         actions.add(action3);
@@ -90,9 +85,9 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame {
      * check it out if player is in the vatican section and increase his victory points.
      */
     @Override
-    public void LudovicoFaithTrackMovement(int faithPoints){
-        ludovico.increaseFaithPoints(faithPoints);
-        if (getFaithTrack().reachPope(ludovico.getFaithPoints())) {
+    public void LorenzoFaithTrackMovement(int faithPoints){
+        LorenzoIlMagnifico.increaseFaithPoints(faithPoints);
+        if (getFaithTrack().reachPope(LorenzoIlMagnifico.getFaithPoints())) {
             getFaithTrack().victoryPointsVaticanReport(getPlayer(0).getVictoryPoints(),getPlayer(0).getFaithPoints());
             getFaithTrack().DecreaseRemainingPope();
         }

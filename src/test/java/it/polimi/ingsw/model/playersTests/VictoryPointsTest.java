@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.playersTests;
 
 import it.polimi.ingsw.model.player.VictoryPoints;
+
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

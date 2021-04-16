@@ -1,11 +1,9 @@
 package it.polimi.ingsw.model.actionsTests;
 
-import it.polimi.ingsw.model.actions.Action;
-import it.polimi.ingsw.model.actions.DiscardAction;
-import it.polimi.ingsw.model.actions.LudovicoMoveAndShuffleAction;
-import it.polimi.ingsw.model.actions.LudovicoTwoMoveAction;
+import it.polimi.ingsw.model.actions.*;
 import it.polimi.ingsw.model.developmentCards.Color;
 import it.polimi.ingsw.model.games.SinglePlayerGame;
+
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,21 +17,21 @@ public class ActionTest {
 
         SinglePlayerGame singlePlayerGame = new SinglePlayerGame();
         Action action1 = new DiscardAction(Color.GREEN);
-        Action action2 = new LudovicoTwoMoveAction();
-        Action action3 = new LudovicoMoveAndShuffleAction();
+        Action action2 = new LorenzoTwoMoveAction();
+        Action action3 = new LorenzoMoveAndShuffleAction();
         assertEquals(4, singlePlayerGame.getDeck(0, 0).numberOfCards());
-        assertEquals(0, singlePlayerGame.getLudovico().getFaithPoints());
+        assertEquals(0, singlePlayerGame.getLorenzoIlMagnifico().getFaithPoints());
 
         action1.actionTrigger(singlePlayerGame);
         assertEquals(2, singlePlayerGame.getDeck(0, 0).numberOfCards());
-        assertEquals(0, singlePlayerGame.getLudovico().getFaithPoints());
+        assertEquals(0, singlePlayerGame.getLorenzoIlMagnifico().getFaithPoints());
 
         action2.actionTrigger(singlePlayerGame);
         assertEquals(2, singlePlayerGame.getDeck(0, 0).numberOfCards());
-        assertEquals(2, singlePlayerGame.getLudovico().getFaithPoints());
+        assertEquals(2, singlePlayerGame.getLorenzoIlMagnifico().getFaithPoints());
 
         action3.actionTrigger(singlePlayerGame);
         assertEquals(2, singlePlayerGame.getDeck(0, 0).numberOfCards());
-        assertEquals(3, singlePlayerGame.getLudovico().getFaithPoints());
+        assertEquals(3, singlePlayerGame.getLorenzoIlMagnifico().getFaithPoints());
     }
 }

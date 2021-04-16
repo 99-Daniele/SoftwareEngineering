@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.player;
 
-import it.polimi.ingsw.model.resourceContainers.Resource;
-import it.polimi.ingsw.model.resourceContainers.ResourceContainer;
+import it.polimi.ingsw.model.resourceContainers.*;
 
 import java.util.ArrayList;
 

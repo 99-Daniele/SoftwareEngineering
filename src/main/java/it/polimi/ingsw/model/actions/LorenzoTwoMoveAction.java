@@ -5,7 +5,7 @@ import it.polimi.ingsw.model.games.LightSinglePlayerGame;
 /**
  * LudovicoTwoMoveAction is the Action that move ludovico in FaithTrack by 2.
  */
-public class LudovicoTwoMoveAction extends Action {
+public class LorenzoTwoMoveAction extends Action {
 
     /**
      * @param game is SinglePlayerGame.
@@ -13,7 +13,7 @@ public class LudovicoTwoMoveAction extends Action {
      */
     @Override
     public void actionTrigger(LightSinglePlayerGame game) {
-        game.LudovicoFaithTrackMovement(2);
+        game.LorenzoFaithTrackMovement(2);
         game.moveToLastAction();
     }
 }

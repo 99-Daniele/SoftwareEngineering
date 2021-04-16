@@ -1,10 +1,9 @@
 package it.polimi.ingsw.model.leaderCards;
 
 import it.polimi.ingsw.exceptions.InsufficientResourceException;
-import it.polimi.ingsw.model.player.Strongbox;
-import it.polimi.ingsw.model.player.Warehouse;
-import it.polimi.ingsw.model.resourceContainers.Cost;
-import it.polimi.ingsw.model.resourceContainers.Resource;
+
+import it.polimi.ingsw.model.player.*;
+import it.polimi.ingsw.model.resourceContainers.*;
 
 /**
  * AdditionalProductionPowerCard is a type of LeaderCard with the effect to give player an additional production power

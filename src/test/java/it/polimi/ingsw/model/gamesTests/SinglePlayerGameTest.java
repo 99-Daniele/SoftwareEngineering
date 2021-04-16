@@ -1,16 +1,13 @@
 package it.polimi.ingsw.model.gamesTests;
 
-import it.polimi.ingsw.exceptions.AlreadyTakenNicknameException;
-import it.polimi.ingsw.exceptions.EmptyDevelopmentCardDeckException;
-import it.polimi.ingsw.exceptions.ImpossibleDevelopmentCardAdditionException;
-import it.polimi.ingsw.exceptions.InsufficientResourceException;
-import it.polimi.ingsw.model.developmentCards.Color;
-import it.polimi.ingsw.model.developmentCards.DevelopmentCard;
+import it.polimi.ingsw.exceptions.*;
+
+import it.polimi.ingsw.model.developmentCards.*;
 import it.polimi.ingsw.model.games.SinglePlayerGame;
 import it.polimi.ingsw.model.player.PlayerBoard;
 import it.polimi.ingsw.model.resourceContainers.Cost;
-import org.junit.jupiter.api.Test;
 
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SinglePlayerGameTest {
@@ -42,11 +39,11 @@ class SinglePlayerGameTest {
         assertEquals(0, singlePlayerGame.getCurrentPlayer().getFaithPoints());
         assertEquals(0, singlePlayerGame.getCurrentPlayer().getVictoryPoints().getVictoryPointsByVaticanReport());
 
-        singlePlayerGame.LudovicoFaithTrackMovement(10);
+        singlePlayerGame.LorenzoFaithTrackMovement(10);
         assertEquals(0, singlePlayerGame.getCurrentPlayer().getVictoryPoints().getVictoryPointsByVaticanReport());
 
         singlePlayerGame.getCurrentPlayer().increaseFaithPoints(13);
-        singlePlayerGame.LudovicoFaithTrackMovement(10);
+        singlePlayerGame.LorenzoFaithTrackMovement(10);
         assertEquals(3, singlePlayerGame.getCurrentPlayer().getVictoryPoints().getVictoryPointsByVaticanReport());
     }
 

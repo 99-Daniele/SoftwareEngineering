@@ -1,8 +1,8 @@
 package it.polimi.ingsw.model.depotsTests;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import it.polimi.ingsw.model.player.depots.WarehouseDepot;
+
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 public class WarehouseDepotTest {
