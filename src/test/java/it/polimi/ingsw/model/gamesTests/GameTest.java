@@ -3,9 +3,10 @@ package it.polimi.ingsw.model.gamesTests;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import it.polimi.ingsw.exceptions.*;
-import it.polimi.ingsw.model.developmentCardsTests.Color;
-import it.polimi.ingsw.model.developmentCardsTests.DevelopmentCard;
+import it.polimi.ingsw.model.developmentCards.Color;
+import it.polimi.ingsw.model.developmentCards.DevelopmentCard;
 import it.polimi.ingsw.model.games.Game;
+import it.polimi.ingsw.model.games.SinglePlayerGame;
 import it.polimi.ingsw.model.leaderCards.*;
 import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.model.player.PlayerBoard;
@@ -462,6 +463,54 @@ class GameTest {
     }
 
     /**
+     * this test verify the corretc update of available slots after buy DevelomentCards
+     */
+    @Test
+    void findRightSlotsAfterBuyDevelopmentCard()
+            throws InsufficientResourceException, AlreadyDiscardLeaderCardException, ActiveLeaderCardException, InsufficientCardsException, EmptyDevelopmentCardDeckException, ImpossibleDevelopmentCardAdditionException, AlreadyTakenNicknameException {
+
+        Game game = new Game(2);
+        game.createPlayer("Giorgia");
+
+        Cost c = new Cost();
+        LeaderCard leaderCard1 = new ExtraDepotCard(Resource.COIN, c, 1);
+        LeaderCard leaderCard2 = new ExtraDepotCard(Resource.SHIELD, c, 1);
+        game.selectCurrentPlayerLeaderCards(leaderCard1, leaderCard2);
+        game.activateLeaderCard(1);
+        game.activateLeaderCard(2);
+
+        game.increaseWarehouse(Resource.SERVANT);
+        game.increaseWarehouse(Resource.COIN);
+        game.increaseWarehouse(Resource.COIN);
+        game.increaseWarehouse(Resource.STONE);
+        game.increaseWarehouse(Resource.SHIELD);
+        game.increaseWarehouse(Resource.SHIELD);
+        game.increaseWarehouse(Resource.SHIELD);
+        game.increaseWarehouse(Resource.SHIELD);
+        game.increaseWarehouse(Resource.SHIELD);
+
+        ArrayList<Integer> slots1 = game.findAvailableSlots(0, 0);
+        assertEquals(3, slots1.size());
+        assertEquals(1, slots1.get(0));
+        assertEquals(2, slots1.get(1));
+        assertEquals(3, slots1.get(2));
+
+        game.buyDevelopmentCard(0, 0, 1, 2);
+
+        game.increaseWarehouse(Resource.SERVANT);
+        game.increaseWarehouse(Resource.COIN);
+        game.increaseWarehouse(Resource.COIN);
+        game.increaseWarehouse(Resource.SHIELD);
+        game.increaseWarehouse(Resource.SHIELD);
+        game.increaseWarehouse(Resource.SHIELD);
+
+        ArrayList<Integer> slots2 = game.findAvailableSlots(0, 0);
+        assertEquals(2, slots2.size());
+        assertEquals(1, slots2.get(0));
+        assertEquals(3, slots2.get(1));
+    }
+
+    /**
      * this test verifies the correct update of Game after the buying of a DevelopmentCard
      */
     @Test
@@ -523,6 +572,38 @@ class GameTest {
     }
 
     /**
+     * this test verifies the correct increase of current player faith points after activating production power
+     */
+    @Test
+    void faithTrackMovementAfterActivateProduction() throws AlreadyTakenNicknameException, InsufficientResourceException, AlreadyDiscardLeaderCardException, ActiveLeaderCardException, InsufficientCardsException {
+
+        Game game = new Game(2);
+        game.createPlayer("Alessio");
+        game.getPlayer(0).increaseWarehouse(Resource.COIN);
+        game.getPlayer(0).increaseWarehouse(Resource.SERVANT);
+        game.getPlayer(0).increaseWarehouse(Resource.SHIELD);
+        game.getPlayer(0).increaseWarehouse(Resource.SHIELD);
+
+        Cost c = new Cost();
+        LeaderCard leaderCard1 = new AdditionalProductionPowerCard(Resource.SHIELD, c, 1);
+        LeaderCard leaderCard2 = new AdditionalProductionPowerCard(Resource.SERVANT, c, 1);
+        game.selectCurrentPlayerLeaderCards(leaderCard1, leaderCard2);
+        game.activateLeaderCard(1);
+        game.activateLeaderCard(2);
+
+        PowerProductionPlayerChoice choice1 = new PowerProductionPlayerChoice();
+        choice1.setBasicPower(Resource.COIN, Resource.SHIELD, Resource.STONE);
+        game.activateProduction(choice1);
+        assertEquals(0, game.getPlayer(0).getFaithPoints());
+
+        PowerProductionPlayerChoice choice2 = new PowerProductionPlayerChoice();
+        choice2.setFirstAdditionalPower(Resource.COIN);
+        choice2.setSecondAdditionalPower(Resource.STONE);
+        game.activateProduction(choice2);
+        assertEquals(2, game.getPlayer(0).getFaithPoints());
+    }
+
+    /**
      * test that controls if increase the victory points of the players in the vatican section
      */
     @Test
@@ -574,6 +655,67 @@ class GameTest {
         assertEquals(2, game.getPlayer(1).getVictoryPoints().getVictoryPointsByVaticanReport());
         assertEquals(1, game.getPlayer(0).getVictoryPoints().getVictoryPointsByFaithTrack());
         assertEquals(4, game.getPlayer(1).getVictoryPoints().getVictoryPointsByFaithTrack());
+    }
+
+    /**
+     * this test verifies if game is ended if one player have 7 developmentCards
+     */
+    @Test
+    void sevenCardsWinner()
+            throws InsufficientResourceException, ImpossibleDevelopmentCardAdditionException, AlreadyTakenNicknameException {
+
+        Game game = new Game(2);
+        game.createPlayer("Giorgio");
+
+        Cost c1 = new Cost();
+        Cost c2 = new Cost();
+        Cost c3 = new Cost();
+
+        DevelopmentCard developmentCard1 = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 0);
+        game.getCurrentPlayer().buyDevelopmentCard(developmentCard1, 1, 1);
+
+        DevelopmentCard developmentCard2 = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 0);
+        game.getCurrentPlayer().buyDevelopmentCard(developmentCard2, 2, 1);
+
+        DevelopmentCard developmentCard3 = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 0);
+        game.getCurrentPlayer().buyDevelopmentCard(developmentCard3, 3, 1);
+
+        DevelopmentCard developmentCard4 = new DevelopmentCard(Color.BLUE, 2, c1, 1, c2, c3, 0);
+        game.getCurrentPlayer().buyDevelopmentCard(developmentCard4, 1, 1);
+
+        DevelopmentCard developmentCard5 = new DevelopmentCard(Color.BLUE, 2, c1, 1, c2, c3, 0);
+        game.getCurrentPlayer().buyDevelopmentCard(developmentCard5, 2, 1);
+
+        DevelopmentCard developmentCard6 = new DevelopmentCard(Color.BLUE, 3, c1, 1, c2, c3, 0);
+        game.getCurrentPlayer().buyDevelopmentCard(developmentCard6, 1, 1);
+
+        assertFalse(game.isEndGame());
+
+        DevelopmentCard developmentCard7 = new DevelopmentCard(Color.BLUE, 2, c1, 1, c2, c3, 0);
+        game.getCurrentPlayer().buyDevelopmentCard(developmentCard7, 3, 1);
+        assertTrue(game.isEndGame());
+    }
+
+    /**
+     * this test verifies iis ended if one player reach the end of FaithTrack
+     */
+    @Test
+    void endFaithTrackWinner() throws AlreadyTakenNicknameException {
+
+        Game game = new Game(4);
+        game.createPlayer("Giorgio");
+
+        game.getCurrentPlayer().increaseFaithPoints(10);
+        game.faithTrackMovement();
+
+        game.getCurrentPlayer().increaseFaithPoints(8);
+        game.faithTrackMovement();
+
+        game.getCurrentPlayer().increaseFaithPoints(7);
+        game.faithTrackMovement();
+
+        assertTrue(game.getFaithTrack().zeroRemainingPope());
+        assertTrue(game.isEndGame());
     }
 
     /**

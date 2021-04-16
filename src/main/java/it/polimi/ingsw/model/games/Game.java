@@ -11,7 +11,7 @@ import java.util.Arrays;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 
-import it.polimi.ingsw.model.developmentCardsTests.*;
+import it.polimi.ingsw.model.developmentCards.*;
 import it.polimi.ingsw.model.faithTrack.*;
 import it.polimi.ingsw.model.leaderCards.*;
 import it.polimi.ingsw.model.market.*;

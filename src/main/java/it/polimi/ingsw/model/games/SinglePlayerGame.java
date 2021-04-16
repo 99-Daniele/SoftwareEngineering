@@ -1,12 +1,12 @@
 package it.polimi.ingsw.model.games;
 
 import it.polimi.ingsw.exceptions.EmptyDevelopmentCardDeckException;
-import it.polimi.ingsw.model.actionsTests.Action;
-import it.polimi.ingsw.model.actionsTests.DiscardAction;
-import it.polimi.ingsw.model.actionsTests.LudovicoMoveAndShuffleAction;
-import it.polimi.ingsw.model.actionsTests.LudovicoTwoMoveAction;
-import it.polimi.ingsw.model.developmentCardsTests.Color;
-import it.polimi.ingsw.model.developmentCardsTests.Deck;
+import it.polimi.ingsw.model.actions.Action;
+import it.polimi.ingsw.model.actions.DiscardAction;
+import it.polimi.ingsw.model.actions.LudovicoMoveAndShuffleAction;
+import it.polimi.ingsw.model.actions.LudovicoTwoMoveAction;
+import it.polimi.ingsw.model.developmentCards.Color;
+import it.polimi.ingsw.model.developmentCards.Deck;
 import it.polimi.ingsw.model.player.PlayerBoard;
 import it.polimi.ingsw.model.player.SimplePlayerBoard;
 

@@ -247,6 +247,12 @@ class CostTest {
     void addResource(){
 
         Cost c = new Cost();
+        assertEquals(0, c.getNumOfResource(r1));
+        assertEquals(0, c.getNumOfResource(r2));
+
+        c.addResource(r1, 0);
+        assertEquals(0, c.getNumOfResource(r1));
+        assertEquals(0, c.getNumOfResource(r2));
 
         c.addResource(r1, 1);
         assertEquals(1, c.getNumOfResource(r1));

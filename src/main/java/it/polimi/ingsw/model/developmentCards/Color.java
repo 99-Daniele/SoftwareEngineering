@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.developmentCardsTests;
+package it.polimi.ingsw.model.developmentCards;
 
 /**
  * Color is an enumeration which represents the 4 color of DevelopmentCards.

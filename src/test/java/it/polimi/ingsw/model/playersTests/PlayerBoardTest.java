@@ -3,8 +3,8 @@ package it.polimi.ingsw.model.playersTests;
 import static org.junit.jupiter.api.Assertions.*;
 
 import it.polimi.ingsw.exceptions.*;
-import it.polimi.ingsw.model.developmentCardsTests.Color;
-import it.polimi.ingsw.model.developmentCardsTests.DevelopmentCard;
+import it.polimi.ingsw.model.developmentCards.Color;
+import it.polimi.ingsw.model.developmentCards.DevelopmentCard;
 import it.polimi.ingsw.model.leaderCards.*;
 import it.polimi.ingsw.model.player.PlayerBoard;
 import it.polimi.ingsw.model.player.PowerProductionPlayerChoice;
@@ -97,7 +97,7 @@ public class PlayerBoardTest {
     }
 
     /**
-     * this test tries to buy an expensive development card if there is an active DiscountCard
+     * this test tries to buy an expensive development card if there are two active DiscountCards
      */
     @Test
     void incorrectBuyDevelopmentCardNotEnoughResourceWithDiscountCard()
@@ -108,17 +108,20 @@ public class PlayerBoardTest {
 
         Cost c1 = new Cost();
         c1.addResource(r1, 3);
+        c1.addResource(r2, 3);
         Cost c2 = new Cost();
         Cost c3 = new Cost();
         DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 3, c2, c3, 2);
 
         LeaderRequirements leaderRequirements = new LeaderRequirements();
         LeaderCard leaderCard1 = new DiscountCard(r1, leaderRequirements, 1);
-        LeaderCard leaderCard2 = new DiscountCard(r1, leaderRequirements, 1);
+        LeaderCard leaderCard2 = new DiscountCard(r2, leaderRequirements, 1);
         p.addLeaderCard(leaderCard1, leaderCard2);
         p.activateLeaderCard(1);
+        p.activateLeaderCard(2);
 
         assertEquals(3, c1.getNumOfResource(r1));
+        assertEquals(3, c1.getNumOfResource(r2));
 
         InsufficientResourceException thrown =
                 assertThrows(InsufficientResourceException.class, () -> p.buyDevelopmentCard(developmentCard, 0, 1));
@@ -127,6 +130,7 @@ public class PlayerBoardTest {
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
         assertEquals(3, c1.getNumOfResource(r1));
+        assertEquals(3, c1.getNumOfResource(r2));
         /*
          DevelopmentCard has been discounted but since it wasn't bought by player, because he hasn't enough resource,
          it return to his original cost.
@@ -134,34 +138,40 @@ public class PlayerBoardTest {
     }
 
     /**
-     * this test verifies the correct buying of DevelopmentCard if there is an active DiscountCard
+     * this test verifies the correct buying of DevelopmentCard if there are two active DiscountCards
      */
     @Test
-    void correctBuyDevelopmentCardWithDiscountCard()
+    void correctBuyDevelopmentCardWithDiscountCards()
             throws InsufficientResourceException, InsufficientCardsException, ActiveLeaderCardException, AlreadyDiscardLeaderCardException, ImpossibleDevelopmentCardAdditionException {
 
         PlayerBoard p = new PlayerBoard("p1");
         p.increaseWarehouse(r1);
+        p.increaseWarehouse(r2);
 
         Cost c1 = new Cost();
         c1.addResource(r1, 2);
+        c1.addResource(r2, 2);
         Cost c2 = new Cost();
         Cost c3 = new Cost();
         DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 3, c2, c3, 2);
 
         LeaderRequirements leaderRequirements = new LeaderRequirements();
         LeaderCard leaderCard1 = new DiscountCard(r1, leaderRequirements, 1);
-        LeaderCard leaderCard2 = new DiscountCard(r1, leaderRequirements, 1);
+        LeaderCard leaderCard2 = new DiscountCard(r2, leaderRequirements, 1);
         p.addLeaderCard(leaderCard1, leaderCard2);
         p.activateLeaderCard(1);
+        p.activateLeaderCard(2);
 
         assertEquals(2, c1.getNumOfResource(r1));
+        assertEquals(2, c1.getNumOfResource(r2));
         /*
-         p has 1 r1 and developmentCard costs 2 r1, but there is an active DiscountCard, so p can buy developmentCard
+         p has 1 r1 and 1 r2, and developmentCard costs 2 r1 and 2 r2, but there are two active DiscountCard,
+         so p can buy developmentCard
          */
 
         p.buyDevelopmentCard(developmentCard, 1, 1);
         assertEquals(1, c1.getNumOfResource(r1));
+        assertEquals(1, c1.getNumOfResource(r2));
         /*
          developmentCard resourceCost has been decreased by 1 during the buying
          */
@@ -258,12 +268,10 @@ public class PlayerBoardTest {
             InsufficientResourceException, ImpossibleDevelopmentCardAdditionException {
 
         PlayerBoard p = new PlayerBoard("p1");
-        p.increaseWarehouse(r1);
         p.increaseWarehouse(r2);
 
         Cost c1 = new Cost();
         Cost c2 = new Cost();
-        c2.addResource(r1, 1);
         Cost c3 = new Cost();
         DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1);
         p.buyDevelopmentCard(developmentCard, 1, 1);
@@ -348,37 +356,51 @@ public class PlayerBoardTest {
         p.increaseWarehouse(r2);
         p.increaseWarehouse(r3);
         p.increaseWarehouse(r3);
+        p.increaseWarehouse(r3);
 
         Cost c1 = new Cost();
         Cost c2 = new Cost();
         c2.addResource(r1, 1);
         Cost c3 = new Cost();
         c3.addResource(r1, 1);
-        DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 0);
+        DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 2);
         p.buyDevelopmentCard(developmentCard, 1, 1);
 
         LeaderRequirements leaderRequirements = new LeaderRequirements();
         LeaderCard leaderCard1 = new AdditionalProductionPowerCard(r2, leaderRequirements, 1);
-        LeaderCard leaderCard2 = new DiscountCard(r1, leaderRequirements, 1);
+        LeaderCard leaderCard2 = new AdditionalProductionPowerCard(r3, leaderRequirements, 1);
         p.addLeaderCard(leaderCard1, leaderCard2);
         p.activateLeaderCard(1);
+        p.activateLeaderCard(2);
 
         PowerProductionPlayerChoice playerChoice = new PowerProductionPlayerChoice();
-        playerChoice.setFirstPower();
-        assertTrue(playerChoice.isFirstPower());
+
+        playerChoice.setSecondPower();
+        assertTrue(playerChoice.isSecondPower());
+
+        playerChoice.setThirdPower();
+        assertTrue(playerChoice.isThirdPower());
 
         playerChoice.setBasicPower(r2, r3, r2);
         assertTrue(playerChoice.isBasicPower());
 
+        playerChoice.setChoice(1);
+
         assertFalse(p.activateProduction(playerChoice));
-        /*
-         neither DevelopmentCard nor basic power give player faith points, so @return true
-         */
+        assertEquals(0, p.getFaithPoints());
+
+        playerChoice.setFirstPower();
+        assertTrue(playerChoice.isFirstPower());
 
         playerChoice.setFirstAdditionalPower(r2);
         assertTrue(playerChoice.isFirstAdditionalPower());
 
+        playerChoice.setSecondAdditionalPower(r2);
+        assertTrue(playerChoice.isSecondAdditionalPower());
+
+
         assertTrue(p.activateProduction(playerChoice));
+        assertEquals(4, p.getFaithPoints());
         /*
          AdditionalProductionPower gives 1 faith points, so @return true
          */
@@ -502,6 +524,12 @@ public class PlayerBoardTest {
 
         PlayerBoard p = new PlayerBoard("p1");
 
+        assertFalse(p.isWhiteConversionLeaderCardActive(1));
+        assertFalse(p.isWhiteConversionLeaderCardActive(2));
+        /*
+         there are any WhiteConversionCard so @return false
+         */
+
         LeaderRequirements leaderRequirements = new LeaderRequirements();
         LeaderCard leaderCard1 = new AdditionalProductionPowerCard(r1, leaderRequirements, 1);
         LeaderCard leaderCard2 = new WhiteConversionCard(r1, leaderRequirements, 1);
@@ -591,6 +619,32 @@ public class PlayerBoardTest {
         DevelopmentCard developmentCard7 = new DevelopmentCard(Color.BLUE, 2, c1, 1, c2, c3, 0);
         p.buyDevelopmentCard(developmentCard7, 3, 1);
         assertTrue(p.haveSevenDevelopmentCards());
+    }
+
+    /**
+     * this test calculates the sum of total victory points
+     */
+    @Test
+    void sumTotalVictoryPoints()
+            throws InsufficientResourceException, ImpossibleDevelopmentCardAdditionException {
+
+        PlayerBoard p = new PlayerBoard("p1");
+        Cost c = new Cost();
+        assertEquals(0, p.sumVictoryPoints());
+
+        DevelopmentCard card = new DevelopmentCard(Color.GREEN, 1, c, 2, c, c, 0);
+        p.buyDevelopmentCard(card, 1, 1);
+        assertEquals(2, p.sumVictoryPoints());
+
+        p.increaseWarehouse(r1);
+        p.increaseWarehouse(r2);
+        p.increaseWarehouse(r2);
+        p.increaseWarehouse(r3);
+        p.increaseWarehouse(r3);
+        p.increaseWarehouse(r3);
+        assertEquals(6, p.sumTotalResource());
+
+        assertEquals(3, p.sumVictoryPoints());
     }
 
     /**

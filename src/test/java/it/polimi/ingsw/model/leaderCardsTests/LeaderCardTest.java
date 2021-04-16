@@ -1,8 +1,8 @@
 package it.polimi.ingsw.model.leaderCardsTests;
 
 import it.polimi.ingsw.exceptions.ActiveLeaderCardException;
-import it.polimi.ingsw.model.developmentCardsTests.Color;
-import it.polimi.ingsw.model.developmentCardsTests.DevelopmentCard;
+import it.polimi.ingsw.model.developmentCards.Color;
+import it.polimi.ingsw.model.developmentCards.DevelopmentCard;
 import it.polimi.ingsw.model.leaderCards.*;
 import it.polimi.ingsw.model.player.Strongbox;
 import it.polimi.ingsw.model.player.Warehouse;
@@ -67,19 +67,19 @@ public class LeaderCardTest {
         assertEquals(3, s.getNumOfResource(r1));
         assertEquals(0, s.getNumOfResource(r2));
 
-        assertEquals(1, card1.additionalProductionPower(w, s, 2, r2));
-        assertEquals(2, s.getNumOfResource(r1));
-        assertEquals(1, s.getNumOfResource(r2));
-
         assertEquals(0, card2.additionalProductionPower(w, s, 2, r2));
-        assertEquals(2, s.getNumOfResource(r1));
-        assertEquals(1, s.getNumOfResource(r2));
+        assertEquals(3, s.getNumOfResource(r1));
+        assertEquals(0, s.getNumOfResource(r2));
 
         assertEquals(0, card3.additionalProductionPower(w, s, 2, r2));
-        assertEquals(2, s.getNumOfResource(r1));
-        assertEquals(1, s.getNumOfResource(r2));
+        assertEquals(3, s.getNumOfResource(r1));
+        assertEquals(0, s.getNumOfResource(r2));
 
         assertEquals(0, card4.additionalProductionPower(w, s, 2, r2));
+        assertEquals(3, s.getNumOfResource(r1));
+        assertEquals(0, s.getNumOfResource(r2));
+
+        assertEquals(1, card1.additionalProductionPower(w, s, 2, r2));
         assertEquals(2, s.getNumOfResource(r1));
         assertEquals(1, s.getNumOfResource(r2));
         /*
@@ -87,31 +87,56 @@ public class LeaderCardTest {
          other cards do nothing
          */
 
-        card1.decreaseProductionPowerResources(w, s, 2);
-        assertEquals(1, s.getNumOfResource(r1));
-        assertEquals(1, s.getNumOfResource(r2));
-
         card2.decreaseProductionPowerResources(w, s, 2);
-        assertEquals(1, s.getNumOfResource(r1));
+        assertEquals(2, s.getNumOfResource(r1));
         assertEquals(1, s.getNumOfResource(r2));
 
         card3.decreaseProductionPowerResources(w, s, 2);
-        assertEquals(1, s.getNumOfResource(r1));
+        assertEquals(2, s.getNumOfResource(r1));
         assertEquals(1, s.getNumOfResource(r2));
 
         card4.decreaseProductionPowerResources(w, s, 2);
+        assertEquals(2, s.getNumOfResource(r1));
+        assertEquals(1, s.getNumOfResource(r2));
+
+        card1.decreaseProductionPowerResources(w, s, 2);
         assertEquals(1, s.getNumOfResource(r1));
         assertEquals(1, s.getNumOfResource(r2));
         /*
          card1 is AdditionalProductionPowerCard so decrease by 1 r1, other cards do nothing
          */
 
+        assertFalse(developmentCard.isBuyable(w, s));
+
         assertFalse(card1.discount(developmentCard));
-        assertTrue(card2.discount(developmentCard));
+        assertFalse(developmentCard.isBuyable(w, s));
+
         assertFalse(card3.discount(developmentCard));
+        assertFalse(developmentCard.isBuyable(w, s));
+
         assertFalse(card4.discount(developmentCard));
+        assertFalse(developmentCard.isBuyable(w, s));
+
+        assertTrue(card2.discount(developmentCard));
+        assertTrue(developmentCard.isBuyable(w, s));
         /*
-         card2 is DiscountCard so decrease by 1 r1 the cost of developmentCard and @return true, other cards @return false
+         card2 is DiscountCard so decrease by 1 r1 the cost of developmentCard and @return true. Now the card is buyable
+         */
+
+        card1.recount(developmentCard);
+        assertTrue(developmentCard.isBuyable(w, s));
+
+        card3.recount(developmentCard);
+        assertTrue(developmentCard.isBuyable(w, s));
+
+        card4.recount(developmentCard);
+        assertTrue(developmentCard.isBuyable(w, s));
+
+        card2.recount(developmentCard);
+        assertFalse(developmentCard.isBuyable(w, s));
+        /*
+         card2 is DiscountCard so increase by 1 r1 the cost of developmentCard and @return true. Now the card
+         return to the original cost so it's not buyable
          */
 
         assertFalse(card1.whiteConversion());

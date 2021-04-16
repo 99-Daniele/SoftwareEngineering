@@ -23,22 +23,20 @@ public class WhiteMarble extends Marble {
         if(game.isActiveWhiteConversionCard(1) && game.isActiveWhiteConversionCard(2)) {
             return true;
         }
-        else if(game.isActiveWhiteConversionCard(1)) {
-            try {
-                LeaderCard card = game.getCurrentPlayerLeaderCard(1);
-                game.whiteMarbleConversion(card);
-            } catch (AlreadyDiscardLeaderCardException e) {
-                e.printStackTrace();
-            }
-        }
-        else if(game.isActiveWhiteConversionCard(2)){
-            try {
-                LeaderCard card = game.getCurrentPlayerLeaderCard(2);
-                game.whiteMarbleConversion(card);
-            } catch (AlreadyDiscardLeaderCardException e) {
-                e.printStackTrace();
-            }
-        }
+        if(!(useWhiteConversionCard(game, 1)))
+            useWhiteConversionCard(game, 2);
         return false;
+    }
+
+    private boolean useWhiteConversionCard(LightGame game, int chosenLeaderCard){
+        if(!(game.isActiveWhiteConversionCard(chosenLeaderCard)))
+            return false;
+        try {
+            LeaderCard card = game.getCurrentPlayerLeaderCard(chosenLeaderCard);
+            game.whiteMarbleConversion(card);
+        } catch (AlreadyDiscardLeaderCardException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 }

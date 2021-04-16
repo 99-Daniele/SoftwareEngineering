@@ -1,6 +1,10 @@
 package it.polimi.ingsw.model.actionsTests;
 
-import it.polimi.ingsw.model.developmentCardsTests.Color;
+import it.polimi.ingsw.model.actions.Action;
+import it.polimi.ingsw.model.actions.DiscardAction;
+import it.polimi.ingsw.model.actions.LudovicoMoveAndShuffleAction;
+import it.polimi.ingsw.model.actions.LudovicoTwoMoveAction;
+import it.polimi.ingsw.model.developmentCards.Color;
 import it.polimi.ingsw.model.games.SinglePlayerGame;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

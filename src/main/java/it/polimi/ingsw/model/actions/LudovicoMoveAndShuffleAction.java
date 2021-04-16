@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.actionsTests;
+package it.polimi.ingsw.model.actions;
 
 import it.polimi.ingsw.model.games.LightSinglePlayerGame;
 

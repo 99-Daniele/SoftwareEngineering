@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.player;
 
 import it.polimi.ingsw.exceptions.*;
-import it.polimi.ingsw.model.developmentCardsTests.DevelopmentCard;
+import it.polimi.ingsw.model.developmentCards.DevelopmentCard;
 import it.polimi.ingsw.model.leaderCards.LeaderCard;
 import it.polimi.ingsw.model.leaderCards.LeaderRequirements;
 import it.polimi.ingsw.model.resourceContainers.Resource;
@@ -148,8 +148,6 @@ public class PlayerBoard extends SimplePlayerBoard {
         if(choice.isThirdPower())
             slotDevelopmentCards[2].removeProductionPowerResource(w, s);
         if(choice.isBasicPower()) {
-            if(!enoughBasicProductionResource(choice.getResources()[0], choice.getResources()[1]))
-                throw new InsufficientResourceException();
             decreaseWarehouseResource(choice.getResources()[0], choice.getResources()[1], w, s);
         }
         if(choice.isFirstAdditionalPower())
@@ -197,7 +195,7 @@ public class PlayerBoard extends SimplePlayerBoard {
             if(leaderCards.size() > 0)
                 faithPoints += leaderCards.get(0).additionalProductionPower(warehouse, strongbox,
                         choice.getChoice(), choice.getAdditionalResource1());
-        if(choice.isSecondPower())
+        if(choice.isSecondAdditionalPower())
             if(leaderCards.size() > 1)
                 faithPoints += leaderCards.get(1).additionalProductionPower(warehouse, strongbox,
                         choice.getChoice(), choice.getAdditionalResource2());
@@ -335,7 +333,15 @@ public class PlayerBoard extends SimplePlayerBoard {
      * @return the sum of all victoryPoints of player.
      */
     public int sumVictoryPoints(){
-        return victoryPoints.sumVictoryPoints();
+        return victoryPointsByAmountOfResource() + victoryPoints.sumVictoryPoints();
+    }
+
+    /**
+     * @return the victory points earned by the amount of resources.
+     * this method calculate the sum of total
+     */
+    private int victoryPointsByAmountOfResource(){
+        return sumTotalResource()/5;
     }
 
     /**
@@ -344,4 +350,5 @@ public class PlayerBoard extends SimplePlayerBoard {
     public int sumTotalResource(){
         return (warehouse.sumWarehouseResource() + strongbox.sumStrongboxResource());
     }
+
 }

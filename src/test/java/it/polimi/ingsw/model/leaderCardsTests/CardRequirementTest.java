@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.leaderCardsTests;
 
-import it.polimi.ingsw.model.developmentCardsTests.Color;
-import it.polimi.ingsw.model.developmentCardsTests.DevelopmentCard;
+import it.polimi.ingsw.model.developmentCards.Color;
+import it.polimi.ingsw.model.developmentCards.DevelopmentCard;
 import it.polimi.ingsw.model.leaderCards.CardRequirement;
 import it.polimi.ingsw.model.resourceContainers.Cost;
 import it.polimi.ingsw.model.resourceContainers.Resource;

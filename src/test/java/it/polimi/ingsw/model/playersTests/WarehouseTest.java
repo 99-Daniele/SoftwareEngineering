@@ -436,15 +436,15 @@ public class WarehouseTest {
         assertTrue(w.increaseResource(r2));
         assertTrue(w.increaseResource(r3));
         assertTrue(w.increaseResource(r3));
-        assertTrue(w.increaseResource(r4));
-        assertTrue(w.increaseResource(r4));
-        assertTrue(w.increaseResource(r4));
+        assertTrue(w.increaseResource(r2));
+        assertTrue(w.increaseResource(r2));
+        assertTrue(w.increaseResource(r2));
         /*
-         ExtraDepot has 2 r2, third WarehouseDepot has 3 r4
+         ExtraDepot has 2 r2, third WarehouseDepot has 3 r2
          */
 
         ImpossibleSwitchDepotException thrown =
-                assertThrows(ImpossibleSwitchDepotException.class, () -> w.switchDepots(2, 3));
+                assertThrows(ImpossibleSwitchDepotException.class, () -> w.switchDepots(3, 2));
         String expectedMessage = "Non è possibile scambiare questi depositi";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));

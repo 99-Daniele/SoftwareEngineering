@@ -1,8 +1,8 @@
 package it.polimi.ingsw.model.playersTests;
 
 import it.polimi.ingsw.exceptions.InsufficientResourceException;
-import it.polimi.ingsw.model.developmentCardsTests.Color;
-import it.polimi.ingsw.model.developmentCardsTests.DevelopmentCard;
+import it.polimi.ingsw.model.developmentCards.Color;
+import it.polimi.ingsw.model.developmentCards.DevelopmentCard;
 import it.polimi.ingsw.model.leaderCards.LeaderRequirements;
 import it.polimi.ingsw.model.player.SlotDevelopmentCards;
 import it.polimi.ingsw.model.player.Strongbox;
@@ -173,6 +173,11 @@ public class SlotDevelopmentCardsTest {
         c2.addResource(r1, 1);
         Cost c3 = new Cost();
         c3.addResource(r2, 1);
+
+        slot.removeProductionPowerResource(w, s);
+        assertEquals(1, w.getNumOfResource(r1));
+        assertEquals(0, s.getNumOfResource(r2));
+
         DevelopmentCard card = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1);
         slot.addDevelopmentCard(card);
         assertEquals(1, w.getNumOfResource(r1));

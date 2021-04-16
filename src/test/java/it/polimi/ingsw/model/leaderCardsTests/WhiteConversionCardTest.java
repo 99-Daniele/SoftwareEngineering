@@ -1,8 +1,8 @@
 package it.polimi.ingsw.model.leaderCardsTests;
 
 import it.polimi.ingsw.exceptions.ActiveLeaderCardException;
-import it.polimi.ingsw.model.developmentCardsTests.Color;
-import it.polimi.ingsw.model.developmentCardsTests.DevelopmentCard;
+import it.polimi.ingsw.model.developmentCards.Color;
+import it.polimi.ingsw.model.developmentCards.DevelopmentCard;
 import it.polimi.ingsw.model.leaderCards.LeaderCard;
 import it.polimi.ingsw.model.leaderCards.LeaderRequirements;
 import it.polimi.ingsw.model.leaderCards.WhiteConversionCard;
