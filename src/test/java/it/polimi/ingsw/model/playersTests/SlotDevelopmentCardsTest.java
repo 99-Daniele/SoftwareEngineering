@@ -66,7 +66,7 @@ public class SlotDevelopmentCardsTest {
      * this test tries to activate a production power if there are not enough resources
      */
     @Test
-    void incorrectProductionPower(){
+    void incorrectProductionPowerNotEnoughResource(){
 
         Resource r1 = Resource.COIN;
         Resource r2 = Resource.SHIELD;
@@ -93,10 +93,31 @@ public class SlotDevelopmentCardsTest {
     }
 
     /**
+     * this test tries to activate production of an empty SlotDevelopmentCards
+     */
+    @Test
+    void incorrectProductionPowerEmptySlot() {
+
+        Resource r1 = Resource.COIN;
+
+        SlotDevelopmentCards slot = new SlotDevelopmentCards();
+        Warehouse w = new Warehouse();
+        w.increaseResource(r1);
+        Strongbox s = new Strongbox();
+
+        NoSuchProductionPowerException thrown =
+                assertThrows(NoSuchProductionPowerException.class, () -> slot.activateProductionActiveCard(w, s, 1));
+
+        String expectedMessage = "Non esistono carte per attivare questo potere di produzione";
+        String actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    /**
      * this test verifies the correct activation of production power of active DevelopmentCard
      */
     @Test
-    void correctProductionPower() throws InsufficientResourceException{
+    void correctProductionPower() throws InsufficientResourceException, NoSuchProductionPowerException {
 
         Resource r1 = Resource.COIN;
         Resource r2 = Resource.SHIELD;
@@ -105,8 +126,6 @@ public class SlotDevelopmentCardsTest {
         Warehouse w = new Warehouse();
         w.increaseResource(r1);
         Strongbox s = new Strongbox();
-
-        assertEquals(0, slot.activateProductionActiveCard(w, s, 1));
 
         Cost c1 = new Cost();
         Cost c2 = new Cost();

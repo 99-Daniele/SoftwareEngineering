@@ -361,7 +361,7 @@ public class PlayerBoardTest {
      */
     @Test
     void correctStandardBasicAndAdditionalProductionPower() throws
-            InsufficientResourceException, InsufficientCardsException, ActiveLeaderCardException, AlreadyDiscardLeaderCardException, ImpossibleDevelopmentCardAdditionException {
+            InsufficientResourceException, InsufficientCardsException, ActiveLeaderCardException, AlreadyDiscardLeaderCardException, ImpossibleDevelopmentCardAdditionException, NoSuchProductionPowerException {
 
         PlayerBoard p = new PlayerBoard("p1");
         p.increaseWarehouse(r1);
@@ -388,22 +388,11 @@ public class PlayerBoardTest {
 
         PowerProductionPlayerChoice playerChoice = new PowerProductionPlayerChoice();
 
-        playerChoice.setSecondPower();
-        assertTrue(playerChoice.isSecondPower());
-
-        playerChoice.setThirdPower();
-        assertTrue(playerChoice.isThirdPower());
+        playerChoice.setFirstPower();
+        assertTrue(playerChoice.isFirstPower());
 
         playerChoice.setBasicPower(r2, r3, r2);
         assertTrue(playerChoice.isBasicPower());
-
-        playerChoice.setChoice(1);
-
-        assertFalse(p.activateProduction(playerChoice));
-        assertEquals(0, p.getFaithPoints());
-
-        playerChoice.setFirstPower();
-        assertTrue(playerChoice.isFirstPower());
 
         playerChoice.setFirstAdditionalPower(r2);
         assertTrue(playerChoice.isFirstAdditionalPower());
@@ -411,12 +400,10 @@ public class PlayerBoardTest {
         playerChoice.setSecondAdditionalPower(r2);
         assertTrue(playerChoice.isSecondAdditionalPower());
 
+        playerChoice.setChoice(1);
 
         assertTrue(p.activateProduction(playerChoice));
         assertEquals(4, p.getFaithPoints());
-        /*
-         AdditionalProductionPower gives 1 faith points, so @return true
-         */
     }
 
     /**
@@ -430,6 +417,67 @@ public class PlayerBoardTest {
 
         NoSuchProductionPowerException thrown =
                 assertThrows(NoSuchProductionPowerException.class, () -> p.activateDevelopmentCardProductionPower(1, s, 1));
+
+        String expectedMessage = "Non esistono carte per attivare questo potere di produzione";
+        String actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    /**
+     * this test tries to activate the production of a not existing DevelopmentCard
+     */
+    @Test
+    void incorrectNotExistingDevelopmentCard(){
+
+        PlayerBoard p = new PlayerBoard("p1");
+        PowerProductionPlayerChoice choice = new PowerProductionPlayerChoice();
+        choice.setFirstPower();
+
+        NoSuchProductionPowerException thrown =
+                assertThrows(NoSuchProductionPowerException.class, () -> p.activateProduction(choice));
+
+        String expectedMessage = "Non esistono carte per attivare questo potere di produzione";
+        String actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    /**
+     * this test tries to activate the production of an inactive AdditionalProductionPowerCard
+     */
+    @Test
+    void incorrectNotActiveAdditionalCard(){
+
+        PlayerBoard p = new PlayerBoard("p1");
+        PowerProductionPlayerChoice choice = new PowerProductionPlayerChoice();
+        Cost c = new Cost();
+        LeaderCard card = new AdditionalProductionPowerCard(r1, c, 1);
+        p.addLeaderCard(card, card);
+        choice.setFirstAdditionalPower(r1);
+
+        NoSuchProductionPowerException thrown =
+                assertThrows(NoSuchProductionPowerException.class, () -> p.activateProduction(choice));
+
+        String expectedMessage = "Non esistono carte per attivare questo potere di produzione";
+        String actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    /**
+     * this test tries to activate the production of a not existing AdditionalProductionPowerCard
+     */
+    @Test
+    void incorrectNotExistingAdditionalCard() throws InsufficientResourceException, AlreadyDiscardLeaderCardException, ActiveLeaderCardException, InsufficientCardsException {
+
+        PlayerBoard p = new PlayerBoard("p1");
+        PowerProductionPlayerChoice choice = new PowerProductionPlayerChoice();
+        Cost c = new Cost();
+        LeaderCard card = new DiscountCard(r1, c, 1);
+        p.addLeaderCard(card, card);
+        p.activateLeaderCard(1);
+        choice.setFirstAdditionalPower(r1);
+
+        NoSuchProductionPowerException thrown =
+                assertThrows(NoSuchProductionPowerException.class, () -> p.activateProduction(choice));
 
         String expectedMessage = "Non esistono carte per attivare questo potere di produzione";
         String actualMessage = thrown.getMessage();
@@ -821,7 +869,7 @@ public class PlayerBoardTest {
      * this test calculates the sum of resources amount in PlayerBoard
      */
     @Test
-    void sumTotalResource() throws InsufficientResourceException {
+    void sumTotalResource() throws InsufficientResourceException, NoSuchProductionPowerException {
 
         PlayerBoard p = new PlayerBoard("p1");
         assertEquals(0, p.sumTotalResource());

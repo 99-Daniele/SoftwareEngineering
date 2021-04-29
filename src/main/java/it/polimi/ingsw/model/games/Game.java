@@ -395,7 +395,7 @@ public class Game implements LightGame {
      * this method activate all production powers together and if player has increased his faith points, calls faithTrackMovement().
      */
     public void activateProduction(PowerProductionPlayerChoice choice)
-            throws InsufficientResourceException{
+            throws InsufficientResourceException, NoSuchProductionPowerException {
         if(players.get(currentPlayer).activateProduction(choice))
             faithTrackMovement();
     }

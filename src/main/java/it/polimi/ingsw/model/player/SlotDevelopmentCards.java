@@ -52,9 +52,9 @@ public class SlotDevelopmentCards {
      * @throws InsufficientResourceException if player has not enough resources.
      * this method calls activateProduction() of the last added card in SlotDevelopmentCards.
      */
-    public int activateProductionActiveCard(Warehouse w, Strongbox s, int choice) throws InsufficientResourceException{
+    public int activateProductionActiveCard(Warehouse w, Strongbox s, int choice) throws InsufficientResourceException, NoSuchProductionPowerException {
         if(isEmpty())
-            return 0;
+            throw new NoSuchProductionPowerException();
         return developmentCards.getLast().activateProduction(w, s, choice);
     }
 
@@ -71,7 +71,7 @@ public class SlotDevelopmentCards {
      * @throws InsufficientResourceException if there are not enough resource to activate production power.
      */
     public void removeProductionPowerResource(Warehouse w, Strongbox s)
-            throws InsufficientResourceException{
+            throws InsufficientResourceException {
         if(isEmpty())
             return;
         developmentCards.getLast().controlDiscardResource(w, s, 1, true);

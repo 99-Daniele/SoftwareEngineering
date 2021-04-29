@@ -626,7 +626,7 @@ class GameTest {
      * this test verifies the correct increase of current player faith points after activating production power
      */
     @Test
-    void faithTrackMovementAfterActivateProduction() throws AlreadyTakenNicknameException, InsufficientResourceException, AlreadyDiscardLeaderCardException, ActiveLeaderCardException, InsufficientCardsException {
+    void faithTrackMovementAfterActivateProduction() throws AlreadyTakenNicknameException, InsufficientResourceException, AlreadyDiscardLeaderCardException, ActiveLeaderCardException, InsufficientCardsException, NoSuchProductionPowerException {
 
         Game game = new Game(2);
         game.createPlayer("Alessio");
@@ -950,7 +950,7 @@ class GameTest {
      */
     @Test
     void endGameWinner()
-            throws AlreadyTakenNicknameException, InsufficientResourceException, ImpossibleDevelopmentCardAdditionException{
+            throws AlreadyTakenNicknameException, InsufficientResourceException, ImpossibleDevelopmentCardAdditionException, NoSuchProductionPowerException {
 
         Game game = new Game(4);
         game.createPlayer("Daniele");

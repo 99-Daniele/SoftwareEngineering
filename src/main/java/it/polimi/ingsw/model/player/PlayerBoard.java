@@ -143,7 +143,7 @@ public class PlayerBoard extends SimplePlayerBoard {
      * which not exist or is not active) the method do nothing without throwing any exception like player has never chose them.
      */
     private void enoughTotalProductionPowerResource(PowerProductionPlayerChoice choice)
-            throws InsufficientResourceException{
+            throws InsufficientResourceException {
         Warehouse w;
         w = warehouse.copyThisWarehouse();
         Strongbox s;
@@ -205,7 +205,7 @@ public class PlayerBoard extends SimplePlayerBoard {
      * if player has increased his faith points, calls increaseFaithPoints() method.
      */
     public boolean activateProduction(PowerProductionPlayerChoice choice) throws
-            InsufficientResourceException{
+            InsufficientResourceException, NoSuchProductionPowerException {
         enoughTotalProductionPowerResource(choice);
         int faithPoints = 0;
         if(choice.isFirstPower())
@@ -218,13 +218,21 @@ public class PlayerBoard extends SimplePlayerBoard {
             activateBasicProduction(choice.getResources()[0], choice.getResources()[1], choice.getResources()[2],
                     warehouse, strongbox, choice.getChoice());
         if(choice.isFirstAdditionalPower())
-            if(leaderCards.size() > 0)
-                faithPoints += leaderCards.get(0).additionalProductionPower(warehouse, strongbox,
-                        choice.getChoice(), choice.getAdditionalResource1());
+            if(leaderCards.size() > 0) {
+                if(leaderCards.get(0).additionalProductionPower(warehouse, strongbox,
+                        choice.getChoice(), choice.getAdditionalResource1()) == 0)
+                    throw new NoSuchProductionPowerException();
+                else
+                    faithPoints++;
+            }
         if(choice.isSecondAdditionalPower())
-            if(leaderCards.size() > 1)
-                faithPoints += leaderCards.get(1).additionalProductionPower(warehouse, strongbox,
-                        choice.getChoice(), choice.getAdditionalResource2());
+            if(leaderCards.size() > 1) {
+                if(leaderCards.get(1).additionalProductionPower(warehouse, strongbox,
+                        choice.getChoice(), choice.getAdditionalResource2()) == 0)
+                    throw new NoSuchProductionPowerException();
+                else
+                    faithPoints++;
+            }
         if(faithPoints > 0) {
             increaseFaithPoints(faithPoints);
             return true;
