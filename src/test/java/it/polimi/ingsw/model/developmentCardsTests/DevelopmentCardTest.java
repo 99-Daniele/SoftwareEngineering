@@ -71,6 +71,23 @@ public class DevelopmentCardTest {
         assertEquals(2,cost.getNumOfResource(Resource.SERVANT));
     }
 
+    /**
+     *
+     */
+    @Test
+    void increaseStrongbox(){
+        setEmpty();
+        strongbox.increaseResourceType(Resource.STONE, 1);
+        given.addResource(Resource.COIN, 1);
+        given.addResource(Resource.STONE, 1);
+        assertEquals(0, strongbox.getNumOfResource(Resource.COIN));
+        assertEquals(1, strongbox.getNumOfResource(Resource.STONE));
+
+        developmentCard.increaseProductionResource(strongbox);
+        assertEquals(1, strongbox.getNumOfResource(Resource.COIN));
+        assertEquals(2, strongbox.getNumOfResource(Resource.STONE));
+    }
+
 
     /**
      * case: choice 2, not enough resource in strongbox.

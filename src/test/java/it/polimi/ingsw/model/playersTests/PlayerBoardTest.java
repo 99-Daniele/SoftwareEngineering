@@ -226,6 +226,21 @@ public class PlayerBoardTest {
     }
 
     /**
+     *
+     */
+    @Test
+    void correctStrongboxIncrease(){
+
+        PlayerBoard p = new PlayerBoard("p");
+        Strongbox s = new Strongbox();
+        s.increaseResourceType(Resource.COIN, 2);
+
+        assertEquals(0, p.sumTotalResource());
+        p.increaseStrongbox(s);
+        assertEquals(2, p.sumTotalResource());
+    }
+
+    /**
      * this test tries to activate DevelopmentCard production power without having enough resources
      */
     @Test
@@ -403,6 +418,163 @@ public class PlayerBoardTest {
          AdditionalProductionPower gives 1 faith points, so @return true
          */
     }
+
+    /**
+     * this test tries to activate the production of an empty SlotDevelopmentCards
+     */
+    @Test
+    void incorrectEmptySlotDevelopmentCard(){
+
+        PlayerBoard p = new PlayerBoard("p1");
+        Strongbox s = new Strongbox();
+
+        NoSuchProductionPowerException thrown =
+                assertThrows(NoSuchProductionPowerException.class, () -> p.activateDevelopmentCardProductionPower(1, s, 1));
+
+        String expectedMessage = "Non esistono carte per attivare questo potere di produzione";
+        String actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    /**
+     * this test tries to activate production power if there aren't enough resources
+     */
+    @Test
+    void incorrectNotEnoughResourceStandardProductionPower()
+            throws InsufficientResourceException, ImpossibleDevelopmentCardAdditionException {
+
+        PlayerBoard p = new PlayerBoard("p1");
+        Cost c1 = new Cost();
+        Cost c2 = new Cost();
+        c2.addResource(r1, 1);
+        Cost c3 = new Cost();
+        c3.addResource(r1, 1);
+        DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 2);
+        p.buyDevelopmentCard(developmentCard, 1, 1);
+        Strongbox s = new Strongbox();
+
+        InsufficientResourceException thrown =
+                assertThrows(InsufficientResourceException.class, () -> p.activateDevelopmentCardProductionPower(1, s, 1));
+
+        String expectedMessage = "Non hai abbastanza risorse per effettuare questa operazione";
+        String actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    /**
+     * this test verifies the correct activation of a DevelopmentCard production power
+     */
+    @Test
+    void correctStandardProductionPower() throws InsufficientResourceException, ImpossibleDevelopmentCardAdditionException, NoSuchProductionPowerException {
+
+        PlayerBoard p = new PlayerBoard("p1");
+        p.increaseWarehouse(r1);
+
+        Cost c1 = new Cost();
+        Cost c2 = new Cost();
+        c2.addResource(r1, 1);
+        Cost c3 = new Cost();
+        c3.addResource(r1, 1);
+        DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 2);
+        p.buyDevelopmentCard(developmentCard, 2, 1);
+
+        Strongbox s = new Strongbox();
+        assertEquals(1, p.sumTotalResource());
+
+        p.activateDevelopmentCardProductionPower(2, s, 1);
+        assertEquals(0, p.sumTotalResource());
+        assertEquals(1, s.getNumOfResource(r1));
+    }
+
+    /**
+     * this test tries to activate basic production power of DevelopmentCard if there aren't enough resources
+     */
+    @Test
+    void incorrectNotEnoughResourceBasicProductionPower() {
+
+        PlayerBoard p = new PlayerBoard("p1");
+
+        InsufficientResourceException thrown =
+                assertThrows(InsufficientResourceException.class, () -> p.activateBasicProduction(r1, r2, 1));
+
+        String expectedMessage = "Non hai abbastanza risorse per effettuare questa operazione";
+        String actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    /**
+     * this test verifies the correct activation of basic production power
+     */
+    @Test
+    void correctBasicProductionPower() throws InsufficientResourceException {
+
+        PlayerBoard p = new PlayerBoard("p1");
+        p.increaseWarehouse(r1);
+        p.increaseWarehouse(r2);
+        assertEquals(2, p.sumTotalResource());
+
+        p.activateBasicProduction(r1, r2, 2);
+        assertEquals(0, p.sumTotalResource());
+    }
+
+    /**
+     * this test tries to activate the production of a not existing AdditionalProductionPowerCard
+     */
+    @Test
+    void incorrectNotExistingAdditionalProductionPowerCard(){
+
+        PlayerBoard p = new PlayerBoard("p1");
+
+        NoSuchProductionPowerException thrown =
+                assertThrows(NoSuchProductionPowerException.class, () -> p.activateAdditionalProductionPower(2,  1));
+
+        String expectedMessage = "Non esistono carte per attivare questo potere di produzione";
+        String actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    /**
+     * this test tries to activate production power of AdditionalProductionPowerCard if there aren't enough resources
+     */
+    @Test
+    void incorrectNotEnoughResourceAdditionalProductionPower()
+            throws InsufficientResourceException, InsufficientCardsException, ActiveLeaderCardException, AlreadyDiscardLeaderCardException {
+
+        PlayerBoard p = new PlayerBoard("p1");
+        Cost c = new Cost();
+        LeaderRequirements l = new LeaderRequirements();
+        LeaderCard card = new AdditionalProductionPowerCard(r1, c, 1);
+        p.addLeaderCard(card, card);
+        p.activateLeaderCard(1);
+
+        InsufficientResourceException thrown =
+                assertThrows(InsufficientResourceException.class, () -> p.activateAdditionalProductionPower(1,1));
+
+        String expectedMessage = "Non hai abbastanza risorse per effettuare questa operazione";
+        String actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    /**
+     * this test verifies the correct activation of a AdditionalProductionPowerCard production power
+     */
+    @Test
+    void correctAdditionalProductionPower() throws InsufficientResourceException, NoSuchProductionPowerException, InsufficientCardsException, ActiveLeaderCardException, AlreadyDiscardLeaderCardException {
+
+        PlayerBoard p = new PlayerBoard("p1");
+        p.increaseWarehouse(r1);
+
+        Cost c = new Cost();
+        LeaderRequirements l = new LeaderRequirements();
+        LeaderCard card = new AdditionalProductionPowerCard(r1, c, 1);
+        p.addLeaderCard(card, card);
+        p.activateLeaderCard(1);
+        assertEquals(1, p.sumTotalResource());
+
+        p.activateAdditionalProductionPower(1, 2);
+        assertEquals(0, p.sumTotalResource());
+    }
+
 
     /**
      * this test trie to activate a previously discarded LeaderCard

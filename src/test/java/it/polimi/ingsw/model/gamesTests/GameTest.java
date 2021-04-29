@@ -400,6 +400,34 @@ class GameTest {
     }
 
     /**
+     * this test verifies the correct return of buyable DevelopmentCards by player
+     */
+    @Test
+    void buyableDevelopmentCards() throws AlreadyTakenNicknameException, InsufficientResourceException, AlreadyDiscardLeaderCardException, ActiveLeaderCardException, InsufficientCardsException {
+
+        Game game = new Game(3);
+        game.createPlayer("Roberta");
+        assertEquals(0, game.buyableDevelopmentCards().size());
+
+        Cost c = new Cost();
+        LeaderCard leaderCard1 = new ExtraDepotCard(Resource.STONE, c, 0);
+        LeaderCard leaderCard2 = new ExtraDepotCard(Resource.SERVANT, c, 0);
+        game.selectCurrentPlayerLeaderCards(leaderCard1, leaderCard2);
+        game.activateLeaderCard(1);
+
+        game.increaseWarehouse(Resource.SERVANT);
+        game.increaseWarehouse(Resource.COIN);
+        game.increaseWarehouse(Resource.COIN);
+        game.increaseWarehouse(Resource.STONE);
+        game.increaseWarehouse(Resource.SHIELD);
+        game.increaseWarehouse(Resource.SHIELD);
+        game.increaseWarehouse(Resource.SHIELD);
+
+        assertNotEquals(0, game.buyableDevelopmentCards().size());
+        assertEquals(1, game.buyableDevelopmentCards().get(0).getLevel());
+    }
+
+    /**
      * this test tries to buy a DevelopmentCard if current player does not have enough resource
      */
     @Test
@@ -409,7 +437,7 @@ class GameTest {
         game.createPlayer("Roberta");
 
         InsufficientResourceException thrown =
-                assertThrows(InsufficientResourceException.class, () -> game.buyDevelopmentCard(0, 0, 1, 1));
+                assertThrows(InsufficientResourceException.class, () -> game.buyDevelopmentCardFromMarket(0, 0, 1, 1));
 
         String expectedMessage = "Non hai abbastanza risorse per effettuare questa operazione";
         String actualMessage = thrown.getMessage();
@@ -443,7 +471,7 @@ class GameTest {
         game.increaseWarehouse(Resource.SHIELD);
 
 
-        game.buyDevelopmentCard(0, 0, 1, 1);
+        game.buyDevelopmentCardFromMarket(0, 0, 1, 1);
 
         game.increaseWarehouse(Resource.SERVANT);
         game.increaseWarehouse(Resource.COIN);
@@ -453,7 +481,7 @@ class GameTest {
         game.increaseWarehouse(Resource.SHIELD);
 
         ImpossibleDevelopmentCardAdditionException thrown =
-                assertThrows(ImpossibleDevelopmentCardAdditionException.class, () -> game.buyDevelopmentCard(0, 0, 1, 1));
+                assertThrows(ImpossibleDevelopmentCardAdditionException.class, () -> game.buyDevelopmentCardFromMarket(0, 0, 1, 1));
 
         String expectedMessage = "Non puoi comprare questa carta";
         String actualMessage = thrown.getMessage();
@@ -461,7 +489,7 @@ class GameTest {
     }
 
     /**
-     * this test verify the corretc update of available slots after buy DevelomentCards
+     * this test verify the correct update of available slots after buy DevelomentCards
      */
     @Test
     void findRightSlotsAfterBuyDevelopmentCard()
@@ -493,7 +521,7 @@ class GameTest {
         assertEquals(2, slots1.get(1));
         assertEquals(3, slots1.get(2));
 
-        game.buyDevelopmentCard(0, 0, 1, 2);
+        game.buyDevelopmentCardFromMarket(0, 0, 1, 2);
 
         game.increaseWarehouse(Resource.SERVANT);
         game.increaseWarehouse(Resource.COIN);
@@ -539,11 +567,36 @@ class GameTest {
         DevelopmentCard card = game.getDeck(0 , 0).getFirstCard();
         assertSame(Color.GREEN, card.getColor());
 
-        game.buyDevelopmentCard(0, 0, 1, 1);
+        game.buyDevelopmentCardFromMarket(0, 0, 1, 1);
         assertNotEquals(7, game.getPlayer(0).sumTotalResource());
         assertNotEquals(0, game.getPlayer(0).getVictoryPoints().getVictoryPointsByCards());
         assertEquals(3, game.getDeck(0, 0).numberOfCards());
         assertNotSame(card, game.getDeck(0, 0).getFirstCard());
+    }
+
+    /**
+     * this test verifies the correct buying of input DevelopmentCard
+     */
+    @Test
+    void buyDevelopmentCardDirectly() throws AlreadyTakenNicknameException {
+
+        Game game = new Game(3);
+        game.createPlayer("Enrico");
+
+        Cost c = new Cost();
+        DevelopmentCard card = new DevelopmentCard(Color.GREEN, 1, c, 2, c, c, 1);
+
+        assertEquals(0, game.getPlayer(0).getVictoryPoints().getVictoryPointsByCards());
+        assertEquals(4, game.getDeck(0, 0).numberOfCards());
+
+        game.buyDevelopmentCard(card, 1, 1);
+        assertEquals(2, game.getPlayer(0).getVictoryPoints().getVictoryPointsByCards());
+        assertEquals(3, game.getDeck(0, 0).numberOfCards());
+
+        DevelopmentCard card2 = new DevelopmentCard(Color.GREEN, 2, c, 5, c, c, 1);
+        game.buyDevelopmentCard(card2, 1, 1);
+        assertEquals(7, game.getPlayer(0).getVictoryPoints().getVictoryPointsByCards());
+        assertEquals(3, game.getDeck(1, 0).numberOfCards());
     }
 
     /**
@@ -599,6 +652,182 @@ class GameTest {
         choice2.setSecondAdditionalPower(Resource.STONE);
         game.activateProduction(choice2);
         assertEquals(2, game.getPlayer(0).getFaithPoints());
+    }
+
+    /**
+     * this test tries to activate a not existing DevelopmentCard production power
+     */
+    @Test
+    void incorrectActivateStandardProductionPowerNoSuchCard() throws AlreadyTakenNicknameException {
+
+        Game game = new Game(2);
+        game.createPlayer("Regina");
+
+        Strongbox s = new Strongbox();
+        NoSuchProductionPowerException thrown =
+                assertThrows(NoSuchProductionPowerException.class, () -> game.removeDevelopmentCardProductionResource(3, s, 2));
+
+        String expectedMessage = "Non esistono carte per attivare questo potere di produzione";
+        String actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    /**
+     * this test tries to activate DevelopmentCard production power if there aren't not enough resources
+     */
+    @Test
+    void incorrectActivateStandardProductionPowerNotEnoughResource() throws AlreadyTakenNicknameException, InsufficientResourceException, ImpossibleDevelopmentCardAdditionException {
+
+        Game game = new Game(2);
+        game.createPlayer("Regina");
+
+        Cost c1 = new Cost();
+        Cost c2 = new Cost();
+        c2.addResource(Resource.STONE, 1);
+        Cost c3 = new Cost();
+
+        DevelopmentCard card = new DevelopmentCard(Color.GREEN, 1,  c1, 1, c2, c3, 5);
+        game.getPlayer(0).buyDevelopmentCard(card, 1, 1);
+
+        Strongbox s = new Strongbox();
+        InsufficientResourceException thrown =
+                assertThrows(InsufficientResourceException.class, () -> game.removeDevelopmentCardProductionResource(1, s, 1));
+
+        String expectedMessage = "Non hai abbastanza risorse per effettuare questa operazione";
+        String actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    /**
+     * this test verifies the correct activation of DevelopmentCard production power
+     */
+    @Test
+    void correctActivateStandardProductionPower()
+            throws AlreadyTakenNicknameException, InsufficientResourceException, ImpossibleDevelopmentCardAdditionException, NoSuchProductionPowerException {
+
+        Game game = new Game(2);
+        game.createPlayer("Regina");
+        game.increaseWarehouse(Resource.STONE);
+        assertEquals(1, game.getPlayer(0).sumTotalResource());
+
+        Cost c1 = new Cost();
+        Cost c2 = new Cost();
+        c2.addResource(Resource.STONE, 1);
+        Cost c3 = new Cost();
+        c3.addResource(Resource.COIN, 2);
+
+        DevelopmentCard card = new DevelopmentCard(Color.GREEN, 1,  c1, 1, c2, c3, 5);
+        game.getPlayer(0).buyDevelopmentCard(card, 1, 1);
+        assertEquals(1, game.getPlayer(0).sumTotalResource());
+        assertEquals(0, game.getPlayer(0).getFaithPoints());
+
+        Strongbox s = new Strongbox();
+        game.removeDevelopmentCardProductionResource(1, s, 1);
+        assertEquals(0, game.getPlayer(0).sumTotalResource());
+        assertEquals(5, game.getPlayer(0).getFaithPoints());
+        assertEquals(1, game.getPlayer(0).getVictoryPoints().getVictoryPointsByFaithTrack());
+        assertEquals(2, s.getNumOfResource(Resource.COIN));
+    }
+
+    /**
+     * this test tries to activate basic production power if there aren't not enough resources
+     */
+    @Test
+    void incorrectActivateBasicProductionPowerNotEnoughResource() throws AlreadyTakenNicknameException {
+
+        Game game = new Game(2);
+        game.createPlayer("Regina");
+        Strongbox s = new Strongbox();
+        InsufficientResourceException thrown =
+                assertThrows(InsufficientResourceException.class, () -> game.basicProductionPower(Resource.COIN, Resource.COIN, Resource.STONE, s, 2));
+
+        String expectedMessage = "Non hai abbastanza risorse per effettuare questa operazione";
+        String actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    /**
+     * this test verifies the correct activation of basic production power
+     */
+    @Test
+    void correctActivateBasicProductionPower()
+            throws AlreadyTakenNicknameException, InsufficientResourceException{
+
+        Game game = new Game(2);
+        game.createPlayer("Regina");
+        game.increaseWarehouse(Resource.SHIELD);
+        game.increaseWarehouse(Resource.STONE);
+        assertEquals(2, game.getPlayer(0).sumTotalResource());
+
+        Strongbox s = new Strongbox();
+        game.basicProductionPower(Resource.SHIELD, Resource.STONE, Resource.COIN, s, 1);
+        assertEquals(0, game.getPlayer(0).sumTotalResource());
+        assertEquals(1, s.getNumOfResource(Resource.COIN));
+    }
+
+    /**
+     * this test tries to activate a not existing AdditionalProductionPowerCard production power
+     */
+    @Test
+    void incorrectActivateAdditionalProductionPowerNoSuchCard() throws AlreadyTakenNicknameException {
+
+        Game game = new Game(2);
+        game.createPlayer("Regina");
+
+        Strongbox s = new Strongbox();
+        NoSuchProductionPowerException thrown =
+                assertThrows(NoSuchProductionPowerException.class, () -> game.removeAdditionalProductionPowerCardResource(2, Resource.COIN, s, 1));
+
+        String expectedMessage = "Non esistono carte per attivare questo potere di produzione";
+        String actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    /**
+     * this test tries to activate AdditionalProductionPowerCard production power if there aren't not enough resources
+     */
+    @Test
+    void incorrectActivateAdditionalProductionPowerNotEnoughResource()
+            throws AlreadyTakenNicknameException, InsufficientResourceException, InsufficientCardsException, ActiveLeaderCardException, AlreadyDiscardLeaderCardException {
+
+        Game game = new Game(2);
+        game.createPlayer("Regina");
+
+        Cost c = new Cost();
+        LeaderCard card = new AdditionalProductionPowerCard(Resource.STONE, c, 1);
+        game.selectCurrentPlayerLeaderCards(card, card);
+        game.activateLeaderCard(1);
+
+        Strongbox s = new Strongbox();
+        InsufficientResourceException thrown =
+                assertThrows(InsufficientResourceException.class, () -> game.removeAdditionalProductionPowerCardResource(1, Resource.COIN, s, 2));
+
+        String expectedMessage = "Non hai abbastanza risorse per effettuare questa operazione";
+        String actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    /**
+     * this test verifies the correct activation of AdditionalProductionPowerCard production power
+     */
+    @Test
+    void correctActivateAdditionalProductionPower()
+            throws AlreadyTakenNicknameException, InsufficientResourceException, InsufficientCardsException, ActiveLeaderCardException, AlreadyDiscardLeaderCardException, NoSuchProductionPowerException {
+
+        Game game = new Game(2);
+        game.createPlayer("Regina");
+        game.increaseWarehouse(Resource.STONE);
+        assertEquals(1, game.getPlayer(0).sumTotalResource());
+
+        Cost c = new Cost();
+        LeaderCard card = new AdditionalProductionPowerCard(Resource.STONE, c, 1);
+        game.selectCurrentPlayerLeaderCards(card, card);
+        game.activateLeaderCard(1);
+
+        Strongbox s = new Strongbox();
+        game.removeAdditionalProductionPowerCardResource(1, Resource.COIN, s, 2);
+        assertEquals(0, game.getPlayer(0).sumTotalResource());
+        assertEquals(1, s.getNumOfResource(Resource.COIN));
     }
 
     /**

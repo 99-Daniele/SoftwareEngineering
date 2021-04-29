@@ -293,6 +293,13 @@ public class Game implements LightGame {
     }
 
     /**
+     *
+     */
+    public ArrayList<Integer[]> availableSwitches(){
+        return players.get(currentPlayer).availableSwitches();
+    }
+
+    /**
      * @param depot1 stands for position of the first Depot in current player Warehouse to switch.
      * @param depot2 stands for position of the second Depot in current player Warehouse to switch.
      * @throws ImpossibleSwitchDepotException if the switch is not possible.
@@ -306,14 +313,35 @@ public class Game implements LightGame {
      * @param deckColumn is the column of the chosen deck.
      * @return an ArrayList </Integer> of slots where @card can be inserted.
      * @throws EmptyDevelopmentCardDeckException if player has chosen an empty deck.
-     * @throws InsufficientResourceException if player has not enough resources.
      */
     public ArrayList<Integer> findAvailableSlots(int deckRow, int deckColumn)
-            throws EmptyDevelopmentCardDeckException, InsufficientResourceException {
+            throws EmptyDevelopmentCardDeckException{
         DevelopmentCard card = deck[deckRow][deckColumn].getFirstCard();
-        if(!(players.get(currentPlayer).isBuyable(card)))
-            throw new InsufficientResourceException();
         return players.get(currentPlayer).findAvailableSlot(card);
+    }
+
+    /**
+     *
+     */
+    public ArrayList<Integer> findAvailableSlots(DevelopmentCard card){
+        return players.get(currentPlayer).findAvailableSlot(card);
+    }
+
+    /**
+     *
+     */
+    public ArrayList<DevelopmentCard> buyableDevelopmentCards(){
+        ArrayList<DevelopmentCard> buyableCards = new ArrayList<>();
+        for(int i = 0; i < 3; i++) {
+            for (int j = 0; j < 4; j++) {
+                try {
+                    DevelopmentCard card = deck[i][j].getFirstCard();
+                    if (players.get(currentPlayer).isBuyable(card))
+                        buyableCards.add(card);
+                } catch (EmptyDevelopmentCardDeckException e) { }
+            }
+        }
+        return buyableCards;
     }
 
     /**
@@ -327,13 +355,38 @@ public class Game implements LightGame {
      * this method firstly verifies if buying is possible and then remove DevelopmentCard from the deck
      * where it was contained.
      */
-    public void buyDevelopmentCard(int deckRow, int deckColumn, int choice, int slot)
+    public void buyDevelopmentCardFromMarket(int deckRow, int deckColumn, int choice, int slot)
             throws InsufficientResourceException, ImpossibleDevelopmentCardAdditionException, EmptyDevelopmentCardDeckException {
         DevelopmentCard card = deck[deckRow][deckColumn].getFirstCard();
         if(!(players.get(currentPlayer).isBuyable(card)))
             throw new InsufficientResourceException();
         players.get(currentPlayer).buyDevelopmentCard(card, slot, choice);
         deck[deckRow][deckColumn].removeDevelopmentCard();
+    }
+
+    /**
+     *
+     */
+    public void buyDevelopmentCard(DevelopmentCard card, int choice, int slot){
+        try {
+            players.get(currentPlayer).buyDevelopmentCard(card, slot, choice);
+        } catch (InsufficientResourceException | ImpossibleDevelopmentCardAdditionException e) {  }
+        removeDevelopmentCard(card);
+    }
+
+    /**
+     *
+     */
+    private void removeDevelopmentCard(DevelopmentCard card){
+        for(int i = 0; i < 3; i++){
+            for (int j = 0; j < 4; j++){
+                if(deck[i][j].getColor() == card.getColor() && i == card.getLevel()-1) {
+                    try {
+                        deck[i][j].removeDevelopmentCard();
+                    } catch (EmptyDevelopmentCardDeckException e) { }
+                }
+            }
+        }
     }
 
     /**
@@ -345,6 +398,40 @@ public class Game implements LightGame {
             throws InsufficientResourceException{
         if(players.get(currentPlayer).activateProduction(choice))
             faithTrackMovement();
+    }
+
+    /**
+     *
+     */
+    public void removeDevelopmentCardProductionResource(int chosenSlot, Strongbox s, int choice)
+            throws InsufficientResourceException, NoSuchProductionPowerException {
+        players.get(currentPlayer).activateDevelopmentCardProductionPower(chosenSlot, s, choice);
+        faithTrackMovement();
+    }
+
+    /**
+     *
+     */
+    public void basicProductionPower(Resource r1, Resource r2, Resource r3, Strongbox s, int choice)
+            throws InsufficientResourceException {
+        players.get(currentPlayer).activateBasicProduction(r1, r2, choice);
+        s.increaseResourceType(r3, 1);
+    }
+
+    /**
+     *
+     */
+    public void removeAdditionalProductionPowerCardResource(int chosenAdditionalPowerCard, Resource r, Strongbox s, int choice)
+            throws InsufficientResourceException, NoSuchProductionPowerException {
+        players.get(currentPlayer).activateAdditionalProductionPower(chosenAdditionalPowerCard, choice);
+        s.increaseResourceType(r, 1);
+    }
+
+    /**
+     *
+     */
+    public void increaseCurrentPlayerStrongbox(Strongbox s){
+        players.get(currentPlayer).increaseStrongbox(s);
     }
 
     /**

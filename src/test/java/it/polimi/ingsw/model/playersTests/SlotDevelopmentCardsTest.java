@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.playersTests;
 
 import it.polimi.ingsw.exceptions.InsufficientResourceException;
 
+import it.polimi.ingsw.exceptions.NoSuchProductionPowerException;
 import it.polimi.ingsw.model.developmentCards.*;
 import it.polimi.ingsw.model.leaderCards.LeaderRequirements;
 import it.polimi.ingsw.model.player.*;
@@ -148,6 +149,24 @@ public class SlotDevelopmentCardsTest {
                 assertThrows(InsufficientResourceException.class, () -> slot.removeProductionPowerResource(w, s));
 
         String expectedMessage = "Non hai abbastanza risorse per effettuare questa operazione";
+        String actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    /**
+     * this test tries to use the production power of an empty SlotDevelopmentCards
+     */
+    @Test
+    void incorrectEmptySlotDevelopmentCards(){
+
+        SlotDevelopmentCards slot = new SlotDevelopmentCards();
+        Warehouse w = new Warehouse();
+        Strongbox s = new Strongbox();
+
+        NoSuchProductionPowerException thrown =
+                assertThrows(NoSuchProductionPowerException.class, () -> slot.removeProductionPowerResource(w, s, 1));
+
+        String expectedMessage = "Non esistono carte per attivare questo potere di produzione";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }

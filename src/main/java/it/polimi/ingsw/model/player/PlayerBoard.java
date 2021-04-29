@@ -1,11 +1,6 @@
 package it.polimi.ingsw.model.player;
 
-import it.polimi.ingsw.exceptions.ImpossibleDevelopmentCardAdditionException;
-import it.polimi.ingsw.exceptions.InsufficientResourceException;
-import it.polimi.ingsw.exceptions.InsufficientCardsException;
-import it.polimi.ingsw.exceptions.ImpossibleSwitchDepotException;
-import it.polimi.ingsw.exceptions.ActiveLeaderCardException;
-import it.polimi.ingsw.exceptions.AlreadyDiscardLeaderCardException;
+import it.polimi.ingsw.exceptions.*;
 
 import it.polimi.ingsw.model.developmentCards.DevelopmentCard;
 import it.polimi.ingsw.model.leaderCards.*;
@@ -66,6 +61,13 @@ public class PlayerBoard extends SimplePlayerBoard {
      */
     public boolean increaseWarehouse(Resource resource){
         return warehouse.increaseResource(resource);
+    }
+
+    /**
+     *
+     */
+    public ArrayList<Integer[]> availableSwitches(){
+        return warehouse.availableSwitches();
     }
 
     /**
@@ -164,6 +166,25 @@ public class PlayerBoard extends SimplePlayerBoard {
     }
 
     /**
+     *
+     */
+    public void activateDevelopmentCardProductionPower(int chosenSlot, Strongbox s, int choice)
+            throws InsufficientResourceException, NoSuchProductionPowerException {
+        slotDevelopmentCards[chosenSlot - 1].removeProductionPowerResource(warehouse, strongbox, choice);
+        int faithPoints = slotDevelopmentCards[chosenSlot - 1].increaseProductionPowerResource(s);
+        increaseFaithPoints(faithPoints);
+    }
+
+    /**
+     *
+     */
+    public void increaseStrongbox(Strongbox s){
+        for(Resource resource: Resource.values()) {
+            strongbox.increaseResourceType(resource, s.getNumOfResource(resource));
+        }
+    }
+
+    /**
      * @param r1 is player's choice to a resource to be removed.
      * @param r2 is player's choice to a resource to be removed.
      * @return true if has at least 1 @param r1 and @param r2.
@@ -231,6 +252,31 @@ public class PlayerBoard extends SimplePlayerBoard {
             decreaseStrongboxResource(r1, r2, w, s);
         }
         s.increaseResourceType(r3, 1);
+    }
+
+    /**
+     *
+     */
+    public void activateBasicProduction(Resource r1, Resource r2, int choice) throws InsufficientResourceException {
+        if(!enoughBasicProductionResource(r1, r2))
+            throw new  InsufficientResourceException();
+        if(choice == 1){
+            decreaseWarehouseResource(r1, r2, warehouse, strongbox);
+        }
+        else{
+            decreaseStrongboxResource(r1, r2, warehouse, strongbox);
+        }
+    }
+
+    /**
+     *
+     */
+    public void activateAdditionalProductionPower(int chosenAdditionalCard, int choice)
+            throws NoSuchProductionPowerException, InsufficientResourceException {
+        if (leaderCards.size() < chosenAdditionalCard)
+            throw new NoSuchProductionPowerException();
+        leaderCards.get(chosenAdditionalCard).decreaseProductionPowerResources(warehouse, strongbox, choice);
+        increaseFaithPoints(1);
     }
 
     /**

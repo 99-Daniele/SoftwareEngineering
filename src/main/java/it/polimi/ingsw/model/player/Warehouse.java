@@ -337,10 +337,49 @@ public class Warehouse{
         else if(depot1 >= 3 && depot2 >= 3) {
             throw new ImpossibleSwitchDepotException();
         }
-        else if(depot1 < 3)
-            switchWarehouseDepotWithExtraDepot(depot1, depot2);
-        else
-            switchWarehouseDepotWithExtraDepot(depot2, depot1);
+        else if(depot1 < 3) {
+            if (existExtraDepot() && (depot2 == 3 || extraDepots.size() == 2))
+                switchWarehouseDepotWithExtraDepot(depot1, depot2);
+            else
+                throw new ImpossibleSwitchDepotException();
+        }
+        else{
+            if(existExtraDepot() && (depot1 == 3 || extraDepots.size() == 2))
+                switchWarehouseDepotWithExtraDepot(depot2, depot1);
+            else
+                throw new ImpossibleSwitchDepotException();
+        }
+    }
+
+    /**
+     *
+     */
+    public ArrayList<Integer[]> availableSwitches(){
+        ArrayList<Integer[]> availableSwitches = new ArrayList<>();
+        for(int i = 0; i < 3; i++) {
+            for (int j = i + 1; j <= 4; j++) {
+                if (isSwitchable(i, j)) {
+                    Integer[] availableSwitch = new Integer[2];
+                    availableSwitch[0] = i;
+                    availableSwitch[1] = j;
+                    availableSwitches.add(availableSwitch);
+                }
+            }
+        }
+        return availableSwitches;
+    }
+
+    /**
+     *
+     */
+    private boolean isSwitchable(int depot1, int depot2){
+        try {
+            switchDepots(depot1, depot2);
+            switchDepots(depot1, depot2);
+            return true;
+        } catch (ImpossibleSwitchDepotException e) {
+            return false;
+        }
     }
 
     /**

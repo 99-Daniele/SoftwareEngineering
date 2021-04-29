@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.player;
 
 import it.polimi.ingsw.exceptions.InsufficientResourceException;
-
+import it.polimi.ingsw.exceptions.NoSuchProductionPowerException;
 import it.polimi.ingsw.model.developmentCards.DevelopmentCard;
 import it.polimi.ingsw.model.leaderCards.LeaderRequirements;
 
@@ -59,6 +59,13 @@ public class SlotDevelopmentCards {
     }
 
     /**
+     *
+     */
+    public int increaseProductionPowerResource(Strongbox s){
+        return developmentCards.getLast().increaseProductionResource(s);
+    }
+
+    /**
      * @param w is player's warehouse.
      * @param s is player's strongbox.
      * @throws InsufficientResourceException if there are not enough resource to activate production power.
@@ -68,6 +75,16 @@ public class SlotDevelopmentCards {
         if(isEmpty())
             return;
         developmentCards.getLast().controlDiscardResource(w, s, 1, true);
+    }
+
+    /**
+     *
+     */
+    public void removeProductionPowerResource(Warehouse w, Strongbox s, int choice)
+            throws InsufficientResourceException, NoSuchProductionPowerException {
+        if(isEmpty())
+            throw new NoSuchProductionPowerException();
+        developmentCards.getLast().controlDiscardResource(w, s, choice, true);
     }
 
     /**

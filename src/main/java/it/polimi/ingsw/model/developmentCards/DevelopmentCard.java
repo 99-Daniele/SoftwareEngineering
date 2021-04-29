@@ -76,6 +76,14 @@ public class DevelopmentCard {
     }
 
     /**
+     *
+     */
+    public int increaseProductionResource(Strongbox s){
+        productionPowerResourceGiven.increaseResource(s);
+        return faithPointsGiven;
+    }
+
+    /**
      * this method control if there are enough resources in warehouse or strongbox. If yes, discard the resources.
      * @param w is player's warehouse.
      * @param s is player's strongbox.
