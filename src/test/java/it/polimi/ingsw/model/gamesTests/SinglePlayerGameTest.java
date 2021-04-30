@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.gamesTests;
 import it.polimi.ingsw.exceptions.*;
 
 import it.polimi.ingsw.model.developmentCards.*;
+import it.polimi.ingsw.model.faithTrack.FaithTrack;
 import it.polimi.ingsw.model.games.SinglePlayerGame;
 import it.polimi.ingsw.model.player.PlayerBoard;
 import it.polimi.ingsw.model.resourceContainers.Cost;
@@ -109,13 +110,13 @@ class SinglePlayerGameTest {
         singlePlayerGame.getCurrentPlayer().increaseFaithPoints(7);
         singlePlayerGame.faithTrackMovement();
 
-        assertTrue(singlePlayerGame.getFaithTrack().zeroRemainingPope());
+        assertTrue(FaithTrack.getFaithTrack().zeroRemainingPope());
         assertTrue(singlePlayerGame.isEndGame());
 
         PlayerBoard winner = singlePlayerGame.endGame();
         assertNotNull(winner);
         assertSame("Giorgio", winner.getNickname());
-        assertTrue(singlePlayerGame.getFaithTrack().zeroRemainingPope());
+        assertTrue(FaithTrack.getFaithTrack().zeroRemainingPope());
     }
 
     /**

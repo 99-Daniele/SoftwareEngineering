@@ -24,7 +24,6 @@ import it.polimi.ingsw.model.resourceContainers.*;
 public class Game implements LightGame {
 
     private final ArrayList<PlayerBoard> players = new ArrayList<>();
-    private final FaithTrack faithTrack;
     private final Deck[][] deck = new Deck[3][4];
     private final int numOfPlayers;
     private int currentPlayer;
@@ -34,12 +33,13 @@ public class Game implements LightGame {
      * @param numOfPlayers is the chosen number of players.
      */
     public Game(int numOfPlayers){
-        faithTrack =new FaithTrack();
         this.numOfPlayers = numOfPlayers;
         currentPlayer = 0;
         createDecks();
         leaderCards = new ArrayList<>(16);
         createLeaderCards();
+        Market.resetMarket();
+        FaithTrack.resetFaithTrack();
     }
 
     /**
@@ -202,22 +202,15 @@ public class Game implements LightGame {
      */
     @Override
     public void faithTrackMovement(){
-        faithTrack.victoryPointsFaithTrack(players.get(currentPlayer).getVictoryPoints(), players.get(currentPlayer).getFaithPoints());
-        if(faithTrack.reachPope(players.get(currentPlayer).getFaithPoints()))
+        FaithTrack.getFaithTrack().victoryPointsFaithTrack(players.get(currentPlayer).getVictoryPoints(), players.get(currentPlayer).getFaithPoints());
+        if(FaithTrack.getFaithTrack().reachPope(players.get(currentPlayer).getFaithPoints()))
         {
             for(PlayerBoard player:players)
             {
-                faithTrack.victoryPointsVaticanReport(player.getVictoryPoints(), player.getFaithPoints());
+                FaithTrack.getFaithTrack().victoryPointsVaticanReport(player.getVictoryPoints(), player.getFaithPoints());
             }
-            faithTrack.DecreaseRemainingPope();
+            FaithTrack.getFaithTrack().DecreaseRemainingPope();
         }
-    }
-
-    /**
-     * @return FaithTrack of game.
-     */
-    public FaithTrack getFaithTrack(){
-        return faithTrack;
     }
 
     /**
@@ -276,17 +269,15 @@ public class Game implements LightGame {
      */
     public void faithTrackMovementAllPlayers(){
         int flag=0;
-        for(PlayerBoard player: players)
-        {
-            faithTrack.victoryPointsFaithTrack(player.getVictoryPoints(), player.getFaithPoints());
-            if (faithTrack.reachPope(player.getFaithPoints()))
+        for(PlayerBoard player: players) {
+            FaithTrack.getFaithTrack().victoryPointsFaithTrack(player.getVictoryPoints(), player.getFaithPoints());
+            if (FaithTrack.getFaithTrack().reachPope(player.getFaithPoints()))
                 flag=1;
         }
-        if (flag==1)
-        {
+        if (flag==1) {
             for (PlayerBoard player: players)
-                faithTrack.victoryPointsVaticanReport(player.getVictoryPoints(), player.getFaithPoints());
-            faithTrack.DecreaseRemainingPope();
+                FaithTrack.getFaithTrack().victoryPointsVaticanReport(player.getVictoryPoints(), player.getFaithPoints());
+            FaithTrack.getFaithTrack().DecreaseRemainingPope();
         }
     }
 
@@ -511,7 +502,7 @@ public class Game implements LightGame {
      * of the FaithTrack
      */
     public boolean isEndGame(){
-        if(faithTrack.zeroRemainingPope() || players.get(currentPlayer).haveSevenDevelopmentCards())
+        if(FaithTrack.getFaithTrack().zeroRemainingPope() || players.get(currentPlayer).haveSevenDevelopmentCards())
             return true;
         return false;
     }

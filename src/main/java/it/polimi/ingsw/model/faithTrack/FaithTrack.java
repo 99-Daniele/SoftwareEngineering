@@ -10,14 +10,32 @@ import it.polimi.ingsw.model.player.VictoryPoints;
  */
 public class FaithTrack {
 
+    private static FaithTrack faithTrack;
     private int remainingPopes;
     private final VaticanReportSection[] vaticanReportSections;
     private final Section[] faithTrackVictoryPointsSection;
 
     /**
-     * constructor that creates the different section and vatican section and set remainingPopes to 3.
+     * @return the instance of FaithTrack.
      */
-    public FaithTrack(){
+    public static FaithTrack getFaithTrack(){
+        if(faithTrack == null)
+            faithTrack = new FaithTrack();
+        return faithTrack;
+    }
+
+    /**
+     * this method reset FaithTrack for tests.
+     */
+    public static void resetFaithTrack(){
+        faithTrack = new FaithTrack();
+    }
+
+    /**
+     * constructor that creates the different section and vatican section and set remainingPopes to 3.
+     * the constructor is private so it can't be called outside the class.
+     */
+    private FaithTrack(){
         remainingPopes=3;
         vaticanReportSections=new VaticanReportSection[3];
         vaticanReportSections[0]=new VaticanReportSection(5,8,2);

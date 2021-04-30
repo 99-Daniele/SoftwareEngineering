@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.games;
 import it.polimi.ingsw.exceptions.EmptyDevelopmentCardDeckException;
 import it.polimi.ingsw.model.actions.*;;
 import it.polimi.ingsw.model.developmentCards.*;
+import it.polimi.ingsw.model.faithTrack.FaithTrack;
 import it.polimi.ingsw.model.player.*;
 
 import java.util.ArrayList;
@@ -87,9 +88,9 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame {
     @Override
     public void LorenzoFaithTrackMovement(int faithPoints){
         LorenzoIlMagnifico.increaseFaithPoints(faithPoints);
-        if (getFaithTrack().reachPope(LorenzoIlMagnifico.getFaithPoints())) {
-            getFaithTrack().victoryPointsVaticanReport(getPlayer(0).getVictoryPoints(),getPlayer(0).getFaithPoints());
-            getFaithTrack().DecreaseRemainingPope();
+        if (FaithTrack.getFaithTrack().reachPope(LorenzoIlMagnifico.getFaithPoints())) {
+            FaithTrack.getFaithTrack().victoryPointsVaticanReport(getPlayer(0).getVictoryPoints(),getPlayer(0).getFaithPoints());
+            FaithTrack.getFaithTrack().DecreaseRemainingPope();
         }
     }
 
@@ -122,7 +123,7 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame {
      */
     @Override
     public boolean isEndGame(){
-        if (getCurrentPlayer().haveSevenDevelopmentCards() || getFaithTrack().zeroRemainingPope() || zeroRemainingColorCards())
+        if (getCurrentPlayer().haveSevenDevelopmentCards() || FaithTrack.getFaithTrack().zeroRemainingPope() || zeroRemainingColorCards())
             return true;
         return false;
     }

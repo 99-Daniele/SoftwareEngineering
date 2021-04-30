@@ -33,35 +33,27 @@ public class Market {
 
 
     /**
-     * the constructor call the method PrepareMarket to prepare the market, when the game starts. t
-     * he constructor is private so it can't be called outside the class.
+     * the constructor build a matrix 3X4 of marbles and a slot for the side slide.
+     * the market is build randomly with the amount of marbles available.
+     * the constructor is private so it can't be called outside the class.
      */
    private Market() {
-        prepareMarket();
+       // this array indicate the amount of marble for each color when the market is still empty.
+       int[] numOfMarbles={1,2,2,2,2,4};
+       boolean enough;
+       // this attribute indicate the number of the marble(0 = RED, 1=YELLOW, 2=BLUE, 3=GREY, 4=PURPLE, 5=WHITE).
+       int random;
+       marketTray = new Marble[row][column];
+       for (int i = 0; i < row; i++) {
+           for (int j = 0; j < column; j++) {
+               do {
+                   random = (int) (Math.random() * 6);
+                   enough = setCell(i,j,random,numOfMarbles);
+               }while(!enough);
+           }
+       }
+       externalMarbleSet(numOfMarbles);
    }
-
-    /**
-     * this method allows the constructor to create the market.
-     * this method build a matrix 3X4 of marbles and a slot for the side slide.
-     * The market is build randomly with the amount of marbles available.
-     */
-    private void prepareMarket() {
-        // this array indicate the amount of marble for each color when the market is still empty.
-        int[] numOfMarbles={1,2,2,2,2,4};
-        boolean enough;
-        // this attribute indicate the number of the marble(0 = RED, 1=YELLOW, 2=BLUE, 3=GREY, 4=PURPLE, 5=WHITE).
-        int random;
-        marketTray = new Marble[row][column];
-        for (int i = 0; i < row; i++) {
-            for (int j = 0; j < column; j++) {
-                do {
-                    random = (int) (Math.random() * 6);
-                    enough = setCell(i,j,random,numOfMarbles);
-                }while(!enough);
-            }
-        }
-        externalMarbleSet(numOfMarbles);
-    }
 
     /**
      * this private method set the cell of the market to a specific Marble.

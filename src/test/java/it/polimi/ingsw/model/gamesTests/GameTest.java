@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.gamesTests;
 import it.polimi.ingsw.exceptions.*;
 
 import it.polimi.ingsw.model.developmentCards.*;
+import it.polimi.ingsw.model.faithTrack.FaithTrack;
 import it.polimi.ingsw.model.games.Game;
 import it.polimi.ingsw.model.leaderCards.*;
 import it.polimi.ingsw.model.market.Marble;
@@ -836,6 +837,7 @@ class GameTest {
     @Test
     void faithTrackMovement() throws AlreadyTakenNicknameException {
 
+        FaithTrack.resetFaithTrack();
         Game game = new Game(2);
         game.createPlayer("Daniele");
         game.createPlayer("Matteo");
@@ -872,6 +874,7 @@ class GameTest {
     @Test
     void faithTrackMovementAllPlayer() throws AlreadyTakenNicknameException {
 
+        FaithTrack.resetFaithTrack();
         Game game = new Game(2);
         game.createPlayer("Daniele");
         game.createPlayer("Matteo");
@@ -929,6 +932,7 @@ class GameTest {
     @Test
     void endFaithTrackWinner() throws AlreadyTakenNicknameException {
 
+        FaithTrack.resetFaithTrack();
         Game game = new Game(4);
         game.createPlayer("Giorgio");
 
@@ -941,7 +945,7 @@ class GameTest {
         game.getCurrentPlayer().increaseFaithPoints(7);
         game.faithTrackMovement();
 
-        assertTrue(game.getFaithTrack().zeroRemainingPope());
+        assertTrue(FaithTrack.getFaithTrack().zeroRemainingPope());
         assertTrue(game.isEndGame());
     }
 
@@ -952,6 +956,7 @@ class GameTest {
     void endGameWinner()
             throws AlreadyTakenNicknameException, InsufficientResourceException, ImpossibleDevelopmentCardAdditionException, NoSuchProductionPowerException {
 
+        FaithTrack.resetFaithTrack();
         Game game = new Game(4);
         game.createPlayer("Daniele");
         game.createPlayer("Matteo");
