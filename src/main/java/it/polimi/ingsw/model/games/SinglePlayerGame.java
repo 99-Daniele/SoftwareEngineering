@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 /**
  * SinglePlayerGame is main class which handle all different phases of a match if player has chosen to play alone.
+ * SinglePlayerGame is a Singleton.
  */
 public class SinglePlayerGame extends Game implements LightSinglePlayerGame {
 
@@ -17,12 +18,18 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame {
     private ArrayList<Action> actions = new ArrayList<>();
     private final SimplePlayerBoard LorenzoIlMagnifico = new SimplePlayerBoard();
 
+    /**
+     * @return the instance of SinglePlayerGame.
+     */
     public static SinglePlayerGame getSinglePlayerGame(){
         if(singlePlayerGame == null)
             singlePlayerGame = new SinglePlayerGame();
         return singlePlayerGame;
     }
 
+    /**
+     * reset SinglePlayerGame for tests.
+     */
     public static void resetSinglePlayerGame(){
         singlePlayerGame = new SinglePlayerGame();
         setNumOfPlayers(1);
@@ -30,6 +37,7 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame {
 
     /**
      * the constructor calls the super method with @param numOfPlayers = 1. Then create and shuffle the 7 actions.
+     * the constructor is private so it can't be called outside the class.
      */
     private SinglePlayerGame() {
         super();

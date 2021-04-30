@@ -30,12 +30,18 @@ public class Game implements LightGame {
     private int currentPlayer;
     private final ArrayList<LeaderCard> leaderCards = new ArrayList<>(16);;
 
+    /**
+     * @return the instance of Game
+     */
     public static Game getGame(){
         if(game == null)
             game = new Game();
         return game;
     }
 
+    /**
+     * reset Game for tests.
+     */
     public static void resetGame(){
         game = new Game();
         setNumOfPlayers(4);
@@ -47,7 +53,7 @@ public class Game implements LightGame {
     }
 
     /**
-     *
+     * the constructor is protected so it can be called only by SinglePlayerGame.
      */
     protected Game(){
         createDecks();
@@ -296,7 +302,7 @@ public class Game implements LightGame {
     }
 
     /**
-     *
+     * @return a list of available switches for current player.
      */
     public ArrayList<Integer[]> availableSwitches(){
         return players.get(currentPlayer).availableSwitches();
@@ -324,14 +330,15 @@ public class Game implements LightGame {
     }
 
     /**
-     *
+     * @param card is a DevelopmentCard bought by current player.
+     * @return a list of available slots to insert @param card.
      */
     public ArrayList<Integer> findAvailableSlots(DevelopmentCard card){
         return players.get(currentPlayer).findAvailableSlot(card);
     }
 
     /**
-     *
+     * @return a list of DevelopmentCard buyable by current player.
      */
     public ArrayList<DevelopmentCard> buyableDevelopmentCards(){
         ArrayList<DevelopmentCard> buyableCards = new ArrayList<>();
@@ -368,7 +375,9 @@ public class Game implements LightGame {
     }
 
     /**
-     *
+     * @param card is a DevelopmentCard bought by current player.
+     * @param choice is player's choice about which between warehouse and strongbox has the priority to be decreased.
+     * @param slot is player's choice about in which slot want to insert the chosen card.
      */
     public void buyDevelopmentCard(DevelopmentCard card, int choice, int slot){
         try {
@@ -378,7 +387,7 @@ public class Game implements LightGame {
     }
 
     /**
-     *
+     * @param card is DevelopmentCard to be removed by his deck.
      */
     private void removeDevelopmentCard(DevelopmentCard card){
         for(int i = 0; i < 3; i++){
@@ -404,7 +413,13 @@ public class Game implements LightGame {
     }
 
     /**
-     *
+     * @param chosenSlot is the chosen SlotDevelopmentCards to activate last card production power.
+     * @param s is a strongbox.
+     * @param choice is player's choice about which between warehouse and strongbox has the priority to be decreased.
+     * @throws InsufficientResourceException if player has not enough resources to activate all production powers together.
+     * @throws NoSuchProductionPowerException if player has chosen an empty SlotDevelopmentCards.
+     * this method remove player resources by the amount required by the chosen card and increase @param s by the amount
+     * given by card production power.
      */
     public void removeDevelopmentCardProductionResource(int chosenSlot, Strongbox s, int choice)
             throws InsufficientResourceException, NoSuchProductionPowerException {
@@ -413,7 +428,13 @@ public class Game implements LightGame {
     }
 
     /**
-     *
+     * @param r1 is a resource to be decreased by current player resources.
+     * @param r2 is a resource to be decreased by current player resources.
+     * @param r3 is a resource to be increased by current player resources.
+     * @param s is a strongbox.
+     * @param choice is player's choice about which between warehouse and strongbox has the priority to be decreased.
+     * @throws InsufficientResourceException if player has not enough resources to activate all production powers together.
+     * this method remove player resources by 1 @param r1 and 1 @param r2 and increase @param s by 1 @param r3.
      */
     public void basicProductionPower(Resource r1, Resource r2, Resource r3, Strongbox s, int choice)
             throws InsufficientResourceException {
@@ -422,16 +443,25 @@ public class Game implements LightGame {
     }
 
     /**
-     *
+     * @param chosenAdditionalPowerCard is the chosen AdditionalProductionPowerCard to be activated.
+     * @param r is a resource to be increased by current player resources.
+     * @param s is a strongbox.
+     * @param choice is player's choice about which between warehouse and strongbox has the priority to be decreased.
+     * @throws InsufficientResourceException if player has not enough resources to activate all production powers together.
+     * @throws NoSuchProductionPowerException if player has chosen a not active or not existing AdditionalProductionPower.
+     * this method remove player resources by the 1 resource required by the chosen card and increase @param s by the 1
+     * resource given by card production power.
      */
     public void removeAdditionalProductionPowerCardResource(int chosenAdditionalPowerCard, Resource r, Strongbox s, int choice)
             throws InsufficientResourceException, NoSuchProductionPowerException {
         players.get(currentPlayer).activateAdditionalProductionPower(chosenAdditionalPowerCard, choice);
         s.increaseResourceType(r, 1);
+        faithTrackMovement();
     }
 
     /**
-     *
+     * @param s is a strongbox.
+     * this method increase current player strongbox by the amount contained in @param s.
      */
     public void increaseCurrentPlayerStrongbox(Strongbox s){
         players.get(currentPlayer).increaseStrongbox(s);

@@ -59,7 +59,9 @@ public class SlotDevelopmentCards {
     }
 
     /**
-     *
+     * @param s is a strongbox.
+     * @return faith points given by last card production power.
+     * this method increase @param s by resource given by this slot last card production power.
      */
     public int increaseProductionPowerResource(Strongbox s){
         return developmentCards.getLast().increaseProductionResource(s);
@@ -78,7 +80,12 @@ public class SlotDevelopmentCards {
     }
 
     /**
-     *
+     * @param w is player's warehouse.
+     * @param s is player's strongbox.
+     * @param choice is player's choice about which between warehouse and strongbox has the priority to be decreased.
+     * @throws InsufficientResourceException if player has not enough resources to activate all production powers together.
+     * @throws NoSuchProductionPowerException if player the SlotDevelopmentCards is empty.
+     * this method reduces @param w and @param s resources by slot last card production power required resources.
      */
     public void removeProductionPowerResource(Warehouse w, Strongbox s, int choice)
             throws InsufficientResourceException, NoSuchProductionPowerException {
