@@ -24,7 +24,6 @@ import it.polimi.ingsw.model.resourceContainers.*;
 public class Game implements LightGame {
 
     private final ArrayList<PlayerBoard> players = new ArrayList<>();
-    private final Market market;
     private final FaithTrack faithTrack;
     private final Deck[][] deck = new Deck[3][4];
     private final int numOfPlayers;
@@ -35,7 +34,6 @@ public class Game implements LightGame {
      * @param numOfPlayers is the chosen number of players.
      */
     public Game(int numOfPlayers){
-        market = new Market();
         faithTrack =new FaithTrack();
         this.numOfPlayers = numOfPlayers;
         currentPlayer = 0;
@@ -167,12 +165,12 @@ public class Game implements LightGame {
     public Marble[] takeMarketMarble(boolean isRow, int choice) throws WrongParametersException {
         Marble [] marbles;
         if(isRow) {
-            marbles = market.getRowMarbles(choice);
-            market.slideRow(choice);
+            marbles = Market.getMarket().getRowMarbles(choice);
+            Market.getMarket().slideRow(choice);
         }
         else {
-            marbles = market.getColumnMarbles(choice);
-            market.slideColumn(choice);
+            marbles = Market.getMarket().getColumnMarbles(choice);
+            Market.getMarket().slideColumn(choice);
         }
         return marbles;
     }
