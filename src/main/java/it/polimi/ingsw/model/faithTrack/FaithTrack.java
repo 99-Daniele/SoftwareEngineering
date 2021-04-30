@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.player.VictoryPoints;
  * remainingPopes that indicate the remaining popes.
  * vaticanReportSections that is an array of VaticanReportSection.
  * faithTrackVictoryPointsSection that is an array of Section.
+ * FaithTrack is a Singleton.
  */
 public class FaithTrack {
 

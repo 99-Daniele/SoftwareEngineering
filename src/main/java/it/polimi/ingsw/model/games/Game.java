@@ -19,24 +19,38 @@ import it.polimi.ingsw.model.player.*;
 import it.polimi.ingsw.model.resourceContainers.*;
 
 /**
- * Game is main class which handle all different phases of a match.
+ * Game is main class which handle all different phases of a match. Game is a Singleton.
  */
 public class Game implements LightGame {
 
+    private static Game game;
     private final ArrayList<PlayerBoard> players = new ArrayList<>();
     private final Deck[][] deck = new Deck[3][4];
-    private final int numOfPlayers;
+    private int numOfPlayers;
     private int currentPlayer;
-    private final ArrayList<LeaderCard> leaderCards;
+    private final ArrayList<LeaderCard> leaderCards = new ArrayList<>(16);;
+
+    public static Game getGame(){
+        if(game == null)
+            game = new Game();
+        return game;
+    }
+
+    public static void resetGame(){
+        game = new Game();
+        setNumOfPlayers(4);
+        game.currentPlayer = 0;
+    }
+
+    public static void setNumOfPlayers(int numOfPlayers){
+        game.numOfPlayers = numOfPlayers;
+    }
 
     /**
-     * @param numOfPlayers is the chosen number of players.
+     *
      */
-    public Game(int numOfPlayers){
-        this.numOfPlayers = numOfPlayers;
-        currentPlayer = 0;
+    protected Game(){
         createDecks();
-        leaderCards = new ArrayList<>(16);
         createLeaderCards();
         Market.resetMarket();
         FaithTrack.resetFaithTrack();
@@ -46,7 +60,7 @@ public class Game implements LightGame {
      * this method method creates all 12 decks and all 48 DevelopmentCards parsing by Json file.
      * then add each card to is correct deck and prepare all decks.
      */
-    private void createDecks(){
+    public void createDecks(){
         deck[0][0]=new Deck(Color.GREEN,1);
         deck[0][1]=new Deck(Color.PURPLE,1);
         deck[0][2]=new Deck(Color.BLUE,1);
@@ -81,7 +95,7 @@ public class Game implements LightGame {
     /**
      * this method creates the list of 16 LeaderCards by parsing Json Files.
      */
-    private void createLeaderCards(){
+    public void createLeaderCards(){
         try {
             Gson gson = new Gson();
             JsonReader reader1 = new JsonReader(new FileReader("src/main/resources/DiscountCards.json"));

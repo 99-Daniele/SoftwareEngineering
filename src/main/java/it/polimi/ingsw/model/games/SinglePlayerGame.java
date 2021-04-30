@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.games;
 
 import it.polimi.ingsw.exceptions.EmptyDevelopmentCardDeckException;
-import it.polimi.ingsw.model.actions.*;;
+import it.polimi.ingsw.model.actions.*;
 import it.polimi.ingsw.model.developmentCards.*;
 import it.polimi.ingsw.model.faithTrack.FaithTrack;
 import it.polimi.ingsw.model.player.*;
@@ -13,14 +13,26 @@ import java.util.ArrayList;
  */
 public class SinglePlayerGame extends Game implements LightSinglePlayerGame {
 
+    private static SinglePlayerGame singlePlayerGame;
     private ArrayList<Action> actions = new ArrayList<>();
     private final SimplePlayerBoard LorenzoIlMagnifico = new SimplePlayerBoard();
+
+    public static SinglePlayerGame getSinglePlayerGame(){
+        if(singlePlayerGame == null)
+            singlePlayerGame = new SinglePlayerGame();
+        return singlePlayerGame;
+    }
+
+    public static void resetSinglePlayerGame(){
+        singlePlayerGame = new SinglePlayerGame();
+        setNumOfPlayers(1);
+    }
 
     /**
      * the constructor calls the super method with @param numOfPlayers = 1. Then create and shuffle the 7 actions.
      */
-    public SinglePlayerGame() {
-        super(1);
+    private SinglePlayerGame() {
+        super();
         prepareActions();
     }
 

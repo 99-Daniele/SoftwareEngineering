@@ -20,7 +20,9 @@ public class ResourceMarbleTest {
         Marble resourceMarble=new ResourceMarble(Resource.COIN);
         Marble resourceMarble2=new ResourceMarble(Resource.SHIELD);
 
-        Game game=new Game(3);
+        Game.resetGame();
+        Game game = Game.getGame();
+        Game.setNumOfPlayers(3);
         game.createPlayer("user");
         game.createPlayer("user2");
         game.createPlayer("user3");

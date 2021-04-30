@@ -22,7 +22,9 @@ public class MarbleTest {
         Marble marble2 = new ResourceMarble(Resource.SHIELD);
         Marble marble3 = new WhiteMarble();
 
-        Game game = new Game(2);
+        Game.resetGame();
+        Game game = Game.getGame();
+        Game.setNumOfPlayers(2);
         game.createPlayer("Alberto");
         game.createPlayer("Giovanni");
         Cost c = new Cost();
