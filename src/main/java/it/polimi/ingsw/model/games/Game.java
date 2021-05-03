@@ -29,10 +29,6 @@ public class Game implements LightGame {
     private int currentPlayer;
     private final ArrayList<LeaderCard> leaderCards = new ArrayList<>(16);;
 
-    public static void main (String []args){
-        Game game = new Game(4);
-    }
-
     public Game(int numOfPlayers){
         createDecks();
         this.numOfPlayers = numOfPlayers;
