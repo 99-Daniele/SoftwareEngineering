@@ -36,7 +36,7 @@ public class PlayerServer implements Runnable{
          {
              GamePos gamePos= ControllerConnection.connection(in, out);
              controllerGame = new ControllerGame(gamePos.getGame(), gamePos.getPosition(), in, out);
-             controllerGame.pos();
+             controllerGame.pos();//non serve solo come prova da togliere
          }
          while(true)
          {
