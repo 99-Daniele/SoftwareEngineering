@@ -20,9 +20,7 @@ public class WhiteMarbleTest {
             throws AlreadyTakenNicknameException, InsufficientResourceException, AlreadyDiscardLeaderCardException, ActiveLeaderCardException, InsufficientCardsException {
 
         Marble whiteMarble = new WhiteMarble();
-        Game.resetGame();
-        Game game = Game.getGame();
-        Game.setNumOfPlayers(2);
+        Game game = new Game(2);
         game.createPlayer("Alberto");
         game.createPlayer("Giovanni");
         Cost c = new Cost();

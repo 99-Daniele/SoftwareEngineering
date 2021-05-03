@@ -29,8 +29,7 @@ class GameTest {
     @Test
     void alreadyTakenNicknamePlayer() throws AlreadyTakenNicknameException {
 
-        Game.resetGame();
-        Game game = Game.getGame();
+        Game game = new Game(4);
         game.createPlayer("Daniele");
 
         AlreadyTakenNicknameException thrown =
@@ -46,8 +45,7 @@ class GameTest {
     @Test
     void createPlayer(){
 
-        Game.resetGame();
-        Game game = Game.getGame();
+        Game game = new Game(4);
         try{
             game.createPlayer("Daniele");
             assertSame("Daniele", game.getPlayer(0).getNickname());
@@ -67,8 +65,7 @@ class GameTest {
     @Test
     void createDecks() throws EmptyDevelopmentCardDeckException{
 
-        Game.resetGame();
-        Game game = Game.getGame();
+        Game game = new Game(4);
         assertFalse(game.zeroRemainingColorCards());
 
         assertEquals(1, game.getDeck(0, 0).getFirstCard().getLevel());
@@ -184,8 +181,7 @@ class GameTest {
     @Test
     void getCorrectColorDeck() throws EmptyDevelopmentCardDeckException {
 
-        Game.resetGame();
-        Game game = Game.getGame();
+        Game game = new Game(4);
 
         assertSame(game.getDeck(0, 0), game.getColorDeck(Color.GREEN));
         assertSame(game.getDeck(0, 1), game.getColorDeck(Color.PURPLE));
@@ -226,8 +222,7 @@ class GameTest {
     @Test
     void zeroRemainingColorCards() throws EmptyDevelopmentCardDeckException {
 
-        Game.resetGame();
-        Game game = Game.getGame();
+        Game game = new Game(4);
         assertFalse(game.zeroRemainingColorCards());
 
         game.getDeck(0,0).removeDevelopmentCard();
@@ -251,8 +246,7 @@ class GameTest {
     @Test
     void getCasualLeaderCards(){
 
-        Game.resetGame();
-        Game game = Game.getGame();
+        Game game = new Game(4);;
 
         ArrayList<LeaderCard> cards = game.casualLeaderCards();
         assertNotSame(cards.get(0), cards.get(1));
@@ -269,8 +263,7 @@ class GameTest {
     @Test
     void correctNextPlayer() throws AlreadyTakenNicknameException {
 
-        Game.resetGame();
-        Game game = Game.getGame();
+        Game game = new Game(4);
         game.createPlayer("Alfredo");
         game.createPlayer("Gustavo");
         game.createPlayer("Domenico");
@@ -300,8 +293,7 @@ class GameTest {
     @Test
     void selectActivateAndGetCurrentPlayerLeaderCards() throws AlreadyTakenNicknameException, AlreadyDiscardLeaderCardException, InsufficientResourceException, InsufficientCardsException, ActiveLeaderCardException {
 
-        Game.resetGame();
-        Game game = Game.getGame();
+        Game game = new Game(4);
         game.createPlayer("Paolo");
 
         Cost c = new Cost();
@@ -325,8 +317,7 @@ class GameTest {
     @Test
     void numOfTakenMarbles() throws WrongParametersException {
 
-        Game.resetGame();
-        Game game = Game.getGame();
+        Game game = new Game(4);
 
         Marble[] rowMarbles = game.takeMarketMarble(true, 1);
         assertEquals(4, rowMarbles.length);
@@ -341,9 +332,7 @@ class GameTest {
     @Test
     void correctWhiteMarbleConversion() throws AlreadyTakenNicknameException {
 
-        Game.resetGame();
-        Game game = Game.getGame();
-        Game.setNumOfPlayers(2);
+        Game game = new Game(2);
         game.createPlayer("Angelo");
         game.createPlayer("Gustavo");
 
@@ -368,8 +357,7 @@ class GameTest {
     @Test
     void otherPlayersIncreaseFaithPoints() throws AlreadyTakenNicknameException {
 
-        Game.resetGame();
-        Game game = Game.getGame();
+        Game game = new Game(4);
         game.createPlayer("Enrico");
         game.createPlayer("Pietro");
         game.createPlayer("Angela");
@@ -418,8 +406,7 @@ class GameTest {
     @Test
     void buyableDevelopmentCards() throws AlreadyTakenNicknameException, InsufficientResourceException, AlreadyDiscardLeaderCardException, ActiveLeaderCardException, InsufficientCardsException {
 
-        Game.resetGame();
-        Game game = Game.getGame();
+        Game game = new Game(4);
         game.createPlayer("Roberta");
         assertEquals(0, game.buyableDevelopmentCards().size());
 
@@ -447,8 +434,7 @@ class GameTest {
     @Test
     void notEnoughResourceBuyDevelopmentCard() throws AlreadyTakenNicknameException {
 
-        Game.resetGame();
-        Game game = Game.getGame();
+        Game game = new Game(4);
         game.createPlayer("Roberta");
 
         InsufficientResourceException thrown =
@@ -465,8 +451,7 @@ class GameTest {
     @Test
     void wrongSlotDevelopmentCards() throws AlreadyTakenNicknameException, InsufficientResourceException, AlreadyDiscardLeaderCardException, ActiveLeaderCardException, InsufficientCardsException, ImpossibleDevelopmentCardAdditionException, EmptyDevelopmentCardDeckException {
 
-        Game.resetGame();
-        Game game = Game.getGame();
+        Game game = new Game(4);
         game.createPlayer("Roberta");
 
         Cost c = new Cost();
@@ -511,8 +496,7 @@ class GameTest {
     void findRightSlotsAfterBuyDevelopmentCard()
             throws InsufficientResourceException, AlreadyDiscardLeaderCardException, ActiveLeaderCardException, InsufficientCardsException, EmptyDevelopmentCardDeckException, ImpossibleDevelopmentCardAdditionException, AlreadyTakenNicknameException {
 
-        Game.resetGame();
-        Game game = Game.getGame();
+        Game game = new Game(4);
         game.createPlayer("Giorgia");
 
         Cost c = new Cost();
@@ -560,8 +544,7 @@ class GameTest {
     void updateAfterBuyDevelopmentCard()
             throws AlreadyTakenNicknameException, InsufficientResourceException, EmptyDevelopmentCardDeckException, ImpossibleDevelopmentCardAdditionException, InsufficientCardsException, ActiveLeaderCardException, AlreadyDiscardLeaderCardException {
 
-        Game.resetGame();
-        Game game = Game.getGame();
+        Game game = new Game(4);
         game.createPlayer("Roberta");
 
         Cost c = new Cost();
@@ -598,8 +581,7 @@ class GameTest {
     @Test
     void buyDevelopmentCardDirectly() throws AlreadyTakenNicknameException {
 
-        Game.resetGame();
-        Game game = Game.getGame();
+        Game game = new Game(4);
         game.createPlayer("Enrico");
 
         Cost c = new Cost();
@@ -624,8 +606,7 @@ class GameTest {
     @Test
     void faithTrackMovementAfterDiscardLeaderCard() throws AlreadyTakenNicknameException, ActiveLeaderCardException, AlreadyDiscardLeaderCardException {
 
-        Game.resetGame();
-        Game game = Game.getGame();
+        Game game = new Game(4);
         game.createPlayer("Gianfranco");
 
         Cost c = new Cost();
@@ -648,8 +629,7 @@ class GameTest {
     @Test
     void faithTrackMovementAfterActivateProduction() throws AlreadyTakenNicknameException, InsufficientResourceException, AlreadyDiscardLeaderCardException, ActiveLeaderCardException, InsufficientCardsException, NoSuchProductionPowerException {
 
-        Game.resetGame();
-        Game game = Game.getGame();
+        Game game = new Game(4);
         game.createPlayer("Alessio");
         game.getPlayer(0).increaseWarehouse(Resource.COIN);
         game.getPlayer(0).increaseWarehouse(Resource.SERVANT);
@@ -681,8 +661,7 @@ class GameTest {
     @Test
     void incorrectActivateStandardProductionPowerNoSuchCard() throws AlreadyTakenNicknameException {
 
-        Game.resetGame();
-        Game game = Game.getGame();
+        Game game = new Game(4);
         game.createPlayer("Regina");
 
         Strongbox s = new Strongbox();
@@ -700,8 +679,7 @@ class GameTest {
     @Test
     void incorrectActivateStandardProductionPowerNotEnoughResource() throws AlreadyTakenNicknameException, InsufficientResourceException, ImpossibleDevelopmentCardAdditionException {
 
-        Game.resetGame();
-        Game game = Game.getGame();
+        Game game = new Game(4);
         game.createPlayer("Regina");
 
         Cost c1 = new Cost();
@@ -728,8 +706,7 @@ class GameTest {
     void correctActivateStandardProductionPower()
             throws AlreadyTakenNicknameException, InsufficientResourceException, ImpossibleDevelopmentCardAdditionException, NoSuchProductionPowerException {
 
-        Game.resetGame();
-        Game game = Game.getGame();
+        Game game = new Game(4);;
         game.createPlayer("Regina");
         game.increaseWarehouse(Resource.STONE);
         assertEquals(1, game.getPlayer(0).sumTotalResource());
@@ -759,8 +736,7 @@ class GameTest {
     @Test
     void incorrectActivateBasicProductionPowerNotEnoughResource() throws AlreadyTakenNicknameException {
 
-        Game.resetGame();
-        Game game = Game.getGame();
+        Game game = new Game(4);
         game.createPlayer("Regina");
         Strongbox s = new Strongbox();
         InsufficientResourceException thrown =
@@ -778,8 +754,7 @@ class GameTest {
     void correctActivateBasicProductionPower()
             throws AlreadyTakenNicknameException, InsufficientResourceException{
 
-        Game.resetGame();
-        Game game = Game.getGame();
+        Game game = new Game(4);
         game.createPlayer("Regina");
         game.increaseWarehouse(Resource.SHIELD);
         game.increaseWarehouse(Resource.STONE);
@@ -797,8 +772,7 @@ class GameTest {
     @Test
     void incorrectActivateAdditionalProductionPowerNoSuchCard() throws AlreadyTakenNicknameException {
 
-        Game.resetGame();
-        Game game = Game.getGame();
+        Game game = new Game(4);
         game.createPlayer("Regina");
 
         Strongbox s = new Strongbox();
@@ -817,8 +791,7 @@ class GameTest {
     void incorrectActivateAdditionalProductionPowerNotEnoughResource()
             throws AlreadyTakenNicknameException, InsufficientResourceException, InsufficientCardsException, ActiveLeaderCardException, AlreadyDiscardLeaderCardException {
 
-        Game.resetGame();
-        Game game = Game.getGame();
+        Game game = new Game(4);
         game.createPlayer("Regina");
 
         Cost c = new Cost();
@@ -842,8 +815,7 @@ class GameTest {
     void correctActivateAdditionalProductionPower()
             throws AlreadyTakenNicknameException, InsufficientResourceException, InsufficientCardsException, ActiveLeaderCardException, AlreadyDiscardLeaderCardException, NoSuchProductionPowerException {
 
-        Game.resetGame();
-        Game game = Game.getGame();
+        Game game = new Game(4);
         game.createPlayer("Regina");
         game.increaseWarehouse(Resource.STONE);
         assertEquals(1, game.getPlayer(0).sumTotalResource());
@@ -865,10 +837,7 @@ class GameTest {
     @Test
     void faithTrackMovement() throws AlreadyTakenNicknameException {
 
-        FaithTrack.resetFaithTrack();
-        Game.resetGame();
-        Game game = Game.getGame();
-        Game.setNumOfPlayers(2);
+        Game game = new Game(2);
         game.createPlayer("Daniele");
         game.createPlayer("Matteo");
 
@@ -904,9 +873,7 @@ class GameTest {
     @Test
     void faithTrackMovementAllPlayer() throws AlreadyTakenNicknameException {
 
-        FaithTrack.resetFaithTrack();
-        Game.resetGame();
-        Game game = Game.getGame();
+        Game game = new Game(4);
         game.createPlayer("Daniele");
         game.createPlayer("Matteo");
         game.getPlayer(0).increaseFaithPoints(4);
@@ -925,8 +892,7 @@ class GameTest {
     void sevenCardsWinner()
             throws InsufficientResourceException, ImpossibleDevelopmentCardAdditionException, AlreadyTakenNicknameException {
 
-        Game.resetGame();
-        Game game = Game.getGame();
+        Game game = new Game(4);
         game.createPlayer("Giorgio");
 
         Cost c1 = new Cost();
@@ -964,8 +930,7 @@ class GameTest {
     @Test
     void endFaithTrackWinner() throws AlreadyTakenNicknameException {
 
-        Game.resetGame();
-        Game game = Game.getGame();
+        Game game = new Game(4);
         game.createPlayer("Giorgio");
 
         game.getCurrentPlayer().increaseFaithPoints(10);
@@ -988,8 +953,7 @@ class GameTest {
     void endGameWinner()
             throws AlreadyTakenNicknameException, InsufficientResourceException, ImpossibleDevelopmentCardAdditionException, NoSuchProductionPowerException {
 
-        Game.resetGame();
-        Game game = Game.getGame();
+        Game game = new Game(4);
         game.createPlayer("Daniele");
         game.createPlayer("Matteo");
         game.createPlayer("Luca");

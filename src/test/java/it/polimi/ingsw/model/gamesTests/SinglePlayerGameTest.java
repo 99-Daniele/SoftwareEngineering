@@ -20,14 +20,13 @@ class SinglePlayerGameTest {
     @Test
     void discardDeckDevelopmentCards() throws EmptyDevelopmentCardDeckException {
 
-            SinglePlayerGame.resetSinglePlayerGame();
-            SinglePlayerGame singlePlayerGame = SinglePlayerGame.getSinglePlayerGame();
-            singlePlayerGame.discardDeckDevelopmentCards(Color.GREEN);
-            assertEquals(2,singlePlayerGame.getDeck(0,0).numberOfCards());
-            singlePlayerGame.getDeck(0,0).removeDevelopmentCard();
-            singlePlayerGame.discardDeckDevelopmentCards(Color.GREEN);
-            assertEquals(0,singlePlayerGame.getDeck(0,0).numberOfCards());
-            assertEquals(3,singlePlayerGame.getDeck(1,0).numberOfCards());
+        SinglePlayerGame singlePlayerGame = new SinglePlayerGame();
+        singlePlayerGame.discardDeckDevelopmentCards(Color.GREEN);
+        assertEquals(2, singlePlayerGame.getDeck(0, 0).numberOfCards());
+        singlePlayerGame.getDeck(0, 0).removeDevelopmentCard();
+        singlePlayerGame.discardDeckDevelopmentCards(Color.GREEN);
+        assertEquals(0, singlePlayerGame.getDeck(0, 0).numberOfCards());
+        assertEquals(3, singlePlayerGame.getDeck(1, 0).numberOfCards());
     }
 
     /**
@@ -36,8 +35,7 @@ class SinglePlayerGameTest {
     @Test
     void correctLudovicoFaithTrackMovement() throws AlreadyTakenNicknameException {
 
-        SinglePlayerGame.resetSinglePlayerGame();
-        SinglePlayerGame singlePlayerGame = SinglePlayerGame.getSinglePlayerGame();
+        SinglePlayerGame singlePlayerGame = new SinglePlayerGame();
         singlePlayerGame.createPlayer("p");
         assertEquals(0, singlePlayerGame.getCurrentPlayer().getFaithPoints());
         assertEquals(0, singlePlayerGame.getCurrentPlayer().getVictoryPoints().getVictoryPointsByVaticanReport());
@@ -57,8 +55,7 @@ class SinglePlayerGameTest {
     void sevenCardsWinner()
             throws InsufficientResourceException, ImpossibleDevelopmentCardAdditionException, AlreadyTakenNicknameException {
 
-        SinglePlayerGame.resetSinglePlayerGame();
-        SinglePlayerGame singlePlayerGame = SinglePlayerGame.getSinglePlayerGame();
+        SinglePlayerGame singlePlayerGame = new SinglePlayerGame();
         singlePlayerGame.createPlayer("Giorgio");
 
         Cost c1 = new Cost();
@@ -101,8 +98,7 @@ class SinglePlayerGameTest {
     @Test
     void endFaithTrackWinner() throws AlreadyTakenNicknameException {
 
-        SinglePlayerGame.resetSinglePlayerGame();
-        SinglePlayerGame singlePlayerGame = SinglePlayerGame.getSinglePlayerGame();
+        SinglePlayerGame singlePlayerGame = new SinglePlayerGame();
         singlePlayerGame.createPlayer("Giorgio");
 
         singlePlayerGame.getCurrentPlayer().increaseFaithPoints(10);
@@ -129,8 +125,7 @@ class SinglePlayerGameTest {
     @Test
     void playerLost() throws AlreadyTakenNicknameException {
 
-        SinglePlayerGame.resetSinglePlayerGame();
-        SinglePlayerGame singlePlayerGame = SinglePlayerGame.getSinglePlayerGame();
+        SinglePlayerGame singlePlayerGame = new SinglePlayerGame();
         singlePlayerGame.createPlayer("Giorgio");
 
         PlayerBoard winner = singlePlayerGame.endGame();

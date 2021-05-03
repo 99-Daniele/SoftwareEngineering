@@ -19,44 +19,24 @@ import it.polimi.ingsw.model.player.*;
 import it.polimi.ingsw.model.resourceContainers.*;
 
 /**
- * Game is main class which handle all different phases of a match. Game is a Singleton.
+ * Game is main class which handle all different phases of a match.
  */
 public class Game implements LightGame {
 
-    private static Game game;
     private final ArrayList<PlayerBoard> players = new ArrayList<>();
     private final Deck[][] deck = new Deck[3][4];
     private int numOfPlayers;
     private int currentPlayer;
     private final ArrayList<LeaderCard> leaderCards = new ArrayList<>(16);;
 
-    /**
-     * @return the instance of Game
-     */
-    public static Game getGame(){
-        if(game == null)
-            game = new Game();
-        return game;
+    public static void main (String []args){
+        Game game = new Game(4);
     }
 
-    /**
-     * reset Game for tests.
-     */
-    public static void resetGame(){
-        game = new Game();
-        setNumOfPlayers(4);
-        game.currentPlayer = 0;
-    }
-
-    public static void setNumOfPlayers(int numOfPlayers){
-        game.numOfPlayers = numOfPlayers;
-    }
-
-    /**
-     * the constructor is protected so it can be called only by SinglePlayerGame.
-     */
-    protected Game(){
+    public Game(int numOfPlayers){
         createDecks();
+        this.numOfPlayers = numOfPlayers;
+        this.currentPlayer = 0;
         createLeaderCards();
         Market.resetMarket();
         FaithTrack.resetFaithTrack();

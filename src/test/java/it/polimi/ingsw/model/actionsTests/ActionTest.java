@@ -15,8 +15,7 @@ public class ActionTest {
     @Test
     void overrideTriggerAction(){
 
-        SinglePlayerGame.resetSinglePlayerGame();
-        SinglePlayerGame singlePlayerGame = SinglePlayerGame.getSinglePlayerGame();
+        SinglePlayerGame singlePlayerGame = new SinglePlayerGame();
         Action action1 = new DiscardAction(Color.GREEN);
         Action action2 = new LorenzoTwoMoveAction();
         Action action3 = new LorenzoMoveAndShuffleAction();
