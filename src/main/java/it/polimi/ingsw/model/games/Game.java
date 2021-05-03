@@ -27,14 +27,13 @@ public class Game implements LightGame {
     private final Deck[][] deck = new Deck[3][4];
     private Market market;
     private FaithTrack faithTrack;
-    private int numOfPlayers;
+    private final int numOfPlayers;
     private int currentPlayer;
     private final ArrayList<LeaderCard> leaderCards = new ArrayList<>(16);;
 
-    public static void main(String args[]){
-        Game game = new Game(2);
-    }
-
+    /**
+     * @param numOfPlayers is the chosen number of players.
+     */
     public Game(int numOfPlayers){
         createDecks();
         market = new Market();
@@ -48,7 +47,7 @@ public class Game implements LightGame {
      * this method method creates all 12 decks and all 48 DevelopmentCards parsing by Json file.
      * then add each card to is correct deck and prepare all decks.
      */
-    public void createDecks(){
+    private void createDecks(){
         deck[0][0]=new Deck(Color.GREEN,1);
         deck[0][1]=new Deck(Color.PURPLE,1);
         deck[0][2]=new Deck(Color.BLUE,1);
@@ -83,7 +82,7 @@ public class Game implements LightGame {
     /**
      * this method creates the list of 16 LeaderCards by parsing Json Files.
      */
-    public void createLeaderCards(){
+    private void createLeaderCards(){
         try {
             Gson gson = new Gson();
             JsonReader reader1 = new JsonReader(new FileReader("src/main/resources/DiscountCards.json"));
@@ -125,6 +124,9 @@ public class Game implements LightGame {
         return false;
     }
 
+    /**
+     * @return FaithTrack of game.
+     */
     public FaithTrack getFaithTrack() {
         return faithTrack;
     }
@@ -562,7 +564,9 @@ public class Game implements LightGame {
         return winner;
     }
 
-
+    /**
+     * @return currentPlayer of game
+     */
     public int getCurrentPosition(){
         return currentPlayer;
     }
