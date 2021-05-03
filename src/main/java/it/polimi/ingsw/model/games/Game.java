@@ -542,4 +542,9 @@ public class Game implements LightGame {
         }
         return winner;
     }
+
+
+    public int getCurrentPosition(){
+        return currentPlayer;
+    }
 }
