@@ -110,13 +110,13 @@ class SinglePlayerGameTest {
         singlePlayerGame.getCurrentPlayer().increaseFaithPoints(7);
         singlePlayerGame.faithTrackMovement();
 
-        assertTrue(FaithTrack.getFaithTrack().zeroRemainingPope());
+        assertTrue(singlePlayerGame.getFaithTrack().zeroRemainingPope());
         assertTrue(singlePlayerGame.isEndGame());
 
         PlayerBoard winner = singlePlayerGame.endGame();
         assertNotNull(winner);
         assertSame("Giorgio", winner.getNickname());
-        assertTrue(FaithTrack.getFaithTrack().zeroRemainingPope());
+        assertTrue(singlePlayerGame.getFaithTrack().zeroRemainingPope());
     }
 
     /**

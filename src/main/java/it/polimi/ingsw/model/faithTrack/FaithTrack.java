@@ -7,36 +7,17 @@ import it.polimi.ingsw.model.player.VictoryPoints;
  * remainingPopes that indicate the remaining popes.
  * vaticanReportSections that is an array of VaticanReportSection.
  * faithTrackVictoryPointsSection that is an array of Section.
- * FaithTrack is a Singleton.
  */
 public class FaithTrack {
 
-    private static FaithTrack faithTrack;
     private int remainingPopes;
     private final VaticanReportSection[] vaticanReportSections;
     private final Section[] faithTrackVictoryPointsSection;
 
     /**
-     * @return the instance of FaithTrack.
-     */
-    public static FaithTrack getFaithTrack(){
-        if(faithTrack == null)
-            faithTrack = new FaithTrack();
-        return faithTrack;
-    }
-
-    /**
-     * this method reset FaithTrack for tests.
-     */
-    public static void resetFaithTrack(){
-        faithTrack = new FaithTrack();
-    }
-
-    /**
      * constructor that creates the different section and vatican section and set remainingPopes to 3.
-     * the constructor is private so it can't be called outside the class.
      */
-    private FaithTrack(){
+    public FaithTrack(){
         remainingPopes=3;
         vaticanReportSections=new VaticanReportSection[3];
         vaticanReportSections[0]=new VaticanReportSection(5,8,2);

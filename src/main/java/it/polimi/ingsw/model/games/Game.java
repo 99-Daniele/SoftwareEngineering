@@ -25,17 +25,23 @@ public class Game implements LightGame {
 
     private final ArrayList<PlayerBoard> players = new ArrayList<>();
     private final Deck[][] deck = new Deck[3][4];
+    private Market market;
+    private FaithTrack faithTrack;
     private int numOfPlayers;
     private int currentPlayer;
     private final ArrayList<LeaderCard> leaderCards = new ArrayList<>(16);;
 
+    public static void main(String args[]){
+        Game game = new Game(2);
+    }
+
     public Game(int numOfPlayers){
         createDecks();
+        market = new Market();
+        faithTrack = new FaithTrack();
         this.numOfPlayers = numOfPlayers;
         this.currentPlayer = 0;
         createLeaderCards();
-        Market.resetMarket();
-        FaithTrack.resetFaithTrack();
     }
 
     /**
@@ -119,6 +125,10 @@ public class Game implements LightGame {
         return false;
     }
 
+    public FaithTrack getFaithTrack() {
+        return faithTrack;
+    }
+
     /**
      * @return arraylist of 4 casual LeaderCards.
      */
@@ -161,12 +171,12 @@ public class Game implements LightGame {
     public Marble[] takeMarketMarble(boolean isRow, int choice) throws WrongParametersException {
         Marble [] marbles;
         if(isRow) {
-            marbles = Market.getMarket().getRowMarbles(choice);
-            Market.getMarket().slideRow(choice);
+            marbles = market.getRowMarbles(choice);
+            market.slideRow(choice);
         }
         else {
-            marbles = Market.getMarket().getColumnMarbles(choice);
-            Market.getMarket().slideColumn(choice);
+            marbles = market.getColumnMarbles(choice);
+            market.slideColumn(choice);
         }
         return marbles;
     }
@@ -198,14 +208,14 @@ public class Game implements LightGame {
      */
     @Override
     public void faithTrackMovement(){
-        FaithTrack.getFaithTrack().victoryPointsFaithTrack(players.get(currentPlayer).getVictoryPoints(), players.get(currentPlayer).getFaithPoints());
-        if(FaithTrack.getFaithTrack().reachPope(players.get(currentPlayer).getFaithPoints()))
+        faithTrack.victoryPointsFaithTrack(players.get(currentPlayer).getVictoryPoints(), players.get(currentPlayer).getFaithPoints());
+        if(faithTrack.reachPope(players.get(currentPlayer).getFaithPoints()))
         {
             for(PlayerBoard player:players)
             {
-                FaithTrack.getFaithTrack().victoryPointsVaticanReport(player.getVictoryPoints(), player.getFaithPoints());
+                faithTrack.victoryPointsVaticanReport(player.getVictoryPoints(), player.getFaithPoints());
             }
-            FaithTrack.getFaithTrack().DecreaseRemainingPope();
+            faithTrack.DecreaseRemainingPope();
         }
     }
 
@@ -266,14 +276,14 @@ public class Game implements LightGame {
     public void faithTrackMovementAllPlayers(){
         int flag=0;
         for(PlayerBoard player: players) {
-            FaithTrack.getFaithTrack().victoryPointsFaithTrack(player.getVictoryPoints(), player.getFaithPoints());
-            if (FaithTrack.getFaithTrack().reachPope(player.getFaithPoints()))
+            faithTrack.victoryPointsFaithTrack(player.getVictoryPoints(), player.getFaithPoints());
+            if (faithTrack.reachPope(player.getFaithPoints()))
                 flag=1;
         }
         if (flag==1) {
             for (PlayerBoard player: players)
-                FaithTrack.getFaithTrack().victoryPointsVaticanReport(player.getVictoryPoints(), player.getFaithPoints());
-            FaithTrack.getFaithTrack().DecreaseRemainingPope();
+                faithTrack.victoryPointsVaticanReport(player.getVictoryPoints(), player.getFaithPoints());
+            faithTrack.DecreaseRemainingPope();
         }
     }
 
@@ -522,7 +532,7 @@ public class Game implements LightGame {
      * of the FaithTrack
      */
     public boolean isEndGame(){
-        if(FaithTrack.getFaithTrack().zeroRemainingPope() || players.get(currentPlayer).haveSevenDevelopmentCards())
+        if(faithTrack.zeroRemainingPope() || players.get(currentPlayer).haveSevenDevelopmentCards())
             return true;
         return false;
     }

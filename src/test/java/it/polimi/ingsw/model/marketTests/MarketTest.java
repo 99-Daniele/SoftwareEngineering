@@ -19,8 +19,7 @@ public class MarketTest {
      */
     @Test
     void slideColumnMarketTest() throws WrongParametersException {
-        Market market = Market.getMarket();
-        Market.resetMarket();
+        Market market = new Market();
         assertNotNull(market);
 
         //checking if a column remain unchanged after a different column has been slided.
@@ -45,8 +44,7 @@ public class MarketTest {
     @Test
     void WrongParametersSlide(){
 
-        Market market = Market.getMarket();
-        Market.resetMarket();
+        Market market = new Market();
         assertNotNull(market);
 
         WrongParametersException thrown =
@@ -65,8 +63,7 @@ public class MarketTest {
      */
     @Test
     public void slideRowMarketTest() throws WrongParametersException {
-        Market market = Market.getMarket();
-        Market.resetMarket();
+        Market market = new Market();
         assertNotNull(market);
 
         //checking if a row remain unchanged after a different row has been slided.
@@ -92,8 +89,7 @@ public class MarketTest {
      */
     @Test
     void marketCreationTest() throws WrongParametersException {
-        Market market = Market.getMarket();
-        Market.resetMarket();
+        Market market = new Market();
         Marble[] selectedRow;
         int red = 0;
         int white = 0;
@@ -139,8 +135,7 @@ public class MarketTest {
      */
     @Test
     void wrongIndexSelectedTest() throws WrongParametersException {
-        Market market = Market.getMarket();
-        Market.resetMarket();
+        Market market = new Market();
         assertNotNull(market);
 
 
@@ -178,7 +173,7 @@ public class MarketTest {
         assertTrue(actualMessage2.contains(expectedMessage2));
 
     }
-    }
+}
 
 
 

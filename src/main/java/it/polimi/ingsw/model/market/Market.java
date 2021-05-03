@@ -5,39 +5,20 @@ import it.polimi.ingsw.exceptions.WrongParametersException;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 
 /**
- * Market is the market of Game and it is a Singleton.
+ * Market is the market of Game.
  */
 public class Market {
 
-    private static Market market;
     private static final int row = 3;
     private static final int column = 4;
     private Marble[][] marketTray;
     private Marble externalMarble;
 
     /**
-     * @return the instance of Market.
-     */
-    public static Market getMarket() {
-        if(market == null)
-            market = new Market();
-        return market;
-    }
-
-    /**
-     * this method reset Market for tests.
-     */
-    public static void resetMarket(){
-        market = new Market();
-    }
-
-
-    /**
      * the constructor build a matrix 3X4 of marbles and a slot for the side slide.
      * the market is build randomly with the amount of marbles available.
-     * the constructor is private so it can't be called outside the class.
      */
-   private Market() {
+   public Market() {
        // this array indicate the amount of marble for each color when the market is still empty.
        int[] numOfMarbles={1,2,2,2,2,4};
        boolean enough;

@@ -942,7 +942,7 @@ class GameTest {
         game.getCurrentPlayer().increaseFaithPoints(7);
         game.faithTrackMovement();
 
-        assertTrue(FaithTrack.getFaithTrack().zeroRemainingPope());
+        assertTrue(game.getFaithTrack().zeroRemainingPope());
         assertTrue(game.isEndGame());
     }
 
