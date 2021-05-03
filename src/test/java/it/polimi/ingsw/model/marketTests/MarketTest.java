@@ -135,7 +135,7 @@ public class MarketTest {
      */
     @Test
     void wrongIndexSelectedTest() throws WrongParametersException {
-        Market market=new Market();
+        Market market = new Market();
         assertNotNull(market);
 
 
@@ -173,7 +173,7 @@ public class MarketTest {
         assertTrue(actualMessage2.contains(expectedMessage2));
 
     }
-    }
+}
 
 
 

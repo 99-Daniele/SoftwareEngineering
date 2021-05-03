@@ -18,7 +18,7 @@ public class RedMarbleTest {
     void Control() throws AlreadyTakenNicknameException {
 
         Marble redMarble=new RedMarble();
-        Game game=new Game(3);
+        Game game = new Game(4);
         game.createPlayer("user1");
 
         game.getCurrentPlayer().increaseFaithPoints(5);

@@ -24,23 +24,23 @@ import it.polimi.ingsw.model.resourceContainers.*;
 public class Game implements LightGame {
 
     private final ArrayList<PlayerBoard> players = new ArrayList<>();
-    private final Market market;
-    private final FaithTrack faithTrack;
     private final Deck[][] deck = new Deck[3][4];
-    private final int numOfPlayers;
+    private Market market;
+    private FaithTrack faithTrack;
+    private int numOfPlayers;
     private int currentPlayer;
-    private final ArrayList<LeaderCard> leaderCards;
+    private final ArrayList<LeaderCard> leaderCards = new ArrayList<>(16);;
 
-    /**
-     * @param numOfPlayers is the chosen number of players.
-     */
+    public static void main(String args[]){
+        Game game = new Game(2);
+    }
+
     public Game(int numOfPlayers){
-        market = new Market();
-        faithTrack =new FaithTrack();
-        this.numOfPlayers = numOfPlayers;
-        currentPlayer = 0;
         createDecks();
-        leaderCards = new ArrayList<>(16);
+        market = new Market();
+        faithTrack = new FaithTrack();
+        this.numOfPlayers = numOfPlayers;
+        this.currentPlayer = 0;
         createLeaderCards();
     }
 
@@ -48,7 +48,7 @@ public class Game implements LightGame {
      * this method method creates all 12 decks and all 48 DevelopmentCards parsing by Json file.
      * then add each card to is correct deck and prepare all decks.
      */
-    private void createDecks(){
+    public void createDecks(){
         deck[0][0]=new Deck(Color.GREEN,1);
         deck[0][1]=new Deck(Color.PURPLE,1);
         deck[0][2]=new Deck(Color.BLUE,1);
@@ -83,7 +83,7 @@ public class Game implements LightGame {
     /**
      * this method creates the list of 16 LeaderCards by parsing Json Files.
      */
-    private void createLeaderCards(){
+    public void createLeaderCards(){
         try {
             Gson gson = new Gson();
             JsonReader reader1 = new JsonReader(new FileReader("src/main/resources/DiscountCards.json"));
@@ -123,6 +123,10 @@ public class Game implements LightGame {
             if(player.getNickname().equals(nickname))
                 return true;
         return false;
+    }
+
+    public FaithTrack getFaithTrack() {
+        return faithTrack;
     }
 
     /**
@@ -216,13 +220,6 @@ public class Game implements LightGame {
     }
 
     /**
-     * @return FaithTrack of game.
-     */
-    public FaithTrack getFaithTrack(){
-        return faithTrack;
-    }
-
-    /**
      * this method increase current player faith points by 1.
      */
     @Override
@@ -278,14 +275,12 @@ public class Game implements LightGame {
      */
     public void faithTrackMovementAllPlayers(){
         int flag=0;
-        for(PlayerBoard player: players)
-        {
+        for(PlayerBoard player: players) {
             faithTrack.victoryPointsFaithTrack(player.getVictoryPoints(), player.getFaithPoints());
             if (faithTrack.reachPope(player.getFaithPoints()))
                 flag=1;
         }
-        if (flag==1)
-        {
+        if (flag==1) {
             for (PlayerBoard player: players)
                 faithTrack.victoryPointsVaticanReport(player.getVictoryPoints(), player.getFaithPoints());
             faithTrack.DecreaseRemainingPope();
@@ -293,7 +288,7 @@ public class Game implements LightGame {
     }
 
     /**
-     *
+     * @return a list of available switches for current player.
      */
     public ArrayList<Integer[]> availableSwitches(){
         return players.get(currentPlayer).availableSwitches();
@@ -321,14 +316,15 @@ public class Game implements LightGame {
     }
 
     /**
-     *
+     * @param card is a DevelopmentCard bought by current player.
+     * @return a list of available slots to insert @param card.
      */
     public ArrayList<Integer> findAvailableSlots(DevelopmentCard card){
         return players.get(currentPlayer).findAvailableSlot(card);
     }
 
     /**
-     *
+     * @return a list of DevelopmentCard buyable by current player.
      */
     public ArrayList<DevelopmentCard> buyableDevelopmentCards(){
         ArrayList<DevelopmentCard> buyableCards = new ArrayList<>();
@@ -365,7 +361,9 @@ public class Game implements LightGame {
     }
 
     /**
-     *
+     * @param card is a DevelopmentCard bought by current player.
+     * @param choice is player's choice about which between warehouse and strongbox has the priority to be decreased.
+     * @param slot is player's choice about in which slot want to insert the chosen card.
      */
     public void buyDevelopmentCard(DevelopmentCard card, int choice, int slot){
         try {
@@ -375,7 +373,7 @@ public class Game implements LightGame {
     }
 
     /**
-     *
+     * @param card is DevelopmentCard to be removed by his deck.
      */
     private void removeDevelopmentCard(DevelopmentCard card){
         for(int i = 0; i < 3; i++){
@@ -401,7 +399,13 @@ public class Game implements LightGame {
     }
 
     /**
-     *
+     * @param chosenSlot is the chosen SlotDevelopmentCards to activate last card production power.
+     * @param s is a strongbox.
+     * @param choice is player's choice about which between warehouse and strongbox has the priority to be decreased.
+     * @throws InsufficientResourceException if player has not enough resources to activate all production powers together.
+     * @throws NoSuchProductionPowerException if player has chosen an empty SlotDevelopmentCards.
+     * this method remove player resources by the amount required by the chosen card and increase @param s by the amount
+     * given by card production power.
      */
     public void removeDevelopmentCardProductionResource(int chosenSlot, Strongbox s, int choice)
             throws InsufficientResourceException, NoSuchProductionPowerException {
@@ -410,7 +414,13 @@ public class Game implements LightGame {
     }
 
     /**
-     *
+     * @param r1 is a resource to be decreased by current player resources.
+     * @param r2 is a resource to be decreased by current player resources.
+     * @param r3 is a resource to be increased by current player resources.
+     * @param s is a strongbox.
+     * @param choice is player's choice about which between warehouse and strongbox has the priority to be decreased.
+     * @throws InsufficientResourceException if player has not enough resources to activate all production powers together.
+     * this method remove player resources by 1 @param r1 and 1 @param r2 and increase @param s by 1 @param r3.
      */
     public void basicProductionPower(Resource r1, Resource r2, Resource r3, Strongbox s, int choice)
             throws InsufficientResourceException {
@@ -419,16 +429,25 @@ public class Game implements LightGame {
     }
 
     /**
-     *
+     * @param chosenAdditionalPowerCard is the chosen AdditionalProductionPowerCard to be activated.
+     * @param r is a resource to be increased by current player resources.
+     * @param s is a strongbox.
+     * @param choice is player's choice about which between warehouse and strongbox has the priority to be decreased.
+     * @throws InsufficientResourceException if player has not enough resources to activate all production powers together.
+     * @throws NoSuchProductionPowerException if player has chosen a not active or not existing AdditionalProductionPower.
+     * this method remove player resources by the 1 resource required by the chosen card and increase @param s by the 1
+     * resource given by card production power.
      */
     public void removeAdditionalProductionPowerCardResource(int chosenAdditionalPowerCard, Resource r, Strongbox s, int choice)
             throws InsufficientResourceException, NoSuchProductionPowerException {
         players.get(currentPlayer).activateAdditionalProductionPower(chosenAdditionalPowerCard, choice);
         s.increaseResourceType(r, 1);
+        faithTrackMovement();
     }
 
     /**
-     *
+     * @param s is a strongbox.
+     * this method increase current player strongbox by the amount contained in @param s.
      */
     public void increaseCurrentPlayerStrongbox(Strongbox s){
         players.get(currentPlayer).increaseStrongbox(s);

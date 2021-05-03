@@ -14,7 +14,7 @@ class FaithTrackTest {
      */
     @Test
     void victoryPointsFaithTrack() {
-        FaithTrack faithTrack=new FaithTrack();
+        FaithTrack faithTrack = new FaithTrack();
         VictoryPoints victoryPoints=new VictoryPoints();
         faithTrack.victoryPointsFaithTrack(victoryPoints,10);
         assertEquals(4,victoryPoints.getVictoryPointsByFaithTrack());
@@ -28,7 +28,7 @@ class FaithTrackTest {
      */
     @Test
     void victoryPointsVaticanReport() {
-        FaithTrack faithTrack=new FaithTrack();
+        FaithTrack faithTrack = new FaithTrack();
         VictoryPoints victoryPoints=new VictoryPoints();
         faithTrack.victoryPointsVaticanReport(victoryPoints,6);
         assertEquals(2,victoryPoints.getVictoryPointsByVaticanReport());
@@ -50,7 +50,7 @@ class FaithTrackTest {
      */
     @Test
     void reachPope() {
-        FaithTrack faithTrack=new FaithTrack();
+        FaithTrack faithTrack = new FaithTrack();
         assertFalse(faithTrack.reachPope(7));
         assertTrue(faithTrack.reachPope(8));
         faithTrack.DecreaseRemainingPope();

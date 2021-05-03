@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.gamesTests;
 import it.polimi.ingsw.exceptions.*;
 
 import it.polimi.ingsw.model.developmentCards.*;
+import it.polimi.ingsw.model.faithTrack.FaithTrack;
 import it.polimi.ingsw.model.games.SinglePlayerGame;
 import it.polimi.ingsw.model.player.PlayerBoard;
 import it.polimi.ingsw.model.resourceContainers.Cost;
@@ -19,13 +20,13 @@ class SinglePlayerGameTest {
     @Test
     void discardDeckDevelopmentCards() throws EmptyDevelopmentCardDeckException {
 
-            SinglePlayerGame singlePlayerGame=new SinglePlayerGame();
-            singlePlayerGame.discardDeckDevelopmentCards(Color.GREEN);
-            assertEquals(2,singlePlayerGame.getDeck(0,0).numberOfCards());
-            singlePlayerGame.getDeck(0,0).removeDevelopmentCard();
-            singlePlayerGame.discardDeckDevelopmentCards(Color.GREEN);
-            assertEquals(0,singlePlayerGame.getDeck(0,0).numberOfCards());
-            assertEquals(3,singlePlayerGame.getDeck(1,0).numberOfCards());
+        SinglePlayerGame singlePlayerGame = new SinglePlayerGame();
+        singlePlayerGame.discardDeckDevelopmentCards(Color.GREEN);
+        assertEquals(2, singlePlayerGame.getDeck(0, 0).numberOfCards());
+        singlePlayerGame.getDeck(0, 0).removeDevelopmentCard();
+        singlePlayerGame.discardDeckDevelopmentCards(Color.GREEN);
+        assertEquals(0, singlePlayerGame.getDeck(0, 0).numberOfCards());
+        assertEquals(3, singlePlayerGame.getDeck(1, 0).numberOfCards());
     }
 
     /**
@@ -34,7 +35,7 @@ class SinglePlayerGameTest {
     @Test
     void correctLudovicoFaithTrackMovement() throws AlreadyTakenNicknameException {
 
-        SinglePlayerGame singlePlayerGame=new SinglePlayerGame();
+        SinglePlayerGame singlePlayerGame = new SinglePlayerGame();
         singlePlayerGame.createPlayer("p");
         assertEquals(0, singlePlayerGame.getCurrentPlayer().getFaithPoints());
         assertEquals(0, singlePlayerGame.getCurrentPlayer().getVictoryPoints().getVictoryPointsByVaticanReport());
