@@ -34,7 +34,7 @@ public class Server {
 
     public static void main(String[] args) {
         int portNumber = Integer.parseInt(args[0]);
-        Server server=new Server(portNumber); //Integer.parseInt(args[0]) parametro
+        Server server=new Server(1234); //Integer.parseInt(args[0]) parametro
         server.startServer();
     }
 }

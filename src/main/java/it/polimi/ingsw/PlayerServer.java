@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class PlayerServer implements Runnable{
+
     private Socket socket;
     private ControllerGame controllerGame;
     private int position;

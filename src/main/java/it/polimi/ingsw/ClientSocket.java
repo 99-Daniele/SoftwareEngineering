@@ -11,7 +11,7 @@ import java.util.Scanner;
  * threadIn is the thread which receive input from System.in
  * threadOut is the thread which receive input from Server.
  * socket is the socket which connect Client and Server.
- * out and in are client - server serializable objects streams.
+ * out and in are Client-Server serializable objects streams.
  * quit is true when user decides to quit.
  * ok summarize Server sent OK messages.
  * turn summarize Server sent TURN messages.

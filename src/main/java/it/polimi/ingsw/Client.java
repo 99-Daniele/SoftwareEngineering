@@ -35,7 +35,7 @@ public class Client{
     public static void main(String args[]) {
         String hostName = args[0];
         int portNumber = Integer.parseInt(args[1]);
-        Client client = new Client(hostName, portNumber);
+        Client client = new Client("localhost", 1234);
         client.startClient();
     }
 }
