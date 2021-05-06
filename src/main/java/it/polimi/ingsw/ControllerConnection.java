@@ -6,15 +6,13 @@ import it.polimi.ingsw.model.games.Game;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
-import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
-
 public class ControllerConnection {
     private static int count=0;
-    private static int max;
     private static Game game;
+    private static  int max;
+    private static ControllerGame controllerGame;
 
-    public static synchronized GamePos connection(Scanner in, PrintWriter out){
+    public static synchronized PosControllerGame connection(Scanner in, PrintWriter out){
         String nickname=in.nextLine();
         boolean error=true;
         if(count==0){
@@ -29,8 +27,9 @@ public class ControllerConnection {
             out.println("ok");
             out.flush();
             count--;
-            GamePos gamePos=new GamePos(game,0);
-            return gamePos;
+            controllerGame=new ControllerGame(game,in,out);
+            PosControllerGame posControllerGame=new PosControllerGame(controllerGame,0, max);
+            return posControllerGame;
         }
         else
         {
@@ -45,9 +44,10 @@ public class ControllerConnection {
                     nickname = in.nextLine();
                 }
             }
-            GamePos gamePos=new GamePos(game,max-count);
+            controllerGame.getView().addViewPos(in, out);
+            PosControllerGame posControllerGame=new PosControllerGame(controllerGame, max-count, max);
             count--;
-            return gamePos;
+            return posControllerGame;
         }
     }
 }

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.games;
 
+import it.polimi.ingsw.VirtualView;
 import it.polimi.ingsw.exceptions.*;
 
 import java.io.FileReader;
@@ -7,6 +8,7 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Observable;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
@@ -21,7 +23,7 @@ import it.polimi.ingsw.model.resourceContainers.*;
 /**
  * Game is main class which handle all different phases of a match.
  */
-public class Game implements LightGame {
+public class Game extends Observable implements LightGame{
 
     private final ArrayList<PlayerBoard> players = new ArrayList<>();
     private final Deck[][] deck = new Deck[3][4];
@@ -41,6 +43,10 @@ public class Game implements LightGame {
         this.numOfPlayers = numOfPlayers;
         this.currentPlayer = 0;
         createLeaderCards();
+    }
+
+    public void addObservers(VirtualView view){
+        addObserver(view);
     }
 
     /**
@@ -565,7 +571,7 @@ public class Game implements LightGame {
     }
 
     /**
-     * @return currentPlayer of game
+     * @return currentPlayer'position
      */
     public int getCurrentPosition(){
         return currentPlayer;

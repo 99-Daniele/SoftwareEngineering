@@ -12,7 +12,6 @@ import java.util.ArrayList;
  */
 public class SinglePlayerGame extends Game implements LightSinglePlayerGame {
 
-    private static SinglePlayerGame singlePlayerGame;
     private ArrayList<Action> actions = new ArrayList<>();
     private final SimplePlayerBoard LorenzoIlMagnifico = new SimplePlayerBoard();
 

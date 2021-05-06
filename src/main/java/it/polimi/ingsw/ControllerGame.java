@@ -1,57 +1,52 @@
 package it.polimi.ingsw;
 
 import it.polimi.ingsw.model.games.Game;
+import java.util.Observable;
+import java.util.Observer;
 
 import java.io.PrintWriter;
 import java.util.Scanner;
 
-import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
-
-public class ControllerGame {
+public class ControllerGame implements Observer{
     private Game game;
-    private int position;
-    private Scanner in;
-    private PrintWriter out;
+    private View view;
 
-    public ControllerGame(Game game, int position, Scanner in, PrintWriter out){
+    public ControllerGame(Game game, Scanner in, PrintWriter out){
         this.game=game;
-        this.position=position;
-        this.in=in;
-        this.out=out;
+        VirtualView virtualView=new VirtualView(in, out, this);
+        this.view=virtualView;
+        game.addObservers(virtualView);
     }
 
-    public boolean isMyTurn()
-    {
-        String msg=in.nextLine();
-        if(!(position==game.getCurrentPosition()))
-        {
-            out.println("non tuo turno");
-            out.flush();
-            return false;
-        }
-        else
-        {
-            out.println("ok");
-            out.flush();
-            return true;
-        }
+    public View getView(){
+        return view;
     }
+
+    public int getCurrentTurn(){
+        return game.getCurrentPosition();
+    }
+
+    public int getNumberOfViews(){
+        return  view.NumOfViewsPos();
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+
+    }
+
+
+
 
     private void nextTurn()
     {
         game.nextPlayer();
     }
 
-    public void play()
+    public void play()//metodo update
     {
         System.out.println("ciao");
         // controllo fine partita
         nextTurn();
-    }
-
-    public void pos(){
-        out.println("posizione"+position);
-        out.flush();
     }
 }

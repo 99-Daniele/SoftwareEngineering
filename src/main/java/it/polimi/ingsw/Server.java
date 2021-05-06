@@ -3,8 +3,6 @@ package it.polimi.ingsw;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
 
 public class Server {
     private int port;
