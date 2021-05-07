@@ -8,7 +8,6 @@ public class Client{
 
     private final String hostName;
     private final int portNumber;
-    private  ClientSocket clientSocket;
 
     public Client(String hostName, int portNumber){
         this.hostName = hostName;
@@ -20,7 +19,7 @@ public class Client{
      */
     private void startClient() {
         try {
-            clientSocket = new ClientSocket(new Socket(hostName, portNumber));
+            ClientSocket clientSocket = new ClientSocket(new Socket(hostName, portNumber));
             System.out.println("Accepted by Server");
             clientSocket.start();
         } catch (UnknownHostException e) {
@@ -33,8 +32,6 @@ public class Client{
     }
 
     public static void main(String args[]) {
-        String hostName = args[0];
-        int portNumber = Integer.parseInt(args[1]);
         Client client = new Client("localhost", 1234);
         client.startClient();
     }

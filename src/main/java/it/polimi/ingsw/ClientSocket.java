@@ -25,8 +25,9 @@ public class ClientSocket{
     private final ObjectOutputStream out;
     private final ObjectInputStream in;
     Scanner stdIn = new Scanner(new InputStreamReader(System.in));
+    private int position;
     private boolean quit;
-    private int ok;
+    private boolean ok;
     private int turn;
     private final Object lock = new Object();
 
@@ -83,6 +84,30 @@ public class ClientSocket{
         }
         Message message = new Message_One_Parameter_String(MessageType.LOGIN, userInput);
         sendCommand(message);
+        if(position == 1){
+            System.out.println("\nSei il primo giocatore. Quanti giocatori vuoi in partita? (1 - 4)");
+            int userInt;
+            while(true){
+                try {
+                    userInt = stdIn.nextInt();
+                    if(userInt < 1 || userInt > 4){
+                        System.err.println("\nInserisci un numero da 1 a 4.\n");
+                        System.out.println("\nQuanti giocatori vuoi in partita? (1 - 4)");
+                    }
+                    else break;
+                }
+                catch (InputMismatchException e){
+                    System.err.println("\nInserisci un numero.");
+                    System.out.println("\nQuanti giocatori vuoi in partita? (1 - 4)");
+                    stdIn.next();
+                }
+            }
+            Message numPlayerMessage = new Message_One_Parameter_Int(MessageType.NUM_PLAYERS, userInt);
+            sendCommand(numPlayerMessage);
+        }
+        else
+            System.out.println("\nSei il giocatore in posizione " + position);
+
     }
 
     /**
@@ -221,23 +246,21 @@ public class ClientSocket{
             out.writeObject(message);
             long initTime = System.currentTimeMillis();
             synchronized (lock) {
-                while (true) {
+                while (turn == 0) {
                     lock.wait(10000);
                     switch (turn) {
                         case 0: {
                             if (isTimePassed(initTime, System.currentTimeMillis()))
                                 throw new InterruptedException();
+                            else {
+                                out.flush();
+                                out.writeObject(message);
+                            }
                         }
                         break;
                         case 1:
                             return true;
-                        case 2: {
-                            out.flush();
-                            out.writeObject(message);
-                            ok = 0;
-                        }
-                        break;
-                        case 3:
+                        case 2:
                             System.out.println("\nNon è il tuo turno");
                             return false;
                     }
@@ -251,6 +274,7 @@ public class ClientSocket{
             System.exit(0);
             return false;
         }
+        return false;
     }
 
     /**
@@ -261,32 +285,53 @@ public class ClientSocket{
             while(true) {
                 Message returnMessage = (Message) in.readObject();
                 switch (returnMessage.getMessageType()) {
+                    case LOGIN: {
+                        Message_One_Parameter_Int message = (Message_One_Parameter_Int) returnMessage;
+                        ok = true;
+                        position = message.getPar();
+                        synchronized (lock) {
+                            lock.notifyAll();
+                        }
+                    }
+                        break;
+                    case START_GAME: {
+                        Message_One_Parameter_Int message = (Message_One_Parameter_Int) returnMessage;
+                        System.out.println("\nLa partita è iniziata. N° giocatori: " + message.getPar());
+                        synchronized (lock) {
+                            lock.notifyAll();
+                        }
+                    }
+                    break;
                     case OK:
-                        ok = 1;
-                        turn = 2;
+                        ok = true;
                         synchronized (lock) {
                             lock.notifyAll();
                         }
                         break;
                     case PING:
-                        ok = 2;
-                        turn = 2;
                         out.flush();
                         out.writeObject(returnMessage);
-                        break;
-                    case TURN:
-                        ok = 2;
-                        Message_One_Parameter_Int cmd = (Message_One_Parameter_Int) returnMessage;
-                        if(cmd.getPar() == 1)
-                            turn = 1;
-                        else
-                            turn = 3;
-                        synchronized (lock){
+                        synchronized (lock) {
                             lock.notifyAll();
                         }
                         break;
+                    case TURN: {
+                        Message_One_Parameter_Int message = (Message_One_Parameter_Int) returnMessage;
+                        if (message.getPar() == 1)
+                            turn = 1;
+                        else
+                            turn = 2;
+                        synchronized (lock) {
+                            lock.notifyAll();
+                        }
+                    }
+                        break;
                     default:
                         System.out.println("" + returnMessage.toString());
+                        synchronized (lock) {
+                            lock.notifyAll();
+                        }
+                        break;
                 }
             }
         } catch (IOException e) {
@@ -304,21 +349,20 @@ public class ClientSocket{
      */
     private void sendCommand(Message message) throws InterruptedException {
         try {
-            ok = 0;
+            ok = false;
             out.flush();
             out.writeObject(message);
             long initTime = System.currentTimeMillis();
             synchronized (lock) {
-                while (ok != 1) {
+                while (!ok) {
                     lock.wait(10000);
-                    if(ok == 0) {
+                    if(!ok) {
                         if (isTimePassed(initTime, System.currentTimeMillis()))
                             throw new InterruptedException();
-                    }
-                    else if(ok == 2){
-                        out.flush();
-                        out.writeObject(message);
-                        ok = 0;
+                        else {
+                            out.flush();
+                            out.writeObject(message);
+                        }
                     }
                 }
                 System.out.println("\n" + message.toString() + " è stato eseguito.");

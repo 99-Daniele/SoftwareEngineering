@@ -6,10 +6,14 @@ package it.polimi.ingsw.network.messages;
 public enum MessageType {
 
     LOGIN,
+    NUM_PLAYERS,
+    START_GAME,
     TURN,
     BUY_CARD,
     SWITCH_DEPOT,
     QUIT,
+    END_GAME,
     PING,
-    OK
+    OK,
+    ERR
 }

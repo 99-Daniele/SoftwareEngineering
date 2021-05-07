@@ -1,9 +1,9 @@
 package it.polimi.ingsw;
 
 public class PosControllerGame {
-    private ControllerGame controllerGame;
-    private int position;
-    private int max;
+    private final ControllerGame controllerGame;
+    private final int position;
+    private final int max;
 
     public PosControllerGame(ControllerGame controllerGame, int position, int max){
         this.controllerGame=controllerGame;
