@@ -45,10 +45,6 @@ public class Game extends Observable implements LightGame{
         createLeaderCards();
     }
 
-    public void addObservers(VirtualView view){
-        addObserver(view);
-    }
-
     /**
      * this method method creates all 12 decks and all 48 DevelopmentCards parsing by Json file.
      * then add each card to is correct deck and prepare all decks.
@@ -575,5 +571,13 @@ public class Game extends Observable implements LightGame{
      */
     public int getCurrentPosition(){
         return currentPlayer;
+    }
+
+    public void addObservers(VirtualView view){
+        addObserver(view);
+    }
+
+    public int getNumOfPlayers(){
+        return numOfPlayers;
     }
 }
