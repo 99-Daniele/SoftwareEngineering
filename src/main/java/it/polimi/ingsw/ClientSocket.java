@@ -6,6 +6,8 @@ import java.io.*;
 import java.net.Socket;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * threadIn is the thread which receive input from System.in
@@ -28,7 +30,8 @@ public class ClientSocket{
     private int position;
     private boolean quit;
     private boolean ok;
-    private int turn;
+    private boolean turn;
+    private boolean startGame;
     private final Object lock = new Object();
 
     public ClientSocket(Socket socket) throws IOException {
@@ -36,6 +39,8 @@ public class ClientSocket{
         this.out = new ObjectOutputStream(socket.getOutputStream());
         this.in = new ObjectInputStream(socket.getInputStream());
         this.quit = false;
+        this.turn = false;
+        this.startGame = false;
     }
 
     /**
@@ -43,8 +48,8 @@ public class ClientSocket{
      * threadIn firstly login player and then constantly waits user inputs from System.in
      * threadOut constantly waits Server inputs.
      */
-    public void start(){
-        if(threadIn == null){
+    public void start() {
+        if (threadIn == null) {
             threadIn = new Thread(() -> {
                 try {
                     login();
@@ -62,10 +67,23 @@ public class ClientSocket{
             });
             threadIn.start();
         }
-        if(threadOut == null){
+        if (threadOut == null) {
             threadOut = new Thread(() -> receiveCommand());
             threadOut.start();
         }
+        Timer turnTime = new Timer();
+        turnTime.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    isMyTurn();
+                } catch (InterruptedException e) {
+                    System.err.println("\nClient non più connesso al Server.");
+                    disconnect();
+                    System.exit(0);
+                }
+            }
+        }, 0,10000);
     }
 
     /**
@@ -107,7 +125,6 @@ public class ClientSocket{
         }
         else
             System.out.println("\nSei il giocatore in posizione " + position);
-
     }
 
     /**
@@ -132,7 +149,12 @@ public class ClientSocket{
      * until user doesn't insert a valid input, ask him 1 int to chose which action activate.
      * @return the action chosen by user.
      */
-    private int player_input(){
+    private int player_input() throws InterruptedException {
+        synchronized (lock){
+            while(!turn)
+                threadIn.wait();
+        }
+        System.out.println("\nE' il tuo turno");
         stdIn = new Scanner(new InputStreamReader(System.in));
         System.out.println("\n1 - BUY_CARD\n2 - SWITCH_DEPOT\n0 - QUIT");
         int userInput;
@@ -175,8 +197,10 @@ public class ClientSocket{
         }
         Message message = new Message_One_Parameter_Int(MessageType.BUY_CARD, x);
         System.out.println("\n" + message.toString());
-        if (isMyTurn())
+        if (turn)
             sendCommand(message);
+        else
+            System.err.println("\nNon è il tuo turno.");
     }
 
     /**
@@ -212,8 +236,10 @@ public class ClientSocket{
         }
         Message message = new Message_Two_Parameter_Int(MessageType.SWITCH_DEPOT, x, y);
         System.out.println("\n" + message.toString());
-        if(isMyTurn())
+        if (turn)
             sendCommand(message);
+        else
+            System.err.println("\nNon è il tuo turno.");
     }
 
     /**
@@ -235,46 +261,24 @@ public class ClientSocket{
      * send to Server a TURN message and wait thread until a TURN message return by Server or after 10 seconds.
      * if thread is awaken before 10 seconds but not for a TURN message return, send another TURN request to Server.
      * if thread is awaken cause 10 seconds passed, connection with Server is considered as lost.
-     * @return if is player turn.
      * @throws InterruptedException if thread is interrupted during the waiting.
      */
-    private boolean isMyTurn() throws InterruptedException {
+    private void isMyTurn() throws InterruptedException {
+        synchronized (lock){
+            while (turn || !startGame)
+                lock.wait();
+        }
         try {
-            turn = 0;
             Message message = new Message(MessageType.TURN);
             out.flush();
             out.writeObject(message);
-            long initTime = System.currentTimeMillis();
-            synchronized (lock) {
-                while (turn == 0) {
-                    lock.wait(10000);
-                    switch (turn) {
-                        case 0: {
-                            if (isTimePassed(initTime, System.currentTimeMillis()))
-                                throw new InterruptedException();
-                            else {
-                                out.flush();
-                                out.writeObject(message);
-                            }
-                        }
-                        break;
-                        case 1:
-                            return true;
-                        case 2:
-                            System.out.println("\nNon è il tuo turno");
-                            return false;
-                    }
-                }
-            }
         }
         catch (IOException e) {
             System.err.println("\nClient non più connesso al Server.");
             threadOut.interrupt();
             disconnect();
             System.exit(0);
-            return false;
         }
-        return false;
     }
 
     /**
@@ -293,10 +297,12 @@ public class ClientSocket{
                             lock.notifyAll();
                         }
                     }
-                        break;
+                    break;
                     case START_GAME: {
                         Message_One_Parameter_Int message = (Message_One_Parameter_Int) returnMessage;
                         System.out.println("\nLa partita è iniziata. N° giocatori: " + message.getPar());
+                        startGame = true;
+                        turn = true;
                         synchronized (lock) {
                             lock.notifyAll();
                         }
@@ -317,15 +323,13 @@ public class ClientSocket{
                         break;
                     case TURN: {
                         Message_One_Parameter_Int message = (Message_One_Parameter_Int) returnMessage;
-                        if (message.getPar() == 1)
-                            turn = 1;
-                        else
-                            turn = 2;
+                        if (message.getPar() == 1) turn = true;
+                        else turn = false;
                         synchronized (lock) {
                             lock.notifyAll();
                         }
                     }
-                        break;
+                    break;
                     default:
                         System.out.println("" + returnMessage.toString());
                         synchronized (lock) {
@@ -365,6 +369,8 @@ public class ClientSocket{
                         }
                     }
                 }
+                turn = false;
+                lock.notifyAll();
                 System.out.println("\n" + message.toString() + " è stato eseguito.");
             }
         } catch (IOException e) {
@@ -381,7 +387,7 @@ public class ClientSocket{
      * @return if 10 seconds have passed
      */
     private boolean isTimePassed(long initTime, long currentTime){
-        return ((currentTime - initTime) >= 10000);
+        return ((currentTime - initTime) >= 30000);
     }
 
     /**
