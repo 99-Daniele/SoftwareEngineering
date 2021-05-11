@@ -103,7 +103,7 @@ public class ClientSocket{
             System.out.println("\nInserisci un nickName valido:");
             userInput = stdIn.nextLine();
         }
-        Message message = new Message_One_Parameter_String(MessageType.LOGIN, userInput);
+        Message message = new Message_One_Parameter_String(MessageType.LOGIN, position,  userInput);
         sendMessage(message);
         if(position == 1){
             System.out.println("\nSei il primo giocatore. Quanti giocatori vuoi in partita? (1 - 4)");
@@ -123,7 +123,7 @@ public class ClientSocket{
                     stdIn.next();
                 }
             }
-            Message numPlayerMessage = new Message_One_Parameter_Int(MessageType.NUM_PLAYERS, userInt);
+            Message numPlayerMessage = new Message_One_Parameter_Int(MessageType.NUM_PLAYERS, position, userInt);
             sendMessage(numPlayerMessage);
         }
         else
@@ -198,7 +198,7 @@ public class ClientSocket{
                 stdIn.next();
             }
         }
-        Message message = new Message_One_Parameter_Int(MessageType.BUY_CARD, x);
+        Message message = new Message_One_Parameter_Int(MessageType.BUY_CARD, position, x);
         System.out.println("\n" + message.toString());
         if (turn) {
             sendMessage(message);
@@ -220,7 +220,7 @@ public class ClientSocket{
         stdIn = new Scanner(new InputStreamReader(System.in));
         int x = choseDepot(1);
         int y = choseDepot(2);
-        Message message = new Message_Two_Parameter_Int(MessageType.SWITCH_DEPOT, x, y);
+        Message message = new Message_Two_Parameter_Int(MessageType.SWITCH_DEPOT, position, x, y);
         System.out.println("\n" + message.toString());
         if (turn) {
             sendMessage(message);
@@ -251,7 +251,7 @@ public class ClientSocket{
      */
     private void quit() {
         try {
-            Message message = new Message(MessageType.QUIT);
+            Message message = new Message(MessageType.QUIT, position);
             System.out.println("\n" + message.toString());
             out.flush();
             out.writeObject(message);
@@ -275,7 +275,7 @@ public class ClientSocket{
         }
         try {
             long initTime = System.currentTimeMillis();
-            Message message = new Message_One_Parameter_Int(MessageType.TURN, position);
+            Message message = new Message(MessageType.TURN, position);
             out.flush();
             out.writeObject(message);
             while(true) {

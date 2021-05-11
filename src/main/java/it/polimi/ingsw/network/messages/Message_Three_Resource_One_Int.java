@@ -8,8 +8,8 @@ public class Message_Three_Resource_One_Int extends Message{
     private final Resource resource3;
     private final int par;
 
-    public Message_Three_Resource_One_Int(int clientID, MessageType messageType, Resource resourceDeleted1, Resource resourceDeleted2, Resource resourceObtained, int par) {
-        super(clientID, messageType);
+    public Message_Three_Resource_One_Int( MessageType messageType, int clientID, Resource resourceDeleted1, Resource resourceDeleted2, Resource resourceObtained, int par) {
+        super(messageType, clientID);
         this.resource1 = resourceDeleted1;
         this.resource2 = resourceDeleted2;
         this.resource3 = resourceObtained;

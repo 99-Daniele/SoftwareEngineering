@@ -4,8 +4,8 @@ public class Message_One_Parameter_String extends Message{
 
     private final String par;
 
-    public Message_One_Parameter_String(int clientID,MessageType messageType, String par) {
-        super(clientID,messageType);
+    public Message_One_Parameter_String(MessageType messageType, int clientID, String par) {
+        super(messageType, clientID);
         this.par = par;
     }
 

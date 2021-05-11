@@ -5,8 +5,8 @@ import it.polimi.ingsw.model.market.Marble;
 public class Message_One_Parameter_Marble extends Message{
     private final Marble marble;
 
-    public Message_One_Parameter_Marble(int clientID, MessageType messageType, Marble marble) {
-        super(clientID, messageType);
+    public Message_One_Parameter_Marble(MessageType messageType, int clientID, Marble marble) {
+        super(messageType, clientID);
         this.marble = marble;
     }
 

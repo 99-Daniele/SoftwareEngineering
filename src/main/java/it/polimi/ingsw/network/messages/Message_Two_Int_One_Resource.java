@@ -7,8 +7,8 @@ public class Message_Two_Int_One_Resource extends Message{
     private final Resource resource;
     private final int par2;
 
-    public Message_Two_Int_One_Resource(int clientID, MessageType messageType,int chosenLeaderCard, Resource resourceObtained, int warehouse) {
-        super(clientID, messageType);
+    public Message_Two_Int_One_Resource(MessageType messageType,int clientID,int chosenLeaderCard, Resource resourceObtained, int warehouse) {
+        super( messageType,clientID);
         this.par1 = chosenLeaderCard;
         this.resource = resourceObtained;
         this.par2 = warehouse;

@@ -7,8 +7,8 @@ public class Message_Five_Parameter_Int extends Message{
     private final int par4;
     private final int par5;
 
-    public Message_Five_Parameter_Int(int clientID, MessageType messageType, int par1, int par2, int par3, int par4, int par5) {
-        super(clientID, messageType);
+    public Message_Five_Parameter_Int(MessageType messageType, int clientID,  int par1, int par2, int par3, int par4, int par5) {
+        super( messageType, clientID);
         this.par1 = par1;
         this.par2 = par2;
         this.par3 = par3;

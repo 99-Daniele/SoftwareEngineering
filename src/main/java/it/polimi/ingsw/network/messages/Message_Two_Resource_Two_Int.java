@@ -8,8 +8,8 @@ public class Message_Two_Resource_Two_Int extends Message{
     private final Resource resource2;
     private final int amount2;
 
-    public Message_Two_Resource_Two_Int(int clientID, MessageType messageType, Resource resource1, int amount1, Resource resource2, int amount2) {
-        super(clientID, messageType);
+    public Message_Two_Resource_Two_Int( MessageType messageType, int clientID,Resource resource1, int amount1, Resource resource2, int amount2) {
+        super(messageType, clientID);
         this.resource1 = resource1;
         this.amount1 = amount1;
         this.resource2 = resource2;

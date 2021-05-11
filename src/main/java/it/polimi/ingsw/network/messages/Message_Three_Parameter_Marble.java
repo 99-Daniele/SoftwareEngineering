@@ -9,8 +9,8 @@ public class Message_Three_Parameter_Marble extends Message{
     private final Marble marble2;
     private final Marble marble3;
 
-    public Message_Three_Parameter_Marble(int clientID, MessageType messageType, Marble marble1, Marble marble2, Marble marble3) {
-        super(clientID, messageType);
+    public Message_Three_Parameter_Marble( MessageType messageType, int clientID, Marble marble1, Marble marble2, Marble marble3) {
+        super(messageType, clientID);
         this.marble1 = marble1;
         this.marble2 = marble2;
         this.marble3 = marble3;
