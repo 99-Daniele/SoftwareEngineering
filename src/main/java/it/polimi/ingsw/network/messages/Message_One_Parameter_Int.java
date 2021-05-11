@@ -4,8 +4,8 @@ public class Message_One_Parameter_Int extends Message {
 
     private final int par;
 
-    public Message_One_Parameter_Int(MessageType messageType, int par) {
-        super(messageType);
+    public Message_One_Parameter_Int(int clientID,MessageType messageType, int par) {
+        super(clientID,messageType);
         this.par = par;
     }
 
