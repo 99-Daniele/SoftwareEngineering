@@ -82,7 +82,7 @@ public class ClientSocket{
             System.out.println("\nInserisci un nickName valido:");
             userInput = stdIn.nextLine();
         }
-        Message message = new Message_One_Parameter_String(MessageType.LOGIN, userInput);
+        Message message = new Message_One_Parameter_String(position,MessageType.LOGIN, userInput);
         sendCommand(message);
         if(position == 1){
             System.out.println("\nSei il primo giocatore. Quanti giocatori vuoi in partita? (1 - 4)");
@@ -102,7 +102,7 @@ public class ClientSocket{
                     stdIn.next();
                 }
             }
-            Message numPlayerMessage = new Message_One_Parameter_Int(MessageType.NUM_PLAYERS, userInt);
+            Message numPlayerMessage = new Message_One_Parameter_Int(position,MessageType.NUM_PLAYERS, userInt);
             sendCommand(numPlayerMessage);
         }
         else
@@ -173,7 +173,7 @@ public class ClientSocket{
                 stdIn.next();
             }
         }
-        Message message = new Message_One_Parameter_Int(MessageType.BUY_CARD, x);
+        Message message = new Message_One_Parameter_Int(position,MessageType.BUY_CARD, x);
         System.out.println("\n" + message.toString());
         if (isMyTurn())
             sendCommand(message);
@@ -210,7 +210,7 @@ public class ClientSocket{
                 stdIn.next();
             }
         }
-        Message message = new Message_Two_Parameter_Int(MessageType.SWITCH_DEPOT, x, y);
+        Message message = new Message_Two_Parameter_Int(position,MessageType.SWITCH_DEPOT, x, y);
         System.out.println("\n" + message.toString());
         if(isMyTurn())
             sendCommand(message);
@@ -221,7 +221,7 @@ public class ClientSocket{
      */
     private void quit() {
         try {
-            Message message = new Message(MessageType.QUIT);
+            Message message = new Message(position,MessageType.QUIT);
             System.out.println("\n" + message.toString());
             out.flush();
             out.writeObject(message);
@@ -241,7 +241,7 @@ public class ClientSocket{
     private boolean isMyTurn() throws InterruptedException {
         try {
             turn = 0;
-            Message message = new Message(MessageType.TURN);
+            Message message = new Message(position,MessageType.TURN);
             out.flush();
             out.writeObject(message);
             long initTime = System.currentTimeMillis();
