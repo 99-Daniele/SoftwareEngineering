@@ -20,7 +20,7 @@ public class Client{
     private void startClient() {
         try {
             ClientSocket clientSocket = new ClientSocket(new Socket(hostName, portNumber));
-            System.out.println("Accepted by Server");
+            System.out.println("Accettato dal Server");
             clientSocket.start();
         } catch (UnknownHostException e) {
             System.err.println("Non conosco l'host " + hostName);
