@@ -8,6 +8,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 /**
  * threadIn is the thread which receive input from System.in
@@ -34,6 +35,7 @@ public class ClientSocket{
     private boolean quit;
     private boolean ok;
     private boolean turn;
+    private boolean startGame;
     private final Object lock = new Object();
 
     public ClientSocket(Socket socket) throws IOException {
@@ -42,7 +44,8 @@ public class ClientSocket{
         this.in = new ObjectInputStream(socket.getInputStream());
         this.quit = false;
         this.ok = false;
-        this.turn = true;
+        this.turn = false;
+        this.startGame = false;
     }
 
     /**
@@ -234,8 +237,7 @@ public class ClientSocket{
         System.out.println("\nScegli il " + depot +"° deposito:");
         while(true) {
             try {
-                int x = stdIn.nextInt();
-                return x;
+                return stdIn.nextInt();
             } catch (InputMismatchException e) {
                 System.err.println("\nInserisci un numero.");
                 System.out.println("\nScegli il primo deposito:");
@@ -267,11 +269,10 @@ public class ClientSocket{
      */
     private  void isMyTurn() throws InterruptedException {
         synchronized (lock) {
-            while (turn) {
+            while (turn && !startGame) {
                 lock.wait();
             }
         }
-        System.out.println("TURN");
         try {
             long initTime = System.currentTimeMillis();
             Message message = new Message_One_Parameter_Int(MessageType.TURN, position);
@@ -306,6 +307,7 @@ public class ClientSocket{
         try {
             while(true) {
                 Message returnMessage = (Message) in.readObject();
+                System.out.println(returnMessage.toString());
                 switch (returnMessage.getMessageType()) {
                     case LOGIN: {
                         Message_One_Parameter_Int message = (Message_One_Parameter_Int) returnMessage;
@@ -318,9 +320,11 @@ public class ClientSocket{
                     break;
                     case START_GAME: {
                         Message_One_Parameter_Int message = (Message_One_Parameter_Int) returnMessage;
+                        TimeUnit.SECONDS.sleep(1);
                         System.out.println("\nLa partita è iniziata. N° giocatori: " + message.getPar());
                         ok = true;
                         turn = false;
+                        startGame = true;
                         synchronized (lock) {
                             lock.notifyAll();
                         }
@@ -356,7 +360,7 @@ public class ClientSocket{
                         break;
                 }
             }
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
         } catch (ClassNotFoundException e) {
             System.err.println("\nValore di ritorno errato.");
         }
