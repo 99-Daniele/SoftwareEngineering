@@ -1,9 +1,13 @@
 package it.polimi.ingsw;
 
+import it.polimi.ingsw.network.messages.Message;
+import it.polimi.ingsw.network.messages.MessageType;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class PlayerServer implements Runnable {
 
@@ -30,7 +34,14 @@ public class PlayerServer implements Runnable {
             virtualView.run();
             disconnect();
         } catch (IOException e) {
-            e.printStackTrace();
+            Message quitMessage = new Message(MessageType.QUIT, 0);
+            try {
+                out.flush();
+                out.writeObject(quitMessage);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+            System.out.println("QUIT");
             disconnect();
         } catch (ClassNotFoundException | ClassCastException e) {
             e.printStackTrace();

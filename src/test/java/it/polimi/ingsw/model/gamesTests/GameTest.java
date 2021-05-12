@@ -246,7 +246,7 @@ class GameTest {
     @Test
     void getCasualLeaderCards(){
 
-        Game game = new Game(4);;
+        Game game = new Game(4);
 
         ArrayList<LeaderCard> cards = game.casualLeaderCards();
         assertNotSame(cards.get(0), cards.get(1));
@@ -706,7 +706,7 @@ class GameTest {
     void correctActivateStandardProductionPower()
             throws AlreadyTakenNicknameException, InsufficientResourceException, ImpossibleDevelopmentCardAdditionException, NoSuchProductionPowerException {
 
-        Game game = new Game(4);;
+        Game game = new Game(4);
         game.createPlayer("Regina");
         game.increaseWarehouse(Resource.STONE);
         assertEquals(1, game.getPlayer(0).sumTotalResource());
@@ -980,9 +980,9 @@ class GameTest {
         assertEquals(0, game.getPlayer(2).sumTotalResource());
         assertEquals(0, game.getPlayer(3).sumTotalResource());
 
-        PlayerBoard winner = game.endGame();
+        int winner = game.endGame();
 
-        assertSame("Luca", winner.getNickname());
+        assertSame("Luca", game.getPlayer(winner).getNickname());
 
         Cost c1 = new Cost();
         Cost c2 = new Cost();
@@ -1002,8 +1002,8 @@ class GameTest {
         assertEquals(0, game.getPlayer(2).sumTotalResource());
         assertEquals(1, game.getPlayer(3).sumTotalResource());
 
-        PlayerBoard winner2 = game.endGame();
+        int winner2 = game.endGame();
 
-        assertSame("Antonio", winner2.getNickname());
+        assertSame("Antonio", game.getPlayer(winner2).getNickname());
     }
 }

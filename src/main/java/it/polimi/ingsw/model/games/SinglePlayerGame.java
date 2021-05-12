@@ -132,10 +132,10 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame {
      * @return player if he win the SinglePlayerGame
      */
     @Override
-    public PlayerBoard endGame() {
+    public int endGame() {
         if(getCurrentPlayer().haveSevenDevelopmentCards() || getCurrentPlayer().getFaithPoints() >= 20)
-            return getCurrentPlayer();
+            return 0;
         else
-            return null;
+            return 1;
     }
 }

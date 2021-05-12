@@ -6,18 +6,18 @@ import it.polimi.ingsw.network.messages.Message_One_Parameter_Int;
 import it.polimi.ingsw.network.messages.Message_One_Parameter_String;
 
 import java.io.IOException;
+import java.io.InterruptedIOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.SocketException;
 import java.util.Observable;
 import java.util.Observer;
-
-import java.io.PrintWriter;
-import java.util.Scanner;
 
 public class VirtualView extends Observable implements View, Observer, Runnable {
 
 
     private Object lock = new Object();
+    private boolean connected;
     private ObjectInputStream in;
     private ObjectOutputStream out;
     private String nickName;
@@ -26,6 +26,7 @@ public class VirtualView extends Observable implements View, Observer, Runnable 
     public VirtualView(ObjectInputStream in, ObjectOutputStream out){
         this.in=in;
         this.out=out;
+        this.connected = true;
     }
 
     public void addController(ControllerGame controllerGame){
@@ -34,7 +35,7 @@ public class VirtualView extends Observable implements View, Observer, Runnable 
 
     @Override
     public void run(){
-        while (true) {
+        while (connected) {
             try {
                 Message message = (Message) in.readObject();
                 if (receiveMessage(message)) {
@@ -42,17 +43,22 @@ public class VirtualView extends Observable implements View, Observer, Runnable 
                     break;
                 }
             } catch (IOException e) {
-                if (nickName == null) {
-                    System.err.println("Client disconesso brutalmente.");
-                } else {
-                    System.err.println(nickName + " disconesso brutalmente.");
+                if(connected) {
+                    if (nickName == null) {
+                        System.err.println("Client disconesso brutalmente.");
+                    } else {
+                        System.err.println(nickName + " disconesso brutalmente.");
+                    }
+                    setChanged();
+                    notifyObservers(new Message(MessageType.QUIT, position));
                 }
-                setChanged();
-                notifyObservers(new Message(MessageType.QUIT, position));
+                else
+                    System.out.println(nickName + " si è disconesso.\n");
                 break;
             } catch (ClassNotFoundException | ClassCastException e) {
                 System.err.println(nickName + " invia messaggi con formato errato.");
             }
+
         }
     }
 
@@ -62,20 +68,22 @@ public class VirtualView extends Observable implements View, Observer, Runnable 
         return (message.getMessageType() == MessageType.QUIT);
     }
 
-    private void disconnect(){
-        try {
-            in.close();
-            out.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void endGame() throws IOException {
-        Message quitMessage = new Message(MessageType.QUIT, position);
+    public void quit(int clientID) throws IOException {
+        Message quitMessage = new Message(MessageType.QUIT, clientID);
         out.flush();
         out.writeObject(quitMessage);
-        disconnect();
+        System.out.println("QUIT");
+    }
+
+    public void endGame(Message message) throws IOException {
+        try {
+            out.flush();
+            out.writeObject(message);
+            System.out.println("END_GAME");
+            in.close();
+            out.close();
+        }catch (SocketException e){}
+        connected = false;
     }
 
     @Override
@@ -168,5 +176,14 @@ public class VirtualView extends Observable implements View, Observer, Runnable 
 
     @Override
     public void update(Observable o, Object arg) {
+        Message message = (Message) arg;
+        try {
+            switch (message.getMessageType()) {
+                case END_GAME:
+                    endGame(message);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

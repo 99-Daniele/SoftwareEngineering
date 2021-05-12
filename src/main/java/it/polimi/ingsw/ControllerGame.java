@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.TimeUnit;
 
 public class ControllerGame implements Observer{
 
@@ -44,6 +45,7 @@ public class ControllerGame implements Observer{
 
     public synchronized void waitPlayers() {
         if (views.size() == game.getNumOfPlayers()) {
+            System.out.println("\nInizia nuova partita\n");
             notifyAll();
         } else {
             try {
@@ -75,7 +77,9 @@ public class ControllerGame implements Observer{
                 case TURN:
                     isMyTurn(m);
                     break;
-                default:
+                case QUIT:
+                    endGame(m);
+                    break;
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -83,9 +87,16 @@ public class ControllerGame implements Observer{
 
     }
 
-    private void endGame() throws IOException {
+    private void endGame(Message message) throws IOException {
         for(View view: views)
-            view.endGame();
+            view.quit(message.getClientID());
+        game.endGame();
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("\nPartita finita\n");
     }
 
 

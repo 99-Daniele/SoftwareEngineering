@@ -262,7 +262,6 @@ public class ClientSocket{
     private void quit() {
         try {
             Message message = new Message(MessageType.QUIT, position);
-            System.out.println("\n" + message.toString());
             out.flush();
             out.writeObject(message);
             quit = true;
@@ -317,6 +316,7 @@ public class ClientSocket{
         try {
             while(true) {
                 Message returnMessage = (Message) in.readObject();
+                System.out.println(returnMessage.toString());
                 switch (returnMessage.getMessageType()) {
                     case LOGIN: {
                         position = returnMessage.getClientID();
@@ -359,8 +359,16 @@ public class ClientSocket{
                     }
                     break;
                     case QUIT:
-                        System.err.println("\nUn altro giocatore si è disconnesso. La partita è finita.");
+                        System.out.println("\nUn altro giocatore si è disconnesso. La partita è finita.");
+                        break;
+                    case END_GAME:
+                        Message_Two_Parameter_Int message = (Message_Two_Parameter_Int) returnMessage;
+                        System.out.println("\nIl vincitore è il giocatore " + message.getClientID()
+                        + " che ha totalizzato " + message.getPar1() + " punti vittoria e " + message.getPar2()
+                        + " risorse totali.");
                         quit = true;
+                        disconnect();
+                        System.exit(1);
                         break;
                     default:
                         System.out.println("" + returnMessage.toString());
@@ -432,9 +440,8 @@ public class ClientSocket{
      */
     private void disconnect() {
         try {
-            out.close();
             in.close();
-            socket.close();
+            out.close();
         } catch (IOException e) {
             System.exit(0);
         }

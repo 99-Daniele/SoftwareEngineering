@@ -10,5 +10,5 @@ public interface View{
 
     void myTurn(boolean turn) throws IOException;
 
-    void endGame() throws IOException;
+    void quit(int clientID) throws IOException;
 }

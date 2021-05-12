@@ -86,9 +86,9 @@ class SinglePlayerGameTest {
         singlePlayerGame.getCurrentPlayer().buyDevelopmentCard(developmentCard7, 3, 1);
         assertTrue(singlePlayerGame.isEndGame());
 
-        PlayerBoard winner = singlePlayerGame.endGame();
-        assertNotNull(winner);
-        assertSame("Giorgio", winner.getNickname());
+        int winner = singlePlayerGame.endGame();
+        assertEquals(0, winner);
+        assertSame("Giorgio", singlePlayerGame.getPlayer(winner).getNickname());
         assertTrue(singlePlayerGame.getCurrentPlayer().haveSevenDevelopmentCards());
     }
 
@@ -113,9 +113,9 @@ class SinglePlayerGameTest {
         assertTrue(singlePlayerGame.getFaithTrack().zeroRemainingPope());
         assertTrue(singlePlayerGame.isEndGame());
 
-        PlayerBoard winner = singlePlayerGame.endGame();
-        assertNotNull(winner);
-        assertSame("Giorgio", winner.getNickname());
+        int winner = singlePlayerGame.endGame();
+        assertEquals(0, winner);
+        assertSame("Giorgio", singlePlayerGame.getPlayer(winner).getNickname());
         assertTrue(singlePlayerGame.getFaithTrack().zeroRemainingPope());
     }
 
@@ -128,7 +128,7 @@ class SinglePlayerGameTest {
         SinglePlayerGame singlePlayerGame = new SinglePlayerGame();
         singlePlayerGame.createPlayer("Giorgio");
 
-        PlayerBoard winner = singlePlayerGame.endGame();
-        assertNull(winner);
+        int winner = singlePlayerGame.endGame();
+        assertEquals(1, winner);
     }
 }

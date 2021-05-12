@@ -19,6 +19,10 @@ import it.polimi.ingsw.model.leaderCards.*;
 import it.polimi.ingsw.model.market.*;
 import it.polimi.ingsw.model.player.*;
 import it.polimi.ingsw.model.resourceContainers.*;
+import it.polimi.ingsw.network.messages.Message;
+import it.polimi.ingsw.network.messages.MessageType;
+import it.polimi.ingsw.network.messages.Message_One_Parameter_Int;
+import it.polimi.ingsw.network.messages.Message_Two_Parameter_Int;
 
 /**
  * Game is main class which handle all different phases of a match.
@@ -31,7 +35,7 @@ public class Game extends Observable implements LightGame{
     private FaithTrack faithTrack;
     private final int numOfPlayers;
     private int currentPlayer;
-    private final ArrayList<LeaderCard> leaderCards = new ArrayList<>(16);;
+    private final ArrayList<LeaderCard> leaderCards = new ArrayList<>(16);
 
     /**
      * @param numOfPlayers is the chosen number of players.
@@ -542,27 +546,30 @@ public class Game extends Observable implements LightGame{
     }
 
     /**
-     * @return the winner of the game.
+     * @return the position of the winner of the game.
      * this method find the player with more victory points.
      * in case more players have both max victory points, find which one has more amount of resources.
      */
-    public PlayerBoard endGame() {
+    public int endGame() {
         int maxVictoryPoints = 0;
         int maxNumOfResources = 0;
-        PlayerBoard winner = players.get(0);
-        for (PlayerBoard player : players) {
-            if (player.sumVictoryPoints() > maxVictoryPoints) {
-                maxVictoryPoints = player.sumVictoryPoints();
-                maxNumOfResources = player.sumTotalResource();
-                winner = player;
+        int winner = 0;
+        for (int i = 0; i < players.size(); i++) {
+            if (players.get(i).sumVictoryPoints() > maxVictoryPoints) {
+                maxVictoryPoints = players.get(i).sumVictoryPoints();
+                maxNumOfResources = players.get(i).sumTotalResource();
+                winner = i;
             }
-            else if(player.sumVictoryPoints() == maxVictoryPoints){
-                if(player.sumTotalResource() > maxNumOfResources){
-                    maxNumOfResources = player.sumTotalResource();
-                    winner = player;
+            else if(players.get(i).sumVictoryPoints() == maxVictoryPoints){
+                if(players.get(i).sumTotalResource() > maxNumOfResources){
+                    maxNumOfResources = players.get(i).sumTotalResource();
+                    winner = i;
                 }
             }
         }
+        Message endGame = new Message_Two_Parameter_Int(MessageType.END_GAME, winner +1, maxVictoryPoints, maxNumOfResources);
+        setChanged();
+        notifyObservers(endGame);
         return winner;
     }
 

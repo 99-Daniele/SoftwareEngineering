@@ -11,7 +11,7 @@ public class Message_One_Parameter_String extends Message{
 
     @Override
     public String toString() {
-        return super.toString() + par;
+        return super.toString() + " -> "  + par;
     }
 
     public String getPar() {
