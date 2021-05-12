@@ -1,19 +1,15 @@
 package it.polimi.ingsw;
 
-import it.polimi.ingsw.network.messages.Message;
-import it.polimi.ingsw.network.messages.MessageType;
-import it.polimi.ingsw.network.messages.Message_One_Parameter_Int;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class PlayerServer implements Runnable {
 
     private final Socket socket;
+    ObjectInputStream in;
+    ObjectOutputStream out;
     private ControllerGame controllerGame;
 
     public PlayerServer(Socket socket) {
@@ -21,28 +17,34 @@ public class PlayerServer implements Runnable {
     }
 
     public void run() {
+        try {
+            in = new ObjectInputStream(socket.getInputStream());
+            out = new ObjectOutputStream(socket.getOutputStream());
+            VirtualView virtualView = new VirtualView(in, out);
+            String nickname = virtualView.getNickname();
+            PosControllerGame posControllerGame = Connection.ConnectionPlayers(virtualView, nickname);
+            controllerGame = posControllerGame.getControllerGame();
+            virtualView.position(posControllerGame.getPosition());
+            controllerGame.waitPlayers();
+            virtualView.pronto(controllerGame.getNumPlayers());
+            virtualView.run();
+            disconnect();
+        } catch (IOException e) {
+            e.printStackTrace();
+            disconnect();
+        } catch (ClassNotFoundException | ClassCastException e) {
+            e.printStackTrace();
+        }
+    }
 
-        Scanner in = null;
+    private void disconnect() {
         try {
-            in = new Scanner(socket.getInputStream());
+            if (!socket.isClosed()) {
+                in.close();
+                out.close();
+                socket.close();
+            }
         } catch (IOException e) {
-            e.printStackTrace();
-        }
-        PrintWriter out = null;
-        try {
-            out = new PrintWriter(socket.getOutputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        VirtualView virtualView = new VirtualView(in, out);
-        String nickname = virtualView.nickname();
-        PosControllerGame posControllerGame= Connection.ConnectionPlayers(virtualView, nickname);
-        controllerGame= posControllerGame.getControllerGame();
-        virtualView.position(posControllerGame.getPosition());
-        controllerGame.waitPlayers();
-        virtualView.pronto();
-        while (true){
-            virtualView.start();
         }
     }
 }

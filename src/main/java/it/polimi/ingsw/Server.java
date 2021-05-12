@@ -24,7 +24,7 @@ public class Server {
                 try {
                     Socket socket = serverSocket.accept();
                     System.out.println("\nAccettato nuovo Client\n");
-                    Thread thread=new Thread(new PlayerServer(socket));
+                    Thread thread = new Thread(new PlayerServer(socket));
                     thread.start();
                 } catch (IOException e) {
                     System.err.println(e.getMessage()); //si attiva se serversocket viene chiuso

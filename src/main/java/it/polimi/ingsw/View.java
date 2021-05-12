@@ -1,12 +1,14 @@
 package it.polimi.ingsw;
 
-import java.io.PrintWriter;
-import java.util.Scanner;
+import java.io.IOException;
 
 public interface View{
-    String nickname();
 
-    void nicknameTaken();
+    String getNickname() throws IOException;
 
-    void myTurn(boolean turn);
+    void nicknameTaken() throws IOException;
+
+    void myTurn(boolean turn) throws IOException;
+
+    void endGame() throws IOException;
 }

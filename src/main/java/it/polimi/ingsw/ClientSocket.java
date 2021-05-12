@@ -26,7 +26,7 @@ public class ClientSocket{
 
     private Thread threadIn;
     private Thread threadOut;
-    private Timer turnTimer = new Timer();
+    private final Timer turnTimer = new Timer();
     private final Socket socket;
     private final ObjectOutputStream out;
     private final ObjectInputStream in;
@@ -58,10 +58,11 @@ public class ClientSocket{
             threadIn = new Thread(() -> {
                 try {
                     login();
+                    waiting();
                     while (!quit)
                         turnAction();
-                    System.out.println("\nDisconnessione.");
                     disconnect();
+                    System.out.println("\nDisconnessione.");
                     threadOut.interrupt();
                     System.exit(1);
                 } catch (InterruptedException e) {
@@ -126,8 +127,17 @@ public class ClientSocket{
             Message numPlayerMessage = new Message_One_Parameter_Int(MessageType.NUM_PLAYERS, position, userInt);
             sendMessage(numPlayerMessage);
         }
-        else
-            System.out.println("\nSei il giocatore in posizione " + position);
+        else if(!startGame)
+            System.out.println("\nSei entrato in una partita che sta per cominciare.\nSei il giocatore in posizione " + position);
+    }
+
+    private void waiting(){
+        try {
+            TimeUnit.SECONDS.sleep(1);
+            if (!startGame)
+                System.out.println("\nIn attesa di altri giocatori...");
+        } catch (InterruptedException e) {
+        }
     }
 
     /**
@@ -269,7 +279,7 @@ public class ClientSocket{
      */
     private  void isMyTurn() throws InterruptedException {
         synchronized (lock) {
-            while (turn && !startGame) {
+            while (turn || !startGame) {
                 lock.wait();
             }
         }
@@ -307,11 +317,9 @@ public class ClientSocket{
         try {
             while(true) {
                 Message returnMessage = (Message) in.readObject();
-                System.out.println(returnMessage.toString());
                 switch (returnMessage.getMessageType()) {
                     case LOGIN: {
-                        Message_One_Parameter_Int message = (Message_One_Parameter_Int) returnMessage;
-                        position = message.getPar();
+                        position = returnMessage.getClientID();
                         ok = true;
                         synchronized (lock) {
                             lock.notifyAll();
@@ -320,9 +328,7 @@ public class ClientSocket{
                     break;
                     case START_GAME: {
                         Message_One_Parameter_Int message = (Message_One_Parameter_Int) returnMessage;
-                        TimeUnit.SECONDS.sleep(1);
                         System.out.println("\nLa partita è iniziata. N° giocatori: " + message.getPar());
-                        ok = true;
                         turn = false;
                         startGame = true;
                         synchronized (lock) {
@@ -352,6 +358,10 @@ public class ClientSocket{
                         }
                     }
                     break;
+                    case QUIT:
+                        System.err.println("\nUn altro giocatore si è disconnesso. La partita è finita.");
+                        quit = true;
+                        break;
                     default:
                         System.out.println("" + returnMessage.toString());
                         synchronized (lock) {
@@ -360,7 +370,7 @@ public class ClientSocket{
                         break;
                 }
             }
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
         } catch (ClassNotFoundException e) {
             System.err.println("\nValore di ritorno errato.");
         }
