@@ -2,16 +2,13 @@ package it.polimi.ingsw.network.messages;
 
 import it.polimi.ingsw.model.market.Marble;
 
-import java.util.Arrays;
-
 public class Message_Four_Parameter_Marble extends Message{
     private final Marble marble1;
     private final Marble marble2;
     private final Marble marble3;
     private final Marble marble4;
 
-    public Message_Four_Parameter_Marble(MessageType messageType, int clientID,
-                                         Marble marble1, Marble marble2, Marble marble3, Marble marble4) {
+    public Message_Four_Parameter_Marble(MessageType messageType, int clientID, Marble marble1, Marble marble2, Marble marble3, Marble marble4) {
         super(messageType, clientID);
         this.marble1 = marble1;
         this.marble2 = marble2;
@@ -37,11 +34,11 @@ public class Message_Four_Parameter_Marble extends Message{
 
     @Override
     public String toString() {
-        return "Message_Three_Vector_Int{" +
+        return "Message_Four_Parameter_Marble{" +
                 "marble1=" + marble1 +
                 ", marble2=" + marble2 +
                 ", marble3=" + marble3 +
-                ", marble3=" + marble4 +
+                ", marble4=" + marble4 +
                 '}';
     }
 }

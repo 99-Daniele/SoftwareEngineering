@@ -16,16 +16,20 @@ public class Message_Three_Resource_One_Int extends Message{
         this.par = par;
     }
 
-    public Resource getResourceDeleted1() {
+    public Resource getResource1() {
         return resource1;
     }
 
-    public Resource getResourceDeleted2() {
+    public Resource getResource2() {
         return resource2;
     }
 
-    public Resource getResourceObtained() {
+    public Resource getResource3() {
         return resource3;
+    }
+
+    public int getPar() {
+        return par;
     }
 
     @Override
