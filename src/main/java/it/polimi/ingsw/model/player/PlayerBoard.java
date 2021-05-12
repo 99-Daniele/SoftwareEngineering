@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * PlayerBoard is the board of the player. Contains his nickname, his warehouse, his strongbox, his owned DevelopmentCards,
  * his owned LeaderCards and summarize of his VictoryPoints.
  */
-public class PlayerBoard extends SimplePlayerBoard {
+public class PlayerBoard extends SimplePlayerBoard{
 
     private final String nickname;
     private final Warehouse warehouse;
@@ -41,6 +41,7 @@ public class PlayerBoard extends SimplePlayerBoard {
     public String getNickname() {
         return nickname;
     }
+
 
     public VictoryPoints getVictoryPoints() {
         return victoryPoints;

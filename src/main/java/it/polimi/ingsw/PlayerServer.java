@@ -38,10 +38,7 @@ public class PlayerServer implements Runnable {
             try {
                 out.flush();
                 out.writeObject(quitMessage);
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
-            System.out.println("QUIT");
+            } catch (IOException ioException) { }
             disconnect();
         } catch (ClassNotFoundException | ClassCastException e) {
             e.printStackTrace();

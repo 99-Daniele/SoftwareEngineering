@@ -4,10 +4,12 @@ import it.polimi.ingsw.exceptions.WrongParametersException;
 
 import it.polimi.ingsw.model.resourceContainers.Resource;
 
+import java.io.Serializable;
+
 /**
  * Market is the market of Game.
  */
-public class Market {
+public class Market implements Serializable {
 
     private static final int row = 3;
     private static final int column = 4;
@@ -115,6 +117,12 @@ public class Market {
         return marketCopy;
     }
 
+    /**
+     * @return the external marble.
+     */
+    public Marble getExternalMarble() {
+        return externalMarble;
+    }
 
     /**
      * this method allows the caller to slide the selected column(of the market)of one position upwards,

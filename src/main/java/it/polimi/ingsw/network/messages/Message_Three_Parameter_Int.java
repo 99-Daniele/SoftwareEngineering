@@ -1,6 +1,7 @@
 package it.polimi.ingsw.network.messages;
 
 public class Message_Three_Parameter_Int extends Message{
+
     private final int par1;
     private final int par2;
     private final int par3;
@@ -12,15 +13,15 @@ public class Message_Three_Parameter_Int extends Message{
         this.par3 = par3;
     }
 
-    public int getDeckRow() {
+    public int getPar1() {
         return par1;
     }
 
-    public int getDeckColumn() {
+    public int getPar2() {
         return par2;
     }
 
-    public int isWarehouse() {
+    public int getPar3() {
         return par3;
     }
 

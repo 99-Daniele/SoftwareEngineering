@@ -39,21 +39,17 @@ public class VirtualView extends Observable implements View, Observer, Runnable 
             try {
                 Message message = (Message) in.readObject();
                 if (receiveMessage(message)) {
-                    System.out.println(nickName + " si è disconesso.\n");
+                    System.out.println(nickName + " si è disconnesso.\n");
                     break;
                 }
             } catch (IOException e) {
                 if(connected) {
-                    if (nickName == null) {
-                        System.err.println("Client disconesso brutalmente.");
-                    } else {
-                        System.err.println(nickName + " disconesso brutalmente.");
-                    }
+                    System.err.println(nickName + " disconnesso brutalmente.");
                     setChanged();
                     notifyObservers(new Message(MessageType.QUIT, position));
                 }
                 else
-                    System.out.println(nickName + " si è disconesso.\n");
+                    System.out.println(nickName + " si è disconnesso.\n");
                 break;
             } catch (ClassNotFoundException | ClassCastException e) {
                 System.err.println(nickName + " invia messaggi con formato errato.");
@@ -70,16 +66,16 @@ public class VirtualView extends Observable implements View, Observer, Runnable 
 
     public void quit(int clientID) throws IOException {
         Message quitMessage = new Message(MessageType.QUIT, clientID);
-        out.flush();
-        out.writeObject(quitMessage);
-        System.out.println("QUIT");
+        try {
+            out.flush();
+            out.writeObject(quitMessage);
+        }catch (SocketException e){}
     }
 
     public void endGame(Message message) throws IOException {
         try {
             out.flush();
             out.writeObject(message);
-            System.out.println("END_GAME");
             in.close();
             out.close();
         }catch (SocketException e){}
@@ -87,7 +83,7 @@ public class VirtualView extends Observable implements View, Observer, Runnable 
     }
 
     @Override
-    public String getNickname() throws IOException{
+    public String getNickname() throws IOException {
         while (true) {
             try {
                 Message_One_Parameter_String loginMessage = (Message_One_Parameter_String) in.readObject();
@@ -95,49 +91,61 @@ public class VirtualView extends Observable implements View, Observer, Runnable 
                 nickName = loginMessage.getPar();
                 break;
             } catch (ClassCastException | ClassNotFoundException e) {
+            }  catch (IOException e) {
+                System.err.println("Client disconnesso brutalmente.");
+                throw new IOException();
             }
         }
         return nickName;
     }
 
     public void nicknameTaken() throws IOException {
-        Message errMessage = new Message_One_Parameter_String(MessageType.ERR, position, "NickName già scelto");
-        out.flush();
-        out.writeObject(errMessage);
+        try {
+            Message errMessage = new Message_One_Parameter_String(MessageType.ERR, position, "NickName già scelto");
+            out.flush();
+            out.writeObject(errMessage);
+        } catch (IOException e) {
+            System.err.println("Client disconnesso brutalmente.");
+            throw new IOException();
+        }
     }
 
-    public int getNumberPlayers() throws IOException{
-        Message message = new Message(MessageType.LOGIN, 1);
-        out.flush();
-        out.writeObject(message);
-        while (true) {
-            try {
-                Message_One_Parameter_Int loginMessage = (Message_One_Parameter_Int) in.readObject();
-                System.out.println(loginMessage.toString());
-                if(loginMessage.getPar() >= 1 && loginMessage.getPar() <= 4 &&
-                        loginMessage.getMessageType() == MessageType.NUM_PLAYERS) {
-                    message = new Message(MessageType.OK, 1);
-                    out.flush();
-                    out.writeObject(message);
-                    return loginMessage.getPar();
-                }
-                else {
-                    Message errMessage;
-                    if (loginMessage.getMessageType() != MessageType.NUM_PLAYERS) {
-                        errMessage = new Message_One_Parameter_String(MessageType.ERR, 1, "Inserisci numero di giocatori");
+    public int getNumberPlayers() throws IOException {
+        try {
+            Message message = new Message(MessageType.LOGIN, 1);
+            out.flush();
+            out.writeObject(message);
+            while (true) {
+                try {
+                    Message_One_Parameter_Int loginMessage = (Message_One_Parameter_Int) in.readObject();
+                    System.out.println(loginMessage.toString());
+                    if (loginMessage.getPar() >= 1 && loginMessage.getPar() <= 4 &&
+                            loginMessage.getMessageType() == MessageType.NUM_PLAYERS) {
+                        message = new Message(MessageType.OK, 1);
+                        out.flush();
+                        out.writeObject(message);
+                        return loginMessage.getPar();
                     } else {
-                        errMessage = new Message_One_Parameter_String(MessageType.ERR, 1, "Numero non valido");
+                        Message errMessage;
+                        if (loginMessage.getMessageType() != MessageType.NUM_PLAYERS) {
+                            errMessage = new Message_One_Parameter_String(MessageType.ERR, 1, "Inserisci numero di giocatori");
+                        } else {
+                            errMessage = new Message_One_Parameter_String(MessageType.ERR, 1, "Numero non valido");
+                        }
+                        out.flush();
+                        out.writeObject(errMessage);
+                        loginMessage = (Message_One_Parameter_Int) in.readObject();
+                        System.out.println(loginMessage.toString());
                     }
+                } catch (ClassNotFoundException | ClassCastException e) {
+                    Message_One_Parameter_String errMessage = new Message_One_Parameter_String(MessageType.ERR, 1, "Inserisci numero di giocatori");
                     out.flush();
                     out.writeObject(errMessage);
-                    loginMessage = (Message_One_Parameter_Int) in.readObject();
-                    System.out.println(loginMessage.toString());
                 }
-            } catch (ClassNotFoundException | ClassCastException e) {
-                Message_One_Parameter_String errMessage = new Message_One_Parameter_String(MessageType.ERR, 1, "Inserisci numero di giocatori");
-                out.flush();
-                out.writeObject(errMessage);
             }
+        } catch (IOException e) {
+            System.err.println(nickName + " disconnesso brutalmente.");
+            throw new IOException();
         }
     }
 

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.network.messages;
 
 public class Message_Five_Parameter_Int extends Message{
+
     private final int par1;
     private final int par2;
     private final int par3;

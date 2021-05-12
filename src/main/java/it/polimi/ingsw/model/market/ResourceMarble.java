@@ -25,4 +25,20 @@ public class ResourceMarble extends Marble {
             game.increaseOneFaithPointOtherPlayers();
         return false;
     }
+
+    @Override
+    public String toString() {
+        switch (resource){
+            case COIN:
+                return "Y";
+            case STONE:
+                return "G";
+            case SHIELD:
+                return "B";
+            case SERVANT:
+                return "P";
+            default:
+                return "";
+        }
+    }
 }

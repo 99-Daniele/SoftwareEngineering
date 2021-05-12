@@ -40,4 +40,9 @@ public class WhiteMarble extends Marble {
         }
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "W";
+    }
 }

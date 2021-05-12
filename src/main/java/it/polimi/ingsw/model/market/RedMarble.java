@@ -17,4 +17,9 @@ public class RedMarble extends Marble {
         game.increaseOneFaithPointCurrentPlayer();
         return false;
     }
+
+    @Override
+    public String toString() {
+        return "R";
+    }
 }

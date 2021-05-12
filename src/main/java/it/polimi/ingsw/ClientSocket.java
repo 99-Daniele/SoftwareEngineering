@@ -1,13 +1,11 @@
 package it.polimi.ingsw;
 
+import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.network.messages.*;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.InputMismatchException;
-import java.util.Scanner;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -27,7 +25,6 @@ public class ClientSocket{
     private Thread threadIn;
     private Thread threadOut;
     private final Timer turnTimer = new Timer();
-    private final Socket socket;
     private final ObjectOutputStream out;
     private final ObjectInputStream in;
     private Scanner stdIn = new Scanner(new InputStreamReader(System.in));
@@ -39,13 +36,13 @@ public class ClientSocket{
     private final Object lock = new Object();
 
     public ClientSocket(Socket socket) throws IOException {
-        this.socket = socket;
         this.out = new ObjectOutputStream(socket.getOutputStream());
         this.in = new ObjectInputStream(socket.getInputStream());
         this.quit = false;
         this.ok = false;
         this.turn = false;
         this.startGame = false;
+        this.position = 0;
     }
 
     /**
@@ -318,70 +315,405 @@ public class ClientSocket{
                 Message returnMessage = (Message) in.readObject();
                 System.out.println(returnMessage.toString());
                 switch (returnMessage.getMessageType()) {
-                    case LOGIN: {
-                        position = returnMessage.getClientID();
-                        ok = true;
-                        synchronized (lock) {
-                            lock.notifyAll();
-                        }
-                    }
-                    break;
-                    case START_GAME: {
-                        Message_One_Parameter_Int message = (Message_One_Parameter_Int) returnMessage;
-                        System.out.println("\nLa partita è iniziata. N° giocatori: " + message.getPar());
-                        turn = false;
-                        startGame = true;
-                        synchronized (lock) {
-                            lock.notifyAll();
-                        }
-                    }
-                    break;
+                    case LOGIN:
+                        login_message(returnMessage);
+                        break;
+                    case NEW_PLAYER:
+                        new_player_message(returnMessage);
+                        break;
+                    case LEADER_CARD:
+                        leader_card_choice(returnMessage);
+                        break;
+                    case START_GAME:
+                        start_game_message(returnMessage);
+                        break;
+                    case MARKET:
+                        market_message(returnMessage);
+                        break;
+                    case DECKBOARD:
+                        deckBoard_message(returnMessage);
+                        break;
                     case OK:
-                        ok = true;
-                        synchronized (lock) {
-                            lock.notifyAll();
-                        }
+                        ok_message();
                         break;
                     case PING:
-                        out.flush();
-                        out.writeObject(returnMessage);
-                        synchronized (lock) {
-                            lock.notifyAll();
-                        }
+                        ping_message();
                         break;
-                    case TURN: {
-                        Message_One_Parameter_Int message = (Message_One_Parameter_Int) returnMessage;
-                        if (message.getPar() == 1) turn = true;
-                        else turn = false;
-                        synchronized (lock) {
-                            lock.notifyAll();
-                        }
-                    }
-                    break;
+                    case TURN:
+                        turn_message(returnMessage);
+                        break;
+                    case PLAYERBOARD:
+                        playerBoard_message(returnMessage);
+                        break;
+                    case BUY_CARD:
+                        buy_card_message(returnMessage);
+                        break;
+                    case CHOSEN_SLOT:
+                        chosen_slot_message(returnMessage);
+                        break;
+                    case CARD_REMOVE:
+                        card_remove_message(returnMessage);
+                        break;
+                    case RESOURCE_AMOUNT:
+                        resource_amount_message(returnMessage);
+                        break;
+                    case TAKE_MARBLE:
+                        take_marble_message(returnMessage);
+                        break;
+                    case MARKET_CHANGE:
+                        market_change(returnMessage);
+                        break;
+                    case WHITE_CONVERSION_CARD:
+                        white_conversion_card_message(returnMessage);
+                        break;
+                    case FAITH_POINTS_INCREASE:
+                        faith_points_message(returnMessage);
+                        break;
+                    case INCREASE_WAREHOUSE:
+                        increase_warehouse_message(returnMessage);
+                        break;
+                    case SWITCH_DEPOT:
+                        switch_depot_message(returnMessage);
+                        break;
+                    case LEADER_CARD_ACTIVATION:
+                        leader_card_activation_message(returnMessage);
+                        break;
+                    case LEADER_CARD_DISCARD:
+                        leader_card_discard_message(returnMessage);
+                        break;
                     case QUIT:
-                        System.out.println("\nUn altro giocatore si è disconnesso. La partita è finita.");
+                        quit_message(returnMessage);
                         break;
                     case END_GAME:
-                        Message_Two_Parameter_Int message = (Message_Two_Parameter_Int) returnMessage;
-                        System.out.println("\nIl vincitore è il giocatore " + message.getClientID()
-                        + " che ha totalizzato " + message.getPar1() + " punti vittoria e " + message.getPar2()
-                        + " risorse totali.");
-                        quit = true;
-                        disconnect();
-                        System.exit(1);
+                        end_game_message(returnMessage);
+                        break;
+                    case ERR:
+                        error_message(returnMessage);
                         break;
                     default:
-                        System.out.println("" + returnMessage.toString());
-                        synchronized (lock) {
-                            lock.notifyAll();
-                        }
+                        System.err.println("\nRicevuto messaggio inaspettato dal Server");
+                        wake_up();
                         break;
                 }
             }
         } catch (IOException e) {
-        } catch (ClassNotFoundException e) {
-            System.err.println("\nValore di ritorno errato.");
+        } catch (ClassNotFoundException | ClassCastException e) {
+            System.err.println("\nRicevuto messaggio inaspettato dal Server");
+            wake_up();
         }
+    }
+
+    private void wake_up() {
+        synchronized (lock) {
+            lock.notifyAll();
+        }
+    }
+
+    private void login_message(Message message){
+        position = message.getClientID();
+        ok = true;
+        wake_up();
+    }
+
+    private void new_player_message(Message message){
+        Message_One_Parameter_String m = (Message_One_Parameter_String) message;
+        System.out.println("\nNuovo giocatore: " + m.getPar() + " in posizione " + m.getClientID());
+        wake_up();
+    }
+
+    private void leader_card_choice(Message message) throws IOException {
+        Message_Four_Parameter_Int m = (Message_Four_Parameter_Int) message;
+        int leaderCard1 = m.getPar1();
+        int leaderCard2 = m.getPar2();
+        int leaderCard3 = m.getPar3();
+        int leaderCard4 = m.getPar4();
+        System.out.println("\nScegli due tra queste 4 carte leader: " +
+                leaderCard1 + ", " + leaderCard2 + ", " + leaderCard3 + ", " + leaderCard4);
+        int firstChoice;
+        int secondChoice;
+        while(true) {
+            try {
+                firstChoice = stdIn.nextInt();
+                if (firstChoice != leaderCard1 && firstChoice != leaderCard2 &&
+                        firstChoice != leaderCard3 && firstChoice != leaderCard4) {
+                    System.err.println("\nInserisci un numero corretto.\n");
+                } else break;
+            } catch (InputMismatchException e) {
+                System.err.println("\nInserisci un numero.");
+                stdIn.next();
+            }
+        }
+        while(true) {
+            try {
+                secondChoice = stdIn.nextInt();
+                if(secondChoice == firstChoice){
+                    System.err.println("\nNon puoi scegliere due carte uguali\n");
+                }
+                else if (secondChoice != leaderCard1 && secondChoice != leaderCard2 &&
+                        secondChoice != leaderCard3 && secondChoice != leaderCard4) {
+                    System.err.println("\nInserisci un numero corretto.\n");
+                } else break;
+            } catch (InputMismatchException e) {
+                System.err.println("\nInserisci un numero.");
+                stdIn.next();
+            }
+        }
+        Message returnMessage = new Message_Two_Parameter_Int(MessageType.LEADER_CARD, position, firstChoice, secondChoice);
+        out.flush();
+        out.writeObject(returnMessage);
+        wake_up();
+    }
+
+    private void start_game_message(Message message){
+        Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
+        System.out.println("\nLa partita è iniziata. N° giocatori: " + m.getPar());
+        turn = false;
+        startGame = true;
+        wake_up();
+    }
+
+    private void market_message(Message message){
+        Message_Market m = (Message_Market) message;
+        System.out.println("\nRicevuto mercato");
+        wake_up();
+    }
+
+    private void deckBoard_message(Message message){
+        Message_ArrayList_Int m = (Message_ArrayList_Int) message;
+        System.out.println("\nRicevuta disposizione delle carte sviluppo");
+        wake_up();
+    }
+
+    private void ok_message(){
+        ok = true;
+        wake_up();
+    }
+
+    private void ping_message() throws IOException {
+        Message ping = new Message(MessageType.PING, position);
+        out.flush();
+        out.writeObject(ping);
+        wake_up();
+    }
+
+    private void turn_message(Message message){
+        Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
+        if (m.getPar() == 1) turn = true;
+        else turn = false;
+        wake_up();
+    }
+
+    private void playerBoard_message(Message message){
+        Message_PlayerBoard m = (Message_PlayerBoard) message;
+        System.out.println("\nRicevuta la playerBoard del giocatore " + m.getClientID());
+        wake_up();
+    }
+
+    private void buy_card_message(Message message){
+        Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        System.out.println("\nIl giocatore " + m.getClientID() + " ha comprato la carta: "
+                + m.getPar1() + " e l'ha inseria nel " + m.getPar2() +"° slot.");
+        wake_up();
+    }
+
+    private void chosen_slot_message(Message message) throws IOException {
+        Message_Three_Parameter_Int m = (Message_Three_Parameter_Int) message;
+        int choice;
+        if(m.getPar3() == -1){
+            System.out.println("\nScegli uno slot in cui inserire la carta: " + m.getPar1() + ", " + m.getPar2());
+            while(true) {
+                try {
+                    choice = stdIn.nextInt();
+                    if (choice != m.getPar1() && choice != m.getPar2()) {
+                        System.err.println("\nInserisci un numero corretto.\n");
+                    } else break;
+                } catch (InputMismatchException e) {
+                    System.err.println("\nInserisci un numero.");
+                    stdIn.next();
+                }
+            }
+        }
+        else{
+            System.out.println("\nScegli uno slot in cui inserire la carta: " + m.getPar1() + ", " + m.getPar2()
+            + ", " + m.getPar3());
+            while(true) {
+                try {
+                    choice = stdIn.nextInt();
+                    if (choice != m.getPar1() && choice != m.getPar2() && choice != m.getPar3()) {
+                        System.err.println("\nInserisci un numero corretto.\n");
+                    } else break;
+                } catch (InputMismatchException e) {
+                    System.err.println("\nInserisci un numero.");
+                    stdIn.next();
+                }
+            }
+        }
+        Message returnMessage = new Message_One_Parameter_Int(MessageType.CHOSEN_SLOT, position, choice);
+        out.flush();
+        out.writeObject(returnMessage);
+        wake_up();
+    }
+
+    private void card_remove_message(Message message){
+        Message_Four_Parameter_Int m = (Message_Four_Parameter_Int) message;
+        System.out.println("\nLa carta nel mazzetto di riga: " + m.getPar1() + " e colonna: "
+        + m.getPar2() + " è stata rimossa.");
+        if(m.getPar3() == 1){
+            System.out.println("Il mazzetto ora è vuoto");
+        }
+        else
+            System.out.println("La nuova carta del mazzetto è: " + m.getPar4());
+        wake_up();
+    }
+
+    private void resource_amount_message(Message message){
+        Message_One_Resource_Two_Int m = (Message_One_Resource_Two_Int) message;
+        System.out.println("\nIl giocatore " + m.getClientID() + " ha " + m.getPar1() + " "
+                + m.getResource() + " nel magazzino e " + m.getPar2() + " nel forziere");
+        wake_up();
+    }
+
+    private void take_marble_message(Message message) throws IOException {
+        Message_Four_Parameter_Marble m = (Message_Four_Parameter_Marble) message;
+        ArrayList<Marble> marbles = new ArrayList<>();
+        marbles.add(m.getMarble1());
+        marbles.add(m.getMarble2());
+        marbles.add(m.getMarble3());
+        if(m.getMarble4() == null){
+            for(int i = 0; i < 3; i++){
+                chose_marble(marbles);
+            }
+        }
+        else {
+            marbles.add(m.getMarble4());
+            for(int i = 0; i < 4; i++){
+                chose_marble(marbles);
+            }
+        }
+        wake_up();
+    }
+
+    private void send_chosen_marble(Marble m) throws IOException {
+        Message message = new Message_One_Parameter_Marble(MessageType.USE_MARBLE, position, m);
+        out.flush();
+        out.writeObject(message);
+    }
+
+    private void chose_marble(ArrayList<Marble> marbles) throws IOException {
+        System.out.println("\nScegli uno tra queste biglie:\n " + marbles.get(0).toString());
+        for(int i = 1; i < marbles.size(); i++)
+            System.out.println(", " + marbles.get(i).toString());
+        int choice;
+        while(true) {
+            try {
+                choice = stdIn.nextInt();
+                if (choice < 1 || choice > marbles.size()) {
+                    System.err.println("\nInserisci un numero corretto.\n");
+                } else break;
+            } catch (InputMismatchException e) {
+                System.err.println("\nInserisci un numero.");
+                stdIn.next();
+            }
+        }
+        Marble chosenMarble = marbles.get(choice -1);
+        marbles.remove(choice);
+        send_chosen_marble(chosenMarble);
+    }
+
+    private void market_change(Message message){
+        Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        if(m.getPar1() == 0) {
+            System.out.println("\nIl giocatore " + m.getClientID() + " ha scelto la riga " + m.getPar2() + " del mercato.");
+        }
+        else{
+            System.out.println("\nIl giocatore " + m.getClientID() + " ha scelto la colonna " + m.getPar2() + " del mercato.");
+        }
+        wake_up();
+    }
+
+    private void white_conversion_card_message(Message message) throws IOException {
+        Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        System.out.println("\nHai selezionato una biglia bianca e hai due possibili conversioni");
+        System.out.println("\nScegli una tra queste carte leader:\n " + m.getPar1() + ", " + m.getPar2());
+        int choice;
+        while(true) {
+            try {
+                choice = stdIn.nextInt();
+                if (choice < 1 || choice > 2) {
+                    System.err.println("\nInserisci un numero corretto.\n");
+                } else break;
+            } catch (InputMismatchException e) {
+                System.err.println("\nInserisci un numero.");
+                stdIn.next();
+            }
+        }
+        Message returnMessage;
+        if(choice == 1){
+            returnMessage = new Message_One_Parameter_Int(MessageType.WHITE_CONVERSION_CARD, position, m.getPar1());
+        }
+        else{
+            returnMessage = new Message_One_Parameter_Int(MessageType.WHITE_CONVERSION_CARD, position, m.getPar2());
+        }
+        out.flush();
+        out.writeObject(returnMessage);
+        wake_up();
+    }
+
+    private void faith_points_message(Message message){
+        Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
+        System.out.println("\nIl giocatore " + m.getClientID() + " ha incrementato di " + m.getPar()
+        + " i suoi punti fede.");
+        wake_up();
+    }
+
+    private void increase_warehouse_message(Message message){
+        Message_One_Int_One_Resource m = (Message_One_Int_One_Resource) message;
+        System.out.println("\nIl giocatore " + m.getClientID() + " ha incrementato di 1 " + m.getResource()
+                + " il suo " + m.getPar1() + "° deposito.");
+        wake_up();
+    }
+
+    private void switch_depot_message(Message message){
+        Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        System.out.println("\nIl giocatore " + m.getClientID() + " ha invertito il suo " + m.getPar1()
+                + "° deposito con il suo " + m.getPar1() + "° deposito.");
+        wake_up();
+    }
+
+    private void leader_card_activation_message(Message message){
+        Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
+        System.out.println("\nIl giocatore " + m.getClientID() + " ha attivato la carta leader: " + m.getPar());
+        wake_up();
+    }
+
+    private void leader_card_discard_message(Message message){
+        Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
+        System.out.println("\nIl giocatore " + m.getClientID() + " ha scartato la carta leader: " + m.getPar());
+        wake_up();
+    }
+
+    private void quit_message(Message message){
+        if(startGame)
+            System.out.println("\nIl giocatore in posizione " + message.getClientID() + " si è disconnesso. La partita è finita.");
+        else
+            System.out.println("\nIl giocatore in posizione " + message.getClientID() + " si è disconnesso prima che iniziasse la partita");
+        wake_up();
+    }
+
+    private void end_game_message(Message message){
+        Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        System.out.println("\nIl vincitore è il giocatore " + m.getClientID()
+                + " che ha totalizzato " + m.getPar1() + " punti vittoria e " + m.getPar2()
+                + " risorse totali.");
+        quit = true;
+        disconnect();
+        System.exit(1);
+    }
+
+    private void error_message(Message message){
+        Message_One_Parameter_String m = (Message_One_Parameter_String) message;
+        System.err.println(m.getPar());
+        wake_up();
     }
 
     /**
