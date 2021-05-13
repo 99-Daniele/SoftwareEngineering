@@ -1,4 +1,4 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.model.resourceContainers.Resource;

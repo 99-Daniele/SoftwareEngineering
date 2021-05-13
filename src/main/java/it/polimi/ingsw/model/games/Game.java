@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.games;
 
-import it.polimi.ingsw.VirtualView;
+import it.polimi.ingsw.view.VirtualView;
 import it.polimi.ingsw.exceptions.*;
 
 import java.io.FileReader;
@@ -13,7 +13,6 @@ import java.util.Observable;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 
-import it.polimi.ingsw.model.actions.Action;
 import it.polimi.ingsw.model.developmentCards.*;
 import it.polimi.ingsw.model.faithTrack.*;
 import it.polimi.ingsw.model.leaderCards.*;
@@ -21,10 +20,6 @@ import it.polimi.ingsw.model.market.*;
 import it.polimi.ingsw.model.player.*;
 import it.polimi.ingsw.model.resourceContainers.*;
 import it.polimi.ingsw.network.messages.*;
-import sun.font.DelegatingShape;
-import sun.jvm.hotspot.debugger.win32.coff.DebugVC50SSSrcLnSeg;
-
-import javax.swing.*;
 
 /**
  * Game is main class which handle all different phases of a match.
