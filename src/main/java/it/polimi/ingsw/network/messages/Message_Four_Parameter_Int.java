@@ -1,7 +1,5 @@
 package it.polimi.ingsw.network.messages;
 
-import java.util.Arrays;
-
 public class Message_Four_Parameter_Int extends Message{
     private final int par1;
     private final int par2;

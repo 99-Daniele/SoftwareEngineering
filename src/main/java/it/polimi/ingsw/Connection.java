@@ -8,7 +8,7 @@ public class Connection {
     private static int max;
     private static ControllerGame controllerGame;
 
-    public static synchronized PosControllerGame ConnectionPlayers(VirtualView virtualView, String nickname) throws IOException, ClassNotFoundException {
+    public static synchronized PosControllerGame ConnectionPlayers(VirtualView virtualView, String nickname) throws IOException{
         if (count == 0) {
             count = virtualView.getNumberPlayers();
             max = count;

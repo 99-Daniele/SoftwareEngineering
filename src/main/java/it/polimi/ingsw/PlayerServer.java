@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.SocketException;
 
 public class PlayerServer implements Runnable {
 
@@ -40,7 +39,7 @@ public class PlayerServer implements Runnable {
                 out.writeObject(quitMessage);
             } catch (IOException ioException) { }
             disconnect();
-        } catch (ClassNotFoundException | ClassCastException e) {
+        } catch (ClassCastException e) {
             e.printStackTrace();
         }
     }

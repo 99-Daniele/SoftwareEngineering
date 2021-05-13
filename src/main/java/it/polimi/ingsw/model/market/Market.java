@@ -13,7 +13,7 @@ public class Market implements Serializable {
 
     private static final int row = 3;
     private static final int column = 4;
-    private Marble[][] marketTray;
+    private final Marble[][] marketTray;
     private Marble externalMarble;
 
     /**
@@ -112,8 +112,7 @@ public class Market implements Serializable {
         if (selectedRow<1 || selectedRow>3)
         throw new WrongParametersException();
         Marble[] marketCopy= new Marble[column];
-        for (int i = 0; i < column; i++)
-            marketCopy[i] = marketTray[selectedRow - 1][i];
+        System.arraycopy(marketTray[selectedRow - 1], 0, marketCopy, 0, column);
         return marketCopy;
     }
 
@@ -156,9 +155,7 @@ public class Market implements Serializable {
         Marble marble;
         marble = this.externalMarble;
         this.externalMarble = marketTray[selectedRow-1][0];
-        for (int i = 0; i <column-1; i++) {
-            this.marketTray[selectedRow-1][i] = this.marketTray[selectedRow-1][i+1];
-        }
+        System.arraycopy(this.marketTray[selectedRow - 1], 1, this.marketTray[selectedRow - 1], 0, column - 1);
         marketTray[selectedRow-1][column-1] = marble;
     }
 }

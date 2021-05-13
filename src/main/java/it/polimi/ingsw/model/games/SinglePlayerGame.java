@@ -123,9 +123,7 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame {
      */
     @Override
     public boolean isEndGame(){
-        if (getCurrentPlayer().haveSevenDevelopmentCards() || getFaithTrack().zeroRemainingPope() || zeroRemainingColorCards())
-            return true;
-        return false;
+        return getCurrentPlayer().haveSevenDevelopmentCards() || getFaithTrack().zeroRemainingPope() || zeroRemainingColorCards();
     }
 
     /**

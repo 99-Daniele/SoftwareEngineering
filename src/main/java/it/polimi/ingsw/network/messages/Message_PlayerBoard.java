@@ -10,4 +10,8 @@ public class Message_PlayerBoard extends Message{
         super(messageType, clientID);
         this.playerBoard = playerBoard;
     }
+
+    public PlayerBoard getPlayerBoard() {
+        return playerBoard;
+    }
 }

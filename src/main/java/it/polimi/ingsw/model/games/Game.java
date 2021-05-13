@@ -33,8 +33,8 @@ public class Game extends Observable implements LightGame{
 
     private final ArrayList<PlayerBoard> players = new ArrayList<>();
     private final Deck[][] deck = new Deck[3][4];
-    private Market market;
-    private FaithTrack faithTrack;
+    private final Market market;
+    private final FaithTrack faithTrack;
     private final int numOfPlayers;
     private int currentPlayer;
     private final ArrayList<LeaderCard> leaderCards = new ArrayList<>(16);
@@ -573,9 +573,7 @@ public class Game extends Observable implements LightGame{
      * of the FaithTrack
      */
     public boolean isEndGame(){
-        if(faithTrack.zeroRemainingPope() || players.get(currentPlayer).haveSevenDevelopmentCards())
-            return true;
-        return false;
+        return faithTrack.zeroRemainingPope() || players.get(currentPlayer).haveSevenDevelopmentCards();
     }
 
     /**

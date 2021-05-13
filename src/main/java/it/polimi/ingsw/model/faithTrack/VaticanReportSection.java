@@ -20,10 +20,7 @@ public class VaticanReportSection extends Section {
      * @return a boolean that is true if the value of the player's faith points is inside or beyond the pope space and false if not.
      */
     public boolean IsPlayerInPopeSpace(int playerFaithPoints){
-        if(playerFaithPoints >= super.getLastSpace())
-            return true;
-        else
-            return false;
+        return playerFaithPoints >= super.getLastSpace();
     }
 }
 

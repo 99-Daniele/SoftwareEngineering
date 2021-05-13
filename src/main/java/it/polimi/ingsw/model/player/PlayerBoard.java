@@ -198,8 +198,8 @@ public class PlayerBoard extends SimplePlayerBoard{
      * @return true if has at least 1 @param r1 and @param r2.
      */
     private boolean enoughBasicProductionResource(Resource r1, Resource r2){
-        return (((warehouse.getNumOfResource(r1) > 0) || (strongbox.getNumOfResource(r1) > 0))
-                 &&((warehouse.getNumOfResource(r2) > 0) || (strongbox.getNumOfResource(r2) > 0)));
+        return (((warehouse.getNumOfResource(r1) <= 0) && (strongbox.getNumOfResource(r1) <= 0))
+                || ((warehouse.getNumOfResource(r2) <= 0) && (strongbox.getNumOfResource(r2) <= 0)));
     }
 
     /**
@@ -259,7 +259,7 @@ public class PlayerBoard extends SimplePlayerBoard{
      */
     private void activateBasicProduction(Resource r1, Resource r2, Resource r3, Warehouse w, Strongbox s, int choice)
             throws InsufficientResourceException {
-        if(!enoughBasicProductionResource(r1, r2))
+        if(enoughBasicProductionResource(r1, r2))
             throw new InsufficientResourceException();
         if(choice == 1){
             decreaseWarehouseResource(r1, r2, w, s);
@@ -278,7 +278,7 @@ public class PlayerBoard extends SimplePlayerBoard{
      * this method decreases resources by 1 @param r1 and 1 @param r2.
      */
     public void activateBasicProduction(Resource r1, Resource r2, int choice) throws InsufficientResourceException {
-        if(!enoughBasicProductionResource(r1, r2))
+        if(enoughBasicProductionResource(r1, r2))
             throw new  InsufficientResourceException();
         if(choice == 1){
             decreaseWarehouseResource(r1, r2, warehouse, strongbox);

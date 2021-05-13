@@ -3,9 +3,7 @@ package it.polimi.ingsw.model.gamesTests;
 import it.polimi.ingsw.exceptions.*;
 
 import it.polimi.ingsw.model.developmentCards.*;
-import it.polimi.ingsw.model.faithTrack.FaithTrack;
 import it.polimi.ingsw.model.games.SinglePlayerGame;
-import it.polimi.ingsw.model.player.PlayerBoard;
 import it.polimi.ingsw.model.resourceContainers.Cost;
 
 import org.junit.jupiter.api.Test;

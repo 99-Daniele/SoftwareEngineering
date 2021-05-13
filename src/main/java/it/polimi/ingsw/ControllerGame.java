@@ -15,8 +15,8 @@ import java.util.concurrent.TimeUnit;
 
 public class ControllerGame implements Observer{
 
-    private Game game;
-    private ArrayList<View> views;
+    private final Game game;
+    private final ArrayList<View> views;
 
     public ControllerGame(int numPlayers){
         if(numPlayers==1)
@@ -66,8 +66,7 @@ public class ControllerGame implements Observer{
         }
     }
 
-    public void isMyTurn(Message message) throws IOException {
-        int pos = message.getClientID() -1;
+    public void isMyTurn(int pos) throws IOException {
         if(pos!= game.getCurrentPosition())
             views.get(pos).myTurn(false);
         else
@@ -82,13 +81,23 @@ public class ControllerGame implements Observer{
          */
         Message m = (Message) arg;
         System.out.println(m.toString());
+        int pos = m.getClientID();
+        View selectedView = views.get(pos -1);
         try {
             switch (m.getMessageType()) {
                 case TURN:
-                    isMyTurn(m);
+                    isMyTurn(pos -1);
                     break;
-                case QUIT:
-                    endGame(m);
+                case BUY_CARD:
+                    ArrayList<Integer> slots = new ArrayList<>(3);
+                    slots.add(0);
+                    slots.add(1);
+                    slots.add(2);
+                    selectedView.available_slot(pos, slots);
+                    selectedView.ok(pos);
+                    break;
+                default:
+                    selectedView.ok(pos);
                     break;
             }
         } catch (IOException e) {

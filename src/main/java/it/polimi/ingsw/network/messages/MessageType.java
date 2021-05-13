@@ -31,6 +31,7 @@ public enum MessageType {
     LEADER_CARD_ACTIVATION,
     LEADER_CARD_DISCARD,
     SWITCH_DEPOT,
+    END_TURN,
     QUIT,
     END_GAME,
     PING,

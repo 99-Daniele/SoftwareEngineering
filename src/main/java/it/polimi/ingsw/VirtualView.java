@@ -1,15 +1,12 @@
 package it.polimi.ingsw;
 
-import it.polimi.ingsw.network.messages.Message;
-import it.polimi.ingsw.network.messages.MessageType;
-import it.polimi.ingsw.network.messages.Message_One_Parameter_Int;
-import it.polimi.ingsw.network.messages.Message_One_Parameter_String;
+import it.polimi.ingsw.network.messages.*;
 
 import java.io.IOException;
-import java.io.InterruptedIOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -18,8 +15,8 @@ public class VirtualView extends Observable implements View, Observer, Runnable 
 
     private Object lock = new Object();
     private boolean connected;
-    private ObjectInputStream in;
-    private ObjectOutputStream out;
+    private final ObjectInputStream in;
+    private final ObjectOutputStream out;
     private String nickName;
     private int position;
 
@@ -38,10 +35,7 @@ public class VirtualView extends Observable implements View, Observer, Runnable 
         while (connected) {
             try {
                 Message message = (Message) in.readObject();
-                if (receiveMessage(message)) {
-                    System.out.println(nickName + " si è disconnesso.\n");
-                    break;
-                }
+                receiveMessage(message);
             } catch (IOException e) {
                 if(connected) {
                     System.err.println(nickName + " disconnesso brutalmente.");
@@ -58,18 +52,53 @@ public class VirtualView extends Observable implements View, Observer, Runnable 
         }
     }
 
-    private boolean receiveMessage(Message message) throws IOException {
+    private void receiveMessage(Message message){
         setChanged();
         notifyObservers(message);
-        return (message.getMessageType() == MessageType.QUIT);
     }
 
     public void quit(int clientID) throws IOException {
+        System.out.println("QUIT");
         Message quitMessage = new Message(MessageType.QUIT, clientID);
         try {
             out.flush();
             out.writeObject(quitMessage);
         }catch (SocketException e){}
+    }
+
+    @Override
+    public void ok(int clientID) throws IOException {
+        System.out.println("OK");
+        Message okMessage = new Message(MessageType.OK, clientID);
+        try {
+            out.flush();
+            out.writeObject(okMessage);
+        }catch (SocketException e){}
+    }
+
+    @Override
+    public int available_slot(int clientID, ArrayList<Integer> availableSlots) throws IOException {
+        System.out.println("AVAILABLE_SLOTS");
+        int firstSlot = availableSlots.get(0);
+        int secondSlot = availableSlots.get(1);
+        int thirdSlot;
+        if(availableSlots.size() == 3)
+            thirdSlot = availableSlots.get(2);
+        else
+            thirdSlot = -1;
+        Message message = new Message_Three_Parameter_Int(MessageType.CHOSEN_SLOT, clientID, firstSlot, secondSlot, thirdSlot);
+        try {
+            out.flush();
+            out.writeObject(message);
+            Message returnMessage = (Message) in.readObject();
+            Message_One_Parameter_Int m = (Message_One_Parameter_Int) returnMessage;
+            System.out.println("CHOSEN_SLOT: " + m.getPar());
+            return m.getPar();
+        }catch (SocketException e){}
+        catch (ClassNotFoundException | ClassCastException e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 
     public void endGame(Message message) throws IOException {

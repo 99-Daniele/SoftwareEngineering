@@ -1,6 +1,7 @@
 package it.polimi.ingsw;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public interface View{
 
@@ -11,4 +12,8 @@ public interface View{
     void myTurn(boolean turn) throws IOException;
 
     void quit(int clientID) throws IOException;
+
+    void ok(int clientID) throws IOException;
+
+    int available_slot(int clientID, ArrayList<Integer> availableSlots) throws IOException;
 }
