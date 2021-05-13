@@ -119,4 +119,16 @@ public class DevelopmentCard {
     public void recount(Resource resource){
         resourceCost.recount(resource);
     }
+
+    public Cost getProductionPowerResourceGiven() {
+        return productionPowerResourceGiven;
+    }
+
+    public Cost getProductionPowerResourceRequired() {
+        return productionPowerResourceRequired;
+    }
+
+    public Cost getResourceCost() {
+        return resourceCost;
+    }
 }
