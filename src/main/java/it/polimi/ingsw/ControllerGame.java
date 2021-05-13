@@ -2,6 +2,7 @@ package it.polimi.ingsw;
 
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.games.Game;
+import it.polimi.ingsw.model.games.SinglePlayerGame;
 import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.model.player.PlayerBoard;
 import it.polimi.ingsw.network.messages.*;
@@ -18,7 +19,10 @@ public class ControllerGame implements Observer{
     private ArrayList<View> views;
 
     public ControllerGame(int numPlayers){
-        this.game = new Game(numPlayers);
+        if(numPlayers==1)
+            this.game=new SinglePlayerGame();
+        else
+            this.game = new Game(numPlayers);
         views = new ArrayList<>();
     }
 
@@ -26,6 +30,10 @@ public class ControllerGame implements Observer{
         return game.getNumOfPlayers();
     }
 
+    /**
+     *
+     * @param view is the view that is added to the list of views in controllerGame and also added to the observers of game
+     */
     public void addView(View view){
         views.add(view);
         game.addObservers((VirtualView) view);

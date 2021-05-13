@@ -426,4 +426,11 @@ public class PlayerBoard extends SimplePlayerBoard{
         return (warehouse.sumWarehouseResource() + strongbox.sumStrongboxResource());
     }
 
+    public Strongbox getStrongbox(){
+        return strongbox;
+    }
+
+    public Warehouse getWarehouse(){
+        return warehouse;
+    }
 }

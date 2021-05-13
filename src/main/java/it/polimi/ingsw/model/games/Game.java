@@ -13,16 +13,18 @@ import java.util.Observable;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 
+import it.polimi.ingsw.model.actions.Action;
 import it.polimi.ingsw.model.developmentCards.*;
 import it.polimi.ingsw.model.faithTrack.*;
 import it.polimi.ingsw.model.leaderCards.*;
 import it.polimi.ingsw.model.market.*;
 import it.polimi.ingsw.model.player.*;
 import it.polimi.ingsw.model.resourceContainers.*;
-import it.polimi.ingsw.network.messages.Message;
-import it.polimi.ingsw.network.messages.MessageType;
-import it.polimi.ingsw.network.messages.Message_One_Parameter_Int;
-import it.polimi.ingsw.network.messages.Message_Two_Parameter_Int;
+import it.polimi.ingsw.network.messages.*;
+import sun.font.DelegatingShape;
+import sun.jvm.hotspot.debugger.win32.coff.DebugVC50SSSrcLnSeg;
+
+import javax.swing.*;
 
 /**
  * Game is main class which handle all different phases of a match.
@@ -186,6 +188,13 @@ public class Game extends Observable implements LightGame{
             marbles = market.getColumnMarbles(choice);
             market.slideColumn(choice);
         }
+        Message_Two_Parameter_Int message_two_parameter_int;
+        if(isRow)
+            message_two_parameter_int=new Message_Two_Parameter_Int(MessageType.MARKET_CHANGE,currentPlayer+1,choice,0);
+        else
+            message_two_parameter_int = new Message_Two_Parameter_Int(MessageType.MARKET_CHANGE,currentPlayer+1,0,choice);
+        setChanged();
+        notifyObservers(message_two_parameter_int);
         return marbles;
     }
 
@@ -366,6 +375,30 @@ public class Game extends Observable implements LightGame{
             throw new InsufficientResourceException();
         players.get(currentPlayer).buyDevelopmentCard(card, slot, choice);
         deck[deckRow][deckColumn].removeDevelopmentCard();
+        Message_Two_Parameter_Int message_two_parameter_int=new Message_Two_Parameter_Int(MessageType.BUY_CARD,currentPlayer+1,5,slot);
+        setChanged();
+        notifyObservers(message_two_parameter_int);
+        int correct;
+        int idCard;
+        if(deck[deckRow][deckColumn].isEmpty()){
+            correct=1;
+            idCard=-1;
+        }
+        else{
+            correct=0;
+            idCard=5;
+        }
+        Message_Four_Parameter_Int message_four_parameter_int=new Message_Four_Parameter_Int(MessageType.CARD_REMOVE,currentPlayer+1,deckRow,deckColumn,correct,idCard);
+        setChanged();
+        notifyObservers(message_four_parameter_int);
+        for(Resource resource: Resource.values())
+        {
+            int par=players.get(currentPlayer).getWarehouse().getNumOfResource(resource);
+            int par1=players.get(currentPlayer).getStrongbox().getNumOfResource(resource);
+            Message_One_Resource_Two_Int message_one_resource_two_int = new Message_One_Resource_Two_Int(MessageType.RESOURCE_AMOUNT, currentPlayer + 1,resource,par,par1);
+            setChanged();
+            notifyObservers(message_one_resource_two_int);
+        }
     }
 
     /**
@@ -580,11 +613,33 @@ public class Game extends Observable implements LightGame{
         return currentPlayer;
     }
 
+    /**
+     * @param view is the observer that is added to the observers of game
+     */
     public void addObservers(VirtualView view){
         addObserver(view);
     }
 
+    /**
+     * @return number of players
+     */
     public int getNumOfPlayers(){
         return numOfPlayers;
     }
+
+
+    public SimplePlayerBoard getLorenzoIlMagnifico() {
+        return new SimplePlayerBoard();
+    }
+
+    public void triggerFirstAction() {return;}
+
+    public void moveToLastAction(){return;}
+
+    public void shuffleActions(){return;}
+
+    public void LorenzoFaithTrackMovement(int faithPoints){return;}
+
+    public void discardDeckDevelopmentCards(Color color){return;}
+
 }
