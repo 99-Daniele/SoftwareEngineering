@@ -433,4 +433,8 @@ public class PlayerBoard extends SimplePlayerBoard{
     public Warehouse getWarehouse(){
         return warehouse;
     }
+
+    public SlotDevelopmentCards getSlotDevelopmentCards(int chosenSlot){
+        return slotDevelopmentCards[chosenSlot];
+    }
 }

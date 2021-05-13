@@ -126,4 +126,8 @@ public class SlotDevelopmentCards {
             sum += card.getVictoryPoints();
         return sum;
     }
+
+    public DevelopmentCard getLastCard(){
+        return developmentCards.getLast();
+    }
 }
