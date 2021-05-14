@@ -2,15 +2,13 @@ package it.polimi.ingsw.network.server;
 
 import it.polimi.ingsw.controller.ControllerGame;
 import it.polimi.ingsw.controller.PosControllerGame;
-import it.polimi.ingsw.network.messages.Message_One_Parameter_String;
 import it.polimi.ingsw.view.VirtualView;
-import it.polimi.ingsw.network.messages.Message;
-import it.polimi.ingsw.network.messages.MessageType;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class PlayerServer implements Runnable {
 
@@ -29,35 +27,38 @@ public class PlayerServer implements Runnable {
             out = new ObjectOutputStream(socket.getOutputStream());
             VirtualView virtualView = new VirtualView(in, out);
             String nickname = virtualView.getNickname();
+            while (nickname == null)
+                nickname = virtualView.getNickname();
             PosControllerGame posControllerGame = Connection.ConnectionPlayers(virtualView, nickname);
             controllerGame = posControllerGame.getControllerGame();
             virtualView.position(posControllerGame.getPosition());
-            virtualView.start();
             controllerGame.waitPlayers();
-            virtualView.pronto(controllerGame.getNumPlayers());
-            virtualView.join();
+            virtualView.run();
             disconnect(virtualView.getPosition(), virtualView.getNickname());
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
             closeConnections();
-        } catch (ClassCastException | ClassNotFoundException e) {
-            e.printStackTrace();
         }
     }
 
     private void closeConnections(){
         try {
+            in.close();
+            out.close();
             if (!socket.isClosed()) {
-                in.close();
-                out.close();
                 socket.close();
             }
         } catch (IOException e) {
         }
+        finally {
+            System.out.println("Connessione col Client chiusa");
+        }
     }
 
     private void disconnect(int position, String nickName) throws IOException {
-        closeConnections();
-        controllerGame.quitGame(nickName, position);
+        try {
+            controllerGame.quitGame(nickName, position);
+            closeConnections();
+        }catch (SocketException e){ }
     }
 }
 //lato client bloccare messaggi quando in attesa altrimenti buffer li memorizza

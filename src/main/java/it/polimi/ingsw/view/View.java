@@ -7,11 +7,13 @@ import java.util.ArrayList;
 
 public interface View{
 
-    String getNickname() throws IOException, ClassNotFoundException;
+    String getNickname() throws IOException;
 
-    String nicknameTaken() throws IOException, ClassNotFoundException;
+    String nicknameTaken() throws IOException;
 
     void newPlayer(String nickname, int position) throws IOException;
+
+    void pronto(int numPLayer) throws IOException;
 
     void myTurn(boolean turn) throws IOException;
 

@@ -54,10 +54,6 @@ public class ClientSocket {
      * threadOut constantly waits Server inputs.
      */
     public void start() {
-        if (threadOut == null) {
-            threadOut = new Thread(() -> receiveMessage());
-            threadOut.start();
-        }
         if (threadIn == null) {
             threadIn = new Thread(() -> {
                 try {
@@ -65,11 +61,7 @@ public class ClientSocket {
                     waiting();
                     while (!quit)
                         turnAction();
-                    disconnect();
-                    System.out.println("\nDisconnessione.");
-                    threadOut.interrupt();
-                    System.exit(1);
-                } catch (InterruptedException | IOException e) {
+                }  catch (InterruptedException | IOException e) {
                     System.err.println("\nClient non più connesso al Server.");
                     disconnect();
                     System.exit(0);
@@ -77,17 +69,26 @@ public class ClientSocket {
             });
             threadIn.start();
         }
+        try {
+            receiveMessage();
+        } catch (InterruptedException | IOException e) {
+            System.err.println("\nClient non più connesso al Server.");
+            disconnect();
+            System.exit(0);
+        }
     }
 
     private void startPing() {
         if(connectedThread == null){
             connectedThread = new Thread(() -> {
                 try {
-                    TimeUnit.SECONDS.sleep(1);
-                    while (!startGame)
-                        isMyTurn(MessageType.PING);
-                    isMyTurn(MessageType.TURN);
-                } catch (InterruptedException e) {
+                    while (true){
+                        if(startGame)
+                            isMyTurn(MessageType.TURN);
+                        else
+                            isMyTurn(MessageType.PING);
+                    }
+                } catch (InterruptedException | IOException e) {
                     System.err.println("\nClient non più connesso al Server.");
                     disconnect();
                     System.exit(0);
@@ -112,70 +113,50 @@ public class ClientSocket {
             userInput = stdIn.nextLine();
         }
         nickName = userInput;
-        Message message = new Message_One_Parameter_String(MessageType.LOGIN, position,  nickName);
-        try {
-            out.flush();
-            out.writeObject(message);
-            long initTime = System.currentTimeMillis();
-            synchronized (lock1) {
-                lock1.wait(30000);
-                if (isTimePassed(initTime, System.currentTimeMillis(), 30000))
-                    throw new InterruptedException();
-            }
-        } catch (IOException e) {
-            System.err.println("\nClient non più connesso al Server.");
-            threadOut.interrupt();
-            disconnect();
-            System.exit(0);
+        Message message = new Message_One_Parameter_String(MessageType.LOGIN, position, nickName);
+        out.flush();
+        out.writeObject(message);
+        long initTime = System.currentTimeMillis();
+        synchronized (lock1) {
+            lock1.wait(30000);
+            if (isTimePassed(initTime, System.currentTimeMillis(), 30000))
+                throw new InterruptedException();
         }
-        if(position == 1){
+        if (position == 0) {
             System.out.println("\nSei il primo giocatore. Quanti giocatori vuoi in partita? (1 - 4)");
             int userInt;
-            while(true){
+            while (true) {
                 try {
                     userInt = stdIn.nextInt();
-                    if(userInt < 1 || userInt > 4){
+                    if (userInt < 1 || userInt > 4) {
                         System.err.println("\nInserisci un numero da 1 a 4.\n");
                         System.out.println("\nQuanti giocatori vuoi in partita? (1 - 4)");
-                    }
-                    else break;
-                }
-                catch (InputMismatchException e){
+                    } else break;
+                } catch (InputMismatchException e) {
                     System.err.println("\nInserisci un numero.");
                     System.out.println("\nQuanti giocatori vuoi in partita? (1 - 4)");
                     stdIn.next();
                 }
             }
             Message numPlayerMessage = new Message_One_Parameter_Int(MessageType.NUM_PLAYERS, position, userInt);
-            try {
-                out.flush();
-                out.writeObject(numPlayerMessage);
-                long initTime = System.currentTimeMillis();
-                synchronized (lock1) {
-                    lock1.wait(30000);
-                    if (isTimePassed(initTime, System.currentTimeMillis(), 30000))
-                        throw new InterruptedException();
-                }
-            } catch (IOException e) {
-                System.err.println("\nClient non più connesso al Server.");
-                threadOut.interrupt();
-                disconnect();
-                System.exit(0);
+            out.flush();
+            out.writeObject(numPlayerMessage);
+            initTime = System.currentTimeMillis();
+            synchronized (lock1) {
+                lock1.wait(30000);
+                if (isTimePassed(initTime, System.currentTimeMillis(), 30000))
+                    throw new InterruptedException();
             }
-        }
-        else if(!startGame)
+        } else if (!startGame)
             System.out.println("\nSei entrato in una partita che sta per cominciare.\nSei il giocatore in posizione " + position);
         turn = false;
-        wake_up(lock1);
+        wake_up(lock2);
     }
 
-    private void waiting(){
-        try {
-            TimeUnit.SECONDS.sleep(1);
-            if (!startGame)
-                System.out.println("\nIn attesa di altri giocatori...");
-        } catch (InterruptedException e) {
-        }
+    private void waiting() throws InterruptedException {
+        TimeUnit.SECONDS.sleep(1);
+        if (!startGame)
+            System.out.println("\nIn attesa di altri giocatori...");
         startPing();
     }
 
@@ -317,7 +298,7 @@ public class ClientSocket {
         return userInput;
     }
 
-    private void lastInput() throws InterruptedException {
+    private void lastInput() throws InterruptedException, IOException {
         stdIn = new Scanner(new InputStreamReader(System.in));
         int userInput;
         System.out.println("\nVuoi fare altro?\n1 - ACTIVATE LEADER CARD\n2 - DISCARD LEADER CARD\n0 - END TURN");
@@ -382,7 +363,7 @@ public class ClientSocket {
         }
     }
 
-    private void take_market_marble() throws InterruptedException, IOException {
+    private void take_market_marble() throws IOException, InterruptedException {
         if(!turn)
             System.err.println("\nNon è il tuo turno");
         else {
@@ -444,9 +425,8 @@ public class ClientSocket {
     /**
      * until user doesn't insert a valid input, ask him 1 int to chose the deck to where buy card. Then send it to Server
      * and waits an OK message return.
-     * @throws InterruptedException if the connection with Server breaks during waiting.
      */
-    private void buy_card() throws InterruptedException {
+    private void buy_card() throws IOException, InterruptedException {
         if(!turn)
             System.err.println("\nNon è il tuo turno");
         else {
@@ -489,7 +469,7 @@ public class ClientSocket {
         }
     }
 
-    private void activate_production() throws InterruptedException {
+    private void activate_production() throws IOException, InterruptedException {
         if(!turn)
             System.err.println("\nNon è il tuo turno");
         else {
@@ -538,7 +518,7 @@ public class ClientSocket {
         }
     }
 
-    private void slot_card_production() throws InterruptedException {
+    private void slot_card_production() throws IOException, InterruptedException {
         stdIn = new Scanner(new InputStreamReader(System.in));
         System.out.println("\nDi quale carta vuoi attivare il potere di produzione? (0 - 2)");
         int x;
@@ -559,7 +539,7 @@ public class ClientSocket {
         sendMessage(message);
     }
 
-    private void basic_production() throws InterruptedException {
+    private void basic_production() throws IOException, InterruptedException {
         stdIn = new Scanner(new InputStreamReader(System.in));
         System.out.println("\nQuale risorsa vuoi eliminare?\n1 - MONETA\n2 - SCUDO\n" +
                 "3 - ROCCIA\n4 - SERVO");
@@ -576,7 +556,7 @@ public class ClientSocket {
         sendMessage(message);
     }
 
-    private void leader_card_production() throws InterruptedException {
+    private void leader_card_production() throws IOException, InterruptedException {
         stdIn = new Scanner(new InputStreamReader(System.in));
         int x = chose_leader_card();
         System.out.println("\nQuale risorsa vuoi ricevere?\n1 - MONETA\n2 - SCUDO\n" +
@@ -588,12 +568,12 @@ public class ClientSocket {
         sendMessage(message);
     }
 
-    private void end_production() throws InterruptedException {
+    private void end_production() throws IOException, InterruptedException {
         Message message = new Message(MessageType.END_PRODUCTION, position);
         sendMessage(message);
     }
 
-    private void activate_leader_card() throws InterruptedException {
+    private void activate_leader_card() throws IOException, InterruptedException {
         if (!turn)
             System.err.println("\nNon è il tuo turno");
         else {
@@ -607,9 +587,7 @@ public class ClientSocket {
             try {
                 int y = stdIn.nextInt();
                 if (y == 1) {
-                    if(x == 0)
-                        y = 1;
-                    else
+                    if(x == 1)
                         y = 0;
                     message = new Message_One_Parameter_Int(MessageType.LEADER_CARD_ACTIVATION, position, y);
                     System.out.println("\n" + message.toString());
@@ -621,7 +599,7 @@ public class ClientSocket {
         }
     }
 
-    private void discard_leader_card() throws InterruptedException {
+    private void discard_leader_card() throws IOException, InterruptedException {
         if (!turn)
             System.err.println("\nNon è il tuo turno");
         else {
@@ -636,9 +614,7 @@ public class ClientSocket {
             try {
                 int y = stdIn.nextInt();
                 if (y == 1) {
-                    if(x == 0)
-                        y = 1;
-                    else
+                    if(x == 1)
                         y = 0;
                     message = new Message_One_Parameter_Int(MessageType.LEADER_CARD_DISCARD, position, y);
                     System.out.println("\n" + message.toString());
@@ -650,7 +626,7 @@ public class ClientSocket {
         }
     }
 
-    private void end_turn() throws InterruptedException {
+    private void end_turn() throws IOException, InterruptedException {
         Message end_turn = new Message(MessageType.END_TURN, position);
         sendMessage(end_turn);
         turn = false;
@@ -729,44 +705,36 @@ public class ClientSocket {
      * if after 30 seconds Server didn't return any message, connection with Server is considered as lost.
      * @throws InterruptedException if the connection with Server breaks during waiting.
      */
-    private void isMyTurn(MessageType type) throws InterruptedException {
-        try {
-            long initTime = System.currentTimeMillis();
-            Message message = new Message(type, position);
-            out.flush();
-            out.writeObject(message);
-            while(true) {
-                synchronized (lock2) {
-                    lock2.wait(10000);
-                    if (isTimePassed(initTime, System.currentTimeMillis(), 30000))
-                        throw new InterruptedException();
-                    else if (!(isTimePassed(initTime, System.currentTimeMillis(), 10000))){
-                        TimeUnit.SECONDS.sleep(10);
-                        initTime = System.currentTimeMillis();
-                    }
-                    else{
-                        out.flush();
-                        out.writeObject(message);
-                    }
+    private void isMyTurn(MessageType type) throws IOException, InterruptedException {
+        long initTime = System.currentTimeMillis();
+        long interTime = initTime;
+        Message message = new Message(type, position);
+        out.flush();
+        out.writeObject(message);
+        while (true) {
+            synchronized (lock2) {
+                lock2.wait(10000);
+                if (isTimePassed(initTime, System.currentTimeMillis(), 30000)) {
+                    throw new IOException();
+                } else if (!(isTimePassed(interTime, System.currentTimeMillis(), 10000))) {
+                    TimeUnit.SECONDS.sleep(10);
+                    break;
+                } else {
+                    interTime = System.currentTimeMillis();
+                    out.flush();
+                    out.writeObject(message);
                 }
             }
-        }
-        catch (IOException e) {
-            System.err.println("\nClient non più connesso al Server.");
-            threadOut.interrupt();
-            disconnect();
-            System.exit(0);
         }
     }
 
     /**
      * constantly wait for Server input and handle it by return a new message to Server or notifying other thread.
      */
-    private void receiveMessage(){
+    private void receiveMessage() throws IOException, InterruptedException {
         while(true) {
             try {
-                Object o = in.readObject();
-                Message returnMessage = (Message) o;
+                Message returnMessage = (Message) in.readObject();
                 switch (returnMessage.getMessageType()) {
                     case LOGIN:
                         login_message(returnMessage);
@@ -847,17 +815,12 @@ public class ClientSocket {
                         error_message(returnMessage);
                         break;
                     default:
-                        System.err.println("\nRicevuto messaggio inaspettato dal Server");
-                        System.out.println(returnMessage.toString());
+                        System.err.println("\nRicevuto messaggio inaspettato dal Server.");
                         wake_up(lock1);
                         break;
                 }
             } catch (ClassNotFoundException | ClassCastException e) {
-                System.err.println("\nRicevuto messaggio inaspettato dal Server");
-                System.out.println();
-            } catch (IOException | InterruptedException e) {
-                System.err.println("Client non più connesso al server");
-                break;
+                System.err.println("\nRicevuto messaggio inaspettato dal Server.");
             }
         }
     }
@@ -1010,10 +973,7 @@ public class ClientSocket {
             }
         }
         Message returnMessage = new Message_One_Parameter_Int(MessageType.CHOSEN_SLOT, position, choice);
-        Thread thread = new Thread(() -> {
-            sendMessage(returnMessage);
-        });
-        thread.start();
+        sendMessage(returnMessage);
     }
 
     private void card_remove_message(Message message){
@@ -1043,7 +1003,7 @@ public class ClientSocket {
      * waits an OK message return.
      * @throws InterruptedException if the connection with Server breaks during waiting.
      */
-    private void switch_depot() throws InterruptedException {
+    private void switch_depot() throws IOException, InterruptedException {
         stdIn = new Scanner(new InputStreamReader(System.in));
         System.out.println("\nVuoi scambiare i tuoi depositi?\n1 - SI\n0 - NO");
         while (true){
@@ -1078,12 +1038,12 @@ public class ClientSocket {
         }
     }
 
-    private void chose_marble(ArrayList<Marble> marbles){
+    private void chose_marble(ArrayList<Marble> marbles) throws IOException, InterruptedException {
         stdIn = new Scanner(new InputStreamReader(System.in));
         System.out.println("\nScegli una tra queste biglie:\n" + marbles.get(0).toString());
         for(int i = 1; i < marbles.size(); i++)
             System.out.println(marbles.get(i).toString());
-        int chosenMarble = -1;
+        int chosenMarble;
         while(true) {
             try {
                 String choice = stdIn.nextLine();
@@ -1098,10 +1058,7 @@ public class ClientSocket {
             }
         }
         Message message = new Message_One_Parameter_Int(MessageType.USE_MARBLE, position,  chosenMarble);
-        Thread thread = new Thread(() -> {
-            sendMessage(message);
-        });
-        thread.start();
+        sendMessage(message);
     }
 
     private int correct_marble(String input, ArrayList<Marble> marbles){
@@ -1194,12 +1151,12 @@ public class ClientSocket {
         System.out.println("\nIl vincitore è il giocatore " + m.getClientID()
                 + " che ha totalizzato " + m.getPar1() + " punti vittoria e " + m.getPar2()
                 + " risorse totali.");
-        quit = true;
+        System.out.println("\nDisconnessione.");
         disconnect();
         System.exit(1);
     }
 
-    private void error_message(Message message) throws InterruptedException {
+    private void error_message(Message message) throws InterruptedException, IOException {
         ErrorMessage m = (ErrorMessage) message;
         switch (m.getErrorType()){
             case ALREADY_TAKEN_NICKNAME:
@@ -1208,7 +1165,7 @@ public class ClientSocket {
         }
     }
 
-    private void already_taken_nickName() throws InterruptedException {
+    private void already_taken_nickName() throws InterruptedException, IOException {
         System.err.println("\nNickName già scelto");
         System.out.println("\nInserisci un nickName diverso:");
         String userInput = stdIn.nextLine();
@@ -1219,12 +1176,25 @@ public class ClientSocket {
             }
             else if(userInput.equals(nickName)){
                 System.err.println("\nNon puoi inserire lo stesso nickName");
+                userInput = stdIn.nextLine();
             }
             else break;
         }
         nickName = userInput;
         Message message = new Message_One_Parameter_String(MessageType.LOGIN, position, nickName);
-        sendMessage(message);
+        out.flush();
+        out.writeObject(message);
+        while (true){
+            try {
+                Message m = (Message) in.readObject();
+                if(m.getMessageType() == MessageType.LOGIN){
+                    login_message(m);
+                    break;
+                }
+            } catch (ClassNotFoundException | ClassCastException e) {
+                System.err.println("\nRicevuto messaggio inaspettato dal Client.");
+            }
+        }
     }
 
     /**
@@ -1235,23 +1205,14 @@ public class ClientSocket {
      * @param message is the message to send to Server
      * @throws InterruptedException if thread is interrupted during the waiting.
      */
-    private void sendMessage(Message message){
-        try {
-            ok = false;
-            out.flush();
-            out.writeObject(message);
-            while(!ok){
-                synchronized (lock1){
-                    lock1.wait();
-                }
+    private void sendMessage(Message message) throws IOException, InterruptedException {
+        ok = false;
+        out.flush();
+        out.writeObject(message);
+        while (!ok) {
+            synchronized (lock1) {
+                lock1.wait();
             }
-        } catch (IOException e) {
-            System.err.println("\nClient non più connesso al Server.");
-            threadOut.interrupt();
-            disconnect();
-            System.exit(0);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
     }
 

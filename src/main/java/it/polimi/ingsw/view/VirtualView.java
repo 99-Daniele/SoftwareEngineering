@@ -11,17 +11,15 @@ import java.net.SocketException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-public class VirtualView extends Observable implements View, Observer{
+public class VirtualView extends Observable implements View, Observer, Runnable{
 
 
     private final Object lock = new Object();
-    private Thread threadIn;
     private Thread pingThread;
     private boolean connected;
     private final ObjectInputStream in;
     private final ObjectOutputStream out;
     private String nickName;
-    private int param;
     private int position;
 
     public VirtualView(ObjectInputStream in, ObjectOutputStream out){
@@ -34,59 +32,72 @@ public class VirtualView extends Observable implements View, Observer{
         addObserver(controllerGame);
     }
 
-    public void start() {
-        if (threadIn == null) {
-            threadIn = new Thread(() -> {
-                receiveMessage();
-            });
-            threadIn.start();
-        }
-        if(pingThread == null){
+
+    @Override
+    public void run() {
+        if(pingThread == null) {
             pingThread = new Thread(() -> {
+                try {
                     ping();
+                } catch (InterruptedException | IOException e) {
+                    if(connected){
+                        if(nickName == null)
+                            System.err.println("Client si è disconesso brutalmente.");
+                        else
+                            System.err.println(nickName + " si è disconnesso brutalmente.");
+                    }
+                    else {
+                        if(nickName == null)
+                            System.out.println("Client si è disconesso.");
+                        else
+                            System.out.println(nickName + " si è disconnesso.");
+                    }
+                    disconnect();
+                }
             });
             pingThread.start();
         }
-    }
-
-    public void join() throws InterruptedException {
-        threadIn.join();
-        pingThread.join();
-    }
-
-    public void ping(){
         try {
-            TimeUnit.SECONDS.sleep(1);
-            long initTime = System.currentTimeMillis();
-            Message message = new Message(MessageType.PING, position);
-            sendMessage(message);
-            while (true) {
-                synchronized (lock) {
-                    lock.wait(10000);
-                    if (isTimePassed(initTime, System.currentTimeMillis(), 30000))
-                        throw new InterruptedException();
-                    else if (!(isTimePassed(initTime, System.currentTimeMillis(), 10000))) {
-                        TimeUnit.SECONDS.sleep(10);
-                        initTime = System.currentTimeMillis();
-                    } else {
-                        out.flush();
-                        out.writeObject(message);
-                    }
+            receiveMessage();
+        } catch (IOException e) {
+            if(connected){
+                if(nickName == null)
+                    System.err.println("Client si è disconesso brutalmente.");
+                else
+                    System.err.println(nickName + " si è disconnesso brutalmente.");
+            }
+            else {
+                if(nickName == null)
+                    System.out.println("Client si è disconesso.");
+                else
+                    System.out.println(nickName + " si è disconnesso.");
+            }
+            disconnect();
+        }
+    }
+
+    public void ping() throws InterruptedException, IOException {
+        TimeUnit.SECONDS.sleep(1);
+        long initTime = System.currentTimeMillis();
+        long interTime = initTime;
+        Message message = new Message(MessageType.PING, position);
+        sendMessage(message);
+        while (true) {
+            synchronized (lock) {
+                lock.wait(10000);
+                if (isTimePassed(initTime, System.currentTimeMillis(), 30000)) {
+                    System.out.println(new Date(initTime) + " - " + new Date(interTime) + " - " + new Date(System.currentTimeMillis()));
+                    throw new IOException();
+                } else if (!(isTimePassed(interTime, System.currentTimeMillis(), 10000))) {
+                    TimeUnit.SECONDS.sleep(10);
+                    initTime = System.currentTimeMillis();
+                    interTime = initTime;
+                } else {
+                    interTime = System.currentTimeMillis();
+                    out.flush();
+                    out.writeObject(message);
                 }
             }
-        } catch (IOException | InterruptedException e) {
-            if (connected) {
-                if (nickName != null)
-                    System.err.println(nickName + " disconnesso brutalmente.");
-                else
-                    System.err.println("Client disconnesso brutalmente");
-                setChanged();
-                notifyObservers(new Message_One_Parameter_String(MessageType.QUIT, position, nickName));
-            } else if (nickName != null)
-                System.out.println(nickName + " si è disconnesso.\n");
-            else
-                System.err.println("Client si è disconnesso");
-            disconnect();
         }
     }
 
@@ -94,11 +105,11 @@ public class VirtualView extends Observable implements View, Observer{
         return position;
     }
 
-    private void receiveMessage() {
+    private void receiveMessage() throws IOException {
         while (true) {
             try {
                 Message message = (Message) in.readObject();
-                if(message.getMessageType() != MessageType.PONG || message.getMessageType() != MessageType.PING ||
+                if(message.getMessageType() != MessageType.PONG && message.getMessageType() != MessageType.PING &&
                         message.getMessageType() != MessageType.TURN)
                     System.out.println(message.toString());
                 switch (message.getMessageType()) {
@@ -110,68 +121,72 @@ public class VirtualView extends Observable implements View, Observer{
                             lock.notifyAll();
                         }
                         break;
+                    case TURN:
+                    case BUY_CARD:
+                    case TAKE_MARBLE:
+                    case DEVELOPMENT_CARD_POWER:
+                    case BASIC_POWER:
+                    case LEADER_CARD_POWER:
+                    case END_PRODUCTION:
+                    case LEADER_CARD_ACTIVATION:
+                    case LEADER_CARD_DISCARD:
                     case END_TURN:
-                        ok();
-                        break;
-                    default:
                         setChanged();
                         notifyObservers(message);
                         break;
                 }
-            } catch (IOException e) {
-                System.out.println(nickName + " si è disconnesso.\n");
-                disconnect();
-                break;
             } catch (ClassNotFoundException | ClassCastException e) {
-                System.err.println("Messaggi inaspettati dal Client");
+                System.err.println("\nRicevuto messaggio inaspettato dal Client.");
             }
         }
     }
 
     @Override
-    public String getNickname() throws IOException, ClassNotFoundException {
-        if(nickName != null)
-            return nickName;
-        Message message = (Message) in.readObject();
-        while (message.getMessageType() != MessageType.LOGIN)
-            message = (Message) in.readObject();
-        Message_One_Parameter_String m = (Message_One_Parameter_String) message;
-        System.out.println(m.toString());
-        nickName = m.getPar();
-        return nickName;
-    }
-
-    public String nicknameTaken() throws IOException, ClassNotFoundException {
-        String oldNickName = nickName;
-        while (nickName.equals(oldNickName)) {
-            try {
-                Message errMessage = new ErrorMessage(MessageType.ERR, position, ErrorType.ALREADY_TAKEN_NICKNAME);
-                sendMessage(errMessage);
-            } catch (IOException e) {
-                System.err.println("Client disconnesso brutalmente.");
-                disconnect();
-                throw new IOException();
-            }
+    public String getNickname() throws IOException{
+        try {
+            if(nickName != null)
+                return nickName;
             Message message = (Message) in.readObject();
             while (message.getMessageType() != MessageType.LOGIN)
                 message = (Message) in.readObject();
-            System.out.println(message.toString());
             Message_One_Parameter_String m = (Message_One_Parameter_String) message;
+            System.out.println(m.toString());
             nickName = m.getPar();
-            System.out.println(nickName);
+            return nickName;
+        } catch (ClassNotFoundException | ClassCastException e) {
+            System.err.println("\nRicevuto messaggio inaspettato dal Client.");
+        }
+        return null;
+    }
+
+    public String nicknameTaken() throws IOException{
+        String oldNickName = nickName;
+        while (nickName.equals(oldNickName)) {
+            Message errMessage = new ErrorMessage(MessageType.ERR, position, ErrorType.ALREADY_TAKEN_NICKNAME);
+            sendMessage(errMessage);
+            try {
+                Message message = (Message) in.readObject();
+                while (message.getMessageType() != MessageType.LOGIN)
+                    message = (Message) in.readObject();
+                System.out.println(message.toString());
+                Message_One_Parameter_String m = (Message_One_Parameter_String) message;
+                nickName = m.getPar();
+            } catch (ClassNotFoundException | ClassCastException e) {
+                System.err.println("\nRicevuto messaggio inaspettato dal Client.");
+            }
         }
         return nickName;
     }
 
-    public int getNumberPlayers() throws IOException, ClassNotFoundException {
-        Message message = new Message(MessageType.LOGIN, 1);
+    public int getNumberPlayers() throws IOException{
+        Message message = new Message(MessageType.LOGIN, 0);
         sendMessage(message);
-        Message numPlayerMessage = (Message) in.readObject();
-        while (true) {
-            while (numPlayerMessage.getMessageType() != MessageType.NUM_PLAYERS)
-                numPlayerMessage = (Message) in.readObject();
-            Message_One_Parameter_Int m = (Message_One_Parameter_Int) numPlayerMessage;
-            try {
+        try {
+            Message numPlayerMessage = (Message) in.readObject();
+            while (true) {
+                while (numPlayerMessage.getMessageType() != MessageType.NUM_PLAYERS)
+                    numPlayerMessage = (Message) in.readObject();
+                Message_One_Parameter_Int m = (Message_One_Parameter_Int) numPlayerMessage;
                 if (m.getPar() < 1 || m.getPar() > 4) {
                     ErrorMessage errMessage = new ErrorMessage(MessageType.ERR, 1, ErrorType.WRONG_PARAMETERS);
                     sendMessage(errMessage);
@@ -180,12 +195,11 @@ public class VirtualView extends Observable implements View, Observer{
                     ok();
                     return m.getPar();
                 }
-            } catch (IOException e) {
-                System.err.println(nickName + " disconnesso brutalmente.");
-                disconnect();
-                return -1;
             }
+        } catch (ClassNotFoundException | ClassCastException e) {
+            System.err.println("\nRicevuto messaggio inaspettato dal Client.");
         }
+        return -1;
     }
 
     public void myTurn(boolean turn) throws IOException {
@@ -208,7 +222,7 @@ public class VirtualView extends Observable implements View, Observer{
 
     public void position(int position) throws IOException {
         this.position = position;
-        if(position != 1) {
+        if(position != 0) {
             Message message = new Message(MessageType.LOGIN, position);
             System.out.println(message.toString());
             sendMessage(message);
@@ -223,17 +237,14 @@ public class VirtualView extends Observable implements View, Observer{
     public void quit(String nickName) throws IOException {
         connected = false;
         Message quitMessage = new Message_One_Parameter_String(MessageType.QUIT, position, nickName);
-        try {
-            sendMessage(quitMessage);
-        }catch (SocketException e){}
+        sendMessage(quitMessage);
+        disconnect();
     }
 
     public void ok() throws IOException {
         Message okMessage = new Message(MessageType.OK, position);
         System.out.println("OK");
-        try {
-            sendMessage(okMessage);
-        }catch (SocketException e){}
+        sendMessage(okMessage);
     }
 
     private boolean isTimePassed(long initTime, long currentTime, int delta){
@@ -260,7 +271,8 @@ public class VirtualView extends Observable implements View, Observer{
                     ok();
                     return m.getPar();
                 }
-            } catch (SocketException | ClassNotFoundException | ClassCastException e) {
+            } catch (ClassNotFoundException | ClassCastException e) {
+                System.err.println("\nRicevuto messaggio inaspettato dal Server.");
             }
         }
     }
@@ -279,17 +291,16 @@ public class VirtualView extends Observable implements View, Observer{
                         ok();
                     break;
                 }
-            } catch (SocketException | ClassNotFoundException | ClassCastException e) {
+            } catch (ClassNotFoundException | ClassCastException e) {
+                System.err.println("\nRicevuto messaggio inaspettato dal Client.");
             }
         }
     }
 
-    public void sendMessage(Message message) throws IOException {
-        try {
-            out.flush();
-            out.writeObject(message);
-        }catch (SocketException e){}
-        if(message.getMessageType() == MessageType.END_GAME)
+    public void sendMessage(Message message) throws IOException{
+        out.flush();
+        out.writeObject(message);
+        if (message.getMessageType() == MessageType.END_GAME || message.getMessageType() == MessageType.QUIT)
             connected = false;
     }
 
@@ -303,10 +314,8 @@ public class VirtualView extends Observable implements View, Observer{
     }
 
     public void endGame(Message message) throws IOException {
-        try {
-            sendMessage(message);
-            disconnect();
-        }catch (SocketException e){}
+        sendMessage(message);
+        disconnect();
     }
 /*
     private Scanner CurrentViewIn(int currentPos){
@@ -322,8 +331,6 @@ public class VirtualView extends Observable implements View, Observer{
         Message message = (Message) arg;
         try {
             sendMessage(message);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        } catch (IOException e) { }
     }
 }

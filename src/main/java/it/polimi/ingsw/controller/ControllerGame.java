@@ -45,7 +45,7 @@ public class ControllerGame implements Observer{
         game.addObservers((VirtualView) view);
     }
 
-    public void addPlayer(String nickname, int position) throws IOException, ClassNotFoundException {
+    public void addPlayer(String nickname, int position) throws IOException{
         boolean error=true;
         while (error) {
             try {
@@ -60,16 +60,31 @@ public class ControllerGame implements Observer{
     }
 
     public synchronized void waitPlayers() {
+        try {
         if (views.size() == game.getNumOfPlayers()) {
             System.out.println("\nInizia nuova partita\n");
-            notifyAll();
-        } else {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            for (View view: views)
+                view.pronto(game.getNumOfPlayers());
         }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void isMyTurn(int pos) throws IOException {
+        if(pos != game.getCurrentPosition())
+            views.get(pos).myTurn(false);
+        else
+            views.get(pos).myTurn(true);
+    }
+
+    public void quitGame(String nickName, int position) throws IOException {
+        removeView(nickName, position);
+        if(views.size() == 0)
+            System.out.println("\nPartita finita");
+        else
+            for(View view: views)
+                view.quit(nickName);
     }
 
     public synchronized void removeView(String nickName, int position){
@@ -79,11 +94,9 @@ public class ControllerGame implements Observer{
         }catch (IndexOutOfBoundsException e){}
     }
 
-    public void isMyTurn(int pos) throws IOException {
-        if(pos!= game.getCurrentPosition())
-            views.get(pos).myTurn(false);
-        else
-            views.get(pos).myTurn(true);
+    public void endGame() throws IOException {
+        game.endGame();
+        System.out.println("\nPartita finita");
     }
 
     @Override
@@ -95,10 +108,10 @@ public class ControllerGame implements Observer{
         Message m = (Message) arg;
         int pos = m.getClientID();
         try {
-            View selectedView = views.get(pos -1);
+            View selectedView = views.get(pos);
             switch (m.getMessageType()) {
                 case TURN:
-                    isMyTurn(pos -1);
+                    isMyTurn(pos);
                     break;
                 case BUY_CARD:
                     ArrayList<Integer> slots = new ArrayList<>(3);
@@ -123,37 +136,13 @@ public class ControllerGame implements Observer{
                     game.nextPlayer();
                     break;
                 default:
-                    System.err.println("DEFAULT");
                     selectedView.ok();
                     break;
             }
         } catch (IOException | IndexOutOfBoundsException e) {
-            e.printStackTrace();
+            
         }
 
-    }
-
-    public void quitGame(String nickName, int position) throws IOException {
-        removeView(nickName, position -1);
-        for(View view: views)
-            view.quit(nickName);
-        try {
-            TimeUnit.SECONDS.sleep(1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        System.out.println("\nPartita finita\n");
-    }
-
-    public void endGame() throws IOException {
-        game.endGame();
-        System.out.println("\nPartita finita\n");
-    }
-
-
-    private void nextTurn()
-    {
-        game.nextPlayer();
     }
 
    /* public int getCurrentTurn(){
