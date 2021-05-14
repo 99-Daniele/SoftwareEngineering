@@ -3,7 +3,12 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.games.Game;
 import it.polimi.ingsw.model.games.SinglePlayerGame;
+import it.polimi.ingsw.model.market.Marble;
+import it.polimi.ingsw.model.market.RedMarble;
+import it.polimi.ingsw.model.market.ResourceMarble;
+import it.polimi.ingsw.model.market.WhiteMarble;
 import it.polimi.ingsw.model.player.PlayerBoard;
+import it.polimi.ingsw.model.resourceContainers.Resource;
 import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.VirtualView;
@@ -40,16 +45,16 @@ public class ControllerGame implements Observer{
         game.addObservers((VirtualView) view);
     }
 
-    public void addNickname(String nickname) throws IOException{
+    public void addPlayer(String nickname, int position) throws IOException, ClassNotFoundException {
         boolean error=true;
         while (error) {
             try {
                 game.createPlayer(nickname);
+                for (View view: views)
+                    view.newPlayer(nickname, position);
                 error = false;
             } catch (AlreadyTakenNicknameException e) {
-                views.get(views.size()-1).nicknameTaken();
-                nickname = views.get(views.size()-1).getNickname();
-                System.out.println(nickname);
+                nickname = views.get(views.size()-1).nicknameTaken();
             }
         }
     }
@@ -67,6 +72,13 @@ public class ControllerGame implements Observer{
         }
     }
 
+    public synchronized void removeView(String nickName, int position){
+        game.deletePlayer(nickName);
+        try {
+            views.remove(position);
+        }catch (IndexOutOfBoundsException e){}
+    }
+
     public void isMyTurn(int pos) throws IOException {
         if(pos!= game.getCurrentPosition())
             views.get(pos).myTurn(false);
@@ -81,10 +93,9 @@ public class ControllerGame implements Observer{
         game.nextPlayer();
          */
         Message m = (Message) arg;
-        System.out.println(m.toString());
         int pos = m.getClientID();
-        View selectedView = views.get(pos -1);
         try {
+            View selectedView = views.get(pos -1);
             switch (m.getMessageType()) {
                 case TURN:
                     isMyTurn(pos -1);
@@ -95,27 +106,47 @@ public class ControllerGame implements Observer{
                     slots.add(1);
                     slots.add(2);
                     selectedView.available_slot(pos, slots);
-                    selectedView.ok(pos);
+                    break;
+                case TAKE_MARBLE:
+                    ArrayList<Marble> marbles = new ArrayList<>(4);
+                    marbles.add(new RedMarble());
+                    marbles.add(new WhiteMarble());
+                    marbles.add(new ResourceMarble(Resource.COIN));
+                    marbles.add(new WhiteMarble());
+                    for (int i = 0; i < 3; i++) {
+                        selectedView.chosen_marble(pos, marbles);
+                    }
+                    selectedView.ok();
+                    break;
+                case END_TURN:
+                    selectedView.ok();
+                    game.nextPlayer();
                     break;
                 default:
-                    selectedView.ok(pos);
+                    System.err.println("DEFAULT");
+                    selectedView.ok();
                     break;
             }
-        } catch (IOException e) {
+        } catch (IOException | IndexOutOfBoundsException e) {
             e.printStackTrace();
         }
 
     }
 
-    private void endGame(Message message) throws IOException {
+    public void quitGame(String nickName, int position) throws IOException {
+        removeView(nickName, position -1);
         for(View view: views)
-            view.quit(message.getClientID());
-        game.endGame();
+            view.quit(nickName);
         try {
             TimeUnit.SECONDS.sleep(1);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        System.out.println("\nPartita finita\n");
+    }
+
+    public void endGame() throws IOException {
+        game.endGame();
         System.out.println("\nPartita finita\n");
     }
 
@@ -129,10 +160,8 @@ public class ControllerGame implements Observer{
         return game.getCurrentPosition();
     }*/
 
-    public Message inGame(Message message)
-    {
-        switch(message.getMessageType())
-        {
+    public Message inGame(Message message) {
+        switch(message.getMessageType()) {
             case BUY_CARD:
                 return buyCardHandler(message);
             case TAKE_MARBLE:
@@ -167,8 +196,7 @@ public class ControllerGame implements Observer{
         }
     }
 
-    public Message buyCardHandler(Message message)
-    {
+    public Message buyCardHandler(Message message) {
         ArrayList<Integer> arrayList;
         Message_Three_Parameter_Int message_three_parameter_int=(Message_Three_Parameter_Int) message;
         try {
@@ -193,8 +221,7 @@ public class ControllerGame implements Observer{
     }
 
 
-    public Message chosenSlotHandler(Message message)
-    {
+    public Message chosenSlotHandler(Message message) {
         Message_One_Parameter_Int message_one_parameter_int=(Message_One_Parameter_Int) message;
         /*gestione dello slot scelto dall'utente
         message_one_parameter_int.getPar();
@@ -203,8 +230,7 @@ public class ControllerGame implements Observer{
     }
 
 
-    public Message takeMarbleHandler(Message message)
-    {
+    public Message takeMarbleHandler(Message message) {
         Message_Two_Parameter_Int message_two_parameter_int=(Message_Two_Parameter_Int)message;
         boolean choice= message_two_parameter_int.getPar1()==0 ? true : false;
         try {
@@ -215,16 +241,14 @@ public class ControllerGame implements Observer{
         return new Message_One_Parameter_String(MessageType.OK,message_two_parameter_int.getClientID(),"Success");
     }
 
-    public Message useMarbleHandler(Message message)
-    {
+    public Message useMarbleHandler(Message message) {
         Message_One_Parameter_Marble message_one_parameter_marble=(Message_One_Parameter_Marble) message;
         message_one_parameter_marble.getMarble().useMarble(game);
         return new Message_One_Parameter_String(MessageType.OK,message_one_parameter_marble.getClientID(),"success");
     }
 
     /* richiede l'identificativo leaderCard*/
-    public Message whiteConversionCardHandler(Message message)
-    {
+    public Message whiteConversionCardHandler(Message message) {
         Message_One_Parameter_Int message_one_parameter_int=(Message_One_Parameter_Int) message;
         /*
         game.whiteMarbleConversion();
@@ -233,8 +257,7 @@ public class ControllerGame implements Observer{
     }
 
 
-    public Message switchHandler(Message message)
-    {
+    public Message switchHandler(Message message) {
         Message_Two_Parameter_Int message_two_parameter_int=(Message_Two_Parameter_Int)message;
         try {
             game.switchDepots(message_two_parameter_int.getPar1(),message_two_parameter_int.getPar2());
@@ -257,8 +280,7 @@ public class ControllerGame implements Observer{
     }
 */
 
-    public Message leaderCardPowerHandler(Message message)
-    {
+    public Message leaderCardPowerHandler(Message message) {
         Message_One_Resource_Two_Int message_one_resource_two_int=(Message_One_Resource_Two_Int) message;
         PlayerBoard playerBoard= game.getPlayer(message_one_resource_two_int.getClientID());
         try {
@@ -272,8 +294,7 @@ public class ControllerGame implements Observer{
     }
 
 
-    public Message leaderActivationHandler(Message message)
-    {
+    public Message leaderActivationHandler(Message message) {
         Message_One_Parameter_Int message_one_parameter_int=(Message_One_Parameter_Int)message;
         try {
             game.activateLeaderCard(message_one_parameter_int.getPar());
@@ -289,8 +310,7 @@ public class ControllerGame implements Observer{
         return new Message_One_Parameter_String(MessageType.OK, message_one_parameter_int.getClientID(), "Success");
     }
 
-    public Message leaderDiscardHandler(Message message)
-    {
+    public Message leaderDiscardHandler(Message message) {
         Message_One_Parameter_Int message_one_parameter_int=(Message_One_Parameter_Int)message;
         try {
             game.discardLeaderCard(message_one_parameter_int.getPar());

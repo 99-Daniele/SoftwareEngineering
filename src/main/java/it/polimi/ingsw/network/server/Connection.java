@@ -12,20 +12,22 @@ public class Connection {
     private static int max;
     private static ControllerGame controllerGame;
 
-    public static synchronized PosControllerGame ConnectionPlayers(VirtualView virtualView, String nickname) throws IOException{
+    public static synchronized PosControllerGame ConnectionPlayers(VirtualView virtualView, String nickname) throws IOException, ClassNotFoundException {
         if (count == 0) {
             count = virtualView.getNumberPlayers();
+            if(count == -1)
+                throw new IOException();
             max = count;
             controllerGame = new ControllerGame(count);
             controllerGame.addView(virtualView);
             virtualView.addController(controllerGame);
-            controllerGame.addNickname(nickname);
+            controllerGame.addPlayer(nickname, 0);
             count--;
             return new PosControllerGame(controllerGame, 1);
         } else {
             controllerGame.addView(virtualView);
             virtualView.addController(controllerGame);
-            controllerGame.addNickname(nickname);
+            controllerGame.addPlayer(nickname, max - count  -1);
             count--;
             return new PosControllerGame(controllerGame, max - count);
 

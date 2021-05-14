@@ -35,6 +35,7 @@ public enum MessageType {
     QUIT,
     END_GAME,
     PING,
+    PONG,
     OK,
     ERR,
 }

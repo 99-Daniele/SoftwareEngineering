@@ -2,6 +2,7 @@ package it.polimi.ingsw.network.server;
 
 import it.polimi.ingsw.controller.ControllerGame;
 import it.polimi.ingsw.controller.PosControllerGame;
+import it.polimi.ingsw.network.messages.Message_One_Parameter_String;
 import it.polimi.ingsw.view.VirtualView;
 import it.polimi.ingsw.network.messages.Message;
 import it.polimi.ingsw.network.messages.MessageType;
@@ -31,23 +32,19 @@ public class PlayerServer implements Runnable {
             PosControllerGame posControllerGame = Connection.ConnectionPlayers(virtualView, nickname);
             controllerGame = posControllerGame.getControllerGame();
             virtualView.position(posControllerGame.getPosition());
+            virtualView.start();
             controllerGame.waitPlayers();
             virtualView.pronto(controllerGame.getNumPlayers());
-            virtualView.run();
-            disconnect();
-        } catch (IOException e) {
-            Message quitMessage = new Message(MessageType.QUIT, 0);
-            try {
-                out.flush();
-                out.writeObject(quitMessage);
-            } catch (IOException ioException) { }
-            disconnect();
-        } catch (ClassCastException e) {
+            virtualView.join();
+            disconnect(virtualView.getPosition(), virtualView.getNickname());
+        } catch (IOException | InterruptedException e) {
+            closeConnections();
+        } catch (ClassCastException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    private void disconnect() {
+    private void closeConnections(){
         try {
             if (!socket.isClosed()) {
                 in.close();
@@ -56,6 +53,11 @@ public class PlayerServer implements Runnable {
             }
         } catch (IOException e) {
         }
+    }
+
+    private void disconnect(int position, String nickName) throws IOException {
+        closeConnections();
+        controllerGame.quitGame(nickName, position);
     }
 }
 //lato client bloccare messaggi quando in attesa altrimenti buffer li memorizza

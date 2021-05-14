@@ -116,6 +116,20 @@ public class Game extends Observable implements LightGame{
         players.add(player);
     }
 
+    public void deletePlayer(String nickName){
+        PlayerBoard quitPlayer = null;
+        for (PlayerBoard player: players) {
+            if (player.getNickname().equals(nickName))
+                quitPlayer = player;
+        }
+        Message m = new Message_One_Parameter_String(MessageType.QUIT, 0, quitPlayer.getNickname());
+        try {
+            players.remove(quitPlayer);
+        }catch (IndexOutOfBoundsException e){}
+        setChanged();
+        notifyObservers(m);
+    }
+
     /**
      * @param nickname is player chosen nickname.
      * @return true if @param nickname is already taken by another player.
@@ -199,7 +213,7 @@ public class Game extends Observable implements LightGame{
      */
     @Override
     public boolean increaseWarehouse(Resource resource) {
-        Message_One_Int_One_Resource message_one_int_one_resource=new Message_One_Int_One_Resource(MessageType.INCREASE_WAREHOUSE,currentPlayer+1,resource,);
+        Message_One_Int_One_Resource message_one_int_one_resource=new Message_One_Int_One_Resource(MessageType.INCREASE_WAREHOUSE,currentPlayer+1,resource, 1);
         setChanged();
         notifyObservers(message_one_int_one_resource);
         return players.get(currentPlayer).increaseWarehouse(resource);
@@ -634,6 +648,7 @@ public class Game extends Observable implements LightGame{
         } catch (AlreadyDiscardLeaderCardException e) {
             e.printStackTrace();
         }
+        int idcard = 0;
         Message_One_Parameter_Int message_one_parameter_int=new Message_One_Parameter_Int(MessageType.LEADER_CARD_ACTIVATION,currentPlayer+1, idcard);
         setChanged();
         notifyObservers(message_one_parameter_int);
@@ -654,6 +669,7 @@ public class Game extends Observable implements LightGame{
         } catch (AlreadyDiscardLeaderCardException e) {
             e.printStackTrace();
         }
+        int idcard = 0;
         Message_One_Parameter_Int message_one_parameter_int=new Message_One_Parameter_Int(MessageType.LEADER_CARD_DISCARD, currentPlayer+1, idcard);
         setChanged();
         notifyObservers(message_one_parameter_int);
