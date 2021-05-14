@@ -513,7 +513,7 @@ public class Game extends Observable implements LightGame{
     public void removeDevelopmentCardProductionResource(int chosenSlot, Strongbox s, int choice)
             throws InsufficientResourceException, NoSuchProductionPowerException {
         players.get(currentPlayer).activateDevelopmentCardProductionPower(chosenSlot, s, choice);
-        faithTrackMovement();
+        faithTrackMovement();//penso dovremmo notificare pure victory points legsti al papa
         Message_One_Parameter_Int message_one_parameter_int=new Message_One_Parameter_Int(MessageType.FAITH_POINTS_INCREASE,currentPlayer+1,players.get(currentPlayer).getFaithPoints());
         setChanged();
         notifyObservers(message_one_parameter_int);
