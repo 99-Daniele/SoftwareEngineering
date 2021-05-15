@@ -14,4 +14,9 @@ public class Message_Market extends Message{
     public Market getMarket() {
         return market;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + "Market";
+    }
 }

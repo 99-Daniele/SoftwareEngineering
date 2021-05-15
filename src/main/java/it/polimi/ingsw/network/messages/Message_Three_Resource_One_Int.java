@@ -34,10 +34,10 @@ public class Message_Three_Resource_One_Int extends Message{
 
     @Override
     public String toString() {
-        return "MessageBasicProduction{" +
-                "resourceDeleted1=" + resource1 +
-                ", resourceDeleted2=" + resource2 +
-                ", resourceObtained=" + resource3 +
+        return super.toString() + "{" +
+                "resourceDeleted1: " + resource1 +
+                ", resourceDeleted2: " + resource2 +
+                ", resourceObtained: " + resource3 +
                 '}';
     }
 }

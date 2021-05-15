@@ -17,7 +17,7 @@ public class Message implements Serializable {
 
     @Override
     public String toString() {
-        return messageType + ": " + clientID;
+        return messageType + ": ";
     }
 
     public MessageType getMessageType() {

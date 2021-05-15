@@ -32,11 +32,11 @@ public class Message_Four_Parameter_Int extends Message{
 
     @Override
     public String toString() {
-        return "MessageLeaderCardInit{" +
-                "par1=" + par1 +
-                ", par2=" + par2 +
-                ", par3=" + par3 +
-                ", par4=" + par4 +
+        return super.toString() + "{" +
+                "par1: " + par1 +
+                ", par2: " + par2 +
+                ", par3: " + par3 +
+                ", par4: " + par4 +
                 '}';
     }
 }

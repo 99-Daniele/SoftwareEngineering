@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller.states;
 
+import it.polimi.ingsw.controller.ControllerGame;
 import it.polimi.ingsw.model.leaderCards.LeaderCard;
 import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.model.player.Strongbox;
@@ -12,11 +13,9 @@ public class ActivateProductionState implements State_Controller{
     private Strongbox s;
 
     @Override
-    public State_Controller nextState(MessageType wantedMessage) {
-        if(wantedMessage == MessageType.END_PRODUCTION)
-            return this;
-        else
-            return new EndTurnState();
+    public void nextState(ControllerGame controllerGame, MessageType wantedMessage) {
+        if(wantedMessage != MessageType.END_PRODUCTION)
+            controllerGame.setCurrentState(new EndTurnState());
     }
 
     @Override

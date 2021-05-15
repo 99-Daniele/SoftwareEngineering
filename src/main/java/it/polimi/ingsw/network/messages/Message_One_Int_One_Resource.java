@@ -23,9 +23,9 @@ public class Message_One_Int_One_Resource extends Message{
 
     @Override
     public String toString() {
-        return "Message_Two_Int_One_Resource{" +
-                "resource=" + resource +
-                ", par1=" + par1 +
+        return super.toString() + "{" +
+                "resource: " + resource +
+                ", par1: " + par1 +
                 '}';
     }
 }

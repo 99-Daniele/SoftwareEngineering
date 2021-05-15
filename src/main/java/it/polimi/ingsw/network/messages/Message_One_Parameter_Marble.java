@@ -16,8 +16,8 @@ public class Message_One_Parameter_Marble extends Message{
 
     @Override
     public String toString() {
-        return "UseMarble{" +
-                "marble=" + marble +
+        return super.toString() + "{" +
+                "marble:" + marble +
                 '}';
     }
 }

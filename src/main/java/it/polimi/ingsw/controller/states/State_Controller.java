@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller.states;
 
+import it.polimi.ingsw.controller.ControllerGame;
 import it.polimi.ingsw.model.leaderCards.LeaderCard;
 import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.model.player.Strongbox;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 
 public interface State_Controller {
 
-    State_Controller nextState (MessageType wantedMessage);
+    void nextState (ControllerGame controllerGame, MessageType wantedMessage);
 
     boolean isRightState (CONTROLLER_STATES state);
 

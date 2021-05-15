@@ -731,7 +731,6 @@ public class ClientSocket {
         while(true) {
             try {
                 Message returnMessage = (Message) in.readObject();
-                System.out.println(returnMessage);
                 switch (returnMessage.getMessageType()) {
                     case LOGIN:
                         login_message(returnMessage);

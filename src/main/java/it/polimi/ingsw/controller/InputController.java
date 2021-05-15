@@ -21,9 +21,9 @@ public class InputController {
         int row = takenMarbleMessage.getPar1();
         int column = takenMarbleMessage.getPar2();
         if (row == 0) {
-            return column >= 0 && column <= 3;
+            return column >= 1 && column <= 3;
         } else if (row == 1) {
-            return column >= 0 && column <= 4;
+            return column >= 1 && column <= 4;
         } else
             return false;
     }
@@ -33,18 +33,18 @@ public class InputController {
         int depot2 = switchDepotMessage.getPar2();
         if(depot1 == depot2)
             return false;
-        else if(depot1 < 0 || depot1 > 4)
+        else if(depot1 < 1 || depot1 > 5)
             return false;
-        else return depot2 >= 0 && depot2 <= 4;
+        else return depot2 >= 1 && depot2 <= 5;
     }
 
     public static boolean buy_card_check(Message_Three_Parameter_Int buyCardMessage) {
         int row = buyCardMessage.getPar1();
         int column = buyCardMessage.getPar2();
         int warehouse = buyCardMessage.getPar3();
-        if (row < 0 || row > 3) {
+        if (row < 1 || row > 3) {
             return false;
-        } else if (column < 0 || column > 4) {
+        } else if (column < 1 || column > 4) {
             return false;
         } else return warehouse == 0 || warehouse == 1;
     }
@@ -52,7 +52,7 @@ public class InputController {
     public static boolean development_card_power_check(Message_Two_Parameter_Int developmentCardPowerMessage) {
         int chosenSlot = developmentCardPowerMessage.getPar1();
         int warehouse = developmentCardPowerMessage.getPar2();
-        if (chosenSlot < 0 || chosenSlot > 2)
+        if (chosenSlot < 1 || chosenSlot > 3)
             return false;
         else return warehouse == 0 || warehouse == 1;
     }
@@ -65,7 +65,7 @@ public class InputController {
     public static boolean leader_card_power_check(Message_One_Resource_Two_Int leaderCardPowerMessage){
         int chosenLeaderCard = leaderCardPowerMessage.getPar1();
         int warehouse = leaderCardPowerMessage.getPar2();
-        if(chosenLeaderCard != 0 && chosenLeaderCard != 1)
+        if(chosenLeaderCard != 1 && chosenLeaderCard != 2)
             return false;
         return warehouse == 0 || warehouse == 1;
     }

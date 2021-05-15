@@ -13,7 +13,7 @@ public class Message_Two_Parameter_Int extends Message {
 
     @Override
     public String toString() {
-        return super.toString() +"{ par1 = " + par1 + ", par2 = " + par2 + "}";
+        return super.toString() +"{par1: " + par1 + ", par2: " + par2 + "}";
     }
 
     public int getPar1() {

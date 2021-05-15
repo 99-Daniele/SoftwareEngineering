@@ -26,7 +26,7 @@ public class WhiteMarbleTest {
         Cost c = new Cost();
         LeaderCard card1 = new WhiteConversionCard(Resource.COIN, c, 1);
         LeaderCard card2 = new WhiteConversionCard(Resource.SERVANT, c, 1);
-        game.selectCurrentPlayerLeaderCards(card1, card2);
+        game.selectPlayerLeaderCards(card1, card2, 0);
         game.getPlayer(1).increaseFaithPoints(2);
 
         assertEquals(0, game.getPlayer(0).getFaithPoints());

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller.states;
 
+import it.polimi.ingsw.controller.ControllerGame;
 import it.polimi.ingsw.model.leaderCards.LeaderCard;
 import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.model.player.Strongbox;
@@ -15,8 +16,8 @@ public class BuyCardState implements State_Controller{
     private ArrayList<Integer> availableSlots = new ArrayList<>();
 
     @Override
-    public State_Controller nextState(MessageType wantedMessage) {
-        return new EndTurnState();
+    public void nextState(ControllerGame controllerGame, MessageType wantedMessage) {
+        controllerGame.setCurrentState(new EndTurnState());
     }
 
     @Override

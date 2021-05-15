@@ -11,10 +11,11 @@ public class Message_One_Parameter_Int extends Message {
 
     @Override
     public String toString() {
-        return super.toString() + "{ par = " + par + "}";
+        return super.toString() + "{par: " + par + "}";
     }
 
     public int getPar() {
         return par;
     }
+
 }

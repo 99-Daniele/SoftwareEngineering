@@ -29,10 +29,10 @@ public class Message_One_Resource_Two_Int extends Message{
 
     @Override
     public String toString() {
-        return "MessageSwitchReply{" +
-                "resource=" + resource +
-                ", par1=" + par1 +
-                ", par2=" + par2 +
+        return super.toString() + "{" +
+                "resource: " + resource +
+                ", par1: " + par1 +
+                ", par2: " + par2 +
                 '}';
     }
 }

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller.states;
 
+import it.polimi.ingsw.controller.ControllerGame;
 import it.polimi.ingsw.model.leaderCards.LeaderCard;
 import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.model.player.Strongbox;
@@ -13,13 +14,11 @@ public class TakeMarbleState implements State_Controller{
     private ArrayList<Marble> marbles = new ArrayList<>();
 
     @Override
-    public State_Controller nextState (MessageType wantedMessage) {
-        if(wantedMessage == MessageType.USE_MARBLE)
-            return this;
-        else if(wantedMessage == MessageType.WHITE_CONVERSION_CARD)
-            return new WhiteConversionCardState();
+    public void nextState(ControllerGame controllerGame, MessageType wantedMessage) {
+        if(wantedMessage == MessageType.WHITE_CONVERSION_CARD)
+            controllerGame.setCurrentState(new WhiteConversionCardState());
         else
-            return new EndTurnState();
+            controllerGame.setCurrentState(new EndTurnState());
     }
 
     @Override

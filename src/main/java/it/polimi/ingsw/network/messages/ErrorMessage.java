@@ -15,8 +15,6 @@ public class ErrorMessage extends Message{
 
     @Override
     public String toString() {
-        return super.toString() +
-                "errorType=" + errorType +
-                "} ";
+        return super.toString() + errorType;
     }
 }

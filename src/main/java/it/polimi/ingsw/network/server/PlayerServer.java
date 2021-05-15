@@ -25,8 +25,9 @@ public class PlayerServer implements Runnable {
             int viewID = controllerGame.addView(virtualView);
             virtualView.addObserver(controllerGame);
             virtualView.start(viewID);
+            virtualView.join();
             disconnect(viewID, virtualView.getNickname());
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             try {
                 controllerGame.quitGame(virtualView.getNickname(), virtualView.getViewID());
             } catch (IOException ioException) { }

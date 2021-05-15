@@ -21,8 +21,6 @@ public class Message_ArrayList_Vector_Int extends Message{
 
     @Override
     public String toString() {
-        return "MessageAvailableSwitchReply{" +
-                "switches=" +
-                '}';
+        return super.toString() + switches;
     }
 }

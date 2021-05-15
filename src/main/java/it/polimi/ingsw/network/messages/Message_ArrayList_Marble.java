@@ -19,8 +19,6 @@ public class Message_ArrayList_Marble extends Message{
 
     @Override
     public String toString() {
-        return "Message_ArrayList_Marble{"+ super.toString() +
-                "marbles=" + marbles +
-                "} " ;
+        return super.toString() + marbles;
     }
 }

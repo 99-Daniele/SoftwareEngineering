@@ -51,6 +51,11 @@ public class VirtualView extends Observable implements View, Observer{
         }
     }
 
+    public void join() throws InterruptedException {
+        pingThread.join();
+        inThread.join();
+    }
+
     public String getNickname(){
         return nickName;
     }
@@ -69,7 +74,6 @@ public class VirtualView extends Observable implements View, Observer{
             synchronized (lock) {
                 lock.wait(10000);
                 if (isTimePassed(initTime, System.currentTimeMillis(), 30000)) {
-                    System.out.println(new Date(initTime) + " - " + new Date(interTime) + " - " + new Date(System.currentTimeMillis()));
                     throw new IOException();
                 } else if (!(isTimePassed(interTime, System.currentTimeMillis(), 10000))) {
                     TimeUnit.SECONDS.sleep(10);
@@ -98,11 +102,17 @@ public class VirtualView extends Observable implements View, Observer{
                         }
                         break;
                     case ERR:
+                        printMessage(message);
                         errorMessage(ErrorType.ILLEGAL_OPERATION);
+                        break;
+                    case TURN:
+                        setChanged();
+                        notifyObservers(message);
                         break;
                     case LOGIN:
                         nickName = ((Message_One_Parameter_String) message).getPar();
                     default:
+                        printMessage(message);
                         setChanged();
                         notifyObservers(message);
                         break;
@@ -111,6 +121,10 @@ public class VirtualView extends Observable implements View, Observer{
                 errorMessage(ErrorType.ILLEGAL_OPERATION);
             }
         }
+    }
+
+    private void printMessage(Message m){
+        System.out.println("[" + nickName + "]: " + m.toString());
     }
 
     private boolean isTimePassed(long initTime, long currentTime, int delta){
@@ -229,5 +243,10 @@ public class VirtualView extends Observable implements View, Observer{
             endGame(message);
         else
             sendMessage(message);
+    }
+
+    @Override
+    public String toString() {
+        return nickName;
     }
 }

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller.states;
 
+import it.polimi.ingsw.controller.ControllerGame;
 import it.polimi.ingsw.model.leaderCards.LeaderCard;
 import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.model.player.Strongbox;
@@ -10,11 +11,9 @@ import java.util.ArrayList;
 public class WaitingPlayerState implements State_Controller {
 
     @Override
-    public State_Controller nextState(MessageType wantedMessage) {
-        if(wantedMessage == MessageType.LOGIN)
-            return this;
-        else
-            return new FirstActionState();
+    public void nextState(ControllerGame controllerGame, MessageType wantedMessage) {
+        if(wantedMessage != MessageType.LOGIN)
+            controllerGame.setCurrentState(new FirstActionState());
     }
 
     @Override

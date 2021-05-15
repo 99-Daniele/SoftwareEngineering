@@ -18,4 +18,9 @@ public class Message_ArrayList_Int extends Message{
     public ArrayList<Integer> getParams() {
         return params;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + params;
+    }
 }

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller.states;
 
+import it.polimi.ingsw.controller.ControllerGame;
 import it.polimi.ingsw.model.leaderCards.LeaderCard;
 import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.model.player.Strongbox;
@@ -10,18 +11,16 @@ import java.util.ArrayList;
 public class FirstActionState implements State_Controller{
 
     @Override
-    public State_Controller nextState(MessageType wantedMessage) {
+    public void nextState(ControllerGame controllerGame, MessageType wantedMessage){
         switch (wantedMessage){
             case USE_MARBLE:
-                return new TakeMarbleState();
+                controllerGame.setCurrentState(new TakeMarbleState());
             case CHOSEN_SLOT:
-                return new BuyCardState();
+                controllerGame.setCurrentState(new BuyCardState());
             case END_PRODUCTION:
-                return new ActivateProductionState();
+                controllerGame.setCurrentState(new ActivateProductionState());
             case END_TURN:
-                return new EndTurnState();
-            default:
-                return this;
+                controllerGame.setCurrentState(new EndTurnState());
         }
     }
 

@@ -299,7 +299,7 @@ class GameTest {
         LeaderCard card1 = new DiscountCard(Resource.COIN, c, 1);
         LeaderCard card2 = new WhiteConversionCard(Resource.COIN, c, 2);
 
-        game.selectCurrentPlayerLeaderCards(card1, card2);
+        game.selectPlayerLeaderCards(card1, card2, 0);
         assertSame(card1, game.getPlayer(0).getLeaderCard(1));
         assertSame(card2, game.getPlayer(0).getLeaderCard(2));
 
@@ -412,7 +412,7 @@ class GameTest {
         Cost c = new Cost();
         LeaderCard leaderCard1 = new ExtraDepotCard(Resource.STONE, c, 0);
         LeaderCard leaderCard2 = new ExtraDepotCard(Resource.SERVANT, c, 0);
-        game.selectCurrentPlayerLeaderCards(leaderCard1, leaderCard2);
+        game.selectPlayerLeaderCards(leaderCard1, leaderCard2, 0);
         game.activateLeaderCard(1);
 
         game.increaseWarehouse(Resource.SERVANT);
@@ -456,7 +456,7 @@ class GameTest {
         Cost c = new Cost();
         LeaderCard leaderCard1 = new ExtraDepotCard(Resource.COIN, c, 1);
         LeaderCard leaderCard2 = new ExtraDepotCard(Resource.SHIELD, c, 1);
-        game.selectCurrentPlayerLeaderCards(leaderCard1, leaderCard2);
+        game.selectPlayerLeaderCards(leaderCard1, leaderCard2, 0);
         game.activateLeaderCard(1);
         game.activateLeaderCard(2);
 
@@ -501,7 +501,7 @@ class GameTest {
         Cost c = new Cost();
         LeaderCard leaderCard1 = new ExtraDepotCard(Resource.COIN, c, 1);
         LeaderCard leaderCard2 = new ExtraDepotCard(Resource.SHIELD, c, 1);
-        game.selectCurrentPlayerLeaderCards(leaderCard1, leaderCard2);
+        game.selectPlayerLeaderCards(leaderCard1, leaderCard2, 0);
         game.activateLeaderCard(1);
         game.activateLeaderCard(2);
 
@@ -549,7 +549,7 @@ class GameTest {
         Cost c = new Cost();
         LeaderCard leaderCard1 = new ExtraDepotCard(Resource.STONE, c, 0);
         LeaderCard leaderCard2 = new ExtraDepotCard(Resource.SERVANT, c, 0);
-        game.selectCurrentPlayerLeaderCards(leaderCard1, leaderCard2);
+        game.selectPlayerLeaderCards(leaderCard1, leaderCard2, 0);
         game.activateLeaderCard(1);
 
         game.increaseWarehouse(Resource.SERVANT);
@@ -611,7 +611,7 @@ class GameTest {
         Cost c = new Cost();
         LeaderCard leaderCard1 = new ExtraDepotCard(Resource.STONE, c, 1);
         LeaderCard leaderCard2 = new ExtraDepotCard(Resource.SERVANT, c, 1);
-        game.selectCurrentPlayerLeaderCards(leaderCard1, leaderCard2);
+        game.selectPlayerLeaderCards(leaderCard1, leaderCard2, 0);
 
         game.getPlayer(0).increaseFaithPoints(2);
         assertEquals(2, game.getPlayer(0).getFaithPoints());
@@ -638,7 +638,7 @@ class GameTest {
         Cost c = new Cost();
         LeaderCard leaderCard1 = new AdditionalProductionPowerCard(Resource.SHIELD, c, 1);
         LeaderCard leaderCard2 = new AdditionalProductionPowerCard(Resource.SERVANT, c, 1);
-        game.selectCurrentPlayerLeaderCards(leaderCard1, leaderCard2);
+        game.selectPlayerLeaderCards(leaderCard1, leaderCard2, 0);
         game.activateLeaderCard(1);
         game.activateLeaderCard(2);
 
@@ -795,7 +795,7 @@ class GameTest {
 
         Cost c = new Cost();
         LeaderCard card = new AdditionalProductionPowerCard(Resource.STONE, c, 1);
-        game.selectCurrentPlayerLeaderCards(card, card);
+        game.selectPlayerLeaderCards(card, card, 0);
         game.activateLeaderCard(1);
 
         Strongbox s = new Strongbox();
@@ -821,7 +821,7 @@ class GameTest {
 
         Cost c = new Cost();
         LeaderCard card = new AdditionalProductionPowerCard(Resource.STONE, c, 1);
-        game.selectCurrentPlayerLeaderCards(card, card);
+        game.selectPlayerLeaderCards(card, card, 0);
         game.activateLeaderCard(1);
 
         Strongbox s = new Strongbox();

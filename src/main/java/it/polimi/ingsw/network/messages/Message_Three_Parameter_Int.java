@@ -27,10 +27,10 @@ public class Message_Three_Parameter_Int extends Message{
 
     @Override
     public String toString() {
-        return "MessageBuyCard{" +
-                "par1=" + par1 +
-                ", par2=" + par2 +
-                ", par3=" + par3 +
+        return super.toString() + "{" +
+                "par1:" + par1 +
+                ", par2: " + par2 +
+                ", par3: " + par3 +
                 '}';
     }
 }
