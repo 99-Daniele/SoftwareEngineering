@@ -1,27 +1,33 @@
 package it.polimi.ingsw.view;
 
+import it.polimi.ingsw.model.leaderCards.LeaderCard;
 import it.polimi.ingsw.model.market.Marble;
+import it.polimi.ingsw.network.messages.ErrorType;
+import it.polimi.ingsw.network.messages.Message;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public interface View{
 
-    String getNickname() throws IOException;
+    void newPlayer(String nickname, int position);
 
-    String nicknameTaken() throws IOException;
+    void sendMessage(Message m);
 
-    void newPlayer(String nickname, int position) throws IOException;
+    void startGame(int numPLayer);
 
-    void pronto(int numPLayer) throws IOException;
+    void isMyTurn(boolean turn);
 
-    void myTurn(boolean turn) throws IOException;
+    void exit(String nickName);
 
-    void quit(String nickName) throws IOException;
+    void quit(String nickName);
 
-    void ok() throws IOException;
+    void ok();
 
-    int available_slot(int clientID, ArrayList<Integer> availableSlots) throws IOException;
+    void errorMessage(ErrorType errorType);
 
-    void chosen_marble(int clientID, ArrayList<Marble> marbles) throws IOException;
+    void available_slot(ArrayList<Integer> availableSlots);
+
+    void chosen_marble(Marble[] marbles);
+
+    void choseWhiteConversionCard(LeaderCard[] leaderCards);
 }

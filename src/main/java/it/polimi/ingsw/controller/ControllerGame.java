@@ -1,314 +1,625 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.controller.states.CONTROLLER_STATES;
+import it.polimi.ingsw.controller.states.State_Controller;
+import it.polimi.ingsw.controller.states.WaitingPlayerState;
 import it.polimi.ingsw.exceptions.*;
-import it.polimi.ingsw.model.games.Game;
-import it.polimi.ingsw.model.games.SinglePlayerGame;
+import it.polimi.ingsw.model.games.*;
+import it.polimi.ingsw.model.leaderCards.LeaderCard;
 import it.polimi.ingsw.model.market.Marble;
-import it.polimi.ingsw.model.market.RedMarble;
-import it.polimi.ingsw.model.market.ResourceMarble;
-import it.polimi.ingsw.model.market.WhiteMarble;
 import it.polimi.ingsw.model.player.PlayerBoard;
+import it.polimi.ingsw.model.player.Strongbox;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 import it.polimi.ingsw.network.messages.*;
-import it.polimi.ingsw.view.View;
-import it.polimi.ingsw.view.VirtualView;
+import it.polimi.ingsw.view.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.TimeUnit;
 
 public class ControllerGame implements Observer{
 
-    private final Game game;
-    private final ArrayList<View> views;
+    private Game game;
+    private String firstPlayer;
+    private int numPlayers;
+    private final LinkedList<View> views;
+    private State_Controller currentState;
 
-    public ControllerGame(int numPlayers){
-        if(numPlayers==1)
-            this.game=new SinglePlayerGame();
-        else
-            this.game = new Game(numPlayers);
-        views = new ArrayList<>();
+    public ControllerGame(){
+        numPlayers = 1;
+        views = new LinkedList<>();
+        currentState = new WaitingPlayerState();
     }
 
-    public int getNumPlayers() {
-        return game.getNumOfPlayers();
+    public int getMaxNumPlayers() {
+        return numPlayers;
+    }
+
+    public int getCurrentNumPlayers(){
+        return views.size();
     }
 
     /**
-     *
      * @param view is the view that is added to the list of views in controllerGame and also added to the observers of game
      */
-    public void addView(View view){
+    public int addView(View view){
         views.add(view);
-        game.addObservers((VirtualView) view);
+        if(game != null)
+            game.addObservers((VirtualView) view);
+        return views.size() -1;
     }
 
-    public void addPlayer(String nickname, int position) throws IOException{
-        boolean error=true;
-        while (error) {
-            try {
-                game.createPlayer(nickname);
-                for (View view: views)
-                    view.newPlayer(nickname, position);
-                error = false;
-            } catch (AlreadyTakenNicknameException e) {
-                nickname = views.get(views.size()-1).nicknameTaken();
-            }
-        }
-    }
-
-    public synchronized void waitPlayers() {
+    public synchronized void removeView(String nickName, int viewID){
+        game.deletePlayer(nickName);
         try {
-        if (views.size() == game.getNumOfPlayers()) {
-            System.out.println("\nInizia nuova partita\n");
-            for (View view: views)
-                view.pronto(game.getNumOfPlayers());
-        }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            views.remove(viewID);
+        }catch (IndexOutOfBoundsException e){}
     }
 
-    public void isMyTurn(int pos) throws IOException {
-        if(pos != game.getCurrentPosition())
-            views.get(pos).myTurn(false);
-        else
-            views.get(pos).myTurn(true);
-    }
-
-    public void quitGame(String nickName, int position) throws IOException {
-        removeView(nickName, position);
+    public void quitGame(String nickName, int viewID) throws IOException {
+        removeView(nickName, viewID);
         if(views.size() == 0)
-            System.out.println("\nPartita finita");
+            System.out.println("GAME ENDED");
+        else if(currentState.isRightState(CONTROLLER_STATES.WAITING_PLAYERS_STATE))
+            for (View view: views)
+                view.exit(nickName);
         else
             for(View view: views)
                 view.quit(nickName);
     }
 
-    public synchronized void removeView(String nickName, int position){
-        game.deletePlayer(nickName);
-        try {
-            views.remove(position);
-        }catch (IndexOutOfBoundsException e){}
-    }
-
-    public void endGame() throws IOException {
-        game.endGame();
-        System.out.println("\nPartita finita");
-    }
-
     @Override
     public void update(Observable o, Object arg) {
-        /*Message m = (Message) arg;
-        isMyTurn(i);
-        game.nextPlayer();
-         */
         Message m = (Message) arg;
-        int pos = m.getClientID();
-        try {
-            View selectedView = views.get(pos);
-            switch (m.getMessageType()) {
-                case TURN:
-                    isMyTurn(pos);
-                    break;
-                case BUY_CARD:
-                    ArrayList<Integer> slots = new ArrayList<>(3);
-                    slots.add(0);
-                    slots.add(1);
-                    slots.add(2);
-                    selectedView.available_slot(pos, slots);
-                    break;
-                case TAKE_MARBLE:
-                    ArrayList<Marble> marbles = new ArrayList<>(4);
-                    marbles.add(new RedMarble());
-                    marbles.add(new WhiteMarble());
-                    marbles.add(new ResourceMarble(Resource.COIN));
-                    marbles.add(new WhiteMarble());
-                    for (int i = 0; i < 3; i++) {
-                        selectedView.chosen_marble(pos, marbles);
-                    }
-                    selectedView.ok();
-                    break;
-                case END_TURN:
-                    selectedView.ok();
-                    game.nextPlayer();
-                    break;
-                default:
-                    selectedView.ok();
-                    break;
-            }
-        } catch (IOException | IndexOutOfBoundsException e) {
-            
+        int viewID = m.getClientID();
+        if (m.getMessageType() == MessageType.LOGIN) {
+            addPlayer(m);
+            return;
         }
-
-    }
-
-   /* public int getCurrentTurn(){
-        return game.getCurrentPosition();
-    }*/
-
-    public Message inGame(Message message) {
-        switch(message.getMessageType()) {
-            case BUY_CARD:
-                return buyCardHandler(message);
-            case TAKE_MARBLE:
-                return takeMarbleHandler(message);
-            case USE_MARBLE:
-                return useMarbleHandler(message);
-            case SWITCH_DEPOT:
-                return switchHandler(message);
-            case CHOSEN_SLOT:
-                return chosenSlotHandler(message);
-            case WHITE_CONVERSION_CARD:
-                return whiteConversionCardHandler(message);
-            case LEADER_CARD_POWER:
-                return leaderCardPowerHandler(message);
-            case LEADER_CARD_DISCARD:
-                return leaderDiscardHandler(message);
-            case LEADER_CARD_ACTIVATION:
-                return leaderActivationHandler(message);
-            case DEVELOPMENT_CARD_POWER:
-            case BASIC_POWER:
-            case END_PRODUCTION:
-            case LOGIN:
-            case END_GAME:
-            case DECKBOARD:
-            case NEW_PLAYER:
+        if (m.getMessageType() == MessageType.NUM_PLAYERS) {
+            newGame(m);
+            return;
+        }
+        if (m.getMessageType() == MessageType.TURN) {
+            isMyTurn(m);
+            return;
+        }
+        if (!isCurrentPlayer(viewID)) {
+            views.get(viewID).errorMessage(ErrorType.NOT_YOUR_TURN);
+            return;
+        }
+        switch (m.getMessageType()) {
             case LEADER_CARD:
-            case MARKET:
-            case START_GAME:
-            case PING:
+                break;
+            case TAKE_MARBLE:
+                takeMarbleHandler(m);
+                break;
+            case USE_MARBLE:
+                useMarbleHandler(m);
+                break;
+            case WHITE_CONVERSION_CARD:
+                whiteConversionCardHandler(m);
+                break;
+            case SWITCH_DEPOT:
+                switchHandler(m);
+                break;
+            case BUY_CARD:
+                buyCardHandler(m);
+                break;
+            case CHOSEN_SLOT:
+                chosenSlotHandler(m);
+                break;
+            case DEVELOPMENT_CARD_POWER:
+                developmentCardPowerHandler(m);
+                break;
+            case BASIC_POWER:
+                basicPowerHandler(m);
+                break;
+            case LEADER_CARD_POWER:
+                leaderCardPowerHandler(m);
+                break;
+            case END_PRODUCTION:
+                endProductionHandler(m);
+                break;
+            case LEADER_CARD_ACTIVATION:
+                leaderActivationHandler(m);
+                break;
+            case LEADER_CARD_DISCARD:
+                leaderDiscardHandler(m);
+                break;
+            case END_TURN:
+                endTurnHandler(m);
+                break;
             default:
-                return new Message_One_Parameter_String(MessageType.ERR,message.getClientID(),"Selected action doesn't exist");
+                views.get(viewID).errorMessage(ErrorType.ILLEGAL_OPERATION);
+                break;
         }
     }
 
-    public Message buyCardHandler(Message message) {
-        ArrayList<Integer> arrayList;
-        Message_Three_Parameter_Int message_three_parameter_int=(Message_Three_Parameter_Int) message;
+    public void addPlayer(Message loginMessage){
         try {
-            arrayList=game.findAvailableSlots(message_three_parameter_int.getPar1(), message_three_parameter_int.getPar2());
-        } catch (EmptyDevelopmentCardDeckException e) {
-            return new Message_One_Parameter_String(MessageType.ERR,message_three_parameter_int.getClientID(),"Selected empty deck");
+            Message_One_Parameter_String m = (Message_One_Parameter_String) loginMessage;
+            String nickName = m.getPar();
+            if(!currentState.isRightState(CONTROLLER_STATES.WAITING_PLAYERS_STATE)){
+                views.getLast().errorMessage(ErrorType.ILLEGAL_OPERATION);
+                return;
+            }
+            if (!InputController.login_check(m)) {
+                views.getLast().errorMessage(ErrorType.WRONG_PARAMETERS);
+                return;
+            }
+            if (game == null) {
+                firstPlayer = nickName;
+                views.get(0).sendMessage(new Message(MessageType.LOGIN, 0));
+            } else {
+                try {
+                    game.createPlayer(nickName);
+
+                    views.getLast().sendMessage(new Message(MessageType.LOGIN, views.size() - 1));
+                    for (View view : views) {
+                        view.newPlayer(nickName, views.size() - 1);
+                    }
+                    try {
+                        TimeUnit.SECONDS.sleep(1);
+                    } catch (InterruptedException e) {
+                    }
+                    if (getCurrentNumPlayers() == numPlayers) {
+                        currentState.nextState(MessageType.START_GAME);
+                        for (View view : views)
+                            view.startGame(numPlayers);
+                        System.out.println("NEW GAME STARTED: " + views.toString());
+                    }
+                    else
+                        currentState.nextState(MessageType.LOGIN);
+                } catch (AlreadyTakenNicknameException e) {
+                    views.getLast().errorMessage(ErrorType.ALREADY_TAKEN_NICKNAME);
+                }
+            }
+        } catch (ClassCastException e){
+            views.getLast().errorMessage(ErrorType.WRONG_PARAMETERS);
         }
-        if (arrayList.isEmpty())
-            return new Message_One_Parameter_String(MessageType.ERR,message_three_parameter_int.getClientID(),"Not available free slot");
-        if(arrayList.size()==1)
-            /* manca la gestione dei slot che viene scelto dall'utente*/
+    }
+
+    public void newGame(Message numPlayerMessage) {
         try {
-            game.buyDevelopmentCardFromMarket(message_three_parameter_int.getPar1(), message_three_parameter_int.getPar2(), message_three_parameter_int.getPar3(),arrayList.get(0));
-        } catch (InsufficientResourceException e) {
-            return new Message_One_Parameter_String(MessageType.ERR,message_three_parameter_int.getClientID(),"Not enough resources");
-        } catch (ImpossibleDevelopmentCardAdditionException e) {
-            return new Message_One_Parameter_String(MessageType.ERR,message_three_parameter_int.getClientID(),"Not available free slot");
-        } catch (EmptyDevelopmentCardDeckException e) {
-            return new Message_One_Parameter_String(MessageType.ERR,message_three_parameter_int.getClientID(),"Selected empty deck");
+            Message_One_Parameter_Int m = (Message_One_Parameter_Int) numPlayerMessage;
+            int numPlayers = m.getPar();
+            int viewID = numPlayerMessage.getClientID();
+            if (!InputController.num_players_check(m)) {
+                views.get(viewID).errorMessage(ErrorType.WRONG_PARAMETERS);
+                return;
+            }
+            if (game != null) {
+                views.get(viewID).errorMessage(ErrorType.ILLEGAL_OPERATION);
+                return;
+            } else {
+                this.numPlayers = numPlayers;
+                if (numPlayers == 1) {
+                    game = new SinglePlayerGame();
+                    try {
+                        game.createPlayer(firstPlayer);
+                    } catch (AlreadyTakenNicknameException e) {
+                    }// can't be thrown because it's the first player
+                    game.addObservers((VirtualView) views.get(0));
+                    views.get(0).startGame(1);
+                    currentState.nextState(MessageType.START_GAME);
+                    System.out.println("NEW GAME STARTED: " + views.toString());
+                } else {
+                    game = new Game(numPlayers);
+                    try {
+                        game.createPlayer(firstPlayer);
+                        game.addObservers((VirtualView) views.get(0));
+                        views.get(0).ok();
+                    } catch (AlreadyTakenNicknameException e) {
+                    }// can't be thrown because it's the first player
+                }
+            }
+        } catch (ClassCastException e){
+            views.get(numPlayerMessage.getClientID()).errorMessage(ErrorType.WRONG_PARAMETERS);
         }
-        return new Message_One_Parameter_String(MessageType.OK, message_three_parameter_int.getClientID(), "success");
     }
 
-
-    public Message chosenSlotHandler(Message message) {
-        Message_One_Parameter_Int message_one_parameter_int=(Message_One_Parameter_Int) message;
-        /*gestione dello slot scelto dall'utente
-        message_one_parameter_int.getPar();
-         */
-        return new Message_One_Parameter_String(MessageType.ERR,message_one_parameter_int.getClientID(),"Success");
+    private boolean isCurrentPlayer(int viewID){
+        if(viewID == game.getCurrentPosition())
+            return true;
+        return false;
     }
 
+    public void isMyTurn(Message m){
+        int viewID = m.getClientID();
+        views.get(viewID).isMyTurn(isCurrentPlayer(viewID));
+    }
 
-    public Message takeMarbleHandler(Message message) {
-        Message_Two_Parameter_Int message_two_parameter_int=(Message_Two_Parameter_Int)message;
-        boolean choice= message_two_parameter_int.getPar1()==0 ? true : false;
+    public void endGame(){
+        game.endGame();
+        System.out.println("GAME ENDED");
+    }
+
+    public void buyCardHandler(Message message) {
         try {
-            game.takeMarketMarble(choice,message_two_parameter_int.getPar2());
-        } catch (WrongParametersException e) {
-            return new Message_One_Parameter_String(MessageType.ERR, message_two_parameter_int.getClientID(), "Wrong parameter");
+            Message_Three_Parameter_Int m = (Message_Three_Parameter_Int) message;
+            ArrayList<Integer> availableSlots;
+            int viewID = m.getClientID();
+            if (!currentState.isRightState(CONTROLLER_STATES.FIRST_ACTION_STATE)) {
+                views.get(viewID).errorMessage(ErrorType.ILLEGAL_OPERATION);
+                return;
+            }
+            if (!InputController.buy_card_check(m)) {
+                views.get(viewID).errorMessage(ErrorType.WRONG_PARAMETERS);
+                return;
+            }
+            try {
+                availableSlots = game.findAvailableSlots(m.getPar1(), m.getPar2());
+            } catch (EmptyDevelopmentCardDeckException e) {
+                views.get(viewID).errorMessage(ErrorType.EMPTY_DECK);
+                return;
+            }
+            if (availableSlots.isEmpty()) {
+                views.get(viewID).errorMessage(ErrorType.FULL_SLOT);
+                return;
+            }
+            int row = m.getPar1();
+            int column = m.getPar2();
+            int choice = m.getPar3();
+            if (availableSlots.size() == 1) {
+                try {
+                    game.buyDevelopmentCardFromMarket(row, column, choice, availableSlots.get(0));
+                } catch (InsufficientResourceException e) {
+                    views.get(viewID).errorMessage(ErrorType.NOT_ENOUGH_RESOURCES);
+                    return;
+                } catch (ImpossibleDevelopmentCardAdditionException e) {
+                    views.get(viewID).errorMessage(ErrorType.FULL_SLOT);
+                    return;
+                } catch (EmptyDevelopmentCardDeckException e) {
+                    views.get(viewID).errorMessage(ErrorType.EMPTY_DECK);
+                    return;
+                }
+                currentState.nextState(MessageType.END_TURN);
+                views.get(viewID).ok();
+            } else {
+                currentState.nextState(MessageType.CHOSEN_SLOT);
+                currentState.setRow(row);
+                currentState.setColumn(column);
+                currentState.setChoice(choice);
+                currentState.setAvailableSlots(availableSlots);
+                views.get(viewID).available_slot(availableSlots);
+            }
+        } catch (ClassCastException e){
+            views.get(message.getClientID()).errorMessage(ErrorType.WRONG_PARAMETERS);
         }
-        return new Message_One_Parameter_String(MessageType.OK,message_two_parameter_int.getClientID(),"Success");
     }
 
-    public Message useMarbleHandler(Message message) {
-        Message_One_Parameter_Marble message_one_parameter_marble=(Message_One_Parameter_Marble) message;
-        message_one_parameter_marble.getMarble().useMarble(game);
-        return new Message_One_Parameter_String(MessageType.OK,message_one_parameter_marble.getClientID(),"success");
+
+    public void chosenSlotHandler(Message message) {
+        try {
+            Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
+            int viewID = m.getClientID();
+            int chosenSlot = m.getClientID();
+            if (!currentState.isRightState(CONTROLLER_STATES.BUY_CARD_STATE)) {
+                views.get(viewID).errorMessage(ErrorType.ILLEGAL_OPERATION);
+                return;
+            }
+            if(!currentState.getAvailableSlots().contains(chosenSlot)) {
+                views.get(viewID).errorMessage(ErrorType.WRONG_PARAMETERS);
+                return;
+            }
+            int row = currentState.getRow();
+            int column = currentState.getColumn();
+            int choice = currentState.getChoice();
+            try {
+                game.buyDevelopmentCardFromMarket(row, column, choice, chosenSlot);
+                currentState.nextState(MessageType.END_TURN);
+                views.get(viewID).ok();
+            } catch (InsufficientResourceException e) {
+                views.get(viewID).errorMessage(ErrorType.NOT_ENOUGH_RESOURCES);
+            } catch (ImpossibleDevelopmentCardAdditionException e) {
+                views.get(viewID).errorMessage(ErrorType.FULL_SLOT);
+            } catch (EmptyDevelopmentCardDeckException e) {
+                views.get(viewID).errorMessage(ErrorType.EMPTY_DECK);
+            }
+        } catch (ClassCastException e){
+            views.get(message.getClientID()).errorMessage(ErrorType.WRONG_PARAMETERS);
+        }
+    }
+
+
+    public void takeMarbleHandler(Message message) {
+        try {
+            Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+            int viewID = m.getClientID();
+            if (!currentState.isRightState(CONTROLLER_STATES.FIRST_ACTION_STATE)) {
+                views.get(viewID).errorMessage(ErrorType.ILLEGAL_OPERATION);
+                return;
+            }
+            if (!InputController.taken_marbles_check(m)) {
+                views.get(viewID).errorMessage(ErrorType.WRONG_PARAMETERS);
+                return;
+            }
+            boolean choice = m.getPar1() == 0 ? true : false;
+            try {
+                Marble[] marbles = game.takeMarketMarble(choice, m.getPar2());
+                currentState.nextState(MessageType.USE_MARBLE);
+                currentState.setMarbles(marbles);
+                views.get(viewID).chosen_marble(marbles);
+            } catch (WrongParametersException e) {
+                views.get(viewID).errorMessage(ErrorType.WRONG_PARAMETERS);
+            }
+        } catch (ClassCastException e){
+            views.get(message.getClientID()).errorMessage(ErrorType.WRONG_PARAMETERS);
+        }
+    }
+
+    public void useMarbleHandler(Message message) {
+        try {
+            Message_One_Parameter_Marble m = (Message_One_Parameter_Marble) message;
+            int viewID = m.getClientID();
+            Marble chosenMarble = m.getMarble();
+            if (!currentState.isRightState(CONTROLLER_STATES.TAKE_MARBLE_STATE)) {
+                views.get(viewID).errorMessage(ErrorType.ILLEGAL_OPERATION);
+                return;
+            }
+            if(!chosenMarble.useMarble(game)){
+                currentState.removeMarble(chosenMarble);
+                if(currentState.getMarbles().size() == 0)
+                    currentState.nextState(MessageType.END_TURN);
+                else
+                    currentState.nextState(MessageType.USE_MARBLE);
+                views.get(viewID).ok();
+            }
+            else {
+                try {
+                    LeaderCard[] whiteConversionCards = game.getCurrentPlayerActiveLeaderCards();
+                    ArrayList<Marble> remainingMarbles = currentState.getMarbles();
+                    currentState.nextState(MessageType.WHITE_CONVERSION_CARD);
+                    currentState.setLeaderCards(whiteConversionCards);
+                    currentState.setMarbles(remainingMarbles);
+                    views.get(viewID).choseWhiteConversionCard(whiteConversionCards);
+                } catch (AlreadyDiscardLeaderCardException e) {
+                    views.get(viewID).errorMessage(ErrorType.ALREADY_DISCARD_LEADER_CARD);
+                }
+            }
+        } catch (ClassCastException e){
+            views.get(message.getClientID()).errorMessage(ErrorType.WRONG_PARAMETERS);
+        }
     }
 
     /* richiede l'identificativo leaderCard*/
-    public Message whiteConversionCardHandler(Message message) {
-        Message_One_Parameter_Int message_one_parameter_int=(Message_One_Parameter_Int) message;
-        /*
-        game.whiteMarbleConversion();
-        */
-        return new Message_One_Parameter_String(MessageType.ERR,message_one_parameter_int.getClientID(),"Success");
-    }
-
-
-    public Message switchHandler(Message message) {
-        Message_Two_Parameter_Int message_two_parameter_int=(Message_Two_Parameter_Int)message;
+    public void whiteConversionCardHandler(Message message) {
         try {
-            game.switchDepots(message_two_parameter_int.getPar1(),message_two_parameter_int.getPar2());
-        } catch (ImpossibleSwitchDepotException e) {
-            return new Message_One_Parameter_String(MessageType.ERR,message_two_parameter_int.getClientID(),"Switch not possible");
+            Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
+            int viewID = m.getClientID();
+            int chosenLeaderCard = m.getPar();
+            if (!currentState.isRightState(CONTROLLER_STATES.WHITE_CONVERSION_CARD_STATE)) {
+                views.get(viewID).errorMessage(ErrorType.ILLEGAL_OPERATION);
+                return;
+            }
+            LeaderCard leaderCard;
+            if(chosenLeaderCard == 0)
+                leaderCard = currentState.getLeaderCard1();
+            else
+                leaderCard = currentState.getLeaderCard2();
+            game.whiteMarbleConversion(leaderCard);
+            if(currentState.getMarbles().size() == 0)
+                currentState.nextState(MessageType.END_TURN);
+            else {
+                ArrayList<Marble> remainingMarbles = currentState.getMarbles();
+                currentState.nextState(MessageType.USE_MARBLE);
+                currentState.setMarbles(remainingMarbles);
+            }
+            views.get(viewID).ok();
+        } catch (ClassCastException e){
+            views.get(message.getClientID()).errorMessage(ErrorType.WRONG_PARAMETERS);
         }
-        return new Message_One_Parameter_String(MessageType.OK,message_two_parameter_int.getClientID(),"success");
     }
 
-/* richiedono lo strongbox
-    public Message developmentCardPowerHandler(Message_Two_Parameter_Int message_two_parameter_int)
-    {
-        PlayerBoard playerBoard=game.getPlayer(message_two_parameter_int.getClientID());
-        playerBoard.activateDevelopmentCardProductionPower(message_two_parameter_int.getPar1(),);
-    }
 
-    public Message basicPowerHandler(Message_Three_Resource_One_Int message_three_resource_one_int){
-        PlayerBoard playerBoard= game.getPlayer(message_three_resource_one_int.getClientID());
-        game.basicProductionPower(message_three_resource_one_int.getResource1(),message_three_resource_one_int.getResource2(),message_three_resource_one_int.getResource3(),4,message_three_resource_one_int.getPar());
-    }
-*/
-
-    public Message leaderCardPowerHandler(Message message) {
-        Message_One_Resource_Two_Int message_one_resource_two_int=(Message_One_Resource_Two_Int) message;
-        PlayerBoard playerBoard= game.getPlayer(message_one_resource_two_int.getClientID());
+    public void switchHandler(Message message) {
         try {
-            playerBoard.activateAdditionalProductionPower(message_one_resource_two_int.getPar1(), message_one_resource_two_int.getPar2());
-        } catch (NoSuchProductionPowerException e) {
-            return new Message_One_Parameter_String(MessageType.ERR, message_one_resource_two_int.getClientID(), "Slot empty");
-        } catch (InsufficientResourceException e) {
-            return new Message_One_Parameter_String(MessageType.ERR, message_one_resource_two_int.getClientID(), "Not enough resources");
+            Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+            int viewID = m.getClientID();
+            if (!currentState.isRightState(CONTROLLER_STATES.TAKE_MARBLE_STATE)) {
+                views.get(viewID).errorMessage(ErrorType.ILLEGAL_OPERATION);
+                return;
+            }
+            if (!InputController.switch_depot_check(m)) {
+                views.get(viewID).errorMessage(ErrorType.WRONG_PARAMETERS);
+                return;
+            }
+            try {
+                game.switchDepots(m.getPar1(), m.getPar2());
+                views.get(viewID).ok();
+            } catch (ImpossibleSwitchDepotException e) {
+                views.get(message.getClientID()).errorMessage(ErrorType.IMPOSSIBLE_SWITCH);
+            }
+        } catch (ClassCastException e){
+            views.get(message.getClientID()).errorMessage(ErrorType.WRONG_PARAMETERS);
         }
-        return new Message_One_Parameter_String(MessageType.OK, message_one_resource_two_int.getClientID(), "Success");
     }
 
-
-    public Message leaderActivationHandler(Message message) {
-        Message_One_Parameter_Int message_one_parameter_int=(Message_One_Parameter_Int)message;
+    public void developmentCardPowerHandler(Message message) {
         try {
-            game.activateLeaderCard(message_one_parameter_int.getPar());
-        } catch (InsufficientResourceException e) {
-            e.printStackTrace();
-        } catch (AlreadyDiscardLeaderCardException e) {
-            return new Message_One_Parameter_String(MessageType.ERR,message_one_parameter_int.getClientID(),"LeaderCard has been discarded already");
-        } catch (ActiveLeaderCardException e) {
-            return new Message_One_Parameter_String(MessageType.ERR,message_one_parameter_int.getClientID(),"LeaderCard already active");
-        } catch (InsufficientCardsException e) {
-            return new Message_One_Parameter_String(MessageType.ERR,message_one_parameter_int.getClientID(),"Not enough card");
+            Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+            int viewID = m.getClientID();
+            int chosenSlot = m.getPar1();
+            int choice = m.getPar2();
+            Strongbox s;
+            if (currentState.isRightState(CONTROLLER_STATES.FIRST_ACTION_STATE))
+                s = new Strongbox();
+            else if(currentState.isRightState(CONTROLLER_STATES.ACTIVATE_PRODUCTION_STATE))
+                s = currentState.getStrongbox();
+            else {
+                views.get(viewID).errorMessage(ErrorType.ILLEGAL_OPERATION);
+                return;
+            }
+            if(!InputController.development_card_power_check(m)) {
+                views.get(viewID).errorMessage(ErrorType.WRONG_PARAMETERS);
+                return;
+            }
+            try {
+                game.removeDevelopmentCardProductionResource(chosenSlot, s, choice);
+                currentState.nextState(MessageType.END_PRODUCTION);
+                currentState.setStrongbox(s);
+                views.get(viewID).ok();
+            } catch (InsufficientResourceException e) {
+                views.get(viewID).errorMessage(ErrorType.NOT_ENOUGH_RESOURCES);
+            } catch (NoSuchProductionPowerException e) {
+                views.get(viewID).errorMessage(ErrorType.EMPTY_SLOT);
+            }
+        } catch (ClassCastException e){
+            views.get(message.getClientID()).errorMessage(ErrorType.WRONG_PARAMETERS);
         }
-        return new Message_One_Parameter_String(MessageType.OK, message_one_parameter_int.getClientID(), "Success");
     }
 
-    public Message leaderDiscardHandler(Message message) {
-        Message_One_Parameter_Int message_one_parameter_int=(Message_One_Parameter_Int)message;
+    public void basicPowerHandler(Message message){
         try {
-            game.discardLeaderCard(message_one_parameter_int.getPar());
-        } catch (ActiveLeaderCardException e) {
-            return new Message_One_Parameter_String(MessageType.ERR, message_one_parameter_int.getClientID(),"LeaderCard already active");
-        } catch (AlreadyDiscardLeaderCardException e) {
-            return new Message_One_Parameter_String(MessageType.ERR, message_one_parameter_int.getClientID(),"LeaderCard already discarded");
+            Message_Three_Resource_One_Int m = (Message_Three_Resource_One_Int) message;
+            int viewID = m.getClientID();
+            Resource r1 = m.getResource1();
+            Resource r2 = m.getResource2();
+            Resource r3 = m.getResource3();
+            int choice = m.getPar();
+            Strongbox s;
+            if (currentState.isRightState(CONTROLLER_STATES.FIRST_ACTION_STATE))
+                s = new Strongbox();
+            else if(currentState.isRightState(CONTROLLER_STATES.ACTIVATE_PRODUCTION_STATE))
+                s = currentState.getStrongbox();
+            else {
+                views.get(viewID).errorMessage(ErrorType.ILLEGAL_OPERATION);
+                return;
+            }
+            if(!InputController.basic_power_check(m)) {
+                views.get(viewID).errorMessage(ErrorType.WRONG_PARAMETERS);
+                return;
+            }
+            try {
+                game.basicProductionPower(r1, r2, r3, s, choice);
+                currentState.nextState(MessageType.END_PRODUCTION);
+                currentState.setStrongbox(s);
+                views.get(viewID).ok();
+            } catch (InsufficientResourceException e) {
+                views.get(viewID).errorMessage(ErrorType.NOT_ENOUGH_RESOURCES);
+            }
+        } catch (ClassCastException e){
+            views.get(message.getClientID()).errorMessage(ErrorType.WRONG_PARAMETERS);
         }
-        return new Message_One_Parameter_String(MessageType.OK, message_one_parameter_int.getClientID(), "Success");
+    }
+
+    public void leaderCardPowerHandler(Message message) {
+        try {
+            Message_One_Resource_Two_Int m = (Message_One_Resource_Two_Int) message;
+            int viewID = m.getClientID();
+            int chosenLeaderCard = m.getPar1();
+            Resource r = m.getResource();
+            int choice = m.getPar2();
+            Strongbox s;
+            if (currentState.isRightState(CONTROLLER_STATES.FIRST_ACTION_STATE))
+                s = new Strongbox();
+            else if(currentState.isRightState(CONTROLLER_STATES.ACTIVATE_PRODUCTION_STATE))
+                s = currentState.getStrongbox();
+            else {
+                views.get(viewID).errorMessage(ErrorType.ILLEGAL_OPERATION);
+                return;
+            }
+            if(!InputController.leader_card_power_check(m)) {
+                views.get(viewID).errorMessage(ErrorType.WRONG_PARAMETERS);
+                return;
+            }
+            try {
+                game.removeAdditionalProductionPowerCardResource(chosenLeaderCard, r, s, choice);
+                currentState.nextState(MessageType.END_PRODUCTION);
+                currentState.setStrongbox(s);
+                views.get(viewID).ok();
+            } catch (InsufficientResourceException e) {
+                views.get(viewID).errorMessage(ErrorType.NOT_ENOUGH_RESOURCES);
+            } catch (NoSuchProductionPowerException e) {
+                views.get(viewID).errorMessage(ErrorType.WRONG_POWER);
+            }
+        } catch (ClassCastException e){
+            views.get(message.getClientID()).errorMessage(ErrorType.WRONG_PARAMETERS);
+        }
+    }
+
+    public void endProductionHandler(Message m) {
+        int viewID = m.getClientID();
+        if (!currentState.isRightState(CONTROLLER_STATES.ACTIVATE_PRODUCTION_STATE)) {
+            views.get(viewID).errorMessage(ErrorType.ILLEGAL_OPERATION);
+            return;
+        }
+        Strongbox s = currentState.getStrongbox();
+        game.increaseCurrentPlayerStrongbox(s);
+        currentState.nextState(MessageType.BUY_CARD);
+        views.get(viewID).ok();
+    }
+
+    public void leaderActivationHandler(Message message) {
+        try {
+            Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
+            int viewID = m.getClientID();
+            int chosenLeaderCard = m.getPar();
+            if(currentState.isRightState(CONTROLLER_STATES.FIRST_ACTION_STATE))
+                currentState.nextState(MessageType.BUY_CARD);
+            else if(currentState.isRightState(CONTROLLER_STATES.END_TURN_STATE))
+                currentState.nextState(MessageType.END_TURN);
+            else {
+                views.get(viewID).errorMessage(ErrorType.ILLEGAL_OPERATION);
+                return;
+            }
+            try {
+                game.activateLeaderCard(chosenLeaderCard);
+                views.get(viewID).ok();
+            } catch (InsufficientResourceException e) {
+                views.get(viewID).errorMessage(ErrorType.NOT_ENOUGH_RESOURCES);
+            } catch (AlreadyDiscardLeaderCardException e) {
+                views.get(viewID).errorMessage(ErrorType.ALREADY_DISCARD_LEADER_CARD);
+            } catch (ActiveLeaderCardException e) {
+                views.get(viewID).errorMessage(ErrorType.ALREADY_ACTIVE_LEADER_CARD);
+            } catch (InsufficientCardsException e) {
+                views.get(viewID).errorMessage(ErrorType.NOT_ENOUGH_CARDS);
+            }
+        } catch (ClassCastException e){
+            views.get(message.getClientID()).errorMessage(ErrorType.WRONG_PARAMETERS);
+        }
+    }
+
+    public void leaderDiscardHandler(Message message) {
+        try {
+            Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
+            int viewID = m.getClientID();
+            int chosenLeaderCard = m.getPar();
+            if(currentState.isRightState(CONTROLLER_STATES.FIRST_ACTION_STATE))
+                currentState.nextState(MessageType.BUY_CARD);
+            else if(currentState.isRightState(CONTROLLER_STATES.END_TURN_STATE))
+                currentState.nextState(MessageType.END_TURN);
+            else {
+                views.get(viewID).errorMessage(ErrorType.ILLEGAL_OPERATION);
+                return;
+            }
+            try {
+                game.discardLeaderCard(chosenLeaderCard);
+                views.get(viewID).ok();
+            } catch (AlreadyDiscardLeaderCardException e) {
+                views.get(viewID).errorMessage(ErrorType.ALREADY_DISCARD_LEADER_CARD);
+            } catch (ActiveLeaderCardException e) {
+                views.get(viewID).errorMessage(ErrorType.ALREADY_ACTIVE_LEADER_CARD);
+            }
+        } catch (ClassCastException e){
+            views.get(message.getClientID()).errorMessage(ErrorType.WRONG_PARAMETERS);
+        }
+    }
+
+    public void endTurnHandler(Message m){
+        int viewID = m.getClientID();
+        if(!currentState.isRightState(CONTROLLER_STATES.END_TURN_STATE)){
+            views.get(viewID).errorMessage(ErrorType.ILLEGAL_OPERATION);
+            return;
+        }
+        currentState.nextState(MessageType.BUY_CARD);
+        game.nextPlayer();
+        if(game.isEndGame())
+            game.endGame();
     }
 }
 

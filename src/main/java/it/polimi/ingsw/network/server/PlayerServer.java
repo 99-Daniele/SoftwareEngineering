@@ -5,45 +5,39 @@ import it.polimi.ingsw.controller.PosControllerGame;
 import it.polimi.ingsw.view.VirtualView;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 
 public class PlayerServer implements Runnable {
 
     private final Socket socket;
-    ObjectInputStream in;
-    ObjectOutputStream out;
     private ControllerGame controllerGame;
+    private final VirtualView virtualView;
 
-    public PlayerServer(Socket socket) {
+    public PlayerServer(Socket socket) throws IOException {
         this.socket = socket;
+        this.virtualView = new VirtualView(socket);
     }
 
     public void run() {
         try {
-            in = new ObjectInputStream(socket.getInputStream());
-            out = new ObjectOutputStream(socket.getOutputStream());
-            VirtualView virtualView = new VirtualView(in, out);
-            String nickname = virtualView.getNickname();
-            while (nickname == null)
-                nickname = virtualView.getNickname();
-            PosControllerGame posControllerGame = Connection.ConnectionPlayers(virtualView, nickname);
-            controllerGame = posControllerGame.getControllerGame();
-            virtualView.position(posControllerGame.getPosition());
-            controllerGame.waitPlayers();
-            virtualView.run();
-            disconnect(virtualView.getPosition(), virtualView.getNickname());
+            controllerGame = Connection.ConnectionPlayers();
+            int viewID = controllerGame.addView(virtualView);
+            virtualView.addObserver(controllerGame);
+            virtualView.start(viewID);
+            disconnect(viewID, virtualView.getNickname());
         } catch (IOException e) {
-            closeConnections();
+            try {
+                controllerGame.quitGame(virtualView.getNickname(), virtualView.getViewID());
+            } catch (IOException ioException) { }
+            finally {
+                closeConnections();
+            }
         }
     }
 
     private void closeConnections(){
         try {
-            in.close();
-            out.close();
             if (!socket.isClosed()) {
                 socket.close();
             }

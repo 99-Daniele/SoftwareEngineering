@@ -122,12 +122,12 @@ public class Game extends Observable implements LightGame{
             if (player.getNickname().equals(nickName))
                 quitPlayer = player;
         }
-        Message m = new Message_One_Parameter_String(MessageType.QUIT, 0, quitPlayer.getNickname());
         try {
             players.remove(quitPlayer);
-        }catch (IndexOutOfBoundsException e){}
-        setChanged();
-        notifyObservers(m);
+            Message m = new Message_One_Parameter_String(MessageType.QUIT, 0, quitPlayer.getNickname());
+            setChanged();
+            notifyObservers(m);
+        }catch (IndexOutOfBoundsException | NullPointerException e){}
     }
 
     /**
@@ -162,21 +162,25 @@ public class Game extends Observable implements LightGame{
     }
 
     /**
-     * @param card1 is the LeaderCard chosen to be added to current PlayerBoard.
-     * @param card2 is the LeaderCard chosen to be added to current PlayerBoard.
+     * @param card1 is the LeaderCard chosen to be added to one player.
+     * @param card2 is the LeaderCard chosen to be added to one player.
+     * @param player is the player which has chosen his leader cards
      */
-    public void selectCurrentPlayerLeaderCards(LeaderCard card1, LeaderCard card2){
-        players.get(currentPlayer).addLeaderCard(card1, card2);
+    public void selectPlayerLeaderCards(LeaderCard card1, LeaderCard card2, int player){
+        players.get(player).addLeaderCard(card1, card2);
     }
 
     /**
      * shift current player to his subsequent or return to first player.
      */
     public void nextPlayer() {
+        Message m = new Message(MessageType.END_TURN, currentPlayer);
         if(currentPlayer < numOfPlayers -1)
             currentPlayer++;
         else
             currentPlayer = 0;
+        setChanged();
+        notifyObservers(m);
     }
 
     /**
@@ -759,7 +763,7 @@ public class Game extends Observable implements LightGame{
                 }
             }
         }
-        Message endGame = new Message_Two_Parameter_Int(MessageType.END_GAME, winner +1, maxVictoryPoints, maxNumOfResources);
+        Message endGame = new Message_Two_Parameter_Int(MessageType.END_GAME, winner, maxVictoryPoints, maxNumOfResources);
         setChanged();
         notifyObservers(endGame);
         return winner;
@@ -791,14 +795,15 @@ public class Game extends Observable implements LightGame{
         return new SimplePlayerBoard();
     }
 
-    public void triggerFirstAction() {return;}
+    public void triggerFirstAction() {
+    }
 
-    public void moveToLastAction(){return;}
+    public void moveToLastAction(){ }
 
-    public void shuffleActions(){return;}
+    public void shuffleActions(){ }
 
-    public void LorenzoFaithTrackMovement(int faithPoints){return;}
+    public void LorenzoFaithTrackMovement(int faithPoints){ }
 
-    public void discardDeckDevelopmentCards(Color color){return;}
+    public void discardDeckDevelopmentCards(Color color){ }
 
 }

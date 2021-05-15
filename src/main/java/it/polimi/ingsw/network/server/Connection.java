@@ -5,34 +5,21 @@ import it.polimi.ingsw.controller.PosControllerGame;
 import it.polimi.ingsw.view.VirtualView;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class Connection {
 
-    private static int count = 0;
-    private static int max;
-    private static ControllerGame controllerGame;
+    private static LinkedList<ControllerGame> controllerGames = new LinkedList<>();
 
-    public static synchronized PosControllerGame ConnectionPlayers(VirtualView virtualView, String nickname) throws IOException{
-        if (count == 0) {
-            count = virtualView.getNumberPlayers();
-            if(count == -1)
-                throw new IOException();
-            max = count;
-            controllerGame = new ControllerGame(count);
-            controllerGame.addView(virtualView);
-            virtualView.addController(controllerGame);
-            controllerGame.addPlayer(nickname, 0);
-            count--;
-            return new PosControllerGame(controllerGame, 0);
-        } else {
-            controllerGame.addView(virtualView);
-            virtualView.addController(controllerGame);
-            controllerGame.addPlayer(nickname, max - count);
-            PosControllerGame posControllerGame = new PosControllerGame(controllerGame, max-count);
-            count--;
-            return posControllerGame;
-
+    public static synchronized ControllerGame ConnectionPlayers() throws IOException{
+        for(ControllerGame controllerGame: controllerGames){
+            if(controllerGame.getCurrentNumPlayers() < controllerGame.getMaxNumPlayers()){
+                return controllerGame;
+            }
         }
+        controllerGames.add(new ControllerGame());
+        return controllerGames.getLast();
     }
 
 }

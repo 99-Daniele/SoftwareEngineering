@@ -11,8 +11,6 @@ public enum MessageType {
     LEADER_CARD,
     START_GAME,
     MARKET,
-    DECKBOARD,
-    PLAYERBOARD,
     TURN,
     BUY_CARD,
     CHOSEN_SLOT,

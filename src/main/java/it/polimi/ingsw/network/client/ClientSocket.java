@@ -69,16 +69,6 @@ public class ClientSocket {
             });
             threadIn.start();
         }
-        try {
-            receiveMessage();
-        } catch (InterruptedException | IOException e) {
-            System.err.println("\nClient non più connesso al Server.");
-            disconnect();
-            System.exit(0);
-        }
-    }
-
-    private void startPing() {
         if(connectedThread == null){
             connectedThread = new Thread(() -> {
                 try {
@@ -95,6 +85,13 @@ public class ClientSocket {
                 }
             });
             connectedThread.start();
+        }
+        try {
+            receiveMessage();
+        } catch (InterruptedException | IOException e) {
+            System.err.println("\nClient non più connesso al Server.");
+            disconnect();
+            System.exit(0);
         }
     }
 
@@ -148,7 +145,7 @@ public class ClientSocket {
                     throw new InterruptedException();
             }
         } else if (!startGame)
-            System.out.println("\nSei entrato in una partita che sta per cominciare.\nSei il giocatore in posizione " + position);
+            System.out.println("\nSei entrato in una partita che sta per cominciare.\nSei il giocatore in posizione " + (position +1));
         turn = false;
         wake_up(lock2);
     }
@@ -157,7 +154,6 @@ public class ClientSocket {
         TimeUnit.SECONDS.sleep(1);
         if (!startGame)
             System.out.println("\nIn attesa di altri giocatori...");
-        startPing();
     }
 
     /**
@@ -735,6 +731,7 @@ public class ClientSocket {
         while(true) {
             try {
                 Message returnMessage = (Message) in.readObject();
+                System.out.println(returnMessage);
                 switch (returnMessage.getMessageType()) {
                     case LOGIN:
                         login_message(returnMessage);
@@ -751,9 +748,6 @@ public class ClientSocket {
                     case MARKET:
                         market_message(returnMessage);
                         break;
-                    case DECKBOARD:
-                        deckBoard_message(returnMessage);
-                        break;
                     case OK:
                         ok_message();
                         break;
@@ -765,9 +759,6 @@ public class ClientSocket {
                         break;
                     case TURN:
                         turn_message(returnMessage);
-                        break;
-                    case PLAYERBOARD:
-                        playerBoard_message(returnMessage);
                         break;
                     case BUY_CARD:
                         buy_card_message(returnMessage);
@@ -840,7 +831,7 @@ public class ClientSocket {
     private void new_player_message(Message message){
         Message_One_Parameter_String m = (Message_One_Parameter_String) message;
         if(m.getClientID() != position)
-            System.out.println("\nNuovo giocatore: " + m.getPar() + " in posizione " + m.getClientID());
+            System.out.println("\nNuovo giocatore: " + m.getPar() + " in posizione " + (m.getClientID()+1));
     }
 
     private void leader_card_choice(Message message) throws IOException, InterruptedException {
@@ -896,20 +887,6 @@ public class ClientSocket {
     private void market_message(Message message){
         Message_Market m = (Message_Market) message;
         System.out.println("\nRicevuto mercato");
-        ok = true;
-        wake_up(lock1);
-    }
-
-    private void deckBoard_message(Message message){
-        Message_ArrayList_Int m = (Message_ArrayList_Int) message;
-        System.out.println("\nRicevuta disposizione delle carte sviluppo");
-        ok = true;
-        wake_up(lock1);
-    }
-
-    private void playerBoard_message(Message message){
-        Message_PlayerBoard m = (Message_PlayerBoard) message;
-        System.out.println("\nRicevuta la playerBoard del giocatore " + m.getClientID());
         ok = true;
         wake_up(lock1);
     }
@@ -1142,8 +1119,10 @@ public class ClientSocket {
             disconnect();
             System.exit(1);
         }
-        else
+        else if(m.getPar() != null)
             System.out.println("\nIl giocatore " + m.getPar() + " si è disconnesso prima che iniziasse la partita.");
+        else
+            System.out.println("\nUn giocatore di è disconnesso prima che iniziasse la partita");
     }
 
     private void end_game_message(Message message){
@@ -1156,16 +1135,52 @@ public class ClientSocket {
         System.exit(1);
     }
 
-    private void error_message(Message message) throws InterruptedException, IOException {
+    private void error_message(Message message) throws  IOException {
         ErrorMessage m = (ErrorMessage) message;
         switch (m.getErrorType()){
             case ALREADY_TAKEN_NICKNAME:
-                already_taken_nickName();
+                already_taken_nickName_error();
+                break;
+            case WRONG_PARAMETERS:
+                wrong_parameters_error();
+                break;
+            case NOT_YOUR_TURN:
+                wrong_turn_error();
+                break;
+            case FULL_SLOT:
+                full_slot_error();
+                break;
+            case EMPTY_DECK:
+                empty_deck_error();
+                break;
+            case EMPTY_SLOT:
+                empty_slot_error();
+                break;
+            case WRONG_POWER:
+                wrong_power_error();
+                break;
+            case NOT_ENOUGH_CARDS:
+                not_enough_cards_error();
+                break;
+            case ILLEGAL_OPERATION:
+                illegal_operation_error();
+                break;
+            case IMPOSSIBLE_SWITCH:
+                impossible_switch_error();
+                break;
+            case NOT_ENOUGH_RESOURCES:
+                not_enough_resource_error();
+                break;
+            case ALREADY_ACTIVE_LEADER_CARD:
+                already_active_error();
+                break;
+            case ALREADY_DISCARD_LEADER_CARD:
+                already_discard_error();
                 break;
         }
     }
 
-    private void already_taken_nickName() throws InterruptedException, IOException {
+    private void already_taken_nickName_error() throws IOException {
         System.err.println("\nNickName già scelto");
         System.out.println("\nInserisci un nickName diverso:");
         String userInput = stdIn.nextLine();
@@ -1195,6 +1210,54 @@ public class ClientSocket {
                 System.err.println("\nRicevuto messaggio inaspettato dal Client.");
             }
         }
+    }
+
+    private void wrong_parameters_error(){
+        System.err.println("\nHai inserito dei parametri sbagliati");
+    }
+
+    private void wrong_turn_error(){
+        System.err.println("\nNon è il tuo turno. Non puoi compiere questa azione adesso");
+    }
+
+    private void empty_deck_error(){
+        System.err.println("\nHai scelto un mazzetto vuoto");
+    }
+
+    private void empty_slot_error(){
+        System.err.println("\nNon hai alcuna carta in questo slot");
+    }
+
+    private void wrong_power_error(){
+        System.err.println("\nNon puoi attivare questa potere di produzione");
+    }
+
+    private void not_enough_cards_error(){
+        System.err.println("\nNon hai abbastanza carte per attivare questa carta leader");
+    }
+
+    private void full_slot_error(){
+        System.err.println("\nNon puoi inserire questa carta in nessuno slot");
+    }
+
+    private void illegal_operation_error(){
+        System.err.println("\nNon puoi eseguire questa azione in questo momento");
+    }
+
+    private void impossible_switch_error(){
+        System.err.println("\nNon puoi scambiare questa depositi");
+    }
+
+    private void not_enough_resource_error(){
+        System.err.println("\nNon hai abbastanza risorse per effettuare questa operazione");
+    }
+
+    private void already_active_error(){
+        System.err.println("\nHai già attivato questa carta in precedenza");
+    }
+
+    private void already_discard_error(){
+        System.err.println("\nHai già scartato questa carta in precedenza");
     }
 
     /**
