@@ -6,6 +6,6 @@ package it.polimi.ingsw.exceptions;
 public class NoSuchProductionPowerException extends Exception{
 
     public NoSuchProductionPowerException(){
-        super("Non esistono carte per attivare questo potere di produzione");
+        super("You don't have any card to activate this power");
     }
 }

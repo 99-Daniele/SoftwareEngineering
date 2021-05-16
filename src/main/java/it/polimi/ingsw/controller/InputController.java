@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.model.leaderCards.LeaderCard;
 import it.polimi.ingsw.network.messages.*;
 
 public class InputController {
@@ -68,5 +69,9 @@ public class InputController {
         if(chosenLeaderCard != 1 && chosenLeaderCard != 2)
             return false;
         return warehouse == 0 || warehouse == 1;
+    }
+
+    public static boolean white_conversion_card_check(int chosenLeaderCard){
+        return chosenLeaderCard == 0 || chosenLeaderCard == 1;
     }
 }

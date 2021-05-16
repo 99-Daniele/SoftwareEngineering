@@ -6,6 +6,6 @@ package it.polimi.ingsw.exceptions;
 public class AlreadyDiscardLeaderCardException extends Exception{
 
     public AlreadyDiscardLeaderCardException(){
-        super("Questa carta è stata già scartata in precedenza");
+        super("This card has already been discarded");
     }
 }

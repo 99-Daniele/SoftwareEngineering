@@ -6,6 +6,6 @@ package it.polimi.ingsw.exceptions;
 public class EmptyDevelopmentCardDeckException extends Exception{
 
     public EmptyDevelopmentCardDeckException(){
-        super("Questo mazzetto è vuoto");
+        super("You have chosen an empty deck");
     }
 }

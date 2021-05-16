@@ -6,6 +6,6 @@ package it.polimi.ingsw.exceptions;
 public class ImpossibleDevelopmentCardAdditionException extends Exception{
 
     public ImpossibleDevelopmentCardAdditionException(){
-        super("Non puoi comprare questa carta");
+        super("You have not available slots to buy this card");
     }
 }

@@ -6,6 +6,6 @@ package it.polimi.ingsw.exceptions;
 public class ImpossibleSwitchDepotException extends Exception{
 
     public ImpossibleSwitchDepotException(){
-        super("Non è possibile scambiare questi depositi");
+        super("You can't switch this depots");
     }
 }

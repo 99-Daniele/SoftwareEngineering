@@ -3,6 +3,6 @@ package it.polimi.ingsw.exceptions;
 public class WrongParametersException extends Exception{
 
     public WrongParametersException(){
-        super("Questi parametri non sono validi");
+        super("You have inserted wrong parameters");
     }
 }

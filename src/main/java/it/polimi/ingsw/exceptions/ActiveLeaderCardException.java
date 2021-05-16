@@ -6,6 +6,6 @@ package it.polimi.ingsw.exceptions;
 public class ActiveLeaderCardException extends Exception{
 
     public ActiveLeaderCardException(){
-        super("Questa carta è stata già attivata in precedenza");
+        super("This card has already been activate");
     }
 }

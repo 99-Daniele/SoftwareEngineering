@@ -3,6 +3,6 @@ package it.polimi.ingsw.exceptions;
 public class InsufficientCardsException extends Exception{
 
     public InsufficientCardsException(){
-        super("Non hai abbastanza carte per effettuare questa operazione");
+        super("You don't have enough cards to do this operation");
     }
 }
