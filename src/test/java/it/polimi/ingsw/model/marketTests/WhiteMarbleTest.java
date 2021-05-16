@@ -3,7 +3,7 @@ package it.polimi.ingsw.model.marketTests;
 import it.polimi.ingsw.exceptions.*;
 
 import it.polimi.ingsw.model.games.Game;
-import it.polimi.ingsw.model.leaderCards.*;
+import it.polimi.ingsw.model.cards.leaderCards.*;
 import it.polimi.ingsw.model.market.*;
 import it.polimi.ingsw.model.resourceContainers.*;
 

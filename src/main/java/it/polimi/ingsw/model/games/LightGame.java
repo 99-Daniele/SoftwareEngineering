@@ -2,7 +2,7 @@ package it.polimi.ingsw.model.games;
 
 import it.polimi.ingsw.exceptions.AlreadyDiscardLeaderCardException;
 
-import it.polimi.ingsw.model.leaderCards.LeaderCard;
+import it.polimi.ingsw.model.cards.leaderCards.LeaderCard;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 
 /**

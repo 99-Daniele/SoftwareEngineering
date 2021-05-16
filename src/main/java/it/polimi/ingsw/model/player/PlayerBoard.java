@@ -2,8 +2,8 @@ package it.polimi.ingsw.model.player;
 
 import it.polimi.ingsw.exceptions.*;
 
-import it.polimi.ingsw.model.developmentCards.DevelopmentCard;
-import it.polimi.ingsw.model.leaderCards.*;
+import it.polimi.ingsw.model.cards.developmentCards.DevelopmentCard;
+import it.polimi.ingsw.model.cards.leaderCards.*;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 
 import java.util.ArrayList;

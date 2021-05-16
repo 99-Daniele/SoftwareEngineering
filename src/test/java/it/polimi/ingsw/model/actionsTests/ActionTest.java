@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.actionsTests;
 
 import it.polimi.ingsw.model.actions.*;
-import it.polimi.ingsw.model.developmentCards.Color;
+import it.polimi.ingsw.model.cards.developmentCards.Color;
 import it.polimi.ingsw.model.games.SinglePlayerGame;
 
 import org.junit.jupiter.api.Test;

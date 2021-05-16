@@ -6,7 +6,7 @@ import it.polimi.ingsw.controller.states.WaitingPlayerState;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.exceptions.IllegalStateException;
 import it.polimi.ingsw.model.games.*;
-import it.polimi.ingsw.model.leaderCards.LeaderCard;
+import it.polimi.ingsw.model.cards.leaderCards.LeaderCard;
 import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.model.player.Strongbox;
 import it.polimi.ingsw.model.resourceContainers.Resource;

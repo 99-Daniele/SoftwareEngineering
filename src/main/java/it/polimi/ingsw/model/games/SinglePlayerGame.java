@@ -2,7 +2,8 @@ package it.polimi.ingsw.model.games;
 
 import it.polimi.ingsw.exceptions.EmptyDevelopmentCardDeckException;
 import it.polimi.ingsw.model.actions.*;
-import it.polimi.ingsw.model.developmentCards.*;
+import it.polimi.ingsw.model.cards.developmentCards.Color;
+import it.polimi.ingsw.model.cards.developmentCards.*;
 import it.polimi.ingsw.model.player.*;
 
 import java.util.ArrayList;

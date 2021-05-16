@@ -1,6 +1,5 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.model.leaderCards.LeaderCard;
 import it.polimi.ingsw.network.messages.*;
 
 public class InputController {

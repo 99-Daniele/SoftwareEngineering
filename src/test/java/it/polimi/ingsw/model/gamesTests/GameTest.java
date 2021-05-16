@@ -2,9 +2,11 @@ package it.polimi.ingsw.model.gamesTests;
 
 import it.polimi.ingsw.exceptions.*;
 
-import it.polimi.ingsw.model.developmentCards.*;
+import it.polimi.ingsw.model.cards.Card;
+import it.polimi.ingsw.model.cards.developmentCards.Color;
+import it.polimi.ingsw.model.cards.developmentCards.*;
 import it.polimi.ingsw.model.games.Game;
-import it.polimi.ingsw.model.leaderCards.*;
+import it.polimi.ingsw.model.cards.leaderCards.*;
 import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.model.player.*;
 import it.polimi.ingsw.model.resourceContainers.*;
@@ -17,6 +19,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import it.polimi.ingsw.parser.CardMap;
+import it.polimi.ingsw.parser.DevelopmentCardsParser;
+import it.polimi.ingsw.parser.LeaderCardsParser;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -117,11 +122,11 @@ class GameTest {
      * this test verifies the correct parsing from Json File DevelopmentCards.json
      */
     @Test
-    void correctJsonParsingDevelopmentCards() throws IOException {
+    void correctJsonParsingDevelopmentCards(){
 
-        Gson gson = new Gson();
-        JsonReader reader = new JsonReader(new FileReader("src/main/resources/DevelopmentCards.json"));
-        DevelopmentCard[] developmentCards = gson.fromJson(reader, DevelopmentCard[].class);
+        DevelopmentCardsParser developmentCardsParser = new DevelopmentCardsParser();
+        DevelopmentCard[] developmentCards = developmentCardsParser.getDevelopmentCards();
+        assertEquals(48, developmentCards.length);
 
         assertSame(Color.GREEN, developmentCards[0].getColor());
         assertEquals(1, developmentCards[0].getLevel());
@@ -143,23 +148,11 @@ class GameTest {
      * this test verifies the correct parsing from Json File of LeaderCards
      */
     @Test
-    void correctJsonParsingLeaderCards() throws IOException{
+    void correctJsonParsingLeaderCards(){
 
-        ArrayList<LeaderCard> leaderCards = new ArrayList<>();
-        Gson gson = new Gson();
-        JsonReader reader1 = new JsonReader(new FileReader("src/main/resources/DiscountCards.json"));
-        LeaderCard[] discountCards = gson.fromJson(reader1, DiscountCard[].class);
-        JsonReader reader2 = new JsonReader(new FileReader("src/main/resources/ExtraDepotCards.json"));
-        LeaderCard[] extraDepotCards = gson.fromJson(reader2, ExtraDepotCard[].class);
-        JsonReader reader3 = new JsonReader(new FileReader("src/main/resources/WhiteConversionCards.json"));
-        LeaderCard[] whiteConversionCards = gson.fromJson(reader3, WhiteConversionCard[].class);
-        JsonReader reader4 = new JsonReader(new FileReader("src/main/resources/AdditionalProductionPowerCards.json"));
-        LeaderCard[] additionalProductionPowerCards = gson.fromJson(reader4, AdditionalProductionPowerCard[].class);
-
-        leaderCards.addAll(Arrays.asList(discountCards).subList(0, 4));
-        leaderCards.addAll(Arrays.asList(extraDepotCards).subList(0, 4));
-        leaderCards.addAll(Arrays.asList(whiteConversionCards).subList(0, 4));
-        leaderCards.addAll(Arrays.asList(additionalProductionPowerCards).subList(0, 4));
+        LeaderCardsParser leaderCardsParser = new LeaderCardsParser();
+        ArrayList<LeaderCard> leaderCards = leaderCardsParser.getLeaderCards();
+        assertEquals(16, leaderCards.size());
 
         assertSame(Resource.SERVANT, leaderCards.get(0).getResource());
         assertEquals(0, leaderCards.get(0).getVictoryPoints());
@@ -181,6 +174,33 @@ class GameTest {
         /*
          victory points are set at 0 because cards are not active.
          */
+    }
+
+    /**
+     * this test verifies the correct mapping of Cards
+     */
+    @Test
+    void correctMapping(){
+
+        Card card1 = CardMap.getCard(1);
+
+        assertEquals(1, card1.getCardID());
+        assertTrue(card1 instanceof DevelopmentCard);
+
+        Card card34 = CardMap.getCard(34);
+
+        assertEquals(34, card34.getCardID());
+        assertTrue(card34 instanceof DevelopmentCard);
+
+        Card card49 = CardMap.getCard(49);
+
+        assertEquals(49, card49.getCardID());
+        assertTrue(card49 instanceof DiscountCard);
+
+        Card card64 = CardMap.getCard(64);
+
+        assertEquals(64, card64.getCardID());
+        assertTrue(card64 instanceof AdditionalProductionPowerCard);
     }
 
     /**
@@ -256,7 +276,7 @@ class GameTest {
 
         Game game = new Game(4);
 
-        ArrayList<LeaderCard> cards = game.casualLeaderCards();
+        ArrayList<Card> cards = game.casualLeaderCards();
         assertNotSame(cards.get(0), cards.get(1));
         assertNotSame(cards.get(0), cards.get(2));
         assertNotSame(cards.get(0), cards.get(3));

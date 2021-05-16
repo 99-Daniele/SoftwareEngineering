@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.developmentCardsTests;
 
-import it.polimi.ingsw.model.developmentCards.*;
+import it.polimi.ingsw.model.cards.developmentCards.Color;
+import it.polimi.ingsw.model.cards.developmentCards.*;
 import it.polimi.ingsw.model.resourceContainers.*;
 
 import org.junit.jupiter.api.Test;

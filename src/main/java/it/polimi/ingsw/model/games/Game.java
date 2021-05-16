@@ -1,21 +1,18 @@
 package it.polimi.ingsw.model.games;
 
+import it.polimi.ingsw.model.cards.Card;
+import it.polimi.ingsw.model.cards.developmentCards.Color;
+import it.polimi.ingsw.parser.DevelopmentCardsParser;
+import it.polimi.ingsw.parser.LeaderCardsParser;
 import it.polimi.ingsw.view.VirtualView;
 import it.polimi.ingsw.exceptions.*;
 
-import java.io.FileReader;
-import java.io.IOException;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Observable;
 
-import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
-
-import it.polimi.ingsw.model.developmentCards.*;
+import it.polimi.ingsw.model.cards.developmentCards.*;
 import it.polimi.ingsw.model.faithTrack.*;
-import it.polimi.ingsw.model.leaderCards.*;
+import it.polimi.ingsw.model.cards.leaderCards.*;
 import it.polimi.ingsw.model.market.*;
 import it.polimi.ingsw.model.player.*;
 import it.polimi.ingsw.model.resourceContainers.*;
@@ -32,18 +29,18 @@ public class Game extends Observable implements LightGame{
     private final FaithTrack faithTrack;
     private final int numOfPlayers;
     private int currentPlayer;
-    private final ArrayList<LeaderCard> leaderCards = new ArrayList<>(16);
+    private ArrayList<LeaderCard> leaderCards;
 
     /**
      * @param numOfPlayers is the chosen number of players.
      */
     public Game(int numOfPlayers){
         createDecks();
+        createLeaderCards();
         market = new Market();
         faithTrack = new FaithTrack();
         this.numOfPlayers = numOfPlayers;
         this.currentPlayer = 0;
-        createLeaderCards();
     }
 
     /**
@@ -63,46 +60,23 @@ public class Game extends Observable implements LightGame{
         deck[2][1]=new Deck(Color.PURPLE,3);
         deck[2][2]=new Deck(Color.BLUE,3);
         deck[2][3]=new Deck(Color.YELLOW,3);
-        try {
-            Gson gson = new Gson();
-            JsonReader reader = new JsonReader(new FileReader("src/main/resources/DevelopmentCards.json"));
-            DevelopmentCard[] developmentCards = gson.fromJson(reader, DevelopmentCard[].class);
-            int i = 0;
-            for(int j = 0; j < 3; j++){
-                for (int k = 0; k < 4; k++){
-                    for(int h = 0; h < 4; h++) {
-                        deck[j][k].addDevelopmentCard(developmentCards[i]);
-                        i++;
-                    }
-                    deck[j][k].prepareDeck();
+        DevelopmentCardsParser developmentCardsParser = new DevelopmentCardsParser();
+        DevelopmentCard[] developmentCards = developmentCardsParser.getDevelopmentCards();
+        int i = 0;
+        for(int j = 0; j < 3; j++){
+            for (int k = 0; k < 4; k++){
+                for(int h = 0; h < 4; h++) {
+                    deck[j][k].addDevelopmentCard(developmentCards[i]);
+                    i++;
                 }
+                deck[j][k].prepareDeck();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
-    /**
-     * this method creates the list of 16 LeaderCards by parsing Json Files.
-     */
     private void createLeaderCards(){
-        try {
-            Gson gson = new Gson();
-            JsonReader reader1 = new JsonReader(new FileReader("src/main/resources/DiscountCards.json"));
-            LeaderCard[] discountCards = gson.fromJson(reader1, DiscountCard[].class);
-            JsonReader reader2 = new JsonReader(new FileReader("src/main/resources/ExtraDepotCards.json"));
-            LeaderCard[] extraDepotCards = gson.fromJson(reader2, ExtraDepotCard[].class);
-            JsonReader reader3 = new JsonReader(new FileReader("src/main/resources/WhiteConversionCards.json"));
-            LeaderCard[] whiteConversionCards = gson.fromJson(reader3, WhiteConversionCard[].class);
-            JsonReader reader4 = new JsonReader(new FileReader("src/main/resources/AdditionalProductionPowerCards.json"));
-            LeaderCard[] additionalProductionPowerCards = gson.fromJson(reader4, AdditionalProductionPowerCard[].class);
-            leaderCards.addAll(Arrays.asList(discountCards).subList(0, 4));
-            leaderCards.addAll(Arrays.asList(extraDepotCards).subList(0, 4));
-            leaderCards.addAll(Arrays.asList(whiteConversionCards).subList(0, 4));
-            leaderCards.addAll(Arrays.asList(additionalProductionPowerCards).subList(0, 4));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        LeaderCardsParser leaderCardsParser = new LeaderCardsParser();
+        leaderCards = leaderCardsParser.getLeaderCards();
     }
 
     /**
@@ -151,8 +125,8 @@ public class Game extends Observable implements LightGame{
     /**
      * @return arraylist of 4 casual LeaderCards.
      */
-    public synchronized ArrayList<LeaderCard> casualLeaderCards() {
-        ArrayList<LeaderCard> NewLeaderCards=new ArrayList<>();
+    public synchronized ArrayList<Card> casualLeaderCards() {
+        ArrayList<Card> NewLeaderCards=new ArrayList<>();
         for(int count=0; count<4; count++)
         {
             int i = (int) (Math.random() * leaderCards.size());

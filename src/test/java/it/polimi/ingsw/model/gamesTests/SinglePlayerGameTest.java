@@ -2,7 +2,8 @@ package it.polimi.ingsw.model.gamesTests;
 
 import it.polimi.ingsw.exceptions.*;
 
-import it.polimi.ingsw.model.developmentCards.*;
+import it.polimi.ingsw.model.cards.developmentCards.Color;
+import it.polimi.ingsw.model.cards.developmentCards.*;
 import it.polimi.ingsw.model.games.SinglePlayerGame;
 import it.polimi.ingsw.model.resourceContainers.Cost;
 

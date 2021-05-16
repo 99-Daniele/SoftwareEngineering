@@ -2,8 +2,8 @@ package it.polimi.ingsw.model.player;
 
 import it.polimi.ingsw.exceptions.InsufficientResourceException;
 import it.polimi.ingsw.exceptions.NoSuchProductionPowerException;
-import it.polimi.ingsw.model.developmentCards.DevelopmentCard;
-import it.polimi.ingsw.model.leaderCards.LeaderRequirements;
+import it.polimi.ingsw.model.cards.developmentCards.DevelopmentCard;
+import it.polimi.ingsw.model.cards.leaderCards.LeaderRequirements;
 
 import java.util.LinkedList;
 

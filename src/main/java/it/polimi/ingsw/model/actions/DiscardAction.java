@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.actions;
 
-import it.polimi.ingsw.model.developmentCards.Color;
+import it.polimi.ingsw.model.cards.developmentCards.Color;
 import it.polimi.ingsw.model.games.LightSinglePlayerGame;
 
 /**
