@@ -1,11 +1,11 @@
 package it.polimi.ingsw.modelTests.actionsTests;
 
-import it.polimi.ingsw.actions.Action;
-import it.polimi.ingsw.actions.DiscardAction;
-import it.polimi.ingsw.actions.LorenzoMoveAndShuffleAction;
-import it.polimi.ingsw.actions.LorenzoTwoMoveAction;
-import it.polimi.ingsw.cards.developmentCards.Color;
-import it.polimi.ingsw.games.SinglePlayerGame;
+import it.polimi.ingsw.model.actions.Action;
+import it.polimi.ingsw.model.actions.DiscardAction;
+import it.polimi.ingsw.model.actions.LorenzoMoveAndShuffleAction;
+import it.polimi.ingsw.model.actions.LorenzoTwoMoveAction;
+import it.polimi.ingsw.model.cards.developmentCards.Color;
+import it.polimi.ingsw.model.games.SinglePlayerGame;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

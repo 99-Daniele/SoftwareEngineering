@@ -1,20 +1,20 @@
 package it.polimi.ingsw.controllerTests;
 
-import it.polimi.ingsw.cards.leaderCards.AdditionalProductionPowerCard;
-import it.polimi.ingsw.cards.leaderCards.LeaderCard;
-import it.polimi.ingsw.controllerTests.states.*;
-import it.polimi.ingsw.market.Marble;
-import it.polimi.ingsw.market.RedMarble;
-import it.polimi.ingsw.market.ResourceMarble;
-import it.polimi.ingsw.market.WhiteMarble;
+import it.polimi.ingsw.model.cards.leaderCards.AdditionalProductionPowerCard;
+import it.polimi.ingsw.model.cards.leaderCards.LeaderCard;
+import it.polimi.ingsw.controller.ControllerGame;
+import it.polimi.ingsw.controller.states.*;
+import it.polimi.ingsw.model.market.Marble;
+import it.polimi.ingsw.model.market.RedMarble;
+import it.polimi.ingsw.model.market.ResourceMarble;
+import it.polimi.ingsw.model.market.WhiteMarble;
 import it.polimi.ingsw.network.messages.*;
-import it.polimi.ingsw.player.Strongbox;
-import it.polimi.ingsw.resourceContainers.Cost;
-import it.polimi.ingsw.resourceContainers.Resource;
+import it.polimi.ingsw.model.player.Strongbox;
+import it.polimi.ingsw.model.resourceContainers.Cost;
+import it.polimi.ingsw.model.resourceContainers.Resource;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.concurrent.Callable;
 
 import static org.junit.jupiter.api.Assertions.*;
 

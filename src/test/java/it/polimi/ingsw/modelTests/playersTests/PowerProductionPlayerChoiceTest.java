@@ -1,7 +1,7 @@
 package it.polimi.ingsw.modelTests.playersTests;
 
-import it.polimi.ingsw.player.PowerProductionPlayerChoice;
-import it.polimi.ingsw.resourceContainers.Resource;
+import it.polimi.ingsw.model.player.PowerProductionPlayerChoice;
+import it.polimi.ingsw.model.resourceContainers.Resource;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

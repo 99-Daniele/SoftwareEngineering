@@ -1,8 +1,8 @@
 package it.polimi.ingsw.modelTests.depotsTests;
 
 
-import it.polimi.ingsw.player.depots.ExtraDepot;
-import it.polimi.ingsw.resourceContainers.Resource;
+import it.polimi.ingsw.model.player.depots.ExtraDepot;
+import it.polimi.ingsw.model.resourceContainers.Resource;
 
 import static org.junit.jupiter.api.Assertions.*;
 

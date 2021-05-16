@@ -1,10 +1,10 @@
 package it.polimi.ingsw.modelTests.leaderCardsTests;
 
-import it.polimi.ingsw.cards.developmentCards.Color;
-import it.polimi.ingsw.cards.developmentCards.DevelopmentCard;
-import it.polimi.ingsw.cards.leaderCards.CardRequirement;
-import it.polimi.ingsw.cards.leaderCards.LeaderRequirements;
-import it.polimi.ingsw.resourceContainers.Cost;
+import it.polimi.ingsw.model.cards.developmentCards.Color;
+import it.polimi.ingsw.model.cards.developmentCards.DevelopmentCard;
+import it.polimi.ingsw.model.cards.leaderCards.CardRequirement;
+import it.polimi.ingsw.model.cards.leaderCards.LeaderRequirements;
+import it.polimi.ingsw.model.resourceContainers.Cost;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

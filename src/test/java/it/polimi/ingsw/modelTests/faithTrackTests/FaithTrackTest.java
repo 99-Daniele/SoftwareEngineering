@@ -1,7 +1,7 @@
 package it.polimi.ingsw.modelTests.faithTrackTests;
 
-import it.polimi.ingsw.faithTrack.FaithTrack;
-import it.polimi.ingsw.player.VictoryPoints;
+import it.polimi.ingsw.model.faithTrack.FaithTrack;
+import it.polimi.ingsw.model.player.VictoryPoints;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

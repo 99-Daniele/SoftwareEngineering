@@ -1,6 +1,6 @@
 package it.polimi.ingsw.network.server;
 
-import it.polimi.ingsw.controllerTests.ControllerGame;
+import it.polimi.ingsw.controller.ControllerGame;
 import it.polimi.ingsw.view.VirtualView;
 
 import java.io.IOException;

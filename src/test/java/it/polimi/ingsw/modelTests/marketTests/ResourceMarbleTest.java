@@ -2,10 +2,10 @@ package it.polimi.ingsw.modelTests.marketTests;
 
 import it.polimi.ingsw.exceptions.AlreadyTakenNicknameException;
 
-import it.polimi.ingsw.games.Game;
-import it.polimi.ingsw.market.Marble;
-import it.polimi.ingsw.market.ResourceMarble;
-import it.polimi.ingsw.resourceContainers.Resource;
+import it.polimi.ingsw.model.games.Game;
+import it.polimi.ingsw.model.market.Marble;
+import it.polimi.ingsw.model.market.ResourceMarble;
+import it.polimi.ingsw.model.resourceContainers.Resource;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

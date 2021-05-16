@@ -1,6 +1,6 @@
 package it.polimi.ingsw.network.server;
 
-import it.polimi.ingsw.controllerTests.ControllerGame;
+import it.polimi.ingsw.controller.ControllerGame;
 
 import java.io.IOException;
 import java.util.LinkedList;

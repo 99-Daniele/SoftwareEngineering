@@ -1,6 +1,6 @@
 package it.polimi.ingsw.modelTests.faithTrackTests;
 
-import it.polimi.ingsw.faithTrack.Section;
+import it.polimi.ingsw.model.faithTrack.Section;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

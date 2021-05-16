@@ -1,7 +1,8 @@
 package it.polimi.ingsw.controllerTests;
 
+import it.polimi.ingsw.controller.InputController;
 import it.polimi.ingsw.network.messages.*;
-import it.polimi.ingsw.resourceContainers.Resource;
+import it.polimi.ingsw.model.resourceContainers.Resource;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

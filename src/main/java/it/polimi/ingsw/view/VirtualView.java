@@ -1,7 +1,7 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.cards.leaderCards.LeaderCard;
-import it.polimi.ingsw.market.Marble;
+import it.polimi.ingsw.model.cards.leaderCards.LeaderCard;
+import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.network.messages.*;
 
 import java.io.IOException;

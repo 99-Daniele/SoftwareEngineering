@@ -2,7 +2,7 @@ package it.polimi.ingsw.modelTests.marketTests;
 
 import it.polimi.ingsw.exceptions.WrongParametersException;
 
-import it.polimi.ingsw.market.*;
+import it.polimi.ingsw.model.market.*;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

@@ -1,17 +1,17 @@
 package it.polimi.ingsw.modelTests.leaderCardsTests;
 
-import it.polimi.ingsw.cards.developmentCards.DevelopmentCard;
-import it.polimi.ingsw.cards.leaderCards.DiscountCard;
-import it.polimi.ingsw.cards.leaderCards.LeaderCard;
-import it.polimi.ingsw.cards.leaderCards.LeaderRequirements;
+import it.polimi.ingsw.model.cards.developmentCards.DevelopmentCard;
+import it.polimi.ingsw.model.cards.leaderCards.DiscountCard;
+import it.polimi.ingsw.model.cards.leaderCards.LeaderCard;
+import it.polimi.ingsw.model.cards.leaderCards.LeaderRequirements;
 import it.polimi.ingsw.exceptions.*;
 
-import it.polimi.ingsw.cards.developmentCards.Color;
+import it.polimi.ingsw.model.cards.developmentCards.Color;
 
-import it.polimi.ingsw.player.Strongbox;
-import it.polimi.ingsw.player.Warehouse;
-import it.polimi.ingsw.resourceContainers.Cost;
-import it.polimi.ingsw.resourceContainers.Resource;
+import it.polimi.ingsw.model.player.Strongbox;
+import it.polimi.ingsw.model.player.Warehouse;
+import it.polimi.ingsw.model.resourceContainers.Cost;
+import it.polimi.ingsw.model.resourceContainers.Resource;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

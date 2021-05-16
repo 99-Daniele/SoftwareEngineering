@@ -1,11 +1,11 @@
 package it.polimi.ingsw.modelTests.gamesTests;
 
-import it.polimi.ingsw.cards.developmentCards.DevelopmentCard;
+import it.polimi.ingsw.model.cards.developmentCards.DevelopmentCard;
 import it.polimi.ingsw.exceptions.*;
 
-import it.polimi.ingsw.games.SinglePlayerGame;
-import it.polimi.ingsw.cards.developmentCards.Color;
-import it.polimi.ingsw.resourceContainers.Cost;
+import it.polimi.ingsw.model.games.SinglePlayerGame;
+import it.polimi.ingsw.model.cards.developmentCards.Color;
+import it.polimi.ingsw.model.resourceContainers.Cost;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

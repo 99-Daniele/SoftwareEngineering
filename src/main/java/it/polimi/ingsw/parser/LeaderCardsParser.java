@@ -2,7 +2,7 @@ package it.polimi.ingsw.parser;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
-import it.polimi.ingsw.cards.leaderCards.*;
+import it.polimi.ingsw.model.cards.leaderCards.*;
 
 import java.io.FileReader;
 import java.io.IOException;

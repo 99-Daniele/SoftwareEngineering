@@ -1,15 +1,15 @@
 package it.polimi.ingsw.modelTests.marketTests;
 
-import it.polimi.ingsw.cards.leaderCards.LeaderCard;
-import it.polimi.ingsw.cards.leaderCards.WhiteConversionCard;
+import it.polimi.ingsw.model.cards.leaderCards.LeaderCard;
+import it.polimi.ingsw.model.cards.leaderCards.WhiteConversionCard;
 import it.polimi.ingsw.exceptions.*;
 
-import it.polimi.ingsw.games.Game;
-import it.polimi.ingsw.market.Marble;
-import it.polimi.ingsw.market.WhiteMarble;
+import it.polimi.ingsw.model.games.Game;
+import it.polimi.ingsw.model.market.Marble;
+import it.polimi.ingsw.model.market.WhiteMarble;
 
-import it.polimi.ingsw.resourceContainers.Cost;
-import it.polimi.ingsw.resourceContainers.Resource;
+import it.polimi.ingsw.model.resourceContainers.Cost;
+import it.polimi.ingsw.model.resourceContainers.Resource;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

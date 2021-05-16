@@ -1,8 +1,8 @@
 package it.polimi.ingsw.parser;
 
-import it.polimi.ingsw.cards.PrintedCard;
-import it.polimi.ingsw.cards.developmentCards.DevelopmentCard;
-import it.polimi.ingsw.cards.leaderCards.LeaderCard;
+import it.polimi.ingsw.model.cards.PrintedCard;
+import it.polimi.ingsw.model.cards.developmentCards.DevelopmentCard;
+import it.polimi.ingsw.model.cards.leaderCards.LeaderCard;
 
 import java.util.ArrayList;
 import java.util.HashMap;

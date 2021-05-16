@@ -1,24 +1,24 @@
 package it.polimi.ingsw.modelTests.gamesTests;
 
-import it.polimi.ingsw.cards.developmentCards.DevelopmentCard;
-import it.polimi.ingsw.cards.leaderCards.*;
+import it.polimi.ingsw.model.cards.developmentCards.DevelopmentCard;
+import it.polimi.ingsw.model.cards.leaderCards.*;
 import it.polimi.ingsw.exceptions.*;
 
-import it.polimi.ingsw.market.Marble;
-import it.polimi.ingsw.cards.Card;
-import it.polimi.ingsw.cards.PrintedCard;
-import it.polimi.ingsw.cards.developmentCards.Color;
-import it.polimi.ingsw.games.Game;
+import it.polimi.ingsw.model.market.Marble;
+import it.polimi.ingsw.model.cards.Card;
+import it.polimi.ingsw.model.cards.PrintedCard;
+import it.polimi.ingsw.model.cards.developmentCards.Color;
+import it.polimi.ingsw.model.games.Game;
 
 import java.util.ArrayList;
 
 import it.polimi.ingsw.parser.CardMap;
 import it.polimi.ingsw.parser.DevelopmentCardsParser;
 import it.polimi.ingsw.parser.LeaderCardsParser;
-import it.polimi.ingsw.player.PowerProductionPlayerChoice;
-import it.polimi.ingsw.player.Strongbox;
-import it.polimi.ingsw.resourceContainers.Cost;
-import it.polimi.ingsw.resourceContainers.Resource;
+import it.polimi.ingsw.model.player.PowerProductionPlayerChoice;
+import it.polimi.ingsw.model.player.Strongbox;
+import it.polimi.ingsw.model.resourceContainers.Cost;
+import it.polimi.ingsw.model.resourceContainers.Resource;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
