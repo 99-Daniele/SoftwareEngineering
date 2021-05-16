@@ -1,0 +1,13 @@
+{
+    "resource": "SERVANT",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "5"
+        }
+      ]
+    },
+    "victoryPoints": "3",
+  "cardID": "58"	
+}

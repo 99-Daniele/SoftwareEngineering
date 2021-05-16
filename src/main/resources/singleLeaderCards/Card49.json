@@ -1,0 +1,14 @@
+{
+  "resource": "SHIELD",
+  "leaderRequirements": {
+    "cardRequirements": [
+      {
+        "color": "YELLOW",
+        "numOfCards": "1",
+        "levels": [2]
+      }
+    ]
+  },
+  "victoryPoints": "4",
+  "cardID": "49"	
+}

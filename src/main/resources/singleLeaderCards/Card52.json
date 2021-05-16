@@ -1,0 +1,14 @@
+{
+  "resource": "COIN",
+  "leaderRequirements": {
+    "cardRequirements": [
+      {
+        "color": "GREEN",
+        "numOfCards": "1",
+        "levels": [2]
+      }
+    ]
+  },
+  "victoryPoints": "4",
+  "cardID": "52"
+}

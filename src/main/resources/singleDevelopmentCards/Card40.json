@@ -1,0 +1,39 @@
+{
+    "color": "PURPLE",
+    "level": "3",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "4"
+        },
+        {
+          "resource": "SERVANT",
+          "amount": "4"
+        }
+      ]
+    },
+    "victoryPoints": "12",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "3"
+        },
+        {
+          "resource": "SERVANT",
+          "amount": "1"
+        }
+      ]
+    },
+    "faithPointsGiven": "0",
+    "cardID": "40"
+}

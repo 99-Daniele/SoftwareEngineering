@@ -381,7 +381,7 @@ public class WarehouseTest {
 
         ImpossibleSwitchDepotException thrown =
                 assertThrows(ImpossibleSwitchDepotException.class, () -> w.switchDepots(0, 1));
-        String expectedMessage = "Non è possibile scambiare questi depositi";
+        String expectedMessage = "You can't switch this depots";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
@@ -401,7 +401,7 @@ public class WarehouseTest {
 
         ImpossibleSwitchDepotException thrown =
                 assertThrows(ImpossibleSwitchDepotException.class, () -> w.switchDepots(3, 4));
-        String expectedMessage = "Non è possibile scambiare questi depositi";
+        String expectedMessage = "You can't switch this depots";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
@@ -424,7 +424,7 @@ public class WarehouseTest {
 
         ImpossibleSwitchDepotException thrown =
                 assertThrows(ImpossibleSwitchDepotException.class, () -> w.switchDepots(1, 3));
-        String expectedMessage = "Non è possibile scambiare questi depositi";
+        String expectedMessage = "You can't switch this depots";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
@@ -444,7 +444,7 @@ public class WarehouseTest {
 
         ImpossibleSwitchDepotException thrown =
                 assertThrows(ImpossibleSwitchDepotException.class, () -> w.switchDepots(0, 3));
-        String expectedMessage = "Non è possibile scambiare questi depositi";
+        String expectedMessage = "You can't switch this depots";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
@@ -463,7 +463,7 @@ public class WarehouseTest {
 
         ImpossibleSwitchDepotException thrown =
                 assertThrows(ImpossibleSwitchDepotException.class, () -> w.switchDepots(0, 3));
-        String expectedMessage = "Non è possibile scambiare questi depositi";
+        String expectedMessage = "You can't switch this depots";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
@@ -492,7 +492,7 @@ public class WarehouseTest {
 
         ImpossibleSwitchDepotException thrown =
                 assertThrows(ImpossibleSwitchDepotException.class, () -> w.switchDepots(3, 2));
-        String expectedMessage = "Non è possibile scambiare questi depositi";
+        String expectedMessage = "You can't switch this depots";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }

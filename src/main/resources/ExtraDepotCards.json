@@ -9,7 +9,8 @@
         }
       ]
     },
-    "victoryPoints": "3"
+    "victoryPoints": "3",
+    "cardID": "57"
   },
   {
     "resource": "SERVANT",
@@ -21,7 +22,8 @@
         }
       ]
     },
-    "victoryPoints": "3"
+    "victoryPoints": "3",
+    "cardID": "58"
   },
   {
     "resource": "SHIELD",
@@ -33,7 +35,8 @@
         }
       ]
     },
-    "victoryPoints": "3"
+    "victoryPoints": "3",
+    "cardID": "59"
   },
   {
     "resource": "COIN",
@@ -45,6 +48,7 @@
         }
       ]
     },
-    "victoryPoints": "3"
+    "victoryPoints": "3",
+    "cardID": "60"
   }
 ]

@@ -50,7 +50,7 @@ public class MarketTest {
         WrongParametersException thrown =
                 assertThrows(WrongParametersException.class, () -> market.slideRow(0));
 
-        String expectedMessage = "Questi parametri non sono validi";
+        String expectedMessage = "You have inserted wrong parameters";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
 
@@ -158,17 +158,17 @@ public class MarketTest {
         //trying to select out of bound index
         WrongParametersException thrown =
                 assertThrows(WrongParametersException.class, () -> market.slideColumn(5));
-        assertTrue(thrown.getMessage().contains("Questi parametri non sono validi"));
+        assertTrue(thrown.getMessage().contains("You have inserted wrong parameters"));
 
         WrongParametersException thrown1 =
                 assertThrows(WrongParametersException.class, () -> market.getRowMarbles(0));
-        String expectedMessage1 = "Questi parametri non sono validi";
+        String expectedMessage1 = "You have inserted wrong parameters";
         String actualMessage1 = thrown1.getMessage();
         assertTrue(actualMessage1.contains(expectedMessage1));
 
         WrongParametersException thrown2 =
                 assertThrows(WrongParametersException.class, () -> market.slideRow(5));
-        String expectedMessage2 = "Questi parametri non sono validi";
+        String expectedMessage2 = "You have inserted wrong parameters";
         String actualMessage2 = thrown2.getMessage();
         assertTrue(actualMessage2.contains(expectedMessage2));
 

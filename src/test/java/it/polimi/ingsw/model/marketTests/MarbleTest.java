@@ -26,8 +26,8 @@ public class MarbleTest {
         game.createPlayer("Alberto");
         game.createPlayer("Giovanni");
         Cost c = new Cost();
-        LeaderCard card = new WhiteConversionCard(Resource.COIN, c, 1);
-        LeaderCard card2 = new WhiteConversionCard(Resource.COIN, c, 1);
+        LeaderCard card = new WhiteConversionCard(Resource.COIN, c, 1, 0);
+        LeaderCard card2 = new WhiteConversionCard(Resource.COIN, c, 1, 0);
         game.selectPlayerLeaderCards(card, card2, 0);
 
         assertEquals(0, game.getPlayer(0).getFaithPoints());

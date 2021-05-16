@@ -1,0 +1,35 @@
+{
+    "color": "BLUE",
+    "level": "2",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "3"
+        },
+        {
+          "resource": "COIN",
+          "amount": "3"
+        }
+      ]
+    },
+    "victoryPoints": "8",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "SERVANT",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "2"
+        }
+      ]
+    },
+    "faithPointsGiven": "1",
+    "cardID": "28"
+}

@@ -1,0 +1,26 @@
+{
+    "color": "PURPLE",
+    "level": "1",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "SERVANT",
+          "amount": "2"
+        }
+      ]
+    },
+    "victoryPoints": "1",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "STONE",
+          "amount": "1"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": []
+    },
+    "faithPointsGiven": "1",
+    "cardID": "5"
+}

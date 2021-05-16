@@ -18,6 +18,7 @@ public abstract class LeaderCard {
     private Cost resourceCost;
     private LeaderRequirements leaderRequirements;
     private final int victoryPoints;
+    private final int cardID;
     private boolean active;
 
     /**
@@ -25,12 +26,13 @@ public abstract class LeaderCard {
      * @param resourceCost stands for the resources required to activate the card.
      * @param victoryPoints stands for the victory given by activating this card.
      * activate is initialized at false.
-     * leaderRequirements remains null.
+     * @param cardID is the cardID.
      */
-    public LeaderCard(Resource resource, Cost resourceCost, int victoryPoints) {
+    public LeaderCard(Resource resource, Cost resourceCost, int victoryPoints, int cardID) {
         this.resource = resource;
         this.resourceCost = resourceCost;
         this.victoryPoints = victoryPoints;
+        this.cardID = cardID;
         this.active = false;
     }
 
@@ -39,12 +41,13 @@ public abstract class LeaderCard {
      * @param leaderRequirements stands for the resources required to activate the card.
      * @param victoryPoints stands for the victory given by activating this card.
      * activate is initialized at false.
-     * resourceCost remains null.
+     * @param cardID is the cardID.
      */
-    public LeaderCard(Resource resource, LeaderRequirements leaderRequirements, int victoryPoints) {
+    public LeaderCard(Resource resource, LeaderRequirements leaderRequirements, int victoryPoints, int cardID) {
         this.resource = resource;
         this.leaderRequirements = leaderRequirements;
         this.victoryPoints = victoryPoints;
+        this.cardID = cardID;
         this.active = false;
     }
 
@@ -63,6 +66,10 @@ public abstract class LeaderCard {
 
     public boolean isActive() {
         return active;
+    }
+
+    public int getCardID() {
+        return cardID;
     }
 
     /**

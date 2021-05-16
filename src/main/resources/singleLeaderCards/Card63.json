@@ -1,0 +1,19 @@
+{
+    "resource": "STONE",
+    "leaderRequirements": {
+      "cardRequirements": [
+        {
+          "color": "BLUE",
+          "numOfCards": "2",
+          "levels": [0]
+        },
+        {
+          "color": "YELLOW",
+          "numOfCards": "1",
+          "levels": [0]
+        }
+      ]
+    },
+    "victoryPoints": "5",
+    "cardID": "63"
+}

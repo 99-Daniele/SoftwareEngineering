@@ -24,8 +24,8 @@ public class WhiteMarbleTest {
         game.createPlayer("Alberto");
         game.createPlayer("Giovanni");
         Cost c = new Cost();
-        LeaderCard card1 = new WhiteConversionCard(Resource.COIN, c, 1);
-        LeaderCard card2 = new WhiteConversionCard(Resource.SERVANT, c, 1);
+        LeaderCard card1 = new WhiteConversionCard(Resource.COIN, c, 1, 0);
+        LeaderCard card2 = new WhiteConversionCard(Resource.SERVANT, c, 1, 0);
         game.selectPlayerLeaderCards(card1, card2, 0);
         game.getPlayer(1).increaseFaithPoints(2);
 

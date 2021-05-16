@@ -8,12 +8,12 @@ import it.polimi.ingsw.model.developmentCards.DevelopmentCard;
  */
 public class DiscountCard extends LeaderCard {
 
-    public DiscountCard(Resource resource, Cost resourceCost, int victoryPoints) {
-        super(resource, resourceCost, victoryPoints);
+    public DiscountCard(Resource resource, Cost resourceCost, int victoryPoints, int cardID) {
+        super(resource, resourceCost, victoryPoints, cardID);
     }
 
-    public DiscountCard(Resource resource, LeaderRequirements leaderRequirements, int victoryPoints) {
-        super(resource, leaderRequirements, victoryPoints);
+    public DiscountCard(Resource resource, LeaderRequirements leaderRequirements, int victoryPoints, int cardID) {
+        super(resource, leaderRequirements, victoryPoints, cardID);
     }
 
     /**

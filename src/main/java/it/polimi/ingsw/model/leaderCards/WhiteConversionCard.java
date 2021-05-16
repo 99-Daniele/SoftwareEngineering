@@ -7,12 +7,12 @@ import it.polimi.ingsw.model.resourceContainers.*;
  */
 public class WhiteConversionCard extends LeaderCard {
 
-    public WhiteConversionCard(Resource resource, Cost resourceCost, int victoryPoints) {
-        super(resource, resourceCost, victoryPoints);
+    public WhiteConversionCard(Resource resource, Cost resourceCost, int victoryPoints, int cardID) {
+        super(resource, resourceCost, victoryPoints, cardID);
     }
 
-    public WhiteConversionCard(Resource resource, LeaderRequirements leaderRequirements, int victoryPoints) {
-        super(resource, leaderRequirements, victoryPoints);
+    public WhiteConversionCard(Resource resource, LeaderRequirements leaderRequirements, int victoryPoints, int cardID) {
+        super(resource, leaderRequirements, victoryPoints, cardID);
     }
 
     /**

@@ -21,7 +21,8 @@ public class DeckTest {
         c1.addResource(r1, 1);
         Cost c2 = new Cost();
         Cost c3 = new Cost();
-        DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1);
+        int cardID = 0;
+        DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1, cardID);
 
         Deck d = new Deck(Color.BLUE, 1);
 
@@ -43,7 +44,7 @@ public class DeckTest {
          developmentCard has level = 2 while deck has level = 1
          */
 
-        String expectedMessage = "Questo mazzetto è vuoto";
+        String expectedMessage = "You have chosen an empty deck";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
@@ -62,7 +63,7 @@ public class DeckTest {
          developmentCard has level = 2 while deck has level = 1
          */
 
-        String expectedMessage = "Questo mazzetto è vuoto";
+        String expectedMessage = "You have chosen an empty deck";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
@@ -78,8 +79,9 @@ public class DeckTest {
         c1.addResource(r1, 1);
         Cost c2 = new Cost();
         Cost c3 = new Cost();
-        DevelopmentCard developmentCard1 = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1);
-        DevelopmentCard developmentCard2 = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1);
+        int cardID = 0;
+        DevelopmentCard developmentCard1 = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1, cardID);
+        DevelopmentCard developmentCard2 = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1, cardID);
 
         Deck d = new Deck(Color.BLUE, 1);
 

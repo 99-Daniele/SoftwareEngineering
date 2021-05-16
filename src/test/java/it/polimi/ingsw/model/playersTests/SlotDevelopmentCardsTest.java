@@ -25,11 +25,12 @@ public class SlotDevelopmentCardsTest {
         Cost c1 = new Cost();
         Cost c2 = new Cost();
         Cost c3 = new Cost();
+        int cardID = 0;
 
-        DevelopmentCard card1 = new DevelopmentCard(Color.BLUE, 2, c1, 1, c2, c3, 1);
+        DevelopmentCard card1 = new DevelopmentCard(Color.BLUE, 2, c1, 1, c2, c3, 1, cardID);
         assertFalse(slot.haveRequiredLevel(card1));
 
-        DevelopmentCard card2 = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1);
+        DevelopmentCard card2 = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1, cardID);
         assertTrue(slot.haveRequiredLevel(card2));
     }
 
@@ -43,17 +44,18 @@ public class SlotDevelopmentCardsTest {
         Cost c1 = new Cost();
         Cost c2 = new Cost();
         Cost c3 = new Cost();
+        int cardID = 0;
 
-        DevelopmentCard card1 = new DevelopmentCard(Color.BLUE, 2, c1, 1, c2, c3, 1);
+        DevelopmentCard card1 = new DevelopmentCard(Color.BLUE, 2, c1, 1, c2, c3, 1, cardID);
         assertFalse(slot.addDevelopmentCard(card1));
         /*
          card1 has level == 2, while required level is 1
          */
 
-        DevelopmentCard card2 = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1);
+        DevelopmentCard card2 = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1, cardID);
         assertTrue(slot.addDevelopmentCard(card2));
 
-        DevelopmentCard card3 = new DevelopmentCard(Color.YELLOW, 2, c1, 1, c2, c3, 1);
+        DevelopmentCard card3 = new DevelopmentCard(Color.YELLOW, 2, c1, 1, c2, c3, 1, cardID);
         assertTrue(slot.addDevelopmentCard(card3));
 
         assertFalse(slot.addDevelopmentCard(card1));
@@ -81,13 +83,14 @@ public class SlotDevelopmentCardsTest {
         c2.addResource(r1, 2);
         Cost c3 = new Cost();
         c3.addResource(r2, 1);
-        DevelopmentCard card = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1);
+        int cardID = 0;
+        DevelopmentCard card = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1, cardID);
         slot.addDevelopmentCard(card);
 
         InsufficientResourceException thrown =
                 assertThrows(InsufficientResourceException.class, () -> slot.activateProductionActiveCard(w, s, 1));
 
-        String expectedMessage = "Non hai abbastanza risorse per effettuare questa operazione";
+        String expectedMessage = "You don't have enough resources to do this operation.";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
@@ -108,7 +111,7 @@ public class SlotDevelopmentCardsTest {
         NoSuchProductionPowerException thrown =
                 assertThrows(NoSuchProductionPowerException.class, () -> slot.activateProductionActiveCard(w, s, 1));
 
-        String expectedMessage = "Non esistono carte per attivare questo potere di produzione";
+        String expectedMessage = "You don't have any card to activate this power";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
@@ -132,7 +135,8 @@ public class SlotDevelopmentCardsTest {
         c2.addResource(r1, 1);
         Cost c3 = new Cost();
         c3.addResource(r2, 1);
-        DevelopmentCard card = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1);
+        int cardID = 0;
+        DevelopmentCard card = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1, cardID);
         slot.addDevelopmentCard(card);
         assertEquals(1, w.getNumOfResource(r1));
         assertEquals(0, s.getNumOfResource(r2));
@@ -161,13 +165,14 @@ public class SlotDevelopmentCardsTest {
         c2.addResource(r1, 2);
         Cost c3 = new Cost();
         c3.addResource(r2, 1);
-        DevelopmentCard card = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1);
+        int cardID = 0;
+        DevelopmentCard card = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1, cardID);
         slot.addDevelopmentCard(card);
 
         InsufficientResourceException thrown =
                 assertThrows(InsufficientResourceException.class, () -> slot.removeProductionPowerResource(w, s));
 
-        String expectedMessage = "Non hai abbastanza risorse per effettuare questa operazione";
+        String expectedMessage = "You don't have enough resources to do this operation.";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
@@ -185,7 +190,7 @@ public class SlotDevelopmentCardsTest {
         NoSuchProductionPowerException thrown =
                 assertThrows(NoSuchProductionPowerException.class, () -> slot.removeProductionPowerResource(w, s, 1));
 
-        String expectedMessage = "Non esistono carte per attivare questo potere di produzione";
+        String expectedMessage = "You don't have any card to activate this power";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
@@ -209,12 +214,13 @@ public class SlotDevelopmentCardsTest {
         c2.addResource(r1, 1);
         Cost c3 = new Cost();
         c3.addResource(r2, 1);
+        int cardID = 0;
 
         slot.removeProductionPowerResource(w, s);
         assertEquals(1, w.getNumOfResource(r1));
         assertEquals(0, s.getNumOfResource(r2));
 
-        DevelopmentCard card = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1);
+        DevelopmentCard card = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1, cardID);
         slot.addDevelopmentCard(card);
         assertEquals(1, w.getNumOfResource(r1));
         assertEquals(0, s.getNumOfResource(r2));
@@ -234,9 +240,10 @@ public class SlotDevelopmentCardsTest {
         Cost c1 = new Cost();
         Cost c2 = new Cost();
         Cost c3 = new Cost();
-        DevelopmentCard card1 = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1);
+        int cardID = 0;
+        DevelopmentCard card1 = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1, cardID);
         slot.addDevelopmentCard(card1);
-        DevelopmentCard card2 = new DevelopmentCard(Color.YELLOW, 2, c1, 1, c2, c3, 1);
+        DevelopmentCard card2 = new DevelopmentCard(Color.YELLOW, 2, c1, 1, c2, c3, 1, cardID);
         slot.addDevelopmentCard(card2);
 
         LeaderRequirements leaderRequirements = new LeaderRequirements();
@@ -253,15 +260,16 @@ public class SlotDevelopmentCardsTest {
         Cost c1 = new Cost();
         Cost c2 = new Cost();
         Cost c3 = new Cost();
+        int cardID = 0;
 
-        DevelopmentCard card1 = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1);
+        DevelopmentCard card1 = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1, cardID);
         slot.addDevelopmentCard(card1);
-        DevelopmentCard card2 = new DevelopmentCard(Color.YELLOW, 2, c1, 3, c2, c3, 1);
+        DevelopmentCard card2 = new DevelopmentCard(Color.YELLOW, 2, c1, 3, c2, c3, 1, cardID);
         slot.addDevelopmentCard(card2);
 
         assertEquals(4, slot.sumTotalVictoryPointsByCards());
 
-        DevelopmentCard card3 = new DevelopmentCard(Color.YELLOW, 3, c1, 7, c2, c3, 1);
+        DevelopmentCard card3 = new DevelopmentCard(Color.YELLOW, 3, c1, 7, c2, c3, 1, cardID);
         slot.addDevelopmentCard(card3);
         assertEquals(11, slot.sumTotalVictoryPointsByCards());
     }

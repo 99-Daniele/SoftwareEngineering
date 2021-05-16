@@ -20,7 +20,8 @@ public class CardRequirementTest {
         c1.addResource(r1, 1);
         Cost c2 = new Cost();
         Cost c3 = new Cost();
-        DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 2, c1, 1, c2, c3, 1);
+        int cardID = 0;
+        DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 2, c1, 1, c2, c3, 1, cardID);
 
         CardRequirement cardRequirement = new CardRequirement(developmentCard);
 

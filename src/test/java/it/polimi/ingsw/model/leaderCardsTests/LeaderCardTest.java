@@ -23,7 +23,8 @@ public class LeaderCardTest {
         c1.addResource(r1, 2);
         Cost c2 = new Cost();
         Cost c3 = new Cost();
-        DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1);
+        int cardID = 0;
+        DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1, cardID);
 
         Cost c = new Cost();
         c.addResource(r1, 3);
@@ -33,10 +34,10 @@ public class LeaderCardTest {
         s.increaseResourceType(r1, 3);
         LeaderRequirements l = new LeaderRequirements();
 
-        LeaderCard card1 = new AdditionalProductionPowerCard(r1, c, 2);
-        LeaderCard card2 = new DiscountCard(r1, c, 2);
-        LeaderCard card3 = new WhiteConversionCard(r1, c, 2);
-        LeaderCard card4 = new ExtraDepotCard(r1, c, 2);
+        LeaderCard card1 = new AdditionalProductionPowerCard(r1, c, 2, 0);
+        LeaderCard card2 = new DiscountCard(r1, c, 2, 0);
+        LeaderCard card3 = new WhiteConversionCard(r1, c, 2, 0);
+        LeaderCard card4 = new ExtraDepotCard(r1, c, 2, 0);
 
         assertFalse(w.existExtraDepot());
 

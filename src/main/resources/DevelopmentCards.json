@@ -22,7 +22,8 @@
     "productionPowerResourceGiven":{
       "resourceContainers": []
     },
-    "faithPointsGiven": "1"
+    "faithPointsGiven": "1",
+    "cardID": "1"
   },
   {
     "color": "GREEN",
@@ -59,7 +60,8 @@
         }
       ]
     },
-    "faithPointsGiven": "0"
+    "faithPointsGiven": "0",
+    "cardID": "2"
   },
   {
     "color": "GREEN",
@@ -97,7 +99,8 @@
         }
       ]
     },
-    "faithPointsGiven": "0"
+    "faithPointsGiven": "0",
+    "cardID": "3"
   },
   {
     "color": "GREEN",
@@ -135,7 +138,8 @@
         }
       ]
     },
-    "faithPointsGiven": "1"
+    "faithPointsGiven": "1",
+    "cardID": "4"
   },
   {
     "color": "PURPLE",
@@ -160,7 +164,8 @@
     "productionPowerResourceGiven":{
       "resourceContainers": []
     },
-    "faithPointsGiven": "1"
+    "faithPointsGiven": "1",
+    "cardID": "5"
   },
   {
     "color": "PURPLE",
@@ -198,7 +203,8 @@
         }
       ]
     },
-    "faithPointsGiven": "0"
+    "faithPointsGiven": "0",
+    "cardID": "6"
   },
   {
     "color": "PURPLE",
@@ -236,9 +242,9 @@
         }
       ]
     },
-    "faithPointsGiven": "0"
+    "faithPointsGiven": "0",
+    "cardID": "7"
   },
-
   {
     "color": "PURPLE",
     "level": "1",
@@ -275,7 +281,8 @@
         }
       ]
     },
-    "faithPointsGiven": "1"
+    "faithPointsGiven": "1",
+    "cardID": "8"
   },
   {
     "color": "BLUE",
@@ -300,7 +307,8 @@
     "productionPowerResourceGiven":{
       "resourceContainers": []
     },
-    "faithPointsGiven": "1"
+    "faithPointsGiven": "1",
+    "cardID": "9"
   },
   {
     "color": "BLUE",
@@ -338,7 +346,8 @@
         }
       ]
     },
-    "faithPointsGiven": "0"
+    "faithPointsGiven": "0",
+    "cardID": "10"
   },
   {
     "color": "BLUE",
@@ -376,9 +385,9 @@
         }
       ]
     },
-    "faithPointsGiven": "0"
+    "faithPointsGiven": "0",
+    "cardID": "11"
   },
-
   {
     "color": "BLUE",
     "level": "1",
@@ -415,7 +424,8 @@
         }
       ]
     },
-    "faithPointsGiven": "1"
+    "faithPointsGiven": "1",
+    "cardID": "12"
   },
   {
     "color": "YELLOW",
@@ -440,7 +450,8 @@
     "productionPowerResourceGiven":{
       "resourceContainers": []
     },
-    "faithPointsGiven": "1"
+    "faithPointsGiven": "1",
+    "cardID": "13"
   },
   {
     "color": "YELLOW",
@@ -478,7 +489,8 @@
         }
       ]
     },
-    "faithPointsGiven": "0"
+    "faithPointsGiven": "0",
+    "cardID": "14"
   },
   {
     "color": "YELLOW",
@@ -516,7 +528,8 @@
         }
       ]
     },
-    "faithPointsGiven": "0"
+    "faithPointsGiven": "0",
+    "cardID": "15"
   },
   {
     "color": "YELLOW",
@@ -554,7 +567,8 @@
         }
       ]
     },
-    "faithPointsGiven": "1"
+    "faithPointsGiven": "1",
+    "cardID": "16"
   },
   {
     "color": "GREEN",
@@ -579,9 +593,9 @@
     "productionPowerResourceGiven":{
       "resourceContainers": []
     },
-    "faithPointsGiven": "2"
+    "faithPointsGiven": "2",
+    "cardID": "17"
   },
-
   {
     "color": "GREEN",
     "level": "2",
@@ -618,9 +632,9 @@
         }
       ]
     },
-    "faithPointsGiven": "0"
+    "faithPointsGiven": "0",
+    "cardID": "18"
   },
-
   {
     "color": "GREEN",
     "level": "2",
@@ -649,9 +663,9 @@
         }
       ]
     },
-    "faithPointsGiven": "2"
+    "faithPointsGiven": "2",
+    "cardID": "19"
   },
-
   {
     "color": "GREEN",
     "level": "2",
@@ -684,7 +698,8 @@
         }
       ]
     },
-    "faithPointsGiven": "1"
+    "faithPointsGiven": "1",
+    "cardID": "20"
   },
   {
     "color": "PURPLE",
@@ -709,9 +724,9 @@
     "productionPowerResourceGiven":{
       "resourceContainers": []
     },
-    "faithPointsGiven": "2"
+    "faithPointsGiven": "2",
+    "cardID": "21"
   },
-
   {
     "color": "PURPLE",
     "level": "2",
@@ -748,9 +763,9 @@
         }
       ]
     },
-    "faithPointsGiven": "0"
+    "faithPointsGiven": "0",
+    "cardID": "22"
   },
-
   {
     "color": "PURPLE",
     "level": "2",
@@ -779,9 +794,9 @@
         }
       ]
     },
-    "faithPointsGiven": "2"
+    "faithPointsGiven": "2",
+    "cardID": "23"
   },
-
   {
     "color": "PURPLE",
     "level": "2",
@@ -814,7 +829,8 @@
         }
       ]
     },
-    "faithPointsGiven": "1"
+    "faithPointsGiven": "1",
+    "cardID": "24"
   },
   {
     "color": "BLUE",
@@ -839,7 +855,8 @@
     "productionPowerResourceGiven":{
       "resourceContainers": []
     },
-    "faithPointsGiven": "2"
+    "faithPointsGiven": "2",
+    "cardID": "25"
   },
   {
     "color": "BLUE",
@@ -877,9 +894,9 @@
         }
       ]
     },
-    "faithPointsGiven": "0"
+    "faithPointsGiven": "0",
+    "cardID": "26"
   },
-
   {
     "color": "BLUE",
     "level": "2",
@@ -908,9 +925,9 @@
         }
       ]
     },
-    "faithPointsGiven": "2"
+    "faithPointsGiven": "2",
+    "cardID": "27"
   },
-
   {
     "color": "BLUE",
     "level": "2",
@@ -943,7 +960,8 @@
         }
       ]
     },
-    "faithPointsGiven": "1"
+    "faithPointsGiven": "1",
+    "cardID": "28"
   },
   {
     "color": "YELLOW",
@@ -968,7 +986,8 @@
     "productionPowerResourceGiven":{
       "resourceContainers": []
     },
-    "faithPointsGiven": "2"
+    "faithPointsGiven": "2",
+    "cardID": "29"
   },
   {
     "color": "YELLOW",
@@ -1006,7 +1025,8 @@
         }
       ]
     },
-    "faithPointsGiven": "0"
+    "faithPointsGiven": "0",
+    "cardID": "30"
   },
   {
     "color": "YELLOW",
@@ -1036,7 +1056,8 @@
         }
       ]
     },
-    "faithPointsGiven": "2"
+    "faithPointsGiven": "2",
+    "cardID": "31"
   },
   {
     "color": "YELLOW",
@@ -1070,7 +1091,8 @@
         }
       ]
     },
-    "faithPointsGiven": "1"
+    "faithPointsGiven": "1",
+    "cardID": "32"
   },
   {
     "color": "GREEN",
@@ -1100,9 +1122,9 @@
         }
       ]
     },
-    "faithPointsGiven": "2"
+    "faithPointsGiven": "2",
+    "cardID": "33"
   },
-
   {
     "color": "GREEN",
     "level": "3",
@@ -1143,9 +1165,9 @@
         }
       ]
     },
-    "faithPointsGiven": "1"
+    "faithPointsGiven": "1",
+    "cardID": "34"
   },
-
   {
     "color": "GREEN",
     "level": "3",
@@ -1174,9 +1196,9 @@
         }
       ]
     },
-    "faithPointsGiven": "3"
+    "faithPointsGiven": "3",
+    "cardID": "35"
   },
-
   {
     "color": "GREEN",
     "level": "3",
@@ -1213,7 +1235,8 @@
         }
       ]
     },
-    "faithPointsGiven": "0"
+    "faithPointsGiven": "0",
+    "cardID": "36"
   },
   {
     "color": "PURPLE",
@@ -1243,9 +1266,9 @@
         }
       ]
     },
-    "faithPointsGiven": "2"
+    "faithPointsGiven": "2",
+    "cardID": "37"
   },
-
   {
     "color": "PURPLE",
     "level": "3",
@@ -1286,9 +1309,9 @@
         }
       ]
     },
-    "faithPointsGiven": "1"
+    "faithPointsGiven": "1",
+    "cardID": "38"
   },
-
   {
     "color": "PURPLE",
     "level": "3",
@@ -1317,9 +1340,9 @@
         }
       ]
     },
-    "faithPointsGiven": "3"
+    "faithPointsGiven": "3",
+    "cardID": "39"
   },
-
   {
     "color": "PURPLE",
     "level": "3",
@@ -1356,7 +1379,8 @@
         }
       ]
     },
-    "faithPointsGiven": "0"
+    "faithPointsGiven": "0",
+    "cardID": "40"
   },
   {
     "color": "BLUE",
@@ -1386,7 +1410,8 @@
         }
       ]
     },
-    "faithPointsGiven": "2"
+    "faithPointsGiven": "2",
+    "cardID": "41"
   },
   {
     "color": "BLUE",
@@ -1428,9 +1453,9 @@
         }
       ]
     },
-    "faithPointsGiven": "1"
+    "faithPointsGiven": "1",
+    "cardID": "42"
   },
-
   {
     "color": "BLUE",
     "level": "3",
@@ -1459,9 +1484,9 @@
         }
       ]
     },
-    "faithPointsGiven": "3"
+    "faithPointsGiven": "3",
+    "cardID": "43"
   },
-
   {
     "color": "BLUE",
     "level": "3",
@@ -1498,7 +1523,8 @@
         }
       ]
     },
-    "faithPointsGiven": "0"
+    "faithPointsGiven": "0",
+    "cardID": "44"
   },
   {
     "color": "YELLOW",
@@ -1528,7 +1554,8 @@
         }
       ]
     },
-    "faithPointsGiven": "2"
+    "faithPointsGiven": "2",
+    "cardID": "45"
   },
   {
     "color": "YELLOW",
@@ -1570,7 +1597,8 @@
         }
       ]
     },
-    "faithPointsGiven": "1"
+    "faithPointsGiven": "1",
+    "cardID": "46"
   },
   {
     "color": "YELLOW",
@@ -1600,7 +1628,8 @@
         }
       ]
     },
-    "faithPointsGiven": "3"
+    "faithPointsGiven": "3",
+    "cardID": "47"
   },
   {
     "color": "YELLOW",
@@ -1638,6 +1667,7 @@
         }
       ]
     },
-    "faithPointsGiven": "0"
+    "faithPointsGiven": "0",
+    "cardID": "48"
   }
 ]

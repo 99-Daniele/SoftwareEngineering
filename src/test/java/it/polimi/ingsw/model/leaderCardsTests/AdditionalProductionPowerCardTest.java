@@ -20,7 +20,7 @@ public class AdditionalProductionPowerCardTest {
 
         Resource r1 = Resource.COIN;
         Cost c = new Cost();
-        LeaderCard card = new AdditionalProductionPowerCard(r1, c, 2);
+        LeaderCard card = new AdditionalProductionPowerCard(r1, c, 2, 1);
 
         assertEquals(0, card.getVictoryPoints());
 
@@ -47,11 +47,11 @@ public class AdditionalProductionPowerCardTest {
         s.increaseResourceType(r1, 2);
         LeaderRequirements l = new LeaderRequirements();
 
-        LeaderCard card = new AdditionalProductionPowerCard(r1, c, 2);
+        LeaderCard card = new AdditionalProductionPowerCard(r1, c, 2, 0);
 
         InsufficientResourceException thrown =
                 assertThrows(InsufficientResourceException.class, () -> card.activateCard(w, s, l));
-        String expectedMessage = "Non hai abbastanza risorse per effettuare questa operazione";
+        String expectedMessage = "You don't have enough resources to do this operation.";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
         assertFalse(card.isActive());
@@ -67,7 +67,8 @@ public class AdditionalProductionPowerCardTest {
         Cost c1 = new Cost();
         Cost c2 = new Cost();
         Cost c3 = new Cost();
-        DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1);
+        int cardID = 0;
+        DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1, cardID);
         LeaderRequirements leaderRequirements = new LeaderRequirements();
         leaderRequirements.addCardRequirement(developmentCard);
 
@@ -75,11 +76,11 @@ public class AdditionalProductionPowerCardTest {
         Strongbox s = new Strongbox();
         LeaderRequirements l = new LeaderRequirements();
 
-        LeaderCard card = new AdditionalProductionPowerCard(r1, leaderRequirements, 2);
+        LeaderCard card = new AdditionalProductionPowerCard(r1, leaderRequirements, 2, 0);
 
         InsufficientCardsException thrown =
                 assertThrows(InsufficientCardsException.class, () -> card.activateCard(w, s, l));
-        String expectedMessage = "Non hai abbastanza carte per effettuare questa operazione";
+        String expectedMessage = "You don't have enough cards to do this operation";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
         assertFalse(card.isActive());
@@ -101,14 +102,14 @@ public class AdditionalProductionPowerCardTest {
         s.increaseResourceType(r1, 3);
         LeaderRequirements l = new LeaderRequirements();
 
-        LeaderCard card = new AdditionalProductionPowerCard(r2, c, 2);
+        LeaderCard card = new AdditionalProductionPowerCard(r2, c, 2, 0);
         card.activateCard(w, s, l);
         assertTrue(card.isActive());
 
         ActiveLeaderCardException thrown =
                 assertThrows(ActiveLeaderCardException.class, () -> card.activateCard(w, s, l));
 
-        String expectedMessage = "Questa carta è stata già attivata in precedenza";
+        String expectedMessage = "This card has already been activate";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
@@ -129,7 +130,7 @@ public class AdditionalProductionPowerCardTest {
         s.increaseResourceType(r1, 3);
         LeaderRequirements l = new LeaderRequirements();
 
-        LeaderCard card = new AdditionalProductionPowerCard(r2, c, 2);
+        LeaderCard card = new AdditionalProductionPowerCard(r2, c, 2, 0);
 
         card.activateCard(w, s, l);
         assertTrue(card.isActive());
@@ -152,13 +153,13 @@ public class AdditionalProductionPowerCardTest {
         s.increaseResourceType(r1, 3);
         LeaderRequirements l = new LeaderRequirements();
 
-        LeaderCard card = new AdditionalProductionPowerCard(r2, c, 2);
+        LeaderCard card = new AdditionalProductionPowerCard(r2, c, 2, 0);
 
         card.activateCard(w, s, l);
 
         InsufficientResourceException thrown =
                 assertThrows(InsufficientResourceException.class, () -> card.decreaseProductionPowerResources(w, s, 1));
-        String expectedMessage = "Non hai abbastanza risorse per effettuare questa operazione";
+        String expectedMessage = "You don't have enough resources to do this operation.";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
@@ -180,7 +181,7 @@ public class AdditionalProductionPowerCardTest {
         w.increaseResource(r1);
         LeaderRequirements l = new LeaderRequirements();
 
-        LeaderCard card = new AdditionalProductionPowerCard(r1, c, 2);
+        LeaderCard card = new AdditionalProductionPowerCard(r1, c, 2, 0);
 
         card.decreaseProductionPowerResources(w, s, 2);
         assertEquals(1, s.getNumOfResource(r1));
@@ -216,13 +217,13 @@ public class AdditionalProductionPowerCardTest {
         s.increaseResourceType(r1, 3);
         LeaderRequirements l = new LeaderRequirements();
 
-        LeaderCard card = new AdditionalProductionPowerCard(r2, c, 2);
+        LeaderCard card = new AdditionalProductionPowerCard(r2, c, 2, 0);
 
         card.activateCard(w, s, l);
 
         InsufficientResourceException thrown =
                 assertThrows(InsufficientResourceException.class, () -> card.additionalProductionPower(w, s, 1, r2));
-        String expectedMessage = "Non hai abbastanza risorse per effettuare questa operazione";
+        String expectedMessage = "You don't have enough resources to do this operation.";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
@@ -243,7 +244,7 @@ public class AdditionalProductionPowerCardTest {
         s.increaseResourceType(r1, 3);
         LeaderRequirements l = new LeaderRequirements();
 
-        LeaderCard card = new AdditionalProductionPowerCard(r1, c, 2);
+        LeaderCard card = new AdditionalProductionPowerCard(r1, c, 2, 0);
 
         assertEquals(0, card.additionalProductionPower(w, s, 2, r2));
         assertEquals(3, s.getNumOfResource(r1));

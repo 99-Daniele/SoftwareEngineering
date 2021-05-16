@@ -29,12 +29,13 @@ public class PlayerBoardTest {
         c1.addResource(r1, 2);
         Cost c2 = new Cost();
         Cost c3 = new Cost();
-        DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 3, c2, c3, 2);
+        int cardID = 0;
+        DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 3, c2, c3, 2, cardID);
 
         InsufficientResourceException thrown =
                 assertThrows(InsufficientResourceException.class, () -> p.buyDevelopmentCard(developmentCard, 0, 1));
 
-        String expectedMessage = "Non hai abbastanza risorse per effettuare questa operazione";
+        String expectedMessage = "You don't have enough resources to do this operation.";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
@@ -51,16 +52,17 @@ public class PlayerBoardTest {
         Cost c1 = new Cost();
         Cost c2 = new Cost();
         Cost c3 = new Cost();
+        int cardID = 0;
 
-        DevelopmentCard developmentCard1 = new DevelopmentCard(Color.BLUE, 1, c1, 3, c2, c3, 2);
+        DevelopmentCard developmentCard1 = new DevelopmentCard(Color.BLUE, 1, c1, 3, c2, c3, 2, cardID);
         p.buyDevelopmentCard(developmentCard1, 1, 1);
 
-        DevelopmentCard developmentCard2 = new DevelopmentCard(Color.BLUE, 1, c1, 3, c2, c3, 2);
+        DevelopmentCard developmentCard2 = new DevelopmentCard(Color.BLUE, 1, c1, 3, c2, c3, 2, cardID);
 
         ImpossibleDevelopmentCardAdditionException thrown =
                 assertThrows(ImpossibleDevelopmentCardAdditionException.class, () -> p.buyDevelopmentCard(developmentCard2, 1, 1));
 
-        String expectedMessage = "Non puoi comprare questa carta";
+        String expectedMessage = "You have not available slots to buy this card";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
@@ -78,7 +80,8 @@ public class PlayerBoardTest {
         c1.addResource(r1, 1);
         Cost c2 = new Cost();
         Cost c3 = new Cost();
-        DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 3, c2, c3, 2);
+        int cardID = 0;
+        DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 3, c2, c3, 2, cardID);
 
         assertEquals(0, p.getVictoryPoints().getVictoryPointsByCards());
         assertEquals(3, p.findAvailableSlot(developmentCard).size());
@@ -109,11 +112,12 @@ public class PlayerBoardTest {
         c1.addResource(r2, 3);
         Cost c2 = new Cost();
         Cost c3 = new Cost();
-        DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 3, c2, c3, 2);
+        int cardID = 0;
+        DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 3, c2, c3, 2, cardID);
 
         LeaderRequirements leaderRequirements = new LeaderRequirements();
-        LeaderCard leaderCard1 = new DiscountCard(r1, leaderRequirements, 1);
-        LeaderCard leaderCard2 = new DiscountCard(r2, leaderRequirements, 1);
+        LeaderCard leaderCard1 = new DiscountCard(r1, leaderRequirements, 1, 0);
+        LeaderCard leaderCard2 = new DiscountCard(r2, leaderRequirements, 1, 0);
         p.addLeaderCard(leaderCard1, leaderCard2);
         p.activateLeaderCard(1);
         p.activateLeaderCard(2);
@@ -124,7 +128,7 @@ public class PlayerBoardTest {
         InsufficientResourceException thrown =
                 assertThrows(InsufficientResourceException.class, () -> p.buyDevelopmentCard(developmentCard, 0, 1));
 
-        String expectedMessage = "Non hai abbastanza risorse per effettuare questa operazione";
+        String expectedMessage = "You don't have enough resources to do this operation.";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
         assertEquals(3, c1.getNumOfResource(r1));
@@ -151,11 +155,12 @@ public class PlayerBoardTest {
         c1.addResource(r2, 2);
         Cost c2 = new Cost();
         Cost c3 = new Cost();
-        DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 3, c2, c3, 2);
+        int cardID = 0;
+        DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 3, c2, c3, 2, cardID);
 
         LeaderRequirements leaderRequirements = new LeaderRequirements();
-        LeaderCard leaderCard1 = new DiscountCard(r1, leaderRequirements, 1);
-        LeaderCard leaderCard2 = new DiscountCard(r2, leaderRequirements, 1);
+        LeaderCard leaderCard1 = new DiscountCard(r1, leaderRequirements, 1, 0);
+        LeaderCard leaderCard2 = new DiscountCard(r2, leaderRequirements, 1, 0);
         p.addLeaderCard(leaderCard1, leaderCard2);
         p.activateLeaderCard(1);
         p.activateLeaderCard(2);
@@ -190,11 +195,12 @@ public class PlayerBoardTest {
         Cost c2 = new Cost();
         c1.addResource(r2, 1);
         Cost c3 = new Cost();
-        DevelopmentCard card1 = new DevelopmentCard(Color.BLUE, 1, c1, 3, c2, c3, 2);
+        int cardID = 0;
+        DevelopmentCard card1 = new DevelopmentCard(Color.BLUE, 1, c1, 3, c2, c3, 2, cardID);
         assertEquals(3, p.findAvailableSlot(card1).size());
         p.buyDevelopmentCard(card1, 1, 1);
 
-        DevelopmentCard card2 = new DevelopmentCard(Color.YELLOW, 1, c2, 3, c1, c3, 2);
+        DevelopmentCard card2 = new DevelopmentCard(Color.YELLOW, 1, c2, 3, c1, c3, 2, cardID);
         assertEquals(2, p.findAvailableSlot(card2).size());
         assertEquals(2, p.findAvailableSlot(card2).get(0));
         assertEquals(3, p.findAvailableSlot(card2).get(1));
@@ -203,14 +209,14 @@ public class PlayerBoardTest {
          */
 
         p.buyDevelopmentCard(card2, 2, 1);
-        DevelopmentCard card3 = new DevelopmentCard(Color.PURPLE, 1, c1, 3, c2, c3, 2);
+        DevelopmentCard card3 = new DevelopmentCard(Color.PURPLE, 1, c1, 3, c2, c3, 2, cardID);
         assertEquals(1, p.findAvailableSlot(card3).size());
         assertEquals(3, p.findAvailableSlot(card3).get(0));
         /*
          there is one available slot: the third one
          */
 
-        DevelopmentCard card4 = new DevelopmentCard(Color.PURPLE, 2, c1, 3, c2, c3, 2);
+        DevelopmentCard card4 = new DevelopmentCard(Color.PURPLE, 2, c1, 3, c2, c3, 2, cardID);
         assertEquals(2, p.findAvailableSlot(card4).size());
         assertEquals(1, p.findAvailableSlot(card4).get(0));
         assertEquals(2, p.findAvailableSlot(card4).get(1));
@@ -218,7 +224,7 @@ public class PlayerBoardTest {
          available slots to insert card4 are first and second slot, where there are level 1 cards
          */
 
-        DevelopmentCard card5 = new DevelopmentCard(Color.GREEN, 3, c1, 3, c2, c3, 2);
+        DevelopmentCard card5 = new DevelopmentCard(Color.GREEN, 3, c1, 3, c2, c3, 2, cardID);
         assertEquals(0, p.findAvailableSlot(card5).size());
         /*
          there are not available slots for card5 because there isn't any level 2 card
@@ -255,7 +261,8 @@ public class PlayerBoardTest {
         Cost c2 = new Cost();
         c2.addResource(r1, 2);
         Cost c3 = new Cost();
-        DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1);
+        int cardID = 0;
+        DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1, cardID);
         p.buyDevelopmentCard(developmentCard, 1, 1);
 
         PowerProductionPlayerChoice playerChoice = new PowerProductionPlayerChoice();
@@ -268,7 +275,7 @@ public class PlayerBoardTest {
         InsufficientResourceException thrown =
                 assertThrows(InsufficientResourceException.class, () -> p.activateProduction(playerChoice));
 
-        String expectedMessage = "Non hai abbastanza risorse per effettuare questa operazione";
+        String expectedMessage = "You don't have enough resources to do this operation.";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
@@ -286,7 +293,8 @@ public class PlayerBoardTest {
         Cost c1 = new Cost();
         Cost c2 = new Cost();
         Cost c3 = new Cost();
-        DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1);
+        int cardID = 0;
+        DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1, cardID);
         p.buyDevelopmentCard(developmentCard, 1, 1);
 
         PowerProductionPlayerChoice playerChoice = new PowerProductionPlayerChoice();
@@ -303,7 +311,7 @@ public class PlayerBoardTest {
         InsufficientResourceException thrown =
                 assertThrows(InsufficientResourceException.class, () -> p.activateProduction(playerChoice));
 
-        String expectedMessage = "Non hai abbastanza risorse per effettuare questa operazione";
+        String expectedMessage = "You don't have enough resources to do this operation.";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
@@ -325,12 +333,13 @@ public class PlayerBoardTest {
         Cost c2 = new Cost();
         c2.addResource(r1, 1);
         Cost c3 = new Cost();
-        DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1);
+        int cardID = 0;
+        DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1, cardID);
         p.buyDevelopmentCard(developmentCard, 1, 1);
 
         LeaderRequirements leaderRequirements = new LeaderRequirements();
-        LeaderCard leaderCard1 = new AdditionalProductionPowerCard(r2, leaderRequirements, 1);
-        LeaderCard leaderCard2 = new DiscountCard(r1, leaderRequirements, 1);
+        LeaderCard leaderCard1 = new AdditionalProductionPowerCard(r2, leaderRequirements, 1, 0);
+        LeaderCard leaderCard2 = new DiscountCard(r1, leaderRequirements, 1, 0);
         p.addLeaderCard(leaderCard1, leaderCard2);
         p.activateLeaderCard(1);
 
@@ -351,7 +360,7 @@ public class PlayerBoardTest {
         InsufficientResourceException thrown =
                 assertThrows(InsufficientResourceException.class, () -> p.activateProduction(playerChoice));
 
-        String expectedMessage = "Non hai abbastanza risorse per effettuare questa operazione";
+        String expectedMessage = "You don't have enough resources to do this operation.";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
@@ -375,13 +384,14 @@ public class PlayerBoardTest {
         Cost c2 = new Cost();
         c2.addResource(r1, 1);
         Cost c3 = new Cost();
+        int cardID = 0;
         c3.addResource(r1, 1);
-        DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 2);
+        DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 2, cardID);
         p.buyDevelopmentCard(developmentCard, 1, 1);
 
         LeaderRequirements leaderRequirements = new LeaderRequirements();
-        LeaderCard leaderCard1 = new AdditionalProductionPowerCard(r2, leaderRequirements, 1);
-        LeaderCard leaderCard2 = new AdditionalProductionPowerCard(r3, leaderRequirements, 1);
+        LeaderCard leaderCard1 = new AdditionalProductionPowerCard(r2, leaderRequirements, 1, 0);
+        LeaderCard leaderCard2 = new AdditionalProductionPowerCard(r3, leaderRequirements, 1, 0);
         p.addLeaderCard(leaderCard1, leaderCard2);
         p.activateLeaderCard(1);
         p.activateLeaderCard(2);
@@ -418,7 +428,7 @@ public class PlayerBoardTest {
         NoSuchProductionPowerException thrown =
                 assertThrows(NoSuchProductionPowerException.class, () -> p.activateDevelopmentCardProductionPower(1, s, 1));
 
-        String expectedMessage = "Non esistono carte per attivare questo potere di produzione";
+        String expectedMessage = "You don't have any card to activate this power";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
@@ -436,7 +446,7 @@ public class PlayerBoardTest {
         NoSuchProductionPowerException thrown =
                 assertThrows(NoSuchProductionPowerException.class, () -> p.activateProduction(choice));
 
-        String expectedMessage = "Non esistono carte per attivare questo potere di produzione";
+        String expectedMessage = "You don't have any card to activate this power";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
@@ -450,14 +460,14 @@ public class PlayerBoardTest {
         PlayerBoard p = new PlayerBoard("p1");
         PowerProductionPlayerChoice choice = new PowerProductionPlayerChoice();
         Cost c = new Cost();
-        LeaderCard card = new AdditionalProductionPowerCard(r1, c, 1);
+        LeaderCard card = new AdditionalProductionPowerCard(r1, c, 1, 0);
         p.addLeaderCard(card, card);
         choice.setFirstAdditionalPower(r1);
 
         NoSuchProductionPowerException thrown =
                 assertThrows(NoSuchProductionPowerException.class, () -> p.activateProduction(choice));
 
-        String expectedMessage = "Non esistono carte per attivare questo potere di produzione";
+        String expectedMessage = "You don't have any card to activate this power";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
@@ -471,7 +481,7 @@ public class PlayerBoardTest {
         PlayerBoard p = new PlayerBoard("p1");
         PowerProductionPlayerChoice choice = new PowerProductionPlayerChoice();
         Cost c = new Cost();
-        LeaderCard card = new DiscountCard(r1, c, 1);
+        LeaderCard card = new DiscountCard(r1, c, 1, 0);
         p.addLeaderCard(card, card);
         p.activateLeaderCard(1);
         choice.setFirstAdditionalPower(r1);
@@ -479,7 +489,7 @@ public class PlayerBoardTest {
         NoSuchProductionPowerException thrown =
                 assertThrows(NoSuchProductionPowerException.class, () -> p.activateProduction(choice));
 
-        String expectedMessage = "Non esistono carte per attivare questo potere di produzione";
+        String expectedMessage = "You don't have any card to activate this power";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
@@ -497,14 +507,15 @@ public class PlayerBoardTest {
         c2.addResource(r1, 1);
         Cost c3 = new Cost();
         c3.addResource(r1, 1);
-        DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 2);
+        int cardID = 0;
+        DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 2, cardID);
         p.buyDevelopmentCard(developmentCard, 1, 1);
         Strongbox s = new Strongbox();
 
         InsufficientResourceException thrown =
                 assertThrows(InsufficientResourceException.class, () -> p.activateDevelopmentCardProductionPower(1, s, 1));
 
-        String expectedMessage = "Non hai abbastanza risorse per effettuare questa operazione";
+        String expectedMessage = "You don't have enough resources to do this operation.";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
@@ -523,7 +534,8 @@ public class PlayerBoardTest {
         c2.addResource(r1, 1);
         Cost c3 = new Cost();
         c3.addResource(r1, 1);
-        DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 2);
+        int cardID = 0;
+        DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 2, cardID);
         p.buyDevelopmentCard(developmentCard, 2, 1);
 
         Strongbox s = new Strongbox();
@@ -545,7 +557,7 @@ public class PlayerBoardTest {
         InsufficientResourceException thrown =
                 assertThrows(InsufficientResourceException.class, () -> p.activateBasicProduction(r1, r2, 1));
 
-        String expectedMessage = "Non hai abbastanza risorse per effettuare questa operazione";
+        String expectedMessage = "You don't have enough resources to do this operation.";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
@@ -576,7 +588,7 @@ public class PlayerBoardTest {
         NoSuchProductionPowerException thrown =
                 assertThrows(NoSuchProductionPowerException.class, () -> p.activateAdditionalProductionPower(2,  1));
 
-        String expectedMessage = "Non esistono carte per attivare questo potere di produzione";
+        String expectedMessage = "You don't have any card to activate this power";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
@@ -591,14 +603,14 @@ public class PlayerBoardTest {
         PlayerBoard p = new PlayerBoard("p1");
         Cost c = new Cost();
         LeaderRequirements l = new LeaderRequirements();
-        LeaderCard card = new AdditionalProductionPowerCard(r1, c, 1);
+        LeaderCard card = new AdditionalProductionPowerCard(r1, c, 1, 0);
         p.addLeaderCard(card, card);
         p.activateLeaderCard(1);
 
         InsufficientResourceException thrown =
                 assertThrows(InsufficientResourceException.class, () -> p.activateAdditionalProductionPower(1,1));
 
-        String expectedMessage = "Non hai abbastanza risorse per effettuare questa operazione";
+        String expectedMessage = "You don't have enough resources to do this operation.";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
@@ -614,7 +626,7 @@ public class PlayerBoardTest {
 
         Cost c = new Cost();
         LeaderRequirements l = new LeaderRequirements();
-        LeaderCard card = new AdditionalProductionPowerCard(r1, c, 1);
+        LeaderCard card = new AdditionalProductionPowerCard(r1, c, 1, 0);
         p.addLeaderCard(card, card);
         p.activateLeaderCard(1);
         assertEquals(1, p.sumTotalResource());
@@ -633,8 +645,8 @@ public class PlayerBoardTest {
         PlayerBoard p = new PlayerBoard("p1");
 
         LeaderRequirements leaderRequirements = new LeaderRequirements();
-        LeaderCard leaderCard1 = new AdditionalProductionPowerCard(r2, leaderRequirements, 1);
-        LeaderCard leaderCard2 = new DiscountCard(r1, leaderRequirements, 1);
+        LeaderCard leaderCard1 = new AdditionalProductionPowerCard(r2, leaderRequirements, 1, 0);
+        LeaderCard leaderCard2 = new DiscountCard(r1, leaderRequirements, 1, 0);
         p.addLeaderCard(leaderCard1, leaderCard2);
 
         p.discardLeaderCard(1);
@@ -642,7 +654,7 @@ public class PlayerBoardTest {
         AlreadyDiscardLeaderCardException thrown =
                 assertThrows(AlreadyDiscardLeaderCardException.class, () -> p.activateLeaderCard(2));
 
-        String expectedMessage = "Questa carta è stata già scartata in precedenza";
+        String expectedMessage = "This card has already been discarded";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
@@ -657,8 +669,8 @@ public class PlayerBoardTest {
         PlayerBoard p = new PlayerBoard("p1");
 
         LeaderRequirements leaderRequirements = new LeaderRequirements();
-        LeaderCard leaderCard1 = new AdditionalProductionPowerCard(r2, leaderRequirements, 1);
-        LeaderCard leaderCard2 = new DiscountCard(r1, leaderRequirements, 1);
+        LeaderCard leaderCard1 = new AdditionalProductionPowerCard(r2, leaderRequirements, 1, 0);
+        LeaderCard leaderCard2 = new DiscountCard(r1, leaderRequirements, 1, 0);
         p.addLeaderCard(leaderCard1, leaderCard2);
 
         assertEquals(0, p.getVictoryPoints().getVictoryPointsByCards());
@@ -676,8 +688,8 @@ public class PlayerBoardTest {
         PlayerBoard p = new PlayerBoard("p1");
 
         LeaderRequirements leaderRequirements = new LeaderRequirements();
-        LeaderCard leaderCard1 = new AdditionalProductionPowerCard(r2, leaderRequirements, 1);
-        LeaderCard leaderCard2 = new DiscountCard(r1, leaderRequirements, 1);
+        LeaderCard leaderCard1 = new AdditionalProductionPowerCard(r2, leaderRequirements, 1, 0);
+        LeaderCard leaderCard2 = new DiscountCard(r1, leaderRequirements, 1, 0);
         p.addLeaderCard(leaderCard1, leaderCard2);
 
         p.activateLeaderCard(1);
@@ -685,7 +697,7 @@ public class PlayerBoardTest {
         ActiveLeaderCardException thrown =
                 assertThrows(ActiveLeaderCardException.class, () -> p.discardLeaderCard(1));
 
-        String expectedMessage = "Questa carta è stata già attivata in precedenza";
+        String expectedMessage = "This card has already been activate";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
@@ -699,8 +711,8 @@ public class PlayerBoardTest {
         PlayerBoard p = new PlayerBoard("p1");
 
         LeaderRequirements leaderRequirements = new LeaderRequirements();
-        LeaderCard leaderCard1 = new AdditionalProductionPowerCard(r2, leaderRequirements, 1);
-        LeaderCard leaderCard2= new DiscountCard(r1, leaderRequirements, 1);
+        LeaderCard leaderCard1 = new AdditionalProductionPowerCard(r2, leaderRequirements, 1, 0);
+        LeaderCard leaderCard2= new DiscountCard(r1, leaderRequirements, 1, 0);
         p.addLeaderCard(leaderCard1, leaderCard2);
 
         p.discardLeaderCard(2);
@@ -708,7 +720,7 @@ public class PlayerBoardTest {
         AlreadyDiscardLeaderCardException thrown =
                 assertThrows(AlreadyDiscardLeaderCardException.class, () -> p.discardLeaderCard(2));
 
-        String expectedMessage = "Questa carta è stata già scartata in precedenza";
+        String expectedMessage = "This card has already been discarded";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
@@ -722,8 +734,8 @@ public class PlayerBoardTest {
         PlayerBoard p = new PlayerBoard("p1");
 
         LeaderRequirements leaderRequirements = new LeaderRequirements();
-        LeaderCard leaderCard1 = new AdditionalProductionPowerCard(r2, leaderRequirements, 1);
-        LeaderCard leaderCard2 = new AdditionalProductionPowerCard(r2, leaderRequirements, 1);
+        LeaderCard leaderCard1 = new AdditionalProductionPowerCard(r2, leaderRequirements, 1, 0);
+        LeaderCard leaderCard2 = new AdditionalProductionPowerCard(r2, leaderRequirements, 1, 0);
         p.addLeaderCard(leaderCard1, leaderCard2);
 
         assertEquals(0, p.getFaithPoints());
@@ -749,8 +761,8 @@ public class PlayerBoardTest {
          */
 
         LeaderRequirements leaderRequirements = new LeaderRequirements();
-        LeaderCard leaderCard1 = new AdditionalProductionPowerCard(r1, leaderRequirements, 1);
-        LeaderCard leaderCard2 = new WhiteConversionCard(r1, leaderRequirements, 1);
+        LeaderCard leaderCard1 = new AdditionalProductionPowerCard(r1, leaderRequirements, 1, 0);
+        LeaderCard leaderCard2 = new WhiteConversionCard(r1, leaderRequirements, 1, 0);
         p.addLeaderCard(leaderCard1, leaderCard2);
 
         assertFalse(p.isWhiteConversionLeaderCardActive(1));
@@ -771,8 +783,8 @@ public class PlayerBoardTest {
         PlayerBoard p = new PlayerBoard("p1");
 
         LeaderRequirements leaderRequirements = new LeaderRequirements();
-        LeaderCard leaderCard1 = new AdditionalProductionPowerCard(r2, leaderRequirements, 1);
-        LeaderCard leaderCard2= new DiscountCard(r1, leaderRequirements, 1);
+        LeaderCard leaderCard1 = new AdditionalProductionPowerCard(r2, leaderRequirements, 1, 0);
+        LeaderCard leaderCard2= new DiscountCard(r1, leaderRequirements, 1, 0);
         p.addLeaderCard(leaderCard1, leaderCard2);
 
         p.discardLeaderCard(2);
@@ -780,7 +792,7 @@ public class PlayerBoardTest {
         AlreadyDiscardLeaderCardException thrown =
                 assertThrows(AlreadyDiscardLeaderCardException.class, () -> p.getLeaderCard(2));
 
-        String expectedMessage = "Questa carta è stata già scartata in precedenza";
+        String expectedMessage = "This card has already been discarded";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
@@ -794,8 +806,8 @@ public class PlayerBoardTest {
         PlayerBoard p = new PlayerBoard("p1");
 
         LeaderRequirements leaderRequirements = new LeaderRequirements();
-        LeaderCard leaderCard1 = new AdditionalProductionPowerCard(r2, leaderRequirements, 1);
-        LeaderCard leaderCard2 = new AdditionalProductionPowerCard(r2, leaderRequirements, 1);
+        LeaderCard leaderCard1 = new AdditionalProductionPowerCard(r2, leaderRequirements, 1, 0);
+        LeaderCard leaderCard2 = new AdditionalProductionPowerCard(r2, leaderRequirements, 1, 0);
         p.addLeaderCard(leaderCard1, leaderCard2);
 
         assertSame(leaderCard1, p.getLeaderCard(1));
@@ -813,28 +825,29 @@ public class PlayerBoardTest {
         Cost c1 = new Cost();
         Cost c2 = new Cost();
         Cost c3 = new Cost();
+        int cardID = 0;
 
-        DevelopmentCard developmentCard1 = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 0);
+        DevelopmentCard developmentCard1 = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 0, cardID);
         p.buyDevelopmentCard(developmentCard1, 1, 1);
 
-        DevelopmentCard developmentCard2 = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 0);
+        DevelopmentCard developmentCard2 = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 0, cardID);
         p.buyDevelopmentCard(developmentCard2, 2, 1);
 
-        DevelopmentCard developmentCard3= new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 0);
+        DevelopmentCard developmentCard3= new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 0, cardID);
         p.buyDevelopmentCard(developmentCard3, 3, 1);
 
-        DevelopmentCard developmentCard4 = new DevelopmentCard(Color.BLUE, 2, c1, 1, c2, c3, 0);
+        DevelopmentCard developmentCard4 = new DevelopmentCard(Color.BLUE, 2, c1, 1, c2, c3, 0, cardID);
         p.buyDevelopmentCard(developmentCard4, 1, 1);
 
-        DevelopmentCard developmentCard5 = new DevelopmentCard(Color.BLUE, 2, c1, 1, c2, c3, 0);
+        DevelopmentCard developmentCard5 = new DevelopmentCard(Color.BLUE, 2, c1, 1, c2, c3, 0, cardID);
         p.buyDevelopmentCard(developmentCard5, 2, 1);
 
-        DevelopmentCard developmentCard6 = new DevelopmentCard(Color.BLUE, 3, c1, 1, c2, c3, 0);
+        DevelopmentCard developmentCard6 = new DevelopmentCard(Color.BLUE, 3, c1, 1, c2, c3, 0, cardID);
         p.buyDevelopmentCard(developmentCard6, 1, 1);
 
         assertFalse(p.haveSevenDevelopmentCards());
 
-        DevelopmentCard developmentCard7 = new DevelopmentCard(Color.BLUE, 2, c1, 1, c2, c3, 0);
+        DevelopmentCard developmentCard7 = new DevelopmentCard(Color.BLUE, 2, c1, 1, c2, c3, 0, cardID);
         p.buyDevelopmentCard(developmentCard7, 3, 1);
         assertTrue(p.haveSevenDevelopmentCards());
     }
@@ -848,9 +861,10 @@ public class PlayerBoardTest {
 
         PlayerBoard p = new PlayerBoard("p1");
         Cost c = new Cost();
+        int cardID = 0;
         assertEquals(0, p.sumVictoryPoints());
 
-        DevelopmentCard card = new DevelopmentCard(Color.GREEN, 1, c, 2, c, c, 0);
+        DevelopmentCard card = new DevelopmentCard(Color.GREEN, 1, c, 2, c, c, 0, cardID);
         p.buyDevelopmentCard(card, 1, 1);
         assertEquals(2, p.sumVictoryPoints());
 

@@ -1,0 +1,13 @@
+{
+    "resource": "SHIELD",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "SERVANT",
+          "amount": "5"
+        }
+      ]
+    },
+    "victoryPoints": "3",
+  "cardID": "59"
+}

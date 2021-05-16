@@ -59,28 +59,29 @@ class SinglePlayerGameTest {
         Cost c1 = new Cost();
         Cost c2 = new Cost();
         Cost c3 = new Cost();
+        int cardID = 0;
 
-        DevelopmentCard developmentCard1 = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 0);
+        DevelopmentCard developmentCard1 = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 0, cardID);
         singlePlayerGame.getCurrentPlayer().buyDevelopmentCard(developmentCard1, 1, 1);
 
-        DevelopmentCard developmentCard2 = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 0);
+        DevelopmentCard developmentCard2 = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 0, cardID);
         singlePlayerGame.getCurrentPlayer().buyDevelopmentCard(developmentCard2, 2, 1);
 
-        DevelopmentCard developmentCard3 = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 0);
+        DevelopmentCard developmentCard3 = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 0, cardID);
         singlePlayerGame.getCurrentPlayer().buyDevelopmentCard(developmentCard3, 3, 1);
 
-        DevelopmentCard developmentCard4 = new DevelopmentCard(Color.BLUE, 2, c1, 1, c2, c3, 0);
+        DevelopmentCard developmentCard4 = new DevelopmentCard(Color.BLUE, 2, c1, 1, c2, c3, 0, cardID);
         singlePlayerGame.getCurrentPlayer().buyDevelopmentCard(developmentCard4, 1, 1);
 
-        DevelopmentCard developmentCard5 = new DevelopmentCard(Color.BLUE, 2, c1, 1, c2, c3, 0);
+        DevelopmentCard developmentCard5 = new DevelopmentCard(Color.BLUE, 2, c1, 1, c2, c3, 0, cardID);
         singlePlayerGame.getCurrentPlayer().buyDevelopmentCard(developmentCard5, 2, 1);
 
-        DevelopmentCard developmentCard6 = new DevelopmentCard(Color.BLUE, 3, c1, 1, c2, c3, 0);
+        DevelopmentCard developmentCard6 = new DevelopmentCard(Color.BLUE, 3, c1, 1, c2, c3, 0, cardID);
         singlePlayerGame.getCurrentPlayer().buyDevelopmentCard(developmentCard6, 1, 1);
 
         assertFalse(singlePlayerGame.isEndGame());
 
-        DevelopmentCard developmentCard7 = new DevelopmentCard(Color.BLUE, 2, c1, 1, c2, c3, 0);
+        DevelopmentCard developmentCard7 = new DevelopmentCard(Color.BLUE, 2, c1, 1, c2, c3, 0, cardID);
         singlePlayerGame.getCurrentPlayer().buyDevelopmentCard(developmentCard7, 3, 1);
         assertTrue(singlePlayerGame.isEndGame());
 

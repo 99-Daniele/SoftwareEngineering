@@ -125,7 +125,7 @@ class CostTest {
          since there aren't enough resource, doesn't count if @param choice is 1 or 2.
          */
 
-        String expectedMessage = "Non hai abbastanza risorse per effettuare questa operazione";
+        String expectedMessage = "You don't have enough resources to do this operation.";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }

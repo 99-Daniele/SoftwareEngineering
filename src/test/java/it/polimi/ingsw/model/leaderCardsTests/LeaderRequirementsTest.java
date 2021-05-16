@@ -32,7 +32,8 @@ public class LeaderRequirementsTest {
         Cost c1 = new Cost();
         Cost c2 = new Cost();
         Cost c3 = new Cost();
-        DevelopmentCard developmentCard1 = new DevelopmentCard(Color.BLUE, 2, c1, 1, c2, c3, 1);
+        int cardID = 0;
+        DevelopmentCard developmentCard1 = new DevelopmentCard(Color.BLUE, 2, c1, 1, c2, c3, 1, cardID);
 
         LeaderRequirements l = new LeaderRequirements();
         l.addCardRequirement(developmentCard1);
@@ -41,7 +42,7 @@ public class LeaderRequirementsTest {
         assertFalse(l.getCardRequirement(Color.BLUE).containsLevel(1));
         assertTrue(l.getCardRequirement(Color.BLUE).containsLevel(2));
 
-        DevelopmentCard developmentCard2 = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1);
+        DevelopmentCard developmentCard2 = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1, cardID);
         l.addCardRequirement(developmentCard2);
 
         assertEquals(2, l.getNumOfCards(Color.BLUE));
@@ -75,7 +76,8 @@ public class LeaderRequirementsTest {
         Cost c1 = new Cost();
         Cost c2 = new Cost();
         Cost c3 = new Cost();
-        DevelopmentCard card = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1);
+        int cardID = 0;
+        DevelopmentCard card = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1, cardID);
         l3.addCardRequirement(card);
         l4.addCardRequirement(card);
         l5.addCardRequirement(card);
@@ -102,7 +104,8 @@ public class LeaderRequirementsTest {
         Cost c1 = new Cost();
         Cost c2 = new Cost();
         Cost c3 = new Cost();
-        DevelopmentCard developmentCard = new DevelopmentCard(Color.YELLOW, 2, c1, 1, c2, c3, 1);
+        int cardID = 0;
+        DevelopmentCard developmentCard = new DevelopmentCard(Color.YELLOW, 2, c1, 1, c2, c3, 1, cardID);
 
         l.addCardRequirement(developmentCard);
         assertEquals(2, l.getNumOfCards(Color.BLUE));
@@ -136,7 +139,8 @@ public class LeaderRequirementsTest {
         Cost c1 = new Cost();
         Cost c2 = new Cost();
         Cost c3 = new Cost();
-        DevelopmentCard developmentCard = new DevelopmentCard(Color.YELLOW, 1, c1, 1, c2, c3, 1);
+        int cardID = 0;
+        DevelopmentCard developmentCard = new DevelopmentCard(Color.YELLOW, 1, c1, 1, c2, c3, 1, cardID);
 
         l.addCardRequirement(developmentCard);
         CardRequirement cardRequirement3 = l.getCardRequirement(Color.YELLOW);

@@ -15,7 +15,8 @@
         }
       ]
     },
-    "victoryPoints": "5"
+    "victoryPoints": "5",
+    "cardID": "61"
   },
   {
     "resource": "SHIELD",
@@ -33,7 +34,8 @@
         }
       ]
     },
-    "victoryPoints": "5"
+    "victoryPoints": "5",
+    "cardID": "62"
   },
   {
     "resource": "STONE",
@@ -51,7 +53,8 @@
         }
       ]
     },
-    "victoryPoints": "5"
+    "victoryPoints": "5",
+    "cardID": "63"
   },
   {
     "resource": "COIN",
@@ -69,6 +72,7 @@
         }
       ]
     },
-    "victoryPoints": "5"
+    "victoryPoints": "5",
+    "cardID": "64"
   }
 ]

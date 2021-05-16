@@ -1,0 +1,39 @@
+{
+    "color": "GREEN",
+    "level": "1",
+    "resourceCost": {
+      "resourceContainers": [
+        {
+          "resource": "SHIELD",
+          "amount": "3"
+        }
+      ]
+    },
+    "victoryPoints": "3",
+    "productionPowerResourceRequired":{
+      "resourceContainers": [
+        {
+          "resource": "SERVANT",
+          "amount": "2"
+        }
+      ]
+    },
+    "productionPowerResourceGiven":{
+      "resourceContainers": [
+        {
+          "resource": "COIN",
+          "amount": "1"
+        },
+        {
+          "resource": "SHIELD",
+          "amount": "1"
+        },
+        {
+          "resource": "STONE",
+          "amount": "1"
+        }
+      ]
+    },
+    "faithPointsGiven": "0",
+    "cardID": "3"
+}

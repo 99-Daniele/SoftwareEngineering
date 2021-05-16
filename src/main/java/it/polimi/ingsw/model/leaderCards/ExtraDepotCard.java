@@ -13,12 +13,12 @@ import it.polimi.ingsw.model.resourceContainers.*;
  */
 public class ExtraDepotCard extends LeaderCard {
 
-    public ExtraDepotCard(Resource resource, Cost resourceCost, int victoryPoints) {
-        super(resource, resourceCost, victoryPoints);
+    public ExtraDepotCard(Resource resource, Cost resourceCost, int victoryPoints, int cardID) {
+        super(resource, resourceCost, victoryPoints, cardID);
     }
 
-    public ExtraDepotCard(Resource resource, LeaderRequirements leaderRequirements, int victoryPoints) {
-        super(resource, leaderRequirements, victoryPoints);
+    public ExtraDepotCard(Resource resource, LeaderRequirements leaderRequirements, int victoryPoints, int cardID) {
+        super(resource, leaderRequirements, victoryPoints, cardID);
     }
 
     /**

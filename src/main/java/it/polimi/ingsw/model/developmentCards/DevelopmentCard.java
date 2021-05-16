@@ -17,9 +17,10 @@ public class DevelopmentCard {
     private final Cost productionPowerResourceRequired;
     private final Cost productionPowerResourceGiven;
     private final int faithPointsGiven;
+    private final int cardID;
 
     public DevelopmentCard(Color color, int level, Cost resourceCost, int victoryPoints, Cost productionPowerResourceRequired,
-                           Cost productionPowerResourceGiven, int faithPointsGiven) {
+                           Cost productionPowerResourceGiven, int faithPointsGiven, int cardID) {
         this.color = color;
         this.level = level;
         this.resourceCost = resourceCost;
@@ -27,6 +28,7 @@ public class DevelopmentCard {
         this.productionPowerResourceRequired = productionPowerResourceRequired;
         this.productionPowerResourceGiven = productionPowerResourceGiven;
         this.faithPointsGiven = faithPointsGiven;
+        this.cardID = cardID;
     }
 
     public Color getColor() {
@@ -39,6 +41,10 @@ public class DevelopmentCard {
 
     public int getVictoryPoints() {
         return victoryPoints;
+    }
+
+    public int getCardID() {
+        return cardID;
     }
 
     /**

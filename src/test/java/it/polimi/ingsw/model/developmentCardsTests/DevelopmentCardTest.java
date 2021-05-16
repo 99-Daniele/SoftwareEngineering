@@ -18,7 +18,8 @@ public class DevelopmentCardTest {
     Cost given=new Cost();
     Warehouse warehouse=new Warehouse();
     Strongbox strongbox=new Strongbox();
-    DevelopmentCard developmentCard=new DevelopmentCard(Color.GREEN, 2, cost, 3, required, given, 3);
+    int cardID = 0;
+    DevelopmentCard developmentCard=new DevelopmentCard(Color.GREEN, 2, cost, 3, required, given, 3, cardID);
 
     /**
      * control if every get method in the class return the correct value.
@@ -159,7 +160,7 @@ public class DevelopmentCardTest {
 
         InsufficientResourceException thrown =
                 assertThrows(InsufficientResourceException.class, () -> developmentCard.activateProduction(warehouse,strongbox,1));
-        String expectedMessage = "Non hai abbastanza risorse per effettuare questa operazione";
+        String expectedMessage = "You don't have enough resources to do this operation.";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
 

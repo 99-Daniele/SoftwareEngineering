@@ -11,12 +11,12 @@ import it.polimi.ingsw.model.resourceContainers.*;
  */
 public class AdditionalProductionPowerCard extends LeaderCard {
 
-    public AdditionalProductionPowerCard(Resource resource, Cost resourceCost, int victoryPoints) {
-        super(resource, resourceCost, victoryPoints);
+    public AdditionalProductionPowerCard(Resource resource, Cost resourceCost, int victoryPoints, int cardID) {
+        super(resource, resourceCost, victoryPoints, cardID);
     }
 
-    public AdditionalProductionPowerCard(Resource resource, LeaderRequirements leaderRequirements, int victoryPoints) {
-        super(resource, leaderRequirements, victoryPoints);
+    public AdditionalProductionPowerCard(Resource resource, LeaderRequirements leaderRequirements, int victoryPoints, int cardID) {
+        super(resource, leaderRequirements, victoryPoints, cardID);
     }
 
     /**
