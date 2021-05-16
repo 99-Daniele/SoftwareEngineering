@@ -84,4 +84,9 @@ public class CardRequirement {
         }
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "\n     [COLOR: " + color + "\n      NUM_OF_CARDS: " + numOfCards + "\n      LEVELS: " + levels +"]";
+    }
 }

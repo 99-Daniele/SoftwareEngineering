@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.gamesTests;
 import it.polimi.ingsw.exceptions.*;
 
 import it.polimi.ingsw.model.cards.Card;
+import it.polimi.ingsw.model.cards.PrintedCard;
 import it.polimi.ingsw.model.cards.developmentCards.Color;
 import it.polimi.ingsw.model.cards.developmentCards.*;
 import it.polimi.ingsw.model.games.Game;
@@ -182,22 +183,22 @@ class GameTest {
     @Test
     void correctMapping(){
 
-        Card card1 = CardMap.getCard(1);
+        PrintedCard card1 = CardMap.getCard(1);
 
         assertEquals(1, card1.getCardID());
         assertTrue(card1 instanceof DevelopmentCard);
 
-        Card card34 = CardMap.getCard(34);
+        PrintedCard card34 = CardMap.getCard(34);
 
         assertEquals(34, card34.getCardID());
         assertTrue(card34 instanceof DevelopmentCard);
 
-        Card card49 = CardMap.getCard(49);
+        PrintedCard card49 = CardMap.getCard(49);
 
         assertEquals(49, card49.getCardID());
         assertTrue(card49 instanceof DiscountCard);
 
-        Card card64 = CardMap.getCard(64);
+        PrintedCard card64 = CardMap.getCard(64);
 
         assertEquals(64, card64.getCardID());
         assertTrue(card64 instanceof AdditionalProductionPowerCard);

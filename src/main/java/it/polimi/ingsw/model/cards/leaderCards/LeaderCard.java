@@ -139,4 +139,14 @@ public abstract class LeaderCard extends Card {
      * this is the standard method of recount() which will be @Override by the specific card.
      */
     public void recount(DevelopmentCard card){}
+
+    @Override
+    public void printCard() {
+        System.out.println("DEVELOPMENT_CARD:\nRESOURCE: " + resource);
+        if(resourceCost != null)
+            System.out.println("RESOURCE_COST: " + resourceCost.toString());
+        else if(leaderRequirements != null)
+            System.out.println("LEADER_REQUIREMENTS: " + leaderRequirements.toString());
+        super.printCard();
+    }
 }

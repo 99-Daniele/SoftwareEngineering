@@ -150,4 +150,9 @@ public class Cost {
     public void recount(Resource resource){
         addResource(resource, 1);
     }
+
+    @Override
+    public String toString() {
+        return resourceContainers.toString();
+    }
 }

@@ -127,4 +127,13 @@ public class DevelopmentCard extends Card {
     public Cost getResourceCost() {
         return resourceCost;
     }
+
+    @Override
+    public void printCard() {
+        System.out.println("DEVELOPMENT_CARD:\nCOLOR: " + color + "\nLEVEL: " + level +
+                "\nRESOURCE_COST: " + resourceCost.toString() + "\nPRODUCTION_POWER_RESOURCE_REQUIRED: " +
+                productionPowerResourceRequired.toString() + "\nPRODUCTION_POWER_RESOURCE_GIVEN: " +
+                productionPowerResourceGiven.toString() + "\nFAITH_POINTS_GIVEN: " + faithPointsGiven);
+        super.printCard();
+    }
 }

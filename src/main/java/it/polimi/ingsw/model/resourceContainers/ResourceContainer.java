@@ -48,4 +48,8 @@ public class ResourceContainer {
             return temp;
         }
     }
+
+    public String toString() {
+        return ("\n     [RESOURCE: " + resource + "\n      AMOUNT: " + amount + "]");
+    }
 }
