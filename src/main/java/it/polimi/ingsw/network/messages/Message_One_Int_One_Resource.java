@@ -1,6 +1,6 @@
 package it.polimi.ingsw.network.messages;
 
-import it.polimi.ingsw.model.resourceContainers.Resource;
+import it.polimi.ingsw.resourceContainers.Resource;
 
 public class Message_One_Int_One_Resource extends Message{
     private final int par1;

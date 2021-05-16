@@ -1,11 +1,8 @@
 package it.polimi.ingsw.network.server;
 
-import it.polimi.ingsw.controller.ControllerGame;
-import it.polimi.ingsw.controller.PosControllerGame;
-import it.polimi.ingsw.view.VirtualView;
+import it.polimi.ingsw.controllerTests.ControllerGame;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Connection {

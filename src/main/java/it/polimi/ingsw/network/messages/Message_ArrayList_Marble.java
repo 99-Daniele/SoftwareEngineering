@@ -1,6 +1,6 @@
 package it.polimi.ingsw.network.messages;
 
-import it.polimi.ingsw.model.market.Marble;
+import it.polimi.ingsw.market.Marble;
 
 import java.util.ArrayList;
 

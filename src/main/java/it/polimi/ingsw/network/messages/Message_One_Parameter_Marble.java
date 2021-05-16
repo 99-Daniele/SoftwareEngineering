@@ -1,6 +1,6 @@
 package it.polimi.ingsw.network.messages;
 
-import it.polimi.ingsw.model.market.Marble;
+import it.polimi.ingsw.market.Marble;
 
 public class Message_One_Parameter_Marble extends Message{
     private final Marble marble;

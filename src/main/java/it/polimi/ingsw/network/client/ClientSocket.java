@@ -1,7 +1,7 @@
 package it.polimi.ingsw.network.client;
 
-import it.polimi.ingsw.model.market.Marble;
-import it.polimi.ingsw.model.resourceContainers.Resource;
+import it.polimi.ingsw.market.Marble;
+import it.polimi.ingsw.resourceContainers.Resource;
 import it.polimi.ingsw.network.messages.*;
 
 import java.io.*;
