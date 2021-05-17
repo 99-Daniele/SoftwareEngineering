@@ -91,18 +91,21 @@ public class ControllerGame implements Observer {
         }
     }
 
-    public void quitGame(String nickName, int viewID) throws IOException {
+    public synchronized void quitGame(String nickName, int viewID) throws IOException {
         if (views.size() == 1) {
+            System.out.println("Q");
             removeView(nickName, viewID);
             System.out.println("GAME ENDED");
             resetControllerGame();
         }
         else if (views.size() < numPlayers) {
+            System.out.println("P");
             removeView(nickName, viewID);
             for (View view : views)
                 view.exit(nickName);
         }
         else {
+            System.out.println("R");
             removeView(nickName, viewID);
             for (View view : views)
                 view.quit(nickName);
@@ -263,7 +266,8 @@ public class ControllerGame implements Observer {
                     selectedView = view;
             newViewsPosition.add(selectedView);
             assert selectedView != null;
-            selectedView.allPlayerConnected(i, numPlayers);
+            ArrayList<String> nickNames = game.getPlayersNickname();
+            selectedView.allPlayerConnected(i, numPlayers, nickNames);
             ArrayList<LeaderCard> leaderCards = game.casualLeaderCards();
             currentState.putLeaderCards(leaderCards);
             selectedView.choseLeaderCards(leaderCards);

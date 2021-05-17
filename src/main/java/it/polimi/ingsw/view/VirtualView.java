@@ -50,7 +50,7 @@ public class VirtualView extends Observable implements View, Observer{
         }
     }
 
-    public void join() throws InterruptedException {
+    public void join() throws InterruptedException, IOException {
         pingThread.join();
         inThread.join();
     }
@@ -150,9 +150,9 @@ public class VirtualView extends Observable implements View, Observer{
     }
 
     @Override
-    public void allPlayerConnected(int position, int numPLayer) {
+    public void allPlayerConnected(int position, int numPLayer, ArrayList<String> nickNames) {
         viewID = position;
-        Message message = new Message_One_Parameter_Int(MessageType.START_GAME, position, numPLayer);
+        Message message = new Message_ArrayList_String(MessageType.PLAYERS, position, nickNames);
         sendMessage(message);
     }
 
@@ -258,8 +258,6 @@ public class VirtualView extends Observable implements View, Observer{
                 System.err.println(nickName + " disconnected brutally");
             connected = false;
         }
-        inThread.interrupt();
-        pingThread.interrupt();
         try {
             in.close();
             out.close();
@@ -277,10 +275,5 @@ public class VirtualView extends Observable implements View, Observer{
             endGame(message);
         else
             sendMessage(message);
-    }
-
-    @Override
-    public String toString() {
-        return nickName;
     }
 }

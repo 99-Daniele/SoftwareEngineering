@@ -17,7 +17,7 @@ public interface View{
 
     void newPlayer(String nickname, int position);
 
-    void allPlayerConnected(int position, int numPLayer);
+    void allPlayerConnected(int position, int numPLayer, ArrayList<String> nickNames);
 
     void startGame(int numPlayer);
 

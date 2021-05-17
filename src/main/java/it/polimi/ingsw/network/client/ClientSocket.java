@@ -33,6 +33,7 @@ public class ClientSocket {
     private int position;
     private int numPlayers;
     private int startGame;
+    private ArrayList<String> players;
     private int leaderCard1;
     private int leaderCard2;
     private CONTROLLER_STATES currentState;
@@ -591,6 +592,9 @@ public class ClientSocket {
                             case NEW_PLAYER:
                                 new_player_message(returnMessage);
                                 break;
+                            case PLAYERS:
+                                players_message(returnMessage);
+                                break;
                             case LEADER_CARD:
                                 leader_card_choice(returnMessage);
                                 break;
@@ -765,17 +769,20 @@ public class ClientSocket {
     private void start_game_message(Message message) throws IOException, InterruptedException {
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
         TimeUnit.SECONDS.sleep(1);
-        if (startGame == 0) {
-            System.out.println("Tutti i giocatori si sono collegati. N° giocatori: " + m.getPar());
-            position = m.getClientID();
-            System.out.println("\nSei il giocatore in posizione " + (position + 1));
-            numPlayers = m.getPar();
-            startGame = 1;
-        } else {
-            System.out.println("Tutti i giocatori hanno fatto le proprie scelte.\nLa partita è iniziata");
-            currentState = CONTROLLER_STATES.FIRST_ACTION_STATE;
-            sendMessage(new Message(MessageType.TURN, position));
-        }
+        System.out.println("Tutti i giocatori hanno fatto le proprie scelte.\nLa partita è iniziata");
+        currentState = CONTROLLER_STATES.FIRST_ACTION_STATE;
+        sendMessage(new Message(MessageType.TURN, position));
+    }
+
+    private void players_message(Message message) throws InterruptedException {
+        Message_ArrayList_String m = (Message_ArrayList_String) message;
+        TimeUnit.SECONDS.sleep(1);
+        System.out.println("Tutti i giocatori si sono collegati.\nGiocatori: " + m.getNickNames().toString());
+        position = m.getClientID();
+        players = m.getNickNames();
+        System.out.println("\nSei il giocatore in posizione " + (position + 1));
+        numPlayers = players.size();
+        startGame = 1;
     }
 
     private void market_message(Message message) {

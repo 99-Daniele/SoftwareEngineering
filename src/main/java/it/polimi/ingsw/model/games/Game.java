@@ -129,7 +129,9 @@ public class Game extends Observable implements LightGame{
             Message m = new Message_One_Parameter_String(MessageType.QUIT, 0, quitPlayer.getNickname());
             setChanged();
             notifyObservers(m);
-        }catch (IndexOutOfBoundsException | NullPointerException e){}
+        }catch (IndexOutOfBoundsException | NullPointerException e){
+            e.printStackTrace();
+        }
     }
 
     private void shufflePlayers(){
@@ -162,6 +164,13 @@ public class Game extends Observable implements LightGame{
      */
     public FaithTrack getFaithTrack() {
         return faithTrack;
+    }
+
+    public ArrayList<String> getPlayersNickname(){
+        ArrayList<String> nickNames = new ArrayList<>();
+        for (PlayerBoard player: players)
+            nickNames.add(player.getNickname());
+        return nickNames;
     }
 
     /**
