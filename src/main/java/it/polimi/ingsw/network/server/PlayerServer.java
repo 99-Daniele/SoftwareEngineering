@@ -20,10 +20,11 @@ public class PlayerServer implements Runnable {
 
     public void run() {
         try {
+            virtualView.start();
             controllerGame = Connection.ConnectionPlayers();
             int viewID = controllerGame.addView(virtualView);
+            virtualView.setViewID(viewID);
             virtualView.addObserver(controllerGame);
-            virtualView.start(viewID);
             virtualView.join();
             disconnect(viewID, virtualView.getNickname());
         } catch (IOException | InterruptedException e) {

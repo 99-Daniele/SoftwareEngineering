@@ -12,6 +12,7 @@ import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.model.player.Strongbox;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 import it.polimi.ingsw.network.messages.*;
+import it.polimi.ingsw.network.server.Connection;
 import it.polimi.ingsw.parser.CardMap;
 import it.polimi.ingsw.view.*;
 
@@ -30,7 +31,7 @@ public class ControllerGame implements Observer {
     private State_Controller currentState;
 
     public ControllerGame() {
-        numPlayers = 1;
+        numPlayers = 0;
         views = new LinkedList<>();
         currentState = new WaitingPlayerState();
     }
@@ -64,8 +65,10 @@ public class ControllerGame implements Observer {
     /**
      * @param view is the view that is added to the list of views in controllerGame and also added to the observers of game
      */
-    public int addView(View view) {
+    public synchronized int addView(View view) {
         views.add(view);
+        if(view.getNickname() != null)
+            addPlayer(view.getNickname());
         if (game != null)
             game.addObservers((VirtualView) view);
         return views.size() - 1;
@@ -77,6 +80,10 @@ public class ControllerGame implements Observer {
             views.remove(viewID);
             if(views.size() == 0){
                 resetControllerGame();
+            }
+            else {
+                for (int i = 0; i < views.size(); i++)
+                    views.get(i).setViewID(i);
             }
         } catch (NullPointerException e) {
             resetControllerGame();
@@ -201,7 +208,24 @@ public class ControllerGame implements Observer {
         }
     }
 
-    public void addPlayer(Message loginMessage) {
+    public synchronized void addPlayer(String nickName){
+        if (nickName == null || nickName.length() == 0) {
+            views.getLast().errorMessage(ErrorType.WRONG_PARAMETERS);
+            return;
+        }
+        try {
+            game.createPlayer(nickName);
+            views.getLast().login(views.size() - 1);
+            if (getCurrentNumPlayers() == numPlayers) {
+                startGame();
+            } else
+                currentState.nextState(this, MessageType.LOGIN);
+        } catch (AlreadyTakenNicknameException e) {
+            views.getLast().errorMessage(ErrorType.ALREADY_TAKEN_NICKNAME);
+        }
+    }
+
+    public synchronized void addPlayer(Message loginMessage) {
         try {
             Message_One_Parameter_String m = (Message_One_Parameter_String) loginMessage;
             String nickName = m.getPar();
@@ -251,7 +275,7 @@ public class ControllerGame implements Observer {
         views = newViewsPosition;
     }
 
-    public void newGame(Message numPlayerMessage)
+    public synchronized void newGame(Message numPlayerMessage)
             throws WrongParametersException, IllegalStateException, AlreadyTakenNicknameException {
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) numPlayerMessage;
         int numPlayers = m.getPar();
@@ -261,6 +285,7 @@ public class ControllerGame implements Observer {
             throw new IllegalStateException();
         else {
             this.numPlayers = numPlayers;
+            Connection.newGame();
             if (numPlayers == 1) {
                 game = new SinglePlayerGame();
                 game.createPlayer(firstPlayer);

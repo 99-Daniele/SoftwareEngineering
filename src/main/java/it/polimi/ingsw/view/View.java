@@ -11,6 +11,8 @@ public interface View{
 
     String getNickname();
 
+    void setViewID(int viewID);
+
     void login(int viewID);
 
     void newPlayer(String nickname, int position);

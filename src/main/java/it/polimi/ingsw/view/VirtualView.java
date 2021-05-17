@@ -28,8 +28,7 @@ public class VirtualView extends Observable implements View, Observer{
         this.connected = true;
     }
 
-    public void start(int viewID) {
-        this.viewID = viewID;
+    public void start() {
         if (pingThread == null)
             pingThread = new Thread(() -> {
                 try {
@@ -69,6 +68,11 @@ public class VirtualView extends Observable implements View, Observer{
 
     public int getViewID() {
         return viewID;
+    }
+
+    @Override
+    public void setViewID(int viewID) {
+        this.viewID = viewID;
     }
 
     private void ping() throws InterruptedException, IOException {
