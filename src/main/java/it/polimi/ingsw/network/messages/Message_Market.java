@@ -1,17 +1,17 @@
 package it.polimi.ingsw.network.messages;
 
-import it.polimi.ingsw.model.market.Market;
+import it.polimi.ingsw.model.market.Market_View;
 
 public class Message_Market extends Message{
 
-    private final Market market;
+    private final Market_View market;
 
-    public Message_Market(MessageType messageType, int clientID, Market market) {
+    public Message_Market(MessageType messageType, int clientID, Market_View market) {
         super(messageType, clientID);
         this.market = market;
     }
 
-    public Market getMarket() {
+    public Market_View getMarket() {
         return market;
     }
 

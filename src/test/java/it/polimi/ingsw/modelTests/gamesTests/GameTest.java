@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import it.polimi.ingsw.parser.CardMap;
 import it.polimi.ingsw.parser.DevelopmentCardsParser;
 import it.polimi.ingsw.parser.LeaderCardsParser;
-import it.polimi.ingsw.model.player.PowerProductionPlayerChoice;
 import it.polimi.ingsw.model.player.Strongbox;
 import it.polimi.ingsw.model.resourceContainers.Cost;
 import it.polimi.ingsw.model.resourceContainers.Resource;
@@ -426,34 +425,6 @@ class GameTest {
     }
 
     /**
-     * this test verifies the correct return of buyable DevelopmentCards by player
-     */
-    @Test
-    void buyableDevelopmentCards() throws AlreadyTakenNicknameException, InsufficientResourceException, AlreadyDiscardLeaderCardException, ActiveLeaderCardException, InsufficientCardsException {
-
-        Game game = new Game(4);
-        game.createPlayer("Roberta");
-        assertEquals(0, game.buyableDevelopmentCards().size());
-
-        Cost c = new Cost();
-        LeaderCard leaderCard1 = new ExtraDepotCard(Resource.STONE, c, 0, 0);
-        LeaderCard leaderCard2 = new ExtraDepotCard(Resource.SERVANT, c, 0, 0);
-        game.selectPlayerLeaderCards(leaderCard1, leaderCard2, 0);
-        game.activateLeaderCard(1);
-
-        game.increaseWarehouse(Resource.SERVANT);
-        game.increaseWarehouse(Resource.COIN);
-        game.increaseWarehouse(Resource.COIN);
-        game.increaseWarehouse(Resource.STONE);
-        game.increaseWarehouse(Resource.SHIELD);
-        game.increaseWarehouse(Resource.SHIELD);
-        game.increaseWarehouse(Resource.SHIELD);
-
-        assertNotEquals(0, game.buyableDevelopmentCards().size());
-        assertEquals(1, game.buyableDevelopmentCards().get(0).getLevel());
-    }
-
-    /**
      * this test tries to buy a DevelopmentCard if current player does not have enough resource
      */
     @Test
@@ -601,32 +572,6 @@ class GameTest {
     }
 
     /**
-     * this test verifies the correct buying of input DevelopmentCard
-     */
-    @Test
-    void buyDevelopmentCardDirectly() throws AlreadyTakenNicknameException {
-
-        Game game = new Game(4);
-        game.createPlayer("Enrico");
-
-        Cost c = new Cost();
-        int cardID = 0;
-        DevelopmentCard card = new DevelopmentCard(Color.GREEN, 1, c, 2, c, c, 1, cardID);
-
-        assertEquals(0, game.getPlayer(0).getVictoryPoints().getVictoryPointsByCards());
-        assertEquals(4, game.getDeck(0, 0).numberOfCards());
-
-        game.buyDevelopmentCard(card, 1, 1);
-        assertEquals(2, game.getPlayer(0).getVictoryPoints().getVictoryPointsByCards());
-        assertEquals(3, game.getDeck(0, 0).numberOfCards());
-
-        DevelopmentCard card2 = new DevelopmentCard(Color.GREEN, 2, c, 5, c, c, 1, cardID);
-        game.buyDevelopmentCard(card2, 1, 1);
-        assertEquals(7, game.getPlayer(0).getVictoryPoints().getVictoryPointsByCards());
-        assertEquals(3, game.getDeck(1, 0).numberOfCards());
-    }
-
-    /**
      * this test verifies if player move in FaithTrack after discarding a LeaderCard
      */
     @Test
@@ -647,38 +592,6 @@ class GameTest {
         game.discardLeaderCard(1);
         assertEquals(3, game.getPlayer(0).getFaithPoints());
         assertEquals(1, game.getPlayer(0).getVictoryPoints().getVictoryPointsByFaithTrack());
-    }
-
-    /**
-     * this test verifies the correct increase of current player faith points after activating production power
-     */
-    @Test
-    void faithTrackMovementAfterActivateProduction() throws AlreadyTakenNicknameException, InsufficientResourceException, AlreadyDiscardLeaderCardException, ActiveLeaderCardException, InsufficientCardsException, NoSuchProductionPowerException {
-
-        Game game = new Game(4);
-        game.createPlayer("Alessio");
-        game.getPlayer(0).increaseWarehouse(Resource.COIN);
-        game.getPlayer(0).increaseWarehouse(Resource.SERVANT);
-        game.getPlayer(0).increaseWarehouse(Resource.SHIELD);
-        game.getPlayer(0).increaseWarehouse(Resource.SHIELD);
-
-        Cost c = new Cost();
-        LeaderCard leaderCard1 = new AdditionalProductionPowerCard(Resource.SHIELD, c, 1, 0);
-        LeaderCard leaderCard2 = new AdditionalProductionPowerCard(Resource.SERVANT, c, 1, 0);
-        game.selectPlayerLeaderCards(leaderCard1, leaderCard2, 0);
-        game.activateLeaderCard(1);
-        game.activateLeaderCard(2);
-
-        PowerProductionPlayerChoice choice1 = new PowerProductionPlayerChoice();
-        choice1.setBasicPower(Resource.COIN, Resource.SHIELD, Resource.STONE);
-        game.activateProduction(choice1);
-        assertEquals(0, game.getPlayer(0).getFaithPoints());
-
-        PowerProductionPlayerChoice choice2 = new PowerProductionPlayerChoice();
-        choice2.setFirstAdditionalPower(Resource.COIN);
-        choice2.setSecondAdditionalPower(Resource.STONE);
-        game.activateProduction(choice2);
-        assertEquals(2, game.getPlayer(0).getFaithPoints());
     }
 
     /**
@@ -1021,19 +934,19 @@ class GameTest {
         DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 4, c2, c3, 0, cardID);
         game.getPlayer(3).buyDevelopmentCard(developmentCard, 1, 1);
 
-        PowerProductionPlayerChoice player1choice = new PowerProductionPlayerChoice();
-        player1choice.setFirstPower();
-        game.getPlayer(3).activateProduction(player1choice);
+        Strongbox s = new Strongbox();
+        game.getPlayer(3).activateDevelopmentCardProductionPower(1, s, 0);
+        game.increaseCurrentPlayerStrongbox(s);
         game.nextPlayer();
 
         assertEquals(4, game.getPlayer(2).sumVictoryPoints());
         assertEquals(4, game.getPlayer(3).sumVictoryPoints());
 
-        assertEquals(0, game.getPlayer(2).sumTotalResource());
-        assertEquals(1, game.getPlayer(3).sumTotalResource());
+        assertEquals(1, game.getPlayer(2).sumTotalResource());
+        assertEquals(0, game.getPlayer(3).sumTotalResource());
 
         int winner2 = game.endGame();
 
-        assertSame(3, winner2);
+        assertSame(2, winner2);
     }
 }

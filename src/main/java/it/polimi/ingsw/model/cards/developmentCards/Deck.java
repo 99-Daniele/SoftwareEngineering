@@ -32,6 +32,24 @@ public class Deck {
         developmentCards = newDevelopmentCards;
     }
 
+    public int getRow() {
+        return level -1;
+    }
+
+    public int getColumn(){
+        switch (color){
+            case BLUE:
+                return 2;
+            case PURPLE:
+                return 1;
+            case GREEN:
+                return 0;
+            case YELLOW:
+                return 3;
+        }
+        return -1;
+    }
+
     public Color getColor() {
         return color;
     }

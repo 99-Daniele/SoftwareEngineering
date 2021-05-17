@@ -35,6 +35,10 @@ public class FaithTrack {
         faithTrackVictoryPointsSection[8]=new Section(24,24,20);
     }
 
+    public int getRemainingPopes() {
+        return remainingPopes;
+    }
+
     /**
      * @return boolean that is true if the number of pope is zero, otherwise false.
      */

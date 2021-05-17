@@ -1,19 +1,11 @@
 package it.polimi.ingsw.model.games;
 
-import it.polimi.ingsw.model.cards.Card;
-import it.polimi.ingsw.model.cards.developmentCards.Deck;
-import it.polimi.ingsw.model.cards.developmentCards.DevelopmentCard;
+import it.polimi.ingsw.model.cards.developmentCards.*;
 import it.polimi.ingsw.model.cards.leaderCards.LeaderCard;
 import it.polimi.ingsw.model.faithTrack.FaithTrack;
-import it.polimi.ingsw.model.market.Marble;
-import it.polimi.ingsw.model.market.Market;
-import it.polimi.ingsw.model.cards.developmentCards.Color;
-import it.polimi.ingsw.parser.DevelopmentCardsParser;
-import it.polimi.ingsw.parser.LeaderCardsParser;
-import it.polimi.ingsw.model.player.PlayerBoard;
-import it.polimi.ingsw.model.player.PowerProductionPlayerChoice;
-import it.polimi.ingsw.model.player.SimplePlayerBoard;
-import it.polimi.ingsw.model.player.Strongbox;
+import it.polimi.ingsw.model.market.*;
+import it.polimi.ingsw.parser.*;
+import it.polimi.ingsw.model.player.*;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 import it.polimi.ingsw.view.VirtualView;
 import it.polimi.ingsw.exceptions.*;
@@ -226,7 +218,7 @@ public class Game extends Observable implements LightGame{
             marbles = market.getColumnMarbles(choice);
             market.slideColumn(choice);
         }
-        Message_Two_Parameter_Int message_two_parameter_int;
+        Message message_two_parameter_int;
         if(isRow)
             message_two_parameter_int=new Message_Two_Parameter_Int(MessageType.MARKET_CHANGE,currentPlayer+1,0,choice);
         else
@@ -242,27 +234,27 @@ public class Game extends Observable implements LightGame{
      */
     @Override
     public boolean increaseWarehouse(Resource resource) {
-        Message_One_Int_One_Resource message_one_int_one_resource=new Message_One_Int_One_Resource(MessageType.INCREASE_WAREHOUSE,currentPlayer+1,resource, 1);
+        Message message_one_int_one_resource=new Message_One_Int_One_Resource(MessageType.INCREASE_WAREHOUSE,currentPlayer+1,resource, 1);
         setChanged();
         notifyObservers(message_one_int_one_resource);
         return players.get(currentPlayer).increaseWarehouse(resource);
     }
 
     public void firstIncreaseWarehouse(Resource resource, int player){
-        Message_One_Int_One_Resource message_one_int_one_resource=new Message_One_Int_One_Resource(MessageType.INCREASE_WAREHOUSE,player+1,resource, 1);
+        Message message_one_int_one_resource=new Message_One_Int_One_Resource(MessageType.INCREASE_WAREHOUSE,player+1,resource, 1);
         players.get(player).increaseWarehouse(resource);
         setChanged();
         notifyObservers(message_one_int_one_resource);
         if(player == 2) {
             players.get(player).increaseFaithPoints(1);
-            Message_One_Parameter_Int message_one_parameter_int = new Message_One_Parameter_Int(MessageType.FAITH_POINTS_INCREASE, player + 1, 1);
+            Message message_one_parameter_int = new Message_One_Parameter_Int(MessageType.FAITH_POINTS_INCREASE, player + 1, 1);
             setChanged();
             notifyObservers(message_one_parameter_int);
         }
     }
 
     public void firstDoubleIncreaseWarehouse(Resource resource1, Resource resource2){
-        Message_One_Int_One_Resource message_one_int_one_resource=new Message_One_Int_One_Resource(MessageType.INCREASE_WAREHOUSE,4, resource1, 1);
+        Message message_one_int_one_resource=new Message_One_Int_One_Resource(MessageType.INCREASE_WAREHOUSE,4, resource1, 1);
         players.get(3).increaseWarehouse(resource1);
         setChanged();
         notifyObservers(message_one_int_one_resource);
@@ -272,7 +264,7 @@ public class Game extends Observable implements LightGame{
             } catch (ImpossibleSwitchDepotException e) {
                 e.printStackTrace();
             }
-            Message_Two_Parameter_Int message_two_parameter_int=new Message_Two_Parameter_Int(MessageType.SWITCH_DEPOT,4, 1,2);
+            Message message_two_parameter_int=new Message_Two_Parameter_Int(MessageType.SWITCH_DEPOT,4, 1,2);
             setChanged();
             notifyObservers(message_two_parameter_int);
         }
@@ -281,7 +273,7 @@ public class Game extends Observable implements LightGame{
         setChanged();
         notifyObservers(message_one_int_one_resource);
         players.get(3).increaseFaithPoints(1);
-        Message_One_Parameter_Int message_one_parameter_int = new Message_One_Parameter_Int(MessageType.FAITH_POINTS_INCREASE, 4, 1);
+        Message message_one_parameter_int = new Message_One_Parameter_Int(MessageType.FAITH_POINTS_INCREASE, 4, 1);
         setChanged();
         notifyObservers(message_one_parameter_int);
     }
@@ -295,7 +287,7 @@ public class Game extends Observable implements LightGame{
             if (i != currentPlayer)
             {
                 players.get(i).increaseFaithPoints(1);
-                Message_One_Parameter_Int message_one_parameter_int=new Message_One_Parameter_Int(MessageType.FAITH_POINTS_INCREASE,i+1, players.get(i).getFaithPoints());
+                Message message_one_parameter_int=new Message_One_Parameter_Int(MessageType.FAITH_POINTS_INCREASE,i+1, players.get(i).getFaithPoints());
                 setChanged();
                 notifyObservers(message_one_parameter_int);
             }
@@ -310,14 +302,20 @@ public class Game extends Observable implements LightGame{
     @Override
     public void faithTrackMovement(){
         faithTrack.victoryPointsFaithTrack(players.get(currentPlayer).getVictoryPoints(), players.get(currentPlayer).getFaithPoints());
-        if(faithTrack.reachPope(players.get(currentPlayer).getFaithPoints()))
-        {
-            for(PlayerBoard player:players)
-            {
-                faithTrack.victoryPointsVaticanReport(player.getVictoryPoints(), player.getFaithPoints());
+        if(faithTrack.reachPope(players.get(currentPlayer).getFaithPoints())){
+            for(int i = 0; i < players.size(); i++){
+                faithTrack.victoryPointsVaticanReport(players.get(i).getVictoryPoints(), players.get(i).getFaithPoints());
+                faithTrackNotify(i);
             }
             faithTrack.DecreaseRemainingPope();
         }
+    }
+
+    public void faithTrackNotify(int i){
+        int victoryPoints = players.get(i).getVictoryPoints().getVictoryPointsByVaticanReport();
+        Message m = new Message_Two_Parameter_Int(MessageType.VATICAN_REPORT, i, currentPlayer, victoryPoints);
+        setChanged();
+        notifyObservers(m);
     }
 
     /**
@@ -326,7 +324,7 @@ public class Game extends Observable implements LightGame{
     @Override
     public void increaseOneFaithPointCurrentPlayer() {
         players.get(currentPlayer).increaseFaithPoints(1);
-        Message_One_Parameter_Int message_one_parameter_int=new Message_One_Parameter_Int(MessageType.FAITH_POINTS_INCREASE,currentPlayer+1, players.get(currentPlayer).getFaithPoints());
+        Message message_one_parameter_int=new Message_One_Parameter_Int(MessageType.FAITH_POINTS_INCREASE,currentPlayer+1, players.get(currentPlayer).getFaithPoints());
         setChanged();
         notifyObservers(message_one_parameter_int);
     }
@@ -392,20 +390,13 @@ public class Game extends Observable implements LightGame{
     }
 
     /**
-     * @return a list of available switches for current player.
-     */
-    public ArrayList<Integer[]> availableSwitches(){
-        return players.get(currentPlayer).availableSwitches();
-    }
-
-    /**
      * @param depot1 stands for position of the first Depot in current player Warehouse to switch.
      * @param depot2 stands for position of the second Depot in current player Warehouse to switch.
      * @throws ImpossibleSwitchDepotException if the switch is not possible.
      */
     public void switchDepots(int depot1, int depot2) throws ImpossibleSwitchDepotException {
         players.get(currentPlayer).switchDepots(depot1 -1, depot2 -1);
-        Message_Two_Parameter_Int message_two_parameter_int=new Message_Two_Parameter_Int(MessageType.SWITCH_DEPOT,currentPlayer+1,depot1,depot2);
+        Message message_two_parameter_int=new Message_Two_Parameter_Int(MessageType.SWITCH_DEPOT,currentPlayer+1,depot1,depot2);
         setChanged();
         notifyObservers(message_two_parameter_int);
     }
@@ -420,31 +411,6 @@ public class Game extends Observable implements LightGame{
             throws EmptyDevelopmentCardDeckException{
         DevelopmentCard card = deck[deckRow][deckColumn].getFirstCard();
         return players.get(currentPlayer).findAvailableSlot(card);
-    }
-
-    /**
-     * @param card is a DevelopmentCard bought by current player.
-     * @return a list of available slots to insert @param card.
-     */
-    public ArrayList<Integer> findAvailableSlots(DevelopmentCard card){
-        return players.get(currentPlayer).findAvailableSlot(card);
-    }
-
-    /**
-     * @return a list of DevelopmentCard buyable by current player.
-     */
-    public ArrayList<DevelopmentCard> buyableDevelopmentCards(){
-        ArrayList<DevelopmentCard> buyableCards = new ArrayList<>();
-        for(int i = 0; i < 3; i++) {
-            for (int j = 0; j < 4; j++) {
-                try {
-                    DevelopmentCard card = deck[i][j].getFirstCard();
-                    if (players.get(currentPlayer).isBuyable(card))
-                        buyableCards.add(card);
-                } catch (EmptyDevelopmentCardDeckException e) { }
-            }
-        }
-        return buyableCards;
     }
 
     /**
@@ -465,10 +431,10 @@ public class Game extends Observable implements LightGame{
             throw new InsufficientResourceException();
         players.get(currentPlayer).buyDevelopmentCard(card, slot, choice);
         deck[deckRow][deckColumn].removeDevelopmentCard();
-        Message_Two_Parameter_Int message_two_parameter_int = new Message_Two_Parameter_Int(MessageType.BUY_CARD,currentPlayer+1, card.getCardID(), slot);
+        Message message_two_parameter_int = new Message_Two_Parameter_Int(MessageType.BUY_CARD,currentPlayer+1, card.getCardID(), slot);
         setChanged();
         notifyObservers(message_two_parameter_int);
-        Message_Four_Parameter_Int message;
+        Message message;
         if(deck[deckRow][deckColumn].isEmpty()){
             message = new Message_Four_Parameter_Int(MessageType.CARD_REMOVE,currentPlayer+1,deckRow,deckColumn,1,-1);
         }
@@ -483,93 +449,10 @@ public class Game extends Observable implements LightGame{
             {
                 int par=players.get(currentPlayer).getWarehouse().getNumOfResource(resource);
                 int par1=players.get(currentPlayer).getStrongbox().getNumOfResource(resource);
-                Message_One_Resource_Two_Int message_one_resource_two_int = new Message_One_Resource_Two_Int(MessageType.RESOURCE_AMOUNT, currentPlayer + 1,resource,par,par1);
+                Message message_one_resource_two_int = new Message_One_Resource_Two_Int(MessageType.RESOURCE_AMOUNT, currentPlayer + 1,resource,par,par1);
                 setChanged();
                 notifyObservers(message_one_resource_two_int);
             }
-        }
-    }
-
-    /**
-     * @param card is a DevelopmentCard bought by current player.
-     * @param choice is player's choice about which between warehouse and strongbox has the priority to be decreased.
-     * @param slot is player's choice about in which slot want to insert the chosen card.
-     */
-    public void buyDevelopmentCard(DevelopmentCard card, int choice, int slot){
-        try {
-            players.get(currentPlayer).buyDevelopmentCard(card, slot, choice);
-        } catch (InsufficientResourceException | ImpossibleDevelopmentCardAdditionException e) {  }
-
-        int [] pos = removeDevelopmentCard(card);
-        //modificare id carta
-        Message_Two_Parameter_Int message_two_parameter_int=new Message_Two_Parameter_Int(MessageType.BUY_CARD,currentPlayer+1,5,slot);
-        setChanged();
-        notifyObservers(message_two_parameter_int);
-        int correct;
-        int idCard;
-        if(deck[pos[0]][pos[1]].isEmpty()){
-            correct=1;
-            idCard=-1;
-        }
-        else{
-            correct=0;
-            idCard=5;//modificare
-        }
-        Message_Four_Parameter_Int message_four_parameter_int=new Message_Four_Parameter_Int(MessageType.CARD_REMOVE,currentPlayer+1,pos[0],pos[1],correct,idCard);
-        setChanged();
-        notifyObservers(message_four_parameter_int);
-        for(Resource resource: Resource.values())
-        {
-            if(card.getResourceCost().getNumOfResource(resource)!=0)
-            {
-                int par=players.get(currentPlayer).getWarehouse().getNumOfResource(resource);
-                int par1=players.get(currentPlayer).getStrongbox().getNumOfResource(resource);
-                Message_One_Resource_Two_Int message_one_resource_two_int = new Message_One_Resource_Two_Int(MessageType.RESOURCE_AMOUNT, currentPlayer + 1,resource,par,par1);
-                setChanged();
-                notifyObservers(message_one_resource_two_int);
-            }
-        }
-    }
-
-    /**
-     * @param card is DevelopmentCard to be removed by his deck.
-     */
-    private int[] removeDevelopmentCard(DevelopmentCard card){
-        for(int i = 0; i < 3; i++){
-            for (int j = 0; j < 4; j++){
-                if(deck[i][j].getColor() == card.getColor() && i == card.getLevel()-1) {
-                    try {
-                        deck[i][j].removeDevelopmentCard();
-                        int [] pos={i,j};
-                        return pos;
-                    } catch (EmptyDevelopmentCardDeckException e) { }
-                }
-            }
-        }
-        return new int[2];
-    }
-
-    /**
-     * @param choice summarize all player's choices about which production powers activate.
-     * @throws InsufficientResourceException if player has not enough resources to activate all production powers together.
-     * this method activate all production powers together and if player has increased his faith points, calls faithTrackMovement().
-     */
-    public void activateProduction(PowerProductionPlayerChoice choice)
-            throws InsufficientResourceException, NoSuchProductionPowerException {
-        if(players.get(currentPlayer).activateProduction(choice))
-        {
-            faithTrackMovement();
-            Message_One_Parameter_Int message_one_parameter_int=new Message_One_Parameter_Int(MessageType.FAITH_POINTS_INCREASE,currentPlayer+1,players.get(currentPlayer).getFaithPoints());
-            setChanged();
-            notifyObservers(message_one_parameter_int);
-        }
-        for(Resource resource: Resource.values())
-        {
-            int par=players.get(currentPlayer).getWarehouse().getNumOfResource(resource);
-            int par1=players.get(currentPlayer).getStrongbox().getNumOfResource(resource);
-            Message_One_Resource_Two_Int message_one_resource_two_int = new Message_One_Resource_Two_Int(MessageType.RESOURCE_AMOUNT, currentPlayer + 1,resource,par,par1);
-            setChanged();
-            notifyObservers(message_one_resource_two_int);
         }
     }
 
@@ -585,8 +468,8 @@ public class Game extends Observable implements LightGame{
     public void removeDevelopmentCardProductionResource(int chosenSlot, Strongbox s, int choice)
             throws InsufficientResourceException, NoSuchProductionPowerException {
         players.get(currentPlayer).activateDevelopmentCardProductionPower(chosenSlot, s, choice);
-        faithTrackMovement();//penso dovremmo notificare pure victory points legsti al papa
-        Message_One_Parameter_Int message_one_parameter_int=new Message_One_Parameter_Int(MessageType.FAITH_POINTS_INCREASE,currentPlayer+1,players.get(currentPlayer).getFaithPoints());
+        faithTrackMovement();
+        Message message_one_parameter_int=new Message_One_Parameter_Int(MessageType.FAITH_POINTS_INCREASE,currentPlayer+1,players.get(currentPlayer).getFaithPoints());
         setChanged();
         notifyObservers(message_one_parameter_int);
         for(Resource resource: Resource.values()) {
@@ -626,7 +509,7 @@ public class Game extends Observable implements LightGame{
             if(r1==resource|| r2==resource|| r3==resource) {
                 int par=players.get(currentPlayer).getWarehouse().getNumOfResource(resource);
                 int par1=players.get(currentPlayer).getStrongbox().getNumOfResource(resource);
-                Message_One_Resource_Two_Int message_one_resource_two_int = new Message_One_Resource_Two_Int(MessageType.RESOURCE_AMOUNT, currentPlayer + 1,resource,par,par1);
+                Message message_one_resource_two_int = new Message_One_Resource_Two_Int(MessageType.RESOURCE_AMOUNT, currentPlayer + 1,resource,par,par1);
                 setChanged();
                 notifyObservers(message_one_resource_two_int);
             }
@@ -647,7 +530,7 @@ public class Game extends Observable implements LightGame{
         players.get(currentPlayer).activateAdditionalProductionPower(chosenAdditionalPowerCard, choice);
         s.increaseResourceType(r, 1);
         faithTrackMovement();
-        Message_One_Parameter_Int message_one_parameter_int=new Message_One_Parameter_Int(MessageType.FAITH_POINTS_INCREASE,currentPlayer+1,players.get(currentPlayer).getFaithPoints());
+        Message message_one_parameter_int=new Message_One_Parameter_Int(MessageType.FAITH_POINTS_INCREASE,currentPlayer+1,players.get(currentPlayer).getFaithPoints());
         setChanged();
         notifyObservers(message_one_parameter_int);
         LeaderCard leaderCard=null;
@@ -659,13 +542,13 @@ public class Game extends Observable implements LightGame{
         if(r!=leaderCard.getResource()) {
             int par=players.get(currentPlayer).getWarehouse().getNumOfResource(r);
             int par1=players.get(currentPlayer).getStrongbox().getNumOfResource(r);
-            Message_One_Resource_Two_Int message_one_resource_two_int = new Message_One_Resource_Two_Int(MessageType.RESOURCE_AMOUNT, currentPlayer + 1,r,par,par1);
+            Message message_one_resource_two_int = new Message_One_Resource_Two_Int(MessageType.RESOURCE_AMOUNT, currentPlayer + 1,r,par,par1);
             setChanged();
             notifyObservers(message_one_resource_two_int);
         }
         int par=players.get(currentPlayer).getWarehouse().getNumOfResource(leaderCard.getResource());
         int par1=players.get(currentPlayer).getStrongbox().getNumOfResource(leaderCard.getResource());
-        Message_One_Resource_Two_Int message_one_resource_two_int = new Message_One_Resource_Two_Int(MessageType.RESOURCE_AMOUNT, currentPlayer + 1,leaderCard.getResource(),par,par1);
+        Message message_one_resource_two_int = new Message_One_Resource_Two_Int(MessageType.RESOURCE_AMOUNT, currentPlayer + 1,leaderCard.getResource(),par,par1);
         setChanged();
         notifyObservers(message_one_resource_two_int);
     }
@@ -679,7 +562,7 @@ public class Game extends Observable implements LightGame{
         for(Resource resource: Resource.values()) {
             int par=players.get(currentPlayer).getWarehouse().getNumOfResource(resource);
             int par1=players.get(currentPlayer).getStrongbox().getNumOfResource(resource);
-            Message_One_Resource_Two_Int message_one_resource_two_int = new Message_One_Resource_Two_Int(MessageType.RESOURCE_AMOUNT, currentPlayer + 1,resource,par,par1);
+            Message message_one_resource_two_int = new Message_One_Resource_Two_Int(MessageType.RESOURCE_AMOUNT, currentPlayer + 1,resource,par,par1);
             setChanged();
             notifyObservers(message_one_resource_two_int);
         }
@@ -697,7 +580,7 @@ public class Game extends Observable implements LightGame{
         LeaderCard leaderCard = getCurrentPlayerLeaderCard(chosenLeaderCard);
         players.get(currentPlayer).activateLeaderCard(chosenLeaderCard);
         int idcard = leaderCard.getCardID();
-        Message_One_Parameter_Int message_one_parameter_int=new Message_One_Parameter_Int(MessageType.LEADER_CARD_ACTIVATION,currentPlayer+1, idcard);
+        Message message_one_parameter_int=new Message_One_Parameter_Int(MessageType.LEADER_CARD_ACTIVATION,currentPlayer+1, idcard);
         setChanged();
         notifyObservers(message_one_parameter_int);
     }
@@ -713,10 +596,10 @@ public class Game extends Observable implements LightGame{
         players.get(currentPlayer).discardLeaderCard(chosenLeaderCard);
         faithTrackMovement();
         int idcard = leaderCard.getCardID();
-        Message_One_Parameter_Int message_one_parameter_int=new Message_One_Parameter_Int(MessageType.LEADER_CARD_DISCARD, currentPlayer+1, idcard);
+        Message message_one_parameter_int=new Message_One_Parameter_Int(MessageType.LEADER_CARD_DISCARD, currentPlayer+1, idcard);
         setChanged();
         notifyObservers(message_one_parameter_int);
-        Message_One_Parameter_Int message_one_parameter_int1=new Message_One_Parameter_Int(MessageType.FAITH_POINTS_INCREASE,currentPlayer+1,players.get(currentPlayer).getFaithPoints());
+        Message message_one_parameter_int1=new Message_One_Parameter_Int(MessageType.FAITH_POINTS_INCREASE,currentPlayer+1,players.get(currentPlayer).getFaithPoints());
         setChanged();
         notifyObservers(message_one_parameter_int1);
     }
@@ -837,12 +720,29 @@ public class Game extends Observable implements LightGame{
     public void triggerFirstAction() {
     }
 
-    public void moveToLastAction(){ }
+    public void LorenzoFaithTrackMovement(int faithPoints){
+        Message message_one_parameter_int=new Message_One_Parameter_Int(MessageType.FAITH_POINTS_INCREASE,1, faithPoints);
+        setChanged();
+        notifyObservers(message_one_parameter_int);
+    }
 
-    public void shuffleActions(){ }
-
-    public void LorenzoFaithTrackMovement(int faithPoints){ }
-
-    public void discardDeckDevelopmentCards(Color color){ }
+    public void discardDeckDevelopmentCards(Color color){
+        Message message;
+        Deck deck = getColorDeck(color);
+        if(deck.isEmpty()){
+            message = new Message_Four_Parameter_Int(MessageType.CARD_REMOVE,1, deck.getRow(),deck.getColumn(),1,-1);
+        }
+        else{
+            int cardID = -1;
+            try {
+                cardID = deck.getFirstCard().getCardID();
+            } catch (EmptyDevelopmentCardDeckException e) {
+                e.printStackTrace();
+            }
+            message = new Message_Four_Parameter_Int(MessageType.CARD_REMOVE,1,deck.getRow(),deck.getColumn(),0, cardID);
+        }
+        setChanged();
+        notifyObservers(message);
+    }
 
 }

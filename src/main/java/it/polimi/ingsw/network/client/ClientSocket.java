@@ -645,6 +645,9 @@ public class ClientSocket {
                             case FAITH_POINTS_INCREASE:
                                 faith_points_message(returnMessage);
                                 break;
+                            case VATICAN_REPORT:
+                                vatican_report_message(returnMessage);
+                                break;
                             case INCREASE_WAREHOUSE:
                                 increase_warehouse_message(returnMessage);
                                 break;
@@ -1009,6 +1012,12 @@ public class ClientSocket {
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
         System.out.println("\nIl giocatore " + m.getClientID() + " ha invertito il suo " + m.getPar1()
                 + "° deposito con il suo " + m.getPar2() + "° deposito.");
+    }
+
+    private void vatican_report_message(Message message){
+        Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        System.out.println("Il giocatore " + m.getPar1() + " è finito su una casella del papa." +
+                " Ora hai " + m.getPar2() + " punti vittoria dal tracciato fede");
     }
 
     private void leader_card_activation_message(Message message){

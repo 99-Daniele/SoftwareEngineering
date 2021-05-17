@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * Market is the market of Game.
  */
-public class Market implements Serializable {
+public class Market implements Serializable, Market_View {
 
     private static final int row = 3;
     private static final int column = 4;
@@ -130,6 +130,7 @@ public class Market implements Serializable {
      * @param selectedColumn number of column that will be slided.
      * @throws WrongParametersException activated when the selectedColumn doesn't exist in the market.
      */
+    @Override
     public void slideColumn(int selectedColumn) throws WrongParametersException {
         if (selectedColumn<1 || selectedColumn>4)
             throw new WrongParametersException();
@@ -149,6 +150,7 @@ public class Market implements Serializable {
      * @param selectedRow number of the row that will be slided.
      * @throws WrongParametersException activated when the selectedRow doesn't exist in the market.
      */
+    @Override
     public void slideRow(int selectedRow) throws WrongParametersException {
         if(selectedRow < 1 || selectedRow > 3)
             throw new WrongParametersException();
@@ -157,5 +159,9 @@ public class Market implements Serializable {
         this.externalMarble = marketTray[selectedRow-1][0];
         System.arraycopy(this.marketTray[selectedRow - 1], 1, this.marketTray[selectedRow - 1], 0, column - 1);
         marketTray[selectedRow-1][column-1] = marble;
+    }
+
+    public void printMarket(){
+        System.out.println("MARKET");
     }
 }

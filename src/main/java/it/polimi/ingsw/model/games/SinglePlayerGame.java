@@ -97,9 +97,11 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame {
     @Override
     public void LorenzoFaithTrackMovement(int faithPoints){
         LorenzoIlMagnifico.increaseFaithPoints(faithPoints);
+        super.LorenzoFaithTrackMovement(faithPoints);
         if (getFaithTrack().reachPope(LorenzoIlMagnifico.getFaithPoints())) {
             getFaithTrack().victoryPointsVaticanReport(getPlayer(0).getVictoryPoints(),getPlayer(0).getFaithPoints());
             getFaithTrack().DecreaseRemainingPope();
+            super.faithTrackNotify(0);
         }
     }
 
@@ -113,9 +115,9 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame {
         Deck colorDeck = getColorDeck(color);
         int count=0;
         int eccCount=0;
-        while (count<2 && eccCount<2)
-        {
+        while (count<2 && eccCount<2) {
             try{
+                super.discardDeckDevelopmentCards(color);
                 colorDeck.removeDevelopmentCard();
                 count++;
             }catch (EmptyDevelopmentCardDeckException e){
