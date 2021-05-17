@@ -42,6 +42,7 @@ public class ControllerGame implements Observer {
         numPlayers = 1;
         views = new LinkedList<>();
         currentState = new WaitingPlayerState();
+        Connection.newGame();
         Thread.currentThread().interrupt();
     }
 
