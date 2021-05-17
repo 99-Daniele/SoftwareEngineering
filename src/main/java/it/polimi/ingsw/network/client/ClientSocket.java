@@ -33,6 +33,8 @@ public class ClientSocket {
     private int position;
     private int numPlayers;
     private int startGame;
+    private int leaderCard1;
+    private int leaderCard2;
     private CONTROLLER_STATES currentState;
     private ArrayList<Marble> remainingMarbles;
     private final Object pingLock = new Object();
@@ -55,9 +57,7 @@ public class ClientSocket {
         if (connectedThread == null) {
             connectedThread = new Thread(() -> {
                 try {
-                    while (true) {
-                        receivePing();
-                    }
+                    receivePing();
                 } catch (InterruptedException | IOException e) {
                     System.err.println("\nClient no longer connected to the Server");
                     disconnect();
@@ -87,19 +87,12 @@ public class ClientSocket {
      * @throws InterruptedException if the connection with Server breaks during waiting.
      */
     private void receivePing() throws InterruptedException, IOException {
-        long initTime = System.currentTimeMillis();
-        long interTime = initTime;
         while (true) {
+            long initTime = System.currentTimeMillis();
             synchronized (pingLock) {
-                pingLock.wait(10000);
-                if (isTimePassed(initTime, System.currentTimeMillis(), 30000)) {
+                pingLock.wait(30000);
+                if (isTimePassed(initTime, System.currentTimeMillis(), 30000))
                     throw new IOException();
-                } else if (!(isTimePassed(interTime, System.currentTimeMillis(), 10000))) {
-                    TimeUnit.SECONDS.sleep(10 - (System.currentTimeMillis() + interTime) / 10000);
-                    break;
-                } else {
-                    interTime = System.currentTimeMillis();
-                }
             }
         }
     }
@@ -514,22 +507,40 @@ public class ClientSocket {
         sendMessage(message);
     }
 
-    private void activate_leader_card() throws IOException, InterruptedException {
+    private void activate_leader_card(){
         stdIn = new Scanner(new InputStreamReader(System.in));
-        System.out.println("ACTIVATE LEADER CARD");
-        int x = chose_leader_card();
-        Message message = new Message_One_Parameter_Int(MessageType.LEADER_CARD_ACTIVATION, position, x);
-        System.out.println(message.toString());
-        sendMessage(message);
+        Thread thread = new Thread(() -> {
+            try {
+                System.out.println("ACTIVATE LEADER CARD");
+                int x = chose_leader_card();
+                Message message = new Message_One_Parameter_Int(MessageType.LEADER_CARD_ACTIVATION, position, x);
+                System.out.println(message.toString());
+                sendMessage(message);
+            } catch (IOException e) {
+                System.err.println("\nClient no longer connected to the Server");
+                disconnect();
+                System.exit(0);
+            }
+        });
+        thread.start();
     }
 
-    private void discard_leader_card() throws IOException, InterruptedException {
+    private void discard_leader_card(){
         stdIn = new Scanner(new InputStreamReader(System.in));
-        System.out.println("DISCARD LEADER CARD");
-        int x = chose_leader_card();
-        Message message = new Message_One_Parameter_Int(MessageType.LEADER_CARD_DISCARD, position, x);
-        System.out.println(message.toString());
-        sendMessage(message);
+        Thread thread = new Thread(() -> {
+            try {
+                System.out.println("DISCARD LEADER CARD");
+                int x = chose_leader_card();
+                Message message = new Message_One_Parameter_Int(MessageType.LEADER_CARD_DISCARD, position, x);
+                System.out.println(message.toString());
+                sendMessage(message);
+            } catch (IOException e) {
+                System.err.println("\nClient no longer connected to the Server");
+                disconnect();
+                System.exit(0);
+            }
+        });
+        thread.start();
     }
 
     private void end_turn() throws IOException, InterruptedException {
@@ -538,6 +549,7 @@ public class ClientSocket {
     }
 
     private int chose_leader_card(){
+        System.out.println("Le tue carte leader: " + leaderCard1 + ", " + leaderCard2);
         System.out.println("Quale carta leader scegli? (1 - 2)");
         stdIn = new Scanner(new InputStreamReader(System.in));
         final int[] x = new int[1];
@@ -564,11 +576,13 @@ public class ClientSocket {
     private void chose_first_resources() throws IOException {
         switch(position) {
             case 0:
+                System.out.println("In attesa che tutti i giocatori facciano le proprie scelte...");
                 break;
             case 1:{
                 System.out.println("Sei il giocatore in posizione 2. Hai diritto a 1 risorsa.\nScegli la risorsa:");
                 Resource r = chose_resource();
                 Message message = new Message_One_Int_One_Resource(MessageType.ONE_FIRST_RESOURCE, position, r, 1);
+                System.out.println("In attesa che tutti i giocatori facciano le proprie scelte...");
                 sendMessage(message);
             }
             break;
@@ -576,6 +590,7 @@ public class ClientSocket {
                 System.out.println("Sei il giocatore in posizione 2. Hai diritto a 1 risorsa e 1 punto fede.\nScegli la risorsa:");
                 Resource r = chose_resource();
                 Message message = new Message_One_Int_One_Resource(MessageType.ONE_FIRST_RESOURCE, position, r, 1);
+                System.out.println("In attesa che tutti i giocatori facciano le proprie scelte...");
                 sendMessage(message);
             }
             case 3: {
@@ -583,6 +598,7 @@ public class ClientSocket {
                 Resource r1 = chose_resource();
                 Resource r2 = chose_resource();
                 Message message = new Message_Two_Resource(MessageType.TWO_FIRST_RESOURCE, position, r1, r2);
+                System.out.println("In attesa che tutti i giocatori facciano le proprie scelte...");
                 sendMessage(message);
             }
             break;
@@ -595,6 +611,7 @@ public class ClientSocket {
         Thread thread = new Thread(() -> {
             int x;
             stdIn = new Scanner(new InputStreamReader(System.in));
+            System.out.println("\n1 - MONETA\n2 - SCUDO\n3 - ROCCIA\n4 - SERVO");
             while (true) {
                 try {
                     x = stdIn.nextInt();
@@ -627,6 +644,7 @@ public class ClientSocket {
     }
 
     private int chose_warehouse_strongbox(){
+        stdIn = new Scanner(new InputStreamReader(System.in));
         System.out.println("Da dove preferiresti prendere le risorse?\n0 - MAGAZZINO\n1 - FORZIERE");
         final int[] choice = new int[1];
         Thread thread = new Thread(() -> {
@@ -831,7 +849,7 @@ public class ClientSocket {
 
     private void new_player_message(Message message){
         Message_One_Parameter_String m = (Message_One_Parameter_String) message;
-        if(m.getClientID() != (position +1))
+        if(m.getClientID() != (position))
             System.out.println("\nNuovo giocatore: " + m.getPar());
     }
 
@@ -874,6 +892,8 @@ public class ClientSocket {
                         stdIn.next();
                     }
                 }
+                this.leaderCard1 = firstChoice;
+                this.leaderCard2 = secondChoice;
                 Message returnMessage = new Message_Two_Parameter_Int(MessageType.LEADER_CARD, position, firstChoice, secondChoice);
                 sendMessage(returnMessage);
             } catch (IOException e) {
@@ -885,8 +905,9 @@ public class ClientSocket {
         thread.start();
     }
 
-    private void start_game_message(Message message) throws IOException {
+    private void start_game_message(Message message) throws IOException, InterruptedException {
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
+        TimeUnit.SECONDS.sleep(1);
         if(startGame == 0) {
             System.out.println("Tutti i giocatori si sono collegati. N° giocatori: " + m.getPar());
             position = m.getClientID();
@@ -1042,19 +1063,18 @@ public class ClientSocket {
                 for (int i = 1; i < marbles.size(); i++)
                     System.out.println(marbles.get(i).toString());
                 System.out.println("\nVuoi scambiare i tuoi depositi?\n1 - SI\n0 - NO");
-                try {
-                    int x = stdIn.nextInt();
-                    if (x == 1) {
-                        switch_depot();
-                        return;
-                    } else
-                        stdIn.next();
-                } catch (InputMismatchException | IOException | InterruptedException e) {
+                int x = stdIn.nextInt();
+                if (x == 1) {
+                    switch_depot();
+                    return;
                 }
+                else
+                    stdIn.next();
                 if (marbles.size() == 1) {
                     chosenMarble = marbles.remove(0);
+                    currentState = CONTROLLER_STATES.END_TURN_STATE;
                 } else {
-                    System.out.println("\nScegli la prima biglia:");
+                    System.out.println("\nScegli una biglia:");
                     while (true) {
                         try {
                             String choice = stdIn.nextLine();
@@ -1075,7 +1095,7 @@ public class ClientSocket {
                     remainingMarbles = marbles;
                 Message message = new Message_One_Parameter_Marble(MessageType.USE_MARBLE, position, chosenMarble);
                 sendMessage(message);
-            } catch (IOException e) {
+            } catch (IOException | InterruptedException e) {
                 System.err.println("\nClient no longer connected to the Server");
                 disconnect();
                 System.exit(0);
@@ -1151,7 +1171,7 @@ public class ClientSocket {
     private void switch_depot_message(Message message){
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
         System.out.println("\nIl giocatore " + m.getClientID() + " ha invertito il suo " + m.getPar1()
-                + "° deposito con il suo " + m.getPar1() + "° deposito.");
+                + "° deposito con il suo " + m.getPar2() + "° deposito.");
     }
 
     private void leader_card_activation_message(Message message){
@@ -1264,8 +1284,10 @@ public class ClientSocket {
         System.out.println("\nHai inserito dei parametri sbagliati");
         if(currentState == CONTROLLER_STATES.ACTIVATE_PRODUCTION_STATE)
             activate_another_production();
-        else
+        else{
+            currentState = CONTROLLER_STATES.FIRST_ACTION_STATE;
             chose_action(first_input());
+        }
     }
 
     private void wrong_turn_error(){
@@ -1315,17 +1337,19 @@ public class ClientSocket {
     }
 
     private void full_slot_error(){
+        stdIn = new Scanner(new InputStreamReader(System.in));
         System.out.println("\nNon puoi inserire questa carta in nessuno slot");
         System.out.println("\nVuoi comprare una carta diversa?\n1 - SI\n0 - NO");
         Thread thread = new Thread(() -> {
             try {
-                stdIn = new Scanner(new InputStreamReader(System.in));
                 try {
                     int x = stdIn.nextInt();
                     if (x == 1) {
                         buy_card();
-                    } else
+                    } else {
                         chose_action(first_input());
+                        currentState = CONTROLLER_STATES.FIRST_ACTION_STATE;
+                    }
                 } catch (InputMismatchException e) {
                     chose_action(first_input());
                 }

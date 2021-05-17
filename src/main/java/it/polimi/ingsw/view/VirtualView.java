@@ -83,7 +83,7 @@ public class VirtualView extends Observable implements View, Observer{
                 if (isTimePassed(initTime, System.currentTimeMillis(), 30000)) {
                     throw new IOException();
                 } else if (!(isTimePassed(interTime, System.currentTimeMillis(), 10000))) {
-                    TimeUnit.SECONDS.sleep(10);
+                    TimeUnit.SECONDS.sleep(10 - (System.currentTimeMillis() - interTime)/10000);
                     initTime = System.currentTimeMillis();
                     interTime = initTime;
                 } else {
@@ -177,7 +177,6 @@ public class VirtualView extends Observable implements View, Observer{
     @Override
     public void ok(){
         Message okMessage = new Message(MessageType.OK, viewID);
-        System.out.println("OK");
         sendMessage(okMessage);
     }
 

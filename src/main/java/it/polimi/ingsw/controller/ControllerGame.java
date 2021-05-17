@@ -84,17 +84,21 @@ public class ControllerGame implements Observer {
     }
 
     public void quitGame(String nickName, int viewID) throws IOException {
-        removeView(nickName, viewID);
-        if (views.size() == 0) {
+        if (views.size() == 1) {
+            removeView(nickName, viewID);
             System.out.println("GAME ENDED");
             resetControllerGame();
         }
-        else if (views.size()< numPlayers)
+        else if (views.size() < numPlayers) {
+            removeView(nickName, viewID);
             for (View view : views)
                 view.exit(nickName);
-        else
+        }
+        else {
+            removeView(nickName, viewID);
             for (View view : views)
                 view.quit(nickName);
+        }
     }
 
     @Override
@@ -302,7 +306,6 @@ public class ControllerGame implements Observer {
         LeaderCard leaderCard2 = chosenLeaderCard(m.getPar2(), leaderCards);
         game.selectPlayerLeaderCards(leaderCard1, leaderCard2, viewID);
         currentState.putPlayerLeaderCards(viewID);
-        System.out.println(m.toString());
         views.get(viewID).ok();
         if(currentState.getPlayerChosenLeaderCards().size() == views.size()
                 && currentState.getPlayerChosenResource().size() == (views.size()-1)) {
@@ -333,7 +336,6 @@ public class ControllerGame implements Observer {
         Resource r = m.getResource();
         game.firstIncreaseWarehouse(r, viewID);
         currentState.putPlayerResource(viewID);
-        System.out.println(m.toString());
         views.get(viewID).ok();
         if(currentState.getPlayerChosenLeaderCards().size() == views.size()
                 && currentState.getPlayerChosenResource().size() == (views.size()-1)) {
@@ -358,7 +360,6 @@ public class ControllerGame implements Observer {
         Resource r2 = m.getR2();
         game.firstDoubleIncreaseWarehouse(r1, r2);
         currentState.putPlayerResource(viewID);
-        System.out.println(m.toString());
         views.get(viewID).ok();
         if(currentState.getPlayerChosenLeaderCards().size() == views.size()
                 && currentState.getPlayerChosenResource().size() == (views.size()-1)) {
@@ -399,7 +400,6 @@ public class ControllerGame implements Observer {
         }
     }
 
-
     public void chosenSlotHandler(Message message)
             throws IllegalStateException, WrongParametersException, InsufficientResourceException, EmptyDevelopmentCardDeckException, ImpossibleDevelopmentCardAdditionException {
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
@@ -416,7 +416,6 @@ public class ControllerGame implements Observer {
         currentState.nextState(this, MessageType.END_TURN);
         views.get(viewID).ok();
     }
-
 
     public void takeMarbleHandler(Message message) throws IllegalStateException, WrongParametersException {
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;

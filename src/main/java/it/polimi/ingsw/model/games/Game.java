@@ -93,28 +93,29 @@ public class Game extends Observable implements LightGame{
         PlayerBoard player = new PlayerBoard(nickname);
         players.add(player);
         Message m = new Message_One_Parameter_String(MessageType.NEW_PLAYER,players.size() -1, nickname);
-        if(players.size() == numOfPlayers)
+        setChanged();
+        notifyObservers(m);
+        if(players.size() == numOfPlayers) {
             shufflePlayers();
-        setChanged();
-        notifyObservers(m);
-        m = new Message_Market(MessageType.MARKET, currentPlayer, market);
-        setChanged();
-        notifyObservers(m);
-        ArrayList<Integer> currentDeckCards = new ArrayList<>();
-        for(int i = 0; i < 3; i++){
-            for(int j = 0; j < 4; j++) {
-                DevelopmentCard card = null;
-                try {
-                    card = deck[i][j].getFirstCard();
-                } catch (EmptyDevelopmentCardDeckException e) {
-                    e.printStackTrace();
+            m = new Message_Market(MessageType.MARKET, currentPlayer, market);
+            setChanged();
+            notifyObservers(m);
+            ArrayList<Integer> currentDeckCards = new ArrayList<>();
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 4; j++) {
+                    DevelopmentCard card = null;
+                    try {
+                        card = deck[i][j].getFirstCard();
+                    } catch (EmptyDevelopmentCardDeckException e) {
+                        e.printStackTrace();
+                    }
+                    currentDeckCards.add(card.getCardID());
                 }
-                currentDeckCards.add(card.getCardID());
             }
+            m = new Message_ArrayList_Int(MessageType.DECKBOARD, currentPlayer, currentDeckCards);
+            setChanged();
+            notifyObservers(m);
         }
-        m = new Message_ArrayList_Int(MessageType.DECKBOARD, currentPlayer, currentDeckCards);
-        setChanged();
-        notifyObservers(m);
     }
 
     public void deletePlayer(String nickName){
@@ -218,9 +219,9 @@ public class Game extends Observable implements LightGame{
         }
         Message_Two_Parameter_Int message_two_parameter_int;
         if(isRow)
-            message_two_parameter_int=new Message_Two_Parameter_Int(MessageType.MARKET_CHANGE,currentPlayer+1,1,choice);
+            message_two_parameter_int=new Message_Two_Parameter_Int(MessageType.MARKET_CHANGE,currentPlayer+1,0,choice);
         else
-            message_two_parameter_int = new Message_Two_Parameter_Int(MessageType.MARKET_CHANGE,currentPlayer+1,0,choice);
+            message_two_parameter_int = new Message_Two_Parameter_Int(MessageType.MARKET_CHANGE,currentPlayer+1,1,choice);
         setChanged();
         notifyObservers(message_two_parameter_int);
         return marbles;

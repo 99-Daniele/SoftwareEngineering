@@ -53,6 +53,11 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame {
         shuffleActions();
     }
 
+    @Override
+    public void nextPlayer() {
+        triggerFirstAction();
+    }
+
     /**
      * this method trigger the first action.
      */
@@ -108,7 +113,6 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame {
         Deck colorDeck = getColorDeck(color);
         int count=0;
         int eccCount=0;
-
         while (count<2 && eccCount<2)
         {
             try{
