@@ -12,6 +12,7 @@ import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.model.player.Strongbox;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 import it.polimi.ingsw.network.messages.*;
+import it.polimi.ingsw.parser.CardMap;
 import it.polimi.ingsw.view.*;
 
 import java.io.IOException;
@@ -25,13 +26,22 @@ public class ControllerGame implements Observer {
     private Game game;
     private String firstPlayer;
     private int numPlayers;
-    private final LinkedList<View> views;
+    private LinkedList<View> views;
     private State_Controller currentState;
 
     public ControllerGame() {
         numPlayers = 1;
         views = new LinkedList<>();
         currentState = new WaitingPlayerState();
+    }
+
+    public void resetControllerGame(){
+        game = null;
+        firstPlayer = null;
+        numPlayers = 1;
+        views = new LinkedList<>();
+        currentState = new WaitingPlayerState();
+        Thread.currentThread().interrupt();
     }
 
     public int getMaxNumPlayers() {
@@ -62,18 +72,24 @@ public class ControllerGame implements Observer {
     }
 
     public synchronized void removeView(String nickName, int viewID) {
-        game.deletePlayer(nickName);
         try {
+            game.deletePlayer(nickName);
             views.remove(viewID);
-        } catch (IndexOutOfBoundsException e) {
+            if(views.size() == 0){
+                resetControllerGame();
+            }
+        } catch (NullPointerException e) {
+            resetControllerGame();
         }
     }
 
     public void quitGame(String nickName, int viewID) throws IOException {
         removeView(nickName, viewID);
-        if (views.size() == 0)
+        if (views.size() == 0) {
             System.out.println("GAME ENDED");
-        else if (currentState.isRightState(CONTROLLER_STATES.WAITING_PLAYERS_STATE))
+            resetControllerGame();
+        }
+        else if (views.size()< numPlayers)
             for (View view : views)
                 view.exit(nickName);
         else
@@ -94,6 +110,18 @@ public class ControllerGame implements Observer {
                 newGame(m);
                 return;
             }
+            if(m.getMessageType() == MessageType.LEADER_CARD){
+                leaderCardHandler(m);
+                return;
+            }
+            if(m.getMessageType() == MessageType.ONE_FIRST_RESOURCE){
+                oneResourceHandle(m);
+                return;
+            }
+            if(m.getMessageType() == MessageType.TWO_FIRST_RESOURCE){
+                twoResourceHandle(m);
+                return;
+            }
             if (m.getMessageType() == MessageType.TURN) {
                 isMyTurn(m);
                 return;
@@ -103,8 +131,6 @@ public class ControllerGame implements Observer {
                 return;
             }
             switch (m.getMessageType()) {
-                case LEADER_CARD:
-                    break;
                 case TAKE_MARBLE:
                     takeMarbleHandler(m);
                     break;
@@ -185,22 +211,13 @@ public class ControllerGame implements Observer {
             }
             if (game == null) {
                 firstPlayer = nickName;
-                views.get(0).sendMessage(new Message(MessageType.LOGIN, 0));
+                views.get(0).login(0);
             } else {
                 try {
                     game.createPlayer(nickName);
-
-                    views.getLast().sendMessage(new Message(MessageType.LOGIN, views.size() - 1));
-                    for (View view : views) {
-                        view.newPlayer(nickName, views.size() - 1);
-                    }
+                    views.getLast().login(views.size() - 1);
                     if (getCurrentNumPlayers() == numPlayers) {
-                        System.out.println(currentState);
-                        currentState.nextState(this, MessageType.START_GAME);
-                        System.out.println(currentState);
-                        for (View view : views)
-                            view.startGame(numPlayers);
-                        System.out.println("NEW GAME STARTED: " + views);
+                        startGame();
                     } else
                         currentState.nextState(this, MessageType.LOGIN);
                 } catch (AlreadyTakenNicknameException e) {
@@ -210,6 +227,24 @@ public class ControllerGame implements Observer {
         } catch (ClassCastException e) {
             views.getLast().errorMessage(ErrorType.WRONG_PARAMETERS);
         }
+    }
+
+    private void startGame(){
+        LinkedList<View> newViewsPosition = new LinkedList<>();
+        for(int i= 0; i < views.size(); i++){
+            String nickName = game.getPlayerPosition(i);
+            View selectedView = null;
+            for (View view: views)
+                if(view.getNickname().equals(nickName))
+                    selectedView = view;
+            newViewsPosition.add(selectedView);
+            assert selectedView != null;
+            selectedView.allPlayerConnected(i, numPlayers);
+            ArrayList<LeaderCard> leaderCards = game.casualLeaderCards();
+            currentState.putLeaderCards(leaderCards);
+            selectedView.choseLeaderCards(leaderCards);
+        }
+        views = newViewsPosition;
     }
 
     public void newGame(Message numPlayerMessage)
@@ -226,9 +261,7 @@ public class ControllerGame implements Observer {
                 game = new SinglePlayerGame();
                 game.createPlayer(firstPlayer);
                 game.addObservers((VirtualView) views.get(0));
-                views.get(0).startGame(1);
-                currentState.nextState(this, MessageType.START_GAME);
-                System.out.println("NEW GAME STARTED: " + views);
+                startGame();
             } else {
                 game = new Game(numPlayers);
                 game.createPlayer(firstPlayer);
@@ -252,6 +285,88 @@ public class ControllerGame implements Observer {
     public void endGame() {
         game.endGame();
         System.out.println("GAME ENDED");
+    }
+
+    public void leaderCardHandler(Message message) throws IllegalStateException, WrongParametersException {
+        Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        int viewID = m.getClientID();
+        ArrayList<LeaderCard> leaderCards = currentState.getLeaderCards(viewID);
+        ArrayList<Integer> players = currentState.getPlayerChosenLeaderCards();
+        if(!currentState.isRightState(CONTROLLER_STATES.WAITING_PLAYERS_STATE))
+            throw new IllegalStateException();
+        if(InputController.already_chosen_leader_card_check(viewID, players))
+            throw new IllegalStateException();
+        if(!InputController.leader_card_check(m, leaderCards))
+            throw new WrongParametersException();
+        LeaderCard leaderCard1 = chosenLeaderCard(m.getPar1(), leaderCards);
+        LeaderCard leaderCard2 = chosenLeaderCard(m.getPar2(), leaderCards);
+        game.selectPlayerLeaderCards(leaderCard1, leaderCard2, viewID);
+        currentState.putPlayerLeaderCards(viewID);
+        System.out.println(m.toString());
+        views.get(viewID).ok();
+        if(currentState.getPlayerChosenLeaderCards().size() == views.size()
+                && currentState.getPlayerChosenResource().size() == (views.size()-1)) {
+            System.out.println("All players have made their choice.");
+            currentState.nextState(this, MessageType.BUY_CARD);
+            for(View view: views)
+                view.startGame(numPlayers);
+        }
+    }
+
+    private LeaderCard chosenLeaderCard(int choice, ArrayList<LeaderCard> leaderCards){
+        for (LeaderCard leaderCard: leaderCards)
+            if(leaderCard.getCardID() == choice)
+                return leaderCard;
+        return null;
+    }
+
+    public void oneResourceHandle(Message message) throws IllegalStateException {
+        Message_One_Int_One_Resource m = (Message_One_Int_One_Resource) message;
+        int viewID = m.getClientID();
+        ArrayList<Integer> players = currentState.getPlayerChosenResource();
+        if(viewID != 1 && viewID != 2)
+            throw new IllegalStateException();
+        if(!currentState.isRightState(CONTROLLER_STATES.WAITING_PLAYERS_STATE))
+            throw new IllegalStateException();
+        if(!InputController.already_chosen_resource_check(viewID, players))
+            throw new IllegalStateException();
+        Resource r = m.getResource();
+        game.firstIncreaseWarehouse(r, viewID);
+        currentState.putPlayerResource(viewID);
+        System.out.println(m.toString());
+        views.get(viewID).ok();
+        if(currentState.getPlayerChosenLeaderCards().size() == views.size()
+                && currentState.getPlayerChosenResource().size() == (views.size()-1)) {
+            System.out.println("All players have made their choice.");
+            currentState.nextState(this, MessageType.BUY_CARD);
+            for(View view: views)
+                view.startGame(numPlayers);
+        }
+    }
+
+    public void twoResourceHandle(Message message) throws IllegalStateException {
+        Message_Two_Resource m = (Message_Two_Resource) message;
+        int viewID = m.getClientID();
+        ArrayList<Integer> players = currentState.getPlayerChosenResource();
+        if(viewID != 3)
+            throw new IllegalStateException();
+        if(!currentState.isRightState(CONTROLLER_STATES.WAITING_PLAYERS_STATE))
+            throw new IllegalStateException();
+        if(!InputController.already_chosen_resource_check(viewID, players))
+            throw new IllegalStateException();
+        Resource r1 = m.getR1();
+        Resource r2 = m.getR2();
+        game.firstDoubleIncreaseWarehouse(r1, r2);
+        currentState.putPlayerResource(viewID);
+        System.out.println(m.toString());
+        views.get(viewID).ok();
+        if(currentState.getPlayerChosenLeaderCards().size() == views.size()
+                && currentState.getPlayerChosenResource().size() == (views.size()-1)) {
+            System.out.println("All players have made their choice.");
+            currentState.nextState(this, MessageType.BUY_CARD);
+            for(View view: views)
+                view.startGame(numPlayers);
+        }
     }
 
     public void buyCardHandler(Message message)
@@ -317,12 +432,15 @@ public class ControllerGame implements Observer {
         views.get(viewID).chosen_marble(marbles);
     }
 
-    public void useMarbleHandler(Message message) throws IllegalStateException, AlreadyDiscardLeaderCardException {
+    public void useMarbleHandler(Message message)
+            throws IllegalStateException, AlreadyDiscardLeaderCardException, WrongParametersException {
         Message_One_Parameter_Marble m = (Message_One_Parameter_Marble) message;
         int viewID = m.getClientID();
         Marble chosenMarble = m.getMarble();
         if (!currentState.isRightState(CONTROLLER_STATES.TAKE_MARBLE_STATE))
             throw new IllegalStateException();
+        if(!InputController.chosen_correct_marble(chosenMarble, currentState.getMarbles()))
+            throw new WrongParametersException();
         if (!chosenMarble.useMarble(game)) {
             currentState.removeMarble(chosenMarble);
             if (currentState.getMarbles().size() == 0)
@@ -460,10 +578,12 @@ public class ControllerGame implements Observer {
     }
 
     public void leaderActivationHandler(Message message)
-            throws InsufficientResourceException, AlreadyDiscardLeaderCardException, ActiveLeaderCardException, InsufficientCardsException, IllegalStateException {
+            throws InsufficientResourceException, AlreadyDiscardLeaderCardException, ActiveLeaderCardException, InsufficientCardsException, IllegalStateException, WrongParametersException {
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
         int viewID = m.getClientID();
         int chosenLeaderCard = m.getPar();
+        if(!InputController.leader_card_activation(m))
+            throw new WrongParametersException();
         if (currentState.isRightState(CONTROLLER_STATES.FIRST_ACTION_STATE))
             currentState.nextState(this, MessageType.BUY_CARD);
         else if (currentState.isRightState(CONTROLLER_STATES.END_TURN_STATE))
@@ -475,10 +595,12 @@ public class ControllerGame implements Observer {
     }
 
     public void leaderDiscardHandler(Message message)
-            throws ActiveLeaderCardException, AlreadyDiscardLeaderCardException, IllegalStateException {
+            throws ActiveLeaderCardException, AlreadyDiscardLeaderCardException, IllegalStateException, WrongParametersException {
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
         int viewID = m.getClientID();
         int chosenLeaderCard = m.getPar();
+        if(!InputController.leader_card_discard(m))
+            throw new WrongParametersException();
         if (currentState.isRightState(CONTROLLER_STATES.FIRST_ACTION_STATE))
             currentState.nextState(this, MessageType.BUY_CARD);
         else if (currentState.isRightState(CONTROLLER_STATES.END_TURN_STATE))

@@ -273,7 +273,7 @@ class GameTest {
 
         Game game = new Game(4);
 
-        ArrayList<Card> cards = game.casualLeaderCards();
+        ArrayList<LeaderCard> cards = game.casualLeaderCards();
         assertNotSame(cards.get(0), cards.get(1));
         assertNotSame(cards.get(0), cards.get(2));
         assertNotSame(cards.get(0), cards.get(3));

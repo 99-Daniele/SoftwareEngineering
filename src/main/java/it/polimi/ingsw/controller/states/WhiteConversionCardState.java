@@ -29,6 +29,36 @@ public class WhiteConversionCardState implements State_Controller{
     }
 
     @Override
+    public void putPlayerLeaderCards(int position){
+
+    }
+
+    @Override
+    public void putPlayerResource(int position){
+
+    }
+
+    @Override
+    public void putLeaderCards(ArrayList<LeaderCard> leaderCards){
+
+    }
+
+    @Override
+    public ArrayList<Integer> getPlayerChosenLeaderCards() {
+        return null;
+    }
+
+    @Override
+    public ArrayList<Integer> getPlayerChosenResource() {
+        return null;
+    }
+
+    @Override
+    public ArrayList<LeaderCard> getLeaderCards(int position) {
+        return null;
+    }
+
+    @Override
     public Strongbox getStrongbox() {
         return null;
     }

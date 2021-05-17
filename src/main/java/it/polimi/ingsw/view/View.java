@@ -9,11 +9,17 @@ import java.util.ArrayList;
 
 public interface View{
 
+    String getNickname();
+
+    void login(int viewID);
+
     void newPlayer(String nickname, int position);
 
-    void sendMessage(Message m);
+    void allPlayerConnected(int position, int numPLayer);
 
-    void startGame(int numPLayer);
+    void startGame(int numPlayer);
+
+    void choseLeaderCards(ArrayList <LeaderCard> leaderCards);
 
     void isMyTurn(boolean turn);
 

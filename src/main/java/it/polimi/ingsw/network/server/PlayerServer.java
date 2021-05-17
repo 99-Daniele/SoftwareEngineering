@@ -44,7 +44,7 @@ public class PlayerServer implements Runnable {
         } catch (IOException e) {
         }
         finally {
-            System.out.println("Connessione col Client chiusa");
+            System.out.println("Closed Client connection");
         }
     }
 

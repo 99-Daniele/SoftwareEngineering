@@ -14,6 +14,18 @@ public interface State_Controller {
 
     boolean isRightState (CONTROLLER_STATES state);
 
+    void putPlayerLeaderCards(int position);
+
+    void putPlayerResource(int position);
+
+    public void putLeaderCards(ArrayList<LeaderCard> leaderCards);
+
+    ArrayList<Integer> getPlayerChosenLeaderCards();
+
+    ArrayList<Integer> getPlayerChosenResource();
+
+    ArrayList<LeaderCard> getLeaderCards(int position);
+
     Strongbox getStrongbox();
 
     void setStrongbox(Strongbox s);

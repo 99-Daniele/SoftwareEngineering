@@ -1,20 +1,45 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.model.cards.leaderCards.LeaderCard;
+import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.network.messages.*;
+
+import java.util.ArrayList;
 
 public class InputController {
 
     public static boolean login_check(Message_One_Parameter_String loginMessage){
-        try{
-            return loginMessage.getPar() != null;
-        } catch (ClassCastException e){
+        if(loginMessage.getPar() == null)
             return false;
-        }
+        return loginMessage.getPar().length() != 0;
     }
 
     public static boolean num_players_check(Message_One_Parameter_Int numPlayersMessage) {
         int numPlayers = numPlayersMessage.getPar();
         return numPlayers >= 1 && numPlayers <= 4;
+    }
+
+    public static boolean already_chosen_leader_card_check(int viewID, ArrayList<Integer> players){
+        return players.contains(viewID);
+    }
+
+    public static boolean already_chosen_resource_check(int viewID, ArrayList<Integer> players){
+        return players.contains(viewID);
+    }
+
+    public static boolean leader_card_check(Message_Two_Parameter_Int leaderCardMessage, ArrayList<LeaderCard> leaderCards){
+        int firstChoice = -1;
+        for (LeaderCard leaderCard: leaderCards) {
+            if (leaderCard.getCardID() == leaderCardMessage.getPar1())
+                firstChoice = leaderCard.getCardID();
+        }
+        if(firstChoice == -1)
+            return false;
+        for (LeaderCard leaderCard: leaderCards) {
+            if (leaderCard.getCardID() == leaderCardMessage.getPar2() && leaderCard.getCardID() != firstChoice)
+                return true;
+        }
+        return false;
     }
 
     public static boolean taken_marbles_check(Message_Two_Parameter_Int takenMarbleMessage) {
@@ -72,6 +97,25 @@ public class InputController {
 
     public static boolean white_conversion_card_check(Message_One_Parameter_Int whiteConversionCardMessage){
         int chosenLeaderCard = whiteConversionCardMessage.getPar();
-        return chosenLeaderCard == 0 || chosenLeaderCard == 1;
+        return chosenLeaderCard == 1 || chosenLeaderCard == 2;
+    }
+
+    public static boolean chosen_correct_marble(Marble chosenMarble, ArrayList<Marble> remainingMarbles) {
+        for (Marble marble : remainingMarbles) {
+            if (marble.toString().equals(chosenMarble.toString())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean leader_card_activation(Message_One_Parameter_Int leaderCardActivation){
+        int chosenLeaderCard = leaderCardActivation.getPar();
+        return chosenLeaderCard == 1 || chosenLeaderCard == 2;
+    }
+
+    public static boolean leader_card_discard(Message_One_Parameter_Int leaderCardDiscard){
+        int chosenLeaderCard = leaderCardDiscard.getPar();
+        return chosenLeaderCard == 1 || chosenLeaderCard == 2;
     }
 }

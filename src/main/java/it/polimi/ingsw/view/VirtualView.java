@@ -20,10 +20,12 @@ public class VirtualView extends Observable implements View, Observer{
     private final ObjectOutputStream out;
     private String nickName;
     private int viewID;
+    private boolean connected;
 
     public VirtualView(Socket socket) throws IOException {
         this.in = new ObjectInputStream(socket.getInputStream());
         this.out = new ObjectOutputStream(socket.getOutputStream());
+        this.connected = true;
     }
 
     public void start(int viewID) {
@@ -34,7 +36,6 @@ public class VirtualView extends Observable implements View, Observer{
                     ping();
                 } catch (InterruptedException | IOException e) {
                     disconnect();
-                    Thread.currentThread().interrupt();
                 }
             });
         pingThread.start();
@@ -44,7 +45,6 @@ public class VirtualView extends Observable implements View, Observer{
                     receiveMessage();
                 } catch (IOException e) {
                     disconnect();
-                    Thread.currentThread().interrupt();
                 }
             });
             inThread.start();
@@ -56,8 +56,15 @@ public class VirtualView extends Observable implements View, Observer{
         inThread.join();
     }
 
+    @Override
     public String getNickname(){
         return nickName;
+    }
+
+    @Override
+    public void login(int viewID){
+        this.viewID = viewID;
+        sendMessage(new Message(MessageType.LOGIN, viewID));
     }
 
     public int getViewID() {
@@ -81,8 +88,7 @@ public class VirtualView extends Observable implements View, Observer{
                     interTime = initTime;
                 } else {
                     interTime = System.currentTimeMillis();
-                    out.flush();
-                    out.writeObject(message);
+                    sendMessage(message);
                 }
             }
         }
@@ -140,8 +146,25 @@ public class VirtualView extends Observable implements View, Observer{
     }
 
     @Override
+    public void allPlayerConnected(int position, int numPLayer) {
+        viewID = position;
+        Message message = new Message_One_Parameter_Int(MessageType.START_GAME, position, numPLayer);
+        sendMessage(message);
+    }
+
+    @Override
     public void startGame(int numPlayers){
         Message message = new Message_One_Parameter_Int(MessageType.START_GAME, viewID, numPlayers);
+        sendMessage(message);
+    }
+
+    @Override
+    public void choseLeaderCards(ArrayList<LeaderCard> leaderCards){
+        int cardID_1 = leaderCards.get(0).getCardID();
+        int cardID_2 = leaderCards.get(1).getCardID();
+        int cardID_3 = leaderCards.get(2).getCardID();
+        int cardID_4 = leaderCards.get(3).getCardID();
+        Message message = new Message_Four_Parameter_Int(MessageType.LEADER_CARD, viewID, cardID_1, cardID_2, cardID_3, cardID_4);
         sendMessage(message);
     }
 
@@ -192,15 +215,14 @@ public class VirtualView extends Observable implements View, Observer{
 
     @Override
     public void choseWhiteConversionCard(LeaderCard[] leaderCards){
-        int leaderCard1 = 1;
-        int leaderCard2 = 2;
-        //gestire id carta
+        int leaderCard1 = leaderCards[0].getCardID();
+        int leaderCard2 = leaderCards[1].getCardID();
         Message message = new Message_Two_Parameter_Int(MessageType.WHITE_CONVERSION_CARD, viewID, leaderCard1, leaderCard2);
         sendMessage(message);
     }
 
     public void quit(String nickName){
-        System.out.println(nickName + " si è disconnesso");
+        System.out.println(nickName + " is disconnected");
         exit(nickName);
         disconnect();
     }
@@ -216,7 +238,7 @@ public class VirtualView extends Observable implements View, Observer{
     }
 
     public void endGame(Message message){
-        System.out.println(nickName + " si è disconnesso");
+        System.out.println(nickName + " is disconnected");
         sendMessage(message);
         disconnect();
     }
@@ -226,6 +248,15 @@ public class VirtualView extends Observable implements View, Observer{
     }
 
     private void disconnect(){
+        if(connected) {
+            if (nickName == null)
+                System.err.println("Client disconnected brutally");
+            else
+                System.err.println(nickName + " disconnected brutally");
+            connected = false;
+        }
+        inThread.interrupt();
+        pingThread.interrupt();
         try {
             in.close();
             out.close();
