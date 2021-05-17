@@ -50,6 +50,8 @@ public class ControllerGame implements Observer {
     }
 
     public int getCurrentNumPlayers() {
+        if(views.size() == 0)
+            return 1;
         return views.size();
     }
 
@@ -212,16 +214,21 @@ public class ControllerGame implements Observer {
         if (nickName == null || nickName.length() == 0) {
             views.getLast().errorMessage(ErrorType.WRONG_PARAMETERS);
             return;
+        }if (game == null) {
+            firstPlayer = nickName;
+            views.get(0).login(0);
         }
-        try {
-            game.createPlayer(nickName);
-            views.getLast().login(views.size() - 1);
-            if (getCurrentNumPlayers() == numPlayers) {
-                startGame();
-            } else
-                currentState.nextState(this, MessageType.LOGIN);
-        } catch (AlreadyTakenNicknameException e) {
-            views.getLast().errorMessage(ErrorType.ALREADY_TAKEN_NICKNAME);
+        else {
+            try {
+                game.createPlayer(nickName);
+                views.getLast().login(views.size() - 1);
+                if (getCurrentNumPlayers() == numPlayers) {
+                    startGame();
+                } else
+                    currentState.nextState(this, MessageType.LOGIN);
+            } catch (AlreadyTakenNicknameException e) {
+                views.getLast().errorMessage(ErrorType.ALREADY_TAKEN_NICKNAME);
+            }
         }
     }
 
