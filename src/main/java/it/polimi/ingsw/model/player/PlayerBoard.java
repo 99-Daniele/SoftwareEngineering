@@ -145,7 +145,7 @@ public class PlayerBoard extends SimplePlayerBoard{
      * which not exist or is not active) the method do nothing without throwing any exception like player has never chose them.
      */
     private void enoughTotalProductionPowerResource(PowerProductionPlayerChoice choice)
-            throws InsufficientResourceException {
+            throws InsufficientResourceException, NoSuchProductionPowerException {
         Warehouse w;
         w = warehouse.copyThisWarehouse();
         Strongbox s;

@@ -18,7 +18,8 @@ public class LeaderCardTest {
      * this test verifies the correct overriding of the 4 type of leaderCard
      */
     @Test
-    void correctOverriding() throws InsufficientResourceException, InsufficientCardsException, ActiveLeaderCardException {
+    void correctOverriding()
+            throws InsufficientResourceException, InsufficientCardsException, ActiveLeaderCardException, NoSuchProductionPowerException {
 
         Resource r1 = Resource.COIN;
         Resource r2 = Resource.SHIELD;
@@ -66,15 +67,29 @@ public class LeaderCardTest {
         assertEquals(3, s.getNumOfResource(r1));
         assertEquals(0, s.getNumOfResource(r2));
 
-        assertEquals(0, card2.additionalProductionPower(w, s, 2, r2));
+        NoSuchProductionPowerException thrown =
+                assertThrows(NoSuchProductionPowerException.class, () -> card2.additionalProductionPower(w, s, 1, r2));
+        String expectedMessage = "You don't have any card to activate this power";
+        String actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+
+        assertTrue(actualMessage.contains(expectedMessage));
         assertEquals(3, s.getNumOfResource(r1));
         assertEquals(0, s.getNumOfResource(r2));
 
-        assertEquals(0, card3.additionalProductionPower(w, s, 2, r2));
+        thrown = assertThrows(NoSuchProductionPowerException.class, () -> card3.additionalProductionPower(w, s, 1, r2));
+        expectedMessage = "You don't have any card to activate this power";
+        actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+
         assertEquals(3, s.getNumOfResource(r1));
         assertEquals(0, s.getNumOfResource(r2));
 
-        assertEquals(0, card4.additionalProductionPower(w, s, 2, r2));
+        thrown = assertThrows(NoSuchProductionPowerException.class, () -> card4.additionalProductionPower(w, s, 1, r2));
+        expectedMessage = "You don't have any card to activate this power";
+        actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+
         assertEquals(3, s.getNumOfResource(r1));
         assertEquals(0, s.getNumOfResource(r2));
 
@@ -86,15 +101,27 @@ public class LeaderCardTest {
          other cards do nothing
          */
 
-        card2.decreaseProductionPowerResources(w, s, 2);
+        thrown = assertThrows(NoSuchProductionPowerException.class, () -> card2.decreaseProductionPowerResources(w, s, 1));
+        expectedMessage = "You don't have any card to activate this power";
+        actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+
         assertEquals(2, s.getNumOfResource(r1));
         assertEquals(1, s.getNumOfResource(r2));
 
-        card3.decreaseProductionPowerResources(w, s, 2);
+        thrown = assertThrows(NoSuchProductionPowerException.class, () -> card3.decreaseProductionPowerResources(w, s, 1));
+        expectedMessage = "You don't have any card to activate this power";
+        actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+
         assertEquals(2, s.getNumOfResource(r1));
         assertEquals(1, s.getNumOfResource(r2));
 
-        card4.decreaseProductionPowerResources(w, s, 2);
+        thrown = assertThrows(NoSuchProductionPowerException.class, () -> card4.decreaseProductionPowerResources(w, s, 1));
+        expectedMessage = "You don't have any card to activate this power";
+        actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+
         assertEquals(2, s.getNumOfResource(r1));
         assertEquals(1, s.getNumOfResource(r2));
 

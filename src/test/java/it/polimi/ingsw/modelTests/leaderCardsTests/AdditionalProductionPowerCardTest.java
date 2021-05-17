@@ -144,7 +144,7 @@ public class AdditionalProductionPowerCardTest {
      * this test tries to decrease resources if player has not enough resources
      */
     @Test
-    void incorrectDecreaseProductionPowerResources()
+    void incorrectDecreaseProductionPowerNotEnoughResources()
             throws InsufficientResourceException, InsufficientCardsException, ActiveLeaderCardException {
 
         Resource r1 = Resource.COIN;
@@ -169,11 +169,35 @@ public class AdditionalProductionPowerCardTest {
     }
 
     /**
+     * this test tries to decrease resources if player has not activate AdditionalProductionCard
+     */
+    @Test
+    void incorrectDecreaseProductionPowerNotActive(){
+
+        Resource r1 = Resource.COIN;
+        Resource r2 = Resource.STONE;
+        Cost c = new Cost();
+        c.addResource(r1, 3);
+
+        Warehouse w = new Warehouse();
+        Strongbox s = new Strongbox();
+        s.increaseResourceType(r1, 3);
+
+        LeaderCard card = new AdditionalProductionPowerCard(r2, c, 2, 0);
+
+        NoSuchProductionPowerException thrown =
+                assertThrows(NoSuchProductionPowerException.class, () -> card.decreaseProductionPowerResources(w, s, 1));
+        String expectedMessage = "You don't have any card to activate this power";
+        String actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    /**
      * this test verifies the correct operation of AdditionalProductionPower
      */
     @Test
     void correctDecreaseProductionPowerResources()
-            throws InsufficientResourceException, InsufficientCardsException, ActiveLeaderCardException {
+            throws InsufficientResourceException, InsufficientCardsException, ActiveLeaderCardException, NoSuchProductionPowerException {
 
         Resource r1 = Resource.COIN;
         Cost c = new Cost();
@@ -186,14 +210,6 @@ public class AdditionalProductionPowerCardTest {
         LeaderRequirements l = new LeaderRequirements();
 
         LeaderCard card = new AdditionalProductionPowerCard(r1, c, 2, 0);
-
-        card.decreaseProductionPowerResources(w, s, 2);
-        assertEquals(1, s.getNumOfResource(r1));
-        assertEquals(1, w.getNumOfResource(r1));
-        /*
-         card is yet inactive
-         */
-
         card.activateCard(w, s, l);
 
         card.decreaseProductionPowerResources(w, s, 2);
@@ -236,7 +252,8 @@ public class AdditionalProductionPowerCardTest {
      * this test verifies the correct operation of AdditionalProductionPower
      */
     @Test
-    void correctAdditionalProductionPower() throws InsufficientResourceException, InsufficientCardsException, ActiveLeaderCardException {
+    void correctAdditionalProductionPower()
+            throws InsufficientResourceException, InsufficientCardsException, ActiveLeaderCardException, NoSuchProductionPowerException {
 
         Resource r1 = Resource.COIN;
         Resource r2 = Resource.STONE;

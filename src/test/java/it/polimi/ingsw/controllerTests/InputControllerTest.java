@@ -145,7 +145,7 @@ public class InputControllerTest {
     @Test
     void correctWhiteConversionCardCheck(){
 
-        Message_One_Parameter_Int m1 = new Message_One_Parameter_Int(MessageType.WHITE_CONVERSION_CARD, 0,  2);
+        Message_One_Parameter_Int m1 = new Message_One_Parameter_Int(MessageType.WHITE_CONVERSION_CARD, 0,  0);
         Message_One_Parameter_Int m2 = new Message_One_Parameter_Int(MessageType.WHITE_CONVERSION_CARD, 1, 1);
         assertFalse(InputController.white_conversion_card_check(m1));
         assertTrue(InputController.white_conversion_card_check(m2));

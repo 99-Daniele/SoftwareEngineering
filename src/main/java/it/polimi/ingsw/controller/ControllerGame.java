@@ -572,7 +572,7 @@ public class ControllerGame implements Observer {
             throw new IllegalStateException();
         Strongbox s = currentState.getStrongbox();
         game.increaseCurrentPlayerStrongbox(s);
-        currentState.nextState(this, MessageType.BUY_CARD);
+        currentState.nextState(this, MessageType.END_TURN);
         views.get(viewID).ok();
     }
 

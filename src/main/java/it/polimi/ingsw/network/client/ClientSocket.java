@@ -36,7 +36,7 @@ public class ClientSocket {
     private int leaderCard1;
     private int leaderCard2;
     private CONTROLLER_STATES currentState;
-    private ArrayList<Marble> remainingMarbles;
+    private ArrayList<Marble> remainingMarbles = new ArrayList<>();
     private final Object pingLock = new Object();
 
     public ClientSocket(Socket socket) throws IOException {
@@ -84,6 +84,7 @@ public class ClientSocket {
      * send to Server a TURN message and wait until a message return by Server.
      * if thread is awaken cause 10 seconds passed, send another TURN request to Server.
      * if after 30 seconds Server didn't return any message, connection with Server is considered as lost.
+     *
      * @throws InterruptedException if the connection with Server breaks during waiting.
      */
     private void receivePing() throws InterruptedException, IOException {
@@ -100,20 +101,21 @@ public class ClientSocket {
     /**
      * until player doesn't insert a valid nickName, constantly ask a new one. Then waits Server response to know which
      * number of player it is. If it's the first player, also send the number of players of new game to Server.
+     *
      * @throws InterruptedException if the connection with Server breaks during waiting.
      */
     private void login(){
-        stdIn = new Scanner(new InputStreamReader(System.in));
-        System.out.println("\nInserisci il tuo nickName:");
         Thread thread = new Thread(() -> {
-            String userInput = stdIn.nextLine();
-            while (userInput.length() == 0) {
-                System.err.println("Inserisci un nickName valido:");
-                userInput = stdIn.nextLine();
-            }
-            nickName = userInput;
-            Message message = new Message_One_Parameter_String(MessageType.LOGIN, position, nickName);
             try {
+                stdIn = new Scanner(new InputStreamReader(System.in));
+                System.out.println("\nInserisci il tuo nickName:");
+                String userInput = stdIn.nextLine();
+                while (userInput.length() == 0) {
+                    System.err.println("Inserisci un nickName valido:");
+                    userInput = stdIn.nextLine();
+                }
+                nickName = userInput;
+                Message message = new Message_One_Parameter_String(MessageType.LOGIN, position, nickName);
                 sendMessage(message);
             } catch (IOException e) {
                 System.err.println("\nClient no longer connected to the Server");
@@ -154,431 +156,309 @@ public class ClientSocket {
 
     /**
      * until user doesn't insert a valid input, ask him 1 int to chose which action activate.
+     *
      * @return the action chosen by user.
      */
-    private int first_input(){
+    private int first_input() {
         System.out.println("E' il tuo turno");
         stdIn = new Scanner(new InputStreamReader(System.in));
         System.out.println("\n1 - TAKE MARBLE FROM MARKET\n2 - BUY DEVELOPMENT CARD\n3 - ACTIVATE PRODUCTION\n" +
                 "4 - ACTIVATE LEADER CARD\n5 - DISCARD LEADER CARD");
-        final int[] userInput = new int[1];
-        Thread thread = new Thread(() -> {
-            while (true) {
-                try {
-                    userInput[0] = stdIn.nextInt();
-                    if (userInput[0] < 1 || userInput[0] > 5) {
-                        System.err.println("Inserisci un numero da 1 a 5.");
-                        System.out.println("\n1 - TAKE MARBLE FROM MARKET\n2 - BUY DEVELOPMENT CARD\n" +
-                                "3 - ACTIVATE PRODUCTION\n4 - ACTIVATE LEADER CARD\n5 - DISCARD LEADER CARD");
-                    } else break;
-                } catch (InputMismatchException e) {
-                    System.err.println("Inserisci un numero.");
+        int userInput;
+        while (true) {
+            try {
+                userInput = stdIn.nextInt();
+                if (userInput < 1 || userInput > 5) {
+                    System.err.println("Inserisci un numero da 1 a 5.");
                     System.out.println("\n1 - TAKE MARBLE FROM MARKET\n2 - BUY DEVELOPMENT CARD\n" +
                             "3 - ACTIVATE PRODUCTION\n4 - ACTIVATE LEADER CARD\n5 - DISCARD LEADER CARD");
-                    stdIn.next();
-                }
+                } else break;
+            } catch (InputMismatchException e) {
+                System.err.println("Inserisci un numero.");
+                System.out.println("\n1 - TAKE MARBLE FROM MARKET\n2 - BUY DEVELOPMENT CARD\n" +
+                        "3 - ACTIVATE PRODUCTION\n4 - ACTIVATE LEADER CARD\n5 - DISCARD LEADER CARD");
+                stdIn.next();
             }
-        });
-        thread.start();
-        try {
-            thread.join();
-        } catch (InterruptedException e) {}
-        return userInput[0];
+        }
+        return userInput;
     }
 
-    private void lastInput(){
+    private void lastInput() throws IOException{
         stdIn = new Scanner(new InputStreamReader(System.in));
         System.out.println("Vuoi fare altro?\n1 - ACTIVATE LEADER CARD\n2 - DISCARD LEADER CARD\n0 - END TURN");
-        Thread thread = new Thread(() -> {
-            int userInput;
-            while (true) {
-                try {
-                    userInput = stdIn.nextInt();
-                    if (userInput < 0 || userInput > 2) {
-                        System.err.println("Inserisci un numero da 0 a 2.");
-                        System.out.println("\n1 - ACTIVATE LEADER CARD\n2 - DISCARD LEADER CARD\n0 - END TURN");
-                    } else break;
-                } catch (InputMismatchException e) {
-                    System.err.println("Inserisci un numero.");
-                    System.out.println("\n1 - ACTIVATE LEADER CARD\n2 - DISCARD LEADER CARD\n0 - END TURN");
-                    stdIn.next();
-                }
-            }
+        int userInput;
+        while (true) {
             try {
-                switch (userInput) {
-                    case 1: {
-                        activate_leader_card();
-                        System.out.println("1 - DISCARD LEADER CARD\n0 - END TURN");
-                        while (true) {
-                            try {
-                                userInput = stdIn.nextInt();
-                                if (userInput < 0 || userInput > 1) {
-                                    System.err.println("Inserisci un numero da 0 a 1.");
-                                    System.out.println("\n1 - DISCARD LEADER CARD\n0 - END TURN");
-                                } else break;
-                            } catch (InputMismatchException e) {
-                                System.err.println("Inserisci un numero.");
-                                System.out.println("\n1 - DISCARD LEADER CARD\n0 - END TURN");
-                                stdIn.next();
-                            }
-                        }
-                        if (userInput == 1)
-                            discard_leader_card();
-                        end_turn();
-                    }
-                    break;
-                    case 2: {
-                        discard_leader_card();
-                        System.out.println("1 - ACTIVATE LEADER CARD\n0 - END TURN");
-                        while (true) {
-                            try {
-                                userInput = stdIn.nextInt();
-                                if (userInput < 0 || userInput > 1) {
-                                    System.err.println("Inserisci un numero da 0 a 1.");
-                                    System.out.println("\n1 - ACTIVATE LEADER CARD\n0 - END TURN");
-                                } else break;
-                            } catch (InputMismatchException e) {
-                                System.err.println("Inserisci un numero.");
-                                System.out.println("\n1 - ACTIVATE LEADER CARD\n0 - END TURN");
-                                stdIn.next();
-                            }
-                        }
-                        if (userInput == 1)
-                            activate_leader_card();
-                        end_turn();
-                    }
-                    break;
-                    case 0:
-                        end_turn();
-                }
-            } catch (InterruptedException | IOException e) {
-                System.err.println("\nClient no longer connected to the Server");
-                disconnect();
-                System.exit(0);
+                userInput = stdIn.nextInt();
+                if (userInput < 0 || userInput > 2) {
+                    System.err.println("Inserisci un numero da 0 a 2.");
+                    System.out.println("\n1 - ACTIVATE LEADER CARD\n2 - DISCARD LEADER CARD\n0 - END TURN");
+                } else break;
+            } catch (InputMismatchException e) {
+                System.err.println("Inserisci un numero.");
+                System.out.println("\n1 - ACTIVATE LEADER CARD\n2 - DISCARD LEADER CARD\n0 - END TURN");
+                stdIn.next();
             }
-        });
-        thread.start();
+        }
+        switch (userInput) {
+            case 1:
+                activate_leader_card();
+            break;
+            case 2:
+                discard_leader_card();
+            break;
+            case 0:
+                currentState = CONTROLLER_STATES.FIRST_ACTION_STATE;
+                end_turn();
+                break;
+        }
     }
 
-    private void take_market_marble(){
+    private void take_market_marble() throws IOException {
         stdIn = new Scanner(new InputStreamReader(System.in));
         System.out.println("TAKE MARBLE FROM MARKET");
         System.out.println("\nScegli una riga o una colonna?\n0 - RIGA\n1 - COLONNA");
-        Thread thread = new Thread(() -> {
-            int x;
-            int y;
+        int x;
+        int y;
+        while (true) {
             try {
-                while (true) {
-                    try {
-                        x = stdIn.nextInt();
-                        if (x < 0 || x > 1) {
-                            System.err.println("Inserisci un numero da 0 a 1.");
-                            System.out.println("\n0 - RIGA\n1 - COLONNA");
-                        } else break;
-                    } catch (InputMismatchException e) {
-                        System.err.println("Inserisci un numero.");
-                        System.out.println("\n0 - RIGA\n1 - COLONNA");
-                        stdIn.next();
-                    }
-                }
-                if (x == 0) {
-                    System.out.println("Scegli la riga (1 - 3):");
-                    while (true) {
-                        try {
-                            y = stdIn.nextInt();
-                            if (y < 1 || y > 3) {
-                                System.err.println("Inserisci un numero da 1 a 3.");
-                                System.out.println("\nScegli la riga:");
-                            } else break;
-                        } catch (InputMismatchException e) {
-                            System.err.println("Inserisci un numero.");
-                            System.out.println("\nScegli la riga:");
-                            stdIn.next();
-                        }
-                    }
-                } else {
-                    System.out.println("Scegli la colonna (1 - 4):");
-                    while (true) {
-                        try {
-                            y = stdIn.nextInt();
-                            if (y < 1 || y > 4) {
-                                System.err.println("Inserisci un numero da 1 a 4.");
-                                System.out.println("\nScegli la colonna:");
-                            } else break;
-                        } catch (InputMismatchException e) {
-                            System.err.println("Inserisci un numero.");
-                            System.out.println("\nScegli la colonna:");
-                            stdIn.next();
-                        }
-                    }
-                }
-                currentState = CONTROLLER_STATES.TAKE_MARBLE_STATE;
-                Message message = new Message_Two_Parameter_Int(MessageType.TAKE_MARBLE, position, x, y);
-                sendMessage(message);
-            } catch (IOException e) {
-                System.err.println("\nClient no longer connected to the Server");
-                disconnect();
-                System.exit(0);
+                x = stdIn.nextInt();
+                if (x < 0 || x > 1) {
+                    System.err.println("Inserisci un numero da 0 a 1.");
+                    System.out.println("\n0 - RIGA\n1 - COLONNA");
+                } else break;
+            } catch (InputMismatchException e) {
+                System.err.println("Inserisci un numero.");
+                System.out.println("\n0 - RIGA\n1 - COLONNA");
+                stdIn.next();
             }
-        });
-        thread.start();
+        }
+        if (x == 0) {
+            System.out.println("Scegli la riga (1 - 3):");
+            while (true) {
+                try {
+                    y = stdIn.nextInt();
+                    if (y < 1 || y > 3) {
+                        System.err.println("Inserisci un numero da 1 a 3.");
+                        System.out.println("\nScegli la riga:");
+                    } else break;
+                } catch (InputMismatchException e) {
+                    System.err.println("Inserisci un numero.");
+                    System.out.println("\nScegli la riga:");
+                    stdIn.next();
+                }
+            }
+        } else {
+            System.out.println("Scegli la colonna (1 - 4):");
+            while (true) {
+                try {
+                    y = stdIn.nextInt();
+                    if (y < 1 || y > 4) {
+                        System.err.println("Inserisci un numero da 1 a 4.");
+                        System.out.println("\nScegli la colonna:");
+                    } else break;
+                } catch (InputMismatchException e) {
+                    System.err.println("Inserisci un numero.");
+                    System.out.println("\nScegli la colonna:");
+                    stdIn.next();
+                }
+            }
+        }
+        currentState = CONTROLLER_STATES.TAKE_MARBLE_STATE;
+        Message message = new Message_Two_Parameter_Int(MessageType.TAKE_MARBLE, position, x, y);
+        sendMessage(message);
     }
 
     /**
      * until user doesn't insert a valid input, ask him 1 int to chose the deck to where buy card. Then send it to Server
      * and waits an OK message return.
      */
-    private void buy_card(){
+    private void buy_card() throws IOException {
         stdIn = new Scanner(new InputStreamReader(System.in));
         System.out.println("BUY_DEVELOPMENT_CARD");
         System.out.println("\nScegli una riga (1 - 3):");
-        Thread thread = new Thread(() -> {
-            int x;
-            int y;
+        int x;
+        int y;
+        while (true) {
             try {
-                while (true) {
-                    try {
-                        x = stdIn.nextInt();
-                        if (x < 1 || x > 3) {
-                            System.err.println("Inserisci un numero da 1 a 3.");
-                            System.out.println("\nScegli una riga:");
-                        } else break;
-                    } catch (InputMismatchException e) {
-                        System.err.println("Inserisci un numero.");
-                        System.out.println("\nScegli una riga:");
-                        stdIn.next();
-                    }
-                }
-                System.out.println("\nScegli una colonna (1 - 4):");
-                while (true) {
-                    try {
-                        y = stdIn.nextInt();
-                        if (y < 1 || y > 4) {
-                            System.err.println("\nInserisci un numero da 1 a 4.\n");
-                            System.out.println("\nScegli una colonna:");
-                        } else break;
-                    } catch (InputMismatchException e) {
-                        System.err.println("\nInserisci un numero.");
-                        System.out.println("\nScegli una colonna:");
-                        stdIn.next();
-                    }
-                }
-                int z = chose_warehouse_strongbox();
-                Message message = new Message_Three_Parameter_Int(MessageType.BUY_CARD, position, x, y, z);
-                System.out.println("\n" + message.toString());
-                currentState = CONTROLLER_STATES.END_TURN_STATE;
-                sendMessage(message);
-            } catch (IOException e) {
-                System.err.println("\nClient no longer connected to the Server");
-                disconnect();
-                System.exit(0);
+                x = stdIn.nextInt();
+                if (x < 1 || x > 3) {
+                    System.err.println("Inserisci un numero da 1 a 3.");
+                    System.out.println("\nScegli una riga:");
+                } else break;
+            } catch (InputMismatchException e) {
+                System.err.println("Inserisci un numero.");
+                System.out.println("\nScegli una riga:");
+                stdIn.next();
             }
-        });
-        thread.start();
+        }
+        System.out.println("\nScegli una colonna (1 - 4):");
+        while (true) {
+            try {
+                y = stdIn.nextInt();
+                if (y < 1 || y > 4) {
+                    System.err.println("\nInserisci un numero da 1 a 4.\n");
+                    System.out.println("\nScegli una colonna:");
+                } else break;
+            } catch (InputMismatchException e) {
+                System.err.println("\nInserisci un numero.");
+                System.out.println("\nScegli una colonna:");
+                stdIn.next();
+            }
+        }
+        int z = chose_warehouse_strongbox();
+        Message message = new Message_Three_Parameter_Int(MessageType.BUY_CARD, position, x, y, z);
+        System.out.println("\n" + message.toString());
+        currentState = CONTROLLER_STATES.END_TURN_STATE;
+        sendMessage(message);
     }
 
-    private void activate_another_production(){
+    private void activate_another_production() throws IOException, InterruptedException {
         stdIn = new Scanner(new InputStreamReader(System.in));
         System.out.println("Vuoi attivare un altro potere di produzione?\n1 - SI\n0 - NO");
-        Thread thread = new Thread(() -> {
-            try {
-                try {
-                    int x = stdIn.nextInt();
-                    if (x == 1)
-                        activate_production();
-                    else {
-                        end_production();
-                    }
-                } catch (InputMismatchException e) {
-                    end_production();
-                }
-            } catch (InterruptedException | IOException e) {
-                System.err.println("\nClient no longer connected to the Server");
-                disconnect();
-                System.exit(0);
+        try {
+            int x = stdIn.nextInt();
+            if (x == 1)
+                activate_production();
+            else {
+                end_production();
             }
-        });
-        thread.start();
+        } catch (InputMismatchException e) {
+            end_production();
+        }
     }
 
-    private void activate_production(){
+    private void activate_production() throws IOException, InterruptedException {
         stdIn = new Scanner(new InputStreamReader(System.in));
         System.out.println("ACTIVATE PRODUCTION");
         System.out.println("\nQuale produzione vuoi attivare?\n1 - CARTA SVILUPPO\n2 - POTERE BASE\n3 - CARTA LEADER");
         currentState = CONTROLLER_STATES.ACTIVATE_PRODUCTION_STATE;
-        Thread thread = new Thread(() -> {
+        int x;
+        while (true) {
             try {
-                int x;
-                while (true) {
-                    try {
-                        x = stdIn.nextInt();
-                        if (x < 1 || x > 3) {
-                            System.err.println("Inserisci un numero da 1 a 3.");
-                            System.out.println("\n1 - CARTA SVILUPPO\n2 - POTERE BASE\n3 - CARTA LEADER");
-                        } else break;
-                    } catch (InputMismatchException e) {
-                        System.err.println("Inserisci un numero.");
-                        System.out.println("\n1 - CARTA SVILUPPO\n2 - POTERE BASE\n3 - CARTA LEADER");
-                        stdIn.next();
-                    }
-                }
-                switch (x) {
-                    case 1:
-                        slot_card_production();
-                        break;
-                    case 2:
-                        basic_production();
-                        break;
-                    case 3:
-                        leader_card_production();
-                        break;
-                }
-            } catch (InterruptedException | IOException e) {
-                System.err.println("\nClient no longer connected to the Server");
-                disconnect();
-                System.exit(0);
+                x = stdIn.nextInt();
+                if (x < 1 || x > 3) {
+                    System.err.println("Inserisci un numero da 1 a 3.");
+                    System.out.println("\n1 - CARTA SVILUPPO\n2 - POTERE BASE\n3 - CARTA LEADER");
+                } else break;
+            } catch (InputMismatchException e) {
+                System.err.println("Inserisci un numero.");
+                System.out.println("\n1 - CARTA SVILUPPO\n2 - POTERE BASE\n3 - CARTA LEADER");
+                stdIn.next();
             }
-        });
-        thread.start();
+        }
+        switch (x) {
+            case 1:
+                slot_card_production();
+                break;
+            case 2:
+                basic_production();
+                break;
+            case 3:
+                leader_card_production();
+                break;
+        }
     }
 
-    private void slot_card_production(){
+    private void slot_card_production() throws IOException {
         stdIn = new Scanner(new InputStreamReader(System.in));
         System.out.println("Di quale carta vuoi attivare il potere di produzione? (1 - 3)");
-        Thread thread = new Thread(() -> {
+        int x;
+        while (true) {
             try {
-                int x;
-                while (true) {
-                    try {
-                        x = stdIn.nextInt();
-                        if (x < 1 || x > 3) {
-                            System.err.println("Inserisci un numero da 1 a 3.");
-                        } else break;
-                    } catch (InputMismatchException e) {
-                        System.err.println("Inserisci un numero.");
-                        stdIn.next();
-                    }
-                }
-                int y = chose_warehouse_strongbox();
-                Message message = new Message_Two_Parameter_Int(MessageType.DEVELOPMENT_CARD_POWER, position, x, y);
-                System.out.println("\n" + message.toString());
-                sendMessage(message);
-            } catch (IOException e) {
-                System.err.println("\nClient no longer connected to the Server");
-                disconnect();
-                System.exit(0);
+                x = stdIn.nextInt();
+                if (x < 1 || x > 3) {
+                    System.err.println("Inserisci un numero da 1 a 3.");
+                } else break;
+            } catch (InputMismatchException e) {
+                System.err.println("Inserisci un numero.");
+                stdIn.next();
             }
-        });
-        thread.start();
+        }
+        int y = chose_warehouse_strongbox();
+        Message message = new Message_Two_Parameter_Int(MessageType.DEVELOPMENT_CARD_POWER, position, x, y);
+        System.out.println("\n" + message.toString());
+        sendMessage(message);
     }
 
-    private void basic_production() throws IOException, InterruptedException {
+    private void basic_production() throws IOException {
         stdIn = new Scanner(new InputStreamReader(System.in));
-        System.out.println("Quale risorsa vuoi eliminare?\n1 - MONETA\n2 - SCUDO\n" +
-                "3 - ROCCIA\n4 - SERVO");
+        System.out.println("Quale risorsa vuoi eliminare?");
         Resource r1 = chose_resource();
-        System.out.println("Quale risorsa vuoi eliminare?\n1 - MONETA\n2 - SCUDO\n" +
-                "3 - ROCCIA\n4 - SERVO");
+        System.out.println("Quale risorsa vuoi eliminare?");
         Resource r2 = chose_resource();
-        System.out.println("Quale risorsa vuoi ricevere?\n1 - MONETA\n2 - SCUDO\n" +
-                "3 - ROCCIA\n4 - SERVO");
+        System.out.println("Quale risorsa vuoi ricevere?");
         Resource r3 = chose_resource();
         int choice = chose_warehouse_strongbox();
         Message message = new Message_Three_Resource_One_Int(MessageType.BASIC_POWER, position, r1, r2, r3, choice);
-        System.out.println(message.toString());
         sendMessage(message);
     }
 
-    private void leader_card_production() throws IOException, InterruptedException {
+    private void leader_card_production() throws IOException {
         stdIn = new Scanner(new InputStreamReader(System.in));
         int x = chose_leader_card();
-        System.out.println("Quale risorsa vuoi ricevere?\n1 - MONETA\n2 - SCUDO\n" +
-                "3 - ROCCIA\n4 - SERVO");
+        System.out.println("Quale risorsa vuoi ricevere?");
         Resource r = chose_resource();
         int choice = chose_warehouse_strongbox();
         Message message = new Message_One_Resource_Two_Int(MessageType.LEADER_CARD_POWER, position, r, x, choice);
-        System.out.println(message.toString());
         sendMessage(message);
     }
 
-    private void end_production() throws IOException, InterruptedException {
+    private void end_production() throws IOException {
         Message message = new Message(MessageType.END_PRODUCTION, position);
         currentState = CONTROLLER_STATES.END_TURN_STATE;
         sendMessage(message);
     }
 
-    private void activate_leader_card(){
+    private void activate_leader_card() throws IOException {
         stdIn = new Scanner(new InputStreamReader(System.in));
-        Thread thread = new Thread(() -> {
-            try {
-                System.out.println("ACTIVATE LEADER CARD");
-                int x = chose_leader_card();
-                Message message = new Message_One_Parameter_Int(MessageType.LEADER_CARD_ACTIVATION, position, x);
-                System.out.println(message.toString());
-                sendMessage(message);
-            } catch (IOException e) {
-                System.err.println("\nClient no longer connected to the Server");
-                disconnect();
-                System.exit(0);
-            }
-        });
-        thread.start();
+        System.out.println("ACTIVATE LEADER CARD");
+        int x = chose_leader_card();
+        Message message = new Message_One_Parameter_Int(MessageType.LEADER_CARD_ACTIVATION, position, x);
+        System.out.println(message.toString());
+        sendMessage(message);
     }
 
-    private void discard_leader_card(){
+    private void discard_leader_card() throws IOException {
         stdIn = new Scanner(new InputStreamReader(System.in));
-        Thread thread = new Thread(() -> {
-            try {
-                System.out.println("DISCARD LEADER CARD");
-                int x = chose_leader_card();
-                Message message = new Message_One_Parameter_Int(MessageType.LEADER_CARD_DISCARD, position, x);
-                System.out.println(message.toString());
-                sendMessage(message);
-            } catch (IOException e) {
-                System.err.println("\nClient no longer connected to the Server");
-                disconnect();
-                System.exit(0);
-            }
-        });
-        thread.start();
+        System.out.println("DISCARD LEADER CARD");
+        int x = chose_leader_card();
+        Message message = new Message_One_Parameter_Int(MessageType.LEADER_CARD_DISCARD, position, x);
+        System.out.println(message.toString());
+        sendMessage(message);
     }
 
-    private void end_turn() throws IOException, InterruptedException {
+    private void end_turn() throws IOException {
         Message end_turn = new Message(MessageType.END_TURN, position);
+        currentState = CONTROLLER_STATES.FIRST_ACTION_STATE;
         sendMessage(end_turn);
     }
 
-    private int chose_leader_card(){
+    private int chose_leader_card() {
         System.out.println("Le tue carte leader: " + leaderCard1 + ", " + leaderCard2);
         System.out.println("Quale carta leader scegli? (1 - 2)");
         stdIn = new Scanner(new InputStreamReader(System.in));
-        final int[] x = new int[1];
-        Thread thread = new Thread(() -> {
-            while (true) {
-                try {
-                    x[0] = stdIn.nextInt();
-                    if (x[0] < 1 || x[0] > 2) {
-                        System.err.println("Inserisci un numero da 1 a 2.");
-                    } else break;
-                } catch (InputMismatchException e) {
-                    System.err.println("Inserisci un numero.");
-                    stdIn.next();
-                }
+        int chosenLeaderCard;
+        while (true) {
+            try {
+                chosenLeaderCard = stdIn.nextInt();
+                if (chosenLeaderCard < 1 || chosenLeaderCard > 2) {
+                    System.err.println("Inserisci un numero da 1 a 2.");
+                } else break;
+            } catch (InputMismatchException e) {
+                System.err.println("Inserisci un numero.");
+                stdIn.next();
             }
-        });
-        thread.start();
-        try {
-            thread.join();
-        } catch (InterruptedException e) {}
-        return x[0];
+        }
+        return chosenLeaderCard;
     }
 
     private void chose_first_resources() throws IOException {
-        switch(position) {
+        switch (position) {
             case 0:
                 System.out.println("In attesa che tutti i giocatori facciano le proprie scelte...");
                 break;
-            case 1:{
+            case 1: {
                 System.out.println("Sei il giocatore in posizione 2. Hai diritto a 1 risorsa.\nScegli la risorsa:");
                 Resource r = chose_resource();
                 Message message = new Message_One_Int_One_Resource(MessageType.ONE_FIRST_RESOURCE, position, r, 1);
@@ -586,7 +466,7 @@ public class ClientSocket {
                 sendMessage(message);
             }
             break;
-            case 2:{
+            case 2: {
                 System.out.println("Sei il giocatore in posizione 2. Hai diritto a 1 risorsa e 1 punto fede.\nScegli la risorsa:");
                 Resource r = chose_resource();
                 Message message = new Message_One_Int_One_Resource(MessageType.ONE_FIRST_RESOURCE, position, r, 1);
@@ -606,67 +486,58 @@ public class ClientSocket {
         startGame = 2;
     }
 
-    private Resource chose_resource(){
-        final Resource[] chosenResource = new Resource[1];
-        Thread thread = new Thread(() -> {
-            int x;
-            stdIn = new Scanner(new InputStreamReader(System.in));
-            System.out.println("\n1 - MONETA\n2 - SCUDO\n3 - ROCCIA\n4 - SERVO");
-            while (true) {
-                try {
-                    x = stdIn.nextInt();
-                    if (x < 1 || x > 4) {
-                        System.err.println("Inserisci un numero da 1 a 4.");
-                        System.out.println("\n1 - MONETA\n2 - SCUDO\n3 - ROCCIA\n4 - SERVO");
-                    } else break;
-                } catch (InputMismatchException e) {
-                    System.err.println("Inserisci un numero.");
+    private Resource chose_resource() {
+        Resource chosenResource;
+        int x;
+        stdIn = new Scanner(new InputStreamReader(System.in));
+        System.out.println("\n1 - MONETA\n2 - SCUDO\n3 - ROCCIA\n4 - SERVO");
+        while (true) {
+            try {
+                x = stdIn.nextInt();
+                if (x < 1 || x > 4) {
+                    System.err.println("Inserisci un numero da 1 a 4.");
                     System.out.println("\n1 - MONETA\n2 - SCUDO\n3 - ROCCIA\n4 - SERVO");
-                    stdIn.next();
-                }
+                } else break;
+            } catch (InputMismatchException e) {
+                System.err.println("Inserisci un numero.");
+                System.out.println("\n1 - MONETA\n2 - SCUDO\n3 - ROCCIA\n4 - SERVO");
+                stdIn.next();
             }
-            switch (x) {
-                case 1:
-                    chosenResource[0] = Resource.COIN;
-                case 2:
-                    chosenResource[0] = Resource.SHIELD;
-                case 3:
-                    chosenResource[0] = Resource.STONE;
-                case 4:
-                    chosenResource[0] = Resource.SERVANT;
-            }
-        });
-        thread.start();
-        try {
-            thread.join();
-        } catch (InterruptedException e) {}
-        return chosenResource[0];
+        }
+        switch (x) {
+            case 1:
+                chosenResource = Resource.COIN;
+            case 2:
+                chosenResource = Resource.SHIELD;
+            case 3:
+                chosenResource = Resource.STONE;
+            case 4:
+                chosenResource = Resource.SERVANT;
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + x);
+        }
+        return chosenResource;
     }
 
-    private int chose_warehouse_strongbox(){
+    private int chose_warehouse_strongbox() {
         stdIn = new Scanner(new InputStreamReader(System.in));
         System.out.println("Da dove preferiresti prendere le risorse?\n0 - MAGAZZINO\n1 - FORZIERE");
-        final int[] choice = new int[1];
-        Thread thread = new Thread(() -> {
-            while (true) {
-                try {
-                    choice[0] = stdIn.nextInt();
-                    if (choice[0] < 0 || choice[0] > 1) {
-                        System.err.println("Inserisci un numero da 0 a 1.");
-                        System.out.println("\n0 - MAGAZZINO\n1 - FORZIERE");
-                    } else break;
-                } catch (InputMismatchException e) {
-                    System.err.println("Inserisci un numero.");
+        int choice;
+        while (true) {
+            try {
+                choice = stdIn.nextInt();
+                if (choice < 0 || choice > 1) {
+                    System.err.println("Inserisci un numero da 0 a 1.");
                     System.out.println("\n0 - MAGAZZINO\n1 - FORZIERE");
-                    stdIn.next();
-                }
+                } else break;
+            } catch (InputMismatchException e) {
+                System.err.println("Inserisci un numero.");
+                System.out.println("\n0 - MAGAZZINO\n1 - FORZIERE");
+                stdIn.next();
             }
-        });
-        thread.start();
-        try {
-            thread.join();
-        } catch (InterruptedException e) {}
-        return choice[0];
+        }
+        return choice;
     }
 
     /**
@@ -675,7 +546,7 @@ public class ClientSocket {
      *
      * @throws InterruptedException if the connection with Server breaks during waiting.
      */
-    private void switch_depot() throws IOException, InterruptedException {
+    private void switch_depot() throws IOException {
         stdIn = new Scanner(new InputStreamReader(System.in));
         int x = choseDepot(1);
         int y = choseDepot(2);
@@ -684,121 +555,124 @@ public class ClientSocket {
         sendMessage(message);
     }
 
-    private int choseDepot(int depot){
+    private int choseDepot(int depot) {
         stdIn = new Scanner(new InputStreamReader(System.in));
-        System.out.println("\nScegli il " + depot +"° deposito:");
-        final int[] choice = new int[1];
-        Thread thread = new Thread(() -> {
-            while(true) {
-                try {
-                    choice[0] = stdIn.nextInt();
-                    if (choice[0] < 1 || choice[0] > 5) {
-                        System.err.println("\nInserisci un numero da 1 a 5.\n");
-                    } else break;
-                } catch (InputMismatchException e) {
-                    System.err.println("\nInserisci un numero.");
-                    System.out.println("\nScegli il " + depot +"° deposito:");
-                    stdIn.next();
-                }
+        System.out.println("\nScegli il " + depot + "° deposito:");
+        int choice;
+        while (true) {
+            try {
+                choice = stdIn.nextInt();
+                if (choice < 1 || choice > 5) {
+                    System.err.println("\nInserisci un numero da 1 a 5.\n");
+                } else break;
+            } catch (InputMismatchException e) {
+                System.err.println("\nInserisci un numero.");
+                System.out.println("\nScegli il " + depot + "° deposito:");
+                stdIn.next();
             }
-        });
-        thread.start();
-        try {
-            thread.join();
-        } catch (InterruptedException e) {}
-        return choice[0];
+        }
+        return choice;
     }
 
     /**
      * constantly wait for Server input and handle it by return a new message to Server or notifying other thread.
      */
     private void receiveMessage() throws IOException, InterruptedException {
-        while(true) {
+        while (true) {
             try {
                 Message returnMessage = (Message) in.readObject();
                 wake_up();
-                switch (returnMessage.getMessageType()) {
-                    case LOGIN:
-                        login_message(returnMessage);
-                        break;
-                    case NEW_PLAYER:
-                        new_player_message(returnMessage);
-                        break;
-                    case LEADER_CARD:
-                        leader_card_choice(returnMessage);
-                        break;
-                    case START_GAME:
-                        start_game_message(returnMessage);
-                        break;
-                    case MARKET:
-                        market_message(returnMessage);
-                        break;
-                    case DECKBOARD:
-                        deckBoard_message(returnMessage);
-                        break;
-                    case OK:
-                        ok_message();
-                        break;
-                    case PING:
-                        ping_message();
-                        break;
-                    case PONG:
-                        break;
-                    case TURN:
-                        turn_message(returnMessage);
-                        break;
-                    case END_TURN:
-                        end_turn_message(returnMessage);
-                        break;
-                    case BUY_CARD:
-                        buy_card_message(returnMessage);
-                        break;
-                    case CHOSEN_SLOT:
-                        chosen_slot_message(returnMessage);
-                        break;
-                    case CARD_REMOVE:
-                        card_remove_message(returnMessage);
-                        break;
-                    case RESOURCE_AMOUNT:
-                        resource_amount_message(returnMessage);
-                        break;
-                    case TAKE_MARBLE:
-                        take_marble_message(returnMessage);
-                        break;
-                    case MARKET_CHANGE:
-                        market_change(returnMessage);
-                        break;
-                    case WHITE_CONVERSION_CARD:
-                        white_conversion_card_message(returnMessage);
-                        break;
-                    case FAITH_POINTS_INCREASE:
-                        faith_points_message(returnMessage);
-                        break;
-                    case INCREASE_WAREHOUSE:
-                        increase_warehouse_message(returnMessage);
-                        break;
-                    case SWITCH_DEPOT:
-                        switch_depot_message(returnMessage);
-                        break;
-                    case LEADER_CARD_ACTIVATION:
-                        leader_card_activation_message(returnMessage);
-                        break;
-                    case LEADER_CARD_DISCARD:
-                        leader_card_discard_message(returnMessage);
-                        break;
-                    case QUIT:
-                        quit_message(returnMessage);
-                        break;
-                    case END_GAME:
-                        end_game_message(returnMessage);
-                        break;
-                    case ERR:
-                        error_message(returnMessage);
-                        break;
-                    default:
-                        System.err.println("\nRicevuto messaggio inaspettato dal Server.");
-                        break;
-                }
+                Thread thread = new Thread(() -> {
+                    try {
+                        switch (returnMessage.getMessageType()) {
+                            case LOGIN:
+                                login_message(returnMessage);
+                                break;
+                            case NEW_PLAYER:
+                                new_player_message(returnMessage);
+                                break;
+                            case LEADER_CARD:
+                                leader_card_choice(returnMessage);
+                                break;
+                            case START_GAME:
+                                start_game_message(returnMessage);
+                                break;
+                            case MARKET:
+                                market_message(returnMessage);
+                                break;
+                            case DECKBOARD:
+                                deckBoard_message(returnMessage);
+                                break;
+                            case OK:
+                                ok_message();
+                                break;
+                            case PING:
+                                ping_message();
+                                break;
+                            case PONG:
+                                break;
+                            case TURN:
+                                turn_message(returnMessage);
+                                break;
+                            case END_TURN:
+                                end_turn_message(returnMessage);
+                                break;
+                            case BUY_CARD:
+                                buy_card_message(returnMessage);
+                                break;
+                            case CHOSEN_SLOT:
+                                chosen_slot_message(returnMessage);
+                                break;
+                            case CARD_REMOVE:
+                                card_remove_message(returnMessage);
+                                break;
+                            case RESOURCE_AMOUNT:
+                                resource_amount_message(returnMessage);
+                                break;
+                            case TAKE_MARBLE:
+                                take_marble_message(returnMessage);
+                                break;
+                            case MARKET_CHANGE:
+                                market_change(returnMessage);
+                                break;
+                            case WHITE_CONVERSION_CARD:
+                                white_conversion_card_message(returnMessage);
+                                break;
+                            case FAITH_POINTS_INCREASE:
+                                faith_points_message(returnMessage);
+                                break;
+                            case INCREASE_WAREHOUSE:
+                                increase_warehouse_message(returnMessage);
+                                break;
+                            case SWITCH_DEPOT:
+                                switch_depot_message(returnMessage);
+                                break;
+                            case LEADER_CARD_ACTIVATION:
+                                leader_card_activation_message(returnMessage);
+                                break;
+                            case LEADER_CARD_DISCARD:
+                                leader_card_discard_message(returnMessage);
+                                break;
+                            case QUIT:
+                                quit_message(returnMessage);
+                                break;
+                            case END_GAME:
+                                end_game_message(returnMessage);
+                                break;
+                            case ERR:
+                                error_message(returnMessage);
+                                break;
+                            default:
+                                System.err.println("\nRicevuto messaggio inaspettato dal Server.");
+                                break;
+                        }
+                    } catch (InterruptedException | IOException e) {
+                        System.err.println("\nClient no longer connected to the Server");
+                        disconnect();
+                        System.exit(0);
+                    }
+                });
+                thread.start();
             } catch (ClassNotFoundException | ClassCastException e) {
                 System.err.println("\nRicevuto messaggio inaspettato dal Server.");
             }
@@ -811,139 +685,122 @@ public class ClientSocket {
         }
     }
 
-    private void login_message(Message message){
+    private void login_message(Message message) throws IOException {
         stdIn = new Scanner(new InputStreamReader(System.in));
         position = message.getClientID();
-        Thread thread = new Thread(() -> {
-            try {
-                if (position == 0) {
-                    final int[] userInt = new int[1];
-                    System.out.println("\nSei il primo giocatore. Quanti giocatori vuoi in partita? (1 - 4)");
-                    while (true) {
-                        try {
-                            userInt[0] = stdIn.nextInt();
-                            if (userInt[0] < 1 || userInt[0] > 4) {
-                                System.err.println("\nInserisci un numero da 1 a 4.\n");
-                                System.out.println("\nQuanti giocatori vuoi in partita? (1 - 4)");
-                            } else break;
-                        } catch (InputMismatchException e) {
-                            System.err.println("\nInserisci un numero.");
-                            System.out.println("\nQuanti giocatori vuoi in partita? (1 - 4)");
-                            stdIn.next();
-                        }
-                    }
-                    Message numPlayerMessage = new Message_One_Parameter_Int(MessageType.NUM_PLAYERS, position, userInt[0]);
-                    sendMessage(numPlayerMessage);
-                } else if (startGame == 0) {
-                    System.out.println("\nSei entrato in una partita che sta per cominciare.");
-                    waiting();
+        if (position == 0) {
+            final int[] userInt = new int[1];
+            System.out.println("\nSei il primo giocatore. Quanti giocatori vuoi in partita? (1 - 4)");
+            while (true) {
+                try {
+                    userInt[0] = stdIn.nextInt();
+                    if (userInt[0] < 1 || userInt[0] > 4) {
+                        System.err.println("\nInserisci un numero da 1 a 4.\n");
+                        System.out.println("\nQuanti giocatori vuoi in partita? (1 - 4)");
+                    } else break;
+                } catch (InputMismatchException e) {
+                    System.err.println("\nInserisci un numero.");
+                    System.out.println("\nQuanti giocatori vuoi in partita? (1 - 4)");
+                    stdIn.next();
                 }
-            } catch (IOException e) {
-                System.err.println("\nClient no longer connected to the Server");
-                disconnect();
-                System.exit(0);
             }
-        });
-        thread.start();
+            Message numPlayerMessage = new Message_One_Parameter_Int(MessageType.NUM_PLAYERS, position, userInt[0]);
+            sendMessage(numPlayerMessage);
+        } else if (startGame == 0) {
+            System.out.println("\nSei entrato in una partita che sta per cominciare.");
+            waiting();
+        }
     }
 
-    private void new_player_message(Message message){
+    private void new_player_message(Message message) {
         Message_One_Parameter_String m = (Message_One_Parameter_String) message;
-        if(m.getClientID() != (position))
+        if (m.getClientID() != (position))
             System.out.println("\nNuovo giocatore: " + m.getPar());
     }
 
-    private void leader_card_choice(Message message){
+    private void leader_card_choice(Message message) throws IOException, InterruptedException {
         Message_Four_Parameter_Int m = (Message_Four_Parameter_Int) message;
         stdIn = new Scanner(new InputStreamReader(System.in));
         int leaderCard1 = m.getPar1();
         int leaderCard2 = m.getPar2();
         int leaderCard3 = m.getPar3();
         int leaderCard4 = m.getPar4();
+        TimeUnit.SECONDS.sleep(2);
         System.out.println("\nScegli due tra queste 4 carte leader: " +
                 leaderCard1 + ", " + leaderCard2 + ", " + leaderCard3 + ", " + leaderCard4);
-        Thread thread = new Thread(() -> {
+        int firstChoice;
+        int secondChoice;
+        while (true) {
             try {
-                int firstChoice;
-                int secondChoice;
-                while (true) {
-                    try {
-                        firstChoice = stdIn.nextInt();
-                        if (firstChoice != leaderCard1 && firstChoice != leaderCard2 &&
-                                firstChoice != leaderCard3 && firstChoice != leaderCard4) {
-                            System.err.println("\nInserisci un numero corretto.\n");
-                        } else break;
-                    } catch (InputMismatchException e) {
-                        System.err.println("\nInserisci un numero.");
-                        stdIn.next();
-                    }
-                }
-                while (true) {
-                    try {
-                        secondChoice = stdIn.nextInt();
-                        if (secondChoice == firstChoice) {
-                            System.err.println("\nNon puoi scegliere due carte uguali\n");
-                        } else if (secondChoice != leaderCard1 && secondChoice != leaderCard2 &&
-                                secondChoice != leaderCard3 && secondChoice != leaderCard4) {
-                            System.err.println("\nInserisci un numero corretto.\n");
-                        } else break;
-                    } catch (InputMismatchException e) {
-                        System.err.println("\nInserisci un numero.");
-                        stdIn.next();
-                    }
-                }
-                this.leaderCard1 = firstChoice;
-                this.leaderCard2 = secondChoice;
-                Message returnMessage = new Message_Two_Parameter_Int(MessageType.LEADER_CARD, position, firstChoice, secondChoice);
-                sendMessage(returnMessage);
-            } catch (IOException e) {
-                System.err.println("\nClient no longer connected to the Server");
-                disconnect();
-                System.exit(0);
+                firstChoice = stdIn.nextInt();
+                if (firstChoice != leaderCard1 && firstChoice != leaderCard2 &&
+                        firstChoice != leaderCard3 && firstChoice != leaderCard4) {
+                    System.err.println("\nInserisci un numero corretto.\n");
+                } else break;
+            } catch (InputMismatchException e) {
+                System.err.println("\nInserisci un numero.");
+                stdIn.next();
             }
-        });
-        thread.start();
+        }
+        while (true) {
+            try {
+                secondChoice = stdIn.nextInt();
+                if (secondChoice == firstChoice) {
+                    System.err.println("\nNon puoi scegliere due carte uguali\n");
+                } else if (secondChoice != leaderCard1 && secondChoice != leaderCard2 &&
+                        secondChoice != leaderCard3 && secondChoice != leaderCard4) {
+                    System.err.println("\nInserisci un numero corretto.\n");
+                } else break;
+            } catch (InputMismatchException e) {
+                System.err.println("\nInserisci un numero.");
+                stdIn.next();
+            }
+        }
+        this.leaderCard1 = firstChoice;
+        this.leaderCard2 = secondChoice;
+        Message returnMessage = new Message_Two_Parameter_Int(MessageType.LEADER_CARD, position, firstChoice, secondChoice);
+        sendMessage(returnMessage);
     }
 
     private void start_game_message(Message message) throws IOException, InterruptedException {
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
         TimeUnit.SECONDS.sleep(1);
-        if(startGame == 0) {
+        if (startGame == 0) {
             System.out.println("Tutti i giocatori si sono collegati. N° giocatori: " + m.getPar());
             position = m.getClientID();
-            System.out.println("\nSei il giocatore in posizione " + (position+1));
+            System.out.println("\nSei il giocatore in posizione " + (position + 1));
             numPlayers = m.getPar();
             startGame = 1;
-        }
-        else{
+        } else {
             System.out.println("Tutti i giocatori hanno fatto le proprie scelte.\nLa partita è iniziata");
             currentState = CONTROLLER_STATES.FIRST_ACTION_STATE;
             sendMessage(new Message(MessageType.TURN, position));
         }
     }
 
-    private void market_message(Message message){
+    private void market_message(Message message) {
         Message_Market m = (Message_Market) message;
         System.out.println("\nRicevuto mercato");
     }
 
-    private void deckBoard_message(Message message){
+    private void deckBoard_message(Message message) {
         Message_ArrayList_Int m = (Message_ArrayList_Int) message;
         System.out.println("\nRicevute carte dei deck: " + m.getParams().toString());
     }
 
     private void ok_message() throws IOException, InterruptedException {
-        switch (currentState){
+        switch (currentState) {
             case WAITING_PLAYERS_STATE:
-                if(startGame == 2)
+                if (startGame == 2)
                     System.out.println("In attesa che tutti i giocatori facciano le proprie scelte...");
-                else if(startGame == 1)
+                else if (startGame == 1)
                     chose_first_resources();
                 else
                     waiting();
                 break;
             case FIRST_ACTION_STATE:
                 chose_action(first_input());
+                break;
             case TAKE_MARBLE_STATE:
                 chose_marble(remainingMarbles);
                 break;
@@ -956,152 +813,134 @@ public class ClientSocket {
         }
     }
 
-    private void ping_message() throws IOException{
+    private void ping_message() throws IOException {
         Message ping = new Message(MessageType.PONG, position);
         sendMessage(ping);
     }
 
     private void turn_message(Message message) throws InterruptedException, IOException {
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
-        if (m.getPar() == 1){
+        if (m.getPar() == 1) {
             chose_action(first_input());
         }
     }
 
     private void end_turn_message(Message message) throws InterruptedException, IOException {
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
-        if(m.getPar() != position) {
-            System.out.println("\nIl giocatore in posizione " + m.getPar() +1 + " ha finito il suo turno.");
+        if (m.getPar() != position) {
+            System.out.println("\nIl giocatore in posizione " + m.getPar() + 1 + " ha finito il suo turno.");
         }
-        if (position == 0){
-            if(m.getPar() == numPlayers -1)
+        if (position == 0) {
+            if (m.getPar() == numPlayers - 1)
                 chose_action(first_input());
-        }
-        else if(m.getPar() == position -1)
+        } else if (m.getPar() == position - 1)
             chose_action(first_input());
     }
 
-    private void buy_card_message(Message message){
+    private void buy_card_message(Message message) {
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
-        System.out.println("\nIl giocatore " + m.getClientID() +1 + " ha comprato la carta: "
-                + m.getPar1() + " e l'ha inseria nel " + m.getPar2() +"° slot.");
+        System.out.println("\nIl giocatore " + m.getClientID() + 1 + " ha comprato la carta: "
+                + m.getPar1() + " e l'ha inseria nel " + m.getPar2() + "° slot.");
     }
 
-    private void chosen_slot_message(Message message){
+    private void chosen_slot_message(Message message) throws IOException {
         Message_Three_Parameter_Int m = (Message_Three_Parameter_Int) message;
         stdIn = new Scanner(new InputStreamReader(System.in));
-        Thread thread = new Thread(() -> {
-            try {
-                int choice;
-                if (m.getPar3() == -1) {
-                    System.out.println("\nScegli uno slot in cui inserire la carta: " + m.getPar1() + ", " + m.getPar2());
-                    while (true) {
-                        try {
-                            choice = stdIn.nextInt();
-                            if (choice != m.getPar1() && choice != m.getPar2()) {
-                                System.err.println("\nInserisci un numero corretto.\n");
-                            } else break;
-                        } catch (InputMismatchException e) {
-                            System.err.println("\nInserisci un numero.");
-                            stdIn.next();
-                        }
-                    }
-                } else {
-                    System.out.println("\nScegli uno slot in cui inserire la carta: " + m.getPar1() + ", " + m.getPar2()
-                            + ", " + m.getPar3());
-                    while (true) {
-                        try {
-                            choice = stdIn.nextInt();
-                            if (choice != m.getPar1() && choice != m.getPar2() && choice != m.getPar3()) {
-                                System.err.println("\nInserisci un numero corretto.\n");
-                            } else break;
-                        } catch (InputMismatchException e) {
-                            System.err.println("\nInserisci un numero.");
-                            stdIn.next();
-                        }
-                    }
+        int choice;
+        if (m.getPar3() == -1) {
+            System.out.println("\nScegli uno slot in cui inserire la carta: " + m.getPar1() + ", " + m.getPar2());
+            while (true) {
+                try {
+                    choice = stdIn.nextInt();
+                    if (choice != m.getPar1() && choice != m.getPar2()) {
+                        System.err.println("\nInserisci un numero corretto.\n");
+                    } else break;
+                } catch (InputMismatchException e) {
+                    System.err.println("\nInserisci un numero.");
+                    stdIn.next();
                 }
-                Message returnMessage = new Message_One_Parameter_Int(MessageType.CHOSEN_SLOT, position, choice);
-                sendMessage(returnMessage);
-            } catch (IOException e) {
-                System.err.println("\nClient no longer connected to the Server");
-                disconnect();
-                System.exit(0);
             }
-        });
-        thread.start();
+        } else {
+            System.out.println("\nScegli uno slot in cui inserire la carta: " + m.getPar1() + ", " + m.getPar2()
+                    + ", " + m.getPar3());
+            while (true) {
+                try {
+                    choice = stdIn.nextInt();
+                    if (choice != m.getPar1() && choice != m.getPar2() && choice != m.getPar3()) {
+                        System.err.println("\nInserisci un numero corretto.\n");
+                    } else break;
+                } catch (InputMismatchException e) {
+                    System.err.println("\nInserisci un numero.");
+                    stdIn.next();
+                }
+            }
+        }
+        Message returnMessage = new Message_One_Parameter_Int(MessageType.CHOSEN_SLOT, position, choice);
+        sendMessage(returnMessage);
     }
 
-    private void card_remove_message(Message message){
+    private void card_remove_message(Message message) {
         Message_Four_Parameter_Int m = (Message_Four_Parameter_Int) message;
         System.out.println("\nLa carta nel mazzetto di riga: " + m.getPar1() + " e colonna: "
-        + m.getPar2() + " è stata rimossa.");
-        if(m.getPar3() == 1){
+                + m.getPar2() + " è stata rimossa.");
+        if (m.getPar3() == 1) {
             System.out.println("Il mazzetto ora è vuoto");
-        }
-        else
+        } else
             System.out.println("La nuova carta del mazzetto è: " + m.getPar4());
     }
 
-    private void resource_amount_message(Message message){
+    private void resource_amount_message(Message message) {
         Message_One_Resource_Two_Int m = (Message_One_Resource_Two_Int) message;
         System.out.println("\nIl giocatore " + m.getClientID() + " ha " + m.getPar1() + " "
                 + m.getResource() + " nel magazzino e " + m.getPar2() + " nel forziere");
     }
 
-    private void take_marble_message(Message message){
+    private void take_marble_message(Message message) throws IOException, InterruptedException {
         Message_ArrayList_Marble m = (Message_ArrayList_Marble) message;
         chose_marble(m.getMarbles());
     }
 
-    private void chose_marble(ArrayList<Marble> marbles){
+    private void chose_marble(ArrayList<Marble> marbles) throws IOException, InterruptedException {
         stdIn = new Scanner(new InputStreamReader(System.in));
-        Thread thread = new Thread(() -> {
+        Marble chosenMarble;
+        if (marbles.size() == 1) {
+            chosenMarble = marbles.remove(0);
+            currentState = CONTROLLER_STATES.END_TURN_STATE;
+            Message message = new Message_One_Parameter_Marble(MessageType.USE_MARBLE, position, chosenMarble);
+            sendMessage(message);
+            return;
+        }
+        System.out.println("Hai scelto queste biglie: ");
+        remainingMarbles = marbles;
+        for (int i = 1; i < marbles.size(); i++)
+            System.out.println(marbles.get(i).toString());
+        System.out.println("\nVuoi scambiare i tuoi depositi?\n1 - SI\n0 - NO");
+        int x = stdIn.nextInt();
+        if (x == 1) {
+            switch_depot();
+            return;
+        }
+        System.out.println("\nScegli una biglia:");
+        stdIn.next();
+        while (true) {
             try {
-                Marble chosenMarble;
-                System.out.println("Hai scelto queste biglie: ");
-                for (int i = 1; i < marbles.size(); i++)
-                    System.out.println(marbles.get(i).toString());
-                System.out.println("\nVuoi scambiare i tuoi depositi?\n1 - SI\n0 - NO");
-                int x = stdIn.nextInt();
-                if (x == 1) {
-                    switch_depot();
-                    return;
-                }
+                String choice = stdIn.nextLine();
+                chosenMarble = correct_marble(choice, marbles);
+                if (chosenMarble != null)
+                    break;
                 else
-                    stdIn.next();
-                if (marbles.size() == 1) {
-                    chosenMarble = marbles.remove(0);
-                    currentState = CONTROLLER_STATES.END_TURN_STATE;
-                } else {
-                    System.out.println("\nScegli una biglia:");
-                    while (true) {
-                        try {
-                            String choice = stdIn.nextLine();
-                            chosenMarble = correct_marble(choice, marbles);
-                            if (chosenMarble != null)
-                                break;
-                            else
-                                System.err.println("\nInserisci un valore corretto.\n");
-                        } catch (InputMismatchException e) {
-                            System.err.println("\nInserisci un valore corretto.\n");
-                            stdIn.next();
-                        }
-                    }
-                }
-                if (marbles.size() == 0)
-                    currentState = CONTROLLER_STATES.END_TURN_STATE;
-                else
-                    remainingMarbles = marbles;
-                Message message = new Message_One_Parameter_Marble(MessageType.USE_MARBLE, position, chosenMarble);
-                sendMessage(message);
-            } catch (IOException | InterruptedException e) {
-                System.err.println("\nClient no longer connected to the Server");
-                disconnect();
-                System.exit(0);
+                    System.err.println("\nInserisci un valore corretto.\n");
+            } catch (InputMismatchException e) {
+                System.err.println("\nInserisci un valore corretto.\n");
+                stdIn.next();
             }
-        });
-        thread.start();
+        }
+        if (marbles.size() == 0)
+            currentState = CONTROLLER_STATES.END_TURN_STATE;
+        else
+            remainingMarbles = marbles;
+        Message message = new Message_One_Parameter_Marble(MessageType.USE_MARBLE, position, chosenMarble);
+        sendMessage(message);
     }
 
     private Marble correct_marble(String input, ArrayList<Marble> marbles){
@@ -1122,39 +961,30 @@ public class ClientSocket {
         }
     }
 
-    private void white_conversion_card_message(Message message){
+    private void white_conversion_card_message(Message message) throws IOException {
         stdIn = new Scanner(new InputStreamReader(System.in));
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
         System.out.println("\nHai selezionato una biglia bianca e hai due possibili conversioni");
         System.out.println("\nScegli una tra queste carte leader:\n " + m.getPar1() + ", " + m.getPar2());
-        Thread thread = new Thread(() -> {
+        int choice;
+        while (true) {
             try {
-                int choice;
-                while (true) {
-                    try {
-                        choice = stdIn.nextInt();
-                        if (choice < 1 || choice > 2) {
-                            System.err.println("\nInserisci un numero corretto.\n");
-                        } else break;
-                    } catch (InputMismatchException e) {
-                        System.err.println("\nInserisci un numero.");
-                        stdIn.next();
-                    }
-                }
-                Message returnMessage;
-                if (choice == 1) {
-                    returnMessage = new Message_One_Parameter_Int(MessageType.WHITE_CONVERSION_CARD, position, m.getPar1());
-                } else {
-                    returnMessage = new Message_One_Parameter_Int(MessageType.WHITE_CONVERSION_CARD, position, m.getPar2());
-                }
-                sendMessage(returnMessage);
-            } catch (IOException e) {
-                System.err.println("\nClient no longer connected to the Server");
-                disconnect();
-                System.exit(0);
+                choice = stdIn.nextInt();
+                if (choice < 1 || choice > 2) {
+                    System.err.println("\nInserisci un numero corretto.\n");
+                } else break;
+            } catch (InputMismatchException e) {
+                System.err.println("\nInserisci un numero.");
+                stdIn.next();
             }
-        });
-        thread.start();
+        }
+        Message returnMessage;
+        if (choice == 1) {
+            returnMessage = new Message_One_Parameter_Int(MessageType.WHITE_CONVERSION_CARD, position, m.getPar1());
+        } else {
+            returnMessage = new Message_One_Parameter_Int(MessageType.WHITE_CONVERSION_CARD, position, m.getPar2());
+        }
+        sendMessage(returnMessage);
     }
 
     private void faith_points_message(Message message){
@@ -1252,32 +1082,23 @@ public class ClientSocket {
         }
     }
 
-    private void already_taken_nickName_error(){
+    private void already_taken_nickName_error() throws IOException {
         System.out.println("\nNickName già scelto");
         System.out.println("\nInserisci un nickName diverso:");
         stdIn = new Scanner(new InputStreamReader(System.in));
-        Thread thread = new Thread(() -> {
-            try {
-                String userInput = stdIn.nextLine();
-                while (true) {
-                    if (userInput == null) {
-                        System.err.println("\nInserisci un nickName valido");
-                        userInput = stdIn.nextLine();
-                    } else if (userInput.equals(nickName)) {
-                        System.err.println("\nNon puoi inserire lo stesso nickName");
-                        userInput = stdIn.nextLine();
-                    } else break;
-                }
-                nickName = userInput;
-                Message message = new Message_One_Parameter_String(MessageType.LOGIN, position, nickName);
-                sendMessage(message);
-            } catch (IOException e) {
-                System.err.println("\nClient no longer connected to the Server");
-                disconnect();
-                System.exit(0);
-            }
-        });
-        thread.start();
+        String userInput = stdIn.nextLine();
+        while (true) {
+            if (userInput == null) {
+                System.err.println("\nInserisci un nickName valido");
+                userInput = stdIn.nextLine();
+            } else if (userInput.equals(nickName)) {
+                System.err.println("\nNon puoi inserire lo stesso nickName");
+                userInput = stdIn.nextLine();
+            } else break;
+        }
+        nickName = userInput;
+        Message message = new Message_One_Parameter_String(MessageType.LOGIN, position, nickName);
+        sendMessage(message);
     }
 
     private void wrong_parameters_error() throws InterruptedException, IOException {
@@ -1294,36 +1115,27 @@ public class ClientSocket {
         System.err.println("\nNon è il tuo turno. Non puoi compiere questa azione adesso");
     }
 
-    private void empty_deck_error() {
+    private void empty_deck_error() throws IOException, InterruptedException {
         stdIn = new Scanner(new InputStreamReader(System.in));
         System.out.println("\nHai scelto un mazzetto vuoto");
         System.out.println("\nVuoi comprare una carta diversa?\n1 - SI\n0 - NO");
-        Thread thread = new Thread(() -> {
-            try {
-                try {
-                    int x = stdIn.nextInt();
-                    if (x == 1) {
-                        buy_card();
-                    } else
-                        chose_action(first_input());
-                } catch (InputMismatchException e) {
-                    chose_action(first_input());
-                }
-            } catch (InterruptedException | IOException e) {
-                System.err.println("\nClient no longer connected to the Server");
-                disconnect();
-                System.exit(0);
-            }
-        });
-        thread.start();
+        try {
+            int x = stdIn.nextInt();
+            if (x == 1) {
+                buy_card();
+            } else
+                chose_action(first_input());
+        } catch (InputMismatchException e) {
+            chose_action(first_input());
+        }
     }
 
-    private void empty_slot_error(){
+    private void empty_slot_error() throws IOException, InterruptedException {
         System.out.println("\nNon hai alcuna carta in questo slot");
         activate_another_production();
     }
 
-    private void wrong_power_error(){
+    private void wrong_power_error() throws IOException, InterruptedException {
         System.out.println("\nNon puoi attivare questa potere di produzione");
         activate_another_production();
     }
@@ -1336,30 +1148,21 @@ public class ClientSocket {
             lastInput();
     }
 
-    private void full_slot_error(){
+    private void full_slot_error() throws IOException, InterruptedException {
         stdIn = new Scanner(new InputStreamReader(System.in));
         System.out.println("\nNon puoi inserire questa carta in nessuno slot");
         System.out.println("\nVuoi comprare una carta diversa?\n1 - SI\n0 - NO");
-        Thread thread = new Thread(() -> {
-            try {
-                try {
-                    int x = stdIn.nextInt();
-                    if (x == 1) {
-                        buy_card();
-                    } else {
-                        chose_action(first_input());
-                        currentState = CONTROLLER_STATES.FIRST_ACTION_STATE;
-                    }
-                } catch (InputMismatchException e) {
-                    chose_action(first_input());
-                }
-            } catch (InterruptedException | IOException e) {
-                System.err.println("\nClient no longer connected to the Server");
-                disconnect();
-                System.exit(0);
+        try {
+            int x = stdIn.nextInt();
+            if (x == 1) {
+                buy_card();
+            } else {
+                chose_action(first_input());
+                currentState = CONTROLLER_STATES.FIRST_ACTION_STATE;
             }
-        });
-        thread.start();
+        } catch (InputMismatchException e) {
+            chose_action(first_input());
+        }
     }
 
     private void illegal_operation_error() throws IOException, InterruptedException {
@@ -1370,7 +1173,7 @@ public class ClientSocket {
             chose_action(first_input());
     }
 
-    private void impossible_switch_error(){
+    private void impossible_switch_error() throws IOException, InterruptedException {
         System.out.println("\nNon puoi scambiare questa depositi");
         chose_marble(remainingMarbles);
     }

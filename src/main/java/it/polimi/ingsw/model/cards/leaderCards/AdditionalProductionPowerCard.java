@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.cards.leaderCards;
 
 import it.polimi.ingsw.exceptions.InsufficientResourceException;
 
+import it.polimi.ingsw.exceptions.NoSuchProductionPowerException;
 import it.polimi.ingsw.model.player.Strongbox;
 import it.polimi.ingsw.model.player.Warehouse;
 import it.polimi.ingsw.model.resourceContainers.Cost;
@@ -30,7 +31,7 @@ public class AdditionalProductionPowerCard extends LeaderCard {
      */
     @Override
     public void decreaseProductionPowerResources(Warehouse w, Strongbox s, int choice)
-            throws InsufficientResourceException {
+            throws InsufficientResourceException, NoSuchProductionPowerException {
         if(this.isActive()) {
             if (choice == 1) {
                 if (w.decreaseResource(this.getResource(), 1) == 1) {
@@ -47,6 +48,8 @@ public class AdditionalProductionPowerCard extends LeaderCard {
              if both decreaseResource() @return 1 means player has 0 this.resource so throws InsufficientResourceException
              */
         }
+        else
+            throw new NoSuchProductionPowerException();
     }
 
     /**
@@ -59,7 +62,7 @@ public class AdditionalProductionPowerCard extends LeaderCard {
      * this method decrease by 1 this.resource and increase by 1 @param resource.
      */
     @Override
-    public int additionalProductionPower(Warehouse w, Strongbox s, int choice, Resource resource) throws InsufficientResourceException{
+    public int additionalProductionPower(Warehouse w, Strongbox s, int choice, Resource resource) throws InsufficientResourceException, NoSuchProductionPowerException {
         if(this.isActive()) {
             decreaseProductionPowerResources(w, s, choice);
             s.increaseResourceType(resource, 1);

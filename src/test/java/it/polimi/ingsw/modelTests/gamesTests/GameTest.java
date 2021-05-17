@@ -1011,7 +1011,7 @@ class GameTest {
 
         int winner = game.endGame();
 
-        assertSame("Luca", game.getPlayer(winner).getNickname());
+        assertSame(2, winner);
 
         Cost c1 = new Cost();
         Cost c2 = new Cost();
@@ -1034,6 +1034,6 @@ class GameTest {
 
         int winner2 = game.endGame();
 
-        assertSame("Antonio", game.getPlayer(winner2).getNickname());
+        assertSame(3, winner2);
     }
 }

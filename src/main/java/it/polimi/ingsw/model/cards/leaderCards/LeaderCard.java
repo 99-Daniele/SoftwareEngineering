@@ -103,8 +103,8 @@ public abstract class LeaderCard extends Card {
      * @return 0 in standard method.
      * this is the standard method of additionalProductionPower() which will be @Override by the specific card.
      */
-    public int additionalProductionPower(Warehouse w, Strongbox s, int choice, Resource resource) throws InsufficientResourceException{
-        return 0;
+    public int additionalProductionPower(Warehouse w, Strongbox s, int choice, Resource resource) throws InsufficientResourceException, NoSuchProductionPowerException {
+        throw new NoSuchProductionPowerException();
     }
 
     /**
@@ -114,7 +114,9 @@ public abstract class LeaderCard extends Card {
      * @throws InsufficientResourceException if player has not enough resources.
      * this is the standard method of decreaseProductionPowerResources() which will be @Override by the specific card.
      */
-    public void decreaseProductionPowerResources(Warehouse w, Strongbox s, int choice) throws InsufficientResourceException{}
+    public void decreaseProductionPowerResources(Warehouse w, Strongbox s, int choice) throws InsufficientResourceException, NoSuchProductionPowerException {
+        throw new NoSuchProductionPowerException();
+    }
 
     /**
      * @return false in standard method.
