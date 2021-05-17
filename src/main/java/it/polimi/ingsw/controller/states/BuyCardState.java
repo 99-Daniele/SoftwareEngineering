@@ -17,7 +17,10 @@ public class BuyCardState implements State_Controller{
 
     @Override
     public void nextState(ControllerGame controllerGame, MessageType wantedMessage) {
-        controllerGame.setCurrentState(new EndTurnState());
+        if(wantedMessage == MessageType.BUY_CARD)
+            controllerGame.setCurrentState(new FirstActionState());
+        else
+            controllerGame.setCurrentState(new EndTurnState());
     }
 
     @Override

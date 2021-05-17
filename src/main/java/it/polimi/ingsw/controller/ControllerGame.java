@@ -62,7 +62,6 @@ public class ControllerGame implements Observer {
         currentState = newState;
     }
 
-
     /**
      * @param view is the view that is added to the list of views in controllerGame and also added to the observers of game
      */
@@ -109,6 +108,7 @@ public class ControllerGame implements Observer {
             removeView(nickName, viewID);
             for (View view : views)
                 view.quit(nickName);
+            resetControllerGame();
         }
     }
 
@@ -354,7 +354,7 @@ public class ControllerGame implements Observer {
             throw new IllegalStateException();
         if(!currentState.isRightState(CONTROLLER_STATES.WAITING_PLAYERS_STATE))
             throw new IllegalStateException();
-        if(!InputController.already_chosen_resource_check(viewID, players))
+        if(InputController.already_chosen_resource_check(viewID, players))
             throw new IllegalStateException();
         Resource r = m.getResource();
         game.firstIncreaseWarehouse(r, viewID);
@@ -377,7 +377,7 @@ public class ControllerGame implements Observer {
             throw new IllegalStateException();
         if(!currentState.isRightState(CONTROLLER_STATES.WAITING_PLAYERS_STATE))
             throw new IllegalStateException();
-        if(!InputController.already_chosen_resource_check(viewID, players))
+        if(InputController.already_chosen_resource_check(viewID, players))
             throw new IllegalStateException();
         Resource r1 = m.getR1();
         Resource r2 = m.getR2();
@@ -402,12 +402,12 @@ public class ControllerGame implements Observer {
             throw new IllegalStateException();
         if (!InputController.buy_card_check(m))
             throw new WrongParametersException();
-        availableSlots = game.findAvailableSlots(m.getPar1(), m.getPar2());
+        int row = m.getPar1() -1;
+        int column = m.getPar2() -1;
+        availableSlots = game.findAvailableSlots(row, column);
         if (availableSlots.isEmpty()) {
             throw new ImpossibleDevelopmentCardAdditionException();
         }
-        int row = m.getPar1();
-        int column = m.getPar2();
         int choice = m.getPar3();
         if (availableSlots.size() == 1) {
             game.buyDevelopmentCardFromMarket(row, column, choice, availableSlots.get(0));
@@ -424,20 +424,25 @@ public class ControllerGame implements Observer {
     }
 
     public void chosenSlotHandler(Message message)
-            throws IllegalStateException, WrongParametersException, InsufficientResourceException, EmptyDevelopmentCardDeckException, ImpossibleDevelopmentCardAdditionException {
+            throws IllegalStateException, WrongParametersException, EmptyDevelopmentCardDeckException, ImpossibleDevelopmentCardAdditionException {
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
         int viewID = m.getClientID();
-        int chosenSlot = m.getClientID();
+        int chosenSlot = m.getPar();
         if (!currentState.isRightState(CONTROLLER_STATES.BUY_CARD_STATE))
             throw new IllegalStateException();
-        if (!currentState.getAvailableSlots().contains(chosenSlot))
+        if (!InputController.chosen_slot_check(chosenSlot, currentState.getAvailableSlots()))
             throw new WrongParametersException();
         int row = currentState.getRow();
         int column = currentState.getColumn();
         int choice = currentState.getChoice();
-        game.buyDevelopmentCardFromMarket(row, column, choice, chosenSlot);
-        currentState.nextState(this, MessageType.END_TURN);
-        views.get(viewID).ok();
+        try {
+            game.buyDevelopmentCardFromMarket(row, column, choice, chosenSlot);
+            currentState.nextState(this, MessageType.END_TURN);
+            views.get(viewID).ok();
+        } catch (InsufficientResourceException e) {
+            currentState.nextState(this, MessageType.BUY_CARD);
+            errorHandler(ErrorType.NOT_ENOUGH_RESOURCES, viewID);
+        }
     }
 
     public void takeMarbleHandler(Message message) throws IllegalStateException, WrongParametersException {
@@ -516,7 +521,7 @@ public class ControllerGame implements Observer {
     }
 
     public void developmentCardPowerHandler(Message message)
-            throws InsufficientResourceException, IllegalStateException, WrongParametersException {
+            throws IllegalStateException, WrongParametersException, InsufficientResourceException {
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
         int viewID = m.getClientID();
         int chosenSlot = m.getPar1();

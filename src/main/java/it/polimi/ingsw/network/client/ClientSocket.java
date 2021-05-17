@@ -463,7 +463,6 @@ public class ClientSocket {
                 System.out.println("Sei il giocatore in posizione 2. Hai diritto a 1 risorsa.\nScegli la risorsa:");
                 Resource r = chose_resource();
                 Message message = new Message_One_Int_One_Resource(MessageType.ONE_FIRST_RESOURCE, position, r, 1);
-                System.out.println("In attesa che tutti i giocatori facciano le proprie scelte...");
                 sendMessage(message);
             }
             break;
@@ -471,15 +470,14 @@ public class ClientSocket {
                 System.out.println("Sei il giocatore in posizione 2. Hai diritto a 1 risorsa e 1 punto fede.\nScegli la risorsa:");
                 Resource r = chose_resource();
                 Message message = new Message_One_Int_One_Resource(MessageType.ONE_FIRST_RESOURCE, position, r, 1);
-                System.out.println("In attesa che tutti i giocatori facciano le proprie scelte...");
                 sendMessage(message);
             }
+            break;
             case 3: {
                 System.out.println("Sei il giocatore in posizione 4. Hai diritto a 2 risorse e 1 punto fede.\nScegli le risorse:");
                 Resource r1 = chose_resource();
                 Resource r2 = chose_resource();
                 Message message = new Message_Two_Resource(MessageType.TWO_FIRST_RESOURCE, position, r1, r2);
-                System.out.println("In attesa che tutti i giocatori facciano le proprie scelte...");
                 sendMessage(message);
             }
             break;
@@ -488,7 +486,7 @@ public class ClientSocket {
     }
 
     private Resource chose_resource() {
-        Resource chosenResource;
+        Resource chosenResource = null;
         int x;
         stdIn = new Scanner(new InputStreamReader(System.in));
         System.out.println("\n1 - MONETA\n2 - SCUDO\n3 - ROCCIA\n4 - SERVO");
@@ -508,15 +506,16 @@ public class ClientSocket {
         switch (x) {
             case 1:
                 chosenResource = Resource.COIN;
+                break;
             case 2:
                 chosenResource = Resource.SHIELD;
+                break;
             case 3:
                 chosenResource = Resource.STONE;
+                break;
             case 4:
                 chosenResource = Resource.SERVANT;
                 break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + x);
         }
         return chosenResource;
     }
@@ -1032,7 +1031,7 @@ public class ClientSocket {
 
     private void quit_message(Message message){
         Message_One_Parameter_String m = (Message_One_Parameter_String) message;
-        if(startGame == 0) {
+        if(startGame == 2) {
             System.out.println("\nIl giocatore " + m.getPar() + " si è disconnesso. La partita è finita.");
             disconnect();
             System.exit(1);
@@ -1139,8 +1138,10 @@ public class ClientSocket {
             int x = stdIn.nextInt();
             if (x == 1) {
                 buy_card();
-            } else
+            } else {
+                currentState = CONTROLLER_STATES.FIRST_ACTION_STATE;
                 chose_action(first_input());
+            }
         } catch (InputMismatchException e) {
             chose_action(first_input());
         }
@@ -1160,8 +1161,10 @@ public class ClientSocket {
         System.out.println("\nNon hai abbastanza carte per attivare questa carta leader");
         if(currentState == CONTROLLER_STATES.FIRST_ACTION_STATE)
             chose_action(first_input());
-        else
+        else{
+            currentState = CONTROLLER_STATES.END_TURN_STATE;
             lastInput();
+        }
     }
 
     private void full_slot_error() throws IOException, InterruptedException {
@@ -1185,8 +1188,10 @@ public class ClientSocket {
         System.out.println("\nNon puoi eseguire questa azione in questo momento");
         if(currentState == CONTROLLER_STATES.ACTIVATE_PRODUCTION_STATE)
             activate_another_production();
-        else
+        else{
+            currentState = CONTROLLER_STATES.FIRST_ACTION_STATE;
             chose_action(first_input());
+        }
     }
 
     private void impossible_switch_error() throws IOException, InterruptedException {
@@ -1198,24 +1203,30 @@ public class ClientSocket {
         System.out.println("\nNon hai abbastanza risorse per effettuare questa operazione");
         if(currentState == CONTROLLER_STATES.ACTIVATE_PRODUCTION_STATE)
             activate_another_production();
-        else
+        else{
+            currentState = CONTROLLER_STATES.FIRST_ACTION_STATE;
             chose_action(first_input());
+        }
     }
 
     private void already_active_error() throws IOException, InterruptedException {
         System.out.println("\nHai già attivato questa carta in precedenza");
         if(currentState == CONTROLLER_STATES.FIRST_ACTION_STATE)
             chose_action(first_input());
-        else
+        else{
+            currentState = CONTROLLER_STATES.END_TURN_STATE;
             lastInput();
+        }
     }
 
     private void already_discard_error() throws InterruptedException, IOException {
         System.out.println("\nHai già scartato questa carta in precedenza");
         if(currentState == CONTROLLER_STATES.FIRST_ACTION_STATE)
             chose_action(first_input());
-        else
+        else{
+            currentState = CONTROLLER_STATES.END_TURN_STATE;
             lastInput();
+        }
     }
 
     /**
@@ -1244,6 +1255,8 @@ public class ClientSocket {
      * close inputStream, outputStream and socket connection with Server.
      */
     private void disconnect() {
+        threadOut.interrupt();
+        connectedThread.interrupt();
         try {
             in.close();
             out.close();

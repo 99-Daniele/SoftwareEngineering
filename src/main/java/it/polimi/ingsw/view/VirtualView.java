@@ -53,6 +53,7 @@ public class VirtualView extends Observable implements View, Observer{
     public void join() throws InterruptedException, IOException {
         pingThread.join();
         inThread.join();
+        disconnect();
     }
 
     @Override

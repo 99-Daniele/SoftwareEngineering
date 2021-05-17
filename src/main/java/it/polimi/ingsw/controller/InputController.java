@@ -74,6 +74,10 @@ public class InputController {
         } else return warehouse == 0 || warehouse == 1;
     }
 
+    public static boolean chosen_slot_check(int chosenSlot, ArrayList<Integer> slots){
+        return slots.contains(chosenSlot);
+    }
+
     public static boolean development_card_power_check(Message_Two_Parameter_Int developmentCardPowerMessage) {
         int chosenSlot = developmentCardPowerMessage.getPar1();
         int warehouse = developmentCardPowerMessage.getPar2();

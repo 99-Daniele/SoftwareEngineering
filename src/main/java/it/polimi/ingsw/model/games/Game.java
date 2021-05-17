@@ -116,6 +116,8 @@ public class Game extends Observable implements LightGame{
             if (player.getNickname().equals(nickName))
                 quitPlayer = player;
         }
+        if(quitPlayer == null)
+            return;
         try {
             players.remove(quitPlayer);
             Message m = new Message_One_Parameter_String(MessageType.QUIT, 0, quitPlayer.getNickname());
@@ -267,8 +269,10 @@ public class Game extends Observable implements LightGame{
             Message message_two_parameter_int=new Message_Two_Parameter_Int(MessageType.SWITCH_DEPOT,4, 1,2);
             setChanged();
             notifyObservers(message_two_parameter_int);
+            message_one_int_one_resource=new Message_One_Int_One_Resource(MessageType.INCREASE_WAREHOUSE,4, resource2, 1);
         }
-        message_one_int_one_resource=new Message_One_Int_One_Resource(MessageType.INCREASE_WAREHOUSE,4, resource2, 1);
+        else
+            message_one_int_one_resource=new Message_One_Int_One_Resource(MessageType.INCREASE_WAREHOUSE,4, resource2, 2);
         players.get(3).increaseWarehouse(resource2);
         setChanged();
         notifyObservers(message_one_int_one_resource);
