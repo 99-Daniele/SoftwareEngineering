@@ -117,7 +117,7 @@ class CostTest {
         c.addResource(r1, 1);
         c.addResource(r2, 2);
 
-        assertTrue(w.increaseResource(r1));
+        assertTrue(w.increaseResource(r1) == 0);
         s.increaseResourceType(r1, 2);
         s.increaseResourceType(r2, 1);
 

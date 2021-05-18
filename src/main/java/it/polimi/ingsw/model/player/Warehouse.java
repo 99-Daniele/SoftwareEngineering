@@ -111,30 +111,37 @@ public class Warehouse{
 
     /**
      * @param resource stands for the type of resource to increase by 1 in warehouseDepots.
-     * @return true if @param resource is correctly increased, otherwise @return false.
+     * @return in which depot @param resource is increased, otherwise @return -1.
      * the method increases in the correct WarehouseDepot, otherwise in the first empty WarehouseDepot.
      */
-    private boolean increaseWarehouseDepot(Resource resource){
+    private int increaseWarehouseDepot(Resource resource){
         int pos = getDepotPosition(resource);
         if (pos == -1) {
             pos = emptyDepotPosition();
             if (pos == -1) {
-                return false;
+                return -1;
                 /*
                  if there is no WarehouseDepot with @param resource and there is no empty
-                 WarehouseDepot @return false.
+                 WarehouseDepot @return -1.
                  */
             }
             else {
                 warehouseDepots[pos].setResource(resource);
-                return (warehouseDepots[pos].increaseAmount());
+                if(warehouseDepots[pos].increaseAmount())
+                    return pos;
+                else
+                    return -1;
                 /*
                  if there is no WarehouseDepot in warehouseDepots with @param resource, but there is at least 1 empty
                  WarehouseDepot, find it, set the resource and @return increaseAmount().
                  */
             }
         } else {
-            return (warehouseDepots[pos].increaseAmount());
+            warehouseDepots[pos].setResource(resource);
+            if(warehouseDepots[pos].increaseAmount())
+                return pos;
+            else
+                return -1;
             /*
              if there is a WarehouseDepot in warehouseDepots with @param resource, find it and @return increaseAmount().
              */
@@ -143,17 +150,17 @@ public class Warehouse{
 
     /**
      * @param resource stands for the type of resource to increase by 1 in Warehouse.
-     * @return true if @param resource is correctly increased, otherwise @return false.
+     * @return in which depot @param resource is increased, otherwise @return -1.
      * the method increases in the correct ExtraDepot, otherwise in the correct WarehouseDepot,
      * otherwise in the first empty WarehouseDepot.
      */
-    public boolean increaseResource(Resource resource) {
+    public int increaseResource(Resource resource) {
         if (existExtraDepot()) {
-            for (ExtraDepot extraDepot : extraDepots) {
-                if (extraDepot.getResource() == resource) {
-                    if (!extraDepot.increaseAmount())
+            for (int i = 0; i < extraDepots.size(); i++) {
+                if (extraDepots.get(i).getResource() == resource) {
+                    if (!extraDepots.get(i).increaseAmount())
                         return increaseWarehouseDepot(resource);
-                    return true;
+                    return i + 3;
                 }
             }
             /*

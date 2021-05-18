@@ -17,10 +17,7 @@ import it.polimi.ingsw.parser.CardMap;
 import it.polimi.ingsw.view.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 
 public class ControllerGame implements Observer {
 

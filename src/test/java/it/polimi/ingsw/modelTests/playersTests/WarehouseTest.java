@@ -61,10 +61,10 @@ public class WarehouseTest {
         assertEquals(0, w.getNumOfResource(r3));
         assertEquals(0, w.getNumOfResource(r4));
 
-        assertTrue(w.increaseResource(r1));
-        assertTrue(w.increaseResource(r2));
-        assertTrue(w.increaseResource(r3));
-        assertFalse(w.increaseResource(r4));
+        assertEquals(w.increaseResource(r1), 0);
+        assertEquals(w.increaseResource(r2), 1);
+        assertEquals(w.increaseResource(r3), 2);
+        assertEquals(-1, w.increaseResource(r4));
         assertEquals(1, w.getNumOfResource(r1));
         assertEquals(1, w.getNumOfResource(r2));
         assertEquals(1, w.getNumOfResource(r3));
@@ -91,10 +91,10 @@ public class WarehouseTest {
         assertEquals(0, w.getNumOfResource(r3));
         assertEquals(0, w.getNumOfResource(r4));
 
-        assertTrue(w.increaseResource(r1));
-        assertTrue(w.increaseResource(r2));
-        assertTrue(w.increaseResource(r3));
-        assertTrue(w.increaseResource(r4));
+        assertEquals(w.increaseResource(r1), 3);
+        assertEquals(w.increaseResource(r2), 4);
+        assertEquals(w.increaseResource(r3), 0);
+        assertEquals(w.increaseResource(r4), 1);
 
         assertEquals(1, w.getNumOfResource(r1));
         assertEquals(1, w.getNumOfResource(r2));
@@ -162,22 +162,22 @@ public class WarehouseTest {
         Warehouse w = new Warehouse();
         assertFalse(w.existExtraDepot());
 
-        assertTrue(w.increaseResource(r1));
-        assertFalse(w.increaseResource(r1));
+        assertEquals(w.increaseResource(r1), 0);
+        assertEquals(-1, w.increaseResource(r1));
         assertEquals(1, w.getNumOfResource(r1));
 
-        assertTrue(w.increaseResource(r2));
-        assertTrue(w.increaseResource(r2));
-        assertFalse(w.increaseResource(r2));
+        assertEquals(w.increaseResource(r2), 1);
+        assertEquals(w.increaseResource(r2), 1);
+        assertEquals(w.increaseResource(r2), -1);
         assertEquals(2, w.getNumOfResource(r2));
 
-        assertTrue(w.increaseResource(r3));
-        assertTrue(w.increaseResource(r3));
-        assertTrue(w.increaseResource(r3));
-        assertFalse(w.increaseResource(r3));
+        assertEquals(w.increaseResource(r3), 2);
+        assertEquals(w.increaseResource(r3), 2);
+        assertEquals(w.increaseResource(r3), 2);
+        assertEquals(-1, w.increaseResource(r3));
         assertEquals(3, w.getNumOfResource(r3));
 
-        assertFalse(w.increaseResource(r4));
+        assertEquals(-1, w.increaseResource(r4));
         /*
          increaseResource(r4) @return false because there are already 3 different type of resource in the Warehouse
          */
@@ -193,41 +193,41 @@ public class WarehouseTest {
 
         assertFalse(w.existExtraDepot());
 
-        assertTrue(w.increaseResource(r1));
-        assertFalse(w.increaseResource(r1));
+        assertEquals(w.increaseResource(r1), 0);
+        assertEquals(-1, w.increaseResource(r1));
         assertEquals(1, w.getNumOfResource(r1));
 
         w.addExtraDepot(r1);
         assertTrue(w.existExtraDepot());
 
-        assertTrue(w.increaseResource(r1));
-        assertTrue(w.increaseResource(r1));
-        assertFalse(w.increaseResource(r1));
+        assertEquals(w.increaseResource(r1), 3);
+        assertEquals(w.increaseResource(r1), 3);
+        assertEquals(-1, w.increaseResource(r1));
         assertEquals(3, w.getNumOfResource(r1));
         /*
          1 r1 is first in WarehouseDepot, 2 r1 are in ExtraDepot
          */
 
         w.addExtraDepot(r2);
-        assertTrue(w.increaseResource(r2));
-        assertTrue(w.increaseResource(r2));
+        assertEquals(w.increaseResource(r2), 4);
+        assertEquals(w.increaseResource(r2), 4);
         assertEquals(2, w.getNumOfResource(r2));
         /*
          2 r2 are in ExtraDepot
          */
 
-        assertTrue(w.increaseResource(r3));
-        assertTrue(w.increaseResource(r3));
-        assertFalse(w.increaseResource(r3));
+        assertEquals(w.increaseResource(r3), 1);
+        assertEquals(w.increaseResource(r3), 1);
+        assertEquals(-1, w.increaseResource(r3));
         assertEquals(2, w.getNumOfResource(r3));
 
-        assertTrue(w.increaseResource(r4));
-        assertTrue(w.increaseResource(r4));
-        assertTrue(w.increaseResource(r4));
-        assertFalse(w.increaseResource(r4));
+        assertEquals(w.increaseResource(r4), 2);
+        assertEquals(w.increaseResource(r4), 2);
+        assertEquals(w.increaseResource(r4), 2);
+        assertEquals(-1, w.increaseResource(r4));
         assertEquals(3, w.getNumOfResource(r4));
 
-        assertFalse(w.increaseResource(r2));
+        assertEquals(-1, w.increaseResource(r2));
         /*
          increaseResource(r2) @return false because there are already 3 different type of resource  in the Warehouse
          */
@@ -245,12 +245,12 @@ public class WarehouseTest {
 
         assertEquals(0, w.decreaseResource(r1, 0));
 
-        assertTrue(w.increaseResource(r1));
-        assertTrue(w.increaseResource(r2));
-        assertTrue(w.increaseResource(r2));
-        assertTrue(w.increaseResource(r3));
-        assertTrue(w.increaseResource(r3));
-        assertTrue(w.increaseResource(r3));
+        assertEquals(w.increaseResource(r1), 0);
+        assertEquals(w.increaseResource(r2), 1);
+        assertEquals(w.increaseResource(r2), 1);
+        assertEquals(w.increaseResource(r3), 2);
+        assertEquals(w.increaseResource(r3), 2);
+        assertEquals(w.increaseResource(r3), 2);
         assertEquals(1, w.getNumOfResource(r1));
         assertEquals(2, w.getNumOfResource(r2));
         assertEquals(3, w.getNumOfResource(r3));
@@ -295,16 +295,16 @@ public class WarehouseTest {
 
         w.addExtraDepot(r1);
         w.addExtraDepot(r2);
-        assertTrue(w.increaseResource(r1));
-        assertTrue(w.increaseResource(r1));
-        assertTrue(w.increaseResource(r1));
-        assertTrue(w.increaseResource(r2));
-        assertTrue(w.increaseResource(r2));
-        assertTrue(w.increaseResource(r3));
-        assertTrue(w.increaseResource(r3));
-        assertTrue(w.increaseResource(r4));
-        assertTrue(w.increaseResource(r4));
-        assertTrue(w.increaseResource(r4));
+        assertEquals(w.increaseResource(r1), 3);
+        assertEquals(w.increaseResource(r1), 3);
+        assertEquals(w.increaseResource(r1), 0);
+        assertEquals(w.increaseResource(r2), 4);
+        assertEquals(w.increaseResource(r2), 4);
+        assertEquals(w.increaseResource(r3), 1);
+        assertEquals(w.increaseResource(r3), 1);
+        assertEquals(w.increaseResource(r4), 2);
+        assertEquals(w.increaseResource(r4), 2);
+        assertEquals(w.increaseResource(r4), 2);
 
         assertEquals(3, w.getNumOfResource(r1));
         /*
@@ -376,9 +376,9 @@ public class WarehouseTest {
 
         Warehouse w = new Warehouse();
 
-        assertTrue(w.increaseResource(r1));
-        assertTrue(w.increaseResource(r2));
-        assertTrue(w.increaseResource(r2));
+        assertEquals(w.increaseResource(r1), 0);
+        assertEquals(w.increaseResource(r2), 1);
+        assertEquals(w.increaseResource(r2), 1);
 
         ImpossibleSwitchDepotException thrown =
                 assertThrows(ImpossibleSwitchDepotException.class, () -> w.switchDepots(0, 1));
@@ -397,8 +397,8 @@ public class WarehouseTest {
 
         w.addExtraDepot(r1);
         w.addExtraDepot(r2);
-        assertTrue(w.increaseResource(r1));
-        assertTrue(w.increaseResource(r2));
+        assertEquals(w.increaseResource(r1), 3);
+        assertEquals(w.increaseResource(r2), 4);
 
         ImpossibleSwitchDepotException thrown =
                 assertThrows(ImpossibleSwitchDepotException.class, () -> w.switchDepots(3, 4));
@@ -416,9 +416,9 @@ public class WarehouseTest {
 
         Warehouse w = new Warehouse();
 
-        assertTrue(w.increaseResource(r1));
+        assertEquals(w.increaseResource(r1), 0);
         w.addExtraDepot(r1);
-        assertTrue(w.increaseResource(r1));
+        assertEquals(w.increaseResource(r1), 3);
         /*
          1 r1 is in first WarehouseDepot, 1 r1 in ExtraDepot
          */
@@ -440,8 +440,8 @@ public class WarehouseTest {
         Warehouse w = new Warehouse();
 
         w.addExtraDepot(r1);
-        assertTrue(w.increaseResource(r1));
-        assertTrue(w.increaseResource(r1));
+        assertEquals(w.increaseResource(r1), 3);
+        assertEquals(w.increaseResource(r1), 3);
 
         ImpossibleSwitchDepotException thrown =
                 assertThrows(ImpossibleSwitchDepotException.class, () -> w.switchDepots(0, 3));
@@ -458,9 +458,9 @@ public class WarehouseTest {
 
         Warehouse w = new Warehouse();
 
-        assertTrue(w.increaseResource(r1));
+        assertEquals(w.increaseResource(r1), 0);
         w.addExtraDepot(r2);
-        assertTrue(w.increaseResource(r2));
+        assertEquals(w.increaseResource(r2), 3);
 
         ImpossibleSwitchDepotException thrown =
                 assertThrows(ImpossibleSwitchDepotException.class, () -> w.switchDepots(0, 3));
@@ -478,15 +478,15 @@ public class WarehouseTest {
 
         Warehouse w = new Warehouse();
 
-        assertTrue(w.increaseResource(r1));
+        assertEquals(w.increaseResource(r1), 0);
         w.addExtraDepot(r2);
-        assertTrue(w.increaseResource(r2));
-        assertTrue(w.increaseResource(r2));
-        assertTrue(w.increaseResource(r3));
-        assertTrue(w.increaseResource(r3));
-        assertTrue(w.increaseResource(r2));
-        assertTrue(w.increaseResource(r2));
-        assertTrue(w.increaseResource(r2));
+        assertEquals(w.increaseResource(r2), 3);
+        assertEquals(w.increaseResource(r2), 3);
+        assertEquals(w.increaseResource(r3), 1);
+        assertEquals(w.increaseResource(r3), 1);
+        assertEquals(w.increaseResource(r2), 2);
+        assertEquals(w.increaseResource(r2), 2);
+        assertEquals(w.increaseResource(r2), 2);
         /*
          ExtraDepot has 2 r2, third WarehouseDepot has 3 r2
          */
@@ -509,8 +509,8 @@ public class WarehouseTest {
 
         assertFalse(w.existExtraDepot());
 
-        assertTrue(w.increaseResource(r1));
-        assertFalse(w.increaseResource(r1));
+        assertEquals(w.increaseResource(r1), 0);
+        assertEquals(-1, w.increaseResource(r1));
         assertEquals(1, w.getNumOfResource(r1));
 
         w.switchDepots(0, 1);
@@ -518,21 +518,21 @@ public class WarehouseTest {
         w.switchDepots(0, 2);
         assertEquals(1, w.getNumOfResource(r1));
 
-        assertTrue(w.increaseResource(r2));
-        assertFalse(w.increaseResource(r1));
+        assertEquals(w.increaseResource(r2), 1);
+        assertEquals(-1, w.increaseResource(r1));
         assertEquals(1, w.getNumOfResource(r1));
         assertEquals(1, w.getNumOfResource(r2));
 
         w.switchDepots(0, 1);
-        assertTrue(w.increaseResource(r1));
-        assertFalse(w.increaseResource(r2));
+        assertEquals(w.increaseResource(r1), 1);
+        assertEquals(-1, w.increaseResource(r2));
         assertEquals(2, w.getNumOfResource(r1));
         assertEquals(1, w.getNumOfResource(r2));
 
-        assertTrue(w.increaseResource(r3));
+        assertEquals(w.increaseResource(r3), 2);
         w.switchDepots(0, 2);
-        assertTrue(w.increaseResource(r2));
-        assertFalse(w.increaseResource(r3));
+        assertEquals(w.increaseResource(r2), 2);
+        assertEquals(-1, w.increaseResource(r3));
         assertEquals(2, w.getNumOfResource(r1));
         assertEquals(2, w.getNumOfResource(r2));
         assertEquals(1, w.getNumOfResource(r3));
@@ -548,24 +548,24 @@ public class WarehouseTest {
 
         assertFalse(w.existExtraDepot());
 
-        assertTrue(w.increaseResource(r1));
-        assertFalse(w.increaseResource(r1));
+        assertEquals(w.increaseResource(r1), 0);
+        assertEquals(-1, w.increaseResource(r1));
         assertEquals(1, w.getNumOfResource(r1));
         w.addExtraDepot(r1);
         w.addExtraDepot(r2);
         assertTrue(w.existExtraDepot());
 
-        assertTrue(w.increaseResource(r1));
+        assertEquals(w.increaseResource(r1), 3);
         w.switchDepots(0, 3);
         assertEquals(2, w.getNumOfResource(r1));
-        assertTrue(w.increaseResource(r2));
+        assertEquals(w.increaseResource(r2), 4);
         w.switchDepots(1, 4);
 
-        assertTrue(w.increaseResource(r1));
-        assertFalse(w.increaseResource(r1));
+        assertEquals(w.increaseResource(r1), 3);
+        assertEquals(-1, w.increaseResource(r1));
         assertEquals(3, w.getNumOfResource(r1));
         w.switchDepots(0, 1);
-        assertTrue(w.increaseResource(r1));
+        assertEquals(w.increaseResource(r1), 1);
         assertEquals(4, w.getNumOfResource(r1));
     }
 
@@ -577,40 +577,40 @@ public class WarehouseTest {
 
         Warehouse w = new Warehouse();
 
-        assertTrue(w.increaseResource(r1));
-        assertFalse(w.increaseResource(r1));
+        assertEquals(w.increaseResource(r1), 0);
+        assertEquals(-1, w.increaseResource(r1));
         w.switchDepots(0, 1);
         assertEquals(1, w.getNumOfResource(r1));
 
-        assertTrue(w.increaseResource(r1));
+        assertEquals(w.increaseResource(r1), 1);
         assertEquals(2, w.getNumOfResource(r1));
-        assertTrue(w.increaseResource(r2));
-        assertFalse(w.increaseResource(r2));
+        assertEquals(w.increaseResource(r2), 0);
+        assertEquals(-1, w.increaseResource(r2));
         assertEquals(1, w.getNumOfResource(r2));
 
         w.switchDepots(0, 2);
-        assertTrue(w.increaseResource(r2));
+        assertEquals(w.increaseResource(r2), 2);
         assertEquals(2, w.getNumOfResource(r2));
 
-        assertFalse(w.increaseResource(r1));
+        assertEquals(-1, w.increaseResource(r1));
         w.switchDepots(1, 2);
-        assertTrue(w.increaseResource(r1));
+        assertEquals(w.increaseResource(r1), 2);
 
-        assertTrue(w.increaseResource(r3));
-        assertFalse(w.increaseResource(r3));
-        assertFalse(w.increaseResource(r4));
+        assertEquals(w.increaseResource(r3), 0);
+        assertEquals(-1, w.increaseResource(r3));
+        assertEquals(-1, w.increaseResource(r4));
 
         assertEquals(3, w.decreaseResource(r2, 5));
-        assertTrue(w.increaseResource(r4));
+        assertEquals(w.increaseResource(r4), 1);
         w.switchDepots(0, 1);
-        assertTrue(w.increaseResource(r3));
+        assertEquals(w.increaseResource(r3), 1);
 
-        assertFalse(w.increaseResource(r4));
+        assertEquals(-1, w.increaseResource(r4));
         w.addExtraDepot(r4);
         w.switchDepots(0, 3);
 
-        assertTrue(w.increaseResource(r4));
-        assertTrue(w.increaseResource(r2));
+        assertEquals(w.increaseResource(r4), 3);
+        assertEquals(w.increaseResource(r2), 0);
         assertEquals(0, w.decreaseResource(r1, 2));
 
         assertEquals(1, w.getNumOfResource(r1));
@@ -628,10 +628,10 @@ public class WarehouseTest {
         Warehouse w1 = new Warehouse();
         Warehouse w2;
 
-        assertTrue(w1.increaseResource(r1));
-        assertTrue(w1.increaseResource(r2));
-        assertTrue(w1.increaseResource(r2));
-        assertTrue(w1.increaseResource(r3));
+        assertEquals(w1.increaseResource(r1), 0);
+        assertEquals(w1.increaseResource(r2), 1);
+        assertEquals(w1.increaseResource(r2), 1);
+        assertEquals(w1.increaseResource(r3), 2);
         assertEquals(1, w1.getNumOfResource(r1));
         assertEquals(2, w1.getNumOfResource(r2));
         assertEquals(1, w1.getNumOfResource(r3));
@@ -641,13 +641,13 @@ public class WarehouseTest {
         assertEquals(2, w2.getNumOfResource(r2));
         assertEquals(1, w1.getNumOfResource(r3));
 
-        assertTrue(w1.increaseResource(r3));
+        assertEquals(w1.increaseResource(r3), 2);
         assertEquals(2, w1.getNumOfResource(r3));
         assertEquals(1, w2.getNumOfResource(r3));
 
         assertEquals(0, w2.decreaseResource(r3, 1));
-        assertFalse(w1.increaseResource(r4));
-        assertTrue(w2.increaseResource(r4));
+        assertEquals(-1, w1.increaseResource(r4));
+        assertEquals(w2.increaseResource(r4), 2);
         assertEquals(0, w1.getNumOfResource(r4));
         assertEquals(1, w2.getNumOfResource(r4));
 
@@ -662,15 +662,15 @@ public class WarehouseTest {
         Warehouse w1 = new Warehouse();
         Warehouse w2;
 
-        assertTrue(w1.increaseResource(r1));
-        assertFalse(w1.increaseResource(r1));
+        assertEquals(w1.increaseResource(r1), 0);
+        assertEquals(-1, w1.increaseResource(r1));
         w1.addExtraDepot(r1);
         w1.addExtraDepot(r2);
-        assertTrue(w1.increaseResource(r1));
-        assertTrue(w1.increaseResource(r2));
-        assertTrue(w1.increaseResource(r2));
-        assertTrue(w1.increaseResource(r3));
-        assertTrue(w1.increaseResource(r4));
+        assertEquals(w1.increaseResource(r1), 3);
+        assertEquals(w1.increaseResource(r2), 4);
+        assertEquals(w1.increaseResource(r2), 4);
+        assertEquals(w1.increaseResource(r3), 1);
+        assertEquals(w1.increaseResource(r4), 2);
         assertEquals(2, w1.getNumOfResource(r1));
         assertEquals(2, w1.getNumOfResource(r2));
         assertEquals(1, w1.getNumOfResource(r3));
@@ -682,9 +682,9 @@ public class WarehouseTest {
         assertEquals(1, w2.getNumOfResource(r3));
         assertEquals(1, w2.getNumOfResource(r4));
 
-        assertFalse(w1.increaseResource(r2));
-        assertFalse(w2.increaseResource(r2));
-        assertTrue(w2.increaseResource(r1));
+        assertEquals(-1, w1.increaseResource(r2));
+        assertEquals(-1, w2.increaseResource(r2));
+        assertEquals(w2.increaseResource(r1), 3);
         assertEquals(2, w1.getNumOfResource(r1));
         assertEquals(3, w2.getNumOfResource(r1));
     }
@@ -699,14 +699,14 @@ public class WarehouseTest {
 
         w.addExtraDepot(r1);
         w.addExtraDepot(r2);
-        assertTrue(w.increaseResource(r1));
-        assertTrue(w.increaseResource(r1));
-        assertTrue(w.increaseResource(r3));
-        assertTrue(w.increaseResource(r1));
-        assertTrue(w.increaseResource(r1));
-        assertTrue(w.increaseResource(r2));
-        assertTrue(w.increaseResource(r4));
-        assertTrue(w.increaseResource(r4));
+        assertEquals(w.increaseResource(r1), 3);
+        assertEquals(w.increaseResource(r1), 3);
+        assertEquals(w.increaseResource(r3), 0);
+        assertEquals(w.increaseResource(r1), 1);
+        assertEquals(w.increaseResource(r1), 1);
+        assertEquals(w.increaseResource(r2), 4);
+        assertEquals(w.increaseResource(r4), 2);
+        assertEquals(w.increaseResource(r4), 2);
 
         assertEquals(4, w.getNumOfResource(r1));
         assertEquals(1, w.getNumOfResource(r2));
@@ -715,7 +715,7 @@ public class WarehouseTest {
 
         assertEquals(8, w.sumWarehouseResource());
 
-        assertTrue(w.increaseResource(r4));
+        assertEquals(w.increaseResource(r4), 2);
         assertEquals(9, w.sumWarehouseResource());
 
         assertEquals(0, w.decreaseResource(r1, 3));

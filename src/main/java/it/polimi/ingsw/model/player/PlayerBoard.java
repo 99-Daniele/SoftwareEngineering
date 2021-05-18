@@ -61,7 +61,7 @@ public class PlayerBoard extends SimplePlayerBoard{
      * @param resource stands for the type of resource to increase by 1 in Warehouse.
      * @return false if @param resource has to be discarded.
      */
-    public boolean increaseWarehouse(Resource resource){
+    public int increaseWarehouse(Resource resource){
         return warehouse.increaseResource(resource);
     }
 

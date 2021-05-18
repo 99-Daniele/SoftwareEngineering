@@ -39,12 +39,14 @@ public class ClientSocket {
     private CONTROLLER_STATES currentState;
     private ArrayList<Marble> remainingMarbles = new ArrayList<>();
     private final Object pingLock = new Object();
+    private boolean connected;
 
     public ClientSocket(Socket socket) throws IOException {
         this.out = new ObjectOutputStream(socket.getOutputStream());
         this.in = new ObjectInputStream(socket.getInputStream());
         this.startGame = 0;
         this.position = 0;
+        this.connected = true;
         currentState = CONTROLLER_STATES.WAITING_PLAYERS_STATE;
     }
 
@@ -60,9 +62,12 @@ public class ClientSocket {
                 try {
                     receivePing();
                 } catch (InterruptedException | IOException e) {
-                    System.err.println("\nClient no longer connected to the Server");
-                    disconnect();
-                    System.exit(0);
+                    if(connected) {
+                        System.err.println("\nClient no longer connected to the Server");
+                        connected = false;
+                        disconnect();
+                        System.exit(0);
+                    }
                 }
             });
             connectedThread.start();
@@ -72,9 +77,12 @@ public class ClientSocket {
                 try {
                     receiveMessage();
                 } catch (InterruptedException | IOException e) {
-                    System.err.println("\nClient no longer connected to the Server");
-                    disconnect();
-                    System.exit(0);
+                    if(connected) {
+                        System.err.println("\nClient no longer connected to the Server");
+                        connected = false;
+                        disconnect();
+                        System.exit(0);
+                    }
                 }
             });
             threadOut.start();
@@ -111,7 +119,7 @@ public class ClientSocket {
                 stdIn = new Scanner(new InputStreamReader(System.in));
                 System.out.println("\nInserisci il tuo nickName:");
                 String userInput = stdIn.nextLine();
-                while (userInput.length() == 0) {
+                while (userInput == null || userInput.length() == 0) {
                     System.err.println("Inserisci un nickName valido:");
                     userInput = stdIn.nextLine();
                 }
@@ -432,6 +440,7 @@ public class ClientSocket {
     private void end_turn() throws IOException {
         Message end_turn = new Message(MessageType.END_TURN, position);
         currentState = CONTROLLER_STATES.FIRST_ACTION_STATE;
+        System.out.println("Hai finito il tuo turno. Attendi che gli altri giocatori facciano il proprio.");
         sendMessage(end_turn);
     }
 
@@ -832,17 +841,19 @@ public class ClientSocket {
         if (m.getPar() == 1) {
             chose_action(first_input());
         }
+        else
+            System.out.println("Attendi che gli altri giocatori facciano il proprio turno...");
     }
 
     private void end_turn_message(Message message) throws InterruptedException, IOException {
-        Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
-        if (m.getPar() != position) {
-            System.out.println("\nIl giocatore in posizione " + m.getPar() + 1 + " ha finito il suo turno.");
+        TimeUnit.SECONDS.sleep(1);
+        if (message.getClientID() != position) {
+            System.out.println("\nIl giocatore in posizione " + message.getClientID() + 1 + " ha finito il suo turno.");
         }
         if (position == 0) {
-            if (m.getPar() == numPlayers - 1)
+            if (message.getClientID() == numPlayers - 1)
                 chose_action(first_input());
-        } else if (m.getPar() == position - 1)
+        } else if (message.getClientID() == position - 1)
             chose_action(first_input());
     }
 
@@ -890,8 +901,13 @@ public class ClientSocket {
 
     private void card_remove_message(Message message) {
         Message_Four_Parameter_Int m = (Message_Four_Parameter_Int) message;
-        System.out.println("\nLa carta nel mazzetto di riga: " + m.getPar1() + " e colonna: "
-                + m.getPar2() + " è stata rimossa.");
+        if(numPlayers == 1 && m.getClientID() == 2)
+            System.out.println("\nLudovico ha rimosso una carta nel mazzetto di riga: " + m.getPar1() + " e" +
+                    " colonna: " + m.getPar2());
+
+        else
+            System.out.println("\nLa carta nel mazzetto di riga: " + m.getPar1() + " e colonna: "
+                    + m.getPar2() + " è stata rimossa.");
         if (m.getPar3() == 1) {
             System.out.println("Il mazzetto ora è vuoto");
         } else
@@ -909,7 +925,7 @@ public class ClientSocket {
         chose_marble(m.getMarbles());
     }
 
-    private void chose_marble(ArrayList<Marble> marbles) throws IOException, InterruptedException {
+    private void chose_marble(ArrayList<Marble> marbles) throws IOException {
         stdIn = new Scanner(new InputStreamReader(System.in));
         Marble chosenMarble;
         if (marbles.size() == 1) {
@@ -919,21 +935,22 @@ public class ClientSocket {
             sendMessage(message);
             return;
         }
-        System.out.println("Hai scelto queste biglie: ");
+        System.out.println("Hai scelto queste biglie: " + marbles);
         remainingMarbles = marbles;
-        for (int i = 1; i < marbles.size(); i++)
-            System.out.println(marbles.get(i).toString());
         System.out.println("\nVuoi scambiare i tuoi depositi?\n1 - SI\n0 - NO");
-        int x = stdIn.nextInt();
-        if (x == 1) {
-            switch_depot();
-            return;
-        }
+        try {
+            int x = stdIn.nextInt();
+            if (x == 1) {
+                switch_depot();
+                return;
+            }
+        } catch (InputMismatchException e){}
+        stdIn = new Scanner(new InputStreamReader(System.in));
         System.out.println("\nScegli una biglia:");
-        stdIn.next();
         while (true) {
             try {
                 String choice = stdIn.nextLine();
+                choice = choice.toUpperCase();
                 chosenMarble = correct_marble(choice, marbles);
                 if (chosenMarble != null)
                     break;
@@ -998,13 +1015,20 @@ public class ClientSocket {
 
     private void faith_points_message(Message message){
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
-        System.out.println("\nIl giocatore " + m.getClientID() + " ha incrementato i suoi punti fede. Ora ne ha " + m.getPar());
+        if(numPlayers == 1 && m.getClientID() == 2)
+            System.out.println("\nLudovico ha incrementato i suoi punti fede. Ora ne ha " + m.getPar());
+        else
+            System.out.println("\nIl giocatore " + m.getClientID() + " ha incrementato i suoi punti fede. Ora ne ha " + m.getPar());
     }
 
     private void increase_warehouse_message(Message message){
         Message_One_Int_One_Resource m = (Message_One_Int_One_Resource) message;
-        System.out.println("\nIl giocatore " + m.getClientID() + " ha incrementato di 1 " + m.getResource()
+        if(m.getPar1() != -1)
+            System.out.println("\nIl giocatore " + m.getClientID() + " ha incrementato di 1 " + m.getResource()
                 + " il suo " + m.getPar1() + "° deposito.");
+        else
+            System.out.println("\nIl giocatore " + m.getClientID() + " ha scartato 1 " + m.getResource()
+                    + " dal mercato.");
     }
 
     private void switch_depot_message(Message message){
@@ -1203,6 +1227,8 @@ public class ClientSocket {
         System.out.println("\nNon hai abbastanza risorse per effettuare questa operazione");
         if(currentState == CONTROLLER_STATES.ACTIVATE_PRODUCTION_STATE)
             activate_another_production();
+        else if (currentState == CONTROLLER_STATES.END_TURN_STATE)
+            end_turn();
         else{
             currentState = CONTROLLER_STATES.FIRST_ACTION_STATE;
             chose_action(first_input());
@@ -1255,8 +1281,8 @@ public class ClientSocket {
      * close inputStream, outputStream and socket connection with Server.
      */
     private void disconnect() {
-        threadOut.interrupt();
         connectedThread.interrupt();
+        threadOut.interrupt();
         try {
             in.close();
             out.close();

@@ -14,7 +14,7 @@ public class ActivateProductionState implements State_Controller{
 
     @Override
     public void nextState(ControllerGame controllerGame, MessageType wantedMessage) {
-        if(wantedMessage == MessageType.END_PRODUCTION)
+        if(wantedMessage == MessageType.END_TURN)
             controllerGame.setCurrentState(new EndTurnState());
     }
 

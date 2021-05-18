@@ -12,6 +12,8 @@ import it.polimi.ingsw.exceptions.*;
 
 import java.util.ArrayList;
 import java.util.Observable;
+import java.util.Observer;
+
 import it.polimi.ingsw.network.messages.*;
 
 /**
@@ -37,6 +39,11 @@ public class Game extends Observable implements LightGame{
         faithTrack = new FaithTrack();
         this.numOfPlayers = numOfPlayers;
         this.currentPlayer = 0;
+    }
+
+    @Override
+    public synchronized void addObserver(Observer o) {
+        super.addObserver(o);
     }
 
     /**
@@ -236,10 +243,15 @@ public class Game extends Observable implements LightGame{
      */
     @Override
     public boolean increaseWarehouse(Resource resource) {
-        Message message_one_int_one_resource=new Message_One_Int_One_Resource(MessageType.INCREASE_WAREHOUSE,currentPlayer+1,resource, 1);
+        int depot = players.get(currentPlayer).increaseWarehouse(resource);
+        Message message_one_int_one_resource;
+        if(depot != -1)
+            message_one_int_one_resource=new Message_One_Int_One_Resource(MessageType.INCREASE_WAREHOUSE,currentPlayer+1,resource, depot+1);
+        else
+            message_one_int_one_resource = new Message_One_Int_One_Resource(MessageType.INCREASE_WAREHOUSE, currentPlayer+1, resource, -1);
         setChanged();
         notifyObservers(message_one_int_one_resource);
-        return players.get(currentPlayer).increaseWarehouse(resource);
+        return depot != -1;
     }
 
     public void firstIncreaseWarehouse(Resource resource, int player){
@@ -288,14 +300,17 @@ public class Game extends Observable implements LightGame{
     @Override
     public void increaseOneFaithPointOtherPlayers() {
         for(int i = 0; i < numOfPlayers; i++) {
-            if (i != currentPlayer)
-            {
+            if (i != currentPlayer) {
                 players.get(i).increaseFaithPoints(1);
-                Message message_one_parameter_int=new Message_One_Parameter_Int(MessageType.FAITH_POINTS_INCREASE,i+1, players.get(i).getFaithPoints());
-                setChanged();
-                notifyObservers(message_one_parameter_int);
+                faithPointsIncreaseNotify(i);
             }
         }
+    }
+
+    private void faithPointsIncreaseNotify(int i){
+        Message message_one_parameter_int=new Message_One_Parameter_Int(MessageType.FAITH_POINTS_INCREASE,i+1, players.get(i).getFaithPoints());
+        setChanged();
+        notifyObservers(message_one_parameter_int);
     }
 
     /**
@@ -531,7 +546,7 @@ public class Game extends Observable implements LightGame{
      */
     public void removeAdditionalProductionPowerCardResource(int chosenAdditionalPowerCard, Resource r, Strongbox s, int choice)
             throws InsufficientResourceException, NoSuchProductionPowerException {
-        players.get(currentPlayer).activateAdditionalProductionPower(chosenAdditionalPowerCard, choice);
+        players.get(currentPlayer).activateAdditionalProductionPower(chosenAdditionalPowerCard, choice -1);
         s.increaseResourceType(r, 1);
         faithTrackMovement();
         Message message_one_parameter_int=new Message_One_Parameter_Int(MessageType.FAITH_POINTS_INCREASE,currentPlayer+1,players.get(currentPlayer).getFaithPoints());
@@ -725,7 +740,7 @@ public class Game extends Observable implements LightGame{
     }
 
     public void LorenzoFaithTrackMovement(int faithPoints){
-        Message message_one_parameter_int=new Message_One_Parameter_Int(MessageType.FAITH_POINTS_INCREASE,1, faithPoints);
+        Message message_one_parameter_int=new Message_One_Parameter_Int(MessageType.FAITH_POINTS_INCREASE,2, faithPoints);
         setChanged();
         notifyObservers(message_one_parameter_int);
     }
@@ -734,7 +749,7 @@ public class Game extends Observable implements LightGame{
         Message message;
         Deck deck = getColorDeck(color);
         if(deck.isEmpty()){
-            message = new Message_Four_Parameter_Int(MessageType.CARD_REMOVE,1, deck.getRow(),deck.getColumn(),1,-1);
+            message = new Message_Four_Parameter_Int(MessageType.CARD_REMOVE,2, deck.getRow(),deck.getColumn(),1,-1);
         }
         else{
             int cardID = -1;
@@ -743,7 +758,7 @@ public class Game extends Observable implements LightGame{
             } catch (EmptyDevelopmentCardDeckException e) {
                 e.printStackTrace();
             }
-            message = new Message_Four_Parameter_Int(MessageType.CARD_REMOVE,1,deck.getRow(),deck.getColumn(),0, cardID);
+            message = new Message_Four_Parameter_Int(MessageType.CARD_REMOVE,2,deck.getRow(),deck.getColumn(),0, cardID);
         }
         setChanged();
         notifyObservers(message);

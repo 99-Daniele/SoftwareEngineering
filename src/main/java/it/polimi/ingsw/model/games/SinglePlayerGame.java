@@ -10,6 +10,7 @@ import it.polimi.ingsw.model.cards.developmentCards.Color;
 import it.polimi.ingsw.model.player.SimplePlayerBoard;
 
 import java.util.ArrayList;
+import java.util.Observer;
 
 /**
  * SinglePlayerGame is main class which handle all different phases of a match if player has chosen to play alone.
@@ -26,6 +27,12 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame {
     public SinglePlayerGame() {
         super(1);
         prepareActions();
+    }
+
+    @Override
+    public synchronized void addObserver(Observer o) {
+        super.addObserver(o);
+        LorenzoIlMagnifico.addObserver(o);
     }
 
     public SimplePlayerBoard getLorenzoIlMagnifico() {
@@ -55,6 +62,7 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame {
 
     @Override
     public void nextPlayer() {
+        super.nextPlayer();
         triggerFirstAction();
     }
 
@@ -89,6 +97,11 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame {
         actions = newActions;
     }
 
+    @Override
+    public void increaseOneFaithPointOtherPlayers() {
+        LorenzoIlMagnifico.increaseFaithPoints(1);
+    }
+
     /**
      * @param faithPoints is the amount of faith points given by action.
      * this method increase ludovico faith points and then looks if ludovico reached the pope space and if true
@@ -97,7 +110,6 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame {
     @Override
     public void LorenzoFaithTrackMovement(int faithPoints){
         LorenzoIlMagnifico.increaseFaithPoints(faithPoints);
-        super.LorenzoFaithTrackMovement(faithPoints);
         if (getFaithTrack().reachPope(LorenzoIlMagnifico.getFaithPoints())) {
             getFaithTrack().victoryPointsVaticanReport(getPlayer(0).getVictoryPoints(),getPlayer(0).getFaithPoints());
             getFaithTrack().DecreaseRemainingPope();
