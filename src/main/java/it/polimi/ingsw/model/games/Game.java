@@ -97,25 +97,33 @@ public class Game extends Observable implements LightGame{
         notifyObservers(m);
         if(players.size() == numOfPlayers) {
             shufflePlayers();
-            m = new Message_Market(MessageType.MARKET, currentPlayer, market);
-            setChanged();
-            notifyObservers(m);
-            ArrayList<Integer> currentDeckCards = new ArrayList<>();
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 4; j++) {
-                    DevelopmentCard card = null;
-                    try {
-                        card = deck[i][j].getFirstCard();
-                    } catch (EmptyDevelopmentCardDeckException e) {
-                        e.printStackTrace();
-                    }
-                    currentDeckCards.add(card.getCardID());
-                }
-            }
-            m = new Message_ArrayList_Int(MessageType.DECKBOARD, currentPlayer, currentDeckCards);
-            setChanged();
-            notifyObservers(m);
+            notifyMarket();
+            notifyDeckCards();
         }
+    }
+
+    public void notifyMarket(){
+        Message m = new Message_Market(MessageType.MARKET, currentPlayer, market);
+        setChanged();
+        notifyObservers(m);
+    }
+
+    public void notifyDeckCards(){
+        ArrayList<Integer> currentDeckCards = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 4; j++) {
+                DevelopmentCard card = null;
+                try {
+                    card = deck[i][j].getFirstCard();
+                } catch (EmptyDevelopmentCardDeckException e) {
+                    e.printStackTrace();
+                }
+                currentDeckCards.add(card.getCardID());
+            }
+        }
+        Message m = new Message_ArrayList_Int(MessageType.DECKBOARD, currentPlayer, currentDeckCards);
+        setChanged();
+        notifyObservers(m);
     }
 
     public void deletePlayer(String nickName){
