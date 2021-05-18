@@ -1055,7 +1055,7 @@ public class ClientSocket {
 
     private void quit_message(Message message){
         Message_One_Parameter_String m = (Message_One_Parameter_String) message;
-        if(startGame == 2) {
+        if(startGame != 0) {
             System.out.println("\nIl giocatore " + m.getPar() + " si è disconnesso. La partita è finita.");
             disconnect();
             System.exit(1);
@@ -1287,7 +1287,6 @@ public class ClientSocket {
             in.close();
             out.close();
         } catch (IOException e) {
-            System.exit(0);
         }
     }
 }

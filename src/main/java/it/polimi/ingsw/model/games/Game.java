@@ -128,9 +128,6 @@ public class Game extends Observable implements LightGame{
             return;
         try {
             players.remove(quitPlayer);
-            Message m = new Message_One_Parameter_String(MessageType.QUIT, 0, quitPlayer.getNickname());
-            setChanged();
-            notifyObservers(m);
         }catch (IndexOutOfBoundsException | NullPointerException e){
             e.printStackTrace();
         }

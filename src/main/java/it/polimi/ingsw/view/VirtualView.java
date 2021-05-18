@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.cards.leaderCards.LeaderCard;
 import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.network.messages.*;
 
+import javax.rmi.ssl.SslRMIClientSocketFactory;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -53,7 +54,6 @@ public class VirtualView extends Observable implements View, Observer{
     public void join() throws InterruptedException, IOException {
         pingThread.join();
         inThread.join();
-        disconnect();
     }
 
     @Override
@@ -226,7 +226,8 @@ public class VirtualView extends Observable implements View, Observer{
     }
 
     public void quit(String nickName){
-        System.out.println(nickName + " is disconnected");
+        connected = false;
+        System.out.println(this.nickName + " is disconnected");
         exit(nickName);
         disconnect();
     }
@@ -237,7 +238,6 @@ public class VirtualView extends Observable implements View, Observer{
             out.writeObject(message);
         } catch (IOException e) {
             disconnect();
-            Thread.currentThread().interrupt();
         }
     }
 
@@ -248,26 +248,32 @@ public class VirtualView extends Observable implements View, Observer{
     }
 
     public void errorMessage(ErrorType errorType){
+        if(errorType == ErrorType.ALREADY_TAKEN_NICKNAME)
+            nickName = null;
         sendMessage(new ErrorMessage(MessageType.ERR, viewID, errorType));
     }
 
     private void disconnect(){
         if(connected) {
-            System.out.println("1");
             if (nickName == null)
                 System.err.println("Client disconnected brutally");
             else
                 System.err.println(nickName + " disconnected brutally");
+            waitAMoment();
             connected = false;
         }
+        pingThread.interrupt();
+        inThread.interrupt();
         try {
             in.close();
             out.close();
         } catch (IOException e) {
         }
-        finally {
-            Thread.currentThread().interrupt();
-        }
+    }
+
+    @Override
+    public String toString() {
+        return nickName;
     }
 
     @Override

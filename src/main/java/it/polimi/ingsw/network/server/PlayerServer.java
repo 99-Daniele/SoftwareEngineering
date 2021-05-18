@@ -12,7 +12,7 @@ public class PlayerServer implements Runnable {
 
     private final Socket socket;
     private ControllerGame controllerGame;
-    private final VirtualView virtualView;
+    private VirtualView virtualView;
 
     public PlayerServer(Socket socket) throws IOException {
         this.socket = socket;
@@ -27,14 +27,9 @@ public class PlayerServer implements Runnable {
             virtualView.setViewID(viewID);
             virtualView.addObserver(controllerGame);
             virtualView.join();
-            disconnect(viewID, virtualView.getNickname());
+            disconnect(virtualView.getNickname(), virtualView.getViewID());
         } catch (IOException | InterruptedException e) {
-            try {
-                controllerGame.quitGame(virtualView.getNickname(), virtualView.getViewID());
-            } catch (IOException ioException) { }
-            finally {
-                closeConnections();
-            }
+            disconnect(virtualView.getNickname(), virtualView.getViewID());
         }
     }
 
@@ -45,17 +40,10 @@ public class PlayerServer implements Runnable {
             }
         } catch (IOException e) {
         }
-        finally {
-            System.out.println("Closed Client connection");
-        }
     }
 
-    private void disconnect(int position, String nickName) throws IOException {
-        try {
-            controllerGame.quitGame(nickName, position);
-            closeConnections();
-        }catch (SocketException e){ }
+    private void disconnect(String nickName, int position){
+        closeConnections();
+        controllerGame.quitGame(nickName, position);
     }
 }
-//lato client bloccare messaggi quando in attesa altrimenti buffer li memorizza
-// esempio server risponde collegato e client non prende ingressi e quando tutti collegati server avvisa e client può prendere in ingresso e inviare

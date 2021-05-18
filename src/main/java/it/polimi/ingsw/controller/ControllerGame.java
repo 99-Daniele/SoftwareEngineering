@@ -18,6 +18,7 @@ import it.polimi.ingsw.view.*;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class ControllerGame implements Observer {
 
@@ -26,19 +27,24 @@ public class ControllerGame implements Observer {
     private int numPlayers;
     private LinkedList<View> views;
     private State_Controller currentState;
+    private boolean startGame;
 
     public ControllerGame() {
         numPlayers = 0;
         views = new LinkedList<>();
         currentState = new WaitingPlayerState();
+        startGame = false;
     }
 
     public void resetControllerGame(){
+        if(game != null)
+            System.out.println("GAME ENDED");
         game = null;
         firstPlayer = null;
         numPlayers = 1;
         views = new LinkedList<>();
         currentState = new WaitingPlayerState();
+        startGame = false;
         Connection.newGame();
         Thread.currentThread().interrupt();
     }
@@ -87,21 +93,22 @@ public class ControllerGame implements Observer {
         }
     }
 
-    public synchronized void quitGame(String nickName, int viewID) throws IOException {
-        if (views.size() == 1) {
-            System.out.println("Q");
+    public synchronized void quitGame(String nickName, int viewID) {
+        if(nickName == null){
+            views.remove(viewID);
+            if(views.size() == 0)
+                resetControllerGame();
+        }
+        else if (views.size() == 1) {
             removeView(nickName, viewID);
-            System.out.println("GAME ENDED");
             resetControllerGame();
         }
-        else if (views.size() < numPlayers) {
-            System.out.println("P");
+        else if (!startGame) {
             removeView(nickName, viewID);
             for (View view : views)
                 view.exit(nickName);
         }
         else {
-            System.out.println("R");
             removeView(nickName, viewID);
             for (View view : views)
                 view.quit(nickName);
@@ -210,7 +217,7 @@ public class ControllerGame implements Observer {
     }
 
     public synchronized void addPlayer(String nickName){
-        if (nickName == null || nickName.length() == 0) {
+        if (!InputController.login_check(nickName)) {
             views.getLast().errorMessage(ErrorType.WRONG_PARAMETERS);
             return;
         }
@@ -225,7 +232,7 @@ public class ControllerGame implements Observer {
                 views.getLast().errorMessage(ErrorType.ILLEGAL_OPERATION);
                 return;
             }
-            if (!InputController.login_check(m)) {
+            if (!InputController.login_check(m.getPar())) {
                 views.getLast().errorMessage(ErrorType.WRONG_PARAMETERS);
                 return;
             }
@@ -270,6 +277,8 @@ public class ControllerGame implements Observer {
             selectedView.choseLeaderCards(leaderCards);
         }
         views = newViewsPosition;
+        System.out.println("NEW GAME STARTED -> PLAYERS: " + views.toString());
+        startGame = true;
     }
 
     public synchronized void newGame(Message numPlayerMessage)

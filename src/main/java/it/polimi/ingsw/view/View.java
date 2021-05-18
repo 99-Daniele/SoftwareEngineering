@@ -38,4 +38,7 @@ public interface View{
     void chosen_marble(Marble[] marbles);
 
     void choseWhiteConversionCard(LeaderCard[] leaderCards);
+
+    @Override
+    String toString();
 }
