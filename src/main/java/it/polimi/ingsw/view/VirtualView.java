@@ -253,6 +253,7 @@ public class VirtualView extends Observable implements View, Observer{
 
     private void disconnect(){
         if(connected) {
+            System.out.println("1");
             if (nickName == null)
                 System.err.println("Client disconnected brutally");
             else
@@ -280,5 +281,12 @@ public class VirtualView extends Observable implements View, Observer{
         }
         else
             sendMessage(message);
+        waitAMoment();
+    }
+
+    private void waitAMoment(){
+        try {
+            TimeUnit.MILLISECONDS.sleep(100);
+        } catch (InterruptedException e) {}
     }
 }

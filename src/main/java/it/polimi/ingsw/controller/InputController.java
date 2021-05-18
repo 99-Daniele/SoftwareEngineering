@@ -11,7 +11,7 @@ public class InputController {
     public static boolean login_check(Message_One_Parameter_String loginMessage){
         if(loginMessage.getPar() == null)
             return false;
-        return loginMessage.getPar().length() != 0;
+        return (loginMessage.getPar() != null && loginMessage.getPar().length() != 0 && !loginMessage.getPar().isBlank());
     }
 
     public static boolean num_players_check(Message_One_Parameter_Int numPlayersMessage) {

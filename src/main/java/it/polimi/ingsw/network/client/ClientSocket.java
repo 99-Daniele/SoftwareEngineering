@@ -119,7 +119,7 @@ public class ClientSocket {
                 stdIn = new Scanner(new InputStreamReader(System.in));
                 System.out.println("\nInserisci il tuo nickName:");
                 String userInput = stdIn.nextLine();
-                while (userInput == null || userInput.length() == 0) {
+                while (userInput == null || userInput.length() == 0 || userInput.isBlank()) {
                     System.err.println("Inserisci un nickName valido:");
                     userInput = stdIn.nextLine();
                 }
@@ -848,7 +848,7 @@ public class ClientSocket {
     private void end_turn_message(Message message) throws InterruptedException, IOException {
         TimeUnit.SECONDS.sleep(1);
         if (message.getClientID() != position) {
-            System.out.println("\nIl giocatore in posizione " + message.getClientID() + 1 + " ha finito il suo turno.");
+            System.out.println("\nIl giocatore in posizione " + (message.getClientID() +1) + " ha finito il suo turno.");
         }
         if (position == 0) {
             if (message.getClientID() == numPlayers - 1)
