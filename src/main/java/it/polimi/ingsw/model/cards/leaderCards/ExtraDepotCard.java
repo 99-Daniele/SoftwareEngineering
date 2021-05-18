@@ -33,9 +33,10 @@ public class ExtraDepotCard extends LeaderCard {
      * ExtraDepot in player's warehouse.
      */
     @Override
-    public void activateCard(Warehouse w, Strongbox s, LeaderRequirements l)
+    public boolean activateCard(Warehouse w, Strongbox s, LeaderRequirements l)
             throws InsufficientResourceException, InsufficientCardsException, ActiveLeaderCardException {
         super.activateCard(w, s, l);
         w.addExtraDepot(this.getResource());
+        return true;
     }
 }

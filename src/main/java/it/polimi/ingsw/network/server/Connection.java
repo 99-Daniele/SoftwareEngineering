@@ -12,14 +12,14 @@ public class Connection {
 
     public static synchronized ControllerGame ConnectionPlayers() throws IOException, InterruptedException {
         for(ControllerGame controllerGame: controllerGames){
+            if(controllerGame.getCurrentNumPlayers() < controllerGame.getMaxNumPlayers())
+                return controllerGame;
             while(controllerGame.getCurrentNumPlayers() == 1 && controllerGame.getMaxNumPlayers() == 0) {
                 synchronized (lock) {
                     lock.wait();
                 }
             }
-            if(controllerGame.getCurrentNumPlayers() < controllerGame.getMaxNumPlayers()){
-                return controllerGame;
-            }
+
         }
         controllerGames.add(new ControllerGame());
         return controllerGames.getLast();

@@ -317,12 +317,12 @@ public class ClientSocket {
         }
         int z = chose_warehouse_strongbox();
         Message message = new Message_Three_Parameter_Int(MessageType.BUY_CARD, position, x, y, z);
-        System.out.println("\n" + message.toString());
-        currentState = CONTROLLER_STATES.END_TURN_STATE;
+        System.out.println("\n" + message);
+        currentState = CONTROLLER_STATES.BUY_CARD_STATE;
         sendMessage(message);
     }
 
-    private void activate_another_production() throws IOException, InterruptedException {
+    private void activate_another_production() throws IOException{
         stdIn = new Scanner(new InputStreamReader(System.in));
         System.out.println("Vuoi attivare un altro potere di produzione?\n1 - SI\n0 - NO");
         try {
@@ -337,7 +337,7 @@ public class ClientSocket {
         }
     }
 
-    private void activate_production() throws IOException, InterruptedException {
+    private void activate_production() throws IOException{
         stdIn = new Scanner(new InputStreamReader(System.in));
         System.out.println("ACTIVATE PRODUCTION");
         System.out.println("\nQuale produzione vuoi attivare?\n1 - CARTA SVILUPPO\n2 - POTERE BASE\n3 - CARTA LEADER");
@@ -665,6 +665,9 @@ public class ClientSocket {
                             case LEADER_CARD_ACTIVATION:
                                 leader_card_activation_message(returnMessage);
                                 break;
+                            case EXTRA_DEPOT:
+                                extra_depot_message(returnMessage);
+                                break;
                             case LEADER_CARD_DISCARD:
                                 leader_card_discard_message(returnMessage);
                                 break;
@@ -822,6 +825,9 @@ public class ClientSocket {
             case TAKE_MARBLE_STATE:
                 chose_marble(remainingMarbles);
                 break;
+            case BUY_CARD_STATE:
+                lastInput();
+                break;
             case ACTIVATE_PRODUCTION_STATE:
                 activate_another_production();
                 break;
@@ -859,7 +865,7 @@ public class ClientSocket {
 
     private void buy_card_message(Message message) {
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
-        System.out.println("\nIl giocatore " + m.getClientID() + 1 + " ha comprato la carta: "
+        System.out.println("\nIl giocatore " + (m.getClientID()+ 1) + " ha comprato la carta "
                 + m.getPar1() + " e l'ha inseria nel " + m.getPar2() + "° slot.");
     }
 
@@ -902,12 +908,12 @@ public class ClientSocket {
     private void card_remove_message(Message message) {
         Message_Four_Parameter_Int m = (Message_Four_Parameter_Int) message;
         if(numPlayers == 1 && m.getClientID() == 2)
-            System.out.println("\nLudovico ha rimosso una carta nel mazzetto di riga: " + m.getPar1() + " e" +
-                    " colonna: " + m.getPar2());
+            System.out.println("\nLudovico ha rimosso una carta nel mazzetto di riga " + (m.getPar1()+1) + " e" +
+                    " colonna " + (m.getPar2()+1));
 
         else
-            System.out.println("\nLa carta nel mazzetto di riga: " + m.getPar1() + " e colonna: "
-                    + m.getPar2() + " è stata rimossa.");
+            System.out.println("\nLa carta nel mazzetto di riga: " + (m.getPar1()+1) + " e colonna: "
+                    + (m.getPar2()+1) + " è stata rimossa.");
         if (m.getPar3() == 1) {
             System.out.println("Il mazzetto ora è vuoto");
         } else
@@ -928,13 +934,6 @@ public class ClientSocket {
     private void chose_marble(ArrayList<Marble> marbles) throws IOException {
         stdIn = new Scanner(new InputStreamReader(System.in));
         Marble chosenMarble;
-        if (marbles.size() == 1) {
-            chosenMarble = marbles.remove(0);
-            currentState = CONTROLLER_STATES.END_TURN_STATE;
-            Message message = new Message_One_Parameter_Marble(MessageType.USE_MARBLE, position, chosenMarble);
-            sendMessage(message);
-            return;
-        }
         System.out.println("Hai scelto queste biglie: " + marbles);
         remainingMarbles = marbles;
         System.out.println("\nVuoi scambiare i tuoi depositi?\n1 - SI\n0 - NO");
@@ -945,6 +944,13 @@ public class ClientSocket {
                 return;
             }
         } catch (InputMismatchException e){}
+        if (marbles.size() == 1) {
+            chosenMarble = marbles.remove(0);
+            currentState = CONTROLLER_STATES.END_TURN_STATE;
+            Message message = new Message_One_Parameter_Marble(MessageType.USE_MARBLE, position, chosenMarble);
+            sendMessage(message);
+            return;
+        }
         stdIn = new Scanner(new InputStreamReader(System.in));
         System.out.println("\nScegli una biglia:");
         while (true) {
@@ -1046,6 +1052,11 @@ public class ClientSocket {
     private void leader_card_activation_message(Message message){
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
         System.out.println("\nIl giocatore " + m.getClientID() + " ha attivato la carta leader: " + m.getPar());
+    }
+
+    private void extra_depot_message(Message message){
+        Message_One_Int_One_Resource m = (Message_One_Int_One_Resource) message;
+        System.out.println("\nIl giocatore " + m.getClientID() + " ha un nuovo deposito extra che può contenere " + m.getResource());
     }
 
     private void leader_card_discard_message(Message message){
@@ -1218,7 +1229,7 @@ public class ClientSocket {
         }
     }
 
-    private void impossible_switch_error() throws IOException, InterruptedException {
+    private void impossible_switch_error() throws IOException{
         System.out.println("\nNon puoi scambiare questa depositi");
         chose_marble(remainingMarbles);
     }

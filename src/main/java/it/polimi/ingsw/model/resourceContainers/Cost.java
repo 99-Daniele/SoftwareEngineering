@@ -66,7 +66,7 @@ public class Cost {
         if(!(enoughResource(warehouse, strongbox)))
             throw new InsufficientResourceException();
         else {
-            if (choice == 1) {
+            if (choice == 0) {
                 decreaseWarehouseResource(warehouse, strongbox);
             } else {
                 decreaseStrongboxResource(warehouse, strongbox);

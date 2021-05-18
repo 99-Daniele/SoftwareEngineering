@@ -33,7 +33,7 @@ public class AdditionalProductionPowerCard extends LeaderCard {
     public void decreaseProductionPowerResources(Warehouse w, Strongbox s, int choice)
             throws InsufficientResourceException, NoSuchProductionPowerException {
         if(this.isActive()) {
-            if (choice == 1) {
+            if (choice == 0) {
                 if (w.decreaseResource(this.getResource(), 1) == 1) {
                     if (s.decreaseResourceType(this.getResource(), 1) == 1)
                         throw new InsufficientResourceException();

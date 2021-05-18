@@ -74,7 +74,7 @@ public abstract class LeaderCard extends Card {
      * this method only evaluates if player has enough resources or enough cards, based on leaderCard requirement,
      * without doing anything.
      */
-    public void activateCard(Warehouse w, Strongbox s, LeaderRequirements l)
+    public boolean activateCard(Warehouse w, Strongbox s, LeaderRequirements l)
             throws InsufficientResourceException, InsufficientCardsException, ActiveLeaderCardException {
         if(isActive())
             throw new ActiveLeaderCardException();
@@ -93,6 +93,7 @@ public abstract class LeaderCard extends Card {
                 throw new InsufficientCardsException();
             }
         }
+        return false;
     }
 
     /**

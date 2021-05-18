@@ -92,7 +92,7 @@ public class StateControllerTest {
         controllerGame.getCurrentState().nextState(controllerGame, MessageType.LEADER_CARD_POWER);
         assertTrue(controllerGame.getCurrentState().isRightState(CONTROLLER_STATES.ACTIVATE_PRODUCTION_STATE));
 
-        controllerGame.getCurrentState().nextState(controllerGame, MessageType.END_PRODUCTION);
+        controllerGame.getCurrentState().nextState(controllerGame, MessageType.END_TURN);
         assertTrue(controllerGame.getCurrentState().isRightState(CONTROLLER_STATES.END_TURN_STATE));
 
         controllerGame.getCurrentState().nextState(controllerGame, MessageType.BASIC_POWER);

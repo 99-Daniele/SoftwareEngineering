@@ -173,7 +173,7 @@ public class PlayerBoard extends SimplePlayerBoard{
     public void activateBasicProduction(Resource r1, Resource r2, int choice) throws InsufficientResourceException {
         if(enoughBasicProductionResource(r1, r2))
             throw new  InsufficientResourceException();
-        if(choice == 1){
+        if(choice == 0){
             decreaseWarehouseResource(r1, r2, warehouse, strongbox);
         }
         else{
@@ -231,13 +231,14 @@ public class PlayerBoard extends SimplePlayerBoard{
      * @throws AlreadyDiscardLeaderCardException if player already discard this LeaderCard previously.
      * @throws ActiveLeaderCardException if this LeaderCard is already active.
      */
-    public void activateLeaderCard(int chosenLeaderCard) throws InsufficientResourceException, InsufficientCardsException,
+    public boolean activateLeaderCard(int chosenLeaderCard) throws InsufficientResourceException, InsufficientCardsException,
             AlreadyDiscardLeaderCardException, ActiveLeaderCardException {
         if (leaderCards.size() < chosenLeaderCard)
             throw new AlreadyDiscardLeaderCardException();
         LeaderRequirements leaderRequirements = createMyLeaderRequirements();
-        leaderCards.get(chosenLeaderCard -1).activateCard(warehouse, strongbox, leaderRequirements);
+        boolean extraDepot = leaderCards.get(chosenLeaderCard -1).activateCard(warehouse, strongbox, leaderRequirements);
         victoryPoints.increaseVictoryPointsByCards(leaderCards.get(chosenLeaderCard -1).getVictoryPoints());
+        return extraDepot;
     }
 
     /**
