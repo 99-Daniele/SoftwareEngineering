@@ -39,24 +39,6 @@ public class MarketTest {
     }
 
     /**
-     * this test tries to slide a not existing row in Market
-     */
-    @Test
-    void WrongParametersSlide(){
-
-        Market market = new Market();
-        assertNotNull(market);
-
-        WrongParametersException thrown =
-                assertThrows(WrongParametersException.class, () -> market.slideRow(0));
-
-        String expectedMessage = "You have inserted wrong parameters";
-        String actualMessage = thrown.getMessage();
-        assertTrue(actualMessage.contains(expectedMessage));
-
-    }
-
-    /**
      * checking if a row remain unchanged after a different row has been slided.
      * checking if a row change after being slided.
      * @throws ArrayIndexOutOfBoundsException activated when the selectedColumn or selectedRow doesn't exist in the market.
@@ -154,24 +136,6 @@ public class MarketTest {
             if (marble[i] != change[i])
                 assertFalse(false);
         }
-
-        //trying to select out of bound index
-        WrongParametersException thrown =
-                assertThrows(WrongParametersException.class, () -> market.slideColumn(5));
-        assertTrue(thrown.getMessage().contains("You have inserted wrong parameters"));
-
-        WrongParametersException thrown1 =
-                assertThrows(WrongParametersException.class, () -> market.getRowMarbles(0));
-        String expectedMessage1 = "You have inserted wrong parameters";
-        String actualMessage1 = thrown1.getMessage();
-        assertTrue(actualMessage1.contains(expectedMessage1));
-
-        WrongParametersException thrown2 =
-                assertThrows(WrongParametersException.class, () -> market.slideRow(5));
-        String expectedMessage2 = "You have inserted wrong parameters";
-        String actualMessage2 = thrown2.getMessage();
-        assertTrue(actualMessage2.contains(expectedMessage2));
-
     }
 }
 

@@ -10,9 +10,24 @@ public class Cards_Slots_View {
     private int firstLeaderCard;
     private int secondLeaderCard;
 
-    public Cards_Slots_View(int firstLeaderCard, int secondLeaderCard){
+    public Cards_Slots_View(){
+        firstSlot = new ArrayList<>();
+        secondSlot = new ArrayList<>();
+        thirdSlot = new ArrayList<>();
+        firstLeaderCard = -1;
+        secondLeaderCard = -1;
+    }
+
+    public void setLeaderCards(int firstLeaderCard, int secondLeaderCard){
         this.firstLeaderCard = firstLeaderCard;
         this.secondLeaderCard = secondLeaderCard;
+    }
+
+    public void addLeaderCard(int leaderCard){
+        if(firstLeaderCard == -1)
+            firstLeaderCard = leaderCard;
+        else
+            secondLeaderCard = leaderCard;
     }
 
     public void addDevelopmentCard(int cardID, int slot){
@@ -30,4 +45,6 @@ public class Cards_Slots_View {
         }
         secondLeaderCard = -1;
     }
+
+    public void print(){};
 }

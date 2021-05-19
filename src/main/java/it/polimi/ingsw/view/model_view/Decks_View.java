@@ -26,7 +26,7 @@ public class Decks_View {
         }
     }
 
-    public int[] getRow_Column(int cardID){
+    public int[] get_Row_Column(int cardID){
         final int[] card_coordinates = new int[2];
         for(int i = 0; i < 4; i++){
             if(firstLevelCards.get(i) == cardID) {

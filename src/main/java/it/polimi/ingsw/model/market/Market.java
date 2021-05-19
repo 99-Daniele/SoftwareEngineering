@@ -129,12 +129,9 @@ public class Market implements Serializable, Market_View {
      * the last marble of the column gets out of the matrix and will placed to the side slide,
      * the current element on the side slide gets placed to the first slot of the column.
      * @param selectedColumn number of column that will be slided.
-     * @throws WrongParametersException activated when the selectedColumn doesn't exist in the market.
      */
     @Override
-    public void slideColumn(int selectedColumn) throws WrongParametersException {
-        if (selectedColumn<1 || selectedColumn>4)
-            throw new WrongParametersException();
+    public void slideColumn(int selectedColumn){
         Marble marble;
         marble=this.externalMarble;
         this.externalMarble= marketTray[row-1][selectedColumn-1];
@@ -149,12 +146,9 @@ public class Market implements Serializable, Market_View {
      * the first marble of the column gets out of the matrix and will placed to the side slide,
      * the current element in the side slide gets placed to the last slot of the row.
      * @param selectedRow number of the row that will be slided.
-     * @throws WrongParametersException activated when the selectedRow doesn't exist in the market.
      */
     @Override
-    public void slideRow(int selectedRow) throws WrongParametersException {
-        if(selectedRow < 1 || selectedRow > 3)
-            throw new WrongParametersException();
+    public void slideRow(int selectedRow){
         Marble marble;
         marble = this.externalMarble;
         this.externalMarble = marketTray[selectedRow-1][0];
