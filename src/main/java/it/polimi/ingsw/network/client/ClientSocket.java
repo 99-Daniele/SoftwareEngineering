@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
  * turn summarize Server sent TURN messages.
  * lock is a Lock for thread.wait()
  */
-public class ClientSocket {
+public class ClientSocket extends Observable{
 
     private Thread threadOut;
     private Thread connectedThread;
@@ -50,6 +50,10 @@ public class ClientSocket {
         currentState = CONTROLLER_STATES.WAITING_PLAYERS_STATE;
     }
 
+    public void addObserver(Observer o){
+        super.addObserver(o);
+    }
+
     /**
      * start threadIn and threadOut.
      * threadIn firstly login player and then constantly waits user inputs from System.in
@@ -62,16 +66,7 @@ public class ClientSocket {
                 try {
                     receivePing();
                 } catch (InterruptedException | IOException e) {
-                    try {
-                        TimeUnit.MILLISECONDS.sleep(100);
-                    } catch (InterruptedException interruptedException) {
-                    }
-                    if(connected) {
-                        System.err.println("\nClient no longer connected to the Server");
-                        connected = false;
-                        disconnect();
-                        System.exit(0);
-                    }
+                    brutalDisconnection();
                 }
             });
             connectedThread.start();
@@ -81,16 +76,7 @@ public class ClientSocket {
                 try {
                     receiveMessage();
                 } catch (InterruptedException | IOException e) {
-                    try {
-                        TimeUnit.MILLISECONDS.sleep(100);
-                    } catch (InterruptedException interruptedException) {
-                    }
-                    if(connected) {
-                        System.err.println("\nClient no longer connected to the Server");
-                        connected = false;
-                        disconnect();
-                        System.exit(0);
-                    }
+                    brutalDisconnection();
                 }
             });
             threadOut.start();
@@ -151,7 +137,7 @@ public class ClientSocket {
         System.out.println("In attesa di altri giocatori...");
     }
 
-    private void chose_action(int choice) throws IOException, InterruptedException {
+    private void chose_action(int choice) throws IOException{
         switch (choice) {
             case 1:
                 take_market_marble();
@@ -1315,6 +1301,19 @@ public class ClientSocket {
             in.close();
             out.close();
         } catch (IOException e) {
+        }
+    }
+
+    private void brutalDisconnection(){
+        try {
+            TimeUnit.MILLISECONDS.sleep(100);
+        } catch (InterruptedException interruptedException) {
+        }
+        if(connected) {
+            System.err.println("\nClient no longer connected to the Server");
+            connected = false;
+            disconnect();
+            System.exit(0);
         }
     }
 }

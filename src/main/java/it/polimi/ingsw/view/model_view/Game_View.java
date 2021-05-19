@@ -1,6 +1,5 @@
 package it.polimi.ingsw.view.model_view;
 
-import it.polimi.ingsw.exceptions.WrongParametersException;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 
 import java.util.ArrayList;
