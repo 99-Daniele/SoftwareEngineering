@@ -21,7 +21,7 @@ public class DevelopmentCard extends Card {
     private final int faithPointsGiven;
 
     public DevelopmentCard(Color color, int level, Cost resourceCost, int victoryPoints, Cost productionPowerResourceRequired,
-                           Cost productionPowerResourceGiven, int faithPointsGiven, int cardID) {
+                               Cost productionPowerResourceGiven, int faithPointsGiven, int cardID) {
         super(victoryPoints, cardID);
         this.color = color;
         this.level = level;
@@ -131,11 +131,11 @@ public class DevelopmentCard extends Card {
     }
 
     @Override
-    public void printCard() {
+    public void print() {
         System.out.println("DEVELOPMENT_CARD:\nCOLOR: " + color + "\nLEVEL: " + level +
                 "\nRESOURCE_COST: " + resourceCost.toString() + "\nPRODUCTION_POWER_RESOURCE_REQUIRED: " +
                 productionPowerResourceRequired.toString() + "\nPRODUCTION_POWER_RESOURCE_GIVEN: " +
                 productionPowerResourceGiven.toString() + "\nFAITH_POINTS_GIVEN: " + faithPointsGiven);
-        super.printCard();
+        super.print();
     }
 }

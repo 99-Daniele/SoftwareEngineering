@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.market;
+package it.polimi.ingsw.view.model_view;
 
 import it.polimi.ingsw.exceptions.WrongParametersException;
 

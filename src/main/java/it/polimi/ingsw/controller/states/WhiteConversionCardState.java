@@ -109,7 +109,7 @@ public class WhiteConversionCardState implements State_Controller{
     }
 
     @Override
-    public void setLeaderCards(LeaderCard [] leaderCards) {
+    public void setLeaderCards(LeaderCard[] leaderCards) {
         this.leaderCard1 = leaderCards[0];
         this.leaderCard2 = leaderCards[1];
     }

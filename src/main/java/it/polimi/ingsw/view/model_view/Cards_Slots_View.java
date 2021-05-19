@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.player;
+package it.polimi.ingsw.view.model_view;
 
 import java.util.ArrayList;
 

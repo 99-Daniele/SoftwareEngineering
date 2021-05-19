@@ -1,9 +1,7 @@
-package it.polimi.ingsw.model.player;
+package it.polimi.ingsw.view.model_view;
 
 import it.polimi.ingsw.model.player.depots.Warehouse_Strongbox_View;
-import it.polimi.ingsw.model.resourceContainers.Resource;
-
-import java.util.ArrayList;
+import it.polimi.ingsw.view.model_view.Cards_Slots_View;
 
 public class PlayerBoard_View {
 

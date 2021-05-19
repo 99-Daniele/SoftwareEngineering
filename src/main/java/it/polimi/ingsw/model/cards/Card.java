@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model.cards;
 
-public class Card implements PrintedCard{
+import it.polimi.ingsw.view.model_view.Card_View;
+
+public class Card implements Card_View {
 
     private final int victoryPoints;
     private final int cardID;
@@ -17,7 +19,7 @@ public class Card implements PrintedCard{
     }
 
     @Override
-    public void printCard() {
+    public void print() {
         System.out.println("VICTORY_POINTS: " + victoryPoints + "\nCARD_ID: " + cardID + "\n\n");
     }
 }

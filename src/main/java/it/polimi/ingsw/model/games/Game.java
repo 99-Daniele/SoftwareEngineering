@@ -13,7 +13,6 @@ import it.polimi.ingsw.exceptions.*;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.concurrent.TimeUnit;
 
 import it.polimi.ingsw.network.messages.*;
 
@@ -310,7 +309,6 @@ public class Game extends Observable implements LightGame{
                 faithPointsIncreaseNotify(i);
             }
         }
-        faithTrackMovementAllPlayers();
     }
 
     private void faithPointsIncreaseNotify(int i){
@@ -352,7 +350,6 @@ public class Game extends Observable implements LightGame{
         Message message_one_parameter_int=new Message_One_Parameter_Int(MessageType.FAITH_POINTS_INCREASE,currentPlayer+1, players.get(currentPlayer).getFaithPoints());
         setChanged();
         notifyObservers(message_one_parameter_int);
-        faithTrackMovement();
     }
 
     /**
@@ -719,10 +716,22 @@ public class Game extends Observable implements LightGame{
                 }
             }
         }
+        endGameNotify(winner +1, maxVictoryPoints, maxNumOfResources);
+        return winner;
+    }
+
+    public void endGameNotify(int winner, int maxVictoryPoints, int maxNumOfResources){
         Message endGame = new Message_Two_Parameter_Int(MessageType.END_GAME, winner, maxVictoryPoints, maxNumOfResources);
         setChanged();
         notifyObservers(endGame);
-        return winner;
+    }
+
+    public void endGameNotify(int winner){
+        int maxVictoryPoints = players.get(winner).sumVictoryPoints();
+        int maxNumOfResources = players.get(winner).sumTotalResource();
+        Message endGame = new Message_Two_Parameter_Int(MessageType.END_GAME, winner+1, maxVictoryPoints, maxNumOfResources);
+        setChanged();
+        notifyObservers(endGame);
     }
 
     /**
@@ -760,20 +769,19 @@ public class Game extends Observable implements LightGame{
         notifyObservers(message_one_parameter_int);
     }
 
-    public void discardDeckDevelopmentCards(Color color){
+    public void discardNotify(Deck colorDeck){
         Message message;
-        Deck deck = getColorDeck(color);
-        if(deck.isEmpty()){
-            message = new Message_Four_Parameter_Int(MessageType.CARD_REMOVE,2, deck.getRow(),deck.getColumn(),1,-1);
+        if(colorDeck.isEmpty()){
+            message = new Message_Four_Parameter_Int(MessageType.CARD_REMOVE,2, colorDeck.getRow(),colorDeck.getColumn(),1,-1);
         }
         else{
             int cardID = -1;
             try {
-                cardID = deck.getFirstCard().getCardID();
+                cardID = colorDeck.getFirstCard().getCardID();
             } catch (EmptyDevelopmentCardDeckException e) {
                 e.printStackTrace();
             }
-            message = new Message_Four_Parameter_Int(MessageType.CARD_REMOVE,2,deck.getRow(),deck.getColumn(),0, cardID);
+            message = new Message_Four_Parameter_Int(MessageType.CARD_REMOVE,2,colorDeck.getRow(),colorDeck.getColumn(),0, cardID);
         }
         setChanged();
         notifyObservers(message);

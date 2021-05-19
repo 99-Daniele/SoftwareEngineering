@@ -112,6 +112,16 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame {
     @Override
     public void LorenzoFaithTrackMovement(int faithPoints){
         LorenzoIlMagnifico.increaseFaithPoints(faithPoints);
+        LorenzoPopeSpace();
+    }
+
+    @Override
+    public void faithTrackMovementAllPlayers() {
+        super.faithTrackMovement();
+        LorenzoPopeSpace();
+    }
+
+    private void LorenzoPopeSpace(){
         if (getFaithTrack().reachPope(LorenzoIlMagnifico.getFaithPoints())) {
             getFaithTrack().victoryPointsVaticanReport(getPlayer(0).getVictoryPoints(),getPlayer(0).getFaithPoints());
             getFaithTrack().DecreaseRemainingPope();
@@ -131,8 +141,8 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame {
         int eccCount=0;
         while (count<2 && eccCount<2) {
             try{
-                super.discardDeckDevelopmentCards(color);
                 colorDeck.removeDevelopmentCard();
+                super.discardNotify(colorDeck);
                 count++;
             }catch (EmptyDevelopmentCardDeckException e){
                 colorDeck=getColorDeck(color);
@@ -155,9 +165,13 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame {
      */
     @Override
     public int endGame() {
-        if(getCurrentPlayer().haveSevenDevelopmentCards() || getCurrentPlayer().getFaithPoints() >= 20)
+        if(getCurrentPlayer().haveSevenDevelopmentCards() || getCurrentPlayer().getFaithPoints() >= 24){
+            super.endGameNotify(0);
             return 0;
-        else
+        }
+        else{
+            super.endGameNotify(1, 0, 0);
             return 1;
+        }
     }
 }

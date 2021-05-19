@@ -1,9 +1,4 @@
-package it.polimi.ingsw.model.games;
-
-import it.polimi.ingsw.model.cards.Decks_View;
-import it.polimi.ingsw.model.faithTrack.FaithTrack_View;
-import it.polimi.ingsw.model.market.Market_View;
-import it.polimi.ingsw.model.player.PlayerBoard_View;
+package it.polimi.ingsw.view.model_view;
 
 import java.util.ArrayList;
 

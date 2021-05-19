@@ -3,7 +3,7 @@ package it.polimi.ingsw.model.cards.leaderCards;
 import it.polimi.ingsw.exceptions.*;
 
 import it.polimi.ingsw.model.cards.Card;
-import it.polimi.ingsw.model.cards.developmentCards.*;
+import it.polimi.ingsw.model.cards.developmentCards.DevelopmentCard;
 import it.polimi.ingsw.model.player.Strongbox;
 import it.polimi.ingsw.model.player.Warehouse;
 import it.polimi.ingsw.model.resourceContainers.*;
@@ -143,12 +143,12 @@ public abstract class LeaderCard extends Card {
     public void recount(DevelopmentCard card){}
 
     @Override
-    public void printCard() {
+    public void print() {
         System.out.println("DEVELOPMENT_CARD:\nRESOURCE: " + resource);
         if(resourceCost != null)
             System.out.println("RESOURCE_COST: " + resourceCost.toString());
         else if(leaderRequirements != null)
             System.out.println("LEADER_REQUIREMENTS: " + leaderRequirements.toString());
-        super.printCard();
+        super.print();
     }
 }

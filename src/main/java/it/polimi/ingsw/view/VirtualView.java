@@ -4,7 +4,6 @@ import it.polimi.ingsw.model.cards.leaderCards.LeaderCard;
 import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.network.messages.*;
 
-import javax.rmi.ssl.SslRMIClientSocketFactory;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -242,6 +241,7 @@ public class VirtualView extends Observable implements View, Observer{
     }
 
     public void endGame(Message message){
+        connected = false;
         System.out.println(nickName + " is disconnected");
         sendMessage(message);
         disconnect();

@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.market;
 import it.polimi.ingsw.exceptions.WrongParametersException;
 
 import it.polimi.ingsw.model.resourceContainers.Resource;
+import it.polimi.ingsw.view.model_view.Market_View;
 
 import java.io.Serializable;
 

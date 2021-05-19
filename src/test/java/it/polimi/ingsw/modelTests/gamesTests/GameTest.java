@@ -5,8 +5,7 @@ import it.polimi.ingsw.model.cards.leaderCards.*;
 import it.polimi.ingsw.exceptions.*;
 
 import it.polimi.ingsw.model.market.Marble;
-import it.polimi.ingsw.model.cards.Card;
-import it.polimi.ingsw.model.cards.PrintedCard;
+import it.polimi.ingsw.view.model_view.Card_View;
 import it.polimi.ingsw.model.cards.developmentCards.Color;
 import it.polimi.ingsw.model.games.Game;
 
@@ -178,22 +177,22 @@ class GameTest {
     @Test
     void correctMapping(){
 
-        PrintedCard card1 = CardMap.getCard(1);
+        Card_View card1 = CardMap.getCard(1);
 
         assertEquals(1, card1.getCardID());
         assertTrue(card1 instanceof DevelopmentCard);
 
-        PrintedCard card34 = CardMap.getCard(34);
+        Card_View card34 = CardMap.getCard(34);
 
         assertEquals(34, card34.getCardID());
         assertTrue(card34 instanceof DevelopmentCard);
 
-        PrintedCard card49 = CardMap.getCard(49);
+        Card_View card49 = CardMap.getCard(49);
 
         assertEquals(49, card49.getCardID());
         assertTrue(card49 instanceof DiscountCard);
 
-        PrintedCard card64 = CardMap.getCard(64);
+        Card_View card64 = CardMap.getCard(64);
 
         assertEquals(64, card64.getCardID());
         assertTrue(card64 instanceof AdditionalProductionPowerCard);

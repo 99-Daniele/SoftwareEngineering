@@ -43,7 +43,7 @@ public class PlayerServer implements Runnable {
     }
 
     private void disconnect(String nickName, int position){
-        closeConnections();
         controllerGame.quitGame(nickName, position);
+        closeConnections();
     }
 }

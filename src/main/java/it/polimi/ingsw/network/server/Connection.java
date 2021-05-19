@@ -14,12 +14,15 @@ public class Connection {
         for(ControllerGame controllerGame: controllerGames){
             if(controllerGame.getCurrentNumPlayers() < controllerGame.getMaxNumPlayers())
                 return controllerGame;
+        }
+        for (ControllerGame controllerGame:controllerGames){
             while(controllerGame.getCurrentNumPlayers() == 1 && controllerGame.getMaxNumPlayers() == 0) {
                 synchronized (lock) {
                     lock.wait();
                 }
             }
-
+            if(controllerGame.getCurrentNumPlayers() < controllerGame.getMaxNumPlayers())
+                return controllerGame;
         }
         controllerGames.add(new ControllerGame());
         return controllerGames.getLast();

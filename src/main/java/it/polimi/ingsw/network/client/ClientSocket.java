@@ -1045,8 +1045,12 @@ public class ClientSocket {
 
     private void vatican_report_message(Message message){
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
-        System.out.println("Il giocatore " + m.getPar1() + " è finito su una casella del papa." +
-                " Ora hai " + m.getPar2() + " punti vittoria dal tracciato fede");
+        if(numPlayers == 1 && m.getPar1() == 1)
+            System.out.println("Ludovico è finito su una casella del papa." +
+                    " Ora hai " + m.getPar2() + " punti vittoria dal tracciato fede");
+        else
+            System.out.println("Il giocatore " + m.getPar1() + " è finito su una casella del papa." +
+                    " Ora hai " + m.getPar2() + " punti vittoria dal tracciato fede");
     }
 
     private void leader_card_activation_message(Message message){
@@ -1065,6 +1069,7 @@ public class ClientSocket {
     }
 
     private void quit_message(Message message){
+        System.out.println("QUIT");
         Message_One_Parameter_String m = (Message_One_Parameter_String) message;
         if(startGame != 0) {
             System.out.println("\nIl giocatore " + m.getPar() + " si è disconnesso. La partita è finita.");
@@ -1079,9 +1084,14 @@ public class ClientSocket {
 
     private void end_game_message(Message message){
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
-        System.out.println("\nIl vincitore è il giocatore " + m.getClientID()
-                + " che ha totalizzato " + m.getPar1() + " punti vittoria e " + m.getPar2()
-                + " risorse totali.");
+        if(numPlayers == 1 && m.getClientID() == 1){
+            System.out.println("La partita è finita. Il vincitore è Ludovico.");
+        }
+        else {
+            System.out.println("\nLa parita è finita. Il vincitore è il giocatore " + m.getClientID()
+                    + " che ha totalizzato " + m.getPar1() + " punti vittoria e " + m.getPar2()
+                    + " risorse totali.");
+        }
         System.out.println("\nDisconnessione.");
         disconnect();
         System.exit(1);
@@ -1292,12 +1302,13 @@ public class ClientSocket {
      * close inputStream, outputStream and socket connection with Server.
      */
     private void disconnect() {
-        connectedThread.interrupt();
-        threadOut.interrupt();
+        connected = false;
         try {
             in.close();
             out.close();
         } catch (IOException e) {
         }
+        connectedThread.interrupt();
+        threadOut.interrupt();
     }
 }

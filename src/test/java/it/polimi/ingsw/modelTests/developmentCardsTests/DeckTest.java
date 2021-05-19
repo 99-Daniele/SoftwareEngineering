@@ -2,8 +2,8 @@ package it.polimi.ingsw.modelTests.developmentCardsTests;
 
 import it.polimi.ingsw.model.cards.developmentCards.Deck;
 import it.polimi.ingsw.model.cards.developmentCards.Color;
-import it.polimi.ingsw.model.cards.developmentCards.DevelopmentCard;
 
+import it.polimi.ingsw.model.cards.developmentCards.DevelopmentCard;
 import it.polimi.ingsw.model.resourceContainers.Cost;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 import org.junit.jupiter.api.Test;

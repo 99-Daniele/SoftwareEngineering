@@ -158,7 +158,7 @@ class CostTest {
         s1.increaseResourceType(r1, 3);
         s1.increaseResourceType(r2, 3);
 
-        c.decreaseResource(w1, s1, 1);
+        c.decreaseResource(w1, s1, 0);
         assertEquals(0, w1.getNumOfResource(r1));
         assertEquals(0, w1.getNumOfResource(r2));
         assertEquals(3, s1.getNumOfResource(r1));
@@ -170,7 +170,7 @@ class CostTest {
         s2.increaseResourceType(r1, 3);
         s2.increaseResourceType(r2, 3);
 
-        c.decreaseResource(w2, s2, 1);
+        c.decreaseResource(w2, s2, 0);
         assertEquals(1, w2.getNumOfResource(r1));
         assertEquals(0, w2.getNumOfResource(r2));
         assertEquals(3, s2.getNumOfResource(r1));
@@ -179,7 +179,7 @@ class CostTest {
         s3.increaseResourceType(r1, 3);
         s3.increaseResourceType(r2, 3);
 
-        c.decreaseResource(w3, s3, 1);
+        c.decreaseResource(w3, s3, 0);
         assertEquals(0, w3.getNumOfResource(r1));
         assertEquals(2, s3.getNumOfResource(r1));
         assertEquals(0, w3.getNumOfResource(r2));

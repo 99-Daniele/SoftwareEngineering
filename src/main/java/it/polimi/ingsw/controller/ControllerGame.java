@@ -13,12 +13,9 @@ import it.polimi.ingsw.model.player.Strongbox;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.network.server.Connection;
-import it.polimi.ingsw.parser.CardMap;
 import it.polimi.ingsw.view.*;
 
-import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 public class ControllerGame implements Observer {
 
@@ -216,30 +213,30 @@ public class ControllerGame implements Observer {
         }
     }
 
-    public synchronized void addPlayer(String nickName){
-        if (!InputController.login_check(nickName)) {
-            views.getLast().errorMessage(ErrorType.WRONG_PARAMETERS);
-            return;
-        }
-        createNewPlayer(nickName);
-    }
-
-    public synchronized void addPlayer(Message loginMessage) {
+    private synchronized void addPlayer(Message loginMessage) {
         try {
             Message_One_Parameter_String m = (Message_One_Parameter_String) loginMessage;
             String nickName = m.getPar();
-            if (!currentState.isRightState(CONTROLLER_STATES.WAITING_PLAYERS_STATE)) {
-                views.getLast().errorMessage(ErrorType.ILLEGAL_OPERATION);
-                return;
-            }
-            if (!InputController.login_check(m.getPar())) {
-                views.getLast().errorMessage(ErrorType.WRONG_PARAMETERS);
-                return;
-            }
-            createNewPlayer(nickName);
+            addPlayer(nickName);
         } catch (ClassCastException e) {
             views.getLast().errorMessage(ErrorType.WRONG_PARAMETERS);
         }
+    }
+
+    private synchronized void addPlayer(String nickName){
+        int viewID = 0;
+        for (int i = 0; i < views.size(); i++)
+            if(views.get(i).getNickname() != null && views.get(i).getNickname().equals(nickName))
+                viewID = i;
+        if (!currentState.isRightState(CONTROLLER_STATES.WAITING_PLAYERS_STATE)) {
+            views.get(viewID).errorMessage(ErrorType.ILLEGAL_OPERATION);
+            return;
+        }
+        if (!InputController.login_check(nickName)) {
+            views.get(viewID).errorMessage(ErrorType.WRONG_PARAMETERS);
+            return;
+        }
+        createNewPlayer(nickName);
     }
 
     private void createNewPlayer(String nickName){
@@ -317,7 +314,7 @@ public class ControllerGame implements Observer {
 
     public void endGame() {
         game.endGame();
-        System.out.println("GAME ENDED");
+        resetControllerGame();
     }
 
     public void leaderCardHandler(Message message) throws IllegalStateException, WrongParametersException {
@@ -476,8 +473,10 @@ public class ControllerGame implements Observer {
             throw new WrongParametersException();
         if (!chosenMarble.useMarble(game)) {
             currentState.removeMarble(chosenMarble);
-            if (currentState.getMarbles().size() == 0)
+            if (currentState.getMarbles().size() == 0) {
+                game.faithTrackMovementAllPlayers();
                 currentState.nextState(this, MessageType.END_TURN);
+            }
             else
                 currentState.nextState(this, MessageType.USE_MARBLE);
             views.get(viewID).ok();
@@ -648,7 +647,10 @@ public class ControllerGame implements Observer {
         if(!currentState.isRightState(CONTROLLER_STATES.END_TURN_STATE))
             throw new IllegalStateException();
         currentState.nextState(this, MessageType.BUY_CARD);
-        game.nextPlayer();
+        if(game.isEndGame())
+            endGame();
+        else
+            game.nextPlayer();
         if(game.isEndGame())
             endGame();
     }

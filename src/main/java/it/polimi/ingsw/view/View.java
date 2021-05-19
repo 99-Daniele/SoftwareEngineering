@@ -3,7 +3,6 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.model.cards.leaderCards.LeaderCard;
 import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.network.messages.ErrorType;
-import it.polimi.ingsw.network.messages.Message;
 
 import java.util.ArrayList;
 
