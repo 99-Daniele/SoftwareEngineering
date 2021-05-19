@@ -62,6 +62,10 @@ public class ClientSocket {
                 try {
                     receivePing();
                 } catch (InterruptedException | IOException e) {
+                    try {
+                        TimeUnit.MILLISECONDS.sleep(100);
+                    } catch (InterruptedException interruptedException) {
+                    }
                     if(connected) {
                         System.err.println("\nClient no longer connected to the Server");
                         connected = false;
@@ -77,6 +81,10 @@ public class ClientSocket {
                 try {
                     receiveMessage();
                 } catch (InterruptedException | IOException e) {
+                    try {
+                        TimeUnit.MILLISECONDS.sleep(100);
+                    } catch (InterruptedException interruptedException) {
+                    }
                     if(connected) {
                         System.err.println("\nClient no longer connected to the Server");
                         connected = false;
@@ -1069,9 +1077,9 @@ public class ClientSocket {
     }
 
     private void quit_message(Message message){
-        System.out.println("QUIT");
         Message_One_Parameter_String m = (Message_One_Parameter_String) message;
         if(startGame != 0) {
+            connected = false;
             System.out.println("\nIl giocatore " + m.getPar() + " si è disconnesso. La partita è finita.");
             disconnect();
             System.exit(1);
@@ -1308,7 +1316,5 @@ public class ClientSocket {
             out.close();
         } catch (IOException e) {
         }
-        connectedThread.interrupt();
-        threadOut.interrupt();
     }
 }

@@ -38,12 +38,11 @@ public class ControllerGame implements Observer {
             System.out.println("GAME ENDED");
         game = null;
         firstPlayer = null;
-        numPlayers = 1;
+        numPlayers = 0;
         views = new LinkedList<>();
         currentState = new WaitingPlayerState();
         startGame = false;
         Connection.newGame();
-        Thread.currentThread().interrupt();
     }
 
     public int getMaxNumPlayers() {
@@ -66,9 +65,11 @@ public class ControllerGame implements Observer {
      * @param view is the view that is added to the list of views in controllerGame and also added to the observers of game
      */
     public synchronized int addView(View view) {
+        if(views.size() == numPlayers && numPlayers > 0)
+            return -1;
         views.add(view);
         if(view.getNickname() != null)
-            addPlayer(view.getNickname());
+            addPlayer(view, view.getNickname());
         if (game != null)
             game.addObservers((VirtualView) view);
         return views.size() - 1;
@@ -119,7 +120,7 @@ public class ControllerGame implements Observer {
         int viewID = m.getClientID();
         try {
             if (m.getMessageType() == MessageType.LOGIN) {
-                addPlayer(m);
+                addPlayer((View) o, m);
                 return;
             }
             if (m.getMessageType() == MessageType.NUM_PLAYERS) {
@@ -213,48 +214,56 @@ public class ControllerGame implements Observer {
         }
     }
 
-    private synchronized void addPlayer(Message loginMessage) {
+    private synchronized void addPlayer(View view, Message loginMessage) {
         try {
             Message_One_Parameter_String m = (Message_One_Parameter_String) loginMessage;
             String nickName = m.getPar();
-            addPlayer(nickName);
+            addPlayer(view, nickName);
         } catch (ClassCastException e) {
             views.getLast().errorMessage(ErrorType.WRONG_PARAMETERS);
         }
     }
 
-    private synchronized void addPlayer(String nickName){
-        int viewID = 0;
-        for (int i = 0; i < views.size(); i++)
-            if(views.get(i).getNickname() != null && views.get(i).getNickname().equals(nickName))
-                viewID = i;
+    private synchronized void addPlayer(View view, String nickName){
         if (!currentState.isRightState(CONTROLLER_STATES.WAITING_PLAYERS_STATE)) {
-            views.get(viewID).errorMessage(ErrorType.ILLEGAL_OPERATION);
+            view.errorMessage(ErrorType.ILLEGAL_OPERATION);
             return;
         }
         if (!InputController.login_check(nickName)) {
-            views.get(viewID).errorMessage(ErrorType.WRONG_PARAMETERS);
+            view.errorMessage(ErrorType.WRONG_PARAMETERS);
             return;
         }
-        createNewPlayer(nickName);
+        createNewPlayer(view, nickName);
     }
 
-    private void createNewPlayer(String nickName){
+    private void createNewPlayer(View view, String nickName){
         if (game == null) {
             firstPlayer = nickName;
             views.get(0).login(0);
         } else {
             try {
                 game.createPlayer(nickName);
-                views.getLast().login(views.size() - 1);
-                if (getCurrentNumPlayers() == numPlayers) {
+                view.login(views.size() - 1);
+                if (playersReady()) {
                     startGame();
                 } else
                     currentState.nextState(this, MessageType.LOGIN);
             } catch (AlreadyTakenNicknameException e) {
-                views.getLast().errorMessage(ErrorType.ALREADY_TAKEN_NICKNAME);
+                view.errorMessage(ErrorType.ALREADY_TAKEN_NICKNAME);
             }
         }
+    }
+
+    private boolean playersReady(){
+        if(getCurrentNumPlayers() == numPlayers){
+            for (View view: views) {
+                if (view.getNickname() == null)
+                    return false;
+            }
+            return true;
+        }
+        else
+            return false;
     }
 
     private void startGame(){
@@ -274,7 +283,7 @@ public class ControllerGame implements Observer {
             selectedView.choseLeaderCards(leaderCards);
         }
         views = newViewsPosition;
-        System.out.println("NEW GAME STARTED -> PLAYERS: " + views.toString());
+        System.out.println("NEW GAME STARTED -> PLAYERS: " + views);
         startGame = true;
     }
 
@@ -288,7 +297,6 @@ public class ControllerGame implements Observer {
             throw new IllegalStateException();
         else {
             this.numPlayers = numPlayers;
-            Connection.newGame();
             if (numPlayers == 1) {
                 game = new SinglePlayerGame();
                 game.createPlayer(firstPlayer);
@@ -300,6 +308,7 @@ public class ControllerGame implements Observer {
                 game.addObservers((VirtualView) views.get(0));
                 views.get(0).ok();
             }
+            Connection.newGame();
         }
     }
 

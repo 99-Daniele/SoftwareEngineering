@@ -24,6 +24,10 @@ public class PlayerServer implements Runnable {
             virtualView.start();
             controllerGame = Connection.ConnectionPlayers();
             int viewID = controllerGame.addView(virtualView);
+            while (viewID == -1){
+                controllerGame = Connection.ConnectionPlayers();
+                viewID = controllerGame.addView(virtualView);
+            }
             virtualView.setViewID(viewID);
             virtualView.addObserver(controllerGame);
             virtualView.join();
