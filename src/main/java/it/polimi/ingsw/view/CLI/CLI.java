@@ -614,6 +614,7 @@ public class CLI implements Observer{
         Message_One_Parameter_String m = (Message_One_Parameter_String) message;
         if(game != null) {
             System.out.println("Player " + m.getPar() + " disconnected. Game ended.");
+            ClientSocket.setDisconnected();
             ClientSocket.disconnect();
             System.exit(1);
         }
@@ -627,14 +628,13 @@ public class CLI implements Observer{
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
         if(game.getNumOfPlayers() == 1 && m.getClientID() == 1){
             System.out.println("Game ended. Ludovico win.");
-            ClientSocket.disconnect();
-            System.exit(1);
         }
         else {
             System.out.println("Game ended. " + game.getNickname(m.getClientID()) + " win the game."
                     + " It made " + m.getPar1() + " victory points and " + m.getPar2()
                     + " total resources.");
         }
+        ClientSocket.setDisconnected();
         System.out.println("\nDisconnecting.");
         ClientSocket.disconnect();
         System.exit(1);

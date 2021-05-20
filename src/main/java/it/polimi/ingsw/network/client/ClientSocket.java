@@ -144,6 +144,10 @@ public class ClientSocket extends Observable{
         return ((currentTime - initTime) >= delta);
     }
 
+    public static void setDisconnected(){
+        connected = false;
+    }
+
     /**
      * close inputStream, outputStream and socket connection with Server.
      */
