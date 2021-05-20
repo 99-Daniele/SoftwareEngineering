@@ -486,10 +486,12 @@ public class CLI implements Observer{
         }
         // print player warehouse_strongbox
         if (position == 0) {
-            if (message.getClientID() == game.getNumOfPlayers()- 1)
+            if (message.getClientID() == game.getNumOfPlayers()- 1) {
+                // azione iniziale
+            }
+        } else if (message.getClientID() == position - 1) {
             // azione iniziale
-        } else if (message.getClientID() == position - 1)
-        // azione iniziale
+        }
     }
 
     private void buy_card_message(Message message) {
@@ -597,6 +599,16 @@ public class CLI implements Observer{
         System.out.println("Player " + m.getClientID() + " has discarded one leader card: ");
         // print leader card
     }
+
+    private void ok_message(){}
+
+    private void chosen_slot_message(Message message){}
+
+    private void take_marble_message(Message message){}
+
+    private void white_conversion_card_message(Message message){}
+
+    private void error_message(Message message){}
 
     private void quit_message(Message message){
         Message_One_Parameter_String m = (Message_One_Parameter_String) message;
