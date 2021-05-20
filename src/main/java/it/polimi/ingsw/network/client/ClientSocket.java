@@ -24,9 +24,9 @@ import java.util.concurrent.TimeUnit;
  */
 public class ClientSocket extends Observable{
 
+    private static ObjectOutputStream out;
     private Thread threadOut;
     private Thread connectedThread;
-    private final ObjectOutputStream out;
     private final ObjectInputStream in;
     private Scanner stdIn = new Scanner(new InputStreamReader(System.in));
     private String nickName;
@@ -1276,7 +1276,7 @@ public class ClientSocket extends Observable{
      * after 30 seconds Server didn't send any, connection with Server is considered as lost.
      * @param message is the message to send to Server
      */
-    private void sendMessage(Message message) throws IOException{
+    public static void sendMessage(Message message) throws IOException{
         out.flush();
         out.writeObject(message);
     }
