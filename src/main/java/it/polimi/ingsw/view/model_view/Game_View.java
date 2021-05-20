@@ -1,20 +1,22 @@
 package it.polimi.ingsw.view.model_view;
 
+import it.polimi.ingsw.model.market.Market;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 
 import java.util.ArrayList;
 
 public class Game_View {
 
-    private ArrayList<PlayerBoard_View> players;
+    private ArrayList<PlayerBoard_View> players = new ArrayList<>();
     private FaithTrack_View faithTrack;
     private Market_View market;
     private Decks_View decks;
 
-    public Game_View(ArrayList<String> players){
+    public void setPlayers(ArrayList<String> players){
         this.players = new ArrayList<>();
         for (String player: players)
             addPlayer(player);
+        initFaithTrack();
     }
 
     public int getNumOfPlayers(){
@@ -39,6 +41,10 @@ public class Game_View {
 
     public void setFirstDeckCards(ArrayList<Integer> cards){
         decks = new Decks_View(cards);
+    }
+
+    public ArrayList<Integer> getFirstDeckCards(){
+        return decks.getDevelopmentCards();
     }
 
     public void initFaithTrack(){
@@ -91,6 +97,10 @@ public class Game_View {
 
     public void setMyLeaderCards(int viewID, int firstLeaderCard, int secondLeaderCard){
         players.get(viewID).setLeaderCards(firstLeaderCard, secondLeaderCard);
+    }
+
+    public ArrayList<Integer> getDevelopmentCards(int viewID){
+        return players.get(viewID).getDevelopmentCards();
     }
 
     public int getMyLeaderCard(int viedID, int leaderCard){

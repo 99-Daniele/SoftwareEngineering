@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.CLI;
 
+import it.polimi.ingsw.model.games.Game;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 import it.polimi.ingsw.network.client.ClientSocket;
 import it.polimi.ingsw.network.messages.*;
@@ -19,10 +20,11 @@ public class CLI implements Observer{
 
     public CLI(ClientSocket clientSocket){
         this.position = 0;
+        game = new Game_View();
         clientSocket.addObserver(this);
     }
 
-    private void username(){
+    public void username(){
         System.out.println("Enter your nickname: ");
         try {
             String nickname = readLine();
@@ -52,14 +54,13 @@ public class CLI implements Observer{
         Message_One_Parameter_String m = (Message_One_Parameter_String) message;
         if (m.getClientID() != this.position) {
             System.out.println("New player: " + m.getPar());
-            game.addPlayer(m.getPar());
         }
     }
 
     private void players_message(Message message){
         Message_ArrayList_String m = (Message_ArrayList_String) message;
         System.out.println("All players connected.\nPlayers: " + m.getNickNames());
-        game = new Game_View(m.getNickNames());
+        game.setPlayers(m.getNickNames());
         this.position = m.getClientID();
         System.out.println("You are the " + (position + 1) + "° player");
     }
@@ -85,14 +86,16 @@ public class CLI implements Observer{
 
     public void take_market_marble() throws IOException {
         System.out.println("TAKE MARBLE FROM MARKET");
-        int input=-1;
         int x;
         int y;
         try {
+            // print market
             x=numberInput(0,1,"Do you want a row or a column?\n0 - ROW\n1 - COLUMN");
-            if (input==0)
+            if (x==0)
                 try {
                     y=numberInput(1,3,"Choose which row (1 to 3)");
+                    game.getRowMarbles(y);
+                    // print marbles
                     ClientSocket.sendMessage(new Message_Two_Parameter_Int(MessageType.TAKE_MARBLE, position, x, y));
                 } catch (ExecutionException e) {
                     e.printStackTrace();
@@ -100,6 +103,8 @@ public class CLI implements Observer{
             else
                 try {
                     y=numberInput(1,4,"Choose which column (1 to 4)");
+                    game.getColumnMarbles(y);
+                    // print marbles
                     ClientSocket.sendMessage(new Message_Two_Parameter_Int(MessageType.TAKE_MARBLE, position, x, y));
                 } catch (ExecutionException e) {
                     e.printStackTrace();
@@ -114,33 +119,32 @@ public class CLI implements Observer{
      * and waits an OK message return.
      */
     public void buy_card() throws IOException {
-        ArrayList<Integer> pos = new ArrayList<>(2);
+        int[] row_column;
         System.out.println("BUY_DEVELOPMENT_CARD");
-        try {
-            pos.add(numberInput(1,3,"Choose a row (1 to 3)"));
-        } catch (ExecutionException e) {
-            System.out.println("error");
-        }
-        try {
-            pos.add(numberInput(1,4,"\nScegli una colonna (1 - 4):"));
-        } catch (ExecutionException e) {
-            System.out.println("error");
-        }
+        // print all cards
+        do {
+            ArrayList<Integer> cardID = new ArrayList<>(1);
+            try {
+                cardID.add(numberInput(1, 48, "Choose a card by his CardID"));
+            } catch (ExecutionException e) {
+                System.out.println("error");
+            }
+            row_column = game.get_Row_Column(cardID.get(0));
+        } while (row_column[0] == -1 || row_column[1] == -1);
+        //print card
         int z = chose_warehouse_strongbox();
-        if(z==-1)
-        {
+        if(z == -1) {
             System.out.println("error");
             return;
         }
-        Message message = new Message_Three_Parameter_Int(MessageType.BUY_CARD, position, pos.get(0), pos.get(1), z);
-        System.out.println("\n" + message.toString());
+        Message message = new Message_Three_Parameter_Int(MessageType.BUY_CARD, position, row_column[0], row_column[1], z);
         ClientSocket.sendMessage(message);
     }
 
     /*
     forse non ci va qui
      */
-    private void activate_another_production() throws IOException, InterruptedException {
+    private void activate_another_production() throws IOException{
         try {
             if (numberInput(0,1,"Vuoi attivare un altro potere di produzione?\n1 - SI\n0 - NO")==1)
                 activate_production();
@@ -154,11 +158,12 @@ public class CLI implements Observer{
     /*
     forse non ci va
      */
-    private void activate_production() throws IOException, InterruptedException {
+    private void activate_production() throws IOException{
         System.out.println("ACTIVATE PRODUCTION");
         int x;
         try {
-            x=numberInput(1,3,"\nQuale produzione vuoi attivare?\n1 - CARTA SVILUPPO\n2 - POTERE BASE\n3 - CARTA LEADER");
+            x=numberInput(1,3,"\nWhich production do ypu want to activate?\n1 - DEVELOPMENT CARD POWER" +
+                    "\n2 - BASIC POWER\n3 - LEADER CARD POWER");
             switch (x) {
                 case 1:
                     slot_card_production();
@@ -177,30 +182,36 @@ public class CLI implements Observer{
 
     public void slot_card_production() {
         int x;
+        int y;
         try {
-            x=numberInput(1,3,"Di quale carta vuoi attivare il potere di produzione? (1 - 3)");
-            int y = chose_warehouse_strongbox();
-            if (y==-1)
-            {
-                System.out.println("error");
-                return;
+            ArrayList<Integer> cards = game.getDevelopmentCards(position);
+            // print cards
+            if(cards.size() > 0) {
+                if (cards.size() > 1)
+                    x = numberInput(1, cards.size(), "Which card do you want to activate production? (1 - " + cards.size() + ")");
+                else
+                    x = cards.get(0);
+                y = chose_warehouse_strongbox();
+                if (y == -1) {
+                    System.out.println("error");
+                    return;
+                }
+                Message message = new Message_Two_Parameter_Int(MessageType.DEVELOPMENT_CARD_POWER, position, x, y);
+                ClientSocket.sendMessage(message);
             }
-            Message message = new Message_Two_Parameter_Int(MessageType.DEVELOPMENT_CARD_POWER, position, x, y);
-            System.out.println("\n" + message.toString());
-            ClientSocket.sendMessage(message);
-        } catch (ExecutionException e) {
-            System.out.println("error");
-        } catch (IOException e) {
+            else
+                System.out.println("You don't have any development cards");
+        } catch (ExecutionException | IOException e) {
             System.out.println("error");
         }
     }
 
     public void basic_production() throws IOException {
-        System.out.println("Quale risorsa vuoi eliminare?");
+        System.out.println("Which resource you want to delete?");
         Resource r1 = chose_resource();
-        System.out.println("Quale risorsa vuoi eliminare?");
+        System.out.println("Which resource you want to delete?");
         Resource r2 = chose_resource();
-        System.out.println("Quale risorsa vuoi ricevere?");
+        System.out.println("Which resource you want to gain?");
         Resource r3 = chose_resource();
         int choice = chose_warehouse_strongbox();
         if (choice==-1)
@@ -218,7 +229,7 @@ public class CLI implements Observer{
             System.out.println("You no longer have any leader cards");
             return;
         }
-        System.out.println("Which resource you choose?");
+        System.out.println("Which resource you want to gain?");
         Resource r = chose_resource();
         int choice = chose_warehouse_strongbox();
         if (choice==-1) {
@@ -260,9 +271,8 @@ public class CLI implements Observer{
             System.out.println("You no longer have any leader cards");
             return;
         }
+        game.discardLeaderCard(position, x);
         Message message = new Message_One_Parameter_Int(MessageType.LEADER_CARD_DISCARD, position, x);
-
-        System.out.println(message.toString());
         try {
             ClientSocket.sendMessage(message);
         } catch (IOException e) {
@@ -272,7 +282,7 @@ public class CLI implements Observer{
 
     private void end_turn() {
         Message end_turn = new Message(MessageType.END_TURN, position);
-        System.out.println("Hai finito il tuo turno. Attendi che gli altri giocatori facciano il proprio.");
+        System.out.println("You finished your turn. Wait for other players.");
         try {
             ClientSocket.sendMessage(end_turn);
         } catch (IOException e) {
@@ -281,7 +291,7 @@ public class CLI implements Observer{
     }
 
     private int chose_leader_card() {
-        int chosenLeaderCard=-1;
+        int chosenLeaderCard = -1;
         int leaderCard1 = game.getMyLeaderCard(position, 1);
         int leaderCard2 = game.getMyLeaderCard(position, 2);
         Card_View firstLeaderCard = null;
@@ -310,24 +320,24 @@ public class CLI implements Observer{
     public void chose_first_resources() throws IOException {
         switch (position) {
             case 0:
-                System.out.println("In attesa che tutti i giocatori facciano le proprie scelte...");
+                System.out.println("You are the 1st player.\nWait for the other players to make their choices...");
                 break;
             case 1: {
-                System.out.println("Sei il giocatore in posizione 2. Hai diritto a 1 risorsa.\nScegli la risorsa:");
+                System.out.println("You are the 2nd player.\nYou gain 1 resource. Chose the resource:");
                 Resource r = chose_resource();
                 Message message = new Message_One_Int_One_Resource(MessageType.ONE_FIRST_RESOURCE, position, r, 1);
                 ClientSocket.sendMessage(message);
             }
             break;
             case 2: {
-                System.out.println("Sei il giocatore in posizione 2. Hai diritto a 1 risorsa e 1 punto fede.\nScegli la risorsa:");
+                System.out.println("You are the 3rd player.\nYou gain 1 resource and 1 faith point. Chose the resource:");
                 Resource r = chose_resource();
                 Message message = new Message_One_Int_One_Resource(MessageType.ONE_FIRST_RESOURCE, position, r, 1);
                 ClientSocket.sendMessage(message);
             }
             break;
             case 3: {
-                System.out.println("Sei il giocatore in posizione 4. Hai diritto a 2 risorse e 1 punto fede.\nScegli le risorse:");
+                System.out.println("You are the 4th player.\nYou gain 2resources and 1 faith point. Chose the resources:");
                 Resource r1 = chose_resource();
                 Resource r2 = chose_resource();
                 Message message = new Message_Two_Resource(MessageType.TWO_FIRST_RESOURCE, position, r1, r2);
@@ -365,7 +375,7 @@ public class CLI implements Observer{
     private int chose_warehouse_strongbox() {
         int choice=-1;
         try {
-            choice=numberInput(0,1,"Da dove preferiresti prendere le risorse?\n0 - MAGAZZINO\n1 - FORZIERE");
+            choice=numberInput(0,1,"Where you preferred to get the resource from?\n0 - WAREHOUSE\n1 - STRONGBOX");
             return choice;
         } catch (ExecutionException e) {
             e.printStackTrace();
@@ -387,7 +397,6 @@ public class CLI implements Observer{
             return;
         }
         Message message = new Message_Two_Parameter_Int(MessageType.SWITCH_DEPOT, position, x, y);
-        System.out.println(message.toString());
         try {
             ClientSocket.sendMessage(message);
         } catch (IOException e) {
@@ -398,7 +407,7 @@ public class CLI implements Observer{
     private int choseDepot(int depot) {
         int choice=-1;
         try {
-            choice=numberInput(1,5,"\nScegli il " + depot + "° deposito:");
+            choice=numberInput(1,5,"Chose the " + depot + "° depot:");
             return choice;
         } catch (ExecutionException e) {
             System.out.println("error");
@@ -415,8 +424,8 @@ public class CLI implements Observer{
         TimeUnit.SECONDS.sleep(2);
         ArrayList<Integer> choice=new ArrayList<>(2);
         try {
-            choice.add(numberInput(1,4,"\nScegli due tra queste 4 carte leader: " +
-                    leaderCard1 + ", " + leaderCard2 + ", " + leaderCard3 + ", " + leaderCard4));
+            choice.add(numberInput(1,4,"Chose between this 4 leader cards. Insert the cardID "));
+            // print cards
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
@@ -425,13 +434,13 @@ public class CLI implements Observer{
                 int number = Integer.parseInt(readLine());
                 choice.add(number);
                 if (choice.get(0) == choice.get(1)) {
-                    System.err.println("\nNon puoi scegliere due carte uguali\n");
+                    System.err.println("You can't chose the same card twice\n");
                 } else if (choice.get(1) != leaderCard1 && choice.get(1) != leaderCard2 &&
                         choice.get(1) != leaderCard3 && choice.get(1) != leaderCard4) {
-                    System.err.println("\nInserisci un numero corretto.\n");
+                    System.err.println("Chose a correct cardID\n");
                 } else break;
             } catch (InputMismatchException | ExecutionException e) {
-                System.err.println("\nInserisci un numero.");
+                System.err.println("Insert a number\n");
             }
         }
         game.setMyLeaderCards(position, choice.get(0), choice.get(1));
@@ -444,9 +453,7 @@ public class CLI implements Observer{
         FutureTask<String> futureTask = new FutureTask<>(new ReadInput());
         inputThread = new Thread(futureTask);
         inputThread.start();
-
         String input = null;
-
         try {
             input = futureTask.get();
         } catch (InterruptedException e) {
@@ -478,11 +485,11 @@ public class CLI implements Observer{
             // azione iniziale
         }
         else
-            System.out.println("Attendi che gli altri giocatori facciano il proprio turno...");
+            System.out.println("Wait for other players to finish their turns...");
     }
     private void end_turn_message(Message message) throws InterruptedException, IOException {
         if (message.getClientID() != position) {
-            System.out.println("Player " + game.getNickname(message.getClientID()) + " has finishe his turn.\nThis are its resources:");
+            System.out.println("Player " + game.getNickname(message.getClientID()) + " has finished his turn.\nThis are its resources:");
         }
         // print player warehouse_strongbox
         if (position == 0) {
@@ -612,7 +619,7 @@ public class CLI implements Observer{
 
     private void quit_message(Message message){
         Message_One_Parameter_String m = (Message_One_Parameter_String) message;
-        if(game != null) {
+        if(game.getNumOfPlayers() != 0) {
             System.out.println("Player " + m.getPar() + " disconnected. Game ended.");
             ClientSocket.setDisconnected();
             ClientSocket.disconnect();

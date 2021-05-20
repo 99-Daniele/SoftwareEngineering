@@ -170,5 +170,6 @@ public class ClientSocket extends Observable{
             connected = false;
             disconnect();
         }
+        System.exit(0);
     }
 }
