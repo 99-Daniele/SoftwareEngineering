@@ -11,7 +11,7 @@ import java.net.Socket;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-public class VirtualView extends Observable implements View, Observer{
+public class VirtualView extends View{
 
     private Thread pingThread;
     private Thread inThread;

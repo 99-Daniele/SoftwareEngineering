@@ -121,9 +121,7 @@ public class ClientSocket extends Observable{
                 Message message = new Message_One_Parameter_String(MessageType.LOGIN, position, nickName);
                 sendMessage(message);
             } catch (IOException e) {
-                System.err.println("\nClient no longer connected to the Server");
-                disconnect();
-                System.exit(0);
+                brutalDisconnection();
             }
         });
         thread.start();
@@ -585,105 +583,106 @@ public class ClientSocket extends Observable{
             try {
                 Message returnMessage = (Message) in.readObject();
                 wake_up();
-                Thread thread = new Thread(() -> {
-                    try {
-                        switch (returnMessage.getMessageType()) {
-                            case LOGIN:
-                                login_message(returnMessage);
-                                break;
-                            case NEW_PLAYER:
-                                new_player_message(returnMessage);
-                                break;
-                            case PLAYERS:
-                                players_message(returnMessage);
-                                break;
-                            case LEADER_CARD:
-                                leader_card_choice(returnMessage);
-                                break;
-                            case START_GAME:
-                                start_game_message(returnMessage);
-                                break;
-                            case MARKET:
-                                market_message(returnMessage);
-                                break;
-                            case DECKBOARD:
-                                deckBoard_message(returnMessage);
-                                break;
-                            case OK:
-                                ok_message();
-                                break;
-                            case PING:
-                                ping_message();
-                                break;
-                            case PONG:
-                                break;
-                            case TURN:
-                                turn_message(returnMessage);
-                                break;
-                            case END_TURN:
-                                end_turn_message(returnMessage);
-                                break;
-                            case BUY_CARD:
-                                buy_card_message(returnMessage);
-                                break;
-                            case CHOSEN_SLOT:
-                                chosen_slot_message(returnMessage);
-                                break;
-                            case CARD_REMOVE:
-                                card_remove_message(returnMessage);
-                                break;
-                            case RESOURCE_AMOUNT:
-                                resource_amount_message(returnMessage);
-                                break;
-                            case TAKE_MARBLE:
-                                take_marble_message(returnMessage);
-                                break;
-                            case MARKET_CHANGE:
-                                market_change(returnMessage);
-                                break;
-                            case WHITE_CONVERSION_CARD:
-                                white_conversion_card_message(returnMessage);
-                                break;
-                            case FAITH_POINTS_INCREASE:
-                                faith_points_message(returnMessage);
-                                break;
-                            case VATICAN_REPORT:
-                                vatican_report_message(returnMessage);
-                                break;
-                            case INCREASE_WAREHOUSE:
-                                increase_warehouse_message(returnMessage);
-                                break;
-                            case SWITCH_DEPOT:
-                                switch_depot_message(returnMessage);
-                                break;
-                            case LEADER_CARD_ACTIVATION:
-                                leader_card_activation_message(returnMessage);
-                                break;
-                            case EXTRA_DEPOT:
-                                extra_depot_message(returnMessage);
-                                break;
-                            case LEADER_CARD_DISCARD:
-                                leader_card_discard_message(returnMessage);
-                                break;
-                            case QUIT:
-                                quit_message(returnMessage);
-                                break;
-                            case END_GAME:
-                                end_game_message(returnMessage);
-                                break;
-                            case ERR:
-                                error_message(returnMessage);
-                                break;
-                            default:
-                                System.err.println("\nRicevuto messaggio inaspettato dal Server.");
-                                break;
+                Thread thread = new Thread() {
+                    @Override
+                    public void run() {
+                        try {
+                            switch (returnMessage.getMessageType()) {
+                                case LOGIN:
+                                    login_message(returnMessage);
+                                    break;
+                                case NEW_PLAYER:
+                                    new_player_message(returnMessage);
+                                    break;
+                                case PLAYERS:
+                                    players_message(returnMessage);
+                                    break;
+                                case LEADER_CARD:
+                                    leader_card_choice(returnMessage);
+                                    break;
+                                case START_GAME:
+                                    start_game_message(returnMessage);
+                                    break;
+                                case MARKET:
+                                    market_message(returnMessage);
+                                    break;
+                                case DECKBOARD:
+                                    deckBoard_message(returnMessage);
+                                    break;
+                                case OK:
+                                    ok_message();
+                                    break;
+                                case PING:
+                                    ping_message();
+                                    break;
+                                case PONG:
+                                    break;
+                                case TURN:
+                                    turn_message(returnMessage);
+                                    break;
+                                case END_TURN:
+                                    end_turn_message(returnMessage);
+                                    break;
+                                case BUY_CARD:
+                                    buy_card_message(returnMessage);
+                                    break;
+                                case CHOSEN_SLOT:
+                                    chosen_slot_message(returnMessage);
+                                    break;
+                                case CARD_REMOVE:
+                                    card_remove_message(returnMessage);
+                                    break;
+                                case RESOURCE_AMOUNT:
+                                    resource_amount_message(returnMessage);
+                                    break;
+                                case TAKE_MARBLE:
+                                    take_marble_message(returnMessage);
+                                    break;
+                                case MARKET_CHANGE:
+                                    market_change(returnMessage);
+                                    break;
+                                case WHITE_CONVERSION_CARD:
+                                    white_conversion_card_message(returnMessage);
+                                    break;
+                                case FAITH_POINTS_INCREASE:
+                                    faith_points_message(returnMessage);
+                                    break;
+                                case VATICAN_REPORT:
+                                    vatican_report_message(returnMessage);
+                                    break;
+                                case INCREASE_WAREHOUSE:
+                                    increase_warehouse_message(returnMessage);
+                                    break;
+                                case SWITCH_DEPOT:
+                                    switch_depot_message(returnMessage);
+                                    break;
+                                case LEADER_CARD_ACTIVATION:
+                                    leader_card_activation_message(returnMessage);
+                                    break;
+                                case EXTRA_DEPOT:
+                                    extra_depot_message(returnMessage);
+                                    break;
+                                case LEADER_CARD_DISCARD:
+                                    leader_card_discard_message(returnMessage);
+                                    break;
+                                case QUIT:
+                                    quit_message(returnMessage);
+                                    break;
+                                case END_GAME:
+                                    end_game_message(returnMessage);
+                                    break;
+                                case ERR:
+                                    error_message(returnMessage);
+                                    break;
+                                default:
+                                    System.err.println("\nRicevuto messaggio inaspettato dal Server.");
+                                    break;
+                            }
+                        } catch (IOException | InterruptedException e) {
+                            brutalDisconnection();
                         }
-                    } catch (InterruptedException | IOException e) {
-                        System.err.println("\nClient no longer connected to the Server");
-                        disconnect();
-                        System.exit(0);
                     }
-                });
+                };
                 thread.start();
             } catch (ClassNotFoundException | ClassCastException e) {
                 System.err.println("\nRicevuto messaggio inaspettato dal Server.");

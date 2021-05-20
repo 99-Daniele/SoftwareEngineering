@@ -3,41 +3,52 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.model.cards.leaderCards.LeaderCard;
 import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.network.messages.ErrorType;
+import it.polimi.ingsw.view.model_view.Game_View;
 
+import java.io.BufferedReader;
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
-public interface View{
+public abstract class View extends Observable implements Observer {
 
-    String getNickname();
+    private Game_View game_view;
+    private Thread inThread;
+    private BufferedReader stdIn;
+    private final Object okLock = new Object();
 
-    void setViewID(int viewID);
+    public abstract String getNickname();
 
-    void login(int viewID);
+    public abstract void setViewID(int viewID);
 
-    void newPlayer(String nickname, int position);
+    public abstract void login(int viewID);
 
-    void allPlayerConnected(int position, int numPLayer, ArrayList<String> nickNames);
+    public abstract void newPlayer(String nickname, int position);
 
-    void startGame(int numPlayer);
+    public abstract void allPlayerConnected(int position, int numPLayer, ArrayList<String> nickNames);
 
-    void choseLeaderCards(ArrayList <LeaderCard> leaderCards);
+    public abstract void startGame(int numPlayer);
 
-    void isMyTurn(boolean turn);
+    public abstract void choseLeaderCards(ArrayList <LeaderCard> leaderCards);
 
-    void exit(String nickName);
+    public abstract void available_slot(ArrayList<Integer> availableSlots);
 
-    void quit(String nickName);
+    public abstract void chosen_marble(Marble[] marbles);
 
-    void ok();
+    public abstract void choseWhiteConversionCard(LeaderCard[] leaderCards);
 
-    void errorMessage(ErrorType errorType);
+    public abstract void isMyTurn(boolean turn);
 
-    void available_slot(ArrayList<Integer> availableSlots);
+    public abstract void exit(String nickName);
 
-    void chosen_marble(Marble[] marbles);
+    public abstract void quit(String nickName);
 
-    void choseWhiteConversionCard(LeaderCard[] leaderCards);
+    public abstract void ok();
+
+    public abstract void errorMessage(ErrorType errorType);
 
     @Override
-    String toString();
+    public void update(Observable o, Object arg) {
+
+    }
 }
