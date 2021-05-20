@@ -41,6 +41,10 @@ public class PlayerBoard_View {
         cards_slots.setLeaderCards(firstLeaderCard, secondLeaderCard);
     }
 
+    public int getLeaderCard(int leaderCard){
+        return cards_slots.getLeaderCard(leaderCard);
+    }
+
     public void addLeaderCard(int leaderCard){
         cards_slots.addLeaderCard(leaderCard);
     }

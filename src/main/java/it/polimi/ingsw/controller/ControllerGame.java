@@ -64,52 +64,47 @@ public class ControllerGame implements Observer {
     /**
      * @param view is the view that is added to the list of views in controllerGame and also added to the observers of game
      */
-    public synchronized int addView(View view) {
+    public synchronized void addView(View view) throws FullGameException {
         if(views.size() == numPlayers && numPlayers > 0)
-            return -1;
+            throw new FullGameException();
         views.add(view);
         if(view.getNickname() != null)
             addPlayer(view, view.getNickname());
         if (game != null)
             game.addObservers((VirtualView) view);
-        return views.size() - 1;
     }
 
-    public synchronized void removeView(String nickName, int viewID) {
+    public synchronized void removeView(View view, String nickName) {
         try {
             game.deletePlayer(nickName);
-            views.remove(viewID);
+            views.remove(view);
             if(views.size() == 0){
                 resetControllerGame();
-            }
-            else {
-                for (int i = 0; i < views.size(); i++)
-                    views.get(i).setViewID(i);
             }
         } catch (NullPointerException e) {
             resetControllerGame();
         }
     }
 
-    public synchronized void quitGame(String nickName, int viewID) {
+    public synchronized void quitGame(View view, String nickName) {
         if(nickName == null){
-            views.remove(viewID);
+            views.remove(view);
             if(views.size() == 0)
                 resetControllerGame();
         }
         else if (views.size() == 1) {
-            removeView(nickName, viewID);
+            removeView(view, nickName);
             resetControllerGame();
         }
         else if (!startGame) {
-            removeView(nickName, viewID);
-            for (View view : views)
-                view.exit(nickName);
+            removeView(view, nickName);
+            for (View otherView : views)
+                otherView.exit(nickName);
         }
         else {
-            removeView(nickName, viewID);
-            for (View view : views)
-                view.quit(nickName);
+            removeView(view, nickName);
+            for (View otherView : views)
+                otherView.quit(nickName);
             resetControllerGame();
         }
     }
@@ -185,7 +180,7 @@ public class ControllerGame implements Observer {
                     leaderDiscardHandler(m);
                     break;
                 case END_TURN:
-                    endTurnHandler(m);
+                    endTurnHandler();
                     break;
                 default:
                     views.get(viewID).errorMessage(ErrorType.ILLEGAL_OPERATION);
@@ -220,7 +215,7 @@ public class ControllerGame implements Observer {
             String nickName = m.getPar();
             addPlayer(view, nickName);
         } catch (ClassCastException e) {
-            views.getLast().errorMessage(ErrorType.WRONG_PARAMETERS);
+            view.errorMessage(ErrorType.WRONG_PARAMETERS);
         }
     }
 
@@ -239,7 +234,7 @@ public class ControllerGame implements Observer {
     private void createNewPlayer(View view, String nickName){
         if (game == null) {
             firstPlayer = nickName;
-            views.get(0).login(0);
+            view.login(0);
         } else {
             try {
                 game.createPlayer(nickName);
@@ -347,7 +342,7 @@ public class ControllerGame implements Observer {
             System.out.println("All players have made their choice.");
             currentState.nextState(this, MessageType.BUY_CARD);
             for(View view: views)
-                view.startGame(numPlayers);
+                view.startGame();
         }
     }
 
@@ -377,7 +372,7 @@ public class ControllerGame implements Observer {
             System.out.println("All players have made their choice.");
             currentState.nextState(this, MessageType.BUY_CARD);
             for(View view: views)
-                view.startGame(numPlayers);
+                view.startGame();
         }
     }
 
@@ -401,7 +396,7 @@ public class ControllerGame implements Observer {
             System.out.println("All players have made their choice.");
             currentState.nextState(this, MessageType.BUY_CARD);
             for(View view: views)
-                view.startGame(numPlayers);
+                view.startGame();
         }
     }
 
@@ -652,7 +647,7 @@ public class ControllerGame implements Observer {
         views.get(viewID).ok();
     }
 
-    public void endTurnHandler(Message m) throws IllegalStateException {
+    public void endTurnHandler() throws IllegalStateException {
         if(!currentState.isRightState(CONTROLLER_STATES.END_TURN_STATE))
             throw new IllegalStateException();
         currentState.nextState(this, MessageType.BUY_CARD);

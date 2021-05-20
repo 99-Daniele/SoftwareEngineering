@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view;
+package it.polimi.ingsw.view.CLI;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.util.concurrent.Callable;
 
 public class ReadInput implements Callable<String> {
+
     private final BufferedReader reader;
 
     public ReadInput() {

@@ -19,7 +19,12 @@ import java.util.concurrent.TimeUnit;
 public class Cli {
 
     private Thread inputThread;
+
     private int position;
+    private int leaderCard1;
+    private int leaderCard2;
+
+
 
     public Cli(Socket socket) throws IOException {
 
@@ -32,7 +37,7 @@ public class Cli {
             String nickname = readLine();
             ClientSocket.sendMessage( new Message_One_Parameter_String(MessageType.LOGIN,position,nickname));
         } catch (ExecutionException | IOException e) {
-            showInputErrorMessage();
+            System.out.println("errore");
         }
     }
 
@@ -42,38 +47,39 @@ public class Cli {
             playerNumber = numberInput(2, 3,  "How many players are going to play? 1 to 4 ");
             ClientSocket.sendMessage( new Message_One_Parameter_Int(MessageType.NUM_PLAYERS,position,playerNumber));
         } catch (ExecutionException | IOException e) {
-            showInputErrorMessage();
+            System.out.println("error");
         }
     }
 
 
-    public void take_market_marble() {
+    public void take_market_marble() throws IOException {
 
         System.out.println("TAKE MARBLE FROM MARKET");
         int input=-1;
         int x;
         int y;
-        int maxValue;
         try {
             x=numberInput(0,1,"\nScegli una riga o una colonna?\n0 - RIGA\n1 - COLONNA");
             if (input==0)
-                maxValue=3;
-            else
-                maxValue=4;
                 try {
-                    y=numberInput(1,maxValue,"Inserisci un numero da 1 a" +maxValue);
-                    try {
-                        ClientSocket.sendMessage(new Message_Two_Parameter_Int(MessageType.TAKE_MARBLE, position, x, y));
-                    } catch (IOException e) {
-                        showSendError();
-                    }
+                    y=numberInput(1,3,"Inserisci un numero da 1 a 3.");
+                    ClientSocket.sendMessage(new Message_Two_Parameter_Int(MessageType.TAKE_MARBLE, position, x, y));
                 } catch (ExecutionException e) {
-                    showInputErrorMessage();
+                    e.printStackTrace();
+                }
+            else
+                try {
+                    y=numberInput(1,4,"Inserisci un numero da 1 a 4.");
+                    ClientSocket.sendMessage(new Message_Two_Parameter_Int(MessageType.TAKE_MARBLE, position, x, y));
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
                 }
         } catch (ExecutionException e) {
-            showInputErrorMessage();
+            System.out.println("errore");
         }
     }
+
+
 
     /**
      * until user doesn't insert a valid input, ask him 1 int to chose the deck to where buy card. Then send it to Server
@@ -85,17 +91,17 @@ public class Cli {
         try {
             pos.add(numberInput(1,3,"\nScegli una riga (1 - 3):"));
         } catch (ExecutionException e) {
-            showInputErrorMessage();
+            System.out.println("error");
         }
         try {
             pos.add(numberInput(1,4,"\nScegli una colonna (1 - 4):"));
         } catch (ExecutionException e) {
-            showInputErrorMessage();
+            System.out.println("error");
         }
         int z = chose_warehouse_strongbox();
         if(z==-1)
         {
-            showInputErrorMessage();
+            System.out.println("error");
             return;
         }
         Message message = new Message_Three_Parameter_Int(MessageType.BUY_CARD, position, pos.get(0), pos.get(1), z);
@@ -103,6 +109,43 @@ public class Cli {
         ClientSocket.sendMessage(message);
     }
 
+    /*
+    forse non ci va qui
+     */
+    private void activate_another_production() throws IOException, InterruptedException {
+        try {
+            if (numberInput(0,1,"Vuoi attivare un altro potere di produzione?\n1 - SI\n0 - NO")==1)
+                activate_production();
+            else
+                end_production();
+        } catch (ExecutionException e) {
+            end_production();
+        }
+    }
+
+    /*forse non ci va
+
+     */
+    private void activate_production() throws IOException, InterruptedException {
+        System.out.println("ACTIVATE PRODUCTION");
+        int x;
+        try {
+            x=numberInput(1,3,"\nQuale produzione vuoi attivare?\n1 - CARTA SVILUPPO\n2 - POTERE BASE\n3 - CARTA LEADER");
+            switch (x) {
+                case 1:
+                    slot_card_production();
+                    break;
+                case 2:
+                    basic_production();
+                    break;
+                case 3:
+                    leader_card_production();
+                    break;
+            }
+        } catch (ExecutionException e) {
+            System.out.println("error");
+        }
+    }
 
     public void slot_card_production() {
         int x;
@@ -111,20 +154,20 @@ public class Cli {
             int y = chose_warehouse_strongbox();
             if (y==-1)
             {
-                showInputErrorMessage();
+                System.out.println("error");
                 return;
             }
             Message message = new Message_Two_Parameter_Int(MessageType.DEVELOPMENT_CARD_POWER, position, x, y);
             System.out.println("\n" + message.toString());
             ClientSocket.sendMessage(message);
         } catch (ExecutionException e) {
-            showInputErrorMessage();
+            System.out.println("error");
         } catch (IOException e) {
-            showSendError();
+            System.out.println("error");
         }
     }
 
-    public void basic_production() {
+    public void basic_production() throws IOException {
         System.out.println("Quale risorsa vuoi eliminare?");
         Resource r1 = chose_resource();
         System.out.println("Quale risorsa vuoi eliminare?");
@@ -134,15 +177,11 @@ public class Cli {
         int choice = chose_warehouse_strongbox();
         if (choice==-1)
         {
-            showInputErrorMessage();
+            System.out.println("error");
             return;
         }
         Message message = new Message_Three_Resource_One_Int(MessageType.BASIC_POWER, position, r1, r2, r3, choice);
-        try {
-            ClientSocket.sendMessage(message);
-        } catch (IOException e) {
-            showSendError();
-        }
+        ClientSocket.sendMessage(message);
     }
 
     public void leader_card_production() {
@@ -153,14 +192,14 @@ public class Cli {
         int choice = chose_warehouse_strongbox();
         if (choice==-1)
         {
-            showInputErrorMessage();
+            System.out.println("error");
             return;
         }
         Message message = new Message_One_Resource_Two_Int(MessageType.LEADER_CARD_POWER, position, r, x, choice);
         try {
             ClientSocket.sendMessage(message);
         } catch (IOException e) {
-            showSendError();
+            System.out.println("error");
         }
     }
 
@@ -174,7 +213,7 @@ public class Cli {
         int x = chose_leader_card();
         if(x==-1)
         {
-            showInputErrorMessage();
+            System.out.println("error");
             return;
         }
         Message message = new Message_One_Parameter_Int(MessageType.LEADER_CARD_ACTIVATION, position, x);
@@ -182,7 +221,7 @@ public class Cli {
         try {
             ClientSocket.sendMessage(message);
         } catch (IOException e) {
-            showSendError();
+            System.out.println("error");
         }
     }
 
@@ -192,7 +231,7 @@ public class Cli {
         int x = chose_leader_card();
         if(x==-1)
         {
-            showInputErrorMessage();
+            System.out.println("error");
             return;
         }
         Message message = new Message_One_Parameter_Int(MessageType.LEADER_CARD_DISCARD, position, x);
@@ -201,7 +240,7 @@ public class Cli {
         try {
             ClientSocket.sendMessage(message);
         } catch (IOException e) {
-            showSendError();
+            System.out.println("error");
         }
     }
 
@@ -211,15 +250,13 @@ public class Cli {
         try {
             ClientSocket.sendMessage(end_turn);
         } catch (IOException e) {
-            showSendError();
+            System.out.println("error");
         }
     }
 
     private int chose_leader_card() {
         int chosenLeaderCard=-1;
-        /*
         System.out.println("Le tue carte leader: " + leaderCard1 + ", " + leaderCard2);
-         */
         try {
             chosenLeaderCard=numberInput(1,2,"Quale carta leader scegli? (1 - 2)");
             return chosenLeaderCard;
@@ -279,7 +316,7 @@ public class Cli {
                     break;
             }
         } catch (ExecutionException e) {
-            showInputErrorMessage();
+            System.out.println("error");
         }
         return chosenResource;
     }
@@ -290,7 +327,7 @@ public class Cli {
             choice=numberInput(0,1,"Da dove preferiresti prendere le risorse?\n0 - MAGAZZINO\n1 - FORZIERE");
             return choice;
         } catch (ExecutionException e) {
-            showInputErrorMessage();
+            e.printStackTrace();
         }
         return choice;
     }
@@ -306,7 +343,7 @@ public class Cli {
         int y = choseDepot(2);
         if(x==-1 || y==-1)
         {
-            showInputErrorMessage();
+            System.out.println("error");
             return;
         }
         Message message = new Message_Two_Parameter_Int(MessageType.SWITCH_DEPOT, position, x, y);
@@ -314,7 +351,7 @@ public class Cli {
         try {
             ClientSocket.sendMessage(message);
         } catch (IOException e) {
-            showSendError();
+            System.out.println("error");
         }
     }
 
@@ -324,53 +361,46 @@ public class Cli {
             choice=numberInput(1,5,"\nScegli il " + depot + "° deposito:");
             return choice;
         } catch (ExecutionException e) {
-            showInputErrorMessage();
+            System.out.println("error");
         }
         return choice;
     }
 
 
-    private void leader_card_choice(Message message) {
+    private void leader_card_choice(Message message) throws IOException, InterruptedException {
         Message_Four_Parameter_Int m = (Message_Four_Parameter_Int) message;
         int leaderCard1 = m.getPar1();
         int leaderCard2 = m.getPar2();
         int leaderCard3 = m.getPar3();
         int leaderCard4 = m.getPar4();
-        try {
-            TimeUnit.SECONDS.sleep(2);
-        } catch (InterruptedException e) {
-            System.out.println("Interrupted sleeping");
-        }
+        TimeUnit.SECONDS.sleep(2);
         ArrayList<Integer> choice=new ArrayList<>(2);
         try {
             choice.add(numberInput(1,4,"\nScegli due tra queste 4 carte leader: " +
                     leaderCard1 + ", " + leaderCard2 + ", " + leaderCard3 + ", " + leaderCard4));
         } catch (ExecutionException e) {
-            showInputErrorMessage();
+            e.printStackTrace();
         }
-        try {
-            choice.add(numberInputWithAvoid(1,4,choice.get(0),"\nScegli due tra queste 4 carte leader: " +
-                    leaderCard1 + ", " + leaderCard2 + ", " + leaderCard3 + ", " + leaderCard4));
-        } catch (ExecutionException e) {
-            showInputErrorMessage();
+        while (true) {
+            try {
+                int number = Integer.parseInt(readLine());
+                choice.add(number);
+                if (choice.get(0) == choice.get(1)) {
+                    System.err.println("\nNon puoi scegliere due carte uguali\n");
+                } else if (choice.get(1) != leaderCard1 && choice.get(1) != leaderCard2 &&
+                        choice.get(1) != leaderCard3 && choice.get(1) != leaderCard4) {
+                    System.err.println("\nInserisci un numero corretto.\n");
+                } else break;
+            } catch (InputMismatchException | ExecutionException e) {
+                System.err.println("\nInserisci un numero.");
+            }
         }
-        Message returnMessage = new Message_Two_Parameter_Int(MessageType.LEADER_CARD, position, choice.get(0), choice.get(1));
-        try {
-            ClientSocket.sendMessage(returnMessage);
-        } catch (IOException e) {
-            showSendError();
-        }
+        this.leaderCard1 = choice.get(0);
+        this.leaderCard2 = choice.get(1);
+        Message returnMessage = new Message_Two_Parameter_Int(MessageType.LEADER_CARD, position, choice.get(0), choice.get(2));
+        ClientSocket.sendMessage(returnMessage);
     }
 
-
-    public void showInputErrorMessage(){
-        System.out.println("Input Error");
-    }
-
-    public void showSendError()
-    {
-        System.out.println("Send request failed");
-    }
 
     public String readLine() throws ExecutionException {
         FutureTask<String> futureTask = new FutureTask<>(new ReadInput());
@@ -390,6 +420,7 @@ public class Cli {
 
     private int numberInput(int minValue, int maxValue, String question) throws ExecutionException {
         int number = minValue - 1;
+
         do {
             try {
                 System.out.println(question);
@@ -403,30 +434,5 @@ public class Cli {
             }
         } while (number < minValue || number > maxValue);
         return number;
-    }
-
-    private int numberInputWithAvoid(int minValue, int maxValue,int avoid, String question) throws ExecutionException {
-        int number = minValue - 1;
-        do {
-            try {
-                System.out.println(question);
-                number = Integer.parseInt(readLine());
-
-                if (number < minValue || number > maxValue) {
-                    System.out.println("Invalid number! Please try again.\n");
-                }else if (avoid==number) {
-                    System.out.println("This number cannot be selected! Please try again.\n");
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input! Please try again.\n");
-            }
-        } while (number < minValue || number > maxValue);
-        return number;
-    }
-
-    public void exit(String message) {
-        inputThread.interrupt();
-        System.out.println("\nERROR: " + message);
-        System.exit(1);
     }
 }

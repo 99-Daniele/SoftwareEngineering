@@ -1,6 +1,7 @@
 package it.polimi.ingsw.network.server;
 
 import it.polimi.ingsw.controller.ControllerGame;
+import it.polimi.ingsw.exceptions.FullGameException;
 import it.polimi.ingsw.view.VirtualView;
 
 import java.io.IOException;
@@ -22,18 +23,18 @@ public class PlayerServer implements Runnable {
     public void run() {
         try {
             virtualView.start();
-            controllerGame = Connection.ConnectionPlayers();
-            int viewID = controllerGame.addView(virtualView);
-            while (viewID == -1){
-                controllerGame = Connection.ConnectionPlayers();
-                viewID = controllerGame.addView(virtualView);
+            while (true) {
+                try {
+                    controllerGame = Connection.ConnectionPlayers();
+                    controllerGame.addView(virtualView);
+                    break;
+                } catch (FullGameException e) {}
             }
-            virtualView.setViewID(viewID);
             virtualView.addObserver(controllerGame);
             virtualView.join();
-            disconnect(virtualView.getNickname(), virtualView.getViewID());
+            disconnect(virtualView.getNickname());
         } catch (IOException | InterruptedException e) {
-            disconnect(virtualView.getNickname(), virtualView.getViewID());
+            disconnect(virtualView.getNickname());
         }
     }
 
@@ -46,8 +47,8 @@ public class PlayerServer implements Runnable {
         }
     }
 
-    private void disconnect(String nickName, int position){
-        controllerGame.quitGame(nickName, position);
+    private void disconnect(String nickName){
+        controllerGame.quitGame(virtualView, nickName);
         closeConnections();
     }
 }

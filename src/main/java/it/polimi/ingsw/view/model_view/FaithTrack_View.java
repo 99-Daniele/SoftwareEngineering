@@ -18,8 +18,8 @@ public class FaithTrack_View {
             playersFaithPoints.add(0);
     }
 
-    public void increaseFaithPoints(int numPlayer, int faithPoints){
-        playersFaithPoints.set(numPlayer, faithPoints);
+    public void increaseFaithPoints(int viewID, int faithPoints){
+        playersFaithPoints.set(viewID, faithPoints);
     }
 
     public void print(){};

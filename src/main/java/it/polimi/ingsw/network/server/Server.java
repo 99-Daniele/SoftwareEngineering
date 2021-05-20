@@ -19,11 +19,11 @@ public class Server {
             System.err.println(e.getMessage());
             return;
         }
-        System.out.println("Server pronto");
+        System.out.println("Server ready");
         while(true){
                 try {
                     Socket socket = serverSocket.accept();
-                    System.out.println("\nAccettato nuovo Client\n");
+                    System.out.println("\nNew Client\n");
                     Thread thread = new Thread(new PlayerServer(socket));
                     thread.start();
                 } catch (IOException e) {
