@@ -11,9 +11,18 @@ public class Game_View {
     private Market_View market;
     private Decks_View decks;
 
-    public Game_View(String myPlayer){
-        players = new ArrayList<>();
-        players.add(new PlayerBoard_View(myPlayer));
+    public Game_View(ArrayList<String> players){
+        this.players = new ArrayList<>();
+        for (String player: players)
+            addPlayer(player);
+    }
+
+    public int getNumOfPlayers(){
+        return players.size();
+    }
+
+    public String getNickname(int player){
+        return players.get(player).getNickName();
     }
 
     public void addPlayer(String newPlayer){
@@ -47,17 +56,21 @@ public class Game_View {
         faithTrack = new FaithTrack_View(players.size());
     }
 
-    public void increaseFaithPoints(int numPlayer, int faithPoints){
-        faithTrack.increaseFaithPoints(numPlayer, faithPoints);
+    public void increaseFaithPoints(int viewID, int faithPoints){
+        faithTrack.increaseFaithPoints(viewID, faithPoints);
     }
 
-    void slideColumn(int selectedColumn) {
+    public void slideRow(int selectedRow){
+        market.slideRow(selectedRow);
+    }
+
+    public void slideColumn(int selectedColumn) {
         market.slideColumn(selectedColumn);
     }
 
-    void slideRow(int selectedRow){
-        market.slideRow(selectedRow);
-    }
+    public void getRowMarbles(int row){market.getRowMarbles(row);}
+
+    public void getColumnMarbles(int column){market.getColumnMarbles(column);}
 
     public void replaceCard(int row, int column, int cardID){
         decks.replaceCard(row, column, cardID);
@@ -87,8 +100,12 @@ public class Game_View {
         players.get(viewID).addExtraDepot(r);
     }
 
-    public void setLeaderCards(int viewID, int firstLeaderCard, int secondLeaderCard){
+    public void setMyLeaderCards(int viewID, int firstLeaderCard, int secondLeaderCard){
         players.get(viewID).setLeaderCards(firstLeaderCard, secondLeaderCard);
+    }
+
+    public int getMyLeaderCard(int viedID, int leaderCard){
+        return players.get(viedID).getLeaderCard(leaderCard);
     }
 
     public void addLeaderCard(int viewID, int leaderCard){

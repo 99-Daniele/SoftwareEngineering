@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.util.concurrent.Callable;
 
 public class ReadInput implements Callable<String> {
+
     private final BufferedReader reader;
 
     public ReadInput() {

@@ -1,95 +1,124 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.controller.states.CONTROLLER_STATES;
-import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 import it.polimi.ingsw.network.client.ClientSocket;
 import it.polimi.ingsw.network.messages.*;
+import it.polimi.ingsw.parser.CardMap;
+import it.polimi.ingsw.view.CLI.CLI_Printer;
+import it.polimi.ingsw.view.model_view.*;
 
 import java.io.*;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Scanner;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
+import java.util.concurrent.*;
 
-public class Cli {
+public class Cli implements Observer{
 
     private Thread inputThread;
-
+    private CLI_Printer cli_printer;
+    private Game_View game;
     private int position;
-    private int leaderCard1;
-    private int leaderCard2;
 
-
-
-    public Cli(Socket socket) throws IOException {
-
+    public Cli(ClientSocket clientSocket){
         this.position = 0;
+        clientSocket.addObserver(this);
     }
 
-    public void username(){
+    private void username(){
         System.out.println("Enter your nickname: ");
         try {
             String nickname = readLine();
             ClientSocket.sendMessage( new Message_One_Parameter_String(MessageType.LOGIN,position,nickname));
         } catch (ExecutionException | IOException e) {
-            System.out.println("errore");
+            System.out.println("error");
         }
     }
 
-    public void askPlayersNumber() {
+    private void login_message(Message message) {
+        if(message.getClientID() == 0)
+            askPlayersNumber();
+        System.out.println("Waiting other players...");
+    }
+
+    private void askPlayersNumber() {
         int playerNumber;
         try {
-            playerNumber = numberInput(2, 3,  "How many players are going to play? 1 to 4 ");
+            playerNumber = numberInput(1, 4,  "How many players are going to play? 1 to 4 ");
             ClientSocket.sendMessage( new Message_One_Parameter_Int(MessageType.NUM_PLAYERS,position,playerNumber));
         } catch (ExecutionException | IOException e) {
             System.out.println("error");
         }
     }
 
+    private void new_player_message(Message message){
+        Message_One_Parameter_String m = (Message_One_Parameter_String) message;
+        if (m.getClientID() != this.position) {
+            System.out.println("New player: " + m.getPar());
+            game.addPlayer(m.getPar());
+        }
+    }
+
+    private void players_message(Message message){
+        Message_ArrayList_String m = (Message_ArrayList_String) message;
+        System.out.println("All players connected.\nPlayers: " + m.getNickNames());
+        game = new Game_View(m.getNickNames());
+        this.position = m.getClientID();
+        System.out.println("You are the " + (position + 1) + "° player");
+    }
+
+    public void start_game_message() throws IOException {
+        System.out.println("All players have made their choices. Game started");
+        ClientSocket.sendMessage(new Message(MessageType.TURN, position));
+    }
+
+    private void market_message(Message message){
+        Message_Market m = (Message_Market) message;
+        game.setMarket(m.getMarket());
+        System.out.println("This is the market:\n");
+        // print market
+    }
+
+    private void deckBoard_message(Message message){
+        Message_ArrayList_Int m = (Message_ArrayList_Int) message;
+        game.setFirstDeckCards(m.getParams());
+        System.out.println("This are the cards of the decks:\n");
+        // print cards
+    }
 
     public void take_market_marble() throws IOException {
-
         System.out.println("TAKE MARBLE FROM MARKET");
         int input=-1;
         int x;
         int y;
         try {
-            x=numberInput(0,1,"\nScegli una riga o una colonna?\n0 - RIGA\n1 - COLONNA");
+            x=numberInput(0,1,"Do you want a row or a column?\n0 - ROW\n1 - COLUMN");
             if (input==0)
                 try {
-                    y=numberInput(1,3,"Inserisci un numero da 1 a 3.");
+                    y=numberInput(1,3,"Choose which row (1 to 3)");
                     ClientSocket.sendMessage(new Message_Two_Parameter_Int(MessageType.TAKE_MARBLE, position, x, y));
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 }
             else
                 try {
-                    y=numberInput(1,4,"Inserisci un numero da 1 a 4.");
+                    y=numberInput(1,4,"Choose which column (1 to 4)");
                     ClientSocket.sendMessage(new Message_Two_Parameter_Int(MessageType.TAKE_MARBLE, position, x, y));
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 }
         } catch (ExecutionException e) {
-            System.out.println("errore");
+            System.out.println("error");
         }
     }
-
-
 
     /**
      * until user doesn't insert a valid input, ask him 1 int to chose the deck to where buy card. Then send it to Server
      * and waits an OK message return.
      */
     public void buy_card() throws IOException {
-        ArrayList<Integer> pos=new ArrayList<>(2);
+        ArrayList<Integer> pos = new ArrayList<>(2);
         System.out.println("BUY_DEVELOPMENT_CARD");
         try {
-            pos.add(numberInput(1,3,"\nScegli una riga (1 - 3):"));
+            pos.add(numberInput(1,3,"Choose a row (1 to 3)"));
         } catch (ExecutionException e) {
             System.out.println("error");
         }
@@ -123,8 +152,8 @@ public class Cli {
         }
     }
 
-    /*forse non ci va
-
+    /*
+    forse non ci va
      */
     private void activate_production() throws IOException, InterruptedException {
         System.out.println("ACTIVATE PRODUCTION");
@@ -185,13 +214,15 @@ public class Cli {
     }
 
     public void leader_card_production() {
-
         int x = chose_leader_card();
-        System.out.println("Quale risorsa vuoi ricevere?");
+        if(x == -1) {
+            System.out.println("You no longer have any leader cards");
+            return;
+        }
+        System.out.println("Which resource you choose?");
         Resource r = chose_resource();
         int choice = chose_warehouse_strongbox();
-        if (choice==-1)
-        {
+        if (choice==-1) {
             System.out.println("error");
             return;
         }
@@ -211,13 +242,11 @@ public class Cli {
     public void activate_leader_card() {
         System.out.println("ACTIVATE LEADER CARD");
         int x = chose_leader_card();
-        if(x==-1)
-        {
-            System.out.println("error");
+        if(x == -1) {
+            System.out.println("You no longer have any leader cards");
             return;
         }
         Message message = new Message_One_Parameter_Int(MessageType.LEADER_CARD_ACTIVATION, position, x);
-        System.out.println(message.toString());
         try {
             ClientSocket.sendMessage(message);
         } catch (IOException e) {
@@ -226,12 +255,10 @@ public class Cli {
     }
 
     public void discard_leader_card() {
-
         System.out.println("DISCARD LEADER CARD");
         int x = chose_leader_card();
-        if(x==-1)
-        {
-            System.out.println("error");
+        if(x == -1) {
+            System.out.println("You no longer have any leader cards");
             return;
         }
         Message message = new Message_One_Parameter_Int(MessageType.LEADER_CARD_DISCARD, position, x);
@@ -256,12 +283,27 @@ public class Cli {
 
     private int chose_leader_card() {
         int chosenLeaderCard=-1;
-        System.out.println("Le tue carte leader: " + leaderCard1 + ", " + leaderCard2);
-        try {
-            chosenLeaderCard=numberInput(1,2,"Quale carta leader scegli? (1 - 2)");
-            return chosenLeaderCard;
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+        int leaderCard1 = game.getMyLeaderCard(position, 1);
+        int leaderCard2 = game.getMyLeaderCard(position, 2);
+        Card_View firstLeaderCard = null;
+        Card_View secondLeaderCard = null;
+        if(leaderCard1 != -1 && leaderCard2 != -2){
+            firstLeaderCard = CardMap.getCard(leaderCard1);
+            secondLeaderCard = CardMap.getCard(leaderCard2);
+            System.out.println("Your leader cards: " );
+            // print leader cards
+            try {
+                chosenLeaderCard=numberInput(1,2,"Which leader card you choose? (1 or 2)");
+                return chosenLeaderCard;
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+        else if(leaderCard1 != -1){
+            firstLeaderCard = CardMap.getCard(leaderCard1);
+            System.out.println("Your leader card: ");
+            // print leader card
+            chosenLeaderCard = 1;
         }
         return chosenLeaderCard;
     }
@@ -300,7 +342,7 @@ public class Cli {
         Resource chosenResource = null;
         int x;
         try {
-            x=numberInput(1,4,"\n1 - MONETA\n2 - SCUDO\n3 - ROCCIA\n4 - SERVO");
+            x=numberInput(1,4,"\n1 - COIN\n2 - SHIELD\n3 - STONE\n4 - SERVANT");
             switch (x) {
                 case 1:
                     chosenResource = Resource.COIN;
@@ -341,8 +383,7 @@ public class Cli {
     public void switch_depot() {
         int x = choseDepot(1);
         int y = choseDepot(2);
-        if(x==-1 || y==-1)
-        {
+        if(x==-1 || y==-1) {
             System.out.println("error");
             return;
         }
@@ -365,7 +406,6 @@ public class Cli {
         }
         return choice;
     }
-
 
     private void leader_card_choice(Message message) throws IOException, InterruptedException {
         Message_Four_Parameter_Int m = (Message_Four_Parameter_Int) message;
@@ -395,8 +435,7 @@ public class Cli {
                 System.err.println("\nInserisci un numero.");
             }
         }
-        this.leaderCard1 = choice.get(0);
-        this.leaderCard2 = choice.get(1);
+        game.setMyLeaderCards(position, choice.get(0), choice.get(1));
         Message returnMessage = new Message_Two_Parameter_Int(MessageType.LEADER_CARD, position, choice.get(0), choice.get(2));
         ClientSocket.sendMessage(returnMessage);
     }
@@ -420,12 +459,10 @@ public class Cli {
 
     private int numberInput(int minValue, int maxValue, String question) throws ExecutionException {
         int number = minValue - 1;
-
         do {
             try {
                 System.out.println(question);
                 number = Integer.parseInt(readLine());
-
                 if (number < minValue || number > maxValue) {
                     System.out.println("Invalid number! Please try again.\n");
                 }
@@ -434,5 +471,256 @@ public class Cli {
             }
         } while (number < minValue || number > maxValue);
         return number;
+    }
+
+    private void turn_message(Message message) throws InterruptedException, IOException {
+        Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
+        if (m.getPar() == 1) {
+            // azione iniziale
+        }
+        else
+            System.out.println("Attendi che gli altri giocatori facciano il proprio turno...");
+    }
+    private void end_turn_message(Message message) throws InterruptedException, IOException {
+        if (message.getClientID() != position) {
+            System.out.println("Player " + game.getNickname(message.getClientID()) + " has finishe his turn.\nThis are its resources:");
+        }
+        // print player warehouse_strongbox
+        if (position == 0) {
+            if (message.getClientID() == game.getNumOfPlayers()- 1)
+                // azione iniziale
+        } else if (message.getClientID() == position - 1)
+            // azione iniziale
+    }
+
+    private void buy_card_message(Message message) {
+        Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        System.out.println("Player " + game.getNickname(m.getClientID()) + " bought a new card and inserted it in " +
+                "the " + m.getPar2() + "° slot.");
+        // print card
+        game.addDevelopmentCard(m.getClientID(), m.getPar1(), m.getPar2());
+    }
+
+    private void card_remove_message(Message message) {
+        Message_Four_Parameter_Int m = (Message_Four_Parameter_Int) message;
+        if(game.getNumOfPlayers() == 1 && m.getClientID() == 1)
+            System.out.println("Ludovico has removed one deck card from row " + (m.getPar1()) + " and" +
+                    " column " + (m.getPar2()));
+        else
+            System.out.println("Deck card from row " + (m.getPar1()+1) + " and column "
+                    + (m.getPar2()) + " has been removed");
+        if (m.getPar3() == 1) {
+            System.out.println("Deck is now empty");
+        }
+        else {
+            System.out.println("New deck card is:");
+            // print card
+        }
+        game.replaceCard(m.getPar1(), m.getPar2(), m.getPar4());
+    }
+
+    private void resource_amount_message(Message message) {
+        Message_One_Resource_Two_Int m = (Message_One_Resource_Two_Int) message;
+        game.newAmount(m.getClientID(), m.getResource(), m.getPar1(), m.getPar2());
+    }
+
+    private void market_change(Message message){
+        Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        if(m.getPar1() == 0) {
+            System.out.println("Player " + game.getNickname(m.getClientID()) + " has chosen row " + m.getPar2() + " of the market");
+            game.slideRow(m.getPar2());
+            //print row
+        }
+        else{
+            System.out.println("Player " + game.getNickname(m.getClientID()) + " has chosen column " + m.getPar2() + " of the market");
+            game.slideColumn(m.getPar2());
+            //print column
+        }
+        // print new market
+    }
+
+    private void faith_points_message(Message message){
+        Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
+        if(game.getNumOfPlayers() == 1 && m.getClientID() == 2)
+            System.out.println("Ludovico has increased his faith points. Now it has " + m.getPar());
+        else
+            System.out.println("Player " + game.getNickname(m.getClientID()) + " has increased its faith points. Now it has " + m.getPar());
+        game.increaseFaithPoints(m.getClientID(), m.getPar());
+        // print faith track
+    }
+
+    private void increase_warehouse_message(Message message){
+        Message_One_Int_One_Resource m = (Message_One_Int_One_Resource) message;
+        if(m.getPar1() != -1) {
+            System.out.println("Player " + game.getNickname(m.getClientID()) + " has inserted by 1 " + m.getResource()
+                    + " its " + m.getPar1() + "° depot");
+            game.increaseWarehouse(m.getClientID(), m.getResource(), m.getPar1());
+            //print warehouse_strongbox
+        }
+        else
+            System.out.println("Player " + game.getNickname(m.getClientID()) + " has discarded 1 " + m.getResource()
+                    + " marble");
+    }
+    private void switch_depot_message(Message message){
+        Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        System.out.println("Player " + game.getNickname(m.getClientID()) + " has switched its " + m.getPar1()
+                + "° depot with its " + m.getPar2() + "° depot.");
+        game.switchDepot(m.getClientID(), m.getPar1(), m.getPar2());
+        //print warehouse_depot
+    }
+
+    private void vatican_report_message(Message message){
+        Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        if(game.getNumOfPlayers() == 1 && m.getPar1() == 1)
+            System.out.println("Ludovico activated Vatican Report." +
+                    " Now you have " + m.getPar2() + " victory points from Vatican Report");
+        else
+            System.out.println("Player " + game.getNickname(m.getPar1()) + " activated Vatican Report." +
+                    " Now you have " + m.getPar2() + " victory points from Vatican Report");
+        // print faith track
+    }
+
+    private void leader_card_activation_message(Message message){
+        Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
+        System.out.println("Player " + game.getNickname(m.getClientID()) + " has activated one leader card: ");
+        game.addLeaderCard(m.getClientID(), m.getPar());
+        // print leader card
+    }
+
+    private void extra_depot_message(Message message){
+        Message_One_Int_One_Resource m = (Message_One_Int_One_Resource) message;
+        System.out.println("Player " + game.getNickname(m.getClientID()) + " has a new extra depot of " + m.getResource());
+        game.addExtraDepot(m.getClientID(), m.getResource());
+    }
+
+    private void leader_card_discard_message(Message message){
+        Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
+        System.out.println("Player " + m.getClientID() + " has discarded one leader card: ");
+        // print leader card
+    }
+
+    private void quit_message(Message message){
+        Message_One_Parameter_String m = (Message_One_Parameter_String) message;
+        if(game != null) {
+            System.out.println("Player " + m.getPar() + " disconnected. Game ended.");
+            System.exit(1);
+        }
+        else if(m.getPar() != null)
+            System.out.println("Player " + m.getPar() + " disconnected before game is started");
+        else
+            System.out.println("One player disconnected before game is started");
+    }
+
+    private void end_game_message(Message message){
+        Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        if(game.getNumOfPlayers() == 1 && m.getClientID() == 1){
+            System.out.println("Game ended. Ludovico win.");
+        }
+        else {
+            System.out.println("Game ended. " + game.getNickname(m.getClientID()) + " win the game."
+                    + " It made " + m.getPar1() + " victory points and " + m.getPar2()
+                    + " total resources.");
+        }
+        System.out.println("\nDisconnecting.");
+        System.exit(1);
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        try {
+            Message returnMessage = (Message) arg;
+            switch (returnMessage.getMessageType()) {
+                case LOGIN:
+                    login_message(returnMessage);
+                    break;
+                case NEW_PLAYER:
+                    new_player_message(returnMessage);
+                    break;
+                case PLAYERS:
+                    players_message(returnMessage);
+                    break;
+                case LEADER_CARD:
+                    leader_card_choice(returnMessage);
+                    break;
+                case START_GAME:
+                    start_game_message();
+                    break;
+                case MARKET:
+                    market_message(returnMessage);
+                    break;
+                case DECKBOARD:
+                    deckBoard_message(returnMessage);
+                    break;
+                case OK:
+                    ok_message();
+                    break;
+                case PONG:
+                    break;
+                case TURN:
+                    turn_message(returnMessage);
+                    break;
+                case END_TURN:
+                    end_turn_message(returnMessage);
+                    break;
+                case BUY_CARD:
+                    buy_card_message(returnMessage);
+                    break;
+                case CHOSEN_SLOT:
+                    chosen_slot_message(returnMessage);
+                    break;
+                case CARD_REMOVE:
+                    card_remove_message(returnMessage);
+                    break;
+                case RESOURCE_AMOUNT:
+                    resource_amount_message(returnMessage);
+                    break;
+                case TAKE_MARBLE:
+                    take_marble_message(returnMessage);
+                    break;
+                case MARKET_CHANGE:
+                    market_change(returnMessage);
+                    break;
+                case WHITE_CONVERSION_CARD:
+                    white_conversion_card_message(returnMessage);
+                    break;
+                case FAITH_POINTS_INCREASE:
+                    faith_points_message(returnMessage);
+                    break;
+                case VATICAN_REPORT:
+                    vatican_report_message(returnMessage);
+                    break;
+                case INCREASE_WAREHOUSE:
+                    increase_warehouse_message(returnMessage);
+                    break;
+                case SWITCH_DEPOT:
+                    switch_depot_message(returnMessage);
+                    break;
+                case LEADER_CARD_ACTIVATION:
+                    leader_card_activation_message(returnMessage);
+                    break;
+                case EXTRA_DEPOT:
+                    extra_depot_message(returnMessage);
+                    break;
+                case LEADER_CARD_DISCARD:
+                    leader_card_discard_message(returnMessage);
+                    break;
+                case QUIT:
+                    quit_message(returnMessage);
+                    break;
+                case END_GAME:
+                    end_game_message(returnMessage);
+                    break;
+                case ERR:
+                    error_message(returnMessage);
+                    break;
+                default:
+                    System.err.println("\nRicevuto messaggio inaspettato dal Server.");
+                    break;
+            }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        } catch (ClassCastException e){
+            e.printStackTrace();
+        }
     }
 }

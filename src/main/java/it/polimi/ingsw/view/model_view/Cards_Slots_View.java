@@ -30,6 +30,13 @@ public class Cards_Slots_View {
             secondLeaderCard = leaderCard;
     }
 
+    public int getLeaderCard(int leaderCard){
+       if(leaderCard == 1)
+           return firstLeaderCard;
+       else
+           return secondLeaderCard;
+    }
+
     public void addDevelopmentCard(int cardID, int slot){
         if(slot == 1)
             firstSlot.add(cardID);
