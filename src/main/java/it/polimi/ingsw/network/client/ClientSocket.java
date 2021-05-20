@@ -27,14 +27,14 @@ public class ClientSocket extends Observable{
     private Thread threadOut;
     private Thread connectedThread;
     private static ObjectOutputStream out = null;
-    private final ObjectInputStream in;
+    private static ObjectInputStream in;
     private final Object pingLock = new Object();
-    private boolean connected;
+    private static boolean connected;
 
     public ClientSocket(Socket socket) throws IOException {
         out = new ObjectOutputStream(socket.getOutputStream());
-        this.in = new ObjectInputStream(socket.getInputStream());
-        this.connected = true;
+        in = new ObjectInputStream(socket.getInputStream());
+        connected = true;
     }
 
     public void addObserver(Observer o){
@@ -147,7 +147,7 @@ public class ClientSocket extends Observable{
     /**
      * close inputStream, outputStream and socket connection with Server.
      */
-    private void disconnect() {
+    public static void disconnect() {
         connected = false;
         try {
             in.close();
@@ -165,7 +165,6 @@ public class ClientSocket extends Observable{
             System.err.println("\nClient no longer connected to the Server");
             connected = false;
             disconnect();
-            System.exit(0);
         }
     }
 }

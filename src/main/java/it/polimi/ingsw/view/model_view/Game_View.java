@@ -33,17 +33,6 @@ public class Game_View {
         players.removeIf(player -> player.getNickName().equals(deletedPlayer));
     }
 
-    public void orderPlayer(ArrayList<String> nickNames){
-        ArrayList<PlayerBoard_View> orderedPlayers = new ArrayList<>();
-        for (int i = 0; i < players.size(); i++){
-            for (PlayerBoard_View player: players) {
-                if (player.getNickName().equals(nickNames.get(i)))
-                    orderedPlayers.add(player);
-            }
-        }
-        players = orderedPlayers;
-    }
-
     public void setMarket(Market_View market){
         this.market = market;
     }
