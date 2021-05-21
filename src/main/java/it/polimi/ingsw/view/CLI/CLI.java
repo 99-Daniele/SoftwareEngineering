@@ -1042,7 +1042,6 @@ public class CLI implements Observer{
     public void update(Observable o, Object arg) {
         try {
             Message returnMessage = (Message) arg;
-            Thread.currentThread().interrupt();
             switch (returnMessage.getMessageType()) {
                 case LOGIN:
                     login_message(returnMessage);
@@ -1135,36 +1134,6 @@ public class CLI implements Observer{
             e.printStackTrace();
         } catch (ClassCastException e){
             e.printStackTrace();
-        }
-        Thread.currentThread().start();
-    }
-
-    public void notYourTurnAction(){
-        int operation = 0;
-        try {
-            operation = numberInput(0, 1, "1 - PLAYERBOARD\n2 - MARKET\n3 - FAITH TRACK\n4 - DECKS ");
-        } catch (ExecutionException e) {
-            System.out.println("error");
-        }
-        switch (operation){
-            case 1:
-                seeOtherPlayerboard();
-                break;
-            case 2:
-                CLI_Printer.printMarket(game);
-            case 3:
-                CLI_Printer.printFaithTrack(game);
-            case 4:
-                CLI_Printer.printDecks(game);
-        }
-    }
-
-    private void seeOtherPlayerboard(){
-        try {
-            int player = numberInput(1, game.getNumOfPlayers(), "Which player you want to see the PlayerBoard?");
-            CLI_Printer.printPlayerBoard(game, player);
-        } catch (ExecutionException e) {
-            System.out.println("error");
         }
     }
 }
