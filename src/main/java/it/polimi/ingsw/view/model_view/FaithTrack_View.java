@@ -29,8 +29,7 @@ public class FaithTrack_View {
     public void printCli(){
         int count=1;
         String s=new String();
-        System.out.println("TRACCIATO FEDE GIOCATORI");
-        System.out.println("disposti in ordine di posizione dei giocatori");
+        System.out.println("FAITH TRACK");
         for (Integer i:playersFaithPoints)
         {
             int val=i.intValue();

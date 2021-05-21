@@ -39,4 +39,10 @@ public class ExtraDepotCard extends LeaderCard {
         w.addExtraDepot(this.getResource());
         return true;
     }
+
+    @Override
+    public void print() {
+        System.out.println("\nEXTRA_DEPOT_CARD");
+        super.print();
+    }
 }

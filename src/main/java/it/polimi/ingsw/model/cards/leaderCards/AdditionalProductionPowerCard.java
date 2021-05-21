@@ -70,4 +70,10 @@ public class AdditionalProductionPowerCard extends LeaderCard {
         }
         return 0;
     }
+
+    @Override
+    public void print() {
+        System.out.println("\nADDITIONAL_PRODUCTION_POWER_CARD");
+        super.print();
+    }
 }

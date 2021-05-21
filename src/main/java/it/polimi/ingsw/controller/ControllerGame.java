@@ -594,7 +594,7 @@ public class ControllerGame implements Observer {
         if (!InputController.leader_card_power_check(m))
             throw new WrongParametersException();
         try {
-            game.removeAdditionalProductionPowerCardResource(chosenLeaderCard, r, s, choice);
+            game.removeAdditionalProductionPowerCardResource(chosenLeaderCard -1, r, s, choice);
             currentState.nextState(this, MessageType.END_PRODUCTION);
             currentState.setStrongbox(s);
             views.get(viewID).ok();

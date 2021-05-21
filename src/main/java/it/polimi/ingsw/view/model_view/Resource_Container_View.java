@@ -8,8 +8,14 @@ public class Resource_Container_View {
     private Resource resource;
     private int amount;
 
+    public Resource_Container_View() {
+        this.resource = Resource.COIN;
+        this.amount = 0;
+    }
+
     public Resource_Container_View(Resource resource) {
         this.resource = resource;
+        this.amount = 0;
     }
 
     public Resource getResource() {

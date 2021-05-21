@@ -16,6 +16,9 @@ public class Warehouse_Strongbox_View {
 
     public Warehouse_Strongbox_View() {
         depots = new ArrayList<>(3);
+        depots.add(new Resource_Container_View());
+        depots.add(new Resource_Container_View());
+        depots.add(new Resource_Container_View());
         coin = new Resource_Container_View(Resource.COIN);
         shield = new Resource_Container_View(Resource.SHIELD);
         servant = new Resource_Container_View(Resource.SERVANT);
@@ -23,10 +26,10 @@ public class Warehouse_Strongbox_View {
     }
 
     public void increaseWarehouse(Resource resource, int depot){
-        if(depots.get(depot-1).getAmount() > 0)
-            depots.get(depot-1).increase();
+        if(depots.get(depot).getAmount() > 0)
+            depots.get(depot).increase();
         else
-            depots.get(depot-1).setNewResource(resource);
+            depots.get(depot).setNewResource(resource);
     }
 
     public void newAmount(Resource resource, int warehouseAmount, int strongboxAmount){
@@ -35,7 +38,7 @@ public class Warehouse_Strongbox_View {
     }
 
     public void switchDepot(int depot1, int depot2) {
-        swap(depots, depot1 - 1, depot2 - 1);
+        swap(depots, depot1, depot2);
     }
 
     public void addExtraDepot(Resource r){
@@ -105,16 +108,19 @@ public class Warehouse_Strongbox_View {
         return depots.size() == 5;
     }
 
-    public void print(){};
+    public void printCLIWarehouseStrongbox(){
+        printCliWarehouse();
+        printCliStrongbox();
+    }
 
     public void printCliWarehouse(){
         System.out.println("WAREHOUSE");
-        for (int i=0;i<3;i++)
-        {
+        for (int i=0;i<3;i++) {
             System.out.print(i+1+" ");
             depots.get(i).printCliWarehouse();
             System.out.println();
         }
+        printCliExtraDepot();
     }
 
     public void printCliStrongbox(){
@@ -125,10 +131,9 @@ public class Warehouse_Strongbox_View {
         stone.printCliStrongbox();
     }
 
-    public void printCliExtarDepot(){
-        System.out.println("DEPOSITO EXTRA");
-        if (existExtraDepot1())
-        {
+    public void printCliExtraDepot(){
+        if (existExtraDepot1()) {
+            System.out.println("EXTRA DEPOTS");
             System.out.print("1 ");
             depots.get(3).printCliWarehouse();
             System.out.println();
@@ -139,7 +144,5 @@ public class Warehouse_Strongbox_View {
                 System.out.println();
             }
         }
-        else
-            System.out.println("nessuno");
     }
 }

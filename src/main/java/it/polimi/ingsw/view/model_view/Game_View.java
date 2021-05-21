@@ -1,6 +1,6 @@
 package it.polimi.ingsw.view.model_view;
 
-import it.polimi.ingsw.model.market.Market;
+import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 
 import java.util.ArrayList;
@@ -8,15 +8,29 @@ import java.util.ArrayList;
 public class Game_View {
 
     private ArrayList<PlayerBoard_View> players = new ArrayList<>();
+    private PlayerBoard_View Ludovico;
     private FaithTrack_View faithTrack;
     private Market_View market;
     private Decks_View decks;
+    private ArrayList<Marble> chosenMarbles;
+    private boolean startGame;
 
     public void setPlayers(ArrayList<String> players){
         this.players = new ArrayList<>();
         for (String player: players)
             addPlayer(player);
+        if(players.size() == 1)
+            Ludovico = new PlayerBoard_View("Ludovico");
         initFaithTrack();
+        startGame = false;
+    }
+
+    public boolean isStartGame() {
+        return startGame;
+    }
+
+    public void startGame() {
+        startGame = true;
     }
 
     public int getNumOfPlayers(){
@@ -35,6 +49,26 @@ public class Game_View {
         players.removeIf(player -> player.getNickName().equals(deletedPlayer));
     }
 
+    public FaithTrack_View getFaithTrack() {
+        return faithTrack;
+    }
+
+    public Market_View getMarket() {
+        return market;
+    }
+
+    public Decks_View getDecks() {
+        return decks;
+    }
+
+    public Warehouse_Strongbox_View getWarehouseStrongbox(int viewID){
+        return players.get(viewID).getWarehouse_strongbox();
+    }
+
+    public Cards_Slots_View getSlotCards(int viewID){
+        return players.get(viewID).getCards_slots();
+    }
+
     public void setMarket(Market_View market){
         this.market = market;
     }
@@ -48,11 +82,22 @@ public class Game_View {
     }
 
     public void initFaithTrack(){
-        faithTrack = new FaithTrack_View(players.size());
+        if(players.size() > 1)
+            faithTrack = new FaithTrack_View(players.size());
+        else
+            faithTrack = new FaithTrack_View(2);
     }
 
     public void increaseFaithPoints(int viewID, int faithPoints){
         faithTrack.increaseFaithPoints(viewID, faithPoints);
+    }
+
+    public void setChosenMarbles(ArrayList<Marble> marbles){
+        chosenMarbles = marbles;
+    }
+
+    public ArrayList<Marble> getChosenMarbles(){
+        return chosenMarbles;
     }
 
     public void slideRow(int selectedRow){
@@ -62,10 +107,6 @@ public class Game_View {
     public void slideColumn(int selectedColumn) {
         market.slideColumn(selectedColumn);
     }
-
-    public void getRowMarbles(int row){market.getRowMarbles(row);}
-
-    public void getColumnMarbles(int column){market.getColumnMarbles(column);}
 
     public void replaceCard(int row, int column, int cardID){
         decks.replaceCard(row, column, cardID);
@@ -80,7 +121,7 @@ public class Game_View {
     }
 
     public void increaseWarehouse(int viewID, Resource resource, int depot){
-        players.get(viewID).increaseWarehouse(resource, depot);
+        players.get(viewID).increaseWarehouse(resource, depot-1);
     }
 
     public void newAmount(int viewID, Resource resource, int warehouseAmount, int strongboxAmount){
@@ -88,7 +129,7 @@ public class Game_View {
     }
 
     public void switchDepot(int viewID, int depot1, int depot2) {
-        players.get(viewID).switchDepot(depot1, depot2);
+        players.get(viewID).switchDepot(depot1-1, depot2-1);
     }
 
     public void addExtraDepot(int viewID, Resource r){
@@ -112,7 +153,7 @@ public class Game_View {
     }
 
     public void addDevelopmentCard(int viewID, int cardID, int slot){
-        players.get(viewID).addDevelopmentCard(cardID, slot);
+        players.get(viewID).addDevelopmentCard(cardID, slot-1);
     }
 
     public void discardLeaderCard(int viewID, int chosenLeaderCard){
@@ -121,17 +162,5 @@ public class Game_View {
 
     public void setVictoryPoints(int viewID, int victoryPoints){
         players.get(viewID).setVictoryPoints(victoryPoints);
-    }
-
-    public void printPlayerBoard(int position){
-        players.get(position).printCliAllPlayerBoard();
-    }
-
-    public void printFaithTrack(){
-        faithTrack.printCli();
-    }
-
-    public void printMarket(){
-        market.printMarketCli();
     }
 }
