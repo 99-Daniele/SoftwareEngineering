@@ -1,6 +1,6 @@
 package it.polimi.ingsw.view.model_view;
 
-import it.polimi.ingsw.model.market.Market;
+import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 
 import java.util.ArrayList;
@@ -11,12 +11,23 @@ public class Game_View {
     private FaithTrack_View faithTrack;
     private Market_View market;
     private Decks_View decks;
+    private ArrayList<Marble> chosenMarbles;
+    private boolean startGame;
 
     public void setPlayers(ArrayList<String> players){
         this.players = new ArrayList<>();
         for (String player: players)
             addPlayer(player);
         initFaithTrack();
+        startGame = false;
+    }
+
+    public boolean isStartGame() {
+        return startGame;
+    }
+
+    public void startGame() {
+        startGame = true;
     }
 
     public int getNumOfPlayers(){
@@ -33,6 +44,26 @@ public class Game_View {
 
     public void removePlayer(String deletedPlayer){
         players.removeIf(player -> player.getNickName().equals(deletedPlayer));
+    }
+
+    public FaithTrack_View getFaithTrack() {
+        return faithTrack;
+    }
+
+    public Market_View getMarket() {
+        return market;
+    }
+
+    public Decks_View getDecks() {
+        return decks;
+    }
+
+    public Warehouse_Strongbox_View getWarehouseStrongbox(int viewID){
+        return players.get(viewID).getWarehouse_strongbox();
+    }
+
+    public Cards_Slots_View getSlotCards(int viewID){
+        return players.get(viewID).getCards_slots();
     }
 
     public void setMarket(Market_View market){
@@ -55,6 +86,14 @@ public class Game_View {
         faithTrack.increaseFaithPoints(viewID, faithPoints);
     }
 
+    public void setChosenMarbles(ArrayList<Marble> marbles){
+        chosenMarbles = marbles;
+    }
+
+    public ArrayList<Marble> getChosenMarbles(){
+        return chosenMarbles;
+    }
+
     public void slideRow(int selectedRow){
         market.slideRow(selectedRow);
     }
@@ -62,10 +101,6 @@ public class Game_View {
     public void slideColumn(int selectedColumn) {
         market.slideColumn(selectedColumn);
     }
-
-    public void getRowMarbles(int row){market.getRowMarbles(row);}
-
-    public void getColumnMarbles(int column){market.getColumnMarbles(column);}
 
     public void replaceCard(int row, int column, int cardID){
         decks.replaceCard(row, column, cardID);

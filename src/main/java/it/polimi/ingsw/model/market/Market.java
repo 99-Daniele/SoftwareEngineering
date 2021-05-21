@@ -7,6 +7,7 @@ import it.polimi.ingsw.view.ColorAnsi;
 import it.polimi.ingsw.view.model_view.Market_View;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Market is the market of Game.
@@ -153,18 +154,12 @@ public class Market implements Serializable, Market_View {
         marketTray[selectedRow-1][column-1] = marble;
     }
 
-    public void printMarket(){
-        System.out.println("MARKET");
-    }
-
-
-    public void printMarketCli(){
+    public void printMarketCLI(){
         System.out.println("MARKET");
         String s[]=new String[13];
         int i=0;
         for (int x=0;x<3;x++)
-            for (int y=0;y<4;y++)
-            {
+            for (int y=0;y<4;y++) {
                 String s1=marketTray[x][y].toString();
                 switch (s1){
                     case "R":
@@ -218,7 +213,7 @@ public class Market implements Serializable, Market_View {
     }
 
     private void creationTable(String[] s){
-        String tabella[][]=new String[7][9];
+        String[][] tabella =new String[7][9];
         for (int x=1;x<6;x++)
             for (int y=0;y<9;y+=2)
                 tabella[x][y]="║";
@@ -231,12 +226,11 @@ public class Market implements Serializable, Market_View {
         tabella[6][8]="╝";
         int count=0;
         for (int x=1;x<6;x+=2)
-            for (int y=1;y<8;y+=2)
-            {
+            for (int y=1;y<8;y+=2) {
                 tabella[x][y]=s[count]+"●"+ColorAnsi.RESET;
                 count++;
             }
-        String tabella2[][]=new String[3][3];
+        String[][] tabella2 =new String[3][3];
         tabella2[0][0]="╔";
         tabella2[0][1]="═";
         tabella2[0][2]="╗";
@@ -257,5 +251,162 @@ public class Market implements Serializable, Market_View {
                 System.out.print(tabella2[i][j]);
             System.out.println();
         }
+    }
+
+    public void printRow(int row){
+        String[] s = new String[9];
+        int i = 0;
+        for (int y=0;y<4;y++) {
+            String s1=marketTray[row][y].toString();
+            switch (s1){
+                case "R":
+                    s[i]= ColorAnsi.ANSI_RED.escape();
+                    i++;
+                    break;
+                case "G":
+                    s[i]=ColorAnsi.ANSI_WHITE.escape();
+                    i++;
+                    break;
+                case "Y":
+                    s[i]=ColorAnsi.ANSI_YELLOW.escape();
+                    i++;
+                    break;
+                case "B":
+                    s[i]=ColorAnsi.ANSI_CYAN.escape();
+                    i++;
+                    break;
+                case "P":
+                    s[i]=ColorAnsi.ANSI_PURPLE.escape();
+                    i++;
+                    break;
+                case "W":
+                    s[i]="";
+                    i++;
+                    break;
+            }
+        }
+        creationRow(s);
+    }
+
+    private void creationRow(String [] s){
+        String[][] tabella =new String[3][s.length];
+        for (int x=1;x<3;x++)
+            for (int y=0;y<s.length;y+=2)
+                tabella[x][y]="║";
+        tabella[0][0]="╔";
+        tabella[2][0]="╚";
+        tabella[0][s.length-1]="╗";
+        tabella[2][s.length-1]="╝";
+        for (int x=0;x<3;x+=2)
+            for (int y=1;y<8;y++)
+                tabella[x][y]="═";
+        int count=0;
+        for (int x=1;x<3;x+=2)
+            for (int y=1;y<s.length-1;y+=2) {
+                tabella[x][y]=s[count]+"●"+ColorAnsi.RESET;
+                count++;
+            }
+        for (int i=0;i<3;i++)
+        {
+            for (int j=0;j<s.length;j++)
+                System.out.print(tabella[i][j]);
+            System.out.println();
+        }
+    }
+
+    public void printColumn(int column){
+        String[] s = new String[7];
+        int i = 0;
+        for (int x=0;x<3;x++) {
+            String s1=marketTray[x][column].toString();
+            switch (s1){
+                case "R":
+                    s[i]= ColorAnsi.ANSI_RED.escape();
+                    i++;
+                    break;
+                case "G":
+                    s[i]=ColorAnsi.ANSI_WHITE.escape();
+                    i++;
+                    break;
+                case "Y":
+                    s[i]=ColorAnsi.ANSI_YELLOW.escape();
+                    i++;
+                    break;
+                case "B":
+                    s[i]=ColorAnsi.ANSI_CYAN.escape();
+                    i++;
+                    break;
+                case "P":
+                    s[i]=ColorAnsi.ANSI_PURPLE.escape();
+                    i++;
+                    break;
+                case "W":
+                    s[i]="";
+                    i++;
+                    break;
+            }
+        }
+        creationColumn(s);
+    }
+
+    private void creationColumn(String [] s){
+        String[][] tabella =new String[7][3];
+        for (int x=1;x<7;x++)
+            for (int y=0;y<3;y+=2)
+                tabella[x][y]="║";
+        tabella[0][0]="╔";
+        tabella[6][0]="╚";
+        tabella[0][2]="╗";
+        tabella[6][2]="╝";
+        for (int x=0;x<7;x+=2)
+            for (int y=1;y<2;y++)
+                tabella[x][y]="═";
+        int count=0;
+        for (int x=1;x<7;x+=2)
+            for (int y=1;y<3;y+=2) {
+                tabella[x][y]=s[count]+"●"+ColorAnsi.RESET;
+                count++;
+            }
+        for (int i=0;i<7;i++) {
+            for (int j=0;j<3;j++)
+                System.out.print(tabella[i][j]);
+            System.out.println();
+        }
+    }
+
+    @Override
+    public void printMarbles(ArrayList<Marble> marbles) {
+        String[] s = new String[marbles.size()*2 + 1];
+        int i = 0;
+        for (int x=0;x<marbles.size();x++) {
+            String s1=marbles.get(x).toString();
+            switch (s1){
+                case "R":
+                    s[i]= ColorAnsi.ANSI_RED.escape();
+                    i++;
+                    break;
+                case "G":
+                    s[i]=ColorAnsi.ANSI_WHITE.escape();
+                    i++;
+                    break;
+                case "Y":
+                    s[i]=ColorAnsi.ANSI_YELLOW.escape();
+                    i++;
+                    break;
+                case "B":
+                    s[i]=ColorAnsi.ANSI_CYAN.escape();
+                    i++;
+                    break;
+                case "P":
+                    s[i]=ColorAnsi.ANSI_PURPLE.escape();
+                    i++;
+                    break;
+                case "W":
+                    s[i]="";
+                    i++;
+                    break;
+            }
+        }
+        creationRow(s);
     }
 }

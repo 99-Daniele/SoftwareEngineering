@@ -51,6 +51,14 @@ public class PlayerBoard_View {
         return cards_slots.getLeaderCard(leaderCard);
     }
 
+    public Warehouse_Strongbox_View getWarehouse_strongbox() {
+        return warehouse_strongbox;
+    }
+
+    public Cards_Slots_View getCards_slots() {
+        return cards_slots;
+    }
+
     public void addLeaderCard(int leaderCard){
         cards_slots.addLeaderCard(leaderCard);
     }
