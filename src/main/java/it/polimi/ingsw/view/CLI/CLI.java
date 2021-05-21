@@ -182,15 +182,15 @@ public class CLI implements Observer{
     public void buy_card() throws IOException {
         int[] row_column;
         System.out.println("BUY_DEVELOPMENT_CARD");
-        // print all cards
+        CLI_Printer.printDecks(game);
         do {
-            ArrayList<Integer> cardID = new ArrayList<>(1);
+            int cardID = 0;
             try {
-                cardID.add(numberInput(1, 48, "Choose a card by his CardID"));
+               cardID = (numberInput(1, 48, "Choose a card by his CardID"));
             } catch (ExecutionException e) {
                 System.out.println("error");
             }
-            row_column = game.get_Row_Column(cardID.get(0));
+            row_column = game.get_Row_Column(cardID);
             if(row_column[0] == -1 || row_column[1] == -1){
                 int otherCard = 0;
                 try {
@@ -203,10 +203,11 @@ public class CLI implements Observer{
                     return;
                 }
             }
-            else
+            else {
+                CLI_Printer.printCard(cardID);
                 break;
+            }
         } while (true);
-        //print card
         int z = chose_warehouse_strongbox();
         if(z == -1) {
             System.out.println("error");
@@ -232,6 +233,7 @@ public class CLI implements Observer{
         System.out.println("ACTIVATE PRODUCTION");
         int x;
         try {
+            CLI_Printer.printWarehouseStrongbox(game, position);
             while (true) {
                 x = numberInput(1, 3, "\nWhich production do you want to activate?\n1 - DEVELOPMENT CARD POWER" +
                         "\n2 - BASIC POWER\n3 - LEADER CARD POWER");
@@ -272,7 +274,7 @@ public class CLI implements Observer{
         int y;
         try {
             ArrayList<Integer> cards = game.getDevelopmentCards(position);
-            // print cards
+            CLI_Printer.printCardSlot(game, position);
             if(cards.size() > 0) {
                 if (cards.size() > 1)
                     x = numberInput(1, cards.size(), "Which card do you want to activate production? (1 - " + cards.size() + ")");
@@ -298,6 +300,7 @@ public class CLI implements Observer{
     }
 
     public void basic_production() throws IOException {
+        CLI_Printer.printWarehouseStrongbox(game, position);
         System.out.println("Which resource you want to delete?");
         Resource r1 = chose_resource();
         System.out.println("Which resource you want to delete?");
@@ -382,13 +385,10 @@ public class CLI implements Observer{
         int chosenLeaderCard = -1;
         int leaderCard1 = game.getMyLeaderCard(position, 1);
         int leaderCard2 = game.getMyLeaderCard(position, 2);
-        Card_View firstLeaderCard = null;
-        Card_View secondLeaderCard = null;
         if(leaderCard1 != -1 && leaderCard2 != -2){
-            firstLeaderCard = CardMap.getCard(leaderCard1);
-            secondLeaderCard = CardMap.getCard(leaderCard2);
             System.out.println("Your leader cards: " );
-            // print leader cards
+            CLI_Printer.printCard(leaderCard1);
+            CLI_Printer.printCard(leaderCard2);
             try {
                 chosenLeaderCard=numberInput(1,2,"Which leader card you choose? (1 or 2)");
                 return chosenLeaderCard;
@@ -397,9 +397,8 @@ public class CLI implements Observer{
             }
         }
         else if(leaderCard1 != -1){
-            firstLeaderCard = CardMap.getCard(leaderCard1);
             System.out.println("Your leader card: ");
-            // print leader card
+            CLI_Printer.printCard(leaderCard1);
             chosenLeaderCard = 1;
         }
         return chosenLeaderCard;
@@ -513,9 +512,12 @@ public class CLI implements Observer{
         int leaderCard4 = m.getPar4();
         ArrayList<Integer> choice=new ArrayList<>(2);
         try {
+            CLI_Printer.printCard(leaderCard1);
+            CLI_Printer.printCard(leaderCard2);
+            CLI_Printer.printCard(leaderCard3);
+            CLI_Printer.printCard(leaderCard4);
             System.out.println(leaderCard1 + "," + leaderCard2);
-            choice.add(numberInput(49,64,"Chose between this 4 leader cards"));
-            // print cards
+            choice.add(numberInput(49,64,"Chose between this 4 leader cards (insert cardID)"));
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
@@ -596,7 +598,7 @@ public class CLI implements Observer{
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
         System.out.println("Player " + game.getNickname(m.getClientID()) + " bought a new card and inserted it in " +
                 "the " + m.getPar2() + "° slot.");
-        // print card
+        CLI_Printer.printCard(m.getPar1());
         game.addDevelopmentCard(m.getClientID(), m.getPar1(), m.getPar2());
     }
 
@@ -613,7 +615,7 @@ public class CLI implements Observer{
         }
         else {
             System.out.println("New deck card is:");
-            // print card
+            CLI_Printer.printCard(m.getPar4());
         }
         game.replaceCard(m.getPar1(), m.getPar2(), m.getPar4());
     }
@@ -691,8 +693,8 @@ public class CLI implements Observer{
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
         if(m.getClientID() != position) {
             System.out.println("Player " + game.getNickname(m.getClientID()) + " has activated one leader card: ");
+            CLI_Printer.printCard(m.getPar());
             game.addLeaderCard(m.getClientID(), m.getPar());
-            // print leader card
         }
     }
 
@@ -709,7 +711,7 @@ public class CLI implements Observer{
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
         if(m.getClientID() != position) {
             System.out.println("Player " + m.getClientID() + " has discarded one leader card: ");
-            // print leader card
+            CLI_Printer.printCard(m.getPar());
         }
         else
             game.discardLeaderCard(position, m.getPar());

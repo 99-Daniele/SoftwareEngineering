@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.CLI;
 
 import it.polimi.ingsw.model.market.Marble;
+import it.polimi.ingsw.parser.CardMap;
 import it.polimi.ingsw.view.model_view.Game_View;
 
 import java.util.ArrayList;
@@ -57,4 +58,10 @@ public class CLI_Printer {
     public static void printFaithTrack(Game_View game){
         game.getFaithTrack().printCli();
     }
+
+    public static void printCard(int cardID){
+        CardMap.getCard(cardID).print();
+    }
+
+    public static void printSlotCards(Game_View game, int viewID){}
 }

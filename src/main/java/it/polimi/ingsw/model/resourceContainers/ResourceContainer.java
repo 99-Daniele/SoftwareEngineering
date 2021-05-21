@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.resourceContainers;
 
+import it.polimi.ingsw.view.ColorAnsi;
+
 /**
  * ResourceContainer is a container of only one type of resource with its amount.
  */
@@ -50,6 +52,25 @@ public class ResourceContainer {
     }
 
     public String toString() {
-        return ("\n     [RESOURCE: " + resource + "\n      AMOUNT: " + amount + "]");
+        return (print());
+    }
+
+    public String print(){
+        String s = "";
+        switch (resource) {
+            case COIN:
+                s = (ColorAnsi.ANSI_YELLOW.escape() + "● " + ColorAnsi.RESET+amount);
+                break;
+            case SERVANT:
+                s = (ColorAnsi.ANSI_PURPLE.escape() + "● " + ColorAnsi.RESET+amount);
+                break;
+            case SHIELD:
+                s = (ColorAnsi.ANSI_CYAN.escape() + "● " + ColorAnsi.RESET+amount);
+                break;
+            case STONE:
+                s = (ColorAnsi.ANSI_WHITE.escape() + "● " + ColorAnsi.RESET+amount);
+                break;
+        }
+        return s;
     }
 }
