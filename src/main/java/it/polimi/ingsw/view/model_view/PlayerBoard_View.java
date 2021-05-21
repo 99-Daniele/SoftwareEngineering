@@ -76,4 +76,26 @@ public class PlayerBoard_View {
     }
 
     public void print(){};
+
+    public void printSlots(){
+        cards_slots.printCliSlot();
+    }
+
+    public void printLeaderCards(){
+        cards_slots.printCliLeaderCard();
+    }
+
+    public void printVictoryPointsPope(){
+        System.out.println("i punti vittoria legati legati alle sezioni papali sono: "+victoryPoints);
+    }
+
+    public void printCliAllPlayerBoard(){
+        System.out.println(nickName);
+        warehouse_strongbox.printCliWarehouse();
+        warehouse_strongbox.printCliExtarDepot();
+        warehouse_strongbox.printCliStrongbox();
+        printSlots();
+        printLeaderCards();
+        printVictoryPointsPope();
+    }
 }

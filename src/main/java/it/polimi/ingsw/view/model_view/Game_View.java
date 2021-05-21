@@ -163,4 +163,16 @@ public class Game_View {
     public void setVictoryPoints(int viewID, int victoryPoints){
         players.get(viewID).setVictoryPoints(victoryPoints);
     }
+
+    public void printPlayerBoard(int position){
+        players.get(position).printCliAllPlayerBoard();
+    }
+
+    public void printFaithTrack(){
+        faithTrack.printCli();
+    }
+
+    public void printMarket(){
+        market.printMarketCli();
+    }
 }
