@@ -1,5 +1,7 @@
 package it.polimi.ingsw.view.model_view;
 
+import it.polimi.ingsw.model.market.Marble;
+
 public interface Market_View {
 
     void slideColumn(int selectedColumn);
@@ -7,4 +9,8 @@ public interface Market_View {
     void slideRow(int selectedRow);
 
     void printMarket();
+
+    Marble[] getRowMarbles(int row);
+
+    Marble[] getColumnMarbles(int column);
 }

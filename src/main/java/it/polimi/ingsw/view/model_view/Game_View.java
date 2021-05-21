@@ -1,19 +1,30 @@
 package it.polimi.ingsw.view.model_view;
 
+import it.polimi.ingsw.model.market.Market;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 
 import java.util.ArrayList;
 
 public class Game_View {
 
-    private ArrayList<PlayerBoard_View> players;
+    private ArrayList<PlayerBoard_View> players = new ArrayList<>();
     private FaithTrack_View faithTrack;
     private Market_View market;
     private Decks_View decks;
 
-    public Game_View(String myPlayer){
-        players = new ArrayList<>();
-        players.add(new PlayerBoard_View(myPlayer));
+    public void setPlayers(ArrayList<String> players){
+        this.players = new ArrayList<>();
+        for (String player: players)
+            addPlayer(player);
+        initFaithTrack();
+    }
+
+    public int getNumOfPlayers(){
+        return players.size();
+    }
+
+    public String getNickname(int player){
+        return players.get(player).getNickName();
     }
 
     public void addPlayer(String newPlayer){
@@ -24,17 +35,6 @@ public class Game_View {
         players.removeIf(player -> player.getNickName().equals(deletedPlayer));
     }
 
-    public void orderPlayer(ArrayList<String> nickNames){
-        ArrayList<PlayerBoard_View> orderedPlayers = new ArrayList<>();
-        for (int i = 0; i < players.size(); i++){
-            for (PlayerBoard_View player: players) {
-                if (player.getNickName().equals(nickNames.get(i)))
-                    orderedPlayers.add(player);
-            }
-        }
-        players = orderedPlayers;
-    }
-
     public void setMarket(Market_View market){
         this.market = market;
     }
@@ -43,21 +43,29 @@ public class Game_View {
         decks = new Decks_View(cards);
     }
 
+    public ArrayList<Integer> getFirstDeckCards(){
+        return decks.getDevelopmentCards();
+    }
+
     public void initFaithTrack(){
         faithTrack = new FaithTrack_View(players.size());
     }
 
-    public void increaseFaithPoints(int numPlayer, int faithPoints){
-        faithTrack.increaseFaithPoints(numPlayer, faithPoints);
+    public void increaseFaithPoints(int viewID, int faithPoints){
+        faithTrack.increaseFaithPoints(viewID, faithPoints);
     }
 
-    void slideColumn(int selectedColumn) {
+    public void slideRow(int selectedRow){
+        market.slideRow(selectedRow);
+    }
+
+    public void slideColumn(int selectedColumn) {
         market.slideColumn(selectedColumn);
     }
 
-    void slideRow(int selectedRow){
-        market.slideRow(selectedRow);
-    }
+    public void getRowMarbles(int row){market.getRowMarbles(row);}
+
+    public void getColumnMarbles(int column){market.getColumnMarbles(column);}
 
     public void replaceCard(int row, int column, int cardID){
         decks.replaceCard(row, column, cardID);
@@ -87,8 +95,16 @@ public class Game_View {
         players.get(viewID).addExtraDepot(r);
     }
 
-    public void setLeaderCards(int viewID, int firstLeaderCard, int secondLeaderCard){
+    public void setMyLeaderCards(int viewID, int firstLeaderCard, int secondLeaderCard){
         players.get(viewID).setLeaderCards(firstLeaderCard, secondLeaderCard);
+    }
+
+    public ArrayList<Integer> getDevelopmentCards(int viewID){
+        return players.get(viewID).getDevelopmentCards();
+    }
+
+    public int getMyLeaderCard(int viedID, int leaderCard){
+        return players.get(viedID).getLeaderCard(leaderCard);
     }
 
     public void addLeaderCard(int viewID, int leaderCard){

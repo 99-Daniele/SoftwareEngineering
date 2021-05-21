@@ -5,50 +5,38 @@ import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.network.messages.ErrorType;
 import it.polimi.ingsw.view.model_view.Game_View;
 
-import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-public abstract class View extends Observable implements Observer {
+public interface View{
 
-    private Game_View game_view;
-    private Thread inThread;
-    private BufferedReader stdIn;
-    private final Object okLock = new Object();
+    String getNickname();
 
-    public abstract String getNickname();
+    void login(int viewID);
 
-    public abstract void setViewID(int viewID);
+    void newPlayer(String nickname, int position);
 
-    public abstract void login(int viewID);
+    void allPlayerConnected(int position, int numPLayer, ArrayList<String> nickNames);
 
-    public abstract void newPlayer(String nickname, int position);
+    void startGame();
 
-    public abstract void allPlayerConnected(int position, int numPLayer, ArrayList<String> nickNames);
+    void choseLeaderCards(ArrayList <LeaderCard> leaderCards);
 
-    public abstract void startGame(int numPlayer);
+    void available_slot(ArrayList<Integer> availableSlots);
 
-    public abstract void choseLeaderCards(ArrayList <LeaderCard> leaderCards);
+    void chosen_marble(Marble[] marbles);
 
-    public abstract void available_slot(ArrayList<Integer> availableSlots);
+    void choseWhiteConversionCard(LeaderCard[] leaderCards);
 
-    public abstract void chosen_marble(Marble[] marbles);
+    void isMyTurn(boolean turn);
 
-    public abstract void choseWhiteConversionCard(LeaderCard[] leaderCards);
+    void exit(String nickName);
 
-    public abstract void isMyTurn(boolean turn);
+    void quit(String nickName);
 
-    public abstract void exit(String nickName);
+    void ok();
 
-    public abstract void quit(String nickName);
+    void errorMessage(ErrorType errorType);
 
-    public abstract void ok();
-
-    public abstract void errorMessage(ErrorType errorType);
-
-    @Override
-    public void update(Observable o, Object arg) {
-
-    }
 }

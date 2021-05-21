@@ -2,6 +2,8 @@ package it.polimi.ingsw.view.model_view;
 
 import it.polimi.ingsw.model.resourceContainers.Resource;
 
+import java.util.ArrayList;
+
 import static java.util.Collections.swap;
 
 public class PlayerBoard_View {
@@ -39,6 +41,14 @@ public class PlayerBoard_View {
 
     public void setLeaderCards(int firstLeaderCard, int secondLeaderCard){
         cards_slots.setLeaderCards(firstLeaderCard, secondLeaderCard);
+    }
+
+    public ArrayList<Integer> getDevelopmentCards(){
+        return cards_slots.getDevelopmentCards();
+    }
+
+    public int getLeaderCard(int leaderCard){
+        return cards_slots.getLeaderCard(leaderCard);
     }
 
     public void addLeaderCard(int leaderCard){

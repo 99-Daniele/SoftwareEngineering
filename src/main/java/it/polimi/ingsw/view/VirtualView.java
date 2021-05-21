@@ -11,7 +11,7 @@ import java.net.Socket;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-public class VirtualView extends View{
+public class VirtualView extends Observable implements View, Observer{
 
     private Thread pingThread;
     private Thread inThread;
@@ -64,15 +64,6 @@ public class VirtualView extends View{
     public void login(int viewID){
         this.viewID = viewID;
         sendMessage(new Message(MessageType.LOGIN, viewID));
-    }
-
-    public int getViewID() {
-        return viewID;
-    }
-
-    @Override
-    public void setViewID(int viewID) {
-        this.viewID = viewID;
     }
 
     private void ping() throws InterruptedException, IOException {
@@ -157,8 +148,8 @@ public class VirtualView extends View{
     }
 
     @Override
-    public void startGame(int numPlayers){
-        Message message = new Message_One_Parameter_Int(MessageType.START_GAME, viewID, numPlayers);
+    public void startGame(){
+        Message message = new Message(MessageType.START_GAME, viewID);
         sendMessage(message);
     }
 

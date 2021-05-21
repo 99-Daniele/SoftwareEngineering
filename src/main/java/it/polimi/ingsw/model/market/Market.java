@@ -93,9 +93,7 @@ public class Market implements Serializable, Market_View {
      * @return a vector of Marble.
      * @throws WrongParametersException activated when the selectedColumn doesn't exist in the market.
      */
-    public Marble[] getColumnMarbles(int selectedColumn) throws WrongParametersException {
-        if (selectedColumn<1 || selectedColumn>4)
-        throw new WrongParametersException();
+    public Marble[] getColumnMarbles(int selectedColumn) {
         Marble[] marketCopy= new Marble[row];
         for(int i=0; i<row; i++)
         {
@@ -110,9 +108,7 @@ public class Market implements Serializable, Market_View {
      * @return a vector of Marbles.
      * @throws WrongParametersException activated when the selectedRow doesn't exist in the market.
      */
-    public Marble[] getRowMarbles(int selectedRow) throws WrongParametersException {
-        if (selectedRow<1 || selectedRow>3)
-        throw new WrongParametersException();
+    public Marble[] getRowMarbles(int selectedRow){
         Marble[] marketCopy= new Marble[column];
         System.arraycopy(marketTray[selectedRow - 1], 0, marketCopy, 0, column);
         return marketCopy;
