@@ -36,7 +36,7 @@ public class Client{
     }
 
     public static void main(String args[]) {
-        Client client = new Client("193.168.1.193", 1234);
+        Client client = new Client("localhost", 1234);
         client.startClient();
     }
 
