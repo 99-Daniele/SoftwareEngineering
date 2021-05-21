@@ -254,6 +254,7 @@ public class Market implements Serializable, Market_View {
     }
 
     public void printRow(int row){
+        row--;
         String[] s = new String[9];
         int i = 0;
         for (int y=0;y<4;y++) {
@@ -298,7 +299,7 @@ public class Market implements Serializable, Market_View {
         tabella[0][s.length-1]="╗";
         tabella[2][s.length-1]="╝";
         for (int x=0;x<3;x+=2)
-            for (int y=1;y<8;y++)
+            for (int y=1;y<s.length-1;y++)
                 tabella[x][y]="═";
         int count=0;
         for (int x=1;x<3;x+=2)
@@ -315,6 +316,7 @@ public class Market implements Serializable, Market_View {
     }
 
     public void printColumn(int column){
+        column--;
         String[] s = new String[7];
         int i = 0;
         for (int x=0;x<3;x++) {

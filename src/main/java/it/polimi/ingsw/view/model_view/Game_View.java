@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class Game_View {
 
     private ArrayList<PlayerBoard_View> players = new ArrayList<>();
+    private PlayerBoard_View Ludovico;
     private FaithTrack_View faithTrack;
     private Market_View market;
     private Decks_View decks;
@@ -18,6 +19,8 @@ public class Game_View {
         this.players = new ArrayList<>();
         for (String player: players)
             addPlayer(player);
+        if(players.size() == 1)
+            Ludovico = new PlayerBoard_View("Ludovico");
         initFaithTrack();
         startGame = false;
     }
@@ -79,7 +82,10 @@ public class Game_View {
     }
 
     public void initFaithTrack(){
-        faithTrack = new FaithTrack_View(players.size());
+        if(players.size() > 1)
+            faithTrack = new FaithTrack_View(players.size());
+        else
+            faithTrack = new FaithTrack_View(2);
     }
 
     public void increaseFaithPoints(int viewID, int faithPoints){
@@ -115,7 +121,7 @@ public class Game_View {
     }
 
     public void increaseWarehouse(int viewID, Resource resource, int depot){
-        players.get(viewID).increaseWarehouse(resource, depot);
+        players.get(viewID).increaseWarehouse(resource, depot-1);
     }
 
     public void newAmount(int viewID, Resource resource, int warehouseAmount, int strongboxAmount){
@@ -123,7 +129,7 @@ public class Game_View {
     }
 
     public void switchDepot(int viewID, int depot1, int depot2) {
-        players.get(viewID).switchDepot(depot1, depot2);
+        players.get(viewID).switchDepot(depot1-1, depot2-1);
     }
 
     public void addExtraDepot(int viewID, Resource r){
@@ -147,7 +153,7 @@ public class Game_View {
     }
 
     public void addDevelopmentCard(int viewID, int cardID, int slot){
-        players.get(viewID).addDevelopmentCard(cardID, slot);
+        players.get(viewID).addDevelopmentCard(cardID, slot-1);
     }
 
     public void discardLeaderCard(int viewID, int chosenLeaderCard){

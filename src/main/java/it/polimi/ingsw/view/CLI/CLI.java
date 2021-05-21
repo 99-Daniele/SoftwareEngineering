@@ -39,6 +39,13 @@ public class CLI implements Observer{
     private void login_message(Message message) {
         if(message.getClientID() == 0)
             askPlayersNumber();
+    }
+
+    private void waiting() {
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+        }
         System.out.println("Waiting other players...");
     }
 
@@ -187,12 +194,14 @@ public class CLI implements Observer{
             if(row_column[0] == -1 || row_column[1] == -1){
                 int otherCard = 0;
                 try {
-                    otherCard = numberInput(0, 1, "You chose a wrong card. You want to take a different one?\n1 - YES\n 0 - NO");
+                    otherCard = numberInput(0, 1, "You chose a wrong card. You want to take a different one?\n1 - YES\n0 - NO");
                 } catch (ExecutionException e) {
                     System.out.println("error");
                 }
-                if(otherCard == 0)
+                if(otherCard == 0) {
                     chose_action(first_input());
+                    return;
+                }
             }
             else
                 break;
@@ -239,12 +248,18 @@ public class CLI implements Observer{
                         power = leader_card_production();
                         break;
                 }
-                if(power == false){
-                    if (numberInput(0,1,"Do you want to activate another power production?\n1 - YES\n0 - NO") == 0)
-                        chose_action(first_input());
+                if(!power){
+                    if (numberInput(0,1,"Do you want to activate another power production?\n1 - YES\n0 - NO") == 0) {
+                        if(currentState == CONTROLLER_STATES.FIRST_ACTION_STATE)
+                            chose_action(first_input());
+                        else
+                            activate_another_production();
+                        return;
+                    }
                 }
                 else{
                   currentState = CONTROLLER_STATES.ACTIVATE_PRODUCTION_STATE;
+                  break;
                 }
             }
         } catch (ExecutionException e) {
@@ -498,7 +513,8 @@ public class CLI implements Observer{
         int leaderCard4 = m.getPar4();
         ArrayList<Integer> choice=new ArrayList<>(2);
         try {
-            choice.add(numberInput(1,4,"Chose between this 4 leader cards. Insert the cardID "));
+            System.out.println(leaderCard1 + "," + leaderCard2);
+            choice.add(numberInput(49,64,"Chose between this 4 leader cards"));
             // print cards
         } catch (ExecutionException e) {
             e.printStackTrace();
@@ -513,15 +529,14 @@ public class CLI implements Observer{
                         choice.get(1) != leaderCard3 && choice.get(1) != leaderCard4) {
                     System.err.println("Chose a correct cardID\n");
                 } else break;
-            } catch (InputMismatchException | ExecutionException e) {
-                System.err.println("Insert a number\n");
+            } catch (IndexOutOfBoundsException | ExecutionException e) {
+                System.err.println("error");
             }
         }
         game.setMyLeaderCards(position, choice.get(0), choice.get(1));
-        Message returnMessage = new Message_Two_Parameter_Int(MessageType.LEADER_CARD, position, choice.get(0), choice.get(2));
+        Message returnMessage = new Message_Two_Parameter_Int(MessageType.LEADER_CARD, position, choice.get(0), choice.get(1));
         ClientSocket.sendMessage(returnMessage);
     }
-
 
     public String readLine() throws ExecutionException {
         FutureTask<String> futureTask = new FutureTask<>(new ReadInput());
@@ -561,7 +576,9 @@ public class CLI implements Observer{
         else
             System.out.println("Wait for other players to finish their turns...");
     }
+
     private void end_turn_message(Message message) throws InterruptedException, IOException {
+        TimeUnit.SECONDS.sleep(1);
         if (message.getClientID() != position) {
             System.out.println("Player " + game.getNickname(message.getClientID()) + " has finished his turn.\nThis are its resources:");
         }
@@ -586,11 +603,11 @@ public class CLI implements Observer{
     private void card_remove_message(Message message) {
         Message_Four_Parameter_Int m = (Message_Four_Parameter_Int) message;
         if(game.getNumOfPlayers() == 1 && m.getClientID() == 1)
-            System.out.println("Ludovico has removed one deck card from row " + (m.getPar1()) + " and" +
-                    " column " + (m.getPar2()));
+            System.out.println("Ludovico has removed one deck card from row " + (m.getPar1() +1 + " and" +
+                    " column " + (m.getPar2() +1)));
         else
             System.out.println("Deck card from row " + (m.getPar1()+1) + " and column "
-                    + (m.getPar2()) + " has been removed");
+                    + (m.getPar2() +1) + " has been removed");
         if (m.getPar3() == 1) {
             System.out.println("Deck is now empty");
         }
@@ -606,16 +623,19 @@ public class CLI implements Observer{
         game.newAmount(m.getClientID(), m.getResource(), m.getPar1(), m.getPar2());
     }
 
-    private void market_change(Message message){
+    private void market_change(Message message) {
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
-        if(m.getPar1() == 0) {
-            System.out.println("Player " + game.getNickname(m.getClientID()) + " has chosen row " + m.getPar2() + " of the market");
-            CLI_Printer.printRowMarket(game, m.getPar2());
+        if (m.getPar1() == 0) {
+            if(m.getClientID() != position) {
+                System.out.println("Player " + game.getNickname(m.getClientID()) + " has chosen row " + m.getPar2() + " of the market");
+                CLI_Printer.printRowMarket(game, m.getPar2());
+            }
             game.slideRow(m.getPar2());
-        }
-        else{
-            System.out.println("Player " + game.getNickname(m.getClientID()) + " has chosen column " + m.getPar2() + " of the market");
-            CLI_Printer.printColumnMarket(game, m.getPar2());
+        } else {
+            if(m.getClientID() != position) {
+                System.out.println("Player " + game.getNickname(m.getClientID()) + " has chosen column " + m.getPar2() + " of the market");
+                CLI_Printer.printColumnMarket(game, m.getPar2());
+            }
             game.slideColumn(m.getPar2());
         }
         CLI_Printer.printMarket(game);
@@ -623,10 +643,12 @@ public class CLI implements Observer{
 
     private void faith_points_message(Message message){
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
-        if(game.getNumOfPlayers() == 1 && m.getClientID() == 2)
-            System.out.println("Ludovico has increased his faith points. Now it has " + m.getPar());
-        else
-            System.out.println("Player " + game.getNickname(m.getClientID()) + " has increased its faith points. Now it has " + m.getPar());
+        if(m.getClientID() != position) {
+            if (game.getNumOfPlayers() == 1 && m.getClientID() == 1)
+                System.out.println("Ludovico has increased his faith points. Now it has " + m.getPar());
+            else
+                System.out.println("Player " + game.getNickname(m.getClientID()) + " has increased its faith points. Now it has " + m.getPar());
+        }
         game.increaseFaithPoints(m.getClientID(), m.getPar());
         CLI_Printer.printFaithTrack(game);
     }
@@ -634,18 +656,21 @@ public class CLI implements Observer{
     private void increase_warehouse_message(Message message){
         Message_One_Int_One_Resource m = (Message_One_Int_One_Resource) message;
         if(m.getPar1() != -1) {
-            System.out.println("Player " + game.getNickname(m.getClientID()) + " has inserted by 1 " + m.getResource()
+            if(m.getClientID() != position)
+                System.out.println("Player " + game.getNickname(m.getClientID()) + " has inserted by 1 " + m.getResource()
                     + " its " + m.getPar1() + "° depot");
             game.increaseWarehouse(m.getClientID(), m.getResource(), m.getPar1());
             CLI_Printer.printWarehouse(game, m.getClientID());
         }
-        else
+        else if(m.getClientID() != position)
             System.out.println("Player " + game.getNickname(m.getClientID()) + " has discarded 1 " + m.getResource()
                     + " marble");
     }
+
     private void switch_depot_message(Message message){
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
-        System.out.println("Player " + game.getNickname(m.getClientID()) + " has switched its " + m.getPar1()
+        if(m.getClientID() != position)
+            System.out.println("Player " + game.getNickname(m.getClientID()) + " has switched its " + m.getPar1()
                 + "° depot with its " + m.getPar2() + "° depot.");
         game.switchDepot(m.getClientID(), m.getPar1(), m.getPar2());
         CLI_Printer.printWarehouse(game, m.getClientID());
@@ -664,31 +689,41 @@ public class CLI implements Observer{
 
     private void leader_card_activation_message(Message message){
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
-        System.out.println("Player " + game.getNickname(m.getClientID()) + " has activated one leader card: ");
-        game.addLeaderCard(m.getClientID(), m.getPar());
-        // print leader card
+        if(m.getClientID() != position) {
+            System.out.println("Player " + game.getNickname(m.getClientID()) + " has activated one leader card: ");
+            game.addLeaderCard(m.getClientID(), m.getPar());
+            // print leader card
+        }
     }
 
     private void extra_depot_message(Message message){
         Message_One_Int_One_Resource m = (Message_One_Int_One_Resource) message;
-        System.out.println("Player " + game.getNickname(m.getClientID()) + " has a new extra depot of " + m.getResource());
+        if(m.getClientID() != position) {
+            System.out.println("Player " + game.getNickname(m.getClientID()) + " has a new extra depot of " + m.getResource());
+        }
         game.addExtraDepot(m.getClientID(), m.getResource());
         CLI_Printer.printWarehouse(game, m.getClientID());
     }
 
     private void leader_card_discard_message(Message message){
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
-        System.out.println("Player " + m.getClientID() + " has discarded one leader card: ");
-        // print leader card
+        if(m.getClientID() != position) {
+            System.out.println("Player " + m.getClientID() + " has discarded one leader card: ");
+            // print leader card
+        }
+        else
+            game.discardLeaderCard(position, m.getPar());
     }
 
     private void ok_message() throws IOException {
         switch (currentState) {
             case WAITING_PLAYERS_STATE:
                 if (game.isStartGame())
-                    System.out.println("In attesa che tutti i giocatori facciano le proprie scelte...");
-                else
+                    System.out.println("Waiting players made their choices...");
+                else if(game.getNumOfPlayers() > 0)
                     chose_first_resources();
+                else
+                    waiting();
                 break;
             case FIRST_ACTION_STATE:
                 chose_action(first_input());
@@ -739,7 +774,7 @@ public class CLI implements Observer{
         System.out.println("You have chosen this marbles: ");
         CLI_Printer.printMarbles(game, marbles);
         try {
-            int switchDepot = numberInput(0, 1, "Do you wnat to switch your depots?\n1 - YES\n0 - NO");
+            int switchDepot = numberInput(0, 1, "Do you want to switch your depots?\n1 - YES\n0 - NO");
             if (switchDepot == 1) {
                 switch_depot();
                 return;
@@ -788,14 +823,7 @@ public class CLI implements Observer{
     private void white_conversion_card_message(Message message) throws IOException {
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
         System.out.println("You have chosen a white marble and you have two possible conversion");
-        System.out.println("Your leader cards: ");
-        //print leader cards
-        int choice = 0;
-        try {
-            choice = numberInput(1, 2, "You use the first or second leader card? (1 or 2)");
-        } catch (ExecutionException e) {
-            System.out.println("error");
-        }
+        int choice = chose_leader_card();
         Message returnMessage;
         if (choice == 1) {
             returnMessage = new Message_One_Parameter_Int(MessageType.WHITE_CONVERSION_CARD, position, m.getPar1());
@@ -896,6 +924,7 @@ public class CLI implements Observer{
         Message message = new Message_One_Parameter_String(MessageType.LOGIN, position, userInput);
         ClientSocket.sendMessage(message);
     }
+
     private void wrong_parameters_error() throws  IOException {
         System.out.println("You have inserted wrong parameters");
         if(currentState == CONTROLLER_STATES.ACTIVATE_PRODUCTION_STATE)

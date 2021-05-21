@@ -38,22 +38,22 @@ public class Decks_View {
         final int[] card_coordinates = new int[2];
         for(int i = 0; i < 4; i++){
             if(firstLevelCards.get(i) == cardID) {
-                card_coordinates[0] = 0;
-                card_coordinates[1] = i;
-                return card_coordinates;
-            }
-        }
-        for(int i = 0; i < 4; i++){
-            if(firstLevelCards.get(i) == cardID) {
                 card_coordinates[0] = 1;
-                card_coordinates[1] = i;
+                card_coordinates[1] = i+1;
                 return card_coordinates;
             }
         }
         for(int i = 0; i < 4; i++){
-            if(firstLevelCards.get(i) == cardID) {
+            if(secondLevelCards.get(i) == cardID) {
                 card_coordinates[0] = 2;
-                card_coordinates[1] = i;
+                card_coordinates[1] = i+1;
+                return card_coordinates;
+            }
+        }
+        for(int i = 0; i < 4; i++){
+            if(thirdLevelCards.get(i) == cardID) {
+                card_coordinates[0] = 3;
+                card_coordinates[1] = i+1;
                 return card_coordinates;
             }
         }

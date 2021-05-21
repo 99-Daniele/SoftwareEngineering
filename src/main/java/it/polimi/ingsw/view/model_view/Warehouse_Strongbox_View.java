@@ -26,10 +26,10 @@ public class Warehouse_Strongbox_View {
     }
 
     public void increaseWarehouse(Resource resource, int depot){
-        if(depots.get(depot-1).getAmount() > 0)
-            depots.get(depot-1).increase();
+        if(depots.get(depot).getAmount() > 0)
+            depots.get(depot).increase();
         else
-            depots.get(depot-1).setNewResource(resource);
+            depots.get(depot).setNewResource(resource);
     }
 
     public void newAmount(Resource resource, int warehouseAmount, int strongboxAmount){
@@ -38,7 +38,7 @@ public class Warehouse_Strongbox_View {
     }
 
     public void switchDepot(int depot1, int depot2) {
-        swap(depots, depot1 - 1, depot2 - 1);
+        swap(depots, depot1, depot2);
     }
 
     public void addExtraDepot(Resource r){
@@ -132,8 +132,8 @@ public class Warehouse_Strongbox_View {
     }
 
     public void printCliExtraDepot(){
-        System.out.println("DEPOSITO EXTRA");
         if (existExtraDepot1()) {
+            System.out.println("EXTRA DEPOTS");
             System.out.print("1 ");
             depots.get(3).printCliWarehouse();
             System.out.println();
