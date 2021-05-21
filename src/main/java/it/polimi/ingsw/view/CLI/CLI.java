@@ -516,7 +516,6 @@ public class CLI implements Observer{
             CLI_Printer.printCard(leaderCard2);
             CLI_Printer.printCard(leaderCard3);
             CLI_Printer.printCard(leaderCard4);
-            System.out.println(leaderCard1 + "," + leaderCard2);
             choice.add(numberInput(49,64,"Chose between this 4 leader cards (insert cardID)"));
         } catch (ExecutionException e) {
             e.printStackTrace();
@@ -710,7 +709,7 @@ public class CLI implements Observer{
     private void leader_card_discard_message(Message message){
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
         if(m.getClientID() != position) {
-            System.out.println("Player " + m.getClientID() + " has discarded one leader card: ");
+            System.out.println("Player " + game.getNickname(m.getClientID()) + " has discarded one leader card: ");
             CLI_Printer.printCard(m.getPar());
         }
         else
@@ -776,6 +775,7 @@ public class CLI implements Observer{
         System.out.println("You have chosen this marbles: ");
         CLI_Printer.printMarbles(game, marbles);
         try {
+            CLI_Printer.printWarehouse(game, position);
             int switchDepot = numberInput(0, 1, "Do you want to switch your depots?\n1 - YES\n0 - NO");
             if (switchDepot == 1) {
                 switch_depot();

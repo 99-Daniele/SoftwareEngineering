@@ -20,6 +20,6 @@ public class Card implements Card_View {
 
     @Override
     public void print() {
-        System.out.println("VICTORY_POINTS: " + victoryPoints + "\nCARD_ID: " + cardID + "\n\n");
+        System.out.println("VICTORY_POINTS: " + victoryPoints + "\nCARD_ID: " + cardID + "\n");
     }
 }

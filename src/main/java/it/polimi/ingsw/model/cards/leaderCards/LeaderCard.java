@@ -144,11 +144,11 @@ public abstract class LeaderCard extends Card {
 
     @Override
     public void print() {
-        System.out.println("DEVELOPMENT_CARD:\nRESOURCE: " + resource);
+        System.out.println("RESOURCE: " + resource);
         if(resourceCost != null)
-            System.out.println("RESOURCE_COST: " + resourceCost.toString());
+            System.out.println("RESOURCE_COST: " + resourceCost);
         else if(leaderRequirements != null)
-            System.out.println("LEADER_REQUIREMENTS: " + leaderRequirements.toString());
+            System.out.println("LEADER_REQUIREMENTS: " + leaderRequirements);
         super.print();
     }
 }
