@@ -1,5 +1,7 @@
 package it.polimi.ingsw.network.client;
 
+import it.polimi.ingsw.view.model_view.FaithTrack_View;
+
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -32,7 +34,7 @@ public class Client{
     }
 
     public static void main(String args[]) {
-        Client client = new Client("localhost", 1234);
+        Client client = new Client("192.168.1.10", 1234);
         client.startClient();
     }
 }

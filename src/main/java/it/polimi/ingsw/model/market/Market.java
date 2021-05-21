@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.market;
 import it.polimi.ingsw.exceptions.WrongParametersException;
 
 import it.polimi.ingsw.model.resourceContainers.Resource;
+import it.polimi.ingsw.view.ColorAnsi;
 import it.polimi.ingsw.view.model_view.Market_View;
 
 import java.io.Serializable;
@@ -158,5 +159,107 @@ public class Market implements Serializable, Market_View {
 
     public void printMarket(){
         System.out.println("MARKET");
+    }
+
+
+    public void printMarketCli(){
+        System.out.println("MARKET");
+        String s[]=new String[13];
+        int i=0;
+        for (int x=0;x<3;x++)
+            for (int y=0;y<4;y++)
+            {
+                String s1=marketTray[x][y].toString();
+                switch (s1){
+                    case "R":
+                        s[i]= ColorAnsi.ANSI_RED.escape();
+                        i++;
+                        break;
+                    case "G":
+                        s[i]=ColorAnsi.ANSI_WHITE.escape();
+                        i++;
+                        break;
+                    case "Y":
+                        s[i]=ColorAnsi.ANSI_YELLOW.escape();
+                        i++;
+                        break;
+                    case "B":
+                        s[i]=ColorAnsi.ANSI_CYAN.escape();
+                        i++;
+                        break;
+                    case "P":
+                        s[i]=ColorAnsi.ANSI_PURPLE.escape();
+                        i++;
+                        break;
+                    case "W":
+                        s[i]="";
+                        i++;
+                        break;
+                }
+            }
+        String s1=externalMarble.toString();
+        switch (s1){
+            case "R":
+                s[i]= ColorAnsi.ANSI_RED.escape();
+                break;
+            case "G":
+                s[i]=ColorAnsi.ANSI_WHITE.escape();
+                break;
+            case "Y":
+                s[i]=ColorAnsi.ANSI_YELLOW.escape();
+                break;
+            case "B":
+                s[i]=ColorAnsi.ANSI_CYAN.escape();
+                break;
+            case "P":
+                s[i]=ColorAnsi.ANSI_PURPLE.escape();
+                break;
+            case "W":
+                s[i]="";
+                break;
+        }
+        creationTable(s);
+    }
+
+    private void creationTable(String[] s){
+        String tabella[][]=new String[7][9];
+        for (int x=1;x<6;x++)
+            for (int y=0;y<9;y+=2)
+                tabella[x][y]="║";
+        for (int x=0;x<7;x+=2)
+            for (int y=1;y<8;y++)
+                tabella[x][y]="═";
+        tabella[0][0]="╔";
+        tabella[6][0]="╚";
+        tabella[0][8]="╗";
+        tabella[6][8]="╝";
+        int count=0;
+        for (int x=1;x<6;x+=2)
+            for (int y=1;y<8;y+=2)
+            {
+                tabella[x][y]=s[count]+"●"+ColorAnsi.RESET;
+                count++;
+            }
+        String tabella2[][]=new String[3][3];
+        tabella2[0][0]="╔";
+        tabella2[0][1]="═";
+        tabella2[0][2]="╗";
+        tabella2[1][0]="║";
+        tabella2[1][1]=s[count]+"●"+ColorAnsi.RESET;
+        tabella2[1][2]="║";
+        tabella2[2][0]="╚";
+        tabella2[2][1]="═";
+        tabella2[2][2]="╝";
+        for (int i=0;i<7;i++)
+        {
+            for (int j=0;j<9;j++)
+                System.out.print(tabella[i][j]);
+            System.out.println();
+        }
+        for (int i=0;i<3;i++) {
+            for (int j = 0; j < 3; j++)
+                System.out.print(tabella2[i][j]);
+            System.out.println();
+        }
     }
 }
