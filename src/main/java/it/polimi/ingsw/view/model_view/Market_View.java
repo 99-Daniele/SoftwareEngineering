@@ -10,6 +10,8 @@ public interface Market_View {
 
     void printMarket();
 
+    void printMarketCli();
+
     Marble[] getRowMarbles(int row);
 
     Marble[] getColumnMarbles(int column);

@@ -1,17 +1,25 @@
 package it.polimi.ingsw.view.model_view;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class Decks_View {
 
-    private ArrayList<Integer> firstLevelCards;
-    private ArrayList<Integer> secondLevelCards;
-    private ArrayList<Integer> thirdLevelCards;
+    private List<Integer> firstLevelCards;
+    private List<Integer> secondLevelCards;
+    private List<Integer> thirdLevelCards;
 
     public Decks_View(ArrayList<Integer> initialCards){
-        firstLevelCards = (ArrayList<Integer>) initialCards.subList(0, 4);
-        secondLevelCards = (ArrayList<Integer>) initialCards.subList(4, 8);
-        thirdLevelCards = (ArrayList<Integer>) initialCards.subList(8, 12);
+        firstLevelCards =  initialCards.subList(0, 4);
+        secondLevelCards =  initialCards.subList(4, 8);
+        thirdLevelCards =  initialCards.subList(8, 12);
+    }
+
+    public ArrayList<Integer> getDevelopmentCards(){
+        ArrayList<Integer> developmentCards = new ArrayList<>();
+        developmentCards.addAll(firstLevelCards);
+        developmentCards.addAll(secondLevelCards);
+        developmentCards.addAll(thirdLevelCards);
+        return developmentCards;
     }
 
     public void replaceCard(int row, int column, int cardID){

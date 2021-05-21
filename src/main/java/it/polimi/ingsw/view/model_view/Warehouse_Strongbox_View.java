@@ -42,8 +42,6 @@ public class Warehouse_Strongbox_View {
         depots.add(new Resource_Container_View(r));
     }
 
-    public void print(){};
-
     private void strongboxHandler(Resource r, int strongboxAmount){
         switch (r){
             case COIN:
@@ -107,4 +105,41 @@ public class Warehouse_Strongbox_View {
         return depots.size() == 5;
     }
 
+    public void print(){};
+
+    public void printCliWarehouse(){
+        System.out.println("WAREHOUSE");
+        for (int i=0;i<3;i++)
+        {
+            System.out.print(i+1+" ");
+            depots.get(i).printCliWarehouse();
+            System.out.println();
+        }
+    }
+
+    public void printCliStrongbox(){
+        System.out.println("STRONGBOX");
+        coin.printCliStrongbox();
+        shield.printCliStrongbox();
+        servant.printCliStrongbox();
+        stone.printCliStrongbox();
+    }
+
+    public void printCliExtarDepot(){
+        System.out.println("DEPOSITO EXTRA");
+        if (existExtraDepot1())
+        {
+            System.out.print("1 ");
+            depots.get(3).printCliWarehouse();
+            System.out.println();
+            if (existExtraDepot2())
+            {
+                System.out.print("2 ");
+                depots.get(4).printCliWarehouse();
+                System.out.println();
+            }
+        }
+        else
+            System.out.println("nessuno");
+    }
 }

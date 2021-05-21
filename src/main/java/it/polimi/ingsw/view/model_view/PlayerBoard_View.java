@@ -2,6 +2,8 @@ package it.polimi.ingsw.view.model_view;
 
 import it.polimi.ingsw.model.resourceContainers.Resource;
 
+import java.util.ArrayList;
+
 import static java.util.Collections.swap;
 
 public class PlayerBoard_View {
@@ -41,6 +43,10 @@ public class PlayerBoard_View {
         cards_slots.setLeaderCards(firstLeaderCard, secondLeaderCard);
     }
 
+    public ArrayList<Integer> getDevelopmentCards(){
+        return cards_slots.getDevelopmentCards();
+    }
+
     public int getLeaderCard(int leaderCard){
         return cards_slots.getLeaderCard(leaderCard);
     }
@@ -62,4 +68,26 @@ public class PlayerBoard_View {
     }
 
     public void print(){};
+
+    public void printSlots(){
+        cards_slots.printCliSlot();
+    }
+
+    public void printLeaderCards(){
+        cards_slots.printCliLeaderCard();
+    }
+
+    public void printVictoryPointsPope(){
+        System.out.println("i punti vittoria legati legati alle sezioni papali sono: "+victoryPoints);
+    }
+
+    public void printCliAllPlayerBoard(){
+        System.out.println(nickName);
+        warehouse_strongbox.printCliWarehouse();
+        warehouse_strongbox.printCliExtarDepot();
+        warehouse_strongbox.printCliStrongbox();
+        printSlots();
+        printLeaderCards();
+        printVictoryPointsPope();
+    }
 }

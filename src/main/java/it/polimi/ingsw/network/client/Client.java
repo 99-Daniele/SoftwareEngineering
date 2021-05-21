@@ -42,6 +42,7 @@ public class Client{
 
     public void launchCLI(ClientSocket clientSocket){
         this.cli = new CLI(clientSocket);
+        cli.username();
     }
 }
 

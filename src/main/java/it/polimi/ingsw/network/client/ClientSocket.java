@@ -144,6 +144,10 @@ public class ClientSocket extends Observable{
         return ((currentTime - initTime) >= delta);
     }
 
+    public static void setDisconnected(){
+        connected = false;
+    }
+
     /**
      * close inputStream, outputStream and socket connection with Server.
      */
@@ -166,5 +170,6 @@ public class ClientSocket extends Observable{
             connected = false;
             disconnect();
         }
+        System.exit(0);
     }
 }
