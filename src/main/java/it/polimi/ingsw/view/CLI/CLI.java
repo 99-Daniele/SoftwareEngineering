@@ -113,6 +113,7 @@ public class CLI implements Observer{
 
     private int first_input() {
         System.out.println("Your turn");
+        CLI_Printer.printPlayerBoard(game, position);
         System.out.println("\n1 - TAKE MARBLE FROM MARKET\n2 - BUY DEVELOPMENT CARD\n3 - ACTIVATE PRODUCTION\n" +
                 "4 - ACTIVATE LEADER CARD\n5 - DISCARD LEADER CARD");
         int userInput = 0;

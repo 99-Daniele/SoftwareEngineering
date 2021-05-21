@@ -15,7 +15,7 @@ public class CLI_Printer {
     }
 
     public static void printMarket(Game_View game){
-        game.getMarket().printMarketCLI();
+        game.getMarket().printMarketCli();
     }
 
     public static void printRowMarket(Game_View game, int row){
@@ -52,7 +52,7 @@ public class CLI_Printer {
     }
 
     public static void printCardSlot(Game_View game, int viewID){
-        game.getSlotCards(viewID).print();
+        game.getSlotCards(viewID).printCliSlot();
     }
 
     public static void printFaithTrack(Game_View game){
@@ -63,5 +63,4 @@ public class CLI_Printer {
         CardMap.getCard(cardID).print();
     }
 
-    public static void printSlotCards(Game_View game, int viewID){}
 }

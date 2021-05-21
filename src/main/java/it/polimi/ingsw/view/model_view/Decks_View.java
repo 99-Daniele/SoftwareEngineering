@@ -1,5 +1,7 @@
 package it.polimi.ingsw.view.model_view;
 
+import it.polimi.ingsw.parser.CardMap;
+
 import java.util.*;
 
 public class Decks_View {
@@ -62,5 +64,28 @@ public class Decks_View {
         return card_coordinates;
     }
 
-    public void print(){};
+    public void print() {
+        for (int j = 0; j < 4; j++) {
+            System.out.println("Deck " + 1 + " - " + (j + 1));
+            if (firstLevelCards.get(j) == -1)
+                System.out.println("Empty");
+            else
+                CardMap.getCard(firstLevelCards.get(j)).print();
+        }
+        for (int j = 0; j < 4; j++) {
+            System.out.println("Deck " + 2 + " - " + (j + 1));
+            if (secondLevelCards.get(j) == -1)
+                System.out.println("Empty");
+            else
+                CardMap.getCard(secondLevelCards.get(j)).print();
+        }
+        for (int j = 0; j < 4; j++) {
+            System.out.println("Deck " + 3 + " - " + (j + 1));
+            if (thirdLevelCards.get(j) == -1)
+                System.out.println("Empty");
+            else
+                CardMap.getCard(thirdLevelCards.get(j)).print();
+        }
+
+    }
 }

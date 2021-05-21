@@ -92,7 +92,7 @@ public class PlayerBoard_View {
     public void printCliAllPlayerBoard(){
         System.out.println(nickName);
         warehouse_strongbox.printCliWarehouse();
-        warehouse_strongbox.printCliExtarDepot();
+        warehouse_strongbox.printCliExtraDepot();
         warehouse_strongbox.printCliStrongbox();
         printSlots();
         printLeaderCards();

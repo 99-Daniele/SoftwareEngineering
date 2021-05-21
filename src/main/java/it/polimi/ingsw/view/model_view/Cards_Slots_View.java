@@ -69,11 +69,11 @@ public class Cards_Slots_View {
 
     public void printCliSlot(){
         System.out.println("SLOTS PLAYERBOARD");
-        System.out.println("slot 1");
+        System.out.println("First slot:");
         int somma=0;
         int count=0;
         if (firstSlot.size()==0)
-            System.out.println("vuoto");
+            System.out.println("empty");
         else
         {
             CardMap.getCard(firstSlot.getLast()).print();
@@ -81,13 +81,13 @@ public class Cards_Slots_View {
                 somma += CardMap.getCard(firstSlot.get(i)).getVictoryPoints();
                 count++;
             }
-            System.out.println("ho "+count+" carte coperte e la somma dei punti vittoria è: "+somma);
+            System.out.println("I have "+count+" covered cards with "+somma + " sum of victory points");
         }
-        System.out.println("slot 2");
+        System.out.println("Second slot:");
         somma=0;
         count=0;
         if (secondSlot.size()==0)
-            System.out.println("vuoto");
+            System.out.println("empty");
         else
         {
             CardMap.getCard(secondSlot.getLast()).print();
@@ -95,13 +95,13 @@ public class Cards_Slots_View {
                 somma+=CardMap.getCard(secondSlot.get(i)).getVictoryPoints();
                 count++;
             }
-            System.out.println("ho "+count+" carte coperte e la somma dei punti vittoria è: "+somma);
+            System.out.println("I have " + count +" covered cards with " + somma + " sum of victory points");
         }
-        System.out.println("slot 3");
+        System.out.println("Third slot");
         somma=0;
         count=0;
         if (thirdSlot.size()==0)
-            System.out.println("vuoto");
+            System.out.println("empty");
         else
         {
             CardMap.getCard(thirdSlot.getLast()).print();
@@ -109,7 +109,7 @@ public class Cards_Slots_View {
                 somma += CardMap.getCard(thirdSlot.get(i)).getVictoryPoints();
                 count++;
             }
-            System.out.println("ho "+count+" carte coperte e la somma dei punti vittoria è: "+somma);
+            System.out.println("I have " + count +" covered cards with " + somma + " sum of victory points");
         }
     }
 
@@ -120,6 +120,4 @@ public class Cards_Slots_View {
         if (CardMap.getCard(secondLeaderCard).getVictoryPoints()!=0)
             CardMap.getCard(secondLeaderCard).print();
     }
-
-    public void print(){};
 }

@@ -154,7 +154,8 @@ public class Market implements Serializable, Market_View {
         marketTray[selectedRow-1][column-1] = marble;
     }
 
-    public void printMarketCLI(){
+    @Override
+    public void printMarketCli(){
         System.out.println("MARKET");
         String s[]=new String[13];
         int i=0;
