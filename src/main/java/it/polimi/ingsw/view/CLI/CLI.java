@@ -136,12 +136,18 @@ public class CLI implements Observer{
     }
 
     public void username(){
+        BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("\nEnter your nickname: ");
-        try {
-            String nickname = readLine();
-            ClientSocket.sendMessage( new Message_One_Parameter_String(MessageType.LOGIN,position,nickname));
-        } catch (ExecutionException | IOException e) {
-            System.out.println("error");
+        while (true) {
+            try {
+                String nickname = stdIn.readLine();
+                if(nickname != null && !nickname.isBlank() && !nickname.equals("")) {
+                    ClientSocket.sendMessage(new Message_One_Parameter_String(MessageType.LOGIN, position, nickname));
+                    break;
+                }
+            } catch (IOException e) {
+                System.out.println("error");
+            }
         }
     }
 
