@@ -30,15 +30,21 @@ public class CLI implements Observer{
     public void startSpyAction() {
         inputThread = new Thread(() -> {
             try {
-                System.out.println("\nWrite command \"see\" or \"s\" to see the state of the game\n");
-                while (!turn){
-                    BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
-                    String command = stdIn.readLine();
-                    command = command.toLowerCase(Locale.ROOT);
-                    if(command.equals("s") || command.equals("see"))
-                        spyAction();
+                if(!turn) {
+                    System.out.println("\nWrite command \"see\" or \"s\" to see the state of the game\n");
+                    while (true) {
+                        BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
+                        String command;
+                        while (!stdIn.ready()) {
+                            inputThread.sleep(200);
+                        }
+                        command = stdIn.readLine();
+                        command = command.toLowerCase(Locale.ROOT);
+                        if (command.equals("s") || command.equals("see"))
+                            spyAction();
+                    }
                 }
-            } catch (IOException e) {
+            } catch (IOException | InterruptedException e) {
             }
         });
         inputThread.start();
@@ -1216,7 +1222,9 @@ public class CLI implements Observer{
                     CLI_Printer.printDecks(game);
                     break;
             }
-        } catch (NumberFormatException e){}
+        } catch (NumberFormatException e){
+            spyAction();
+        }
     }
 
     private void seeOtherPlayerboard(){
