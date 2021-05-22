@@ -8,6 +8,8 @@ import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.view.model_view.*;
 
 import java.io.*;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -19,12 +21,11 @@ public class CLI implements Observer{
     private int position;
     private boolean turn;
 
-    public CLI(ClientSocket clientSocket){
+    public CLI(){
         game = new Game_View();
         currentState = CONTROLLER_STATES.WAITING_PLAYERS_STATE;
         position = 0;
         turn = false;
-        clientSocket.addObserver(this);
     }
 
     public void startSpyAction() {
@@ -36,7 +37,7 @@ public class CLI implements Observer{
                         BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
                         String command;
                         while (!stdIn.ready()) {
-                            inputThread.sleep(200);
+                            Thread.sleep(1000);
                         }
                         command = stdIn.readLine();
                         command = command.toLowerCase(Locale.ROOT);
@@ -50,8 +51,28 @@ public class CLI implements Observer{
         inputThread.start();
     }
 
-    public void username(){
-        System.out.println("" +
+    public void launchCli(){
+        try {
+            connectionInfo();
+        } catch (IOException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        printLogo();
+        username();
+    }
+
+    public void launchCLI(String hostName, int port){
+        try {
+            connectionInfo(hostName, port);
+        } catch (IOException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        printLogo();
+        username();
+    }
+
+    private void printLogo(){
+        System.out.println("\n" +
                 "8b     d8    d888b     d888888b  888888888  888888888  888888b                                                      \n" +
                 "88b   d88   d8bnd8b   d888b      888888888  888        88    88                                                     \n" +
                 "888bud888  d8     8b   d888b        888     888888     888888b                                                      \n" +
@@ -72,7 +93,49 @@ public class CLI implements Observer{
                 "8888b     888888     88  d8b 88  888888888  888     d888b      d888b   888888888  88  d8b 88  d888        888888    \n" +
                 "888 d8b   888        88    d888  88     88  888      d888b      d888b  88     88  88    d888   d88888888  888       \n" +
                 "888  888  888888888  88     d88  88     88  888  d888888b   d888888b   88     88  88     d88    d8888888  888888888 \n");
+    }
 
+    private void connectionInfo() throws IOException, ExecutionException {
+        BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
+        while (true) {
+            System.out.println("\nEnter hostname [localhost]: ");
+            String hostName = readLine();
+            if (hostName == null || hostName.isBlank() || hostName.equals(""))
+                hostName = "localhost";
+            System.out.println("Enter port [12460]: ");
+            String portNumber = stdIn.readLine();
+            if (portNumber == null || portNumber.isBlank() ||portNumber.equals(""))
+                portNumber = "12460";
+            try {
+                ClientSocket clientSocket = new ClientSocket(new Socket(hostName, Integer.parseInt(portNumber)));
+                System.out.println("Accepted by Server");
+                clientSocket.addObserver(this);
+                clientSocket.start();
+                break;
+            } catch (UnknownHostException e) {
+                System.err.println("Unknown host " + hostName);
+            } catch (IOException e) {
+                System.err.println("Can't connect to host " + hostName);
+            }
+        }
+    }
+
+    private void connectionInfo(String hostName, int port) throws IOException, ExecutionException {
+        try {
+            ClientSocket clientSocket = new ClientSocket(new Socket(hostName, port));
+            System.out.println("Accepted by Server");
+            clientSocket.addObserver(this);
+            clientSocket.start();
+        } catch (UnknownHostException e) {
+            System.err.println("Unknown host " + hostName);
+            connectionInfo();
+        } catch (IOException e) {
+            System.err.println("Can't connect to host " + hostName);
+            connectionInfo();
+        }
+    }
+
+    public void username(){
         System.out.println("\nEnter your nickname: ");
         try {
             String nickname = readLine();

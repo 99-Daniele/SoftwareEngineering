@@ -236,8 +236,8 @@ public class ControllerGame implements Observer {
         } else {
             try {
                 game.addObserver((VirtualView) view);
-                game.createPlayer(nickName);
                 view.login(views.size() - 1);
+                game.createPlayer(nickName);
                 if (playersReady()) {
                     startGame();
                 } else
