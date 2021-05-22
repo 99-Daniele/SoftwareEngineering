@@ -29,22 +29,22 @@ public class FaithTrack_View {
     public void printCli(){
         int count=1;
         String s=new String();
-        System.out.println("FAITH TRACK");
+        System.out.println("\nFAITH TRACK:");
         for (Integer i:playersFaithPoints)
         {
             int val=i.intValue();
             switch (count){
                 case 1:
-                    s=new String(ColorAnsi.ANSI_CYAN.escape());
+                    s= ColorAnsi.ANSI_CYAN.escape();
                     break;
                 case 2:
-                    s=new String(ColorAnsi.ANSI_GREEN.escape());
+                    s= ColorAnsi.ANSI_GREEN.escape();
                     break;
                 case 3:
-                    s=new String(ColorAnsi.ANSI_PURPLE.escape());
+                    s= ColorAnsi.ANSI_PURPLE.escape();
                     break;
                 case 4:
-                    s=new String(ColorAnsi.ANSI_YELLOW.escape());
+                    s= ColorAnsi.ANSI_YELLOW.escape();
                     break;
             }
             representationFaithTrack(val,s);

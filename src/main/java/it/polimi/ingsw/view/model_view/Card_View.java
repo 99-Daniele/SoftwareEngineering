@@ -4,6 +4,8 @@ public interface Card_View {
 
     void print();
 
+    void printSmallInfo();
+
     int getCardID();
 
     int getVictoryPoints();

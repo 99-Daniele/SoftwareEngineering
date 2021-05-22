@@ -35,8 +35,7 @@ public class CLI_Printer {
     }
 
     public static void printPlayerBoard(Game_View game, int viewID){
-        printCardSlot(game, viewID);
-        printWarehouseStrongbox(game, viewID);
+        game.getPlayer(viewID).printCliAllPlayerBoard();
     }
 
     public static void printWarehouseStrongbox(Game_View game, int viewID){
@@ -49,6 +48,10 @@ public class CLI_Printer {
 
     public static void printCardSlot(Game_View game, int viewID){
         game.getSlotCards(viewID).printCliSlot();
+    }
+
+    public static void printLeaderCard(Game_View game, int viewID){
+        game.getSlotCards(viewID).printCliLeaderCard();
     }
 
     public static void printFaithTrack(Game_View game){

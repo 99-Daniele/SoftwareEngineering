@@ -37,6 +37,10 @@ public class Game_View {
         return players.size();
     }
 
+    public PlayerBoard_View getPlayer(int player){
+        return players.get(player);
+    }
+
     public String getNickname(int player){
         return players.get(player).getNickName();
     }
@@ -75,10 +79,6 @@ public class Game_View {
 
     public void setFirstDeckCards(ArrayList<Integer> cards){
         decks = new Decks_View(cards);
-    }
-
-    public ArrayList<Integer> getFirstDeckCards(){
-        return decks.getDevelopmentCards();
     }
 
     public void initFaithTrack(){
@@ -144,7 +144,7 @@ public class Game_View {
         return players.get(viewID).getDevelopmentCards();
     }
 
-    public int getMyLeaderCard(int viedID, int leaderCard){
+    public int getLeaderCard(int viedID, int leaderCard){
         return players.get(viedID).getLeaderCard(leaderCard);
     }
 

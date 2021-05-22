@@ -65,24 +65,25 @@ public class Decks_View {
     }
 
     public void print() {
+        System.out.println("\nDEVELOPMENT_CARDS:");
         for (int j = 0; j < 4; j++) {
-            System.out.println("Deck " + 1 + " - " + (j + 1));
+            System.out.println("Deck " + 1 + " - " + (j + 1) + ":");
             if (firstLevelCards.get(j) == -1)
-                System.out.println("Empty");
+                System.out.println("empty");
             else
                 CardMap.getCard(firstLevelCards.get(j)).print();
         }
         for (int j = 0; j < 4; j++) {
             System.out.println("Deck " + 2 + " - " + (j + 1));
             if (secondLevelCards.get(j) == -1)
-                System.out.println("Empty");
+                System.out.println("empty");
             else
                 CardMap.getCard(secondLevelCards.get(j)).print();
         }
         for (int j = 0; j < 4; j++) {
             System.out.println("Deck " + 3 + " - " + (j + 1));
             if (thirdLevelCards.get(j) == -1)
-                System.out.println("Empty");
+                System.out.println("empty");
             else
                 CardMap.getCard(thirdLevelCards.get(j)).print();
         }
