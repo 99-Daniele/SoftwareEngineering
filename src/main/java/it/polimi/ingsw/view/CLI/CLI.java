@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 import it.polimi.ingsw.network.client.ClientSocket;
 import it.polimi.ingsw.network.messages.*;
-import it.polimi.ingsw.parser.CardMap;
 import it.polimi.ingsw.view.model_view.*;
 
 import java.io.*;
