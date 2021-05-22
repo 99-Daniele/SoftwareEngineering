@@ -142,11 +142,11 @@ public class CLI implements Observer{
                 activate_production();
                 break;
             case 4:
-                if(!activate_leader_card())
+                if(activate_leader_card())
                     chose_action(first_input());
                 break;
             case 5:
-                if(!discard_leader_card())
+                if(discard_leader_card())
                     chose_action(first_input());
                 break;
             case 6:
@@ -179,11 +179,11 @@ public class CLI implements Observer{
         }
         switch (userInput) {
             case 1:
-                if(!activate_leader_card())
+                if(activate_leader_card())
                     lastInput();
                 break;
             case 2:
-                if(!discard_leader_card())
+                if(discard_leader_card())
                     lastInput();
                 break;
             case 3:
@@ -394,7 +394,7 @@ public class CLI implements Observer{
         int x = chose_leader_card();
         if(x == -1) {
             System.out.println("You no longer have any leader cards");
-            return false;
+            return true;
         }
         Message message = new Message_One_Parameter_Int(MessageType.LEADER_CARD_ACTIVATION, position, x);
         try {
@@ -402,7 +402,7 @@ public class CLI implements Observer{
         } catch (IOException e) {
             System.out.println("error");
         }
-        return true;
+        return false;
     }
 
     public boolean discard_leader_card() {
@@ -410,7 +410,7 @@ public class CLI implements Observer{
         int x = chose_leader_card();
         if(x == -1) {
             System.out.println("You no longer have any leader cards");
-            return false;
+            return true;
         }
         game.discardLeaderCard(position, x);
         Message message = new Message_One_Parameter_Int(MessageType.LEADER_CARD_DISCARD, position, x);
@@ -419,7 +419,7 @@ public class CLI implements Observer{
         } catch (IOException e) {
             System.out.println("error");
         }
-        return true;
+        return false;
     }
 
     private void end_turn(){
@@ -562,32 +562,38 @@ public class CLI implements Observer{
         int leaderCard2 = m.getPar2();
         int leaderCard3 = m.getPar3();
         int leaderCard4 = m.getPar4();
-        ArrayList<Integer> choice=new ArrayList<>(2);
-        try {
-            CLI_Printer.printCard(leaderCard1);
-            CLI_Printer.printCard(leaderCard2);
-            CLI_Printer.printCard(leaderCard3);
-            CLI_Printer.printCard(leaderCard4);
-            choice.add(numberInput(49,64,"Chose between this 4 leader cards (insert cardID)"));
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
+        int choice1;
+        int choice2;
+        CLI_Printer.printCard(leaderCard1);
+        CLI_Printer.printCard(leaderCard2);
+        CLI_Printer.printCard(leaderCard3);
+        CLI_Printer.printCard(leaderCard4);
         while (true) {
             try {
-                int number = Integer.parseInt(readLine());
-                choice.add(number);
-                if (choice.get(0) == choice.get(1)) {
-                    System.err.println("You can't chose the same card twice\n");
-                } else if (choice.get(1) != leaderCard1 && choice.get(1) != leaderCard2 &&
-                        choice.get(1) != leaderCard3 && choice.get(1) != leaderCard4) {
-                    System.err.println("Chose a correct cardID\n");
-                } else break;
-            } catch (IndexOutOfBoundsException | ExecutionException | NumberFormatException e) {
+                choice1 = numberInput(49, 64, "Chose the first card (insert cardID)");
+                if (choice1 != leaderCard1 && choice1 != leaderCard2 && choice1 != leaderCard3 && choice1 != leaderCard4)
+                    System.err.println("Chose a correct cardID");
+                else
+                    break;
+            } catch (ExecutionException e) {
                 System.err.println("error");
             }
         }
-        game.setMyLeaderCards(position, choice.get(0), choice.get(1));
-        Message returnMessage = new Message_Two_Parameter_Int(MessageType.LEADER_CARD, position, choice.get(0), choice.get(1));
+        while (true) {
+            try {
+                choice2 = numberInput(49, 64, "Chose the second card");
+                if(choice1 == choice2)
+                    System.err.println("You can't chose the same card");
+                else if (choice2 != leaderCard1 && choice2 != leaderCard2 && choice2 != leaderCard3 && choice2 != leaderCard4)
+                    System.err.println("Chose a correct cardID");
+                else
+                    break;
+            } catch (ExecutionException e) {
+                System.err.println("error");
+            }
+        }
+        game.setMyLeaderCards(position, choice1, choice2);
+        Message returnMessage = new Message_Two_Parameter_Int(MessageType.LEADER_CARD, position, choice1, choice2);
         ClientSocket.sendMessage(returnMessage);
     }
 
@@ -842,7 +848,7 @@ public class CLI implements Observer{
             ClientSocket.sendMessage(message);
             return;
         }
-        System.out.println("Chose one marble\nR - RED\nW - WHITE\nB - BLUE\nG - GREY\nY - YELLOW\nP - PURPLE");
+        printMarbles(marbles);
         while (true) {
             try {
                 String choice = readLine();
@@ -862,6 +868,13 @@ public class CLI implements Observer{
             game.setChosenMarbles(marbles);
         Message message = new Message_One_Parameter_Marble(MessageType.USE_MARBLE, position, chosenMarble);
         ClientSocket.sendMessage(message);
+    }
+
+    private void printMarbles(ArrayList<Marble> marbles){
+        System.out.println("Chose one marble:");
+        for(Marble marble: marbles){
+            System.out.println(marble.toString() + " - " + marble.colorString());
+        }
     }
 
     private Marble correct_marble(String input, ArrayList<Marble> marbles){

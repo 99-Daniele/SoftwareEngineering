@@ -45,4 +45,9 @@ public class WhiteMarble extends Marble {
     public String toString() {
         return "W";
     }
+
+    @Override
+    public String colorString() {
+        return "WHITE";
+    }
 }
