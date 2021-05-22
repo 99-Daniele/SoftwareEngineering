@@ -132,11 +132,11 @@ public class Market implements Serializable, Market_View {
     public void slideColumn(int selectedColumn){
         Marble marble;
         marble=this.externalMarble;
-        this.externalMarble= marketTray[row-1][selectedColumn-1];
-        for(int i=row-1; i>0; i--) {
-            this.marketTray[i][selectedColumn-1]=this.marketTray[i-1][selectedColumn-1];
+        this.externalMarble= marketTray[0][selectedColumn-1];
+        for(int i=0; i<row-1; i++) {
+            this.marketTray[i][selectedColumn-1]=this.marketTray[i+1][selectedColumn-1];
         }
-        marketTray[0][selectedColumn-1]=marble;
+        marketTray[row-1][selectedColumn-1]=marble;
     }
 
     /**
