@@ -20,7 +20,7 @@ public class Game_View {
         for (String player: players)
             addPlayer(player);
         if(players.size() == 1)
-            Ludovico = new PlayerBoard_View("Ludovico");
+            Ludovico = new PlayerBoard_View("LorenzoIlMagnifico");
         initFaithTrack();
         startGame = false;
     }
@@ -31,6 +31,15 @@ public class Game_View {
 
     public void startGame() {
         startGame = true;
+    }
+
+    public ArrayList<String> getNickNames(){
+        ArrayList<String> nickNames = new ArrayList<>();
+        for(PlayerBoard_View player: players)
+            nickNames.add(player.getNickName());
+        if(players.size() == 1)
+            nickNames.add("LorenzoIlMagnifico");
+        return nickNames;
     }
 
     public int getNumOfPlayers(){
@@ -47,10 +56,6 @@ public class Game_View {
 
     public void addPlayer(String newPlayer){
         players.add(new PlayerBoard_View(newPlayer));
-    }
-
-    public void removePlayer(String deletedPlayer){
-        players.removeIf(player -> player.getNickName().equals(deletedPlayer));
     }
 
     public FaithTrack_View getFaithTrack() {

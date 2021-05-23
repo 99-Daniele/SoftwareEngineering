@@ -26,12 +26,11 @@ public class FaithTrack_View {
 
     public void print(){};
 
-    public void printCli(){
+    public void printCli(ArrayList<String> nickNames){
         int count=1;
-        String s=new String();
+        String s= "";
         System.out.println("\nFAITH TRACK:");
-        for (Integer i:playersFaithPoints)
-        {
+        for (Integer i : playersFaithPoints) {
             int val=i.intValue();
             switch (count){
                 case 1:
@@ -47,36 +46,54 @@ public class FaithTrack_View {
                     s= ColorAnsi.ANSI_YELLOW.escape();
                     break;
             }
-            representationFaithTrack(val,s);
+            representationFaithTrack(val,s, nickNames.get(count-1));
             count++;
         }
     }
 
-    private void representationFaithTrack(int val, String color){
-        String tabella[][]=new String[5][51];
-        for(int y=0;y<51;y+=2)
-        {
-            if (y==10||y==18||y==24||y==34||y==38||y==50)
+    private void representationFaithTrack(int val, String color, String nickName){
+        String tabella[][]=new String[4][52];
+        for(int y=0;y<51;y+=2) {
+            if ((y>=10 && y<=14) || (y>=24 && y<=30 ) || (y>=38 && y<=46))
                 tabella[2][y]=ColorAnsi.ANSI_RED.escape()+"║"+ColorAnsi.RESET;
+            else if((y>=16 && y<=18) || (y>=32 && y<=34 ) || (y>=48 && y<=50))
+                tabella[2][y]=ColorAnsi.ANSI_YELLOW.escape()+"║"+ColorAnsi.RESET;
             else
                 tabella[2][y]="║";
         }
-        for (int x=1;x<5;x+=2)
-            for (int y=1;y<50;y++)
-                if ((y>=10&&y<19)||(y>=24&&y<=34)||(y>=38&&y<=50))
-                    tabella[x][y]=ColorAnsi.ANSI_RED.escape()+"═"+ColorAnsi.RESET;
+        for (int x=1;x<5;x+=2) {
+            for (int y = 1; y < 50; y+=2) {
+                if ((y >= 10 && y < 16) || (y >= 24 && y < 32) || (y >= 38 && y < 48))
+                    tabella[x][y] = ColorAnsi.ANSI_RED.escape() + "═" + ColorAnsi.RESET;
+                else if((y >= 16 && y <= 18) || (y >= 32 && y <= 34) || y>= 48)
+                    tabella[x][y] = ColorAnsi.ANSI_YELLOW.escape() + "═" + ColorAnsi.RESET;
                 else
-                    tabella[x][y]="═";
+                    tabella[x][y] = "═";
+            }
+        }
+        for(int y = 2; y  < 49; y +=2){
+            if ((y >= 10 && y < 16) || (y >= 24 && y < 32) || (y >= 38 && y < 48))
+                tabella[1][y] = ColorAnsi.ANSI_RED.escape() + "╦" + ColorAnsi.RESET;
+            else if((y >= 16 && y <= 18) || (y >= 32 && y <= 34) || y>= 48)
+                tabella[1][y] = ColorAnsi.ANSI_YELLOW.escape() + "╦" + ColorAnsi.RESET;
+            else
+                tabella[1][y] = "╦";
+        }
+        for(int y = 2; y  < 49; y +=2){
+            if ((y >= 10 && y < 16) || (y >= 24 && y < 32) || (y >= 38 && y < 48))
+                tabella[3][y] = ColorAnsi.ANSI_RED.escape() + "╩" + ColorAnsi.RESET;
+            else if((y >= 16 && y <= 18) || (y >= 32 && y <= 34) || y>= 48)
+                tabella[3][y] = ColorAnsi.ANSI_YELLOW.escape() + "╩" + ColorAnsi.RESET;
+            else
+                tabella[3][y] = "╩";
+        }
         tabella[1][0]="╔";
         tabella[3][0]="╚";
-        tabella[1][50]=ColorAnsi.ANSI_RED.escape()+"╗"+ColorAnsi.RESET;
-        tabella[3][50]=ColorAnsi.ANSI_RED.escape()+"╝"+ColorAnsi.RESET;
-        for (int y=0;y<51;y++)
-        {
+        tabella[1][50]=ColorAnsi.ANSI_YELLOW.escape()+"╗"+ColorAnsi.RESET;
+        tabella[3][50]=ColorAnsi.ANSI_YELLOW.escape()+"╝"+ColorAnsi.RESET;
+        for (int y=0;y<51;y++) {
             if(y!=7&&y!=13&&y!=19&&y!=25&&y!=31&&y!=36&&y!=37&&y!=42&&y!=43&&y!=48&&y!=49)
                 tabella[0][y]=" ";
-            if(y!=17&&y!=33&&y!=49)
-                tabella[4][y]=" ";
         }
         tabella[0][7]="1";
         tabella[0][13]="2";
@@ -89,25 +106,22 @@ public class FaithTrack_View {
         tabella[0][43]="6";
         tabella[0][48]="2";
         tabella[0][49]="0";
-        tabella[4][17]="P";
-        tabella[4][33]="P";
-        tabella[4][49]="P";
+        tabella[2][51] = nickName;
         int i=0;
-        for (int y=1;y<51;y+=2)
-        {
+        for (int y=1;y<51;y+=2) {
             if(i==val)
                 tabella[2][y]=color+"●"+ColorAnsi.RESET;
             else
                 tabella[2][y]=" ";
             i++;
         }
-
-
-        for (int x=0;x<5;x++)
-        {
+        for (int x=0;x<4;x++) {
             for (int y = 0; y < 51; y++)
                 System.out.print(tabella[x][y]);
-            System.out.println();
+            if(x == 2)
+                System.out.println("    " + tabella[x][51]);
+            else
+                System.out.println();
         }
     }
 }

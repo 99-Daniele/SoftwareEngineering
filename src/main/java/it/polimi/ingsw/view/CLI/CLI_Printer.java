@@ -55,7 +55,7 @@ public class CLI_Printer {
     }
 
     public static void printFaithTrack(Game_View game){
-        game.getFaithTrack().printCli();
+        game.getFaithTrack().printCli(game.getNickNames());
     }
 
     public static void printCard(int cardID){
