@@ -92,7 +92,7 @@ public class MarketTest {
         }
             //checking the color of the marble in the side slide
             market.slideColumn(1);
-            selectedRow=market.getRowMarbles(1);
+            selectedRow=market.getRowMarbles(3);
             if (selectedRow[0] instanceof RedMarble) {
                 red++;
             }
