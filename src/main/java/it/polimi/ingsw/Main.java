@@ -1,3 +1,5 @@
+package it.polimi.ingsw;
+
 import it.polimi.ingsw.network.server.Server;
 import it.polimi.ingsw.view.CLI.CLI;
 import it.polimi.ingsw.view.GUI.GUI;
