@@ -68,56 +68,35 @@ public class Cards_Slots_View {
     }
 
     public void printCliSlot(){
-        System.out.println("SLOTS PLAYERBOARD");
+        System.out.println("\nDEVELOPMENT_CARDS:");
         System.out.println("First slot:");
-        int somma=0;
-        int count=0;
-        if (firstSlot.size()==0)
-            System.out.println("empty");
-        else
-        {
+        if (firstSlot.size()>0) {
             CardMap.getCard(firstSlot.getLast()).print();
-            for(int i=0;i<firstSlot.size()-1;i++) {
-                somma += CardMap.getCard(firstSlot.get(i)).getVictoryPoints();
-                count++;
+            for(int i = firstSlot.size() - 1; i > 0; i--) {
+                CardMap.getCard(firstSlot.get(i)).printSmallInfo();
             }
-            System.out.println("I have "+count+" covered cards with "+somma + " sum of victory points");
         }
         System.out.println("Second slot:");
-        somma=0;
-        count=0;
-        if (secondSlot.size()==0)
-            System.out.println("empty");
-        else
-        {
+        if (secondSlot.size()>0) {
             CardMap.getCard(secondSlot.getLast()).print();
-            for(int i=0;i<secondSlot.size()-1;i++){
-                somma+=CardMap.getCard(secondSlot.get(i)).getVictoryPoints();
-                count++;
+            for(int i = secondSlot.size() - 1; i > 0; i--) {
+                CardMap.getCard(secondSlot.get(i)).printSmallInfo();
             }
-            System.out.println("I have " + count +" covered cards with " + somma + " sum of victory points");
         }
-        System.out.println("Third slot");
-        somma=0;
-        count=0;
-        if (thirdSlot.size()==0)
-            System.out.println("empty");
-        else
-        {
+        System.out.println("Third slot:");
+        if (thirdSlot.size()>0) {
             CardMap.getCard(thirdSlot.getLast()).print();
-            for(int i=0;i<thirdSlot.size()-1;i++) {
-                somma += CardMap.getCard(thirdSlot.get(i)).getVictoryPoints();
-                count++;
+            for(int i = thirdSlot.size() - 1; i > 0; i--) {
+                CardMap.getCard(thirdSlot.get(i)).printSmallInfo();
             }
-            System.out.println("I have " + count +" covered cards with " + somma + " sum of victory points");
         }
     }
 
     public void printCliLeaderCard(){
-        System.out.println("LEADER CARD");
-        if(CardMap.getCard(firstLeaderCard).getVictoryPoints()!=0)
+        System.out.println("\nLEADER_CARDS: ");
+        if(firstLeaderCard != -1)
             CardMap.getCard(firstLeaderCard).print();
-        if (CardMap.getCard(secondLeaderCard).getVictoryPoints()!=0)
+        if (secondLeaderCard != -1)
             CardMap.getCard(secondLeaderCard).print();
     }
 }

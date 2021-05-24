@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.cards.leaderCards;
 
 import it.polimi.ingsw.model.cards.developmentCards.Color;
 import it.polimi.ingsw.model.cards.developmentCards.DevelopmentCard;
+import it.polimi.ingsw.view.ColorAnsi;
 
 import java.util.ArrayList;
 
@@ -87,6 +88,43 @@ public class CardRequirement {
 
     @Override
     public String toString() {
-        return "\n     [COLOR: " + color + "\n      NUM_OF_CARDS: " + numOfCards + "\n      LEVELS: " + levels +"]";
+        String s1 = numOfCards + "";
+        String s2 = null;
+        switch (color) {
+            case BLUE:
+                s2 = (ColorAnsi.ANSI_CYAN.escape() + " █ " + ColorAnsi.RESET);
+                break;
+            case GREEN:
+                s2 = (ColorAnsi.ANSI_GREEN.escape() + " █ " + ColorAnsi.RESET);
+                break;
+            case PURPLE:
+                s2 = (ColorAnsi.ANSI_PURPLE.escape() + " █ " + ColorAnsi.RESET);
+                break;
+            case YELLOW:
+                s2 = (ColorAnsi.ANSI_YELLOW.escape() + " █ " + ColorAnsi.RESET);
+                break;
+        }
+        String s3 = null;
+        if(numOfCards > 1){
+            switch (color) {
+                case BLUE:
+                    s3 = (ColorAnsi.ANSI_CYAN.escape() + "█" + ColorAnsi.RESET);
+                    break;
+                case GREEN:
+                    s3 = (ColorAnsi.ANSI_GREEN.escape() + "█" + ColorAnsi.RESET);
+                    break;
+                case PURPLE:
+                    s3 = (ColorAnsi.ANSI_PURPLE.escape() + "█" + ColorAnsi.RESET);
+                    break;
+                case YELLOW:
+                    s3 = (ColorAnsi.ANSI_YELLOW.escape() + "█" + ColorAnsi.RESET);
+                    break;
+            }
+        }
+        else if(levels.get(0) == 2)
+            s3 = "lvl 2";
+        else
+            s3 = "";
+        return s1 + s2 + s3;
     }
 }

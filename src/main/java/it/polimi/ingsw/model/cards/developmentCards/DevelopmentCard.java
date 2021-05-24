@@ -138,4 +138,10 @@ public class DevelopmentCard extends Card {
                 productionPowerResourceGiven.toString() + "\nFAITH_POINTS_GIVEN: " + faithPointsGiven);
         super.print();
     }
+
+    @Override
+    public void printSmallInfo() {
+        System.out.println("\nCOLOR: " + color);
+        super.printSmallInfo();
+    }
 }

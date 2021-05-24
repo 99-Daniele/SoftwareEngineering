@@ -70,8 +70,6 @@ public class ControllerGame implements Observer {
         views.add(view);
         if(view.getNickname() != null)
             addPlayer(view, view.getNickname());
-        if (game != null)
-            game.addObservers((VirtualView) view);
     }
 
     public synchronized void removeView(View view, String nickName) {
@@ -237,8 +235,9 @@ public class ControllerGame implements Observer {
             view.login(0);
         } else {
             try {
-                game.createPlayer(nickName);
+                game.addObserver((VirtualView) view);
                 view.login(views.size() - 1);
+                game.createPlayer(nickName);
                 if (playersReady()) {
                     startGame();
                 } else

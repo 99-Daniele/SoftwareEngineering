@@ -20,7 +20,7 @@ public class Game_View {
         for (String player: players)
             addPlayer(player);
         if(players.size() == 1)
-            Ludovico = new PlayerBoard_View("Ludovico");
+            Ludovico = new PlayerBoard_View("LorenzoIlMagnifico");
         initFaithTrack();
         startGame = false;
     }
@@ -33,8 +33,21 @@ public class Game_View {
         startGame = true;
     }
 
+    public ArrayList<String> getNickNames(){
+        ArrayList<String> nickNames = new ArrayList<>();
+        for(PlayerBoard_View player: players)
+            nickNames.add(player.getNickName());
+        if(players.size() == 1)
+            nickNames.add("LorenzoIlMagnifico");
+        return nickNames;
+    }
+
     public int getNumOfPlayers(){
         return players.size();
+    }
+
+    public PlayerBoard_View getPlayer(int player){
+        return players.get(player);
     }
 
     public String getNickname(int player){
@@ -43,10 +56,6 @@ public class Game_View {
 
     public void addPlayer(String newPlayer){
         players.add(new PlayerBoard_View(newPlayer));
-    }
-
-    public void removePlayer(String deletedPlayer){
-        players.removeIf(player -> player.getNickName().equals(deletedPlayer));
     }
 
     public FaithTrack_View getFaithTrack() {
@@ -75,10 +84,6 @@ public class Game_View {
 
     public void setFirstDeckCards(ArrayList<Integer> cards){
         decks = new Decks_View(cards);
-    }
-
-    public ArrayList<Integer> getFirstDeckCards(){
-        return decks.getDevelopmentCards();
     }
 
     public void initFaithTrack(){
@@ -144,7 +149,7 @@ public class Game_View {
         return players.get(viewID).getDevelopmentCards();
     }
 
-    public int getMyLeaderCard(int viedID, int leaderCard){
+    public int getLeaderCard(int viedID, int leaderCard){
         return players.get(viedID).getLeaderCard(leaderCard);
     }
 

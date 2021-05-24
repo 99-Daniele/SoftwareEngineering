@@ -22,4 +22,9 @@ public class RedMarble extends Marble {
     public String toString() {
         return "R";
     }
+
+    @Override
+    public String colorString() {
+        return "RED";
+    }
 }

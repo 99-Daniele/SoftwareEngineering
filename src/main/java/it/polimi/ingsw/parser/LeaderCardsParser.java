@@ -6,31 +6,31 @@ import it.polimi.ingsw.model.cards.leaderCards.*;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class LeaderCardsParser {
 
-    private ArrayList<LeaderCard> leaderCards = new ArrayList<>(16);
+    private final ArrayList<LeaderCard> leaderCards = new ArrayList<>(16);
 
     public LeaderCardsParser() {
-        try {
-            Gson gson = new Gson();
-            JsonReader reader1 = new JsonReader(new FileReader("src/main/resources/DiscountCards.json"));
-            LeaderCard[] discountCards = gson.fromJson(reader1, DiscountCard[].class);
-            JsonReader reader2 = new JsonReader(new FileReader("src/main/resources/ExtraDepotCards.json"));
-            LeaderCard[] extraDepotCards = gson.fromJson(reader2, ExtraDepotCard[].class);
-            JsonReader reader3 = new JsonReader(new FileReader("src/main/resources/WhiteConversionCards.json"));
-            LeaderCard[] whiteConversionCards = gson.fromJson(reader3, WhiteConversionCard[].class);
-            JsonReader reader4 = new JsonReader(new FileReader("src/main/resources/AdditionalProductionPowerCards.json"));
-            LeaderCard[] additionalProductionPowerCards = gson.fromJson(reader4, AdditionalProductionPowerCard[].class);
-            leaderCards.addAll(Arrays.asList(discountCards).subList(0, 4));
-            leaderCards.addAll(Arrays.asList(extraDepotCards).subList(0, 4));
-            leaderCards.addAll(Arrays.asList(whiteConversionCards).subList(0, 4));
-            leaderCards.addAll(Arrays.asList(additionalProductionPowerCards).subList(0, 4));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Gson gson = new Gson();
+        Reader reader1 = new InputStreamReader(Objects.requireNonNull(this.getClass().getResourceAsStream("/DiscountCards.json")), StandardCharsets.UTF_8);
+        LeaderCard[] discountCards = gson.fromJson(reader1, DiscountCard[].class);
+        Reader reader2 = new InputStreamReader(Objects.requireNonNull(this.getClass().getResourceAsStream("/ExtraDepotCards.json")), StandardCharsets.UTF_8);
+        LeaderCard[] extraDepotCards = gson.fromJson(reader2, ExtraDepotCard[].class);
+        Reader reader3 = new InputStreamReader(Objects.requireNonNull(this.getClass().getResourceAsStream("/WhiteConversionCards.json")), StandardCharsets.UTF_8);
+        LeaderCard[] whiteConversionCards = gson.fromJson(reader3, WhiteConversionCard[].class);
+        Reader reader4 = new InputStreamReader(Objects.requireNonNull(this.getClass().getResourceAsStream("/AdditionalProductionPowerCards.json")), StandardCharsets.UTF_8);
+        LeaderCard[] additionalProductionPowerCards = gson.fromJson(reader4, AdditionalProductionPowerCard[].class);
+        leaderCards.addAll(Arrays.asList(discountCards).subList(0, 4));
+        leaderCards.addAll(Arrays.asList(extraDepotCards).subList(0, 4));
+        leaderCards.addAll(Arrays.asList(whiteConversionCards).subList(0, 4));
+        leaderCards.addAll(Arrays.asList(additionalProductionPowerCards).subList(0, 4));
     }
 
     public ArrayList<LeaderCard> getLeaderCards() {

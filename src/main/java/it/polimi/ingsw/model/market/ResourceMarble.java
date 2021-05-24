@@ -41,4 +41,20 @@ public class ResourceMarble extends Marble {
                 return "";
         }
     }
+
+    @Override
+    public String colorString() {
+        switch (resource){
+            case COIN:
+                return "YELLOW";
+            case STONE:
+                return "GREY";
+            case SHIELD:
+                return "BLUE";
+            case SERVANT:
+                return "PURPLE";
+            default:
+                return "";
+        }
+    }
 }

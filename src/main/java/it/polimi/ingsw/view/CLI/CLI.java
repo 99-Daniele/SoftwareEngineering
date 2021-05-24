@@ -8,30 +8,124 @@ import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.view.model_view.*;
 
 import java.io.*;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.*;
 import java.util.concurrent.*;
 
 public class CLI implements Observer{
 
     private Thread inputThread;
-    private Game_View game;
+    private final Game_View game;
     private CONTROLLER_STATES currentState;
     private int position;
+    private boolean turn;
 
-    public CLI(ClientSocket clientSocket){
+    public CLI(){
         game = new Game_View();
         currentState = CONTROLLER_STATES.WAITING_PLAYERS_STATE;
         position = 0;
-        clientSocket.addObserver(this);
+        turn = false;
     }
 
-    public void username(){
-        System.out.println("Enter your nickname: ");
+    public void launchCli(){
         try {
-            String nickname = readLine();
-            ClientSocket.sendMessage( new Message_One_Parameter_String(MessageType.LOGIN,position,nickname));
-        } catch (ExecutionException | IOException e) {
-            System.out.println("error");
+            connectionInfo();
+        } catch (IOException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        printLogo();
+        username();
+    }
+
+    public void launchCLI(String hostName, int port){
+        try {
+            connectionInfo(hostName, port);
+        } catch (IOException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        printLogo();
+        username();
+    }
+
+    private void printLogo(){
+        System.out.println("" +
+                "8b     d8    d888b     d888888b  888888888  888888888  888888b                                                      \n" +
+                "88b   d88   d8bnd8b   d888b      888888888  888        88    88                                                     \n" +
+                "888bud888  d8     8b   d888b        888     888888     888888b                                                      \n" +
+                "88 d8b 88  888888888     d888b      888     888888     8888b                                                        \n" +
+                "88  8  88  88     88      d888b     888     888        888 d8b                                                      \n" +
+                "88     88  88     88  d888888b      888     888888888  888  888                                                     \n" +
+                "                                                                                                                    \n" +
+                "888888888  888888888                                                                                                \n" +
+                "888888888  888                                                                                                      \n" +
+                "888   888  888888888                                                                                                \n" +
+                "888   888  888                                                                                                      \n" +
+                "888888888  888                                                                                                      \n" +
+                "888888888  888                                                                                                      \n" +
+                "                                                                                                                    \n" +
+                "888888b   888888888  88b     88    d888b    888   d888888b   d888888b    d888b    88b     88    d8888888  888888888 \n" +
+                "88    88  888        888b    88   d8bnd8b   888  d888b      d888b       d8bnd8b   888b    88   d88888888  888       \n" +
+                "888888b   888888     88 d8b  88  d8     8b  888   d888b      d888b     d8     8b  88 d8b  88  d888        888888    \n" +
+                "8888b     888888     88  d8b 88  888888888  888     d888b      d888b   888888888  88  d8b 88  d888        888888    \n" +
+                "888 d8b   888        88    d888  88     88  888      d888b      d888b  88     88  88    d888   d88888888  888       \n" +
+                "888  888  888888888  88     d88  88     88  888  d888888b   d888888b   88     88  88     d88    d8888888  888888888 \n");
+    }
+
+    private void connectionInfo() throws IOException, ExecutionException {
+        BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
+        while (true) {
+            System.out.println("\nEnter hostname [localhost]: ");
+            String hostName = readLine();
+            if (hostName == null || hostName.isBlank() || hostName.equals(""))
+                hostName = "localhost";
+            System.out.println("Enter port [12460]: ");
+            String portNumber = stdIn.readLine();
+            if (portNumber == null || portNumber.isBlank() ||portNumber.equals(""))
+                portNumber = "12460";
+            try {
+                ClientSocket clientSocket = new ClientSocket(new Socket(hostName, Integer.parseInt(portNumber)));
+                System.out.println("Accepted by Server");
+                clientSocket.addObserver(this);
+                clientSocket.start();
+                break;
+            } catch (UnknownHostException e) {
+                System.err.println("Unknown host " + hostName);
+            } catch (IOException e) {
+                System.err.println("Can't connect to host " + hostName);
+            }
+        }
+    }
+
+    private void connectionInfo(String hostName, int port) throws IOException, ExecutionException {
+        try {
+            ClientSocket clientSocket = new ClientSocket(new Socket(hostName, port));
+            System.out.println("Accepted by Server");
+            clientSocket.addObserver(this);
+            clientSocket.start();
+        } catch (UnknownHostException e) {
+            System.err.println("Unknown host " + hostName);
+            connectionInfo();
+        } catch (IOException e) {
+            System.err.println("Can't connect to host " + hostName);
+            connectionInfo();
+        }
+    }
+
+
+    private void username(){
+        BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
+        System.out.println("\nEnter your nickname: ");
+        while (true) {
+            try {
+                String nickname = stdIn.readLine();
+                if (nickname != null && !nickname.isBlank() && !nickname.equals("")) {
+                    ClientSocket.sendMessage(new Message_One_Parameter_String(MessageType.LOGIN, position, nickname));
+                    break;
+                }
+            } catch (IOException e) {
+                System.out.println("error");
+            }
         }
     }
 
@@ -75,7 +169,6 @@ public class CLI implements Observer{
 
     public void start_game_message() throws IOException {
         System.out.println("All players have made their choices. Game started");
-        CLI_Printer.printInitialGame(game);
         currentState = CONTROLLER_STATES.FIRST_ACTION_STATE;
         ClientSocket.sendMessage(new Message(MessageType.TURN, position));
     }
@@ -102,42 +195,53 @@ public class CLI implements Observer{
                 activate_production();
                 break;
             case 4:
-                activate_leader_card();
+                if(activate_leader_card())
+                    chose_action(first_input());
                 break;
             case 5:
-                discard_leader_card();
+                if(discard_leader_card())
+                    chose_action(first_input());
+                break;
+            case 6:
+                spyAction();
+                chose_action(first_input());
                 break;
         }
     }
 
     private int first_input() {
         System.out.println("Your turn");
-        CLI_Printer.printPlayerBoard(game, position);
         System.out.println("\n1 - TAKE MARBLE FROM MARKET\n2 - BUY DEVELOPMENT CARD\n3 - ACTIVATE PRODUCTION\n" +
-                "4 - ACTIVATE LEADER CARD\n5 - DISCARD LEADER CARD");
+                "4 - ACTIVATE LEADER CARD\n5 - DISCARD LEADER CARD\n6 - SEE THE STATE OF THE GAME");
         int userInput = 0;
         try {
-            userInput = numberInput(1, 5, "What do you want to do?");
+            userInput = numberInput(1, 6, "What do you want to do?");
         } catch (ExecutionException e) {
             System.out.println("error");
         }
         return userInput;
     }
 
-    private void lastInput(){
-        System.out.println("You want to do something else?\n1 - ACTIVATE LEADER CARD\n2 - DISCARD LEADER CARD\n0 - END TURN");
+    private void lastInput() throws IOException {
+        System.out.println("You want to do something else?\n1 - ACTIVATE LEADER CARD\n2 - DISCARD LEADER CARD\n3 - SEE THE STATE OF THE GAME\n0 - END TURN");
         int userInput = 0;
         try{
-            userInput = numberInput(0, 2, "What do you want to do");
+            userInput = numberInput(0, 3, "What do you want to do?");
         } catch (ExecutionException e) {
             System.out.println("error");
         }
         switch (userInput) {
             case 1:
-                activate_leader_card();
+                if(activate_leader_card())
+                    lastInput();
                 break;
             case 2:
-                discard_leader_card();
+                if(discard_leader_card())
+                    lastInput();
+                break;
+            case 3:
+                spyAction();
+                lastInput();
                 break;
             case 0:
                 currentState = CONTROLLER_STATES.FIRST_ACTION_STATE;
@@ -157,7 +261,6 @@ public class CLI implements Observer{
             if (x==0)
                 try {
                     y=numberInput(1,3,"Choose which row (1 to 3)");
-                    CLI_Printer.printRowMarket(game, y);
                     ClientSocket.sendMessage(new Message_Two_Parameter_Int(MessageType.TAKE_MARBLE, position, x, y));
                 } catch (ExecutionException e) {
                     e.printStackTrace();
@@ -165,7 +268,6 @@ public class CLI implements Observer{
             else
                 try {
                     y=numberInput(1,4,"Choose which column (1 to 4)");
-                    CLI_Printer.printColumnMarket(game, y);
                     ClientSocket.sendMessage(new Message_Two_Parameter_Int(MessageType.TAKE_MARBLE, position, x, y));
                 } catch (ExecutionException e) {
                     e.printStackTrace();
@@ -340,12 +442,12 @@ public class CLI implements Observer{
         ClientSocket.sendMessage(message);
     }
 
-    public void activate_leader_card() {
+    public boolean activate_leader_card() {
         System.out.println("ACTIVATE LEADER CARD");
         int x = chose_leader_card();
         if(x == -1) {
             System.out.println("You no longer have any leader cards");
-            return;
+            return true;
         }
         Message message = new Message_One_Parameter_Int(MessageType.LEADER_CARD_ACTIVATION, position, x);
         try {
@@ -353,14 +455,15 @@ public class CLI implements Observer{
         } catch (IOException e) {
             System.out.println("error");
         }
+        return false;
     }
 
-    public void discard_leader_card() {
+    public boolean discard_leader_card() {
         System.out.println("DISCARD LEADER CARD");
         int x = chose_leader_card();
         if(x == -1) {
             System.out.println("You no longer have any leader cards");
-            return;
+            return true;
         }
         game.discardLeaderCard(position, x);
         Message message = new Message_One_Parameter_Int(MessageType.LEADER_CARD_DISCARD, position, x);
@@ -369,9 +472,10 @@ public class CLI implements Observer{
         } catch (IOException e) {
             System.out.println("error");
         }
+        return false;
     }
 
-    private void end_turn() {
+    private void end_turn(){
         Message end_turn = new Message(MessageType.END_TURN, position);
         System.out.println("You finished your turn. Wait for other players.");
         try {
@@ -379,16 +483,17 @@ public class CLI implements Observer{
         } catch (IOException e) {
             System.out.println("error");
         }
+        turn = false;
+        startSpyAction();
     }
 
     private int chose_leader_card() {
         int chosenLeaderCard = -1;
-        int leaderCard1 = game.getMyLeaderCard(position, 1);
-        int leaderCard2 = game.getMyLeaderCard(position, 2);
-        if(leaderCard1 != -1 && leaderCard2 != -2){
+        int leaderCard1 = game.getLeaderCard(position, 1);
+        int leaderCard2 = game.getLeaderCard(position, 2);
+        if(leaderCard1 != -1 && leaderCard2 != -1){
             System.out.println("Your leader cards: " );
-            CLI_Printer.printCard(leaderCard1);
-            CLI_Printer.printCard(leaderCard2);
+            CLI_Printer.printLeaderCard(game, position);
             try {
                 chosenLeaderCard=numberInput(1,2,"Which leader card you choose? (1 or 2)");
                 return chosenLeaderCard;
@@ -398,7 +503,7 @@ public class CLI implements Observer{
         }
         else if(leaderCard1 != -1){
             System.out.println("Your leader card: ");
-            CLI_Printer.printCard(leaderCard1);
+            CLI_Printer.printLeaderCard(game, position);
             chosenLeaderCard = 1;
         }
         return chosenLeaderCard;
@@ -424,7 +529,7 @@ public class CLI implements Observer{
             }
             break;
             case 3: {
-                System.out.println("You are the 4th player.\nYou gain 2resources and 1 faith point. Chose the resources:");
+                System.out.println("You are the 4th player.\nYou gain 2 resources and 1 faith point. Chose the resources:");
                 Resource r1 = chose_resource();
                 Resource r2 = chose_resource();
                 Message message = new Message_Two_Resource(MessageType.TWO_FIRST_RESOURCE, position, r1, r2);
@@ -461,7 +566,7 @@ public class CLI implements Observer{
     }
 
     private int chose_warehouse_strongbox() {
-        int choice=-1;
+        int choice = -1;
         try {
             choice=numberInput(0,1,"Where you preferred to get the resource from?\n0 - WAREHOUSE\n1 - STRONGBOX");
             return choice;
@@ -510,39 +615,45 @@ public class CLI implements Observer{
         int leaderCard2 = m.getPar2();
         int leaderCard3 = m.getPar3();
         int leaderCard4 = m.getPar4();
-        ArrayList<Integer> choice=new ArrayList<>(2);
-        try {
-            CLI_Printer.printCard(leaderCard1);
-            CLI_Printer.printCard(leaderCard2);
-            CLI_Printer.printCard(leaderCard3);
-            CLI_Printer.printCard(leaderCard4);
-            choice.add(numberInput(49,64,"Chose between this 4 leader cards (insert cardID)"));
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
+        int choice1;
+        int choice2;
+        CLI_Printer.printCard(leaderCard1);
+        CLI_Printer.printCard(leaderCard2);
+        CLI_Printer.printCard(leaderCard3);
+        CLI_Printer.printCard(leaderCard4);
         while (true) {
             try {
-                int number = Integer.parseInt(readLine());
-                choice.add(number);
-                if (choice.get(0) == choice.get(1)) {
-                    System.err.println("You can't chose the same card twice\n");
-                } else if (choice.get(1) != leaderCard1 && choice.get(1) != leaderCard2 &&
-                        choice.get(1) != leaderCard3 && choice.get(1) != leaderCard4) {
-                    System.err.println("Chose a correct cardID\n");
-                } else break;
-            } catch (IndexOutOfBoundsException | ExecutionException e) {
+                choice1 = numberInput(49, 64, "Chose the first card (insert cardID)");
+                if (choice1 != leaderCard1 && choice1 != leaderCard2 && choice1 != leaderCard3 && choice1 != leaderCard4)
+                    System.err.println("Chose a correct cardID");
+                else
+                    break;
+            } catch (ExecutionException e) {
                 System.err.println("error");
             }
         }
-        game.setMyLeaderCards(position, choice.get(0), choice.get(1));
-        Message returnMessage = new Message_Two_Parameter_Int(MessageType.LEADER_CARD, position, choice.get(0), choice.get(1));
+        while (true) {
+            try {
+                choice2 = numberInput(49, 64, "Chose the second card");
+                if(choice1 == choice2)
+                    System.err.println("You can't chose the same card");
+                else if (choice2 != leaderCard1 && choice2 != leaderCard2 && choice2 != leaderCard3 && choice2 != leaderCard4)
+                    System.err.println("Chose a correct cardID");
+                else
+                    break;
+            } catch (ExecutionException e) {
+                System.err.println("error");
+            }
+        }
+        game.setMyLeaderCards(position, choice1, choice2);
+        Message returnMessage = new Message_Two_Parameter_Int(MessageType.LEADER_CARD, position, choice1, choice2);
         ClientSocket.sendMessage(returnMessage);
     }
 
     public String readLine() throws ExecutionException {
         FutureTask<String> futureTask = new FutureTask<>(new ReadInput());
-        inputThread = new Thread(futureTask);
-        inputThread.start();
+        Thread thread = new Thread(futureTask);
+        thread.start();
         String input = null;
         try {
             input = futureTask.get();
@@ -572,24 +683,37 @@ public class CLI implements Observer{
     private void turn_message(Message message) throws InterruptedException, IOException {
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
         if (m.getPar() == 1) {
+            turn = true;
             chose_action(first_input());
         }
-        else
+        else {
             System.out.println("Wait for other players to finish their turns...");
+            turn = false;
+            startSpyAction();
+        }
     }
 
     private void end_turn_message(Message message) throws InterruptedException, IOException {
         TimeUnit.SECONDS.sleep(1);
         if (message.getClientID() != position) {
+            turn = true;
+            inputThread.interrupt();
             System.out.println("Player " + game.getNickname(message.getClientID()) + " has finished his turn.\nThis are its resources:");
         }
-        CLI_Printer.printWarehouseStrongbox(game, message.getClientID());
         if (position == 0) {
-            if (message.getClientID() == game.getNumOfPlayers()- 1) {
+            if (message.getClientID() == game.getNumOfPlayers() - 1) {
+                turn = true;
+                inputThread.interrupt();
                 chose_action(first_input());
             }
         } else if (message.getClientID() == position - 1) {
+            turn = true;
+            inputThread.interrupt();
             chose_action(first_input());
+        }
+        else {
+            turn = false;
+            startSpyAction();
         }
     }
 
@@ -597,7 +721,6 @@ public class CLI implements Observer{
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
         System.out.println("Player " + game.getNickname(m.getClientID()) + " bought a new card and inserted it in " +
                 "the " + m.getPar2() + "° slot.");
-        CLI_Printer.printCard(m.getPar1());
         game.addDevelopmentCard(m.getClientID(), m.getPar1(), m.getPar2());
     }
 
@@ -609,13 +732,6 @@ public class CLI implements Observer{
         else
             System.out.println("Deck card from row " + (m.getPar1()+1) + " and column "
                     + (m.getPar2() +1) + " has been removed");
-        if (m.getPar3() == 1) {
-            System.out.println("Deck is now empty");
-        }
-        else {
-            System.out.println("New deck card is:");
-            CLI_Printer.printCard(m.getPar4());
-        }
         game.replaceCard(m.getPar1(), m.getPar2(), m.getPar4());
     }
 
@@ -639,7 +755,6 @@ public class CLI implements Observer{
             }
             game.slideColumn(m.getPar2());
         }
-        CLI_Printer.printMarket(game);
     }
 
     private void faith_points_message(Message message){
@@ -651,17 +766,15 @@ public class CLI implements Observer{
                 System.out.println("Player " + game.getNickname(m.getClientID()) + " has increased its faith points. Now it has " + m.getPar());
         }
         game.increaseFaithPoints(m.getClientID(), m.getPar());
-        CLI_Printer.printFaithTrack(game);
     }
 
     private void increase_warehouse_message(Message message){
         Message_One_Int_One_Resource m = (Message_One_Int_One_Resource) message;
         if(m.getPar1() != -1) {
             if(m.getClientID() != position)
-                System.out.println("Player " + game.getNickname(m.getClientID()) + " has inserted by 1 " + m.getResource()
-                    + " its " + m.getPar1() + "° depot");
+                System.out.println("Player " + game.getNickname(m.getClientID()) + " has inserted 1 " + m.getResource()
+                    + " in its " + m.getPar1() + "° depot");
             game.increaseWarehouse(m.getClientID(), m.getResource(), m.getPar1());
-            CLI_Printer.printWarehouse(game, m.getClientID());
         }
         else if(m.getClientID() != position)
             System.out.println("Player " + game.getNickname(m.getClientID()) + " has discarded 1 " + m.getResource()
@@ -674,7 +787,6 @@ public class CLI implements Observer{
             System.out.println("Player " + game.getNickname(m.getClientID()) + " has switched its " + m.getPar1()
                 + "° depot with its " + m.getPar2() + "° depot.");
         game.switchDepot(m.getClientID(), m.getPar1(), m.getPar2());
-        CLI_Printer.printWarehouse(game, m.getClientID());
     }
 
     private void vatican_report_message(Message message){
@@ -685,14 +797,12 @@ public class CLI implements Observer{
         else
             System.out.println("Player " + game.getNickname(m.getPar1()) + " activated Vatican Report." +
                     " Now you have " + m.getPar2() + " victory points from Vatican Report");
-        CLI_Printer.printFaithTrack(game);
     }
 
     private void leader_card_activation_message(Message message){
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
         if(m.getClientID() != position) {
             System.out.println("Player " + game.getNickname(m.getClientID()) + " has activated one leader card: ");
-            CLI_Printer.printCard(m.getPar());
             game.addLeaderCard(m.getClientID(), m.getPar());
         }
     }
@@ -703,7 +813,6 @@ public class CLI implements Observer{
             System.out.println("Player " + game.getNickname(m.getClientID()) + " has a new extra depot of " + m.getResource());
         }
         game.addExtraDepot(m.getClientID(), m.getResource());
-        CLI_Printer.printWarehouse(game, m.getClientID());
     }
 
     private void leader_card_discard_message(Message message){
@@ -716,7 +825,7 @@ public class CLI implements Observer{
             game.discardLeaderCard(position, m.getPar());
     }
 
-    private void ok_message() throws IOException {
+    private void ok_message() throws IOException, InterruptedException {
         switch (currentState) {
             case WAITING_PLAYERS_STATE:
                 if (game.isStartGame())
@@ -792,7 +901,7 @@ public class CLI implements Observer{
             ClientSocket.sendMessage(message);
             return;
         }
-        System.out.println("Chose one marble\nR - RED\nW - WHITE\nB - BLUE\nG - GREY\nY - YELLOW\nP - PURPLE");
+        printMarbles(marbles);
         while (true) {
             try {
                 String choice = readLine();
@@ -812,6 +921,13 @@ public class CLI implements Observer{
             game.setChosenMarbles(marbles);
         Message message = new Message_One_Parameter_Marble(MessageType.USE_MARBLE, position, chosenMarble);
         ClientSocket.sendMessage(message);
+    }
+
+    private void printMarbles(ArrayList<Marble> marbles){
+        System.out.println("Chose one marble:");
+        for(Marble marble: marbles){
+            System.out.println(marble.toString() + " - " + marble.colorString());
+        }
     }
 
     private Marble correct_marble(String input, ArrayList<Marble> marbles){
@@ -1018,7 +1134,7 @@ public class CLI implements Observer{
         }
     }
 
-    private void already_active_error() throws IOException{
+    private void already_active_error() throws IOException {
         System.out.println("You activated this leader card previously");
         if(currentState == CONTROLLER_STATES.FIRST_ACTION_STATE)
             chose_action(first_input());
@@ -1028,7 +1144,7 @@ public class CLI implements Observer{
         }
     }
 
-    private void already_discard_error() throws  IOException {
+    private void already_discard_error() throws IOException {
         System.out.println("You discard this leader card previously");
         if(currentState == CONTROLLER_STATES.FIRST_ACTION_STATE)
             chose_action(first_input());
@@ -1127,13 +1243,66 @@ public class CLI implements Observer{
                     error_message(returnMessage);
                     break;
                 default:
-                    System.err.println("\nRicevuto messaggio inaspettato dal Server.");
+                    System.err.println("\nUnexpected message from Server.");
                     break;
             }
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        } catch (ClassCastException e){
-            e.printStackTrace();
+        } catch (IOException | InterruptedException | ClassCastException e) {
+        }
+    }
+
+    public void startSpyAction() {
+        inputThread = new Thread(() -> {
+            try {
+                if(!turn) {
+                    System.out.println("\nWrite command \"see\" or \"s\" to see the state of the game\n");
+                    while (true) {
+                        BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
+                        String command;
+                        while (!stdIn.ready()) {
+                            inputThread.sleep(200);
+                        }
+                        command = stdIn.readLine();
+                        command = command.toLowerCase(Locale.ROOT);
+                        if (command.equals("s") || command.equals("see"))
+                            spyAction();
+                    }
+                }
+            } catch (IOException | InterruptedException e) {
+            }
+        });
+        inputThread.start();
+    }
+
+    public void spyAction() throws IOException {
+        BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
+        System.out.println("\nDo you want to see something?\n1 - PLAYERBOARD\n2 - MARKET\n3 - FAITH TRACK\n4 - DECKS");
+        try {
+            int operation = Integer.parseInt(stdIn.readLine());
+            switch (operation) {
+                case 1:
+                    seeOtherPlayerboard();
+                    break;
+                case 2:
+                    CLI_Printer.printMarket(game);
+                    break;
+                case 3:
+                    CLI_Printer.printFaithTrack(game);
+                    break;
+                case 4:
+                    CLI_Printer.printDecks(game);
+                    break;
+            }
+        } catch (NumberFormatException e){
+            spyAction();
+        }
+    }
+
+    private void seeOtherPlayerboard(){
+        try {
+            int player = numberInput(1, game.getNumOfPlayers(), "Which player you want to see the PlayerBoard?");
+            CLI_Printer.printPlayerBoard(game, player-1);
+        } catch (ExecutionException e) {
+            System.out.println("error");
         }
     }
 }
