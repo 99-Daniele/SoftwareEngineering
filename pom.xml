@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>it.polimi.ingsw</groupId>
@@ -37,14 +37,13 @@
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
-      <version>13</version>
+      <version>16</version>
     </dependency>
 
   </dependencies>
 
   <build>
     <plugins>
-
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
@@ -64,7 +63,7 @@
             <!-- original:
             <mainClass>org.example.App</mainClass>
             -->
-            <mainClass>org.example.Launcher</mainClass>
+            <mainClass>it.polimi.ingsw.Launcher</mainClass>
 
           </configuration>
         </plugin>
@@ -94,7 +93,7 @@
                     <mainClass>org.example.App</mainClass>
                      -->
 
-                    <mainClass>org.example.Launcher</mainClass>
+                    <mainClass>it.polimi.ingsw.Launcher</mainClass>
 
                   </transformer>
                 </transformers>
@@ -102,7 +101,6 @@
             </execution>
           </executions>
         </plugin>
-
         <!-- end of added shade plugin -->
       </plugins>
   </build>
