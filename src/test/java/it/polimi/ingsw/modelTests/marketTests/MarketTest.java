@@ -29,6 +29,8 @@ public class MarketTest {
         for (int i = 0; i < row; i++) {
             assertEquals(marble1[i], change1[i]);
         }
+        Marble external;
+        external=market.getExternalMarble();
 
         //checking if a column change after being slided.
         market.slideColumn(2);
@@ -36,6 +38,11 @@ public class MarketTest {
         for (int i = 0; i < row; i++) {
             assertNotEquals(marble1[i], change1[i]);
         }
+        assertEquals(marble1[1],change1[0]);
+        assertEquals(marble1[2],change1[1]);
+        assertEquals(external,change1[2]);
+        external=market.getExternalMarble();
+        assertEquals(external,marble1[0]);
     }
 
     /**
@@ -60,9 +67,12 @@ public class MarketTest {
         market.slideRow(2);
         change = market.getRowMarbles(2);
         for (int i = 0; i < column; i++) {
-            if (marble[i] != change[i])
-                assertFalse(false);
+            assertNotEquals(marble[i], change[i]);
         }
+        assertEquals(marble[1],change[0]);
+        assertEquals(marble[2],change[1]);
+        assertEquals(marble[3],change[2]);
+        assertEquals(marble[0],market.getExternalMarble());
     }
 
     /**
@@ -102,11 +112,11 @@ public class MarketTest {
             if (selectedRow[0] instanceof ResourceMarble) {
                 resource++;
             }
+
             //check if the number of marble are the same as the rules says.
             assertEquals(1,red);
             assertEquals(4,white);
             assertEquals(8,resource);
-
         }
 
 
