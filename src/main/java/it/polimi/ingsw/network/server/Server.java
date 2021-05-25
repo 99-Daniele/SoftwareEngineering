@@ -1,7 +1,6 @@
 package it.polimi.ingsw.network.server;
 
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server {
@@ -17,9 +16,9 @@ public class Server {
     }
 
     public void startServer() {
-        ServerSocket serverSocket;
+        java.net.ServerSocket serverSocket;
         try {
-            serverSocket = new ServerSocket(port);
+            serverSocket = new java.net.ServerSocket(port);
         } catch (IOException e) {
             System.err.println(e.getMessage());
             return;
@@ -29,7 +28,7 @@ public class Server {
             try {
                 Socket socket = serverSocket.accept();
                 System.out.println("\nNew Client\n");
-                Thread thread = new Thread(new PlayerServer(socket));
+                Thread thread = new Thread(new ServerSocket(socket));
                 thread.start();
             } catch (IOException e) {
                 System.err.println(e.getMessage()); //si attiva se serversocket viene chiuso

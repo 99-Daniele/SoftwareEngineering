@@ -1,7 +1,8 @@
-package it.polimi.ingsw.controller.states;
+package it.polimi.ingsw.model.games.states;
 
 import it.polimi.ingsw.controller.ControllerGame;
 import it.polimi.ingsw.model.cards.leaderCards.LeaderCard;
+import it.polimi.ingsw.model.games.GameManager;
 import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.model.player.Strongbox;
 import it.polimi.ingsw.network.messages.MessageType;
@@ -9,46 +10,21 @@ import it.polimi.ingsw.network.messages.MessageType;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class TakeMarbleState implements State_Controller{
+public class TakeMarbleState implements GameState {
 
     private ArrayList<Marble> marbles = new ArrayList<>();
 
     @Override
-    public void nextState(ControllerGame controllerGame, MessageType wantedMessage) {
+    public void nextState(GameManager gameManager, MessageType wantedMessage) {
         if(wantedMessage == MessageType.WHITE_CONVERSION_CARD)
-            controllerGame.setCurrentState(new WhiteConversionCardState());
+            gameManager.setCurrentState(new WhiteConversionCardState());
         else if(wantedMessage == MessageType.END_TURN)
-            controllerGame.setCurrentState(new EndTurnState());
+            gameManager.setCurrentState(new EndTurnState());
     }
 
     @Override
-    public boolean isRightState(CONTROLLER_STATES state) {
-        return state == CONTROLLER_STATES.TAKE_MARBLE_STATE;
-    }
-
-    @Override
-    public void putPlayerLeaderCards(int position){
-
-    }
-
-    @Override
-    public void putPlayerResource(int position){
-
-    }
-
-    @Override
-    public void putLeaderCards(ArrayList<LeaderCard> leaderCards){
-
-    }
-
-    @Override
-    public ArrayList<Integer> getPlayerChosenLeaderCards() {
-        return null;
-    }
-
-    @Override
-    public ArrayList<Integer> getPlayerChosenResource() {
-        return null;
+    public boolean isRightState(GAME_STATES state) {
+        return state == GAME_STATES.TAKE_MARBLE_STATE;
     }
 
     @Override

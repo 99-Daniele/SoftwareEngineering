@@ -1,58 +1,30 @@
-package it.polimi.ingsw.controller.states;
+package it.polimi.ingsw.model.games.states;
 
 import it.polimi.ingsw.controller.ControllerGame;
 import it.polimi.ingsw.model.cards.leaderCards.LeaderCard;
+import it.polimi.ingsw.model.games.GameManager;
 import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.model.player.Strongbox;
 import it.polimi.ingsw.network.messages.MessageType;
 
 import java.util.ArrayList;
 
-public class WaitingPlayerState implements State_Controller {
-
-    private ArrayList<Integer> playerChosenLeaderCards = new ArrayList<>();
-    private ArrayList<Integer> playerChosenResource = new ArrayList<>();
-    private ArrayList<ArrayList<LeaderCard>> leaderCards = new ArrayList<>();
+public class EndTurnState implements GameState {
 
     @Override
-    public void nextState(ControllerGame controllerGame, MessageType wantedMessage) {
-        if(wantedMessage != MessageType.LOGIN)
-            controllerGame.setCurrentState(new FirstActionState());
+    public void nextState(GameManager gameManager, MessageType wantedMessage) {
+        if(wantedMessage != MessageType.END_TURN)
+            gameManager.setCurrentState(new FirstActionState());
     }
 
     @Override
-    public boolean isRightState(CONTROLLER_STATES state) {
-        return state == CONTROLLER_STATES.WAITING_PLAYERS_STATE;
-    }
-
-    @Override
-    public void putPlayerLeaderCards(int position){
-        playerChosenLeaderCards.add(position);
-    }
-
-    @Override
-    public void putPlayerResource(int position){
-        playerChosenResource.add(position);
-    }
-
-    @Override
-    public void putLeaderCards(ArrayList<LeaderCard> leaderCards){
-        this.leaderCards.add(leaderCards);
-    }
-
-    @Override
-    public ArrayList<Integer> getPlayerChosenLeaderCards() {
-        return playerChosenLeaderCards;
-    }
-
-    @Override
-    public ArrayList<Integer> getPlayerChosenResource() {
-        return playerChosenResource;
+    public boolean isRightState(GAME_STATES state) {
+        return state == GAME_STATES.END_TURN_STATE;
     }
 
     @Override
     public ArrayList<LeaderCard> getLeaderCards(int position) {
-        return leaderCards.get(position);
+        return null;
     }
 
     @Override
@@ -62,6 +34,7 @@ public class WaitingPlayerState implements State_Controller {
 
     @Override
     public void setStrongbox(Strongbox s) {
+
     }
 
     @Override

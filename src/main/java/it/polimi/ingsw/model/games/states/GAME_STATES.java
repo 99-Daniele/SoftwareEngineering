@@ -1,8 +1,7 @@
-package it.polimi.ingsw.controller.states;
+package it.polimi.ingsw.model.games.states;
 
-public enum CONTROLLER_STATES {
+public enum GAME_STATES {
 
-    WAITING_PLAYERS_STATE,
     FIRST_ACTION_STATE,
     TAKE_MARBLE_STATE,
     BUY_CARD_STATE,

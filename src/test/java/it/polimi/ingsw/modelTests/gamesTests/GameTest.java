@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class GameTest {
 
     /**
-     * this test tries to create a player with an already taken nickname
+     * this test tries to create a player with an already taken nickname.
      */
     @Test
     void alreadyTakenNicknamePlayer() throws AlreadyTakenNicknameException {
@@ -39,7 +39,7 @@ class GameTest {
     }
 
     /**
-     * this test verifies the correct creation of a new player
+     * this test verifies the correct creation of a new player.
      */
     @Test
     void createPlayer(){
@@ -59,6 +59,157 @@ class GameTest {
     }
 
     /**
+     * this test verifies if all players are connected.
+     */
+    @Test
+    void allPlayersConnected(){
+
+        Game game = new Game(4);
+        try {
+            game.createPlayer("Daniele");
+            game.createPlayer("Danilo");
+            game.createPlayer("Emanuele");
+            assertFalse(game.allPlayersConnected());
+            game.createPlayer("Daniela");
+            assertTrue(game.allPlayersConnected());
+        } catch (AlreadyTakenNicknameException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * this test verifies the correct delete of a player.
+     */
+    @Test
+    void deletePlayer(){
+
+        Game game = new Game(2);
+        try {
+            game.createPlayer("Daniele");
+            game.createPlayer("Giorgio");
+            assertSame("Daniele", game.getPlayerPosition(0));
+            game.deletePlayer("Daniele");
+            assertSame("Giorgio", game.getPlayerPosition(0));
+        } catch (AlreadyTakenNicknameException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * this test verifies the correct nickName of players by position.
+     */
+    @Test
+    void correctGetNickNameFromPosition(){
+
+        Game game = new Game(4);
+        try {
+            game.createPlayer("Daniele");
+            game.createPlayer("Danilo");
+            game.createPlayer("Emanuele");
+            game.createPlayer("Daniela");
+            assertSame("Daniele", game.getPlayerPosition(0));
+            assertSame("Danilo", game.getPlayerPosition(1));
+            assertSame("Emanuele", game.getPlayerPosition(2));
+            assertSame("Daniela", game.getPlayerPosition(3));
+        } catch (AlreadyTakenNicknameException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * this test verifies if player already selected leader cards.
+     */
+    @Test
+    void alreadySelectedLeaderCards(){
+
+        Game game = new Game(2);
+        try {
+            game.createPlayer("Daniele");
+            assertFalse(game.alreadySelectedLeaderCards(0));
+            game.selectPlayerLeaderCards((LeaderCard) CardMap.getCard(49), (LeaderCard) CardMap.getCard(50), 0);
+            assertTrue(game.alreadySelectedLeaderCards(0));
+        } catch (AlreadyTakenNicknameException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * this test verifies if player already selected resources
+     */
+    @Test
+    void alreadySelectedResources(){
+
+        Game game = new Game(4);
+        try {
+            game.createPlayer("Daniele");
+            game.createPlayer("Danilo");
+            game.createPlayer("Emanuele");
+            game.createPlayer("Daniela");
+            assertTrue(game.alreadySelectedResource(0));
+            assertFalse(game.alreadySelectedResource(1));
+            assertFalse(game.alreadySelectedResource(2));
+            assertFalse(game.alreadySelectedResource(3));
+            game.firstIncreaseWarehouse(Resource.COIN, 1);
+            game.firstIncreaseWarehouse(Resource.COIN, 2);
+            game.firstDoubleIncreaseWarehouse(Resource.COIN, Resource.COIN);
+            assertTrue(game.alreadySelectedResource(0));
+            assertTrue(game.alreadySelectedResource(1));
+            assertTrue(game.alreadySelectedResource(2));
+            assertTrue(game.alreadySelectedResource(3));
+        } catch (AlreadyTakenNicknameException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * this test verifies if players have made all thier choices
+     */
+    @Test
+    void allPlayersReady(){
+
+        Game game = new Game(4);
+        try {
+            game.createPlayer("Daniele");
+            game.createPlayer("Danilo");
+            game.createPlayer("Emanuele");
+            game.createPlayer("Daniela");
+            assertFalse(game.allPlayersReady());
+            game.selectPlayerLeaderCards((LeaderCard) CardMap.getCard(49), (LeaderCard) CardMap.getCard(50), 0);
+            game.selectPlayerLeaderCards((LeaderCard) CardMap.getCard(51), (LeaderCard) CardMap.getCard(52), 1);
+            game.selectPlayerLeaderCards((LeaderCard) CardMap.getCard(53), (LeaderCard) CardMap.getCard(54), 2);
+            game.selectPlayerLeaderCards((LeaderCard) CardMap.getCard(55), (LeaderCard) CardMap.getCard(56), 3);
+            game.firstIncreaseWarehouse(Resource.COIN, 1);
+            game.firstIncreaseWarehouse(Resource.COIN, 2);
+            game.firstDoubleIncreaseWarehouse(Resource.COIN, Resource.COIN);
+            assertTrue(game.allPlayersReady());
+        } catch (AlreadyTakenNicknameException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * this test verifies the correct list of nickNames of players.
+     */
+    @Test
+    void correctNickNamesList() {
+
+        Game game = new Game(4);
+        try {
+            game.createPlayer("Daniele");
+            game.createPlayer("Danilo");
+            game.createPlayer("Emanuele");
+            game.createPlayer("Daniela");
+            assertEquals(4, game.getPlayersNickname().size());
+            assertSame("Daniele", game.getPlayersNickname().get(0));
+            assertSame("Danilo", game.getPlayersNickname().get(1));
+            assertSame("Emanuele", game.getPlayersNickname().get(2));
+            assertSame("Daniela", game.getPlayersNickname().get(3));
+        } catch (AlreadyTakenNicknameException e) {
+            e.printStackTrace();
+        }
+    }
+
+        /**
      * this test verifies the correct creations of decks.
      */
     @Test
@@ -338,7 +489,7 @@ class GameTest {
      * correct number of taken marbles if player chose row or column
      */
     @Test
-    void numOfTakenMarbles() throws WrongParametersException {
+    void numOfTakenMarbles(){
 
         Game game = new Game(4);
 
@@ -372,6 +523,41 @@ class GameTest {
         game.whiteMarbleConversion(card);
         assertEquals(1, game.getPlayer(0).sumTotalResource());
         assertEquals(1, game.getPlayer(1).getFaithPoints());
+    }
+
+    /**
+     * this test verifies the correct first increase of warehouse
+     */
+    @Test
+    void firstWarehouseIncrease() throws AlreadyTakenNicknameException {
+
+        Game game = new Game(4);
+        game.createPlayer("Enrico");
+        game.createPlayer("Pietro");
+        game.createPlayer("Angela");
+        game.createPlayer("Giulia");
+        assertEquals(0, game.getPlayer(0).sumTotalResource());
+        assertEquals(0, game.getPlayer(1).sumTotalResource());
+        assertEquals(0, game.getPlayer(2).sumTotalResource());
+        assertEquals(0, game.getPlayer(3).sumTotalResource());
+
+        assertEquals(0, game.getPlayer(0).getFaithPoints());
+        assertEquals(0, game.getPlayer(1).getFaithPoints());
+        assertEquals(0, game.getPlayer(2).getFaithPoints());
+        assertEquals(0, game.getPlayer(3).getFaithPoints());
+
+        game.firstIncreaseWarehouse(Resource.COIN, 1);
+        game.firstIncreaseWarehouse(Resource.COIN, 2);
+        game.firstDoubleIncreaseWarehouse(Resource.COIN, Resource.COIN);
+        assertEquals(0, game.getPlayer(0).sumTotalResource());
+        assertEquals(1, game.getPlayer(1).sumTotalResource());
+        assertEquals(1, game.getPlayer(2).sumTotalResource());
+        assertEquals(2, game.getPlayer(3).sumTotalResource());
+
+        assertEquals(0, game.getPlayer(0).getFaithPoints());
+        assertEquals(0, game.getPlayer(1).getFaithPoints());
+        assertEquals(1, game.getPlayer(2).getFaithPoints());
+        assertEquals(1, game.getPlayer(3).getFaithPoints());
     }
 
     /**

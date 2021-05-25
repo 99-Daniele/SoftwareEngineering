@@ -1,11 +1,9 @@
-package it.polimi.ingsw.network.server;
-
-import it.polimi.ingsw.controller.ControllerGame;
+package it.polimi.ingsw.controller;
 
 import java.io.IOException;
 import java.util.LinkedList;
 
-public class Connection {
+public class ControllerConnection {
 
     private static LinkedList<ControllerGame> controllerGames = new LinkedList<>();
     private static final Object lock = new Object();

@@ -7,7 +7,6 @@ import it.polimi.ingsw.model.market.*;
 import it.polimi.ingsw.parser.*;
 import it.polimi.ingsw.model.player.*;
 import it.polimi.ingsw.model.resourceContainers.Resource;
-import it.polimi.ingsw.view.VirtualView;
 import it.polimi.ingsw.exceptions.*;
 
 import java.util.ArrayList;
@@ -41,9 +40,17 @@ public class Game extends Observable implements LightGame{
         this.currentPlayer = 0;
     }
 
+    /**
+     * @param o is the observer that is added to the observers of game
+     */
     @Override
     public synchronized void addObserver(Observer o) {
         super.addObserver(o);
+        if(players.size() == numOfPlayers) {
+            shufflePlayers();
+            notifyMarket();
+            notifyDeckCards();
+        }
     }
 
     /**
@@ -86,7 +93,7 @@ public class Game extends Observable implements LightGame{
      * @param nickname is player chosen nickname.
      * @throws AlreadyTakenNicknameException if @param nickname is already taken by another player.
      */
-    public void createPlayer(String nickname) throws AlreadyTakenNicknameException {
+    public void createPlayer(String nickname) throws AlreadyTakenNicknameException{
         if(isNicknameTaken(nickname))
             throw new AlreadyTakenNicknameException();
         PlayerBoard player = new PlayerBoard(nickname);
@@ -94,11 +101,6 @@ public class Game extends Observable implements LightGame{
         Message m = new Message_One_Parameter_String(MessageType.NEW_PLAYER,players.size() -1, nickname);
         setChanged();
         notifyObservers(m);
-        if(players.size() == numOfPlayers) {
-            shufflePlayers();
-            notifyMarket();
-            notifyDeckCards();
-        }
     }
 
     public void notifyMarket(){
@@ -199,6 +201,40 @@ public class Game extends Observable implements LightGame{
      */
     public void selectPlayerLeaderCards(LeaderCard card1, LeaderCard card2, int player){
         players.get(player).addLeaderCard(card1, card2);
+    }
+
+    public boolean alreadySelectedLeaderCards(int player){
+        try {
+            players.get(player).getLeaderCard(1);
+            return true;
+        } catch (AlreadyDiscardLeaderCardException e) {
+            return false;
+        }
+    }
+
+    public boolean alreadySelectedResource(int player){
+        switch (player){
+            case 0:
+                return true;
+            case 1:
+            case 2:
+                return players.get(player).sumTotalResource() == 1;
+            case 3:
+                return players.get(player).sumTotalResource() == 2;
+        }
+        return false;
+    }
+
+    public boolean allPlayersConnected(){
+        return players.size() == numOfPlayers;
+    }
+
+    public boolean allPlayersReady(){
+        for (int i = 0; i < players.size(); i++){
+            if(!alreadySelectedLeaderCards(i) || !alreadySelectedResource(i))
+                return false;
+        }
+        return true;
     }
 
     /**
@@ -742,25 +778,10 @@ public class Game extends Observable implements LightGame{
     }
 
     /**
-     * @param view is the observer that is added to the observers of game
-     */
-    public void addObservers(VirtualView view){
-        addObserver(view);
-    }
-
-    /**
      * @return number of players
      */
     public int getNumOfPlayers(){
         return numOfPlayers;
-    }
-
-
-    public SimplePlayerBoard getLorenzoIlMagnifico() {
-        return new SimplePlayerBoard();
-    }
-
-    public void triggerFirstAction() {
     }
 
     public void LorenzoFaithTrackMovement(int faithPoints){

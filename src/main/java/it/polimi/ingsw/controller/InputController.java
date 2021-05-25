@@ -2,7 +2,6 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.cards.leaderCards.LeaderCard;
 import it.polimi.ingsw.model.market.Marble;
-import it.polimi.ingsw.network.messages.*;
 
 import java.util.ArrayList;
 
@@ -12,37 +11,22 @@ public class InputController {
         return (nickName != null && nickName.length() != 0 && !nickName.isBlank());
     }
 
-    public static boolean num_players_check(Message_One_Parameter_Int numPlayersMessage) {
-        int numPlayers = numPlayersMessage.getPar();
+    public static boolean num_players_check(int numPlayers) {
         return numPlayers >= 1 && numPlayers <= 4;
     }
 
-    public static boolean already_chosen_leader_card_check(int viewID, ArrayList<Integer> players){
-        return players.contains(viewID);
-    }
-
-    public static boolean already_chosen_resource_check(int viewID, ArrayList<Integer> players){
-        return players.contains(viewID);
-    }
-
-    public static boolean leader_card_check(Message_Two_Parameter_Int leaderCardMessage, ArrayList<LeaderCard> leaderCards){
-        int firstChoice = -1;
-        for (LeaderCard leaderCard: leaderCards) {
-            if (leaderCard.getCardID() == leaderCardMessage.getPar1())
-                firstChoice = leaderCard.getCardID();
-        }
-        if(firstChoice == -1)
+    public static boolean leader_card_check(int card1, int card2, ArrayList<LeaderCard> leaderCards){
+        int count = 0;
+        if(card1 == card2)
             return false;
         for (LeaderCard leaderCard: leaderCards) {
-            if (leaderCard.getCardID() == leaderCardMessage.getPar2() && leaderCard.getCardID() != firstChoice)
-                return true;
+            if (leaderCard.getCardID() == card1 || leaderCard.getCardID() == card2)
+                count++;
         }
-        return false;
+        return count == 2;
     }
 
-    public static boolean taken_marbles_check(Message_Two_Parameter_Int takenMarbleMessage) {
-        int row = takenMarbleMessage.getPar1();
-        int column = takenMarbleMessage.getPar2();
+    public static boolean taken_marbles_check(int row, int column) {
         if (row == 0) {
             return column >= 1 && column <= 3;
         } else if (row == 1) {
@@ -51,9 +35,7 @@ public class InputController {
             return false;
     }
 
-    public static boolean switch_depot_check(Message_Two_Parameter_Int switchDepotMessage){
-        int depot1 = switchDepotMessage.getPar1();
-        int depot2 = switchDepotMessage.getPar2();
+    public static boolean switch_depot_check(int depot1, int depot2){
         if(depot1 == depot2)
             return false;
         else if(depot1 < 1 || depot1 > 5)
@@ -61,10 +43,7 @@ public class InputController {
         else return depot2 >= 1 && depot2 <= 5;
     }
 
-    public static boolean buy_card_check(Message_Three_Parameter_Int buyCardMessage) {
-        int row = buyCardMessage.getPar1();
-        int column = buyCardMessage.getPar2();
-        int warehouse = buyCardMessage.getPar3();
+    public static boolean buy_card_check(int row, int column, int warehouse) {
         if (row < 1 || row > 3) {
             return false;
         } else if (column < 1 || column > 4) {
@@ -76,29 +55,23 @@ public class InputController {
         return slots.contains(chosenSlot);
     }
 
-    public static boolean development_card_power_check(Message_Two_Parameter_Int developmentCardPowerMessage) {
-        int chosenSlot = developmentCardPowerMessage.getPar1();
-        int warehouse = developmentCardPowerMessage.getPar2();
+    public static boolean development_card_power_check(int chosenSlot, int warehouse) {
         if (chosenSlot < 1 || chosenSlot > 3)
             return false;
         else return warehouse == 0 || warehouse == 1;
     }
 
-    public static boolean basic_power_check(Message_Three_Resource_One_Int basicPowerMessage){
-        int warehouse = basicPowerMessage.getPar();
+    public static boolean basic_power_check(int warehouse){
         return warehouse == 0 || warehouse == 1;
     }
 
-    public static boolean leader_card_power_check(Message_One_Resource_Two_Int leaderCardPowerMessage){
-        int chosenLeaderCard = leaderCardPowerMessage.getPar1();
-        int warehouse = leaderCardPowerMessage.getPar2();
+    public static boolean leader_card_power_check(int chosenLeaderCard, int warehouse){
         if(chosenLeaderCard != 1 && chosenLeaderCard != 2)
             return false;
         return warehouse == 0 || warehouse == 1;
     }
 
-    public static boolean white_conversion_card_check(Message_One_Parameter_Int whiteConversionCardMessage){
-        int chosenLeaderCard = whiteConversionCardMessage.getPar();
+    public static boolean white_conversion_card_check(int chosenLeaderCard){
         return chosenLeaderCard == 1 || chosenLeaderCard == 2;
     }
 
@@ -111,13 +84,11 @@ public class InputController {
         return false;
     }
 
-    public static boolean leader_card_activation(Message_One_Parameter_Int leaderCardActivation){
-        int chosenLeaderCard = leaderCardActivation.getPar();
+    public static boolean leader_card_activation(int chosenLeaderCard){
         return chosenLeaderCard == 1 || chosenLeaderCard == 2;
     }
 
-    public static boolean leader_card_discard(Message_One_Parameter_Int leaderCardDiscard){
-        int chosenLeaderCard = leaderCardDiscard.getPar();
+    public static boolean leader_card_discard(int chosenLeaderCard){
         return chosenLeaderCard == 1 || chosenLeaderCard == 2;
     }
 }

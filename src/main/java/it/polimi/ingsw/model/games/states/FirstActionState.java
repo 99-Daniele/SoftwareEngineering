@@ -1,51 +1,37 @@
-package it.polimi.ingsw.controller.states;
+package it.polimi.ingsw.model.games.states;
 
 import it.polimi.ingsw.controller.ControllerGame;
 import it.polimi.ingsw.model.cards.leaderCards.LeaderCard;
+import it.polimi.ingsw.model.games.GameManager;
 import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.model.player.Strongbox;
 import it.polimi.ingsw.network.messages.MessageType;
 
 import java.util.ArrayList;
 
-public class ActivateProductionState implements State_Controller{
-
-    private Strongbox s;
+public class FirstActionState implements GameState {
 
     @Override
-    public void nextState(ControllerGame controllerGame, MessageType wantedMessage) {
-        if(wantedMessage == MessageType.END_TURN)
-            controllerGame.setCurrentState(new EndTurnState());
+    public void nextState(GameManager gameManager, MessageType wantedMessage){
+        switch (wantedMessage){
+            case USE_MARBLE:
+                gameManager.setCurrentState(new TakeMarbleState());
+                break;
+            case CHOSEN_SLOT:
+                gameManager.setCurrentState(new BuyCardState());
+                break;
+            case END_PRODUCTION:
+                gameManager.setCurrentState(new ActivateProductionState());
+                break;
+            case END_TURN:
+                gameManager.setCurrentState(new EndTurnState());
+                break;
+        }
     }
 
     @Override
-    public boolean isRightState(CONTROLLER_STATES state) {
-        return state == CONTROLLER_STATES.ACTIVATE_PRODUCTION_STATE;
-    }
-
-    @Override
-    public void putPlayerLeaderCards(int position){
-
-    }
-
-    @Override
-    public void putPlayerResource(int position){
-
-    }
-
-    @Override
-    public void putLeaderCards(ArrayList<LeaderCard> leaderCards){
-
-    }
-
-    @Override
-    public ArrayList<Integer> getPlayerChosenLeaderCards() {
-        return null;
-    }
-
-    @Override
-    public ArrayList<Integer> getPlayerChosenResource() {
-        return null;
+    public boolean isRightState(GAME_STATES state) {
+        return state == GAME_STATES.FIRST_ACTION_STATE;
     }
 
     @Override
@@ -55,13 +41,11 @@ public class ActivateProductionState implements State_Controller{
 
     @Override
     public Strongbox getStrongbox() {
-        return s;
+        return null;
     }
 
     @Override
-    public void setStrongbox(Strongbox s) {
-        this.s = s;
-    }
+    public void setStrongbox(Strongbox s) {}
 
     @Override
     public int getRow() {
@@ -102,6 +86,7 @@ public class ActivateProductionState implements State_Controller{
     public LeaderCard getLeaderCard2(){
         return null;
     }
+
     @Override
     public void setLeaderCards(LeaderCard[] leaderCards){
 
@@ -134,6 +119,5 @@ public class ActivateProductionState implements State_Controller{
 
     @Override
     public void removeMarble(Marble m) {
-
     }
 }
