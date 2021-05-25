@@ -145,11 +145,26 @@ public abstract class LeaderCard extends Card {
 
     @Override
     public void print() {
-        System.out.println("RESOURCE: " + ColorAnsi.ANSI_YELLOW.escape() + "●" + ColorAnsi.RESET);
+        System.out.println("RESOURCE: " + fromResourceToString(resource));
         if(resourceCost != null)
             System.out.println("RESOURCE_COST: " + resourceCost);
         else if(leaderRequirements != null)
             System.out.println("LEADER_REQUIREMENTS: " + leaderRequirements);
         super.print();
+    }
+
+    private String fromResourceToString(Resource r){
+        switch (r){
+            case COIN:
+                return ColorAnsi.ANSI_YELLOW.escape() + "●" + ColorAnsi.RESET;
+            case SHIELD:
+                return ColorAnsi.ANSI_CYAN.escape() + "●" + ColorAnsi.RESET;
+            case SERVANT:
+                return ColorAnsi.ANSI_PURPLE.escape() + "●" + ColorAnsi.RESET;
+            case STONE:
+                return ColorAnsi.ANSI_WHITE.escape() + "●" + ColorAnsi.RESET;
+            default:
+                return "";
+        }
     }
 }

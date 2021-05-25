@@ -162,7 +162,7 @@ public class GameManager {
     }
 
     public boolean useMarbleHandler(Marble chosenMarble)
-            throws IllegalStateException, AlreadyDiscardLeaderCardException, WrongParametersException {
+            throws IllegalStateException,  WrongParametersException {
         if (!currentState.isRightState(GAME_STATES.TAKE_MARBLE_STATE))
             throw new IllegalStateException();
         if(!InputController.chosen_correct_marble(chosenMarble, currentState.getMarbles()))
@@ -177,12 +177,14 @@ public class GameManager {
                 currentState.nextState(this, MessageType.USE_MARBLE);
             return true;
         } else {
-            LeaderCard[] whiteConversionCards = game.getCurrentPlayerActiveLeaderCards();
-            ArrayList<Marble> remainingMarbles = currentState.getMarbles();
-            currentState.nextState(this, MessageType.WHITE_CONVERSION_CARD);
-            currentState.setLeaderCards(whiteConversionCards);
-            currentState.setMarbles(remainingMarbles);
-            controllerGame.choseWhiteConversionCard(game.getCurrentPosition(), whiteConversionCards);
+            try {
+                LeaderCard[] whiteConversionCards = game.getCurrentPlayerActiveLeaderCards();
+                ArrayList<Marble> remainingMarbles = currentState.getMarbles();
+                currentState.nextState(this, MessageType.WHITE_CONVERSION_CARD);
+                currentState.setLeaderCards(whiteConversionCards);
+                currentState.setMarbles(remainingMarbles);
+                controllerGame.choseWhiteConversionCard(game.getCurrentPosition(), whiteConversionCards);
+            } catch (AlreadyDiscardLeaderCardException e) {}
             return false;
         }
     }
