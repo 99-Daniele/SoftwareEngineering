@@ -1,28 +1,18 @@
-package it.polimi.ingsw.controller.states;
+package it.polimi.ingsw.model.games.states;
 
-import it.polimi.ingsw.controller.ControllerGame;
 import it.polimi.ingsw.model.cards.leaderCards.LeaderCard;
+import it.polimi.ingsw.model.games.GameManager;
 import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.model.player.Strongbox;
 import it.polimi.ingsw.network.messages.MessageType;
 
 import java.util.ArrayList;
 
-public interface State_Controller {
+public interface GameState {
 
-    void nextState (ControllerGame controllerGame, MessageType wantedMessage);
+    void nextState (GameManager gameManager, MessageType wantedMessage);
 
-    boolean isRightState (CONTROLLER_STATES state);
-
-    void putPlayerLeaderCards(int position);
-
-    void putPlayerResource(int position);
-
-    public void putLeaderCards(ArrayList<LeaderCard> leaderCards);
-
-    ArrayList<Integer> getPlayerChosenLeaderCards();
-
-    ArrayList<Integer> getPlayerChosenResource();
+    boolean isRightState (GAME_STATES state);
 
     ArrayList<LeaderCard> getLeaderCards(int position);
 

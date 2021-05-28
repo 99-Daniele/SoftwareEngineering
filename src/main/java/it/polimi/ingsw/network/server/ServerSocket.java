@@ -1,21 +1,20 @@
 package it.polimi.ingsw.network.server;
 
+import it.polimi.ingsw.controller.ControllerConnection;
 import it.polimi.ingsw.controller.ControllerGame;
 import it.polimi.ingsw.exceptions.FullGameException;
 import it.polimi.ingsw.view.VirtualView;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.net.SocketException;
-import java.util.concurrent.TimeUnit;
 
-public class PlayerServer implements Runnable {
+public class ServerSocket implements Runnable {
 
     private final Socket socket;
     private ControllerGame controllerGame;
     private VirtualView virtualView;
 
-    public PlayerServer(Socket socket) throws IOException {
+    public ServerSocket(Socket socket) throws IOException {
         this.socket = socket;
         this.virtualView = new VirtualView(socket);
     }
@@ -25,7 +24,7 @@ public class PlayerServer implements Runnable {
             virtualView.start();
             while (true) {
                 try {
-                    controllerGame = Connection.ConnectionPlayers();
+                    controllerGame = ControllerConnection.ConnectionPlayers();
                     controllerGame.addView(virtualView);
                     break;
                 } catch (FullGameException e) {}

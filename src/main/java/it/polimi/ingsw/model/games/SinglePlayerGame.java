@@ -33,8 +33,6 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame {
     public synchronized void addObserver(Observer o) {
         super.addObserver(o);
         LorenzoIlMagnifico.addObserver(o);
-        notifyMarket();
-        notifyDeckCards();
     }
 
     public SimplePlayerBoard getLorenzoIlMagnifico() {

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.view.CLI;
 
-import it.polimi.ingsw.controller.states.CONTROLLER_STATES;
+import it.polimi.ingsw.model.games.states.GAME_STATES;
 import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 import it.polimi.ingsw.network.client.ClientSocket;
@@ -17,13 +17,12 @@ public class CLI implements Observer{
 
     private Thread inputThread;
     private final Game_View game;
-    private CONTROLLER_STATES currentState;
+    private GAME_STATES currentState;
     private int position;
     private boolean turn;
 
     public CLI(){
         game = new Game_View();
-        currentState = CONTROLLER_STATES.WAITING_PLAYERS_STATE;
         position = 0;
         turn = false;
     }
@@ -132,6 +131,8 @@ public class CLI implements Observer{
     private void login_message(Message message) {
         if(message.getClientID() == 0)
             askPlayersNumber();
+        else
+            waiting();
     }
 
     private void waiting() {
@@ -169,7 +170,6 @@ public class CLI implements Observer{
 
     public void start_game_message() throws IOException {
         System.out.println("All players have made their choices. Game started");
-        currentState = CONTROLLER_STATES.FIRST_ACTION_STATE;
         ClientSocket.sendMessage(new Message(MessageType.TURN, position));
     }
 
@@ -244,7 +244,7 @@ public class CLI implements Observer{
                 lastInput();
                 break;
             case 0:
-                currentState = CONTROLLER_STATES.FIRST_ACTION_STATE;
+                currentState = GAME_STATES.FIRST_ACTION_STATE;
                 end_turn();
                 break;
         }
@@ -254,7 +254,7 @@ public class CLI implements Observer{
         System.out.println("TAKE MARBLE FROM MARKET");
         int x;
         int y;
-        currentState = CONTROLLER_STATES.TAKE_MARBLE_STATE;
+        currentState = GAME_STATES.TAKE_MARBLE_STATE;
         try {
             CLI_Printer.printMarket(game);
             x=numberInput(0,1,"Do you want a row or a column?\n0 - ROW\n1 - COLUMN");
@@ -315,7 +315,7 @@ public class CLI implements Observer{
             System.out.println("error");
             return;
         }
-        currentState = CONTROLLER_STATES.BUY_CARD_STATE;
+        currentState = GAME_STATES.BUY_CARD_STATE;
         Message message = new Message_Three_Parameter_Int(MessageType.BUY_CARD, position, row_column[0], row_column[1], z);
         ClientSocket.sendMessage(message);
     }
@@ -354,7 +354,7 @@ public class CLI implements Observer{
                 }
                 if(!power){
                     if (numberInput(0,1,"Do you want to activate another power production?\n1 - YES\n0 - NO") == 0) {
-                        if(currentState == CONTROLLER_STATES.FIRST_ACTION_STATE)
+                        if(currentState == GAME_STATES.FIRST_ACTION_STATE)
                             chose_action(first_input());
                         else
                             activate_another_production();
@@ -362,7 +362,7 @@ public class CLI implements Observer{
                     }
                 }
                 else{
-                  currentState = CONTROLLER_STATES.ACTIVATE_PRODUCTION_STATE;
+                  currentState = GAME_STATES.ACTIVATE_PRODUCTION_STATE;
                   break;
                 }
             }
@@ -438,7 +438,7 @@ public class CLI implements Observer{
 
     public void end_production() throws IOException {
         Message message = new Message(MessageType.END_PRODUCTION, position);
-        currentState = CONTROLLER_STATES.END_TURN_STATE;
+        currentState = GAME_STATES.END_TURN_STATE;
         ClientSocket.sendMessage(message);
     }
 
@@ -682,6 +682,7 @@ public class CLI implements Observer{
 
     private void turn_message(Message message) throws InterruptedException, IOException {
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
+        currentState = GAME_STATES.FIRST_ACTION_STATE;
         if (m.getPar() == 1) {
             turn = true;
             chose_action(first_input());
@@ -826,15 +827,16 @@ public class CLI implements Observer{
     }
 
     private void ok_message() throws IOException, InterruptedException {
+        if(currentState == null){
+            if (game.isStartGame())
+                System.out.println("Waiting players made their choices...");
+            else if(game.getNumOfPlayers() > 0)
+                chose_first_resources();
+            else
+                waiting();
+            return;
+        }
         switch (currentState) {
-            case WAITING_PLAYERS_STATE:
-                if (game.isStartGame())
-                    System.out.println("Waiting players made their choices...");
-                else if(game.getNumOfPlayers() > 0)
-                    chose_first_resources();
-                else
-                    waiting();
-                break;
             case FIRST_ACTION_STATE:
                 chose_action(first_input());
                 break;
@@ -896,7 +898,7 @@ public class CLI implements Observer{
         if (marbles.size() == 1) {
             chosenMarble = marbles.remove(0);
             game.setChosenMarbles(marbles);
-            currentState = CONTROLLER_STATES.END_TURN_STATE;
+            currentState = GAME_STATES.END_TURN_STATE;
             Message message = new Message_One_Parameter_Marble(MessageType.USE_MARBLE, position, chosenMarble);
             ClientSocket.sendMessage(message);
             return;
@@ -916,7 +918,7 @@ public class CLI implements Observer{
             }
         }
         if (marbles.size() == 0)
-            currentState = CONTROLLER_STATES.END_TURN_STATE;
+            currentState = GAME_STATES.END_TURN_STATE;
         else
             game.setChosenMarbles(marbles);
         Message message = new Message_One_Parameter_Marble(MessageType.USE_MARBLE, position, chosenMarble);
@@ -1045,10 +1047,10 @@ public class CLI implements Observer{
 
     private void wrong_parameters_error() throws  IOException {
         System.out.println("You have inserted wrong parameters");
-        if(currentState == CONTROLLER_STATES.ACTIVATE_PRODUCTION_STATE)
+        if(currentState == GAME_STATES.ACTIVATE_PRODUCTION_STATE)
             activate_another_production();
         else{
-            currentState = CONTROLLER_STATES.FIRST_ACTION_STATE;
+            currentState = GAME_STATES.FIRST_ACTION_STATE;
             chose_action(first_input());
         }
     }
@@ -1064,7 +1066,7 @@ public class CLI implements Observer{
             if (x == 1) {
                 buy_card();
             } else {
-                currentState = CONTROLLER_STATES.FIRST_ACTION_STATE;
+                currentState = GAME_STATES.FIRST_ACTION_STATE;
                 chose_action(first_input());
             }
         } catch (ExecutionException e) {
@@ -1084,10 +1086,10 @@ public class CLI implements Observer{
 
     private void not_enough_cards_error() throws IOException {
         System.out.println("You don't have enough development cards to activate this leader card");
-        if(currentState == CONTROLLER_STATES.FIRST_ACTION_STATE)
+        if(currentState == GAME_STATES.FIRST_ACTION_STATE)
             chose_action(first_input());
         else{
-            currentState = CONTROLLER_STATES.END_TURN_STATE;
+            currentState = GAME_STATES.END_TURN_STATE;
             lastInput();
         }
     }
@@ -1099,7 +1101,7 @@ public class CLI implements Observer{
             if (x == 1) {
                 buy_card();
             } else {
-                currentState = CONTROLLER_STATES.FIRST_ACTION_STATE;
+                currentState = GAME_STATES.FIRST_ACTION_STATE;
                 chose_action(first_input());
             }
         } catch (ExecutionException e) {
@@ -1109,10 +1111,10 @@ public class CLI implements Observer{
 
     private void illegal_operation_error() throws IOException {
         System.out.println("You can't do this operation at this moment");
-        if(currentState == CONTROLLER_STATES.ACTIVATE_PRODUCTION_STATE)
+        if(currentState == GAME_STATES.ACTIVATE_PRODUCTION_STATE)
             activate_another_production();
         else{
-            currentState = CONTROLLER_STATES.FIRST_ACTION_STATE;
+            currentState = GAME_STATES.FIRST_ACTION_STATE;
             chose_action(first_input());
         }
     }
@@ -1124,32 +1126,32 @@ public class CLI implements Observer{
 
     private void not_enough_resource_error() throws IOException {
         System.out.println("You have not enough resources to do this operation");
-        if(currentState == CONTROLLER_STATES.ACTIVATE_PRODUCTION_STATE)
+        if(currentState == GAME_STATES.ACTIVATE_PRODUCTION_STATE)
             activate_another_production();
-        else if (currentState == CONTROLLER_STATES.END_TURN_STATE)
+        else if (currentState == GAME_STATES.END_TURN_STATE)
             end_turn();
         else{
-            currentState = CONTROLLER_STATES.FIRST_ACTION_STATE;
+            currentState = GAME_STATES.FIRST_ACTION_STATE;
             chose_action(first_input());
         }
     }
 
     private void already_active_error() throws IOException {
         System.out.println("You activated this leader card previously");
-        if(currentState == CONTROLLER_STATES.FIRST_ACTION_STATE)
+        if(currentState == GAME_STATES.FIRST_ACTION_STATE)
             chose_action(first_input());
         else{
-            currentState = CONTROLLER_STATES.END_TURN_STATE;
+            currentState = GAME_STATES.END_TURN_STATE;
             lastInput();
         }
     }
 
     private void already_discard_error() throws IOException {
         System.out.println("You discard this leader card previously");
-        if(currentState == CONTROLLER_STATES.FIRST_ACTION_STATE)
+        if(currentState == GAME_STATES.FIRST_ACTION_STATE)
             chose_action(first_input());
         else{
-            currentState = CONTROLLER_STATES.END_TURN_STATE;
+            currentState = GAME_STATES.END_TURN_STATE;
             lastInput();
         }
     }
