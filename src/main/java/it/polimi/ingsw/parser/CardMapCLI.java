@@ -7,12 +7,12 @@ import it.polimi.ingsw.model.cards.leaderCards.LeaderCard;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class CardMap {
+public class CardMapCLI {
 
-    private static CardMap cardParser;
+    private static CardMapCLI cardParser;
     private static HashMap<Integer, Card_View> cardMap = new HashMap<>();
 
-    private CardMap() {
+    private CardMapCLI() {
         DevelopmentCardsParser developmentCardsParser = new DevelopmentCardsParser();
         LeaderCardsParser leaderCardsParser = new LeaderCardsParser();
         DevelopmentCard[] developmentCards = developmentCardsParser.getDevelopmentCards();
@@ -85,7 +85,7 @@ public class CardMap {
 
     public static Card_View getCard(int cardID){
         if(cardParser == null)
-            cardParser = new CardMap();
+            cardParser = new CardMapCLI();
         return cardMap.get(cardID);
     }
 }

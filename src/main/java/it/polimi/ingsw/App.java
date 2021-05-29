@@ -18,9 +18,9 @@ public class App {
             GUI gui = new GUI();
             if (args.length > 4 && (args[1].equals("--hostname") || args[1].equals("-h")) &&
                     (args[3].equals("--port") || args[3].equals("-p"))) {
-                // gui launcher with hostname and port
+                gui.launchGUI(args[2], Integer.parseInt(args[4]));
             } else {
-               GUI.launch();
+               gui.launchGUI();
             }
         } else if (args.length >= 1 && (args[0].equals("--cli") || args[0].equals("-c"))) {
             CLI cli = new CLI();

@@ -7,6 +7,7 @@ import javafx.scene.control.CheckBox;
 import java.io.IOException;
 
 public class PrimaryController {
+
     @FXML
     private Button ciao;
     @FXML

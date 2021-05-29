@@ -36,7 +36,9 @@ public class GUI extends Application implements Observer {
         return fxmlLoader.load();
     }
 
-    public static void main(String[] args) {
+    public void launchGUI() {
         launch();
     }
+
+    public void launchGUI(String hostName, int port){launch();}
 }
