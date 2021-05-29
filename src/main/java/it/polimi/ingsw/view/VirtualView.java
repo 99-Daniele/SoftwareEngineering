@@ -223,6 +223,7 @@ public class VirtualView extends Observable implements View, Observer{
     }
 
     public void sendMessage(Message message){
+        System.out.println(viewID + " - " + message.toString());
         try {
             out.flush();
             out.writeObject(message);

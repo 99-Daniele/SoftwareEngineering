@@ -11,7 +11,7 @@ import it.polimi.ingsw.model.games.Game;
 
 import java.util.ArrayList;
 
-import it.polimi.ingsw.parser.CardMap;
+import it.polimi.ingsw.parser.CardMapCLI;
 import it.polimi.ingsw.parser.DevelopmentCardsParser;
 import it.polimi.ingsw.parser.LeaderCardsParser;
 import it.polimi.ingsw.model.player.Strongbox;
@@ -126,7 +126,7 @@ class GameTest {
         try {
             game.createPlayer("Daniele");
             assertFalse(game.alreadySelectedLeaderCards(0));
-            game.selectPlayerLeaderCards((LeaderCard) CardMap.getCard(49), (LeaderCard) CardMap.getCard(50), 0);
+            game.selectPlayerLeaderCards((LeaderCard) CardMapCLI.getCard(49), (LeaderCard) CardMapCLI.getCard(50), 0);
             assertTrue(game.alreadySelectedLeaderCards(0));
         } catch (AlreadyTakenNicknameException e) {
             e.printStackTrace();
@@ -174,10 +174,10 @@ class GameTest {
             game.createPlayer("Emanuele");
             game.createPlayer("Daniela");
             assertFalse(game.allPlayersReady());
-            game.selectPlayerLeaderCards((LeaderCard) CardMap.getCard(49), (LeaderCard) CardMap.getCard(50), 0);
-            game.selectPlayerLeaderCards((LeaderCard) CardMap.getCard(51), (LeaderCard) CardMap.getCard(52), 1);
-            game.selectPlayerLeaderCards((LeaderCard) CardMap.getCard(53), (LeaderCard) CardMap.getCard(54), 2);
-            game.selectPlayerLeaderCards((LeaderCard) CardMap.getCard(55), (LeaderCard) CardMap.getCard(56), 3);
+            game.selectPlayerLeaderCards((LeaderCard) CardMapCLI.getCard(49), (LeaderCard) CardMapCLI.getCard(50), 0);
+            game.selectPlayerLeaderCards((LeaderCard) CardMapCLI.getCard(51), (LeaderCard) CardMapCLI.getCard(52), 1);
+            game.selectPlayerLeaderCards((LeaderCard) CardMapCLI.getCard(53), (LeaderCard) CardMapCLI.getCard(54), 2);
+            game.selectPlayerLeaderCards((LeaderCard) CardMapCLI.getCard(55), (LeaderCard) CardMapCLI.getCard(56), 3);
             game.firstIncreaseWarehouse(Resource.COIN, 1);
             game.firstIncreaseWarehouse(Resource.COIN, 2);
             game.firstDoubleIncreaseWarehouse(Resource.COIN, Resource.COIN);
@@ -328,22 +328,22 @@ class GameTest {
     @Test
     void correctMapping(){
 
-        Card_View card1 = CardMap.getCard(1);
+        Card_View card1 = CardMapCLI.getCard(1);
 
         assertEquals(1, card1.getCardID());
         assertTrue(card1 instanceof DevelopmentCard);
 
-        Card_View card34 = CardMap.getCard(34);
+        Card_View card34 = CardMapCLI.getCard(34);
 
         assertEquals(34, card34.getCardID());
         assertTrue(card34 instanceof DevelopmentCard);
 
-        Card_View card49 = CardMap.getCard(49);
+        Card_View card49 = CardMapCLI.getCard(49);
 
         assertEquals(49, card49.getCardID());
         assertTrue(card49 instanceof DiscountCard);
 
-        Card_View card64 = CardMap.getCard(64);
+        Card_View card64 = CardMapCLI.getCard(64);
 
         assertEquals(64, card64.getCardID());
         assertTrue(card64 instanceof AdditionalProductionPowerCard);

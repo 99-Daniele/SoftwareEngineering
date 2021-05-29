@@ -66,11 +66,7 @@ public class ControllerGame implements Observer {
             throw new FullGameException();
         views.add(view);
         if(view.getNickname() != null){
-            try {
-                addPlayer(view, view.getNickname());
-            } catch (AlreadyTakenNicknameException e) {
-                errorHandler(ErrorType.ALREADY_TAKEN_NICKNAME, views.size() -1);
-            }
+            addPlayer(view, view.getNickname());
         }
     }
 
@@ -207,8 +203,6 @@ public class ControllerGame implements Observer {
             errorHandler(ErrorType.WRONG_PARAMETERS, viewID);
         } catch (IllegalStateException illegalStateException) {
             errorHandler(ErrorType.ILLEGAL_OPERATION, viewID);
-        } catch (AlreadyTakenNicknameException alreadyTakenNicknameException) {
-            errorHandler(ErrorType.ALREADY_TAKEN_NICKNAME, viewID);
         } catch (EmptyDevelopmentCardDeckException e) {
             errorHandler(ErrorType.EMPTY_DECK, viewID);
         } catch (ImpossibleDevelopmentCardAdditionException e) {
@@ -229,9 +223,8 @@ public class ControllerGame implements Observer {
     /**
      * @param view is player's view trying to logging in.
      * @param loginMessage is one message of LOGIN.
-     * @throws AlreadyTakenNicknameException if nickName was already taken by another player.
      */
-    private synchronized void addPlayer(View view, Message loginMessage) throws AlreadyTakenNicknameException {
+    private synchronized void addPlayer(View view, Message loginMessage){
         try {
             Message_One_Parameter_String m = (Message_One_Parameter_String) loginMessage;
             String nickName = m.getPar();
@@ -244,9 +237,8 @@ public class ControllerGame implements Observer {
     /**
      * @param view is player's view trying to logging in.
      * @param nickName is player's chosen nickName.
-     * @throws AlreadyTakenNicknameException if nickName was already taken by another player.
      */
-    private synchronized void addPlayer(View view, String nickName) throws AlreadyTakenNicknameException {
+    private synchronized void addPlayer(View view, String nickName){
         if (state != GAME_STARTING_STATES.WAITING_PLAYERS && state != GAME_STARTING_STATES.WAITING_NUM_PLAYERS) {
             view.errorMessage(ErrorType.ILLEGAL_OPERATION);
             return;
@@ -255,7 +247,11 @@ public class ControllerGame implements Observer {
             view.errorMessage(ErrorType.WRONG_PARAMETERS);
             return;
         }
-        createNewPlayer(view, nickName);
+        try {
+            createNewPlayer(view, nickName);
+        } catch (AlreadyTakenNicknameException e) {
+            view.errorMessage(ErrorType.ALREADY_TAKEN_NICKNAME);
+        }
     }
 
     /**
@@ -265,7 +261,7 @@ public class ControllerGame implements Observer {
      * If it's the first player, simply send a LOGIN message with clientID as 0. Otherwise create the player and then
      * sends a login message to player.
      */
-    private void createNewPlayer(View view, String nickName) throws AlreadyTakenNicknameException {
+    private synchronized void createNewPlayer(View view, String nickName) throws AlreadyTakenNicknameException {
         if (state == GAME_STARTING_STATES.WAITING_NUM_PLAYERS) {
             view.login(0);
         } else {

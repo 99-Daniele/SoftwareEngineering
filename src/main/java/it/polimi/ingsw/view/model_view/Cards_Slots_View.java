@@ -1,6 +1,6 @@
 package it.polimi.ingsw.view.model_view;
 
-import it.polimi.ingsw.parser.CardMap;
+import it.polimi.ingsw.parser.CardMapCLI;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -71,23 +71,23 @@ public class Cards_Slots_View {
         System.out.println("\nDEVELOPMENT_CARDS:");
         System.out.println("First slot:");
         if (firstSlot.size()>0) {
-            CardMap.getCard(firstSlot.getLast()).print();
+            CardMapCLI.getCard(firstSlot.getLast()).print();
             for(int i = firstSlot.size() - 1; i > 0; i--) {
-                CardMap.getCard(firstSlot.get(i)).printSmallInfo();
+                CardMapCLI.getCard(firstSlot.get(i)).printSmallInfo();
             }
         }
         System.out.println("Second slot:");
         if (secondSlot.size()>0) {
-            CardMap.getCard(secondSlot.getLast()).print();
+            CardMapCLI.getCard(secondSlot.getLast()).print();
             for(int i = secondSlot.size() - 1; i > 0; i--) {
-                CardMap.getCard(secondSlot.get(i)).printSmallInfo();
+                CardMapCLI.getCard(secondSlot.get(i)).printSmallInfo();
             }
         }
         System.out.println("Third slot:");
         if (thirdSlot.size()>0) {
-            CardMap.getCard(thirdSlot.getLast()).print();
+            CardMapCLI.getCard(thirdSlot.getLast()).print();
             for(int i = thirdSlot.size() - 1; i > 0; i--) {
-                CardMap.getCard(thirdSlot.get(i)).printSmallInfo();
+                CardMapCLI.getCard(thirdSlot.get(i)).printSmallInfo();
             }
         }
     }
@@ -95,8 +95,8 @@ public class Cards_Slots_View {
     public void printCliLeaderCard(){
         System.out.println("\nLEADER_CARDS: ");
         if(firstLeaderCard != -1)
-            CardMap.getCard(firstLeaderCard).print();
+            CardMapCLI.getCard(firstLeaderCard).print();
         if (secondLeaderCard != -1)
-            CardMap.getCard(secondLeaderCard).print();
+            CardMapCLI.getCard(secondLeaderCard).print();
     }
 }

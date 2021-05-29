@@ -9,7 +9,7 @@ import it.polimi.ingsw.model.market.WhiteMarble;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 import it.polimi.ingsw.network.messages.*;
 
-import it.polimi.ingsw.parser.CardMap;
+import it.polimi.ingsw.parser.CardMapCLI;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -48,10 +48,10 @@ public class InputControllerTest {
     void correctLeaderCardsCheck(){
 
         ArrayList<LeaderCard> leaderCards = new ArrayList<>();
-        leaderCards.add((LeaderCard) CardMap.getCard(49));
-        leaderCards.add((LeaderCard) CardMap.getCard(53));
-        leaderCards.add((LeaderCard) CardMap.getCard(64));
-        leaderCards.add((LeaderCard) CardMap.getCard(57));
+        leaderCards.add((LeaderCard) CardMapCLI.getCard(49));
+        leaderCards.add((LeaderCard) CardMapCLI.getCard(53));
+        leaderCards.add((LeaderCard) CardMapCLI.getCard(64));
+        leaderCards.add((LeaderCard) CardMapCLI.getCard(57));
 
         assertFalse(InputController.leader_card_check(10, 74, leaderCards));
         assertFalse(InputController.leader_card_check(51, 64, leaderCards));

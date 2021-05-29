@@ -20,7 +20,7 @@ public class App {
                     (args[3].equals("--port") || args[3].equals("-p"))) {
                 // gui launcher with hostname and port
             } else {
-                //gui default launcher
+               GUI.launch();
             }
         } else if (args.length >= 1 && (args[0].equals("--cli") || args[0].equals("-c"))) {
             CLI cli = new CLI();

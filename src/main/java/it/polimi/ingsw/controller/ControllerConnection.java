@@ -16,7 +16,7 @@ public class ControllerConnection {
      * When a view tries to connect to Server, the ControllerConnection finds if there is any game where the number of
      * player is not maxed, or if there is any game where the number of players has not yet been chosen.
      */
-    public static synchronized ControllerGame ConnectionPlayers() throws InterruptedException {
+    public static ControllerGame ConnectionPlayers() throws InterruptedException {
         for (ControllerGame controllerGame : controllerGames) {
             while (controllerGame.getCurrentNumPlayers() == 1 && controllerGame.getMaxNumPlayers() == 0) {
                 synchronized (lock) {

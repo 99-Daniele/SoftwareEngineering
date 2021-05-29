@@ -44,7 +44,7 @@ public class GameManager {
         return game.getNumOfPlayers();
     }
 
-    public void createPlayer(View view, String nickName) throws AlreadyTakenNicknameException{
+    public synchronized void createPlayer(View view, String nickName) throws AlreadyTakenNicknameException{
         game.createPlayer(nickName);
         game.addObserver((VirtualView) view);
         if(game.allPlayersConnected())

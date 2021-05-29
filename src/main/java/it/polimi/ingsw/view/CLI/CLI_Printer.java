@@ -1,7 +1,7 @@
 package it.polimi.ingsw.view.CLI;
 
 import it.polimi.ingsw.model.market.Marble;
-import it.polimi.ingsw.parser.CardMap;
+import it.polimi.ingsw.parser.CardMapCLI;
 import it.polimi.ingsw.view.model_view.Game_View;
 
 import java.util.ArrayList;
@@ -59,7 +59,7 @@ public class CLI_Printer {
     }
 
     public static void printCard(int cardID){
-        CardMap.getCard(cardID).print();
+        CardMapCLI.getCard(cardID).print();
     }
 
 }
