@@ -16,6 +16,8 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
+    <javafx.version>16</javafx.version>
+    <javafx.maven.plugin.version>0.0.6</javafx.maven.plugin.version>
   </properties>
 
   <dependencies>
@@ -45,6 +47,7 @@
       <artifactId>javafx-fxml</artifactId>
       <version>13</version>
     </dependency>
+
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>

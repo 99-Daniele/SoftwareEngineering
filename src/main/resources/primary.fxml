@@ -16,7 +16,7 @@
          <children>
             <ImageView fitHeight="548.0" fitWidth="355.0" layoutX="97.0" layoutY="-34.0" rotate="-90.0" AnchorPane.leftAnchor="97.0" AnchorPane.topAnchor="-34.0">
                <image>
-                  <Image url="photos/Masters_of_Renaissance_PlayerBoard(11_2020)-1.png" />
+                  <Image url="@photos/Masters_of_Renaissance_PlayerBoard(11_2020)-1.png" />
                </image>
             </ImageView>
             <CheckBox layoutX="332.0" layoutY="558.0" mnemonicParsing="false" text="CheckBox" />
@@ -26,63 +26,63 @@
             <CheckBox fx:id="first_action" layoutX="332.0" layoutY="453.0" mnemonicParsing="false" text="first action " />
             <ImageView fitHeight="180.0" fitWidth="115.0" layoutY="437.0">
                <image>
-                  <Image url="photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-56-1.png" />
+                  <Image url="@photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-56-1.png" />
                </image>
 
             </ImageView>
             <ImageView fitHeight="180.0" fitWidth="122.0" layoutX="127.0" layoutY="437.0">
                <image>
-                  <Image url="photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-64-1.png" />
+                  <Image url="@photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-64-1.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="159.0" fitWidth="108.0" layoutX="553.0" layoutY="62.0">
                <image>
-                  <Image url="photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
+                  <Image url="@photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="159.0" fitWidth="108.0" layoutX="793.0" layoutY="62.0">
                <image>
-                  <Image url="photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
+                  <Image url="@photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="159.0" fitWidth="108.0" layoutX="674.0" layoutY="62.0">
                <image>
-                  <Image url="photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
+                  <Image url="@photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="159.0" fitWidth="108.0" layoutX="674.0" layoutY="230.0">
                <image>
-                  <Image url="photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
+                  <Image url="@photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="159.0" fitWidth="108.0" layoutX="553.0" layoutY="230.0">
                <image>
-                  <Image url="photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
+                  <Image url="@photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="159.0" fitWidth="108.0" layoutX="553.0" layoutY="399.0">
                <image>
-                  <Image url="photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
+                  <Image url="@photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="159.0" fitWidth="108.0" layoutX="674.0" layoutY="399.0">
                <image>
-                  <Image url="photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
+                  <Image url="@photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="159.0" fitWidth="108.0" layoutX="793.0" layoutY="230.0">
                <image>
-                  <Image url="photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
+                  <Image url="@photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="159.0" fitWidth="108.0" layoutX="793.0" layoutY="399.0">
                <image>
-                  <Image url="photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
+                  <Image url="@photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="249.0" fitWidth="195.0" layoutX="926.0" layoutY="63.0">
                <image>
-                  <Image url="photos/plancia portabiglie.png" />
+                  <Image url="@photos/plancia portabiglie.png" />
                </image>
             </ImageView>
             <Button fx:id="ciao" layoutX="220.0" layoutY="377.0" mnemonicParsing="false"  text="Choose slot" />

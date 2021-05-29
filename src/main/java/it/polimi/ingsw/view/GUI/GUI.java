@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -22,7 +23,7 @@ public class GUI extends Application implements Observer {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("primary"), 640, 480);
+        scene = new Scene(loadFXML("/secondary"), 640, 480);
         stage.setScene(scene);
         stage.show();
     }
@@ -31,10 +32,14 @@ public class GUI extends Application implements Observer {
         scene.setRoot(loadFXML(fxml));
     }
 
+
     private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(GUI.class.getResource(fxml + ".fxml"));
+        //was:FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
+        URL url = GUI.class.getResource(fxml + ".fxml");
+        FXMLLoader fxmlLoader = new FXMLLoader(url);
         return fxmlLoader.load();
     }
+
 
     public static void main(String[] args) {
         launch();
