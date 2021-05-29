@@ -133,14 +133,6 @@ public class VirtualView extends Observable implements View, Observer{
     }
 
     @Override
-    public void newPlayer(String nickname, int position){
-        if(this.viewID != position) {
-            Message m = new Message_One_Parameter_String(MessageType.NEW_PLAYER,position, nickname);
-            sendMessage(m);
-        }
-    }
-
-    @Override
     public void allPlayerConnected(int position, int numPLayer, ArrayList<String> nickNames) {
         viewID = position;
         Message message = new Message_ArrayList_String(MessageType.PLAYERS, position, nickNames);

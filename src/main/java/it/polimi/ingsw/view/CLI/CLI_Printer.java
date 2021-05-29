@@ -8,12 +8,6 @@ import java.util.ArrayList;
 
 public class CLI_Printer {
 
-    public static void printInitialGame(Game_View game){
-        printMarket(game);
-        printFaithTrack(game);
-        printDecks(game);
-    }
-
     public static void printMarket(Game_View game){
         game.getMarket().printMarketCli();
     }
