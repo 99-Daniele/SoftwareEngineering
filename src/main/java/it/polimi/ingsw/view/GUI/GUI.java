@@ -1,22 +1,16 @@
 package it.polimi.ingsw.view.GUI;
 
-import javafx.application.Application;
+import it.polimi.ingsw.network.messages.Message;
+import it.polimi.ingsw.view.ClientView;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Observable;
-import java.util.Observer;
 
-public class GUI extends Application implements Observer {
+public class GUI extends ClientView {
 
-
-    @Override
-    public void update(Observable o, Object arg) {
-
-    }
 
     private static Scene scene;
 
@@ -36,9 +30,76 @@ public class GUI extends Application implements Observer {
         return fxmlLoader.load();
     }
 
+    @Override
     public void launchGUI() {
         launch();
     }
 
+    @Override
     public void launchGUI(String hostName, int port){launch();}
+
+    @Override
+    public void askPlayersNumber() {
+
+    }
+
+    @Override
+    public void waiting() {
+
+    }
+
+    @Override
+    public void new_player_message(Message message) {
+
+    }
+
+    @Override
+    public void leader_card_choice(Message message) throws IOException, InterruptedException {
+
+    }
+
+    @Override
+    public void ok_message() throws IOException, InterruptedException {
+
+    }
+
+    @Override
+    public void turn_message(Message message) throws InterruptedException, IOException {
+
+    }
+
+    @Override
+    public void end_turn_message(Message message) throws InterruptedException, IOException {
+
+    }
+
+    @Override
+    public void white_conversion_card_message(Message message) throws IOException {
+
+    }
+
+    @Override
+    public void vatican_report_message(Message message) {
+
+    }
+
+    @Override
+    public void chosen_slot_message(Message message) throws IOException {
+
+    }
+
+    @Override
+    public void quit_message(Message message) {
+
+    }
+
+    @Override
+    public void end_game_message(Message message) {
+
+    }
+
+    @Override
+    public void error_message(Message message) throws IOException, InterruptedException {
+
+    }
 }

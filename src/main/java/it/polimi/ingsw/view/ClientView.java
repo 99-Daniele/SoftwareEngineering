@@ -1,21 +1,42 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.market.Marble;
+import it.polimi.ingsw.network.client.ClientSocket;
 import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.view.model_view.Game_View;
+import javafx.application.Application;
+import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-public abstract class ClientView implements Observer {
+public abstract class ClientView extends Application implements Observer {
 
     private final Game_View game;
 
     public ClientView() {
         game = new Game_View();
     }
+
+    public void launchGUI(){}
+
+    public void launchGUI(String hostName, int port){}
+
+    public void launchCLI(){}
+
+    public void launchCLI(String hostName, int port){}
+
+    public void serverConnection(String hostName, int port) throws IOException {
+        ClientSocket clientSocket = new ClientSocket(new Socket(hostName, port));
+        clientSocket.addObserver(this);
+        clientSocket.start();
+    }
+
+    @Override
+    public void start(Stage stage) throws Exception {}
 
     public Game_View getGame() {
         return game;

@@ -2,6 +2,7 @@ package it.polimi.ingsw;
 
 import it.polimi.ingsw.network.server.Server;
 import it.polimi.ingsw.view.CLI.CLI;
+import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.GUI.GUI;
 
 public class App {
@@ -15,7 +16,7 @@ public class App {
             }
             server.startServer();
         } else if (args.length >= 1 && (args[0].equals("--gui") || args[0].equals("-g"))) {
-            GUI gui = new GUI();
+            ClientView gui = new GUI();
             if (args.length > 4 && (args[1].equals("--hostname") || args[1].equals("-h")) &&
                     (args[3].equals("--port") || args[3].equals("-p"))) {
                 gui.launchGUI(args[2], Integer.parseInt(args[4]));
@@ -23,12 +24,12 @@ public class App {
                gui.launchGUI();
             }
         } else if (args.length >= 1 && (args[0].equals("--cli") || args[0].equals("-c"))) {
-            CLI cli = new CLI();
+            ClientView cli = new CLI();
             if (args.length > 4 && (args[1].equals("--hostname") || args[1].equals("-h")) &&
                     (args[3].equals("--port") || args[3].equals("-p"))) {
                 cli.launchCLI(args[2], Integer.parseInt(args[4]));
             } else
-                cli.launchCli();
+                cli.launchCLI();
         }
     }
 }

@@ -8,7 +8,6 @@ import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.view.ClientView;
 
 import java.io.*;
-import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.*;
 import java.util.concurrent.*;
@@ -19,15 +18,13 @@ public class CLI extends ClientView{
     private GAME_STATES currentState;
     private int position;
     private boolean turn;
-    private BufferedReader stdIn;
 
     public CLI(){
-        stdIn = new BufferedReader(new InputStreamReader(System.in));
         position = 0;
         turn = false;
     }
 
-    public void launchCli(){
+    public void launchCLI(){
         try {
             connectionInfo();
         } catch (IOException | ExecutionException e) {
@@ -35,18 +32,17 @@ public class CLI extends ClientView{
         }
         printLogo();
         username();
-        startCli();
     }
 
     public void launchCLI(String hostName, int port){
         try {
-            connectionInfo(hostName, port);
+            if(!connectionInfo(hostName, port))
+                connectionInfo();
         } catch (IOException | ExecutionException e) {
             e.printStackTrace();
         }
         printLogo();
         username();
-        startCli();
     }
 
     private void printLogo(){
@@ -77,40 +73,29 @@ public class CLI extends ClientView{
         BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
         while (true) {
             System.out.println("\nEnter hostname [localhost]: ");
-            String hostName = readLine();
+            String hostName = stdIn.readLine();
             if (hostName == null || hostName.isBlank() || hostName.equals(""))
                 hostName = "localhost";
             System.out.println("Enter port [12460]: ");
             String portNumber = stdIn.readLine();
             if (portNumber == null || portNumber.isBlank() ||portNumber.equals(""))
                 portNumber = "12460";
-            try {
-                ClientSocket clientSocket = new ClientSocket(new Socket(hostName, Integer.parseInt(portNumber)));
-                System.out.println("Accepted by Server");
-                clientSocket.addObserver(this);
-                clientSocket.start();
+            if(connectionInfo(hostName, Integer.parseInt(portNumber)))
                 break;
-            } catch (UnknownHostException e) {
-                System.err.println("Unknown host " + hostName);
-            } catch (IOException e) {
-                System.err.println("Can't connect to host " + hostName);
-            }
         }
     }
 
-    private void connectionInfo(String hostName, int port) throws IOException, ExecutionException {
+    private boolean connectionInfo(String hostName, int port) throws IOException, ExecutionException {
         try {
-            ClientSocket clientSocket = new ClientSocket(new Socket(hostName, port));
+            super.serverConnection(hostName, port);
             System.out.println("Accepted by Server");
-            clientSocket.addObserver(this);
-            clientSocket.start();
+            return true;
         } catch (UnknownHostException e) {
             System.err.println("Unknown host " + hostName);
-            connectionInfo();
         } catch (IOException e) {
             System.err.println("Can't connect to host " + hostName);
-            connectionInfo();
         }
+        return false;
     }
 
     private void username(){
@@ -126,19 +111,6 @@ public class CLI extends ClientView{
             } catch (IOException e) {
                 System.out.println("error");
             }
-        }
-    }
-
-    private void startCli(){
-        if(inputThread == null){
-            inputThread = new Thread(() -> {
-                try {
-                    stdIn.readLine();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-            inputThread.start();
         }
     }
 
@@ -158,7 +130,7 @@ public class CLI extends ClientView{
             playerNumber = numberInput(1, 4,  "How many players are going to play? 1 to 4 ");
             ClientSocket.sendMessage( new Message_One_Parameter_Int(MessageType.NUM_PLAYERS,position,playerNumber));
         } catch (ExecutionException | IOException e) {
-            System.out.println("error");
+            System.err.println("error");
         }
     }
 
@@ -653,10 +625,26 @@ public class CLI extends ClientView{
         ClientSocket.sendMessage(returnMessage);
     }
 
-    public String readLine() throws ExecutionException {
+    private int numberInput(int minValue, int maxValue, String question) throws ExecutionException {
+        int number = minValue - 1;
+        do {
+            try {
+                System.out.println(question);
+                number = Integer.parseInt(readLine());
+                if (number < minValue || number > maxValue) {
+                    System.err.println("Invalid number! Please try again.\n");
+                }
+            } catch (NumberFormatException e) {
+                System.err.println("Invalid input! Please try again.\n");
+            }
+        } while (number < minValue || number > maxValue);
+        return number;
+    }
+
+    private String readLine() throws ExecutionException {
         FutureTask<String> futureTask = new FutureTask<>(new ReadInput());
-        Thread thread = new Thread(futureTask);
-        thread.start();
+        inputThread = new Thread(futureTask);
+        inputThread.start();
         String input = null;
         try {
             input = futureTask.get();
@@ -665,22 +653,6 @@ public class CLI extends ClientView{
             Thread.currentThread().interrupt();
         }
         return input;
-    }
-
-    private int numberInput(int minValue, int maxValue, String question) throws ExecutionException {
-        int number = minValue - 1;
-        do {
-            try {
-                System.out.println(question);
-                number = Integer.parseInt(readLine());
-                if (number < minValue || number > maxValue) {
-                    System.out.println("Invalid number! Please try again.\n");
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input! Please try again.\n");
-            }
-        } while (number < minValue || number > maxValue);
-        return number;
     }
 
     @Override
@@ -917,17 +889,18 @@ public class CLI extends ClientView{
         }
         printMarbles(marbles);
         while (true) {
+            String choice = null;
             try {
-                String choice = readLine();
-                choice = choice.toUpperCase();
-                chosenMarble = correct_marble(choice, marbles);
-                if (chosenMarble != null)
-                    break;
-                else
-                    System.err.println("Chose a right marble");
+                choice = readLine();
             } catch (ExecutionException e) {
-                System.out.println("error");
+                e.printStackTrace();
             }
+            choice = choice.toUpperCase();
+            chosenMarble = correct_marble(choice, marbles);
+            if (chosenMarble != null)
+                break;
+            else
+                System.err.println("Chose a right marble");
         }
         if (marbles.size() == 0)
             currentState = GAME_STATES.END_TURN_STATE;
@@ -1047,15 +1020,15 @@ public class CLI extends ClientView{
     private void already_taken_nickName_error() throws IOException {
         System.out.println("Nickname already taken. Chose a different one");
         String userInput = null;
-        try {
-            while (true) {
+        while (true) {
+            try {
                 userInput = readLine();
-                if (userInput == null) {
-                    System.err.println("Insert a valid nickname");
-                } else break;
+            } catch (ExecutionException e) {
+                e.printStackTrace();
             }
-        } catch (ExecutionException e) {
-            System.out.println("error");
+            if (userInput == null || userInput.isBlank()) {
+                System.err.println("Insert a valid nickname");
+            } else break;
         }
         Message message = new Message_One_Parameter_String(MessageType.LOGIN, position, userInput);
         ClientSocket.sendMessage(message);
