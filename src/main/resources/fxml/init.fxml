@@ -19,7 +19,7 @@
             <Button layoutX="450.0" layoutY="267.0" mnemonicParsing="false" text="Choose Leader" />
             <ImageView fitHeight="200.0" fitWidth="132.0" layoutY="56.0">
                <image>
-                  <Image url="@photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-64-1.png" />
+                  <Image url="@../photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-64-1.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="200.0" fitWidth="132.0" layoutX="140.0" layoutY="56.0">
@@ -27,12 +27,12 @@
             </ImageView>
             <ImageView fitHeight="200.0" fitWidth="132.0" layoutX="285.0" layoutY="56.0">
                <image>
-                  <Image url="@photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-64-1.png" />
+                  <Image url="@../photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-64-1.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="200.0" fitWidth="132.0" layoutX="431.0" layoutY="56.0">
                <image>
-                  <Image url="@photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-64-1.png" />
+                  <Image url="@../photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-64-1.png" />
                </image>
             </ImageView>
             <Label layoutX="133.0" prefHeight="36.0" prefWidth="370.0" text="CHOOSE 2 LEADER CARDS">
@@ -42,22 +42,22 @@
             </Label>
             <ImageView fitHeight="65.0" fitWidth="76.0" layoutY="305.0">
                <image>
-                  <Image url="@photos/stone.png" />
+                  <Image url="@../photos/stone.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="76.0" fitWidth="84.0" layoutX="-4.0" layoutY="381.0">
                <image>
-                  <Image url="@photos/coin.png" />
+                  <Image url="@../photos/coin.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="65.0" fitWidth="84.0" layoutX="201.0" layoutY="305.0">
                <image>
-                  <Image url="@photos/servant.png" />
+                  <Image url="@../photos/servant.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="76.0" fitWidth="84.0" layoutX="201.0" layoutY="381.0">
                <image>
-                  <Image url="@photos/shield.png" />
+                  <Image url="@../photos/shield.png" />
                </image>
             </ImageView>
             <Button layoutX="85.0" layoutY="325.0" mnemonicParsing="false" text="Choose Resource" />
@@ -68,7 +68,7 @@
             <Button layoutX="477.0" layoutY="313.0" mnemonicParsing="false" text="Button" />
             <ImageView fitHeight="200.0" fitWidth="132.0" layoutX="140.0" layoutY="56.0">
                <image>
-                  <Image url="@photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-64-1.png" />
+                  <Image url="@../photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-64-1.png" />
                </image>
             </ImageView>
          </children>

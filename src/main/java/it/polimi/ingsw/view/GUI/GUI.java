@@ -23,7 +23,7 @@ public class GUI extends Application implements Observer {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("/secondary"), 640, 480);
+        scene = new Scene(loadFXML("/fxml/yourTurn"), 640, 480);
         stage.setScene(scene);
         stage.show();
     }
