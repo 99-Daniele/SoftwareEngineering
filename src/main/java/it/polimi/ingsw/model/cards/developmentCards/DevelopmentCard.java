@@ -132,7 +132,7 @@ public class DevelopmentCard extends Card {
 
     @Override
     public void print() {
-        System.out.println("\nDEVELOPMENT_CARD:\nCOLOR: " + color + "\nLEVEL: " + level +
+        System.out.println("\nDEVELOPMENT_CARD:\nCOLOR: " + Color.print(color) + "\nLEVEL: " + level +
                 "\nRESOURCE_COST: " + resourceCost.toString() + "\nPRODUCTION_POWER_RESOURCE_REQUIRED: " +
                 productionPowerResourceRequired.toString() + "\nPRODUCTION_POWER_RESOURCE_GIVEN: " +
                 productionPowerResourceGiven.toString() + "\nFAITH_POINTS_GIVEN: " + faithPointsGiven);

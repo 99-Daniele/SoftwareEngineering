@@ -364,15 +364,15 @@ public class Game extends Observable implements LightGame{
         if(faithTrack.reachPope(players.get(currentPlayer).getFaithPoints())){
             for(int i = 0; i < players.size(); i++){
                 faithTrack.victoryPointsVaticanReport(players.get(i).getVictoryPoints(), players.get(i).getFaithPoints());
-                faithTrackNotify(i);
+                faithTrackNotify(i, currentPlayer);
             }
             faithTrack.DecreaseRemainingPope();
         }
     }
 
-    public void faithTrackNotify(int i){
+    public void faithTrackNotify(int i, int notifyPlayer){
         int victoryPoints = players.get(i).getVictoryPoints().getVictoryPointsByVaticanReport();
-        Message m = new Message_Two_Parameter_Int(MessageType.VATICAN_REPORT, i, currentPlayer, victoryPoints);
+        Message m = new Message_Two_Parameter_Int(MessageType.VATICAN_REPORT, i, notifyPlayer, victoryPoints);
         setChanged();
         notifyObservers(m);
     }
@@ -436,16 +436,16 @@ public class Game extends Observable implements LightGame{
      */
     @Override
     public void faithTrackMovementAllPlayers(){
-        int flag=0;
-        for(PlayerBoard player: players) {
-            faithTrack.victoryPointsFaithTrack(player.getVictoryPoints(), player.getFaithPoints());
-            if (faithTrack.reachPope(player.getFaithPoints()))
-                flag=1;
+        int flag = -1;
+        for(int i = 0; i < players.size(); i++) {
+            faithTrack.victoryPointsFaithTrack(players.get(i).getVictoryPoints(), players.get(i).getFaithPoints());
+            if (faithTrack.reachPope(players.get(i).getFaithPoints()))
+                flag = i;
         }
-        if (flag==1) {
+        if (flag != -1) {
             for(int i = 0; i < players.size(); i++){
                 faithTrack.victoryPointsVaticanReport(players.get(i).getVictoryPoints(), players.get(i).getFaithPoints());
-                faithTrackNotify(i);
+                faithTrackNotify(i, flag);
             }
             faithTrack.DecreaseRemainingPope();
         }

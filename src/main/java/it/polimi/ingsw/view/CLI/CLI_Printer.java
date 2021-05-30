@@ -49,7 +49,7 @@ public class CLI_Printer {
     }
 
     public static void printFaithTrack(Game_View game){
-        game.getFaithTrack().printCli(game.getNickNames());
+        game.getFaithTrack().printCli();
     }
 
     public static void printCard(int cardID){

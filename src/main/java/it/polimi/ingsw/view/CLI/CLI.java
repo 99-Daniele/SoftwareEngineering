@@ -153,7 +153,6 @@ public class CLI extends ClientView{
 
     @Override
     public void start_game_message() throws IOException {
-        super.start_game_message();
         System.out.println("All players have made their choices. Game started");
         ClientSocket.sendMessage(new Message(MessageType.TURN, position));
     }
@@ -459,7 +458,6 @@ public class CLI extends ClientView{
             System.out.println("error");
         }
         turn = false;
-        startSpyAction();
     }
 
     private int chose_leader_card() {
@@ -512,13 +510,16 @@ public class CLI extends ClientView{
             }
             break;
         }
+        super.startGame();
     }
 
     private Resource chose_resource() {
         Resource chosenResource = null;
         int x;
         try {
-            x=numberInput(1,4,"\n1 - COIN\n2 - SHIELD\n3 - STONE\n4 - SERVANT");
+            x=numberInput(1,4,"\n1 - " + Resource.printResource(Resource.COIN) +
+                    "\n2 - " + Resource.printResource(Resource.SHIELD) + "\n3 - " + Resource.printResource(Resource.STONE) +
+                    "\n4 - " + Resource.printResource(Resource.SERVANT));
             switch (x) {
                 case 1:
                     chosenResource = Resource.COIN;
@@ -666,7 +667,6 @@ public class CLI extends ClientView{
         else {
             System.out.println("Wait for other players to finish their turns...");
             turn = false;
-            startSpyAction();
         }
     }
 
@@ -675,30 +675,27 @@ public class CLI extends ClientView{
         TimeUnit.SECONDS.sleep(1);
         if (message.getClientID() != position) {
             turn = true;
-            inputThread.interrupt();
-            System.out.println("Player " + super.getNickname(message.getClientID()) + " has finished his turn.\nThis are its resources:");
+            System.out.println("Player " + super.getNickname(message.getClientID()) + " has finished his turn.");
         }
         if (position == 0) {
             if (message.getClientID() == super.getNumOfPlayers() - 1) {
                 turn = true;
-                inputThread.interrupt();
                 chose_action(first_input());
             }
         } else if (message.getClientID() == position - 1) {
             turn = true;
-            inputThread.interrupt();
             chose_action(first_input());
         }
         else {
             turn = false;
-            startSpyAction();
         }
     }
 
     @Override
     public void buy_card_message(Message message) {
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
-        System.out.println("Player " + super.getNickname(m.getClientID()) + " bought a new card and inserted it in " +
+        if(m.getClientID() != position)
+            System.out.println("Player " + super.getNickname(m.getClientID()) + " bought a new card and inserted it in " +
                 "the " + m.getPar2() + "° slot.");
         super.buy_card_message(message);
     }
@@ -709,7 +706,7 @@ public class CLI extends ClientView{
         if(super.getNumOfPlayers() == 1 && m.getClientID() == 1)
             System.out.println("Ludovico has removed one deck card from row " + (m.getPar1() +1 + " and" +
                     " column " + (m.getPar2() +1)));
-        else
+        else if(m.getClientID() != position)
             System.out.println("Deck card from row " + (m.getPar1()+1) + " and column "
                     + (m.getPar2() +1) + " has been removed");
         super.card_remove_message(message);
@@ -749,11 +746,11 @@ public class CLI extends ClientView{
         Message_One_Int_One_Resource m = (Message_One_Int_One_Resource) message;
         if(m.getPar1() != -1) {
             if(m.getClientID() != position)
-                System.out.println("Player " + super.getNickname(m.getClientID()) + " has inserted 1 " + m.getResource()
+                System.out.println("Player " + super.getNickname(m.getClientID()) + " has inserted 1 " + Resource.printResource(m.getResource())
                     + " in its " + m.getPar1() + "° depot");
         }
         else if(m.getClientID() != position)
-            System.out.println("Player " + super.getNickname(m.getClientID()) + " has discarded 1 " + m.getResource()
+            System.out.println("Player " + super.getNickname(m.getClientID()) + " has discarded 1 " + Resource.printResource(m.getResource())
                     + " marble");
         super.increase_warehouse_message(message);
     }
@@ -773,9 +770,10 @@ public class CLI extends ClientView{
         if(super.getNumOfPlayers() == 1 && m.getPar1() == 1)
             System.out.println("Ludovico activated Vatican Report." +
                     " Now you have " + m.getPar2() + " victory points from Vatican Report");
-        else
-            System.out.println("Player " + super.getNickname(m.getClientID()) + " activated Vatican Report." +
+        else if(m.getClientID() == position)
+            System.out.println("Player " + super.getNickname(m.getPar1()) + " activated Vatican Report." +
                     " Now you have " + m.getPar2() + " victory points from Vatican Report");
+        super.vatican_report_message(message);
     }
 
     @Override
@@ -783,6 +781,7 @@ public class CLI extends ClientView{
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
         if(m.getClientID() != position) {
             System.out.println("Player " + super.getNickname(m.getClientID()) + " has activated one leader card: ");
+            CLI_Printer.printCard(m.getPar());
             super.leader_card_activation_message(message);
         }
     }

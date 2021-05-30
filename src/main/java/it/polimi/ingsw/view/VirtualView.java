@@ -264,10 +264,6 @@ public class VirtualView extends Observable implements View, Observer{
         Message message = (Message) arg;
         if(message.getMessageType() == MessageType.END_GAME)
             endGame(message);
-        else if(message.getMessageType() == MessageType.VATICAN_REPORT) {
-            if (message.getClientID() == viewID)
-                sendMessage(message);
-        }
         else
             sendMessage(message);
         waitAMoment();

@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.market;
 
 import it.polimi.ingsw.model.games.LightGame;
 import it.polimi.ingsw.model.resourceContainers.Resource;
+import it.polimi.ingsw.view.ColorAnsi;
 
 /**
  * ResourceMarble is the Marble which increase player's warehouse by 1 resource.
@@ -37,24 +38,22 @@ public class ResourceMarble extends Marble {
                 return "B";
             case SERVANT:
                 return "P";
-            default:
-                return "";
         }
+        return null;
     }
 
     @Override
     public String colorString() {
         switch (resource){
             case COIN:
-                return "YELLOW";
+                return ColorAnsi.ANSI_YELLOW.escape() + "YELLOW" + ColorAnsi.RESET;
             case STONE:
-                return "GREY";
+                return ColorAnsi.ANSI_WHITE.escape() + "GREY" + ColorAnsi.RESET;
             case SHIELD:
-                return "BLUE";
+                return ColorAnsi.ANSI_CYAN.escape() + "BLUE" + ColorAnsi.RESET;
             case SERVANT:
-                return "PURPLE";
-            default:
-                return "";
+                return ColorAnsi.ANSI_PURPLE.escape() + "PURPLE" + ColorAnsi.RESET;
         }
+        return null;
     }
 }

@@ -112,6 +112,8 @@ public class GameManager {
             throw new IllegalStateException();
         if (!InputController.buy_card_check(row, column, choice))
             throw new WrongParametersException();
+        row--;
+        column--;
         ArrayList<Integer> availableSlots = game.findAvailableSlots(row, column);
         if (availableSlots.isEmpty()) {
             throw new ImpossibleDevelopmentCardAdditionException();

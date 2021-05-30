@@ -54,6 +54,11 @@ public class GUI extends ClientView {
     }
 
     @Override
+    public void start_game_message() throws IOException {
+
+    }
+
+    @Override
     public void leader_card_choice(Message message) throws IOException, InterruptedException {
 
     }

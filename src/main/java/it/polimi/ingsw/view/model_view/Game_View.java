@@ -88,13 +88,17 @@ public class Game_View {
 
     public void initFaithTrack(){
         if(players.size() > 1)
-            faithTrack = new FaithTrack_View(players.size());
+            faithTrack = new FaithTrack_View(players.size(), getNickNames());
         else
-            faithTrack = new FaithTrack_View(2);
+            faithTrack = new FaithTrack_View(2, getNickNames());
     }
 
     public void increaseFaithPoints(int viewID, int faithPoints){
         faithTrack.increaseFaithPoints(viewID, faithPoints);
+    }
+
+    public void increaseVictoryPoints(int viewID, int victoryPoints){
+        faithTrack.increaseVictoryPoints(viewID, victoryPoints);
     }
 
     public void setChosenMarbles(ArrayList<Marble> marbles){
@@ -158,14 +162,10 @@ public class Game_View {
     }
 
     public void addDevelopmentCard(int viewID, int cardID, int slot){
-        players.get(viewID).addDevelopmentCard(cardID, slot-1);
+        players.get(viewID).addDevelopmentCard(cardID, slot);
     }
 
     public void discardLeaderCard(int viewID, int chosenLeaderCard){
         players.get(viewID).discardLeaderCard(chosenLeaderCard);
-    }
-
-    public void setVictoryPoints(int viewID, int victoryPoints){
-        players.get(viewID).setVictoryPoints(victoryPoints);
     }
 }

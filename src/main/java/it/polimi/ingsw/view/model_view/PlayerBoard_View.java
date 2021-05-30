@@ -11,7 +11,6 @@ public class PlayerBoard_View {
     private final String nickName;
     private Warehouse_Strongbox_View warehouse_strongbox;
     private Cards_Slots_View cards_slots;
-    private int victoryPoints;
 
     public PlayerBoard_View(String nickName) {
         this.nickName = nickName;
@@ -71,10 +70,6 @@ public class PlayerBoard_View {
         cards_slots.discardLeaderCard(chosenLeaderCard);
     }
 
-    public void setVictoryPoints(int victoryPoints){
-        this.victoryPoints = victoryPoints;
-    }
-
     public void printSlots(){
         cards_slots.printCliSlot();
     }
@@ -83,14 +78,9 @@ public class PlayerBoard_View {
         cards_slots.printCliLeaderCard();
     }
 
-    public void printVictoryPointsPope(){
-        System.out.println("i punti vittoria legati legati alle sezioni papali sono: " + victoryPoints);
-    }
-
     public void printCliAllPlayerBoard(){
         System.out.println(nickName);
         warehouse_strongbox.printCliWarehouse();
-        warehouse_strongbox.printCliExtraDepot();
         warehouse_strongbox.printCliStrongbox();
         printSlots();
         printLeaderCards();

@@ -71,24 +71,23 @@ public class Cards_Slots_View {
         System.out.println("\nDEVELOPMENT_CARDS:");
         System.out.println("First slot:");
         if (firstSlot.size()>0) {
-            CardMapCLI.getCard(firstSlot.getLast()).print();
-            for(int i = firstSlot.size() - 1; i > 0; i--) {
-                CardMapCLI.getCard(firstSlot.get(i)).printSmallInfo();
-            }
+            printSlot(firstSlot);
         }
         System.out.println("Second slot:");
         if (secondSlot.size()>0) {
-            CardMapCLI.getCard(secondSlot.getLast()).print();
-            for(int i = secondSlot.size() - 1; i > 0; i--) {
-                CardMapCLI.getCard(secondSlot.get(i)).printSmallInfo();
-            }
+            printSlot(secondSlot);
         }
         System.out.println("Third slot:");
         if (thirdSlot.size()>0) {
-            CardMapCLI.getCard(thirdSlot.getLast()).print();
-            for(int i = thirdSlot.size() - 1; i > 0; i--) {
-                CardMapCLI.getCard(thirdSlot.get(i)).printSmallInfo();
-            }
+            printSlot(thirdSlot);
+        }
+    }
+
+    private void printSlot(LinkedList <Integer> slot){
+        CardMapCLI.getCard(slot.getLast()).print();
+        for(int i = slot.size() - 1; i > 0; i--) {
+            System.out.println("CARD " + i + ": ");
+            CardMapCLI.getCard(slot.get(i)).printSmallInfo();
         }
     }
 

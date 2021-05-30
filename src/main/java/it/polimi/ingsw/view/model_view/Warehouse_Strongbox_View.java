@@ -101,7 +101,7 @@ public class Warehouse_Strongbox_View {
     }
 
     private boolean existExtraDepot1(){
-        return depots.size() == 4;
+        return depots.size() >= 4;
     }
 
     private boolean existExtraDepot2(){
@@ -114,7 +114,7 @@ public class Warehouse_Strongbox_View {
     }
 
     public void printCliWarehouse(){
-        System.out.println("WAREHOUSE");
+        System.out.println("WAREHOUSE:");
         for (int i=0;i<3;i++) {
             System.out.print(i+1+" ");
             depots.get(i).printCliWarehouse();
@@ -124,7 +124,7 @@ public class Warehouse_Strongbox_View {
     }
 
     public void printCliStrongbox(){
-        System.out.println("STRONGBOX");
+        System.out.println("STRONGBOX:");
         coin.printCliStrongbox();
         shield.printCliStrongbox();
         servant.printCliStrongbox();
@@ -133,13 +133,12 @@ public class Warehouse_Strongbox_View {
 
     public void printCliExtraDepot(){
         if (existExtraDepot1()) {
-            System.out.println("EXTRA DEPOTS");
-            System.out.print("1 ");
+            System.out.println("EXTRA DEPOTS:");
+            System.out.print("4 ");
             depots.get(3).printCliWarehouse();
             System.out.println();
-            if (existExtraDepot2())
-            {
-                System.out.print("2 ");
+            if (existExtraDepot2()) {
+                System.out.print("5 ");
                 depots.get(4).printCliWarehouse();
                 System.out.println();
             }

@@ -156,7 +156,9 @@ public abstract class ClientView extends Application implements Observer {
         game.setPlayers(m.getNickNames());
     }
 
-    public void start_game_message() throws IOException{
+    public abstract void start_game_message() throws IOException;
+
+    public void startGame(){
         game.startGame();
     }
 
@@ -249,7 +251,10 @@ public abstract class ClientView extends Application implements Observer {
         game.switchDepot(m.getClientID(), m.getPar1(), m.getPar2());
     }
 
-    public abstract void vatican_report_message(Message message);
+    public void vatican_report_message(Message message){
+        Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        game.increaseVictoryPoints(m.getClientID(), m.getPar2());
+    }
 
     public void leader_card_activation_message(Message message){
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;

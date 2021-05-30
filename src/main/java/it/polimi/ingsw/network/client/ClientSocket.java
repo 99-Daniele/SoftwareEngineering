@@ -103,7 +103,7 @@ public class ClientSocket extends Observable{
                     thread.start();
                 }
             } catch (ClassNotFoundException | ClassCastException e) {
-                System.err.println("\nRicevuto messaggio inaspettato dal Server.");
+                System.err.println("\nUnexpected message from Server.");
             }
         }
     }

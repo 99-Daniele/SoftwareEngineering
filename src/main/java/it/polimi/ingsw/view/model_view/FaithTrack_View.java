@@ -6,120 +6,142 @@ import java.util.ArrayList;
 
 public class FaithTrack_View {
 
-    private final int[] sections;
-    private final int[][] vaticanSections;
-    private final int[] popeSpaces;
-    private ArrayList<Integer> playersFaithPoints;
+    private ArrayList<String[][]> faithTracks;
 
-    public FaithTrack_View(int numPlayers) {
-        sections = new int[]{3, 6, 9, 12, 15, 18, 21, 24};
-        vaticanSections = new int[][]{{5, 8}, {12, 16}, {19, 24}};
-        popeSpaces = new int[]{8, 16, 24};
-        playersFaithPoints = new ArrayList<>();
-        for (int i = 0; i < numPlayers; i++)
-            playersFaithPoints.add(0);
-    }
-
-    public void increaseFaithPoints(int viewID, int faithPoints){
-        playersFaithPoints.set(viewID, faithPoints);
-    }
-
-    public void print(){};
-
-    public void printCli(ArrayList<String> nickNames){
-        int count=1;
-        String s= "";
-        System.out.println("\nFAITH TRACK:");
-        for (Integer i : playersFaithPoints) {
-            int val=i.intValue();
-            switch (count){
-                case 1:
-                    s= ColorAnsi.ANSI_CYAN.escape();
-                    break;
-                case 2:
-                    s= ColorAnsi.ANSI_GREEN.escape();
-                    break;
-                case 3:
-                    s= ColorAnsi.ANSI_PURPLE.escape();
-                    break;
-                case 4:
-                    s= ColorAnsi.ANSI_YELLOW.escape();
-                    break;
-            }
-            representationFaithTrack(val,s, nickNames.get(count-1));
-            count++;
+    public FaithTrack_View(int numPlayers, ArrayList<String> nickNames) {
+        faithTracks = new ArrayList<>();
+        for (int i = 0; i < numPlayers; i++) {
+            faithTracks.add(new String[5][52]);
+            createFaithTracks(i, nickNames.get(i));
         }
     }
 
-    private void representationFaithTrack(int val, String color, String nickName){
-        String tabella[][]=new String[4][52];
+    private void createFaithTracks(int player, String nickName){
+        String[][] faithTrack = faithTracks.get(player);
         for(int y=0;y<51;y+=2) {
             if ((y>=10 && y<=14) || (y>=24 && y<=30 ) || (y>=38 && y<=46))
-                tabella[2][y]=ColorAnsi.ANSI_RED.escape()+"║"+ColorAnsi.RESET;
+                faithTrack[2][y]=ColorAnsi.ANSI_RED.escape()+"║"+ColorAnsi.RESET;
             else if((y>=16 && y<=18) || (y>=32 && y<=34 ) || (y>=48 && y<=50))
-                tabella[2][y]=ColorAnsi.ANSI_YELLOW.escape()+"║"+ColorAnsi.RESET;
+                faithTrack[2][y]=ColorAnsi.ANSI_YELLOW.escape()+"║"+ColorAnsi.RESET;
             else
-                tabella[2][y]="║";
+                faithTrack[2][y]="║";
         }
         for (int x=1;x<5;x+=2) {
             for (int y = 1; y < 50; y+=2) {
                 if ((y >= 10 && y < 16) || (y >= 24 && y < 32) || (y >= 38 && y < 48))
-                    tabella[x][y] = ColorAnsi.ANSI_RED.escape() + "═" + ColorAnsi.RESET;
+                    faithTrack[x][y] = ColorAnsi.ANSI_RED.escape() + "═" + ColorAnsi.RESET;
                 else if((y >= 16 && y <= 18) || (y >= 32 && y <= 34) || y>= 48)
-                    tabella[x][y] = ColorAnsi.ANSI_YELLOW.escape() + "═" + ColorAnsi.RESET;
+                    faithTrack[x][y] = ColorAnsi.ANSI_YELLOW.escape() + "═" + ColorAnsi.RESET;
                 else
-                    tabella[x][y] = "═";
+                    faithTrack[x][y] = "═";
             }
         }
         for(int y = 2; y  < 49; y +=2){
             if ((y >= 10 && y < 16) || (y >= 24 && y < 32) || (y >= 38 && y < 48))
-                tabella[1][y] = ColorAnsi.ANSI_RED.escape() + "╦" + ColorAnsi.RESET;
+                faithTrack[1][y] = ColorAnsi.ANSI_RED.escape() + "╦" + ColorAnsi.RESET;
             else if((y >= 16 && y <= 18) || (y >= 32 && y <= 34) || y>= 48)
-                tabella[1][y] = ColorAnsi.ANSI_YELLOW.escape() + "╦" + ColorAnsi.RESET;
+                faithTrack[1][y] = ColorAnsi.ANSI_YELLOW.escape() + "╦" + ColorAnsi.RESET;
             else
-                tabella[1][y] = "╦";
+                faithTrack[1][y] = "╦";
         }
         for(int y = 2; y  < 49; y +=2){
             if ((y >= 10 && y < 16) || (y >= 24 && y < 32) || (y >= 38 && y < 48))
-                tabella[3][y] = ColorAnsi.ANSI_RED.escape() + "╩" + ColorAnsi.RESET;
+                faithTrack[3][y] = ColorAnsi.ANSI_RED.escape() + "╩" + ColorAnsi.RESET;
             else if((y >= 16 && y <= 18) || (y >= 32 && y <= 34) || y>= 48)
-                tabella[3][y] = ColorAnsi.ANSI_YELLOW.escape() + "╩" + ColorAnsi.RESET;
+                faithTrack[3][y] = ColorAnsi.ANSI_YELLOW.escape() + "╩" + ColorAnsi.RESET;
             else
-                tabella[3][y] = "╩";
+                faithTrack[3][y] = "╩";
         }
-        tabella[1][0]="╔";
-        tabella[3][0]="╚";
-        tabella[1][50]=ColorAnsi.ANSI_YELLOW.escape()+"╗"+ColorAnsi.RESET;
-        tabella[3][50]=ColorAnsi.ANSI_YELLOW.escape()+"╝"+ColorAnsi.RESET;
+        faithTrack[1][0]="╔";
+        faithTrack[3][0]="╚";
+        faithTrack[1][50]=ColorAnsi.ANSI_YELLOW.escape()+"╗"+ColorAnsi.RESET;
+        faithTrack[3][50]=ColorAnsi.ANSI_YELLOW.escape()+"╝"+ColorAnsi.RESET;
         for (int y=0;y<51;y++) {
             if(y!=7&&y!=13&&y!=19&&y!=25&&y!=31&&y!=36&&y!=37&&y!=42&&y!=43&&y!=48&&y!=49)
-                tabella[0][y]=" ";
+                faithTrack[0][y]=" ";
         }
-        tabella[0][7]="1";
-        tabella[0][13]="2";
-        tabella[0][19]="4";
-        tabella[0][25]="6";
-        tabella[0][31]="9";
-        tabella[0][36]="1";
-        tabella[0][37]="2";
-        tabella[0][42]="1";
-        tabella[0][43]="6";
-        tabella[0][48]="2";
-        tabella[0][49]="0";
-        tabella[2][51] = nickName;
-        int i=0;
         for (int y=1;y<51;y+=2) {
-            if(i==val)
-                tabella[2][y]=color+"●"+ColorAnsi.RESET;
-            else
-                tabella[2][y]=" ";
-            i++;
+            faithTrack[2][y] = " ";
+            faithTrack[4][y] = " ";
+            faithTrack[4][y + 1] = " ";
         }
-        for (int x=0;x<4;x++) {
-            for (int y = 0; y < 51; y++)
-                System.out.print(tabella[x][y]);
+        faithTrack[0][7]=ColorAnsi.ANSI_CYAN.escape() + "1" + ColorAnsi.RESET;
+        faithTrack[0][13]=ColorAnsi.ANSI_CYAN.escape() + "2" + ColorAnsi.RESET;
+        faithTrack[0][19]=ColorAnsi.ANSI_CYAN.escape() + "4" + ColorAnsi.RESET;
+        faithTrack[0][25]=ColorAnsi.ANSI_CYAN.escape() + "6" + ColorAnsi.RESET;
+        faithTrack[0][31]=ColorAnsi.ANSI_CYAN.escape() + "9" + ColorAnsi.RESET;
+        faithTrack[0][36]=ColorAnsi.ANSI_CYAN.escape() + "1" + ColorAnsi.RESET;
+        faithTrack[0][37]=ColorAnsi.ANSI_CYAN.escape() + "2" + ColorAnsi.RESET;
+        faithTrack[0][42]=ColorAnsi.ANSI_CYAN.escape() + "1" + ColorAnsi.RESET;
+        faithTrack[0][43]=ColorAnsi.ANSI_CYAN.escape() + "6" + ColorAnsi.RESET;
+        faithTrack[0][48]=ColorAnsi.ANSI_CYAN.escape() + "2" + ColorAnsi.RESET;
+        faithTrack[0][49]=ColorAnsi.ANSI_CYAN.escape() + "0" + ColorAnsi.RESET;
+        faithTrack[2][1] = playerColor(player) + "●"+ColorAnsi.RESET;
+        faithTrack[2][51] = nickName;
+        faithTrack[4][0] = " ";
+    }
+
+    private String playerColor(int player){
+        switch (player){
+            case 0:
+                return ColorAnsi.ANSI_CYAN.escape();
+            case 1:
+                return ColorAnsi.ANSI_GREEN.escape();
+            case 2:
+                return ColorAnsi.ANSI_RED.escape();
+            case 3:
+                return ColorAnsi.ANSI_YELLOW.escape();
+        }
+        return null;
+    }
+
+    public void increaseFaithPoints(int player, int newFaithPoints){
+        String[][] faithTrack = faithTracks.get(player);
+        for (int y=1;y<51;y+=2) {
+            faithTrack[2][y] = " ";
+        }
+        faithTrack[2][newFaithPoints*2 + 1] = playerColor(player) + "●" + ColorAnsi.RESET;
+    }
+
+    public void increaseVictoryPoints(int player, int victoryPoints){
+        String[][] faithTrack = faithTracks.get(player);
+        if(!faithTrack[4][33].equals(" ")){
+            int newPoints = victoryPoints - Integer.parseInt(faithTrack[4][33]) - Integer.parseInt(faithTrack[4][17]);
+            faithTrack[4][49] = "" + newPoints;
+        }
+        else if(!faithTrack[4][17].equals(" ")){
+            int newPoints = victoryPoints - Integer.parseInt(faithTrack[4][17]);
+            faithTrack[4][33] = "" + newPoints;
+        }
+        else {
+            faithTrack[4][17] = "" + victoryPoints;
+        }
+    }
+
+    public void printCli(){
+        System.out.println("\nFAITH TRACK:\n");
+        for(int i = 0; i < faithTracks.size(); i++)
+            printFaithTrack(i);
+    }
+
+    private void printFaithTrack(int player){
+        String[][] faithTrack = faithTracks.get(player);
+        for (int x=0;x<5;x++) {
+            for (int y = 0; y < 51; y++) {
+                if(x == 4 && y == 17){
+                    System.out.println(ColorAnsi.ANSI_YELLOW.escape() + faithTrack[x][y] + ColorAnsi.RESET);
+                }
+                else if(x == 4 && y == 33){
+                    System.out.println(ColorAnsi.ANSI_YELLOW.escape() + faithTrack[x][y] + ColorAnsi.RESET);
+                }
+                else if(x == 4 && y == 49){
+                    System.out.println(ColorAnsi.ANSI_YELLOW.escape() + faithTrack[x][y] + ColorAnsi.RESET);
+                }
+                else
+                    System.out.print(faithTrack[x][y]);
+            }
             if(x == 2)
-                System.out.println("    " + tabella[x][51]);
+                System.out.println("    " + faithTrack[x][51]);
             else
                 System.out.println();
         }

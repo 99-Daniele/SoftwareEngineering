@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 public class Strongbox {
 
-    private final ArrayList<ResourceContainer> resourceContainers = new java.util.ArrayList<>();
+    private final ArrayList<ResourceContainer> resourceContainers = new ArrayList<>();
 
     /**
      * @param resource stands for the type of resource to count.

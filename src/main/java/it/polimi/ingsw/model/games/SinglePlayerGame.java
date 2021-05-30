@@ -123,7 +123,7 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame {
         if (getFaithTrack().reachPope(LorenzoIlMagnifico.getFaithPoints())) {
             getFaithTrack().victoryPointsVaticanReport(getPlayer(0).getVictoryPoints(),getPlayer(0).getFaithPoints());
             getFaithTrack().DecreaseRemainingPope();
-            super.faithTrackNotify(0);
+            super.faithTrackNotify(0, 1);
         }
     }
 
