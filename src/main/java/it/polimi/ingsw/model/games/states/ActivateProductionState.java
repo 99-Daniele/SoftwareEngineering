@@ -11,6 +11,9 @@ import java.util.ArrayList;
 public class ActivateProductionState implements GameState {
 
     private Strongbox s;
+    private final ArrayList<Integer> chosenSlots = new ArrayList<>();
+    private boolean basicPower = false;
+    private final ArrayList<Integer> chosenLeaderCards = new ArrayList<>();
 
     @Override
     public void nextState(GameManager gameManager, MessageType wantedMessage) {
@@ -36,6 +39,36 @@ public class ActivateProductionState implements GameState {
     @Override
     public void setStrongbox(Strongbox s) {
         this.s = s;
+    }
+
+    @Override
+    public ArrayList<Integer> getChosenSlots() {
+        return chosenSlots;
+    }
+
+    @Override
+    public void addDevelopmentCardSlot(int slot){
+        this.chosenLeaderCards.add(slot);
+    }
+
+    @Override
+    public boolean isBasicPower() {
+        return basicPower;
+    }
+
+    @Override
+    public void setBasicPower() {
+        this.basicPower = true;
+    }
+
+    @Override
+    public ArrayList<Integer> getChosenLeaderCards() {
+        return chosenLeaderCards;
+    }
+
+    @Override
+    public void addLeaderCard(int chosenLeaderCard) {
+        this.chosenLeaderCards.add(chosenLeaderCard);
     }
 
     @Override

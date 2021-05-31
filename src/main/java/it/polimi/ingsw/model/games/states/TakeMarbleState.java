@@ -43,6 +43,35 @@ public class TakeMarbleState implements GameState {
     }
 
     @Override
+    public ArrayList<Integer> getChosenSlots() {
+        return null;
+    }
+
+    @Override
+    public void addDevelopmentCardSlot(int slot) {
+
+    }
+
+    @Override
+    public boolean isBasicPower() {
+        return false;
+    }
+
+    @Override
+    public void setBasicPower() {
+
+    }
+
+    @Override
+    public ArrayList<Integer> getChosenLeaderCards() {
+        return null;
+    }
+
+    @Override
+    public void addLeaderCard(int chosenLeaderCard) {
+    }
+
+    @Override
     public int getRow() {
         return -1;
     }

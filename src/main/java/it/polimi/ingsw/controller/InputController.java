@@ -99,8 +99,10 @@ public class InputController {
      * @param warehouse is player's choice if gave priority to warehouse.
      * @return if @param chosenSlot is less than 1 or more than 2 and @param warehouse is 0 or 1.
      */
-    public static boolean development_card_power_check(int chosenSlot, int warehouse) {
+    public static boolean development_card_power_check(int chosenSlot, int warehouse, ArrayList<Integer> chosenCards) {
         if (chosenSlot < 1 || chosenSlot > 3)
+            return false;
+        if(chosenCards.contains(chosenSlot))
             return false;
         else return warehouse == 0 || warehouse == 1;
     }
@@ -109,8 +111,8 @@ public class InputController {
      * @param warehouse is player's choice if gave priority to warehouse.
      * @return if @param warehouse is 0 or 1.
      */
-    public static boolean basic_power_check(int warehouse){
-        return warehouse == 0 || warehouse == 1;
+    public static boolean basic_power_check(int warehouse, boolean basicPower){
+        return (warehouse == 0 || warehouse == 1) && !basicPower;
     }
 
     /**
@@ -118,8 +120,10 @@ public class InputController {
      * @param warehouse is player's choice if gave priority to warehouse.
      * @return if @param chosenLeaderCard is 1 or 2 and @param warehouse is 0 or 1.
      */
-    public static boolean leader_card_power_check(int chosenLeaderCard, int warehouse){
+    public static boolean leader_card_power_check(int chosenLeaderCard, int warehouse, ArrayList<Integer> chosenCards){
         if(chosenLeaderCard != 1 && chosenLeaderCard != 2)
+            return false;
+        if(chosenCards.contains(chosenLeaderCard))
             return false;
         return warehouse == 0 || warehouse == 1;
     }

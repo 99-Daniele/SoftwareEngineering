@@ -197,7 +197,7 @@ public class GameManager {
         if (!InputController.white_conversion_card_check(chosenLeaderCard))
             throw new WrongParametersException();
         LeaderCard leaderCard;
-        if (chosenLeaderCard == 0)
+        if (chosenLeaderCard == 1)
             leaderCard = currentState.getLeaderCard1();
         else
             leaderCard = currentState.getLeaderCard2();
@@ -228,11 +228,12 @@ public class GameManager {
             s = currentState.getStrongbox();
         else
             throw new IllegalStateException();
-        if (!InputController.development_card_power_check(chosenSlot, choice))
+        if (!InputController.development_card_power_check(chosenSlot, choice, currentState.getChosenSlots()))
             throw new WrongParametersException();
         game.removeDevelopmentCardProductionResource(chosenSlot, s, choice);
         currentState.nextState(this, MessageType.END_PRODUCTION);
         currentState.setStrongbox(s);
+        currentState.addDevelopmentCardSlot(chosenSlot);
     }
 
     public void basicPowerHandler(Resource r1, Resource r2, Resource r3, int choice)
@@ -244,11 +245,12 @@ public class GameManager {
             s = currentState.getStrongbox();
         else
             throw new IllegalStateException();
-        if (!InputController.basic_power_check(choice))
+        if (!InputController.basic_power_check(choice, currentState.isBasicPower()))
             throw new WrongParametersException();
         game.basicProductionPower(r1, r2, r3, s, choice);
         currentState.nextState(this, MessageType.END_PRODUCTION);
         currentState.setStrongbox(s);
+        currentState.setBasicPower();
     }
 
     public void leaderCardPowerHandler(int chosenLeaderCard, Resource r, int choice)
@@ -260,11 +262,12 @@ public class GameManager {
             s = currentState.getStrongbox();
         else
             throw new IllegalStateException();
-        if (!InputController.leader_card_power_check(chosenLeaderCard, choice))
+        if (!InputController.leader_card_power_check(chosenLeaderCard, choice, currentState.getChosenLeaderCards()))
             throw new WrongParametersException();
-        game.removeAdditionalProductionPowerCardResource(chosenLeaderCard -1, r, s, choice);
+        game.removeAdditionalProductionPowerCardResource(chosenLeaderCard, r, s, choice);
         currentState.nextState(this, MessageType.END_PRODUCTION);
         currentState.setStrongbox(s);
+        currentState.addLeaderCard(chosenLeaderCard);
     }
 
     public void endProductionHandler() throws IllegalStateException {

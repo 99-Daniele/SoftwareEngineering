@@ -141,7 +141,7 @@ public class DevelopmentCard extends Card {
 
     @Override
     public void printSmallInfo() {
-        System.out.println("\nCOLOR: " + color);
+        System.out.println("\nCOLOR: " + Color.print(color));
         super.printSmallInfo();
     }
 }

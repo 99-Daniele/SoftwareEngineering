@@ -218,9 +218,9 @@ public class Game extends Observable implements LightGame{
                 return true;
             case 1:
             case 2:
-                return players.get(player).sumTotalResource() == 1;
+                return players.get(player).sumTotalResource() == 201;
             case 3:
-                return players.get(player).sumTotalResource() == 2;
+                return players.get(player).sumTotalResource() == 202;
         }
         return false;
     }
@@ -589,7 +589,7 @@ public class Game extends Observable implements LightGame{
      */
     public void removeAdditionalProductionPowerCardResource(int chosenAdditionalPowerCard, Resource r, Strongbox s, int choice)
             throws InsufficientResourceException, NoSuchProductionPowerException {
-        players.get(currentPlayer).activateAdditionalProductionPower(chosenAdditionalPowerCard, choice -1);
+        players.get(currentPlayer).activateAdditionalProductionPower(chosenAdditionalPowerCard -1, choice);
         s.increaseResourceType(r, 1);
         faithTrackMovement();
         Message message_one_parameter_int=new Message_One_Parameter_Int(MessageType.FAITH_POINTS_INCREASE,currentPlayer,players.get(currentPlayer).getFaithPoints());

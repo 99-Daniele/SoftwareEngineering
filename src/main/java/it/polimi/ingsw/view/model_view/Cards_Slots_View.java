@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.model_view;
 
 import it.polimi.ingsw.parser.CardMapCLI;
+import it.polimi.ingsw.view.ColorAnsi;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -11,7 +12,9 @@ public class Cards_Slots_View {
     private LinkedList<Integer> secondSlot;
     private LinkedList<Integer> thirdSlot;
     private int firstLeaderCard;
+    private boolean firstActive;
     private int secondLeaderCard;
+    private boolean secondActive;
 
     public Cards_Slots_View(){
         firstSlot = new LinkedList<>();
@@ -23,14 +26,22 @@ public class Cards_Slots_View {
 
     public void setLeaderCards(int firstLeaderCard, int secondLeaderCard){
         this.firstLeaderCard = firstLeaderCard;
+        firstActive = false;
         this.secondLeaderCard = secondLeaderCard;
+        secondActive = false;
     }
 
     public void addLeaderCard(int leaderCard){
-        if(firstLeaderCard == -1)
+        if(firstLeaderCard == -1) {
             firstLeaderCard = leaderCard;
-        else
+            firstActive = true;
+        }
+        else if(secondLeaderCard == -1){
             secondLeaderCard = leaderCard;
+            secondActive = true;
+        }
+        else
+            activateLeaderCard(leaderCard);
     }
 
     public ArrayList<Integer> getDevelopmentCards() {
@@ -60,11 +71,20 @@ public class Cards_Slots_View {
             thirdSlot.add(cardID);
     }
 
+    public void activateLeaderCard(int leaderCard){
+        if(firstLeaderCard == leaderCard)
+            firstActive = true;
+        else
+            secondActive = true;
+    }
+
     public void discardLeaderCard(int chosenLeaderCard){
         if(chosenLeaderCard == 1){
             firstLeaderCard = secondLeaderCard;
+            firstActive = secondActive;
         }
         secondLeaderCard = -1;
+        secondActive = false;
     }
 
     public void printCliSlot(){
@@ -85,17 +105,28 @@ public class Cards_Slots_View {
 
     private void printSlot(LinkedList <Integer> slot){
         CardMapCLI.getCard(slot.getLast()).print();
-        for(int i = slot.size() - 1; i > 0; i--) {
-            System.out.println("CARD " + i + ": ");
+        for(int i = slot.size() - 2; i >= 0; i--) {
+            System.out.println("CARD " + (i+1) + ": ");
             CardMapCLI.getCard(slot.get(i)).printSmallInfo();
         }
     }
 
     public void printCliLeaderCard(){
         System.out.println("\nLEADER_CARDS: ");
-        if(firstLeaderCard != -1)
+        if(firstLeaderCard != -1) {
             CardMapCLI.getCard(firstLeaderCard).print();
-        if (secondLeaderCard != -1)
+            if(firstActive)
+                System.out.println("ACTIVE: " + ColorAnsi.ANSI_GREEN.escape() + "TRUE" + ColorAnsi.RESET);
+            else
+                System.out.println("ACTIVE: " + ColorAnsi.ANSI_RED.escape() + "FALSE" + ColorAnsi.RESET);
+        }
+        if (secondLeaderCard != -1) {
             CardMapCLI.getCard(secondLeaderCard).print();
+            if(secondActive)
+                System.out.println("ACTIVE: " + ColorAnsi.ANSI_GREEN.escape() + "TRUE" + ColorAnsi.RESET);
+            else
+                System.out.println("ACTIVE: " + ColorAnsi.ANSI_RED.escape() + "FALSE" + ColorAnsi.RESET);
+        }
+        System.out.println("\n");
     }
 }

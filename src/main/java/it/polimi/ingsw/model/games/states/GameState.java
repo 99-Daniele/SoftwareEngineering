@@ -20,6 +20,18 @@ public interface GameState {
 
     void setStrongbox(Strongbox s);
 
+    ArrayList<Integer> getChosenSlots();
+
+    void addDevelopmentCardSlot(int slot);
+
+    boolean isBasicPower();
+
+    void setBasicPower();
+
+    ArrayList<Integer> getChosenLeaderCards();
+
+    void addLeaderCard(int chosenLeaderCard);
+
     int getRow();
 
     int getColumn();

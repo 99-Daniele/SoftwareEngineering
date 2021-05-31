@@ -782,8 +782,8 @@ public class CLI extends ClientView{
         if(m.getClientID() != position) {
             System.out.println("Player " + super.getNickname(m.getClientID()) + " has activated one leader card: ");
             CLI_Printer.printCard(m.getPar());
-            super.leader_card_activation_message(message);
         }
+        super.leader_card_activation_message(message);
     }
 
     @Override
@@ -929,12 +929,7 @@ public class CLI extends ClientView{
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
         System.out.println("You have chosen a white marble and you have two possible conversion");
         int choice = chose_leader_card();
-        Message returnMessage;
-        if (choice == 1) {
-            returnMessage = new Message_One_Parameter_Int(MessageType.WHITE_CONVERSION_CARD, position, m.getPar1());
-        } else {
-            returnMessage = new Message_One_Parameter_Int(MessageType.WHITE_CONVERSION_CARD, position, m.getPar2());
-        }
+        Message returnMessage = new Message_One_Parameter_Int(MessageType.WHITE_CONVERSION_CARD, position, choice);
         ClientSocket.sendMessage(returnMessage);
     }
 
@@ -943,6 +938,11 @@ public class CLI extends ClientView{
         Message_One_Parameter_String m = (Message_One_Parameter_String) message;
         if(super.getNumOfPlayers() != 0) {
             System.out.println("Player " + m.getPar() + " disconnected. Game ended.");
+            try {
+                endGameView();
+            } catch (IOException | ExecutionException e) {
+                e.printStackTrace();
+            }
             ClientSocket.setDisconnected();
             ClientSocket.disconnect();
             System.exit(1);
@@ -966,6 +966,11 @@ public class CLI extends ClientView{
         }
         ClientSocket.setDisconnected();
         System.out.println("\nDisconnecting.");
+        try {
+            endGameView();
+        } catch (IOException | ExecutionException e) {
+            e.printStackTrace();
+        }
         ClientSocket.disconnect();
         System.exit(1);
     }
@@ -1141,6 +1146,16 @@ public class CLI extends ClientView{
         else{
             currentState = GAME_STATES.END_TURN_STATE;
             lastInput();
+        }
+    }
+
+    private void endGameView() throws ExecutionException, IOException {
+        while (true){
+            int choice = numberInput(0, 1, "Do you want to see the state of the game?\n1 - YES\n0 - NO");
+            if(choice == 0)
+                break;
+            else
+                spyAction();
         }
     }
 
