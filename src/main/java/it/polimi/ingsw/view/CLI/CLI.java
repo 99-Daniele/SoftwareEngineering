@@ -934,20 +934,20 @@ public class CLI extends ClientView{
     }
 
     @Override
-    public void quit_message(Message message){
+    public void quit_message(Message message) {
         Message_One_Parameter_String m = (Message_One_Parameter_String) message;
-        if(super.getNumOfPlayers() != 0) {
+        if (super.getNumOfPlayers() != 0) {
             System.out.println("Player " + m.getPar() + " disconnected. Game ended.");
+            ClientSocket.setDisconnected();
             try {
                 endGameView();
             } catch (IOException | ExecutionException e) {
                 e.printStackTrace();
             }
-            ClientSocket.setDisconnected();
             ClientSocket.disconnect();
+            System.out.println("\nDisconnecting.\n");
             System.exit(1);
-        }
-        else if(m.getPar() != null)
+        } else if (m.getPar() != null)
             System.out.println("Player " + m.getPar() + " disconnected before game is started");
         else
             System.out.println("One player disconnected before game is started");
@@ -965,13 +965,13 @@ public class CLI extends ClientView{
                     + " total resources.");
         }
         ClientSocket.setDisconnected();
-        System.out.println("\nDisconnecting.");
         try {
             endGameView();
         } catch (IOException | ExecutionException e) {
             e.printStackTrace();
         }
         ClientSocket.disconnect();
+        System.out.println("\nDisconnecting.\n");
         System.exit(1);
     }
 

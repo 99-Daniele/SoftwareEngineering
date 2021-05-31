@@ -166,7 +166,7 @@ public class ClientSocket extends Observable{
             System.err.println("\nClient no longer connected to the Server");
             connected = false;
             disconnect();
+            System.exit(0);
         }
-        System.exit(0);
     }
 }

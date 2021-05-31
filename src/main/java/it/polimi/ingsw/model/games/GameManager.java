@@ -220,7 +220,7 @@ public class GameManager {
     }
 
     public void developmentCardPowerHandler(int chosenSlot, int choice)
-            throws IllegalStateException, WrongParametersException, InsufficientResourceException, NoSuchProductionPowerException {
+            throws IllegalStateException, WrongParametersException, InsufficientResourceException, NoSuchProductionPowerException, AlreadyUsedProductionPowerException {
         Strongbox s;
         if (currentState.isRightState(GAME_STATES.FIRST_ACTION_STATE))
             s = new Strongbox();
@@ -228,8 +228,10 @@ public class GameManager {
             s = currentState.getStrongbox();
         else
             throw new IllegalStateException();
-        if (!InputController.development_card_power_check(chosenSlot, choice, currentState.getChosenSlots()))
+        if (!InputController.development_card_power_check(chosenSlot, choice))
             throw new WrongParametersException();
+        if(!InputController.already_used_development_card_power_check(chosenSlot, currentState.getChosenSlots()))
+            throw new AlreadyUsedProductionPowerException();
         game.removeDevelopmentCardProductionResource(chosenSlot, s, choice);
         currentState.nextState(this, MessageType.END_PRODUCTION);
         currentState.setStrongbox(s);
@@ -237,7 +239,7 @@ public class GameManager {
     }
 
     public void basicPowerHandler(Resource r1, Resource r2, Resource r3, int choice)
-            throws InsufficientResourceException, IllegalStateException, WrongParametersException {
+            throws InsufficientResourceException, IllegalStateException, WrongParametersException, AlreadyUsedProductionPowerException {
         Strongbox s;
         if (currentState.isRightState(GAME_STATES.FIRST_ACTION_STATE))
             s = new Strongbox();
@@ -245,8 +247,10 @@ public class GameManager {
             s = currentState.getStrongbox();
         else
             throw new IllegalStateException();
-        if (!InputController.basic_power_check(choice, currentState.isBasicPower()))
+        if (!InputController.basic_power_check(choice))
             throw new WrongParametersException();
+        if(currentState.isBasicPower())
+            throw new AlreadyUsedProductionPowerException();
         game.basicProductionPower(r1, r2, r3, s, choice);
         currentState.nextState(this, MessageType.END_PRODUCTION);
         currentState.setStrongbox(s);
@@ -254,7 +258,7 @@ public class GameManager {
     }
 
     public void leaderCardPowerHandler(int chosenLeaderCard, Resource r, int choice)
-            throws InsufficientResourceException, IllegalStateException, WrongParametersException, NoSuchProductionPowerException {
+            throws InsufficientResourceException, IllegalStateException, WrongParametersException, NoSuchProductionPowerException, AlreadyUsedProductionPowerException {
         Strongbox s;
         if (currentState.isRightState(GAME_STATES.FIRST_ACTION_STATE))
             s = new Strongbox();
@@ -262,8 +266,10 @@ public class GameManager {
             s = currentState.getStrongbox();
         else
             throw new IllegalStateException();
-        if (!InputController.leader_card_power_check(chosenLeaderCard, choice, currentState.getChosenLeaderCards()))
+        if (!InputController.leader_card_power_check(chosenLeaderCard, choice))
             throw new WrongParametersException();
+        if(!InputController.already_used_leader_card_power_check(chosenLeaderCard, currentState.getChosenLeaderCards()))
+            throw new AlreadyUsedProductionPowerException();
         game.removeAdditionalProductionPowerCardResource(chosenLeaderCard, r, s, choice);
         currentState.nextState(this, MessageType.END_PRODUCTION);
         currentState.setStrongbox(s);

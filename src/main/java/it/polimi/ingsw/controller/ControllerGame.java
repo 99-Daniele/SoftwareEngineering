@@ -520,6 +520,8 @@ public class ControllerGame implements Observer {
             views.get(viewID).ok();
         } catch (NoSuchProductionPowerException e) {
             errorHandler(ErrorType.EMPTY_SLOT, viewID);
+        } catch (AlreadyUsedProductionPowerException e) {
+            errorHandler(ErrorType.WRONG_POWER, viewID);
         }
     }
 
@@ -533,8 +535,12 @@ public class ControllerGame implements Observer {
             throws InsufficientResourceException, IllegalStateException, WrongParametersException {
         Message_Three_Resource_One_Int m = (Message_Three_Resource_One_Int) message;
         int viewID = m.getClientID();
-        gameManager.basicPowerHandler(m.getResource1(), m.getResource2(), m.getResource3(), m.getPar());
-        views.get(viewID).ok();
+        try {
+            gameManager.basicPowerHandler(m.getResource1(), m.getResource2(), m.getResource3(), m.getPar());
+            views.get(viewID).ok();
+        } catch (AlreadyUsedProductionPowerException e) {
+            errorHandler(ErrorType.WRONG_POWER, viewID);
+        }
     }
 
     /**
@@ -550,7 +556,7 @@ public class ControllerGame implements Observer {
         try {
             gameManager.leaderCardPowerHandler(m.getPar1(), m.getResource(), m.getPar2());
             views.get(viewID).ok();
-        } catch (NoSuchProductionPowerException e) {
+        } catch (NoSuchProductionPowerException | AlreadyUsedProductionPowerException e) {
             errorHandler(ErrorType.WRONG_POWER, viewID);
         }
     }

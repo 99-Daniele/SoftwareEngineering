@@ -85,7 +85,7 @@ public class Warehouse_Strongbox_View {
     }
 
     private int rightDepot(Resource r){
-        for(int i = 0; i < 2; i++){
+        for(int i = 0; i < 3; i++){
             if(depots.get(i).getAmount() > 0 && depots.get(i).getResource() == r)
                 return i;
         }

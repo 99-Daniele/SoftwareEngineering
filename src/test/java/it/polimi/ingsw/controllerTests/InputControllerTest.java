@@ -156,14 +156,15 @@ public class InputControllerTest {
     void correctDevelopmentCardPowerCheck(){
 
         ArrayList<Integer> chosenSlot = new ArrayList<>();
-        assertFalse(InputController.development_card_power_check(0, 2, chosenSlot));
-        assertFalse(InputController.development_card_power_check(0, 0, chosenSlot));
-        assertFalse(InputController.development_card_power_check(1, 2, chosenSlot));
-        assertTrue(InputController.development_card_power_check(3, 0, chosenSlot));
+        assertFalse(InputController.development_card_power_check(0, 2));
+        assertFalse(InputController.development_card_power_check(0, 0));
+        assertFalse(InputController.development_card_power_check(1, 2));
+        assertTrue(InputController.development_card_power_check(3, 0));
+        assertTrue(InputController.already_used_development_card_power_check(3, chosenSlot));
         chosenSlot.add(3);
-        assertFalse(InputController.development_card_power_check(3, 1, chosenSlot));
-        assertTrue(InputController.development_card_power_check(1, 0, chosenSlot));
-        assertTrue(InputController.development_card_power_check(2, 0, chosenSlot));
+        assertFalse(InputController.already_used_development_card_power_check(3, chosenSlot));
+        assertTrue(InputController.already_used_development_card_power_check(1, chosenSlot));
+        assertTrue(InputController.already_used_development_card_power_check(2, chosenSlot));
     }
 
     /**
@@ -172,13 +173,9 @@ public class InputControllerTest {
     @Test
     void correctBasicPowerCheck(){
 
-        boolean basicPower = false;
-        assertFalse(InputController.basic_power_check(2, basicPower));
-        assertTrue(InputController.basic_power_check(0, basicPower));
-        assertTrue(InputController.basic_power_check(1, basicPower));
-        basicPower = true;
-        assertFalse(InputController.basic_power_check(0, basicPower));
-        assertFalse(InputController.basic_power_check(1, basicPower));
+        assertFalse(InputController.basic_power_check(2));
+        assertTrue(InputController.basic_power_check(0));
+        assertTrue(InputController.basic_power_check(1));
     }
 
     /**
@@ -188,13 +185,14 @@ public class InputControllerTest {
     void correctLeaderCardPowerCheck(){
 
         ArrayList<Integer> chosenLeaderCards = new ArrayList<>();
-        assertFalse(InputController.leader_card_power_check(0, 2, chosenLeaderCards));
-        assertFalse(InputController.leader_card_power_check(0, 0, chosenLeaderCards));
-        assertFalse(InputController.leader_card_power_check(1, 2, chosenLeaderCards));
-        assertTrue(InputController.leader_card_power_check(2, 0, chosenLeaderCards));
+        assertFalse(InputController.leader_card_power_check(0, 2));
+        assertFalse(InputController.leader_card_power_check(0, 0));
+        assertFalse(InputController.leader_card_power_check(1, 2));
+        assertTrue(InputController.leader_card_power_check(2, 0));
+        assertTrue(InputController.already_used_leader_card_power_check(2, chosenLeaderCards));
         chosenLeaderCards.add(2);
-        assertFalse(InputController.leader_card_power_check(2, 1, chosenLeaderCards));
-        assertTrue(InputController.leader_card_power_check(1, 0, chosenLeaderCards));
+        assertFalse(InputController.already_used_leader_card_power_check(2, chosenLeaderCards));
+        assertTrue(InputController.already_used_leader_card_power_check(1, chosenLeaderCards));
     }
 
     /**

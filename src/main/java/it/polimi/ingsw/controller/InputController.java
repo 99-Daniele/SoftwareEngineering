@@ -99,20 +99,22 @@ public class InputController {
      * @param warehouse is player's choice if gave priority to warehouse.
      * @return if @param chosenSlot is less than 1 or more than 2 and @param warehouse is 0 or 1.
      */
-    public static boolean development_card_power_check(int chosenSlot, int warehouse, ArrayList<Integer> chosenCards) {
+    public static boolean development_card_power_check(int chosenSlot, int warehouse) {
         if (chosenSlot < 1 || chosenSlot > 3)
             return false;
-        if(chosenCards.contains(chosenSlot))
-            return false;
         else return warehouse == 0 || warehouse == 1;
+    }
+
+    public static boolean already_used_development_card_power_check(int chosenSlot, ArrayList<Integer> chosenCards){
+        return !chosenCards.contains(chosenSlot);
     }
 
     /**
      * @param warehouse is player's choice if gave priority to warehouse.
      * @return if @param warehouse is 0 or 1.
      */
-    public static boolean basic_power_check(int warehouse, boolean basicPower){
-        return (warehouse == 0 || warehouse == 1) && !basicPower;
+    public static boolean basic_power_check(int warehouse){
+        return (warehouse == 0 || warehouse == 1);
     }
 
     /**
@@ -120,12 +122,14 @@ public class InputController {
      * @param warehouse is player's choice if gave priority to warehouse.
      * @return if @param chosenLeaderCard is 1 or 2 and @param warehouse is 0 or 1.
      */
-    public static boolean leader_card_power_check(int chosenLeaderCard, int warehouse, ArrayList<Integer> chosenCards){
+    public static boolean leader_card_power_check(int chosenLeaderCard, int warehouse){
         if(chosenLeaderCard != 1 && chosenLeaderCard != 2)
             return false;
-        if(chosenCards.contains(chosenLeaderCard))
-            return false;
         return warehouse == 0 || warehouse == 1;
+    }
+
+    public static boolean already_used_leader_card_power_check(int chosenLeaderCard, ArrayList<Integer> chosenCards){
+        return !chosenCards.contains(chosenLeaderCard);
     }
 
     /**
