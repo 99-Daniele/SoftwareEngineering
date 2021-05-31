@@ -218,9 +218,9 @@ public class Game extends Observable implements LightGame{
                 return true;
             case 1:
             case 2:
-                return players.get(player).sumTotalResource() == 201;
+                return players.get(player).sumTotalResource() == 1;
             case 3:
-                return players.get(player).sumTotalResource() == 202;
+                return players.get(player).sumTotalResource() == 2;
         }
         return false;
     }
