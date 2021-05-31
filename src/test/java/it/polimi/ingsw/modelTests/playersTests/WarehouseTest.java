@@ -106,54 +106,6 @@ public class WarehouseTest {
     }
 
     /**
-     *
-     */
-    @Test
-    void availableSwitchesNoExtraDepots(){
-
-        Warehouse w = new Warehouse();
-        assertFalse(w.existExtraDepot());
-
-        w.increaseResource(r1);
-        w.increaseResource(r2);
-        w.increaseResource(r2);
-
-        ArrayList<Integer[]> availableSwitches = w.availableSwitches();
-        assertEquals(2, availableSwitches.size());
-        assertEquals(0, availableSwitches.get(0)[0]);
-        assertEquals(2, availableSwitches.get(0)[1]);
-        assertEquals(1, availableSwitches.get(1)[0]);
-        assertEquals(2, availableSwitches.get(1)[1]);
-    }
-
-    /**
-     *
-     */
-    @Test
-    void availableSwitchesWithExtraDepots(){
-
-        Warehouse w = new Warehouse();
-        w.addExtraDepot(r1);
-        w.addExtraDepot(r3);
-
-        w.increaseResource(r2);
-        w.increaseResource(r1);
-        w.increaseResource(r1);
-        w.increaseResource(r1);
-
-        ArrayList<Integer[]> availableSwitches = w.availableSwitches();
-        assertEquals(4, availableSwitches.size());
-        assertEquals(0, availableSwitches.get(0)[0]);
-        assertEquals(1, availableSwitches.get(0)[1]);
-        assertEquals(0, availableSwitches.get(1)[0]);
-        assertEquals(2, availableSwitches.get(1)[1]);
-        assertEquals(1, availableSwitches.get(2)[0]);
-        assertEquals(2, availableSwitches.get(2)[1]);
-        assertEquals(1, availableSwitches.get(3)[0]);
-        assertEquals(3, availableSwitches.get(3)[1]);
-    }
-
-    /**
      * this test verifies the correct increase of Warehouse if not exist ExtraDepot
      */
     @Test

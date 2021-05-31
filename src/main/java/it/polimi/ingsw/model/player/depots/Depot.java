@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.player.depots;
 
 import it.polimi.ingsw.model.resourceContainers.Resource;
+import it.polimi.ingsw.view.ColorAnsi;
 
 /**
  * Depot is a container of only one type of resource with its amount limited to maxAmount.
@@ -10,7 +11,6 @@ public abstract class Depot{
     private Resource resource;
     private final int maxAmount;
     private int amount;
-    private boolean empty;
 
     /**
      * @param maxAmount stands for the max amount of resource that the depot can contain in itself (1, 2, or 3).
@@ -19,8 +19,6 @@ public abstract class Depot{
     public Depot(int maxAmount) {
         this.maxAmount = maxAmount;
         this.amount = 0;
-        this.empty = true;
-
     }
 
     public Resource getResource() {
@@ -44,12 +42,11 @@ public abstract class Depot{
      * if @param amount == 0 also set Depot as empty.
      */
     public void setAmount(int amount) {
-        empty = (amount == 0);
         this.amount = amount;
     }
 
     public boolean isEmpty() {
-        return empty;
+        return amount == 0;
     }
 
     /**
@@ -57,7 +54,6 @@ public abstract class Depot{
      * @return false if Depot was already full before the call of the method, otherwise @return true.
      */
     public boolean increaseAmount(){
-        empty = false;
         if(this.amount + 1 <= maxAmount) {
             this.amount += 1;
             return true;
@@ -80,7 +76,6 @@ public abstract class Depot{
         }
         else{
             int temp = amount - this.amount;
-            empty = true;
             this.amount = 0;
             return temp;
         }

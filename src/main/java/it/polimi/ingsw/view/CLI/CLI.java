@@ -717,7 +717,8 @@ public class CLI extends ClientView{
 
     @Override
     public void endProductionMessage(Message message) {
-        System.out.println("Player " + super.getNickname(message.getClientID()) + " has activated production powers.");
+        if(message.getClientID() != position)
+            System.out.println("Player " + super.getNickname(message.getClientID()) + " has activated production powers.");
     }
 
     @Override

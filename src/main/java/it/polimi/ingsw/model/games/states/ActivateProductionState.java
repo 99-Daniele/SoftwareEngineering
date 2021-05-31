@@ -42,13 +42,13 @@ public class ActivateProductionState implements GameState {
     }
 
     @Override
-    public ArrayList<Integer> getChosenSlots() {
-        return chosenSlots;
+    public void addDevelopmentCardSlot(int slot){
+        this.chosenSlots.add(slot);
     }
 
     @Override
-    public void addDevelopmentCardSlot(int slot){
-        this.chosenLeaderCards.add(slot);
+    public ArrayList<Integer> getChosenSlots() {
+        return chosenSlots;
     }
 
     @Override

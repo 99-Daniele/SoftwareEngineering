@@ -127,19 +127,17 @@ public class Warehouse{
             }
             else {
                 warehouseDepots[pos].setResource(resource);
-                if(warehouseDepots[pos].increaseAmount())
-                    return pos;
-                else
-                    return -1;
+                warehouseDepots[pos].increaseAmount();
+                return pos;
                 /*
                  if there is no WarehouseDepot in warehouseDepots with @param resource, but there is at least 1 empty
                  WarehouseDepot, find it, set the resource and @return increaseAmount().
                  */
             }
         } else {
-            warehouseDepots[pos].setResource(resource);
-            if(warehouseDepots[pos].increaseAmount())
+            if(warehouseDepots[pos].increaseAmount()) {
                 return pos;
+            }
             else
                 return -1;
             /*
@@ -160,7 +158,7 @@ public class Warehouse{
                 if (extraDepots.get(i).getResource() == resource) {
                     if (!extraDepots.get(i).increaseAmount())
                         return increaseWarehouseDepot(resource);
-                    return i + 3;
+                    return (i + 3);
                 }
             }
             /*
@@ -293,7 +291,7 @@ public class Warehouse{
         setWarehouseDepot(warehouseDepotPos, extraDepots.get(extraDepotPos).getAmount(), extraDepots.get(extraDepotPos).getResource());
         setExtraDepot(extraDepotPos, 0);
         /*
-         if the switch is possible, set the empty WarehouseDepot with ExtraDepot parameters and set WarehouseDepot as empty.
+         if the switch is possible, set the empty WarehouseDepot with ExtraDepot parameters and set ExtraDepot as empty.
          */
     }
 
@@ -307,6 +305,7 @@ public class Warehouse{
         extraDepotPos -= 3;
         if(warehouseDepots[warehouseDepotPos].isEmpty()){
             switchExtraDepotWithEmptyWarehouseDepot(extraDepotPos, warehouseDepotPos);
+            return;
         }
         if (warehouseDepots[warehouseDepotPos].getResource() != extraDepots.get(extraDepotPos).getResource()) {
             throw new ImpossibleSwitchDepotException();
@@ -356,37 +355,6 @@ public class Warehouse{
                 switchWarehouseDepotWithExtraDepot(depot2, depot1);
             else
                 throw new ImpossibleSwitchDepotException();
-        }
-    }
-
-    /**
-     *
-     */
-    public ArrayList<Integer[]> availableSwitches(){
-        ArrayList<Integer[]> availableSwitches = new ArrayList<>();
-        for(int i = 0; i < 3; i++) {
-            for (int j = i + 1; j <= 4; j++) {
-                if (isSwitchable(i, j)) {
-                    Integer[] availableSwitch = new Integer[2];
-                    availableSwitch[0] = i;
-                    availableSwitch[1] = j;
-                    availableSwitches.add(availableSwitch);
-                }
-            }
-        }
-        return availableSwitches;
-    }
-
-    /**
-     *
-     */
-    private boolean isSwitchable(int depot1, int depot2){
-        try {
-            switchDepots(depot1, depot2);
-            switchDepots(depot1, depot2);
-            return true;
-        } catch (ImpossibleSwitchDepotException e) {
-            return false;
         }
     }
 
