@@ -229,6 +229,7 @@ public class CLI extends ClientView{
         int x;
         int y;
         currentState = GAME_STATES.TAKE_MARBLE_STATE;
+        CLI_Printer.printWarehouse(super.getGame(), position);
         try {
             CLI_Printer.printMarket(super.getGame());
             x=numberInput(0,1,"Do you want a row or a column?\n0 - ROW\n1 - COLUMN");
@@ -352,10 +353,12 @@ public class CLI extends ClientView{
             ArrayList<Integer> cards = super.getDevelopmentCards(position);
             CLI_Printer.printCardSlot(super.getGame(), position);
             if(cards.size() > 0) {
-                if (cards.size() > 1)
-                    x = numberInput(1, cards.size(), "Which card do you want to activate production? (1 - " + cards.size() + ")");
-                else
+                if(cards.size() == 1)
                     x = cards.get(0);
+                else if(cards.size() == 2)
+                    x = numberInput(cards.get(0), cards.get(1), "Which card do you want to activate production? (" + cards.get(0) + " - " + cards.get(1) + ")");
+                else
+                    x = numberInput(1, 3, "Which card do you want to activate production? (1 - 3)");
                 y = chose_warehouse_strongbox();
                 if (y == -1) {
                     System.out.println("error");
@@ -713,6 +716,11 @@ public class CLI extends ClientView{
     }
 
     @Override
+    public void endProductionMessage(Message message) {
+        System.out.println("Player " + super.getNickname(message.getClientID()) + " has activated production powers.");
+    }
+
+    @Override
     public void market_change(Message message) {
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
         if (m.getPar1() == 0) {
@@ -780,8 +788,7 @@ public class CLI extends ClientView{
     public void leader_card_activation_message(Message message){
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
         if(m.getClientID() != position) {
-            System.out.println("Player " + super.getNickname(m.getClientID()) + " has activated one leader card: ");
-            CLI_Printer.printCard(m.getPar());
+            System.out.println("Player " + super.getNickname(m.getClientID()) + " has activated a leader card");
         }
         super.leader_card_activation_message(message);
     }
@@ -790,7 +797,7 @@ public class CLI extends ClientView{
     public void extra_depot_message(Message message){
         Message_One_Int_One_Resource m = (Message_One_Int_One_Resource) message;
         if(m.getClientID() != position) {
-            System.out.println("Player " + super.getNickname(m.getClientID()) + " has a new extra depot of " + m.getResource());
+            System.out.println("Player " + super.getNickname(m.getClientID()) + " has a new extra depot of " + Resource.printResource(m.getResource()));
         }
         super.extra_depot_message(message);
     }
@@ -840,6 +847,7 @@ public class CLI extends ClientView{
     public void chosen_slot_message(Message message) throws IOException {
         Message_Three_Parameter_Int m = (Message_Three_Parameter_Int) message;
         int choice = 0;
+        CLI_Printer.printCardSlot(super.getGame(), position);
         if (m.getPar3() == -1) {
             try {
                 choice = numberInput(m.getPar1(), m.getPar2(), "Chose which slot insert the card into: " + m.getPar1() + ", " + m.getPar2());

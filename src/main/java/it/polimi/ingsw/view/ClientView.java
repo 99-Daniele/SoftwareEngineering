@@ -91,6 +91,9 @@ public abstract class ClientView extends Application implements Observer {
                 case RESOURCE_AMOUNT:
                     resource_amount_message(returnMessage);
                     break;
+                case END_PRODUCTION:
+                    endProductionMessage(returnMessage);
+                    break;
                 case TAKE_MARBLE:
                     take_marble_message(returnMessage);
                     break;
@@ -222,6 +225,8 @@ public abstract class ClientView extends Application implements Observer {
         Message_One_Resource_Two_Int m = (Message_One_Resource_Two_Int) message;
         game.newAmount(m.getClientID(), m.getResource(), m.getPar1(), m.getPar2());
     }
+
+    public abstract void endProductionMessage(Message message);
 
     public void market_change(Message message){
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;

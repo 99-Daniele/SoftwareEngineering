@@ -79,6 +79,11 @@ public class GUI extends ClientView {
     }
 
     @Override
+    public void endProductionMessage(Message message) {
+
+    }
+
+    @Override
     public void white_conversion_card_message(Message message) throws IOException {
 
     }

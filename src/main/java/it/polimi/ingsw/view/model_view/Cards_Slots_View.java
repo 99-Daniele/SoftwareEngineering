@@ -47,11 +47,11 @@ public class Cards_Slots_View {
     public ArrayList<Integer> getDevelopmentCards() {
         ArrayList<Integer> activeCards = new ArrayList<>();
         if(firstSlot.size() > 0)
-            activeCards.add(firstSlot.getLast());
+            activeCards.add(1);
         if(secondSlot.size() > 0)
-            activeCards.add(secondSlot.getLast());
+            activeCards.add(2);
         if(thirdSlot.size() > 0)
-            activeCards.add(firstSlot.getLast());
+            activeCards.add(3);
         return activeCards;
     }
 

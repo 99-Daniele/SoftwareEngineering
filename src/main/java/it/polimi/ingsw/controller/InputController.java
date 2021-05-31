@@ -106,7 +106,7 @@ public class InputController {
     }
 
     public static boolean already_used_development_card_power_check(int chosenSlot, ArrayList<Integer> chosenCards){
-        return !chosenCards.contains(chosenSlot);
+        return chosenCards == null || !chosenCards.contains(chosenSlot);
     }
 
     /**
@@ -129,7 +129,7 @@ public class InputController {
     }
 
     public static boolean already_used_leader_card_power_check(int chosenLeaderCard, ArrayList<Integer> chosenCards){
-        return !chosenCards.contains(chosenLeaderCard);
+        return chosenCards == null || !chosenCards.contains(chosenLeaderCard);
     }
 
     /**

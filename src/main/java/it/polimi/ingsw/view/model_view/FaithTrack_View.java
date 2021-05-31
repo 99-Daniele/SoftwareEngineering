@@ -107,14 +107,14 @@ public class FaithTrack_View {
         String[][] faithTrack = faithTracks.get(player);
         if(!faithTrack[4][33].equals(" ")){
             int newPoints = victoryPoints - Integer.parseInt(faithTrack[4][33]) - Integer.parseInt(faithTrack[4][17]);
-            faithTrack[4][49] = "" + newPoints;
+            faithTrack[4][49] = String.valueOf(newPoints);
         }
         else if(!faithTrack[4][17].equals(" ")){
             int newPoints = victoryPoints - Integer.parseInt(faithTrack[4][17]);
-            faithTrack[4][33] = "" + newPoints;
+            faithTrack[4][33] = String.valueOf(newPoints);
         }
         else {
-            faithTrack[4][17] = "" + victoryPoints;
+            faithTrack[4][17] = String.valueOf(victoryPoints);
         }
     }
 
@@ -128,17 +128,10 @@ public class FaithTrack_View {
         String[][] faithTrack = faithTracks.get(player);
         for (int x=0;x<5;x++) {
             for (int y = 0; y < 51; y++) {
-                if(x == 4 && y == 17){
-                    System.out.println(ColorAnsi.ANSI_YELLOW.escape() + faithTrack[x][y] + ColorAnsi.RESET);
+                if(x == 4 && (y == 17 || y == 33 || y == 49)){
+                    System.out.print(ColorAnsi.ANSI_YELLOW.escape() + faithTrack[x][y] + ColorAnsi.RESET);
                 }
-                else if(x == 4 && y == 33){
-                    System.out.println(ColorAnsi.ANSI_YELLOW.escape() + faithTrack[x][y] + ColorAnsi.RESET);
-                }
-                else if(x == 4 && y == 49){
-                    System.out.println(ColorAnsi.ANSI_YELLOW.escape() + faithTrack[x][y] + ColorAnsi.RESET);
-                }
-                else
-                    System.out.print(faithTrack[x][y]);
+                else System.out.print(faithTrack[x][y]);
             }
             if(x == 2)
                 System.out.println("    " + faithTrack[x][51]);

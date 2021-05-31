@@ -458,7 +458,7 @@ public class Game extends Observable implements LightGame{
      */
     public void switchDepots(int depot1, int depot2) throws ImpossibleSwitchDepotException {
         players.get(currentPlayer).switchDepots(depot1 -1, depot2 -1);
-        Message message_two_parameter_int=new Message_Two_Parameter_Int(MessageType.SWITCH_DEPOT,currentPlayer,depot1,depot2);
+        Message message_two_parameter_int = new Message_Two_Parameter_Int(MessageType.SWITCH_DEPOT,currentPlayer,depot1,depot2);
         setChanged();
         notifyObservers(message_two_parameter_int);
     }
@@ -628,6 +628,9 @@ public class Game extends Observable implements LightGame{
             setChanged();
             notifyObservers(message_one_resource_two_int);
         }
+        Message message = new Message(MessageType.END_PRODUCTION, currentPlayer);
+        setChanged();
+        notifyObservers(message);
     }
 
     /**
