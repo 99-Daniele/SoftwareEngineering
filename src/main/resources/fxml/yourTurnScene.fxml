@@ -6,6 +6,7 @@
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -105,12 +106,15 @@
                   <Font name="Bell MT" size="24.0" />
                </font>
             </Label>
-            <RadioButton fx:id="first_action" layoutX="279.0" layoutY="446.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="115.0" text="BUY CARD" />
-            <RadioButton layoutX="279.0" layoutY="478.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="108.0" text="TAKE MARBLE" />
-            <RadioButton layoutX="279.0" layoutY="510.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="171.0" text="ACTIVATE PRODUCTION" />
-            <RadioButton layoutX="279.0" layoutY="541.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="108.0" text="SWITCH DEPOT" />
-            <RadioButton layoutX="279.0" layoutY="567.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="183.0" text="ACTIVATE LEADER CARD" />
-            <RadioButton layoutX="279.0" layoutY="599.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="171.0" text="DISCARD LEADER CARD" />
+            <RadioButton fx:id="radiobutBuyCard" layoutX="279.0" layoutY="446.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="115.0" text="BUY CARD">
+               <toggleGroup>
+                  <ToggleGroup fx:id="mainAction" />
+               </toggleGroup></RadioButton>
+            <RadioButton fx:id="radiobutTakeMarble" layoutX="279.0" layoutY="478.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="108.0" text="TAKE MARBLE" toggleGroup="$mainAction" />
+            <RadioButton fx:id="radiobutActivProduc" layoutX="279.0" layoutY="510.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="171.0" text="ACTIVATE PRODUCTION" toggleGroup="$mainAction" />
+            <RadioButton fx:id="rdobutEndTurn" layoutX="279.0" layoutY="633.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="108.0" text="END TURN" toggleGroup="$mainAction" />
+            <RadioButton fx:id="radiobutActLeader" layoutX="279.0" layoutY="544.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="183.0" text="ACTIVATE LEADER CARD" toggleGroup="$mainAction" />
+            <RadioButton fx:id="radiobutDiscardLeader" layoutX="279.0" layoutY="577.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="171.0" text="DISCARD LEADER CARD" toggleGroup="$mainAction" />
             <Label layoutX="279.0" layoutY="402.0" prefHeight="30.0" prefWidth="258.0" text="CHOOSE AN ACTION:">
                <font>
                   <Font name="Bell MT" size="24.0" />
@@ -319,7 +323,7 @@
                   <Image url="@../photos/bianca.png" />
                </image>
             </ImageView>
-            <RadioButton layoutX="279.0" layoutY="628.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="222.0" text="WATCH OPPONENT PLAYERBOARD" />
+            <RadioButton fx:id="radiobutOtherPlayboard" layoutX="279.0" layoutY="608.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="222.0" text="SEE OTHER PLAYERBOARD" toggleGroup="$mainAction" />
          </children>
       </AnchorPane>
    </children>
