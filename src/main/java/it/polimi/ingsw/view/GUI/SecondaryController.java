@@ -5,8 +5,9 @@ import javafx.fxml.FXML;
 import java.io.IOException;
 
 public class SecondaryController {
+    public GUI gui;
     @FXML
     private void switchToPrimary() throws IOException {
-        GUI.setRoot("primary");
+        gui.setRoot("/fxml/yourTurn");
     }
 }
