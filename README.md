@@ -1,22 +1,27 @@
 SERVER
 
-java -jar shade/AM22.jar --server/-s  --> create server on default port 12460
+| JAR COMMAND | DESCRIPTION 
+| ------- | --- 
+| java -jar shade/AM22.jar --server/-s | create server on default port 12460
+| java -jar shade/AM22.jar --server/-s --port/-p xyzw | create server on port xyzw
 
-java -jar shade/AM22.jar --server/-s --port/-p xyzw  --> create server on port xyzw
 
 CLI
 
-java -jar shade/AM22.jar --cli/-c  --> launch CLI without connection info
+| JAR COMMAND | DESCRIPTION
+| ------- | --- 
+| java -jar shade/AM22.jar --cli/-c | launch CLI without connection info
+| java -jar shade/AM22.jar --cli/-c --hostname/-h  "hostname" --port/-p xyzw | launch CLI on server "hostname" on port xyzw
 
-java -jar shade/AM22.jar --cli/-c --hostname/-h  "hostname" --port/-p xyzw  --> launch CLI on server "hostname" on port xyzw
 
 GUI
 
-java -jar shade/AM22.jar --gui/-g  --> launch GUI without connection info
+| JAR COMMAND | DESCRIPTION
+| ------- | --- 
+| java -jar shade/AM22.jar --gui/-g | launch GUI without connection info
+| java -jar shade/AM22.jar --gui/-g --hostname/-h  "hostname" --port/-p xyzw | launch GUI on server "hostname" on port xyzw
 
-java -jar shade/AM22.jar --gui/-g --hostname/-h  "hostname" --port/-p xyzw  --> launch GUI on server "hostname" on port xyzw
-
-CLI_COMMAND
+CLI COMMAND HELPER
 
 | CMD       | DESCRIPTION     
 | :------------- | :----------: 
