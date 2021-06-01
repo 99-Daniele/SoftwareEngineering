@@ -9,6 +9,13 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+import java.net.URL;
+import java.util.Observable;
+import java.util.Observer;
+
+
+public class GUI extends Application implements Observer {
+
 public class GUI extends ClientView {
 
 
@@ -16,7 +23,8 @@ public class GUI extends ClientView {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("primary"), 640, 480);
+        scene = new Scene(loadFXML("/fxml/yourTurnScene"), 640, 480);
+        stage.setMaximized(true);
         stage.setScene(scene);
         stage.show();
     }
@@ -30,11 +38,16 @@ public class GUI extends ClientView {
         scene.setRoot(loadFXML(fxml));
     }
 
+
     private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(GUI.class.getResource(fxml + ".fxml"));
+        //was:FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
+        URL url = GUI.class.getResource(fxml + ".fxml");
+        FXMLLoader fxmlLoader = new FXMLLoader(url);
         return fxmlLoader.load();
     }
 
+
+    public static void main(String[] args) {
     @Override
     public void launchGUI() {
         launch();
