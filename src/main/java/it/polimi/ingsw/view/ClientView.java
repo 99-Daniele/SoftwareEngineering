@@ -141,16 +141,9 @@ public abstract class ClientView extends Application implements Observer {
         }
     }
 
-    private void login_message(Message message) {
-        if(message.getClientID() == 0)
-            askPlayersNumber();
-        else
-            waiting();
-    }
+    public abstract void login_message(Message message);
 
     public abstract void askPlayersNumber();
-
-    public abstract void waiting();
 
     public abstract void new_player_message(Message message);
 
@@ -278,7 +271,7 @@ public abstract class ClientView extends Application implements Observer {
 
     public abstract void chosen_slot_message(Message message) throws IOException;
 
-    public void take_marble_message(Message message) throws IOException {
+    public void take_marble_message(Message message) {
         Message_ArrayList_Marble m = (Message_ArrayList_Marble) message;
         game.setChosenMarbles(m.getMarbles());
     }

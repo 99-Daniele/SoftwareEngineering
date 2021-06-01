@@ -43,7 +43,12 @@ public class WhiteMarble extends Marble {
     }
 
     @Override
-    public String toString() {
+    public String toString(){
+        return "WHITE";
+    }
+
+    @Override
+    public String toStringAbb() {
         return "W";
     }
 

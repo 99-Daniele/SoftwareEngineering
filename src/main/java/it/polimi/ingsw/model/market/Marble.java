@@ -17,5 +17,7 @@ public abstract class Marble implements Serializable {
     @Override
     public abstract String toString();
 
+    public abstract String toStringAbb();
+
     public abstract String colorString();
 }

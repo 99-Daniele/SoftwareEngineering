@@ -28,7 +28,22 @@ public class ResourceMarble extends Marble {
     }
 
     @Override
-    public String toString() {
+    public String toString(){
+        switch (resource){
+            case COIN:
+                return "YELLOW";
+            case STONE:
+                return "GREY";
+            case SHIELD:
+                return "BLUE";
+            case SERVANT:
+                return "PURPLE";
+        }
+        return null;
+    }
+
+    @Override
+    public String toStringAbb() {
         switch (resource){
             case COIN:
                 return "Y";

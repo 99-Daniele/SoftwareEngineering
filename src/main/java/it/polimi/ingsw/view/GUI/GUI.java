@@ -21,6 +21,11 @@ public class GUI extends ClientView {
         stage.show();
     }
 
+    @Override
+    public void login_message(Message message) {
+
+    }
+
     static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
     }
@@ -40,11 +45,6 @@ public class GUI extends ClientView {
 
     @Override
     public void askPlayersNumber() {
-
-    }
-
-    @Override
-    public void waiting() {
 
     }
 

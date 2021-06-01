@@ -40,6 +40,10 @@ public class CLI_Printer {
         game.getWarehouseStrongbox(viewID).printCliWarehouse();
     }
 
+    public static void printStrongbox(Game_View game, int viewID){
+        game.getWarehouseStrongbox(viewID).printCliStrongbox();
+    }
+
     public static void printCardSlot(Game_View game, int viewID){
         game.getSlotCards(viewID).printCliSlot();
     }

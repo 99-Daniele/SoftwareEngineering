@@ -20,7 +20,12 @@ public class RedMarble extends Marble {
     }
 
     @Override
-    public String toString() {
+    public String toString(){
+        return "RED";
+    }
+
+    @Override
+    public String toStringAbb() {
         return "R";
     }
 
