@@ -10,11 +10,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 import java.net.URL;
-import java.util.Observable;
-import java.util.Observer;
 
-
-public class GUI extends Application implements Observer {
 
 public class GUI extends ClientView {
 
@@ -46,8 +42,6 @@ public class GUI extends ClientView {
         return fxmlLoader.load();
     }
 
-
-    public static void main(String[] args) {
     @Override
     public void launchGUI() {
         launch();
