@@ -8,15 +8,15 @@
 
 <AnchorPane prefHeight="612.0" prefWidth="1178.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.ConnectionSceneController">
    <children>
-      <TextField layoutX="489.0" layoutY="403.0" prefHeight="46.0" prefWidth="338.0">
+      <TextField fx:id="serverPort" layoutX="489.0" layoutY="403.0" prefHeight="46.0" prefWidth="338.0">
          <font>
             <Font size="24.0" />
          </font></TextField>
-      <TextField layoutX="489.0" layoutY="238.0" prefHeight="46.0" prefWidth="338.0">
+      <TextField fx:id="serverAddress" layoutX="489.0" layoutY="238.0" prefHeight="46.0" prefWidth="338.0">
          <font>
             <Font size="24.0" />
          </font></TextField>
-      <Button layoutX="583.0" layoutY="494.0" mnemonicParsing="false" text="CONNECT">
+      <Button fx:id="connect" layoutX="583.0" layoutY="494.0" mnemonicParsing="false" text="CONNECT">
          <font>
             <Font name="Arial" size="24.0" />
          </font>

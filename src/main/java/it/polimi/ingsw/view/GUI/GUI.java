@@ -7,9 +7,11 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+
 import java.net.URL;
 import java.util.Observable;
 import java.util.Observer;
+
 
 public class GUI extends Application implements Observer {
 
@@ -23,7 +25,8 @@ public class GUI extends Application implements Observer {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("/fxml/opponentPlayerboardScene"), 640, 480);
+        scene = new Scene(loadFXML("/fxml/yourTurnScene"), 640, 480);
+        stage.setMaximized(true);
         stage.setScene(scene);
         stage.show();
     }
