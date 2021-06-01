@@ -51,11 +51,6 @@ public class GUI extends ClientView {
     public void launchGUI(String hostName, int port){launch();}
 
     @Override
-    public void askPlayersNumber() {
-
-    }
-
-    @Override
     public void new_player_message(Message message) {
 
     }

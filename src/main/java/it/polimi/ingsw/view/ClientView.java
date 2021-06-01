@@ -143,8 +143,6 @@ public abstract class ClientView extends Application implements Observer {
 
     public abstract void login_message(Message message);
 
-    public abstract void askPlayersNumber();
-
     public abstract void new_player_message(Message message);
 
     public void players_message(Message message){

@@ -185,16 +185,12 @@ public class Market implements Serializable, Market_View {
             }
             tabella[x][16] = "╣";
         }
-        tabella[0][0]="╔";
         for(int i = 1; i < 4; i++){
             tabella[0][4*i] = "╦";
         }
-        tabella[0][16]="╗";
-        tabella[6][0]="╚";
         for(int i = 1; i < 4; i++){
             tabella[6][4*i] = "╩";
         }
-        tabella[6][16]="╝";
         for (int x=1;x<7;x+=2) {
             tabella[x][0] = "║";
             for (int y = 1; y < 15; y++) {

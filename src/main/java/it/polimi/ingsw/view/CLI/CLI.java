@@ -15,8 +15,10 @@ import java.util.concurrent.*;
 public class CLI extends ClientView{
 
     private Thread inputThread;
-    private GAME_STATES currentState;
     private BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
+    private GAME_STATES currentState;
+    private Message receivedMessage;
+    private final Object lock = new Object();
     private int position;
 
     public CLI(){
@@ -30,6 +32,14 @@ public class CLI extends ClientView{
             e.printStackTrace();
         }
         printLogo();
+        inputThread.start();
+        synchronized (lock){
+            try {
+                lock.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         startCLI();
     }
 
@@ -41,6 +51,21 @@ public class CLI extends ClientView{
             e.printStackTrace();
         }
         printLogo();
+        inputThread = new Thread(() -> {
+            try {
+                username();
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        inputThread.start();
+        synchronized (lock){
+            try {
+                lock.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         startCLI();
     }
 
@@ -66,8 +91,6 @@ public class CLI extends ClientView{
                 "8888b     888888     88  d8b 88  888888888  888     d888b      d888b   888888888  88  d8b 88  d888        888888    \n" +
                 "888 d8b   888        88    d888  88     88  888      d888b      d888b  88     88  88    d888   d88888888  888       \n" +
                 "888  888  888888888  88     d88  88     88  888  d888888b   d888888b   88     88  88     d88    d8888888  888888888 \n");
-
-        System.out.println("Write a \"username\" command");
     }
 
     private void connectionInfo() throws IOException, ExecutionException {
@@ -99,22 +122,69 @@ public class CLI extends ClientView{
         return false;
     }
 
-    private void startCLI(){
-        if(inputThread == null){
-            inputThread = new Thread(() -> {
-                try {
-                    readCommand();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-            inputThread.start();
+    private void username() throws IOException, InterruptedException {
+        while (true) {
+            System.out.println("\nEnter username: ");
+            String username = stdIn.readLine();
+            if (username == null || username.isBlank() || username.equals(""))
+                System.err.println("Insert a valid username");
+            else {
+                ClientSocket.sendMessage(new Message_One_Parameter_String(MessageType.LOGIN, position, username));
+                break;
+            }
         }
+        receivedMessage = null;
+        while (receivedMessage == null) {
+            synchronized (lock) {
+                lock.wait();
+            }
+        }
+        if(receivedMessage.getMessageType() == MessageType.ERR)
+            username();
+        else if(receivedMessage.getMessageType() == MessageType.LOGIN && receivedMessage.getClientID() == 0)
+            numPlayers();
+    }
+
+    private void numPlayers() throws InterruptedException {
+        while (true) {
+            try {
+                System.out.println("How many players are going to play? 1 to 4");
+                int playerNumber = Integer.parseInt(stdIn.readLine());
+                if (playerNumber < 1 || playerNumber > 4)
+                    System.err.println("You have inserted a wrong number (1 - 4)");
+                else {
+                    ClientSocket.sendMessage(new Message_One_Parameter_Int(MessageType.NUM_PLAYERS, position, playerNumber));
+                    break;
+                }
+            } catch (NumberFormatException | IOException e) {
+                System.err.println("You have to insert one number!");
+            }
+        }
+        receivedMessage = null;
+        while (receivedMessage == null) {
+            synchronized (lock) {
+                lock.wait();
+            }
+        }
+        if(receivedMessage.getMessageType() == MessageType.ERR)
+            numPlayers();
+        else if(receivedMessage.getMessageType() == MessageType.OK )
+            System.out.println("Waiting other players...");
+    }
+
+    private void startCLI() {
+        inputThread = new Thread(() -> {
+            try {
+                readCommand();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        inputThread.start();
     }
 
     private void readCommand() throws IOException {
         while (true){
-            //System.out.println("[" + super.getNickname(position) + "]: ");
             ArrayList<String> command = new ArrayList<>();
             String line = stdIn.readLine();
             int j = 0;
@@ -130,12 +200,8 @@ public class CLI extends ClientView{
     }
 
     private void commandInterpreter(ArrayList<String> command) throws IOException {
-        if(command.get(0).equals("username") || command.get(0).equals("user") || command.get(0).equals("-un")){
-            usernameRequest(command);
-            return;
-        }
         if(command.get(0).equals("help")  || command.get(0).equals("-h")){
-            BufferedReader br = new BufferedReader(new FileReader("src/main/resources/helpCommand.txt"));
+            BufferedReader br = new BufferedReader(new FileReader("src/main/resources/helpCommand/helpCommand.txt"));
             String line;
             while ((line = br.readLine()) != null) {
                 System.out.println(line);
@@ -165,15 +231,6 @@ public class CLI extends ClientView{
                 System.err.println("Illegal command from player");
                 break;
         }
-    }
-
-    private void usernameRequest(ArrayList<String> nickName) throws IOException {
-        String nick = nickName.get(1);
-        for (int i = 2; i < nickName.size(); i++) {
-            nick += " ";
-            nick += nickName.get(i);
-        }
-        ClientSocket.sendMessage(new Message_One_Parameter_String(MessageType.LOGIN, position, nick));
     }
 
     private void oneCommandRequest(ArrayList<String> command) throws IOException {
@@ -228,11 +285,6 @@ public class CLI extends ClientView{
 
     private void twoCommandRequest(ArrayList<String> command) throws IOException {
         switch (command.get(0)){
-            case "numplayer":
-            case "num":
-            case "-np":
-                numPlayerRequest(command.get(1));
-                break;
             case "see":
                 seeRequest(command.get(1));
                 break;
@@ -267,10 +319,6 @@ public class CLI extends ClientView{
             case"turn":
                 endTurnRequest(command.get(1));
                 break;
-            case "resource":
-            case "-cr":
-                choseResourceRequest(command.get(1));
-                break;
             case "slot":
             case "-cs":
                 choseSlotRequest(command.get(1));
@@ -278,18 +326,6 @@ public class CLI extends ClientView{
             default:
                 System.err.println("Illegal command from player");
                 break;
-        }
-    }
-
-    private void numPlayerRequest(String numPlayers) throws IOException {
-        try {
-            int playerNumber = Integer.parseInt(numPlayers);
-            if(playerNumber < 1 || playerNumber > 4)
-                System.err.println("You have inserted a wrong number (1 - 4)");
-            else
-                ClientSocket.sendMessage(new Message_One_Parameter_Int(MessageType.NUM_PLAYERS, position, playerNumber));
-        } catch (NumberFormatException e){
-            System.err.println("You have to insert one number!");
         }
     }
 
@@ -389,12 +425,6 @@ public class CLI extends ClientView{
             case "switch":
             case "-sw":
                 switchRequest(command);
-                break;
-            case "leader":
-            case "-la":
-            case "-ld":
-            case "-cl":
-                leaderRequest(command);
                 break;
             default:
                 System.err.println("Illegal command from player");
@@ -530,10 +560,6 @@ public class CLI extends ClientView{
 
     private void choseRequest(ArrayList<String> command) throws IOException {
         switch(command.get(1)){
-            case "resource":
-            case "r":
-                choseResourceRequest(command.get(2));
-                break;
             case "slot":
             case "s":
                 choseSlotRequest(command.get(2));
@@ -541,16 +567,6 @@ public class CLI extends ClientView{
             default:
                 System.err.println("Illegal command from player");
                 break;
-        }
-    }
-
-    private void choseResourceRequest(String resource) throws IOException {
-        Resource r = correctResource(resource);
-        if(r == null)
-            System.err.println("Illegal command from player");
-        else {
-            Message message = new Message_One_Int_One_Resource(MessageType.ONE_FIRST_RESOURCE, position, r, 1);
-            ClientSocket.sendMessage(message);
         }
     }
 
@@ -647,52 +663,8 @@ public class CLI extends ClientView{
         }
     }
 
-    private void leaderRequest(ArrayList<String> command) throws IOException {
-        try{
-            if(command.get(1).equals("active")){
-               int leaderCard = Integer.parseInt(command.get(2));
-               if(leaderCard < 1 || leaderCard > 2)
-                   System.err.println("You have inserted a wrong number (1 - 2)");
-               else
-                   ClientSocket.sendMessage(new Message_One_Parameter_Int(MessageType.LEADER_CARD_ACTIVATION, position, leaderCard));
-            }
-            else
-            if(command.get(1).equals("discard")){
-                int leaderCard = Integer.parseInt(command.get(2));
-                if(leaderCard < 1 || leaderCard > 2)
-                    System.err.println("You have inserted a wrong number (1 - 2)");
-                else
-                    ClientSocket.sendMessage(new Message_One_Parameter_Int(MessageType.LEADER_CARD_DISCARD, position, leaderCard));
-            }
-            else {
-                int card1 = Integer.parseInt(command.get(1));
-                int card2 = Integer.parseInt(command.get(2));
-                if (card1 < 49 || card1 > 64)
-                    System.err.println("You have inserted a wrong number (49 - 64)");
-                else if (card2 < 49 || card2 > 64)
-                    System.err.println("You have inserted a wrong number (49 - 64)");
-                else if (card1 == card2)
-                    System.err.println("You can't chose two same cards.");
-                else {
-                    super.setLeaderCard(position, card1, card2);
-                    ClientSocket.sendMessage(new Message_Two_Parameter_Int(MessageType.LEADER_CARD, position, card1, card2));
-                    chose_first_resources();
-                }
-            }
-        } catch (NumberFormatException e){
-            System.err.println("Illegal command from player");
-        }
-    }
-
     private void fourCommandRequest(ArrayList<String> command) throws IOException {
         switch (command.get(0)){
-            case "chose":
-                command.remove(0);
-                if(command.get(0).equals("leader") || command.get(0).equals("l"))
-                    leaderRequest(command);
-                else
-                    System.err.println("Illegal command from player");
-                break;
             case "power":
                 cardPowerRequest(command);
                 break;
@@ -798,39 +770,16 @@ public class CLI extends ClientView{
             System.err.println("Illegal command from player");
     }
 
-    private void username(){
-        BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
-        System.out.println("\nEnter your nickname: ");
-        while (true) {
-            try {
-                String nickname = stdIn.readLine();
-                if (nickname != null && !nickname.isBlank() && !nickname.equals("")) {
-                    ClientSocket.sendMessage(new Message_One_Parameter_String(MessageType.LOGIN, position, nickname));
-                    break;
-                }
-            } catch (IOException e) {
-                System.out.println("error");
-            }
-        }
-    }
-
     @Override
     public void login_message(Message message) {
+        receivedMessage = message;
+        synchronized (lock){
+            lock.notifyAll();
+        }
         if(message.getClientID() == 0)
-            System.out.println("You are the first player. Write a \"numplayer\" command.");
+            System.out.println("You are the first player");
         else
             System.out.println("Waiting other players...");
-    }
-
-    @Override
-    public void askPlayersNumber() {
-        int playerNumber;
-        try {
-            playerNumber = numberInput(1, 4,  "How many players are going to play? 1 to 4 ");
-            ClientSocket.sendMessage( new Message_One_Parameter_Int(MessageType.NUM_PLAYERS,position,playerNumber));
-        } catch (ExecutionException | IOException e) {
-            System.err.println("error");
-        }
     }
 
     @Override
@@ -856,325 +805,6 @@ public class CLI extends ClientView{
         ClientSocket.sendMessage(new Message(MessageType.TURN, position));
     }
 
-    private void chose_action(int choice) throws IOException{
-        switch (choice) {
-            case 1:
-                take_market_marble();
-                break;
-            case 2:
-                buy_card();
-                break;
-            case 3:
-                activate_production();
-                break;
-            case 4:
-                if(activate_leader_card())
-                    chose_action(first_input());
-                break;
-            case 5:
-                if(discard_leader_card())
-                    chose_action(first_input());
-                break;
-        }
-    }
-
-    private int first_input() {
-        System.out.println("Your turn");
-        System.out.println("\n1 - TAKE MARBLE FROM MARKET\n2 - BUY DEVELOPMENT CARD\n3 - ACTIVATE PRODUCTION\n" +
-                "4 - ACTIVATE LEADER CARD\n5 - DISCARD LEADER CARD\n6 - SEE THE STATE OF THE GAME");
-        int userInput = 0;
-        try {
-            userInput = numberInput(1, 6, "What do you want to do?");
-        } catch (ExecutionException e) {
-            System.out.println("error");
-        }
-        return userInput;
-    }
-
-    private void lastInput() throws IOException {
-        System.out.println("You want to do something else?\n1 - ACTIVATE LEADER CARD\n2 - DISCARD LEADER CARD\n3 - SEE THE STATE OF THE GAME\n0 - END TURN");
-        int userInput = 0;
-        try{
-            userInput = numberInput(0, 3, "What do you want to do?");
-        } catch (ExecutionException e) {
-            System.out.println("error");
-        }
-        switch (userInput) {
-            case 1:
-                if(activate_leader_card())
-                    lastInput();
-                break;
-            case 2:
-                if(discard_leader_card())
-                    lastInput();
-                break;
-            case 0:
-                currentState = GAME_STATES.FIRST_ACTION_STATE;
-                end_turn();
-                break;
-        }
-    }
-
-    private void take_market_marble() throws IOException {
-        System.out.println("TAKE MARBLE FROM MARKET");
-        int x;
-        int y;
-        currentState = GAME_STATES.TAKE_MARBLE_STATE;
-        CLI_Printer.printWarehouse(super.getGame(), position);
-        try {
-            CLI_Printer.printMarket(super.getGame());
-            x=numberInput(0,1,"Do you want a row or a column?\n0 - ROW\n1 - COLUMN");
-            if (x==0)
-                try {
-                    y=numberInput(1,3,"Choose which row (1 to 3)");
-                    ClientSocket.sendMessage(new Message_Two_Parameter_Int(MessageType.TAKE_MARBLE, position, x, y));
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                }
-            else
-                try {
-                    y=numberInput(1,4,"Choose which column (1 to 4)");
-                    ClientSocket.sendMessage(new Message_Two_Parameter_Int(MessageType.TAKE_MARBLE, position, x, y));
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                }
-        } catch (ExecutionException e) {
-            System.out.println("error");
-        }
-    }
-
-    /**
-     * until user doesn't insert a valid input, ask him 1 int to chose the deck to where buy card. Then send it to Server
-     * and waits an OK message return.
-     */
-    public void buy_card() throws IOException {
-        int[] row_column;
-        System.out.println("BUY_DEVELOPMENT_CARD");
-        CLI_Printer.printDecks(super.getGame());
-        do {
-            int cardID = 0;
-            try {
-               cardID = (numberInput(1, 48, "Choose a card by his CardID"));
-            } catch (ExecutionException e) {
-                System.out.println("error");
-            }
-            row_column = super.getRowColumn(cardID);
-            if(row_column[0] == -1 || row_column[1] == -1){
-                int otherCard = 0;
-                try {
-                    otherCard = numberInput(0, 1, "You chose a wrong card. You want to take a different one?\n1 - YES\n0 - NO");
-                } catch (ExecutionException e) {
-                    System.out.println("error");
-                }
-                if(otherCard == 0) {
-                    chose_action(first_input());
-                    return;
-                }
-            }
-            else {
-                CLI_Printer.printCard(cardID);
-                break;
-            }
-        } while (true);
-        int z = chose_warehouse_strongbox();
-        if(z == -1) {
-            System.out.println("error");
-            return;
-        }
-        currentState = GAME_STATES.BUY_CARD_STATE;
-        Message message = new Message_Three_Parameter_Int(MessageType.BUY_CARD, position, row_column[0], row_column[1], z);
-        ClientSocket.sendMessage(message);
-    }
-
-    private void activate_another_production() throws IOException{
-        try {
-            if (numberInput(0,1,"Do you want to activate another power production?\n1 - YES\n0 - NO") == 1)
-                activate_production();
-            else
-                end_production();
-        } catch (ExecutionException e) {
-            end_production();
-        }
-    }
-
-    private void activate_production() throws IOException{
-        System.out.println("ACTIVATE PRODUCTION");
-        int x;
-        try {
-            CLI_Printer.printWarehouseStrongbox(super.getGame(), position);
-            while (true) {
-                x = numberInput(1, 3, "\nWhich production do you want to activate?\n1 - DEVELOPMENT CARD POWER" +
-                        "\n2 - BASIC POWER\n3 - LEADER CARD POWER");
-                boolean power = false;
-                switch (x) {
-                    case 1:
-                        power = slot_card_production();
-                        break;
-                    case 2:
-                        basic_production();
-                        power = true;
-                        break;
-                    case 3:
-                        power = leader_card_production();
-                        break;
-                }
-                if(!power){
-                    if (numberInput(0,1,"Do you want to activate another power production?\n1 - YES\n0 - NO") == 0) {
-                        if(currentState == GAME_STATES.FIRST_ACTION_STATE)
-                            chose_action(first_input());
-                        else
-                            activate_another_production();
-                        return;
-                    }
-                }
-                else{
-                  currentState = GAME_STATES.ACTIVATE_PRODUCTION_STATE;
-                  break;
-                }
-            }
-        } catch (ExecutionException e) {
-            System.out.println("error");
-        }
-    }
-
-    public boolean slot_card_production() {
-        int x;
-        int y;
-        try {
-            ArrayList<Integer> cards = super.getDevelopmentCards(position);
-            CLI_Printer.printCardSlot(super.getGame(), position);
-            if(cards.size() > 0) {
-                if(cards.size() == 1)
-                    x = cards.get(0);
-                else if(cards.size() == 2)
-                    x = numberInput(cards.get(0), cards.get(1), "Which card do you want to activate production? (" + cards.get(0) + " - " + cards.get(1) + ")");
-                else
-                    x = numberInput(1, 3, "Which card do you want to activate production? (1 - 3)");
-                y = chose_warehouse_strongbox();
-                if (y == -1) {
-                    System.out.println("error");
-                    return false;
-                }
-                Message message = new Message_Two_Parameter_Int(MessageType.DEVELOPMENT_CARD_POWER, position, x, y);
-                ClientSocket.sendMessage(message);
-                return true;
-            }
-            else {
-                System.out.println("You don't have any development cards");
-                return false;
-            }
-        } catch (ExecutionException | IOException e) {
-            System.out.println("error");
-        }
-        return false;
-    }
-
-    public void basic_production() throws IOException {
-        CLI_Printer.printWarehouseStrongbox(super.getGame(), position);
-        System.out.println("Which resource you want to delete?");
-        Resource r1 = chose_resource();
-        System.out.println("Which resource you want to delete?");
-        Resource r2 = chose_resource();
-        System.out.println("Which resource you want to gain?");
-        Resource r3 = chose_resource();
-        int choice = chose_warehouse_strongbox();
-        if (choice==-1) {
-            System.out.println("error");
-            return;
-        }
-        Message message = new Message_Three_Resource_One_Int(MessageType.BASIC_POWER, position, r1, r2, r3, choice);
-        ClientSocket.sendMessage(message);
-    }
-
-    public boolean leader_card_production() throws IOException {
-        int x = chose_leader_card();
-        if(x == -1) {
-            System.out.println("You no longer have any leader cards");
-            return false;
-        }
-        System.out.println("Which resource you want to gain?");
-        Resource r = chose_resource();
-        int choice = chose_warehouse_strongbox();
-        if (choice==-1) {
-            System.out.println("error");
-            return false;
-        }
-        Message message = new Message_One_Resource_Two_Int(MessageType.LEADER_CARD_POWER, position, r, x, choice);
-        ClientSocket.sendMessage(message);
-        return true;
-    }
-
-    public void end_production() throws IOException {
-        Message message = new Message(MessageType.END_PRODUCTION, position);
-        currentState = GAME_STATES.END_TURN_STATE;
-        ClientSocket.sendMessage(message);
-    }
-
-    public boolean activate_leader_card() {
-        System.out.println("ACTIVATE LEADER CARD");
-        int x = chose_leader_card();
-        if(x == -1) {
-            System.out.println("You no longer have any leader cards");
-            return true;
-        }
-        Message message = new Message_One_Parameter_Int(MessageType.LEADER_CARD_ACTIVATION, position, x);
-        try {
-            ClientSocket.sendMessage(message);
-        } catch (IOException e) {
-            System.out.println("error");
-        }
-        return false;
-    }
-
-    public boolean discard_leader_card() {
-        System.out.println("DISCARD LEADER CARD");
-        int x = chose_leader_card();
-        if(x == -1) {
-            System.out.println("You no longer have any leader cards");
-            return true;
-        }
-        super.discardLeaderCard(position, x);
-        Message message = new Message_One_Parameter_Int(MessageType.LEADER_CARD_DISCARD, position, x);
-        try {
-            ClientSocket.sendMessage(message);
-        } catch (IOException e) {
-            System.out.println("error");
-        }
-        return false;
-    }
-
-    private void end_turn(){
-        Message end_turn = new Message(MessageType.END_TURN, position);
-        System.out.println("You finished your turn. Wait for other players.");
-        try {
-            ClientSocket.sendMessage(end_turn);
-        } catch (IOException e) {
-            System.out.println("error");
-        }
-    }
-
-    private int chose_leader_card() {
-        int chosenLeaderCard = -1;
-        int leaderCard1 = super.getLeaderCard(position, 1);
-        int leaderCard2 = super.getLeaderCard(position, 2);
-        if(leaderCard1 != -1 && leaderCard2 != -1){
-            System.out.println("Your leader cards: " );
-            CLI_Printer.printLeaderCard(super.getGame(), position);
-            try {
-                chosenLeaderCard=numberInput(1,2,"Which leader card you choose? (1 or 2)");
-                return chosenLeaderCard;
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
-        }
-        else if(leaderCard1 != -1){
-            System.out.println("Your leader card: ");
-            CLI_Printer.printLeaderCard(super.getGame(), position);
-            chosenLeaderCard = 1;
-        }
-        return chosenLeaderCard;
-    }
-
     public void chose_first_resources(){
         switch (position) {
             case 0:
@@ -1193,77 +823,6 @@ public class CLI extends ClientView{
         super.startGame();
     }
 
-    private Resource chose_resource() {
-        Resource chosenResource = null;
-        int x;
-        try {
-            x=numberInput(1,4,"\n1 - " + Resource.printResource(Resource.COIN) +
-                    "\n2 - " + Resource.printResource(Resource.SHIELD) + "\n3 - " + Resource.printResource(Resource.STONE) +
-                    "\n4 - " + Resource.printResource(Resource.SERVANT));
-            switch (x) {
-                case 1:
-                    chosenResource = Resource.COIN;
-                    break;
-                case 2:
-                    chosenResource = Resource.SHIELD;
-                    break;
-                case 3:
-                    chosenResource = Resource.STONE;
-                    break;
-                case 4:
-                    chosenResource = Resource.SERVANT;
-                    break;
-            }
-        } catch (ExecutionException e) {
-            System.out.println("error");
-        }
-        return chosenResource;
-    }
-
-    private int chose_warehouse_strongbox() {
-        int choice = -1;
-        try {
-            choice=numberInput(0,1,"Where you preferred to get the resource from?\n0 - WAREHOUSE\n1 - STRONGBOX");
-            return choice;
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        return choice;
-    }
-
-    /**
-     * until user doesn't insert a valid input, ask him 2 int to chose two depots to switch. Then send it to Server and
-     * waits an OK message return.
-     *
-     * @throws InterruptedException if the connection with Server breaks during waiting.
-     */
-    public void switch_depot() {
-        CLI_Printer.printWarehouse(super.getGame(), position);
-        int x = choseDepot(1);
-        int y = choseDepot(2);
-        if(x==-1 || y==-1) {
-            System.out.println("error");
-            return;
-        }
-        Message message = new Message_Two_Parameter_Int(MessageType.SWITCH_DEPOT, position, x, y);
-        try {
-            ClientSocket.sendMessage(message);
-        } catch (IOException e) {
-            System.out.println("error");
-        }
-    }
-
-    private int choseDepot(int depot) {
-        int choice=-1;
-        try {
-            choice=numberInput(1,5,"Chose the " + depot + "° depot:");
-            return choice;
-        } catch (ExecutionException e) {
-            System.out.println("error");
-        }
-        return choice;
-    }
-
     @Override
     public void leader_card_choice(Message message) {
         Message_Four_Parameter_Int m = (Message_Four_Parameter_Int) message;
@@ -1272,36 +831,6 @@ public class CLI extends ClientView{
         CLI_Printer.printCard(m.getPar3());
         CLI_Printer.printCard(m.getPar4());
         System.out.println("Chose 2 between this 4 leader cards.");
-    }
-
-    private int numberInput(int minValue, int maxValue, String question) throws ExecutionException {
-        int number = minValue - 1;
-        do {
-            try {
-                System.out.println(question);
-                number = Integer.parseInt(readLine());
-                if (number < minValue || number > maxValue) {
-                    System.err.println("Invalid number! Please try again.\n");
-                }
-            } catch (NumberFormatException e) {
-                System.err.println("Invalid input! Please try again.\n");
-            }
-        } while (number < minValue || number > maxValue);
-        return number;
-    }
-
-    private String readLine() throws ExecutionException {
-        FutureTask<String> futureTask = new FutureTask<>(new ReadInput());
-        inputThread = new Thread(futureTask);
-        inputThread.start();
-        String input = null;
-        try {
-            input = futureTask.get();
-        } catch (InterruptedException e) {
-            futureTask.cancel(true);
-            Thread.currentThread().interrupt();
-        }
-        return input;
     }
 
     @Override
@@ -1452,10 +981,7 @@ public class CLI extends ClientView{
 
     @Override
     public void ok_message() {
-        if(currentState == null){
-            if (super.getGame().isStartGame())
-                System.out.println("Waiting players made their choices...");
-        }
+        notifyMessage(new Message(MessageType.OK, position));
     }
 
     @Override
@@ -1473,58 +999,6 @@ public class CLI extends ClientView{
         super.take_marble_message(message);
         System.out.println("You have chosen this marbles: ");
         CLI_Printer.printMarbles(super.getGame(), m.getMarbles());
-    }
-
-    private void chose_marble(ArrayList<Marble> marbles) throws IOException {
-        Marble chosenMarble;
-        System.out.println("You have chosen this marbles: ");
-        CLI_Printer.printMarbles(super.getGame(), marbles);
-        try {
-            CLI_Printer.printWarehouse(super.getGame(), position);
-            int switchDepot = numberInput(0, 1, "Do you want to switch your depots?\n1 - YES\n0 - NO");
-            if (switchDepot == 1) {
-                switch_depot();
-                return;
-            }
-        } catch (ExecutionException e) {
-            System.out.println("error");
-        }
-        if (marbles.size() == 1) {
-            chosenMarble = marbles.remove(0);
-            super.setMarbles(marbles);
-            currentState = GAME_STATES.END_TURN_STATE;
-            Message message = new Message_One_Parameter_Marble(MessageType.USE_MARBLE, position, chosenMarble);
-            ClientSocket.sendMessage(message);
-            return;
-        }
-        printMarbles(marbles);
-        while (true) {
-            String choice = null;
-            try {
-                choice = readLine();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
-            choice = choice.toUpperCase();
-            chosenMarble = correct_marble(choice, marbles);
-            if (chosenMarble != null)
-                break;
-            else
-                System.err.println("Chose a right marble");
-        }
-        if (marbles.size() == 0)
-            currentState = GAME_STATES.END_TURN_STATE;
-        else
-            super.setMarbles(marbles);
-        Message message = new Message_One_Parameter_Marble(MessageType.USE_MARBLE, position, chosenMarble);
-        ClientSocket.sendMessage(message);
-    }
-
-    private void printMarbles(ArrayList<Marble> marbles){
-        System.out.println("Chose one marble:");
-        for(Marble marble: marbles){
-            System.out.println(marble.toString() + " - " + marble.colorString());
-        }
     }
 
     @Override
@@ -1663,5 +1137,11 @@ public class CLI extends ClientView{
         System.err.println("You discard this leader card previously");
     }
 
+    private void notifyMessage(Message message){
+        receivedMessage = message;
+        synchronized (lock){
+            lock.notifyAll();
+        }
+    }
 
 }

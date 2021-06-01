@@ -1,0 +1,36 @@
+
+power card/power c/-cp 1/2/3 warehouse(w)/strongbox(s)  --> activate the power of slot 1/2/3 taking resource from warehouse/strongbox
+
+power basic/power b/-bp coin(co)/shield(sh)/stone(st)/servant(se) coin(co)/shield(sh)/stone(st)/servant(se)  coin(co)/shield(sh)/stone(st)/servant(se) warehouse(w)/strongbox(s)
+                                                                                                        --> activate basic power  deleting first two resource and gaining third resource
+
+power leader/power l/-lp 1/2 coin(co)/shield(sh)/stone(st)/servant(se) warehouse(w)/strongbox(s) --> activate the power of AdditionalProductionPower card taking resource
+                                                                                                                                         from warehouse/strongbox and gaining 1 resource
+power end/-ep  --> inform Server that player has ended its production
+
+
+see playerboard/see board/see p/-sp 1/2/3/4 --> print the board of player 1/2/3/4
+
+see my playerboard/see my p/-smp  --> print your playerboard
+
+see warehouse/see wh/-swh 1/2/3/4  --> print the warehouse of player 1/2/3/4
+
+see my warehouse/see my wh/-smw  --> print your warehouse
+
+see strongbox/see sb/-ssb 1/2/3/4  --> print the strongbox of player 1/2/3/4
+
+see my strongbox/see my sb/-sms  --> print your strongbox
+
+see cards/see c/-sc 1/2/3/4  --> print the development cards of player 1/2/3/4
+
+see my cards/see my c/-smc  --> print your development cards
+
+see leader/see l/-sl 1/2/3/4  --> print the leader cards of player 1/2/3/4
+
+see my leader/see my l/-sml  --> print your leader cards
+
+see market/see m/-sm  --> print the market
+
+see faithtrack/see f/-sf  --> print the faithTrack
+
+see decks/see d/-sd  --> print current buyable development cards
