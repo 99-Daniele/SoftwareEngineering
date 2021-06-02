@@ -40,7 +40,6 @@ CLI COMMAND HELPER
 | see faithtrack / see f / -sf| print the faithTrack
 | see decks / see d  / -sd| print current buyable development cards
 | buy card /buy / -bc  1/2.../47/48  warehouse(w) / strongbox(s)| buy card 1/2.../47/48 taking resources from warehouse/strongbox
-| chose slot / chose s / slot / -cs  1/2/3| chose in which slot insert the buying card
 | take marble / market / -tm  row(r) / column(c)  1/2/3/4| take row/column 1/2/3/4 from market
 | usemarble / marble / -um  red(r) / white(w) / purple(p) / yellow(y) / grey(g) / blue(b)| use one of the chosen marbles
 | whiteconversion / white / -wc  1/2| chose which active WhiteConversionCard use for white marble
