@@ -5,7 +5,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -17,58 +16,53 @@
    <children>
       <AnchorPane prefHeight="660.0" prefWidth="1213.0">
          <children>
-            <ImageView fitHeight="548.0" fitWidth="355.0" layoutX="97.0" layoutY="-53.0" rotate="-90.0" AnchorPane.leftAnchor="97.0" AnchorPane.topAnchor="-53.0">
+            <ImageView fitHeight="616.0" fitWidth="382.0" layoutX="98.0" layoutY="-79.0" rotate="-90.0" AnchorPane.leftAnchor="98.0" AnchorPane.topAnchor="-79.0">
                <image>
                   <Image url="@../photos/Masters_of_Renaissance_PlayerBoard(11_2020)-1.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="leader1" disable="true" fitHeight="180.0" fitWidth="115.0" layoutY="437.0">
-               <image>
-                  <Image url="@../photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-56-1.png" />
-               </image>
-
-            </ImageView>
-            <ImageView fx:id="card13" fitHeight="159.0" fitWidth="108.0" layoutX="558.0" layoutY="44.0">
+            <ImageView fx:id="leader1" disable="true" fitHeight="166.0" fitWidth="108.0" layoutY="451.0" />
+            <ImageView fx:id="card13" fitHeight="159.0" fitWidth="99.0" layoutX="600.0" layoutY="42.0">
                <image>
                   <Image url="@../photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="card33" fitHeight="159.0" fitWidth="108.0" layoutX="798.0" layoutY="44.0">
+            <ImageView fx:id="card33" fitHeight="159.0" fitWidth="99.0" layoutX="825.0" layoutY="42.0">
                <image>
                   <Image url="@../photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="card23" fitHeight="159.0" fitWidth="108.0" layoutX="677.0" layoutY="44.0">
+            <ImageView fx:id="card23" fitHeight="159.0" fitWidth="99.0" layoutX="712.0" layoutY="42.0">
                <image>
                   <Image url="@../photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="card22" fitHeight="159.0" fitWidth="108.0" layoutX="677.0" layoutY="221.0">
+            <ImageView fx:id="card22" fitHeight="159.0" fitWidth="99.0" layoutX="712.0" layoutY="221.0">
                <image>
                   <Image url="@../photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="card12" fitHeight="159.0" fitWidth="108.0" layoutX="558.0" layoutY="221.0">
+            <ImageView fx:id="card12" disable="true" fitHeight="159.0" fitWidth="99.0" layoutX="600.0" layoutY="221.0">
                <image>
                   <Image url="@../photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="card11" fitHeight="159.0" fitWidth="108.0" layoutX="558.0" layoutY="399.0" pickOnBounds="true">
+            <ImageView fx:id="card11" disable="true" fitHeight="159.0" fitWidth="99.0" layoutX="600.0" layoutY="399.0" pickOnBounds="true">
                <image>
                   <Image url="@../photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="card21" fitHeight="159.0" fitWidth="108.0" layoutX="677.0" layoutY="399.0" pickOnBounds="true">
+            <ImageView fx:id="card21" disable="true" fitHeight="159.0" fitWidth="99.0" layoutX="712.0" layoutY="399.0" pickOnBounds="true">
                <image>
                   <Image url="@../photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="card32" fitHeight="159.0" fitWidth="108.0" layoutX="798.0" layoutY="221.0">
+            <ImageView fx:id="card32" fitHeight="159.0" fitWidth="99.0" layoutX="825.0" layoutY="221.0">
                <image>
                   <Image url="@../photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="card31" fitHeight="159.0" fitWidth="108.0" layoutX="798.0" layoutY="399.0" pickOnBounds="true">
+            <ImageView fx:id="card31" disable="true" fitHeight="159.0" fitWidth="99.0" layoutX="825.0" layoutY="399.0" pickOnBounds="true">
                <image>
                   <Image url="@../photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
                </image>
@@ -78,10 +72,10 @@
                   <Image url="@../photos/plancia portabiglie.png" />
                </image>
             </ImageView>
-            <Button fx:id="chooseSlot1" layoutX="221.0" layoutY="355.0" mnemonicParsing="false" text="Choose slot" />
-            <Button fx:id="chooseSlot2" layoutX="330.0" layoutY="355.0" mnemonicParsing="false" text="Choose slot" />
-            <Button fx:id="chooseSlot3" layoutX="438.0" layoutY="355.0" mnemonicParsing="false" text="Choose slot" />
-            <Label layoutX="566.0" prefHeight="37.0" prefWidth="222.0" text="DECKS">
+            <Button fx:id="chooseSlot1" disable="true" layoutX="228.0" layoutY="371.0" mnemonicParsing="false" text="Choose slot" />
+            <Button fx:id="chooseSlot2" disable="true" layoutX="355.0" layoutY="371.0" mnemonicParsing="false" text="Choose slot" />
+            <Button fx:id="chooseSlot3" disable="true" layoutX="475.0" layoutY="371.0" mnemonicParsing="false" text="Choose slot" />
+            <Label layoutX="601.0" prefHeight="37.0" prefWidth="222.0" text="DECKS">
                <font>
                   <Font name="Bell MT" size="24.0" />
                </font>
@@ -91,12 +85,12 @@
                   <Font name="Bell MT" size="24.0" />
                </font>
             </Label>
-            <Label layoutX="7.0" layoutY="399.0" prefHeight="35.0" prefWidth="216.0" text="LEADER CARDS">
+            <Label layoutY="414.0" prefHeight="35.0" prefWidth="216.0" text="LEADER CARDS">
                <font>
                   <Font name="Bell MT" size="24.0" />
                </font>
             </Label>
-            <Label layoutX="8.0" layoutY="1.0" prefHeight="35.0" prefWidth="237.0" text="PLAYERBOARD">
+            <Label layoutX="-6.0" layoutY="1.0" prefHeight="35.0" prefWidth="237.0" text="PLAYERBOARD">
                <font>
                   <Font name="Bell MT" size="24.0" />
                </font>
@@ -107,76 +101,75 @@
                </toggleGroup></RadioButton>
             <RadioButton fx:id="radiobutTakeMarble" layoutX="279.0" layoutY="478.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="108.0" text="TAKE MARBLE" toggleGroup="$mainAction" />
             <RadioButton fx:id="radiobutActivProduc" layoutX="279.0" layoutY="510.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="171.0" text="ACTIVATE PRODUCTION" toggleGroup="$mainAction" />
-            <RadioButton fx:id="radiobutEndTurn" disable="true" layoutX="279.0" layoutY="633.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="108.0" text="END TURN" toggleGroup="$mainAction" />
             <RadioButton fx:id="radiobutActLeader" layoutX="279.0" layoutY="544.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="183.0" text="ACTIVATE LEADER CARD" toggleGroup="$mainAction" />
             <RadioButton fx:id="radiobutDiscardLeader" layoutX="279.0" layoutY="577.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="171.0" text="DISCARD LEADER CARD" toggleGroup="$mainAction" />
-            <Label layoutX="279.0" layoutY="402.0" prefHeight="30.0" prefWidth="258.0" text="CHOOSE AN ACTION:">
+            <Label layoutX="276.0" layoutY="417.0" prefHeight="30.0" prefWidth="258.0" text="CHOOSE AN ACTION:">
                <font>
                   <Font name="Bell MT" size="24.0" />
                </font>
             </Label>
-            <Button layoutX="17.0" layoutY="624.0" mnemonicParsing="false" text="Choose card" />
-            <Button layoutX="147.0" layoutY="624.0" mnemonicParsing="false" text="Choose card" />
-            <Button fx:id="chooseBase" layoutX="141.0" layoutY="355.0" mnemonicParsing="false" text="Choose" />
-            <RadioButton fx:id="switch1" layoutX="14.0" layoutY="194.0" mnemonicParsing="false">
+            <Button fx:id="chooseLeader1" disable="true" layoutX="17.0" layoutY="624.0" mnemonicParsing="false" text="Choose card" />
+            <Button fx:id="chooseLeader2" disable="true" layoutX="147.0" layoutY="624.0" mnemonicParsing="false" text="Choose card" />
+            <Button fx:id="chooseBase" disable="true" layoutX="141.0" layoutY="371.0" mnemonicParsing="false" text="Choose" />
+            <RadioButton fx:id="switch1" disable="true" layoutX="6.0" layoutY="207.0" mnemonicParsing="false">
                <toggleGroup>
                   <ToggleGroup fx:id="deposit" />
                </toggleGroup></RadioButton>
-            <RadioButton fx:id="switch2" layoutX="14.0" layoutY="229.0" mnemonicParsing="false" toggleGroup="$deposit" />
-            <RadioButton fx:id="switch3" layoutX="14.0" layoutY="265.0" mnemonicParsing="false" toggleGroup="$deposit" />
-            <ImageView fx:id="coin" fitHeight="25.0" fitWidth="29.0" layoutX="16.0" layoutY="342.0">
+            <RadioButton fx:id="switch2" disable="true" layoutX="6.0" layoutY="241.0" mnemonicParsing="false" toggleGroup="$deposit" />
+            <RadioButton fx:id="switch3" disable="true" layoutX="6.0" layoutY="274.0" mnemonicParsing="false" toggleGroup="$deposit" />
+            <ImageView fx:id="coin" fitHeight="30.0" fitWidth="29.0" layoutX="3.0" layoutY="352.0">
                <image>
                   <Image url="@../photos/coin.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="shield" fitHeight="30.0" fitWidth="29.0" layoutX="16.0" layoutY="308.0">
+            <ImageView fx:id="shield" fitHeight="30.0" fitWidth="29.0" layoutX="3.0" layoutY="315.0">
                <image>
                   <Image url="@../photos/shield.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="stone" fitHeight="30.0" fitWidth="29.0" layoutX="70.0" layoutY="340.0">
+            <ImageView fx:id="stone" fitHeight="30.0" fitWidth="29.0" layoutX="58.0" layoutY="352.0">
                <image>
                   <Image url="@../photos/stone.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="servant" fitHeight="30.0" fitWidth="29.0" layoutX="70.0" layoutY="306.0">
+            <ImageView fx:id="servant" fitHeight="30.0" fitWidth="29.0" layoutX="58.0" layoutY="315.0">
                <image>
                   <Image url="@../photos/servant.png" />
                </image>
             </ImageView>
-            <Label fx:id="shieldAmount" layoutX="44.0" layoutY="309.0" prefHeight="30.0" prefWidth="28.0" textFill="WHITE">
+            <Label fx:id="shieldAmount" layoutX="35.0" layoutY="315.0" prefHeight="30.0" prefWidth="28.0" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font></Label>
-            <Label fx:id="coinAmount" layoutX="44.0" layoutY="340.0" prefHeight="30.0" prefWidth="28.0" textFill="WHITE">
+            <Label fx:id="coinAmount" layoutX="35.0" layoutY="352.0" prefHeight="30.0" prefWidth="28.0" textFill="WHITE">
                <font>
-                  <Font size="14.0" />
+                  <Font name="System Bold" size="14.0" />
                </font></Label>
-            <Label fx:id="servantAmount" layoutX="99.0" layoutY="309.0" prefHeight="30.0" prefWidth="28.0" textFill="WHITE">
+            <Label fx:id="servantAmount" layoutX="85.0" layoutY="315.0" prefHeight="30.0" prefWidth="28.0" textFill="WHITE">
                <font>
-                  <Font size="14.0" />
+                  <Font name="System Bold" size="14.0" />
                </font></Label>
-            <Label fx:id="stoneAmount" layoutX="99.0" layoutY="340.0" prefHeight="30.0" prefWidth="28.0" textFill="WHITE">
+            <Label fx:id="stoneAmount" layoutX="85.0" layoutY="352.0" prefHeight="30.0" prefWidth="28.0" textFill="WHITE">
                <font>
-                  <Font size="14.0" />
+                  <Font name="System Bold" size="14.0" />
                </font></Label>
-            <ImageView fx:id="deposit1" fitHeight="25.0" fitWidth="28.0" layoutX="58.0" layoutY="191.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="deposit21" fitHeight="25.0" fitWidth="28.0" layoutX="44.0" layoutY="225.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="deposit22" fitHeight="25.0" fitWidth="28.0" layoutX="71.0" layoutY="225.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="deposit33" fitHeight="25.0" fitWidth="28.0" layoutX="85.0" layoutY="253.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="deposit32" fitHeight="25.0" fitWidth="28.0" layoutX="57.0" layoutY="253.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="deposit31" fitHeight="25.0" fitWidth="28.0" layoutX="31.0" layoutY="253.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="deposit1" fitHeight="25.0" fitWidth="28.0" layoutX="49.0" layoutY="195.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="deposit21" fitHeight="25.0" fitWidth="28.0" layoutX="35.0" layoutY="229.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="deposit22" fitHeight="25.0" fitWidth="28.0" layoutX="63.0" layoutY="229.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="deposit33" fitHeight="25.0" fitWidth="28.0" layoutX="76.0" layoutY="270.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="deposit32" fitHeight="25.0" fitWidth="28.0" layoutX="49.0" layoutY="270.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="deposit31" fitHeight="25.0" fitWidth="28.0" layoutX="18.0" layoutY="270.0" pickOnBounds="true" preserveRatio="true" />
             <ImageView fx:id="pope1" fitHeight="37.0" fitWidth="38.0" layoutX="135.0" layoutY="91.0">
                <image>
                   <Image url="@../photos/quadrato giallo.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="pope2" fitHeight="35.0" fitWidth="44.0" layoutX="267.0" layoutY="74.0">
+            <ImageView fx:id="pope2" fitHeight="35.0" fitWidth="44.0" layoutX="284.0" layoutY="71.0">
                <image>
                   <Image url="@../photos/quadrato arancione.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="pope3" fitHeight="37.0" fitWidth="44.0" layoutX="428.0" layoutY="91.0">
+            <ImageView fx:id="pope3" fitHeight="37.0" fitWidth="44.0" layoutX="465.0" layoutY="91.0">
                <image>
                   <Image url="@../photos/quadrato rosso.png" />
                </image>
@@ -192,68 +185,31 @@
             <RadioButton fx:id="row2" disable="true" layoutX="1222.0" layoutY="125.0" mnemonicParsing="false" toggleGroup="$market" />
             <RadioButton fx:id="row1" disable="true" layoutX="1222.0" layoutY="150.0" mnemonicParsing="false" toggleGroup="$market" />
             <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="23.0" layoutY="114.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="card43" fitHeight="159.0" fitWidth="108.0" layoutX="918.0" layoutY="44.0">
+            <ImageView fx:id="card43" fitHeight="159.0" fitWidth="99.0" layoutX="937.0" layoutY="42.0">
                <image>
                   <Image url="@../photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="card42" fitHeight="159.0" fitWidth="108.0" layoutX="918.0" layoutY="221.0">
+            <ImageView fx:id="card42" fitHeight="159.0" fitWidth="99.0" layoutX="937.0" layoutY="221.0">
                <image>
                   <Image url="@../photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="card41" fitHeight="159.0" fitWidth="108.0" layoutX="918.0" layoutY="398.0" pickOnBounds="true">
+            <ImageView fx:id="card41" disable="true" fitHeight="159.0" fitWidth="99.0" layoutX="937.0" layoutY="399.0" pickOnBounds="true">
                <image>
                   <Image url="@../photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
                </image>
             </ImageView>
             <TextArea layoutX="1049.0" layoutY="324.0" prefHeight="297.0" prefWidth="200.0" />
-            <TextField layoutX="370.0" layoutY="145.0" prefHeight="315.0" prefWidth="564.0" visible="false" />
-            <ImageView fx:id="slot11" fitHeight="131.0" fitWidth="90.0" layoutX="215.0" layoutY="217.0">
-               <image>
-                  <Image url="@../photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="slot12" fitHeight="131.0" fitWidth="90.0" layoutX="215.0" layoutY="188.0">
-               <image>
-                  <Image url="@../photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="slot13" fitHeight="131.0" fitWidth="90.0" layoutX="215.0" layoutY="160.0">
-               <image>
-                  <Image url="@../photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="slot21" fitHeight="131.0" fitWidth="90.0" layoutX="326.0" layoutY="217.0">
-               <image>
-                  <Image url="@../photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="slot22" fitHeight="131.0" fitWidth="90.0" layoutX="326.0" layoutY="188.0">
-               <image>
-                  <Image url="@../photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="slot31" fitHeight="131.0" fitWidth="90.0" layoutX="432.0" layoutY="217.0">
-               <image>
-                  <Image url="@../photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="slot23" fitHeight="131.0" fitWidth="90.0" layoutX="326.0" layoutY="160.0">
-               <image>
-                  <Image url="@../photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="slot32" fitHeight="131.0" fitWidth="90.0" layoutX="432.0" layoutY="188.0">
-               <image>
-                  <Image url="@../photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="slot33" fitHeight="131.0" fitWidth="90.0" layoutX="432.0" layoutY="160.0">
-               <image>
-                  <Image url="@../photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.png" />
-               </image>
-            </ImageView>
+            <ImageView fx:id="slot11" fitHeight="131.0" fitWidth="90.0" layoutX="222.0" layoutY="232.0" />
+            <ImageView fx:id="slot12" fitHeight="131.0" fitWidth="90.0" layoutX="222.0" layoutY="209.0" />
+            <ImageView fx:id="slot13" fitHeight="131.0" fitWidth="90.0" layoutX="222.0" layoutY="184.0" />
+            <ImageView fx:id="slot21" fitHeight="131.0" fitWidth="90.0" layoutX="349.0" layoutY="232.0" />
+            <ImageView fx:id="slot22" fitHeight="131.0" fitWidth="90.0" layoutX="349.0" layoutY="209.0" />
+            <ImageView fx:id="slot31" fitHeight="131.0" fitWidth="90.0" layoutX="464.0" layoutY="232.0" />
+            <ImageView fx:id="slot23" fitHeight="131.0" fitWidth="90.0" layoutX="349.0" layoutY="184.0" />
+            <ImageView fx:id="slot32" fitHeight="131.0" fitWidth="90.0" layoutX="464.0" layoutY="209.0" />
+            <ImageView fx:id="slot33" fitHeight="131.0" fitWidth="90.0" layoutX="464.0" layoutY="184.0" />
             <ImageView fitHeight="115.0" fitWidth="140.0" layoutX="1078.0" layoutY="71.0">
                <image>
                   <Image url="@../photos/planciaMercato.png" />
@@ -324,16 +280,48 @@
                   <Image url="@../photos/bianca.png" />
                </image>
             </ImageView>
-            <RadioButton fx:id="radiobutOtherPlayboard" layoutX="279.0" layoutY="608.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="222.0" text="SEE OTHER PLAYERBOARD" toggleGroup="$mainAction" />
-            <ImageView fx:id="leader2" disable="true" fitHeight="180.0" fitWidth="115.0" layoutX="130.0" layoutY="437.0">
-               <image>
-                  <Image url="@../photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-56-1.png" />
-               </image>
+            <RadioButton fx:id="radiobutOtherPlayboard" layoutX="276.0" layoutY="612.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="222.0" text="SEE OTHER PLAYERBOARD" toggleGroup="$mainAction" />
+            <ImageView fx:id="leader2" disable="true" fitHeight="166.0" fitWidth="108.0" layoutX="134.0" layoutY="451.0">
             </ImageView>
             <ImageView fx:id="extra11" fitHeight="20.0" fitWidth="20.0" layoutX="25.0" layoutY="584.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="extra12" fitHeight="20.0" fitWidth="20.0" layoutX="70.0" layoutY="584.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="extra12" fitHeight="20.0" fitWidth="20.0" layoutX="65.0" layoutY="584.0" pickOnBounds="true" preserveRatio="true" />
             <ImageView fx:id="extra21" fitHeight="20.0" fitWidth="20.0" layoutX="159.0" layoutY="584.0" pickOnBounds="true" preserveRatio="true" />
             <ImageView fx:id="extra22" fitHeight="20.0" fitWidth="20.0" layoutX="200.0" layoutY="584.0" pickOnBounds="true" preserveRatio="true" />
+            <Label fx:id="croceRossa" layoutX="8.0" layoutY="107.0" prefHeight="25.0" prefWidth="28.0" text="✞">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Button fx:id="move" layoutX="586.0" layoutY="592.0" mnemonicParsing="false" text="Button" />
+            <Label fx:id="message" alignment="TOP_CENTER" layoutX="344.0" layoutY="118.0" prefHeight="345.0" prefWidth="644.0" style="-fx-background-color: white;" textAlignment="CENTER" visible="false" wrapText="true">
+               <font>
+                  <Font name="Bell MT" size="36.0" />
+               </font>
+            </Label>
+            <Button fx:id="yes" layoutX="472.0" layoutY="335.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="72.0" text="YES" visible="false" />
+            <Button fx:id="no" layoutX="816.0" layoutY="335.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="72.0" text="NO" visible="false" />
+            <Button fx:id="ok" layoutX="641.0" layoutY="335.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="72.0" text="OK" visible="false" />
+            <ImageView fx:id="marbleShow1" fitHeight="23.0" fitWidth="23.0" layoutX="630.0" layoutY="266.0" visible="false">
+               <image>
+                  <Image url="@../photos/bianca.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="marbleShow2" fitHeight="23.0" fitWidth="23.0" layoutX="653.0" layoutY="267.0" visible="false">
+               <image>
+                  <Image url="@../photos/bianca.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="marbleShow3" fitHeight="23.0" fitWidth="23.0" layoutX="677.0" layoutY="266.0" visible="false">
+               <image>
+                  <Image url="@../photos/bianca.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="marbleShow4" fitHeight="23.0" fitWidth="23.0" layoutX="700.0" layoutY="266.0" visible="false">
+               <image>
+                  <Image url="@../photos/bianca.png" />
+               </image>
+            </ImageView>
+            <RadioButton fx:id="radiobutEndTurn" layoutX="276.0" layoutY="637.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="90.0" text="END TURN" toggleGroup="$mainAction" />
          </children>
       </AnchorPane>
    </children>

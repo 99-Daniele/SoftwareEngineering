@@ -26,12 +26,12 @@
             <Font name="Bell MT" size="36.0" />
          </font>
       </Label>
-      <Label alignment="CENTER" layoutX="489.0" layoutY="158.0" prefHeight="51.0" prefWidth="338.0" text="SERVER ADDRESS">
+      <Label alignment="CENTER" layoutX="417.0" layoutY="157.0" prefHeight="51.0" prefWidth="482.0" text=" INSERT 127.0.0.1 AS SERVER ADDRESS">
          <font>
             <Font name="Bell MT" size="24.0" />
          </font>
       </Label>
-      <Label alignment="CENTER" layoutX="489.0" layoutY="317.0" prefHeight="51.0" prefWidth="338.0" text="SERVER PORT">
+      <Label alignment="CENTER" layoutX="466.0" layoutY="317.0" prefHeight="51.0" prefWidth="379.0" text="INSERT 12460 AS SERVER PORT">
          <font>
             <Font name="Bell MT" size="24.0" />
          </font>

@@ -19,7 +19,7 @@ public class GUI extends ClientView {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("/fxml/yourTurnScene"), 640, 480);
+        scene = new Scene(loadFXML("/fxml/connectionScene"), 640, 480);
         stage.setMaximized(true);
         stage.setScene(scene);
         stage.show();

@@ -8,12 +8,12 @@
 
 <AnchorPane prefHeight="429.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.NicknameSceneController">
    <children>
-      <Label layoutX="207.0" layoutY="61.0" text="INSERT NICKNAME">
+      <Label fx:id="nicknameLabel" layoutX="207.0" layoutY="61.0" text="INSERT NICKNAME">
          <font>
             <Font name="Bell MT" size="24.0" />
          </font>
       </Label>
-      <Label layoutX="110.0" layoutY="200.0" text="NUMBER OF PLAYER IN THE GAME ">
+      <Label fx:id="numPlayerLabel" layoutX="110.0" layoutY="200.0" text="NUMBER OF PLAYER IN THE GAME " visible="false">
          <font>
             <Font name="Bell MT" size="24.0" />
          </font>
@@ -23,11 +23,11 @@
             <Font size="24.0" />
          </font>
       </TextField>
-      <TextField fx:id="playerNumber" layoutX="222.0" layoutY="244.0" prefHeight="47.0" prefWidth="211.0">
+      <TextField fx:id="playerNumber" layoutX="222.0" layoutY="244.0" prefHeight="47.0" prefWidth="211.0" visible="false">
          <font>
             <Font size="24.0" />
          </font>
       </TextField>
-      <Button fx:id="goNext" layoutX="284.0" layoutY="322.0" mnemonicParsing="false"  prefHeight="39.0" prefWidth="87.0" text="GO NEXT" />
+      <Button fx:id="goNext" layoutX="284.0" layoutY="322.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="87.0" text="GO NEXT" />
    </children>
 </AnchorPane>
