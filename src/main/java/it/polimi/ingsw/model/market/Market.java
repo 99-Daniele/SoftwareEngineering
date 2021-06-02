@@ -353,7 +353,7 @@ public class Market implements Serializable, Market_View {
     }
 
     private String fromMarbleToString(Marble m) {
-        String s1 = m.toString();
+        String s1 = m.toStringAbb();
         switch (s1) {
             case "R":
                 return ColorAnsi.ANSI_RED.escape();

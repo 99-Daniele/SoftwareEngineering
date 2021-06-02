@@ -4,8 +4,8 @@ public class ErrorMessage extends Message{
 
     private final ErrorType errorType;
 
-    public ErrorMessage(MessageType messageType, int clientID, ErrorType errorType) {
-        super(messageType, clientID);
+    public ErrorMessage(int clientID, ErrorType errorType) {
+        super(MessageType.ERR, clientID);
         this.errorType = errorType;
     }
 

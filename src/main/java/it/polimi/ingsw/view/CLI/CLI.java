@@ -730,11 +730,11 @@ public class CLI extends ClientView{
                 else {
                     int[] rowColumn = super.getRowColumn(cardID);
                     if (command.get(2).equals("warehouse") || command.get(2).equals("w")) {
-                        Message message = new Message_Three_Parameter_Int(MessageType.BUY_CARD, position, rowColumn[0], rowColumn[1], 1);
+                        Message message = new Message_Three_Parameter_Int(MessageType.BUY_CARD, position, rowColumn[0], rowColumn[1], 0);
                         ClientSocket.sendMessage(message);
                     } else if (command.get(2).equals("strongbox") || command.get(2).equals("s")) {
                         currentState = GAME_STATES.BUY_CARD_STATE;
-                        Message message = new Message_Three_Parameter_Int(MessageType.BUY_CARD, position, rowColumn[0], rowColumn[1], 2);
+                        Message message = new Message_Three_Parameter_Int(MessageType.BUY_CARD, position, rowColumn[0], rowColumn[1], 1);
                         ClientSocket.sendMessage(message);
                         waitMessage();
                         if(receivedMessage.getMessageType() == MessageType.CHOSEN_SLOT)
@@ -1240,8 +1240,10 @@ public class CLI extends ClientView{
 
     private void empty_deck_error() {
         System.err.println("You have chosen an empty deck");
-        if(currentState == GAME_STATES.BUY_CARD_STATE)
+        if(currentState == GAME_STATES.BUY_CARD_STATE){
             currentState = GAME_STATES.FIRST_ACTION_STATE;
+            notifyMessage(new ErrorMessage(position, ErrorType.EMPTY_DECK));
+        }
     }
 
     private void empty_slot_error() {
@@ -1262,8 +1264,10 @@ public class CLI extends ClientView{
 
     private void full_slot_error() {
         System.err.println("You can't insert this card in any slot");
-        if(currentState == GAME_STATES.BUY_CARD_STATE)
+        if(currentState == GAME_STATES.BUY_CARD_STATE){
             currentState = GAME_STATES.FIRST_ACTION_STATE;
+            notifyMessage(new ErrorMessage(position, ErrorType.FULL_SLOT));
+        }
     }
 
     private void illegal_operation_error() {
@@ -1276,8 +1280,10 @@ public class CLI extends ClientView{
 
     private void not_enough_resource_error() {
         System.err.println("You have not enough resources to do this operation");
-        if(currentState == GAME_STATES.FIRST_POWER_STATE || currentState == GAME_STATES.BUY_CARD_STATE)
+        if(currentState == GAME_STATES.FIRST_POWER_STATE || currentState == GAME_STATES.BUY_CARD_STATE) {
             currentState = GAME_STATES.FIRST_ACTION_STATE;
+            notifyMessage(new ErrorMessage(position, ErrorType.NOT_ENOUGH_RESOURCES));
+        }
     }
 
     private void already_active_error() {
