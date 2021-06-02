@@ -62,8 +62,8 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame {
 
     @Override
     public void nextPlayer() {
-        super.nextPlayer();
         triggerFirstAction();
+        super.nextPlayer();
     }
 
     /**

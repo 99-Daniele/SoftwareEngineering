@@ -1,14 +1,13 @@
 package it.polimi.ingsw.view;
 
+import it.polimi.ingsw.model.games.states.GAME_STATES;
 import it.polimi.ingsw.model.market.Marble;
-import it.polimi.ingsw.network.client.ClientSocket;
 import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.view.model_view.Game_View;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -16,30 +15,34 @@ import java.util.Observer;
 public abstract class ClientView extends Application implements Observer {
 
     private final Game_View game;
+    private GAME_STATES currentState;
 
     public ClientView() {
         game = new Game_View();
+        currentState = GAME_STATES.FIRST_ACTION_STATE;
     }
 
     public void launchGUI(){}
 
-    public void launchGUI(String hostName, int port){}
-
     public void launchCLI(){}
-
-    public void launchCLI(String hostName, int port){}
-
-    public void serverConnection(String hostName, int port) throws IOException {
-        ClientSocket clientSocket = new ClientSocket(new Socket(hostName, port));
-        clientSocket.addObserver(this);
-        clientSocket.start();
-    }
 
     @Override
     public void start(Stage stage) throws Exception {}
 
     public Game_View getGame() {
         return game;
+    }
+
+    public GAME_STATES getCurrentState() {
+        return currentState;
+    }
+
+    public boolean isState(GAME_STATES state){
+        return  currentState  == state;
+    }
+
+    public void setCurrentState(GAME_STATES currentState) {
+        this.currentState = currentState;
     }
 
     @Override
@@ -143,8 +146,6 @@ public abstract class ClientView extends Application implements Observer {
 
     public abstract void login_message(Message message);
 
-    public abstract void askPlayersNumber();
-
     public abstract void new_player_message(Message message);
 
     public void players_message(Message message){
@@ -198,7 +199,16 @@ public abstract class ClientView extends Application implements Observer {
 
     public abstract void leader_card_choice(Message message) throws IOException, InterruptedException;
 
-    public abstract void ok_message() throws IOException, InterruptedException;
+    public void ok_message() throws IOException, InterruptedException{
+        switch (getCurrentState()){
+            case BUY_CARD_STATE:
+                setCurrentState(GAME_STATES.END_TURN_STATE);
+                break;
+            case FIRST_POWER_STATE:
+                setCurrentState(GAME_STATES.ACTIVATE_PRODUCTION_STATE);
+                break;
+        }
+    }
 
     public abstract void turn_message(Message message) throws InterruptedException, IOException;
 
@@ -288,5 +298,9 @@ public abstract class ClientView extends Application implements Observer {
 
     public abstract void end_game_message(Message message);
 
-    public abstract void error_message(Message message) throws IOException, InterruptedException;
+    public void error_message(Message message) throws IOException, InterruptedException{
+        if(isState(GAME_STATES.FIRST_POWER_STATE) || isState(GAME_STATES.BUY_CARD_STATE)) {
+            setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
+        }
+    }
 }

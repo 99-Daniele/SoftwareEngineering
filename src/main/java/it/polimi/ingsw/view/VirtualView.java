@@ -233,7 +233,7 @@ public class VirtualView extends Observable implements View, Observer{
     public void errorMessage(ErrorType errorType){
         if(errorType == ErrorType.ALREADY_TAKEN_NICKNAME)
             nickName = null;
-        sendMessage(new ErrorMessage(MessageType.ERR, viewID, errorType));
+        sendMessage(new ErrorMessage( viewID, errorType));
     }
 
     private void disconnect(){

@@ -24,6 +24,11 @@ public class Strongbox {
         return 0;
     }
 
+    public Strongbox() {
+        for(Resource r: Resource.values())
+            increaseResourceType(r, 100);
+    }
+
     /**
      * @param resource stands for the type of resource to increase.
      * @param amount stands for the amount of @param resource to increase.
