@@ -30,23 +30,10 @@ public class CLI extends ClientView{
 
     public void launchCLI(){
         try {
-            connectionInfo();
             printLogo();
             login();
             startCLI();
-        } catch (IOException | ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void launchCLI(String hostName, int port){
-        try {
-            if(!connectionInfo(hostName, port))
-                connectionInfo();
-            printLogo();
-            login();
-            startCLI();
-        } catch (IOException | ExecutionException | InterruptedException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
@@ -73,35 +60,6 @@ public class CLI extends ClientView{
                 "8888b     888888     88  d8b 88  888888888  888     d888b      d888b   888888888  88  d8b 88  d888        888888    \n" +
                 "888 d8b   888        88    d888  88     88  888      d888b      d888b  88     88  88    d888   d88888888  888       \n" +
                 "888  888  888888888  88     d88  88     88  888  d888888b   d888888b   88     88  88     d88    d8888888  888888888 \n");
-    }
-
-    private void connectionInfo() throws IOException, ExecutionException {
-        BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
-        while (true) {
-            System.out.println("\nEnter hostname [localhost]: ");
-            String hostName = stdIn.readLine();
-            if (hostName == null || hostName.isBlank() || hostName.equals(""))
-                hostName = "localhost";
-            System.out.println("Enter port [12460]: ");
-            String portNumber = stdIn.readLine();
-            if (portNumber == null || portNumber.isBlank() ||portNumber.equals(""))
-                portNumber = "12460";
-            if(connectionInfo(hostName, Integer.parseInt(portNumber)))
-                break;
-        }
-    }
-
-    private boolean connectionInfo(String hostName, int port) throws IOException, ExecutionException {
-        try {
-            super.serverConnection(hostName, port);
-            System.out.println("Accepted by Server");
-            return true;
-        } catch (UnknownHostException e) {
-            System.err.println("Unknown host " + hostName);
-        } catch (IOException e) {
-            System.err.println("Can't connect to host " + hostName);
-        }
-        return false;
     }
 
     private void login() throws InterruptedException {

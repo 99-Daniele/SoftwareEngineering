@@ -48,9 +48,6 @@ public class GUI extends ClientView {
     }
 
     @Override
-    public void launchGUI(String hostName, int port){launch();}
-
-    @Override
     public void new_player_message(Message message) {
 
     }

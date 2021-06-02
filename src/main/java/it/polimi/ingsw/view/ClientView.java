@@ -23,17 +23,7 @@ public abstract class ClientView extends Application implements Observer {
 
     public void launchGUI(){}
 
-    public void launchGUI(String hostName, int port){}
-
     public void launchCLI(){}
-
-    public void launchCLI(String hostName, int port){}
-
-    public void serverConnection(String hostName, int port) throws IOException {
-        ClientSocket clientSocket = new ClientSocket(new Socket(hostName, port));
-        clientSocket.addObserver(this);
-        clientSocket.start();
-    }
 
     @Override
     public void start(Stage stage) throws Exception {}
