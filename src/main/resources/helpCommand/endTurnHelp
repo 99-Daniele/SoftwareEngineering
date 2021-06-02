@@ -1,9 +1,9 @@
 
 end turn/-et  --> end your turn
 
-leader active/leader a/-la 1/2  --> activate leader card
+active leader/-al 1/2  --> activate leader card
 
-leader discard/leader d/-ld  --> discard leader card
+discard leader/-dl 1/2 --> discard leader card
 
 
 see playerboard/see board/see p/-sp 1/2/3/4 --> print other playerboard

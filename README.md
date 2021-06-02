@@ -40,15 +40,16 @@ CLI COMMAND HELPER
 | see faithtrack / see f / -sf| print the faithTrack
 | see decks / see d  / -sd| print current buyable development cards
 | buy card /buy / -bc  1/2.../47/48  warehouse(w) / strongbox(s)| buy card 1/2.../47/48 taking resources from warehouse/strongbox
-| take marble / market / -tm  row(r) / column(c)  1/2/3/4| take row/column 1/2/3/4 from market
+| takemarble / market / -tm  row(r) / column(c)  1/2/3/4| take row/column 1/2/3/4 from market
 | usemarble / marble / -um  red(r) / white(w) / purple(p) / yellow(y) / grey(g) / blue(b)| use one of the chosen marbles
 | whiteconversion / white / -wc  1/2| chose which active WhiteConversionCard use for white marble
 | switch / -sw  1/2/3/4/5  1/2/3/4/5| switch depot 1/2/3/4/5 with depot 1/2/3/4/5
-| power card / power c / -cp  1/2/3  warehouse(w) / strongbox(s)| activate the power of slot 1/2/3 taking resource from warehouse/strongbox
-| power basic / power b / -bp  coin(co) / shield(sh) / stone(st) / servant(se)   coin(co) / shield(sh) / stone(st) / servant(se)   coin(co) / shield(sh) / stone(st) / servant(se)  warehouse(w) / strongbox(s)| activate basic power  deleting first two resource and gaining third resource
-| power leader / power l / -lp  1/2  coin(co) / shield(sh) / stone(st) / servant(se)  warehouse(w)/strongbox(s)| activate the power of AdditionalProductionPower card taking resource from warehouse/strongbox and gaining 1 resource
-| power end / -ep| inform Server that player has ended its production
-| leader active / leader a / -la  1/2| activate leader card 1/2
-| leader discard / leader d / -ld  1/2| discard leader card 1/2
+| card power / -cp  1/2/3  warehouse(w) / strongbox(s)| activate the power of slot 1/2/3 taking resource from warehouse/strongbox
+| basic power / -bp  coin(co) / shield(sh) / stone(st) / servant(se)   coin(co) / shield(sh) / stone(st) / servant(se)   coin(co) / shield(sh) / stone(st) / servant(se)  warehouse(w) / strongbox(s)| activate basic power  deleting first two resource and gaining third resource
+| leader power / -lp  1/2  coin(co) / shield(sh) / stone(st) / servant(se)  warehouse(w)/strongbox(s)| activate the power of AdditionalProductionPower card taking resource from warehouse/strongbox and gaining 1 resource
+| end power / -ep| inform Server that player has ended its production
+| active leader / -al  1/2| activate leader card 1/2
+| discard leader / -dl  1/2| discard leader card 1/2
 | end turn / -et| end your turn
 | help / -h| print help text
+| end game | finish the game

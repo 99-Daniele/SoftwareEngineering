@@ -1,11 +1,11 @@
 
-power card/power c/-cp 1/2/3 warehouse(w)/strongbox(s)  --> activate slot production power
+card power/-cp 1/2/3 warehouse(w)/strongbox(s)  --> activate slot production power
 
-power basic/power b/-bp coin(co)/shield(sh)/stone(st)/servant(se) coin(co)/shield(sh)/stone(st)/servant(se)  coin(co)/shield(sh)/stone(st)/servant(se) warehouse(w)/strongbox(s)
-                                                                                                                                                        --> activate basic production power
-power leader/power l/-lp 1/2 coin(co)/shield(sh)/stone(st)/servant(se) warehouse(w)/strongbox(s) --> activate leader card production power
+basic power/-bp coin(co)/shield(sh)/stone(st)/servant(se) coin(co)/shield(sh)/stone(st)/servant(se)  coin(co)/shield(sh)/stone(st)/servant(se) warehouse(w)/strongbox(s)
+                                                                                                                                                   --> activate basic production power
+leader power/-lp 1/2 coin(co)/shield(sh)/stone(st)/servant(se) warehouse(w)/strongbox(s) --> activate leader card production power
 
-power end/-ep  --> end power productions
+end power/-ep  --> end power productions
 
 
 see playerboard/see board/see p/-sp 1/2/3/4 --> print other playerboard
