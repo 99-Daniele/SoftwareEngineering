@@ -8,6 +8,7 @@ import javafx.scene.input.MouseEvent;
 import java.io.IOException;
 
 public class InitSceneController {
+
     public GUI gui;
     @FXML
     private ImageView leader1;

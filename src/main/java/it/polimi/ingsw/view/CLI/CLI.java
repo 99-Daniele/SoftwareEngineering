@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.CLI;
 
+import it.polimi.ingsw.App;
 import it.polimi.ingsw.model.games.states.GAME_STATES;
 import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.model.resourceContainers.Resource;
@@ -10,12 +11,11 @@ import it.polimi.ingsw.view.ClientView;
 import java.io.*;
 import java.net.UnknownHostException;
 import java.util.*;
-import java.util.concurrent.*;
 
 public class CLI extends ClientView{
 
     private Thread inputThread;
-    private BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
+    private final BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
     private Message receivedMessage;
     private final Object lock = new Object();
     private int position;
@@ -26,14 +26,69 @@ public class CLI extends ClientView{
         turn = false;
     }
 
+    @Override
     public void launchCLI(){
         try {
+            connectToServer();
             printLogo();
             login();
             startCLI();
-        } catch (InterruptedException e) {
+        } catch (InterruptedException | IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void launchCLI(String hostname, int port){
+        try {
+            connectToServer(hostname, port);
+            printLogo();
+            login();
+            startCLI();
+        } catch (InterruptedException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void connectToServer() throws IOException {
+        while (true) {
+            System.out.println("\nEnter hostname [localhost]: ");
+            String hostName = stdIn.readLine();
+            if (hostName == null || hostName.isBlank() || hostName.equals(""))
+                hostName = "localhost";
+            System.out.println("Enter port [12460]: ");
+            String portNumber = stdIn.readLine();
+            if (portNumber == null || portNumber.isBlank() || portNumber.equals(""))
+                portNumber = "12460";
+            try {
+                App.connectionInfo(hostName, Integer.parseInt(portNumber));
+                System.out.println("Accepted by Server\n");
+                App.startClient(this);
+                break;
+            } catch (UnknownHostException e) {
+                System.err.println("Unknown host " + hostName);
+            } catch (IOException e) {
+                System.err.println("Can't connect to host " + hostName);
+            } catch (NumberFormatException e) {
+                System.err.println("You have to insert a number!");
+            }
+        }
+    }
+
+    private void connectToServer(String hostname, int port) throws IOException {
+        try {
+            App.connectionInfo(hostname, port);
+            System.out.println("Accepted by Server\n");
+            App.startClient(this);
+            return;
+        } catch (UnknownHostException e) {
+            System.err.println("Unknown host " + hostname);
+        } catch (IOException e) {
+            System.err.println("Can't connect to host " + hostname);
+        } catch (NumberFormatException e) {
+            System.err.println("You have to insert a number!");
+        }
+        connectToServer();
     }
 
     private void printLogo(){
@@ -1022,7 +1077,7 @@ public class CLI extends ClientView{
             else
                 System.out.println("Player " + super.getNickname(m.getClientID()) + " has increased its faith points. Now it has " + m.getPar());
         }
-        else if (super.getMarbles().size() > 0)
+        else if (super.getGame().isStartGame() && super.getMarbles().size() > 0)
             CLI_Printer.printMarbles(super.getGame(), super.getMarbles());
         super.faith_points_message(message);
     }
@@ -1037,7 +1092,7 @@ public class CLI extends ClientView{
                     + " in its " + m.getPar1() + "° depot");
             else {
                 CLI_Printer.printWarehouse(super.getGame(), position);
-                if (super.getMarbles().size() > 0)
+                if (super.getGame().isStartGame() &&  super.getMarbles().size() > 0)
                     CLI_Printer.printMarbles(super.getGame(), super.getMarbles());
             }
         }
@@ -1167,103 +1222,71 @@ public class CLI extends ClientView{
     }
 
     @Override
-    public void error_message(Message message) {
-        ErrorMessage m = (ErrorMessage) message;
-        switch (m.getErrorType()){
-            case ALREADY_TAKEN_NICKNAME:
-                already_taken_nickName_error();
-                break;
-            case WRONG_PARAMETERS:
-                wrong_parameters_error();
-                break;
-            case NOT_YOUR_TURN:
-                wrong_turn_error();
-                break;
-            case FULL_SLOT:
-                full_slot_error();
-                break;
-            case EMPTY_DECK:
-                empty_deck_error();
-                break;
-            case EMPTY_SLOT:
-                empty_slot_error();
-                break;
-            case WRONG_POWER:
-                wrong_power_error();
-                break;
-            case NOT_ENOUGH_CARDS:
-                not_enough_cards_error();
-                break;
-            case ILLEGAL_OPERATION:
-                illegal_operation_error();
-                break;
-            case IMPOSSIBLE_SWITCH:
-                impossible_switch_error();
-                break;
-            case NOT_ENOUGH_RESOURCES:
-                not_enough_resource_error();
-                break;
-            case ALREADY_ACTIVE_LEADER_CARD:
-                already_active_error();
-                break;
-            case ALREADY_DISCARD_LEADER_CARD:
-                already_discard_error();
-                break;
-        }
-    }
-
-    private void already_taken_nickName_error() {
+    public void already_taken_nickName_error() {
         System.err.println("Nickname already taken. Chose a different one");
+        notifyMessage(new ErrorMessage(position, ErrorType.ALREADY_TAKEN_NICKNAME));
     }
 
-    private void wrong_parameters_error() {
+    @Override
+    public void wrong_parameters_error() {
         System.err.println("You have inserted wrong parameters");
     }
 
-    private void wrong_turn_error(){
+    @Override
+    public void wrong_turn_error(){
         System.err.println("It's not your turn");
     }
 
-    private void empty_deck_error() {
+    @Override
+    public void empty_deck_error() {
         System.err.println("You have chosen an empty deck");
         notifyMessage(new ErrorMessage(position, ErrorType.EMPTY_DECK));
     }
 
-    private void empty_slot_error() {
+    @Override
+    public void empty_slot_error() {
         System.err.println("You have no cards in this slot");
     }
 
-    private void wrong_power_error() {
+    @Override
+    public void wrong_power_error() {
         System.err.println("You can't activate this production power");
     }
 
-    private void not_enough_cards_error() {
+    @Override
+    public void not_enough_cards_error() {
         System.err.println("You don't have enough development cards to activate this leader card");
     }
 
-    private void full_slot_error() {
+    @Override
+    public void full_slot_error() {
         System.err.println("You can't insert this card in any slot");
         notifyMessage(new ErrorMessage(position, ErrorType.FULL_SLOT));
     }
 
-    private void illegal_operation_error() {
+    @Override
+    public void illegal_operation_error() {
         System.err.println("You can't do this operation at this moment");
     }
 
-    private void impossible_switch_error() {
+    @Override
+    public void impossible_switch_error() {
         System.err.println("You can't switch this depots");
     }
 
-    private void not_enough_resource_error() {
+    @Override
+    public void not_enough_resource_error() {
         System.err.println("You have not enough resources to do this operation");
         notifyMessage(new ErrorMessage(position, ErrorType.NOT_ENOUGH_RESOURCES));
     }
 
-    private void already_active_error() {
+    @Override
+    public void already_active_error() {
         System.err.println("You activated this leader card previously");
     }
 
-    private void already_discard_error() {
+    @Override
+    public void already_discard_error() {
         System.err.println("You discard this leader card previously");
     }
 

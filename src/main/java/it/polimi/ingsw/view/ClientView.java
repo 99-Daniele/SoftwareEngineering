@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view;
 
+import it.polimi.ingsw.App;
 import it.polimi.ingsw.model.games.states.GAME_STATES;
 import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.network.messages.*;
@@ -24,7 +25,12 @@ public abstract class ClientView extends Application implements Observer {
 
     public void launchGUI(){}
 
+    public void launchGUI(String hostName, int port){}
+
     public void launchCLI(){}
+
+    public void launchCLI(String hostname, int port){}
+
 
     @Override
     public void start(Stage stage) throws Exception {}
@@ -302,5 +308,73 @@ public abstract class ClientView extends Application implements Observer {
         if(isState(GAME_STATES.FIRST_POWER_STATE) || isState(GAME_STATES.BUY_CARD_STATE)) {
             setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
         }
+        ErrorMessage m = (ErrorMessage) message;
+        switch (m.getErrorType()){
+            case ALREADY_TAKEN_NICKNAME:
+                already_taken_nickName_error();
+                break;
+            case WRONG_PARAMETERS:
+                wrong_parameters_error();
+                break;
+            case NOT_YOUR_TURN:
+                wrong_turn_error();
+                break;
+            case FULL_SLOT:
+                full_slot_error();
+                break;
+            case EMPTY_DECK:
+                empty_deck_error();
+                break;
+            case EMPTY_SLOT:
+                empty_slot_error();
+                break;
+            case WRONG_POWER:
+                wrong_power_error();
+                break;
+            case NOT_ENOUGH_CARDS:
+                not_enough_cards_error();
+                break;
+            case ILLEGAL_OPERATION:
+                illegal_operation_error();
+                break;
+            case IMPOSSIBLE_SWITCH:
+                impossible_switch_error();
+                break;
+            case NOT_ENOUGH_RESOURCES:
+                not_enough_resource_error();
+                break;
+            case ALREADY_ACTIVE_LEADER_CARD:
+                already_active_error();
+                break;
+            case ALREADY_DISCARD_LEADER_CARD:
+                already_discard_error();
+                break;
+        }
     }
+
+    public abstract void already_taken_nickName_error() ;
+
+    public abstract void wrong_parameters_error();
+
+    public abstract void wrong_turn_error();
+
+    public abstract void empty_deck_error() ;
+
+    public abstract void empty_slot_error();
+
+    public abstract void wrong_power_error();
+
+    public abstract void not_enough_cards_error() ;
+
+    public abstract void full_slot_error();
+
+    public abstract void illegal_operation_error();
+
+    public abstract void impossible_switch_error();
+
+    public abstract void not_enough_resource_error();
+
+    public abstract void already_active_error();
+
+    public abstract void already_discard_error();
 }

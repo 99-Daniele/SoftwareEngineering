@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.GUI;
 
+import it.polimi.ingsw.App;
 import it.polimi.ingsw.network.client.ClientSocket;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -12,6 +13,7 @@ import java.util.concurrent.ExecutionException;
 
 
 public class ConnectionSceneController {
+
     @FXML
     private Button connect;
     @FXML
@@ -20,28 +22,33 @@ public class ConnectionSceneController {
     private TextField serverAddress;
     @FXML
     public void initialize(){
-        connect.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> connectButton());
-    }
-    private void connectButton(){
-        int port=Integer.parseInt(serverPort.getText());
-        String address=serverAddress.getText();
-        if(port==12460 && address.equals("localhost")) {
-            /*
-            apro la connessione
-             */
+        connect.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             try {
-                GUI.setRoot("/fxml/nicknameScene");
+                connectButton();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-        else
+        });
+    }
+
+    private void connectButton() throws IOException {
         try {
+            String address = serverAddress.getText();
+            int portNumber;
+            if(address.isBlank())
+                address = "127.0.0.1";
+            String port = serverPort.getText();
+            if(port.isBlank())
+                portNumber = 12460;
+            else
+                portNumber = Integer.parseInt(port);
+            App.connectionInfo(address, portNumber);
+            GUI.setRoot("/fxml/nicknameScene");
+        } catch (NumberFormatException | IOException e) {
             GUI.setRoot("/fxml/connectionScene");
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
+
 
 
 }

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.GUI;
 
+import it.polimi.ingsw.App;
 import it.polimi.ingsw.model.games.states.GAME_STATES;
 import it.polimi.ingsw.network.messages.ErrorMessage;
 import it.polimi.ingsw.network.messages.ErrorType;
@@ -13,16 +14,41 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 import java.net.URL;
+import java.net.UnknownHostException;
 
 
 public class GUI extends ClientView {
 
 
     private static Scene scene;
+    private static boolean connected = false;
+
+    @Override
+    public void launchGUI() {
+        launch();
+    }
+
+    @Override
+    public void launchGUI(String hostname, int port){
+        connectToSever(hostname, port);
+        launch();
+    }
+
+    private void connectToSever(String hostname, int port){
+        try {
+            App.connectionInfo(hostname, port);
+            App.startClient(this);
+            connected = true;
+        } catch (IOException e) {
+        }
+    }
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("/fxml/connectionScene"), 640, 480);
+        if(connected)
+            scene = new Scene(loadFXML("/fxml/nicknameScene"), 640, 480);
+        else
+            scene = new Scene(loadFXML("/fxml/connectionScene"), 640, 480);
         stage.setMaximized(true);
         stage.setScene(scene);
         stage.show();
@@ -43,11 +69,6 @@ public class GUI extends ClientView {
         URL url = GUI.class.getResource(fxml + ".fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(url);
         return fxmlLoader.load();
-    }
-
-    @Override
-    public void launchGUI() {
-        launch();
     }
 
     @Override
@@ -157,42 +178,55 @@ public class GUI extends ClientView {
         }
     }
 
-    private void already_taken_nickName_error() {
+    @Override
+    public void already_taken_nickName_error() {
     }
 
-    private void wrong_parameters_error() {
+    @Override
+    public void wrong_parameters_error() {
     }
 
-    private void wrong_turn_error(){
+    @Override
+    public void wrong_turn_error(){
     }
 
-    private void empty_deck_error() {
+    @Override
+    public void empty_deck_error() {
     }
 
-    private void empty_slot_error() {
+    @Override
+    public void empty_slot_error() {
     }
 
-    private void wrong_power_error() {
+    @Override
+    public void wrong_power_error() {
     }
 
-    private void not_enough_cards_error() {
+    @Override
+    public void not_enough_cards_error() {
     }
 
-    private void full_slot_error() {
+    @Override
+    public void full_slot_error() {
     }
 
-    private void illegal_operation_error() {
+    @Override
+    public void illegal_operation_error() {
     }
 
-    private void impossible_switch_error() {
+    @Override
+    public void impossible_switch_error() {
     }
 
-    private void not_enough_resource_error() {
+    @Override
+    public void not_enough_resource_error() {
     }
 
-    private void already_active_error() {
+    @Override
+    public void already_active_error() {
     }
 
-    private void already_discard_error() {
+    @Override
+    public void already_discard_error() {
     }
 }

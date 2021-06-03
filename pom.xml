@@ -38,13 +38,13 @@
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
-      <version>13</version>
+      <version>16</version>
     </dependency>
 
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-fxml</artifactId>
-      <version>13</version>
+      <version>16</version>
     </dependency>
 
     <dependency>
@@ -74,7 +74,7 @@
           <configuration>
 
             <!-- original:
-            <mainClass>org.example.App</mainClass>
+            <mainClass>it.polimi.ingsw.App</mainClass>
             -->
             <mainClass>it.polimi.ingsw.Launcher</mainClass>
 
@@ -103,7 +103,7 @@
                                        "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 
                     <!-- original:
-                    <mainClass>org.example.App</mainClass>
+                    <mainClass>it.polimi.ingsw.App</mainClass>
                      -->
 
                     <mainClass>it.polimi.ingsw.Launcher</mainClass>
