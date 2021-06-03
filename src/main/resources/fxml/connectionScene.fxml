@@ -8,11 +8,11 @@
 
 <AnchorPane prefHeight="612.0" prefWidth="1178.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.ConnectionSceneController">
    <children>
-      <TextField fx:id="serverPort" layoutX="489.0" layoutY="403.0" prefHeight="46.0" prefWidth="338.0">
+      <TextField fx:id="serverPort" alignment="CENTER" layoutX="489.0" layoutY="403.0" prefHeight="46.0" prefWidth="338.0" text="12460">
          <font>
             <Font size="24.0" />
          </font></TextField>
-      <TextField fx:id="serverAddress" layoutX="489.0" layoutY="238.0" prefHeight="46.0" prefWidth="338.0">
+      <TextField fx:id="serverAddress" alignment="CENTER" layoutX="489.0" layoutY="238.0" prefHeight="46.0" prefWidth="338.0" text="127.0.0.1">
          <font>
             <Font size="24.0" />
          </font></TextField>
@@ -36,5 +36,15 @@
             <Font name="Bell MT" size="24.0" />
          </font>
       </Label>
+      <Label fx:id="errorLabel" alignment="CENTER" layoutX="384.0" layoutY="167.0" prefHeight="296.0" prefWidth="541.0" style="-fx-background-color: WHITE;" text="SERVER ADDRESS OR PORT ARE WRONG. PLEASE INSERT AGAIN" textAlignment="CENTER" visible="false" wrapText="true">
+         <font>
+            <Font name="Bell MT" size="24.0" />
+         </font>
+      </Label>
+      <Button fx:id="ok" layoutX="629.0" layoutY="391.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="59.0" text="OK" visible="false">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

@@ -18,15 +18,15 @@
          <font>
             <Font size="14.0" />
          </font></Button>
-      <ImageView fitHeight="156.0" fitWidth="107.0" layoutX="468.0" layoutY="305.0" />
-      <ImageView fitHeight="156.0" fitWidth="107.0" layoutX="468.0" layoutY="274.0" />
-      <ImageView fitHeight="156.0" fitWidth="107.0" layoutX="597.0" layoutY="305.0" />
-      <ImageView fitHeight="156.0" fitWidth="107.0" layoutX="468.0" layoutY="244.0" />
-      <ImageView fitHeight="156.0" fitWidth="107.0" layoutX="597.0" layoutY="274.0" />
-      <ImageView fitHeight="156.0" fitWidth="107.0" layoutX="597.0" layoutY="244.0" />
-      <ImageView fitHeight="156.0" fitWidth="107.0" layoutX="730.0" layoutY="305.0" />
-      <ImageView fitHeight="156.0" fitWidth="107.0" layoutX="730.0" layoutY="274.0" />
-      <ImageView fitHeight="156.0" fitWidth="107.0" layoutX="725.0" layoutY="245.0" />
+      <ImageView fx:id="slot11" fitHeight="156.0" fitWidth="107.0" layoutX="468.0" layoutY="305.0" />
+      <ImageView fx:id="slot12" fitHeight="156.0" fitWidth="107.0" layoutX="468.0" layoutY="274.0" />
+      <ImageView fx:id="slot21" fitHeight="156.0" fitWidth="107.0" layoutX="597.0" layoutY="305.0" />
+      <ImageView fx:id="slot13" fitHeight="156.0" fitWidth="107.0" layoutX="468.0" layoutY="244.0" />
+      <ImageView fx:id="slot22" fitHeight="156.0" fitWidth="107.0" layoutX="597.0" layoutY="274.0" />
+      <ImageView fx:id="slot23" fitHeight="156.0" fitWidth="107.0" layoutX="597.0" layoutY="244.0" />
+      <ImageView fx:id="slot31" fitHeight="156.0" fitWidth="107.0" layoutX="730.0" layoutY="305.0" />
+      <ImageView fx:id="slot32" fitHeight="156.0" fitWidth="107.0" layoutX="730.0" layoutY="274.0" />
+      <ImageView fx:id="slot33" fitHeight="156.0" fitWidth="107.0" layoutX="725.0" layoutY="245.0" />
       <ImageView fitHeight="25.0" fitWidth="29.0" layoutX="216.0" layoutY="412.0">
          <image>
             <Image url="@../photos/servant.png" />
@@ -47,53 +47,58 @@
             <Image url="@../photos/stone.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="25.0" fitWidth="29.0" layoutX="269.0" layoutY="274.0" />
-      <ImageView fitHeight="25.0" fitWidth="29.0" layoutX="255.0" layoutY="310.0" />
-      <ImageView fitHeight="25.0" fitWidth="29.0" layoutX="284.0" layoutY="310.0" />
+      <ImageView fx:id="deposit11" fitHeight="25.0" fitWidth="29.0" layoutX="269.0" layoutY="274.0" />
+      <ImageView fx:id="deposit21" fitHeight="25.0" fitWidth="29.0" layoutX="255.0" layoutY="310.0" />
+      <ImageView fx:id="deposit22" fitHeight="25.0" fitWidth="29.0" layoutX="284.0" layoutY="310.0" />
       <ImageView fx:id="deposit31" fitHeight="25.0" fitWidth="29.0" layoutX="240.0" layoutY="352.0">
       </ImageView>
-      <ImageView fitHeight="25.0" fitWidth="29.0" layoutX="269.0" layoutY="352.0" />
-      <ImageView fitHeight="25.0" fitWidth="29.0" layoutX="299.0" layoutY="352.0" />
-      <Label layoutX="247.0" layoutY="415.0" textFill="#fffbfb">
+      <ImageView fx:id="deposit32" fitHeight="25.0" fitWidth="29.0" layoutX="269.0" layoutY="352.0" />
+      <ImageView fx:id="deposit33" fitHeight="25.0" fitWidth="29.0" layoutX="299.0" layoutY="352.0" />
+      <Label fx:id="servantAmount" layoutX="247.0" layoutY="410.0" prefHeight="25.0" prefWidth="22.0" textFill="#fffbfb">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label layoutX="247.0" layoutY="448.0" prefHeight="25.0" prefWidth="15.0" textFill="#fffbfb">
+      <Label fx:id="stoneAmount" layoutX="247.0" layoutY="448.0" prefHeight="25.0" prefWidth="22.0" textFill="#fffbfb">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label layoutX="306.0" layoutY="412.0" prefHeight="25.0" prefWidth="15.0" textFill="#fffbfb">
+      <Label fx:id="shieldAmount" layoutX="306.0" layoutY="412.0" prefHeight="25.0" prefWidth="22.0" textFill="#fffbfb">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label layoutX="306.0" layoutY="449.0" prefHeight="25.0" prefWidth="15.0" textFill="#fffbfb">
+      <Label fx:id="coinAmount" layoutX="306.0" layoutY="449.0" prefHeight="25.0" prefWidth="22.0" textFill="#fffbfb">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <ImageView fitHeight="200.0" fitWidth="132.0" layoutX="936.0" layoutY="93.0" />
-      <ImageView fitHeight="200.0" fitWidth="132.0" layoutX="936.0" layoutY="325.0" />
-      <ImageView fitHeight="33.0" fitWidth="29.0" layoutX="962.0" layoutY="249.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fitHeight="33.0" fitWidth="29.0" layoutX="1013.0" layoutY="249.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fitHeight="33.0" fitWidth="29.0" layoutX="1013.0" layoutY="480.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fitHeight="33.0" fitWidth="29.0" layoutX="962.0" layoutY="480.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fitHeight="42.0" fitWidth="48.0" layoutX="363.0" layoutY="151.0">
+      <ImageView fx:id="leader1" fitHeight="200.0" fitWidth="132.0" layoutX="936.0" layoutY="93.0" />
+      <ImageView fx:id="leader2" fitHeight="200.0" fitWidth="132.0" layoutX="936.0" layoutY="325.0" />
+      <ImageView fx:id="extraResource11" fitHeight="33.0" fitWidth="29.0" layoutX="962.0" layoutY="249.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="extraResource11" fitHeight="33.0" fitWidth="29.0" layoutX="1013.0" layoutY="249.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="extraResource22" fitHeight="33.0" fitWidth="29.0" layoutX="1013.0" layoutY="480.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="extraResource21" fitHeight="33.0" fitWidth="29.0" layoutX="962.0" layoutY="480.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pope1" fitHeight="42.0" fitWidth="48.0" layoutX="363.0" layoutY="151.0">
          <image>
             <Image url="@../photos/quadrato giallo.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="42.0" fitWidth="48.0" layoutX="530.0" layoutY="124.0">
+      <ImageView fx:id="pope2" fitHeight="42.0" fitWidth="48.0" layoutX="530.0" layoutY="124.0">
          <image>
             <Image url="@../photos/quadrato arancione.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="42.0" fitWidth="48.0" layoutX="730.0" layoutY="151.0">
+      <ImageView fx:id="pope3" fitHeight="42.0" fitWidth="48.0" layoutX="730.0" layoutY="151.0">
          <image>
             <Image url="@../photos/quadrato rosso.png" />
          </image>
       </ImageView>
+      <Label fx:id="croceRossa" layoutX="225.0" layoutY="172.0" prefHeight="25.0" prefWidth="29.0" text="✞">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

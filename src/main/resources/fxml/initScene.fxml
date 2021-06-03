@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefHeight="566.0" prefWidth="827.0" spacing="20.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.InitSceneController">
+<VBox alignment="CENTER" prefHeight="566.0" prefWidth="827.0" spacing="20.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="it.polimi.ingsw.view.GUI.InitSceneController">
     <children>
       <AnchorPane prefHeight="515.0" prefWidth="787.0">
          <children>
