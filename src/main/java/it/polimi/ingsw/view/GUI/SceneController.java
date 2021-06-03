@@ -28,6 +28,9 @@ public class SceneController {
         }
     }
 
+    public void askNumPlayer(){}
+
+
     private static Parent loadFXML(String fxml) throws IOException {
         //was:FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
         URL url = GUI.class.getResource(fxml + ".fxml");

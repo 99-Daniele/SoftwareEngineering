@@ -46,6 +46,15 @@ public class NicknameSceneController extends SceneController {
         });
     }
 
+    @FXML
+    @Override
+    public void askNumPlayer(){
+        nickname.setVisible(false);
+        nicknameLabel.setVisible(false);
+        playerNumber.setVisible(true);
+        numPlayerLabel.setVisible(true);
+    }
+
     private void goNextButton() throws IOException {
         SceneController nsc = new NicknameSceneController();
         if(GUI.getPosition() == 0) {

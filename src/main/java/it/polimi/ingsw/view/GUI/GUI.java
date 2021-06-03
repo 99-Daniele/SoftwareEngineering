@@ -46,26 +46,37 @@ public class GUI extends ClientView {
     public void start(Stage stage) throws IOException {
         if(connected) {
             sceneController = new NicknameSceneController();
-            sceneController.setScene(stage,"/fxml/nickNameScene");
+            Platform.runLater(() -> {
+                try {
+                    sceneController.setScene(stage,"/fxml/nickNameScene");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
         }
         else{
             sceneController = new ConnectionSceneController();
-            sceneController.setScene(stage,  "/fxml/connectionScene");
+            Platform.runLater(() -> {
+                try {
+                    sceneController.setScene(stage,"/fxml/connectionScene");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
         }
     }
 
     public static void setRoot(SceneController sceneController, String fxml) {
         GUI.sceneController = sceneController;
-        Platform.runLater(() ->
-                sceneController.changeRootPane(fxml));
+        sceneController.changeRootPane(fxml);
     }
 
     @Override
     public void login_message(Message message) {
         position = message.getClientID();
         if(position == 0) {
-            SceneController nsc = new NicknameSceneController();
-            setRoot(nsc, "/fxml/nickNameScene");
+            SceneController isc = new NicknameSceneController();
+            setRoot(isc, "/fxml/nickNameScene");
         }
         else {
             SceneController isc = new InitSceneController();
