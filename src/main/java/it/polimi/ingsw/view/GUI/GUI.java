@@ -14,7 +14,7 @@ public class GUI extends ClientView {
 
     private boolean connected = false;
     private static SceneController sceneController;
-    private static int position;
+    private static int position = -1;
 
     @Override
     public void launchGUI() {
@@ -54,8 +54,6 @@ public class GUI extends ClientView {
         }
     }
 
-
-
     public static void setRoot(SceneController sceneController, String fxml) {
         GUI.sceneController = sceneController;
         Platform.runLater(() ->
@@ -66,7 +64,8 @@ public class GUI extends ClientView {
     public void login_message(Message message) {
         position = message.getClientID();
         if(position == 0) {
-            sceneController.login();
+            SceneController nsc = new NicknameSceneController();
+            setRoot(nsc, "/fxml/nickNameScene");
         }
         else {
             SceneController isc = new InitSceneController();
