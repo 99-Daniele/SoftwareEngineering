@@ -28,26 +28,36 @@ public class CLI extends ClientView{
 
     @Override
     public void launchCLI(){
+        App.createClient(this);
         try {
             connectToServer();
-            printLogo();
-            login();
-            startCLI();
-        } catch (InterruptedException | IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
+        printLogo();
+        try {
+            login();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        startCLI();
     }
 
     @Override
     public void launchCLI(String hostname, int port){
+        App.createClient(this);
         try {
             connectToServer(hostname, port);
-            printLogo();
-            login();
-            startCLI();
-        } catch (InterruptedException | IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
+        printLogo();
+        try {
+            login();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        startCLI();
     }
 
     private void connectToServer() throws IOException {
@@ -61,9 +71,8 @@ public class CLI extends ClientView{
             if (portNumber == null || portNumber.isBlank() || portNumber.equals(""))
                 portNumber = "12460";
             try {
-                App.connectionInfo(hostName, Integer.parseInt(portNumber));
+                App.startClient(hostName, Integer.parseInt(portNumber));
                 System.out.println("Accepted by Server\n");
-                App.startClient(this);
                 break;
             } catch (UnknownHostException e) {
                 System.err.println("Unknown host " + hostName);
@@ -77,9 +86,8 @@ public class CLI extends ClientView{
 
     private void connectToServer(String hostname, int port) throws IOException {
         try {
-            App.connectionInfo(hostname, port);
+            App.startClient(hostname, port);
             System.out.println("Accepted by Server\n");
-            App.startClient(this);
             return;
         } catch (UnknownHostException e) {
             System.err.println("Unknown host " + hostname);
@@ -532,8 +540,10 @@ public class CLI extends ClientView{
         int leaderCard = Integer.parseInt(leader);
         if (leaderCard < 1 || leaderCard > 2)
             System.err.println("You have inserted a wrong number (1 - 2)");
-        else
+        else {
+            super.discardLeaderCard(position, leaderCard);
             ClientSocket.sendMessage(new Message_One_Parameter_Int(MessageType.LEADER_CARD_DISCARD, position, leaderCard));
+        }
     }
 
     private void endRequest(String command) throws IOException {

@@ -55,6 +55,7 @@ public abstract class ClientView extends Application implements Observer {
     public void update(Observable o, Object arg) {
         try {
             Message returnMessage = (Message) arg;
+            System.out.println(returnMessage);
             switch (returnMessage.getMessageType()) {
                 case LOGIN:
                     login_message(returnMessage);
@@ -179,16 +180,8 @@ public abstract class ClientView extends Application implements Observer {
         return game.get_Row_Column(cardID);
     }
 
-    public ArrayList<Integer> getDevelopmentCards(int position){
-        return game.getDevelopmentCards(position);
-    }
-
     public void discardLeaderCard(int position, int chosenLeaderCard){
         game.discardLeaderCard(position, chosenLeaderCard);
-    }
-
-    public int getLeaderCard(int position, int card){
-        return game.getLeaderCard(position, card);
     }
 
     public void setLeaderCard(int position, int card1, int card2){

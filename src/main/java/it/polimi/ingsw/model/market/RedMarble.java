@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.market;
 
 import it.polimi.ingsw.model.games.LightGame;
-import it.polimi.ingsw.view.ColorAnsi;
+import it.polimi.ingsw.view.CLI.ColorAnsi;
 
 /**
  * RedMarble is the Marble which increase player faith points by 1.

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.view.model_view;
 
 import it.polimi.ingsw.model.resourceContainers.Resource;
-import it.polimi.ingsw.view.ColorAnsi;
+import it.polimi.ingsw.view.CLI.ColorAnsi;
 
 public class Resource_Container_View {
 

@@ -46,12 +46,12 @@ public class App {
         }
     }
 
-    public static void connectionInfo(String hostName, int port) throws UnknownHostException, IOException {
-        client = new ClientSocket(new Socket(hostName, port));
+    public static void createClient(ClientView clientView){
+        client = new ClientSocket();
+        client.addObserver(clientView);
     }
 
-    public static void startClient(ClientView clientView){
-        client.addObserver(clientView);
-        client.start();
+    public static void startClient(String hostname, int port) throws UnknownHostException, IOException {
+        client.start(new Socket(hostname, port));
     }
 }

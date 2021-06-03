@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.resourceContainers;
 
-import it.polimi.ingsw.view.ColorAnsi;
+import it.polimi.ingsw.view.CLI.ColorAnsi;
 
 /**
  * ResourceContainer is a container of only one type of resource with its amount.

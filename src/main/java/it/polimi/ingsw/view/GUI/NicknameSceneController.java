@@ -20,26 +20,28 @@ import java.util.Observer;
 
 
 public class NicknameSceneController{
-    private int position=0;
+
     @FXML
     private TextField nickname;
     @FXML
-    private Button goNext;
-    @FXML
-    private Label numPlayerLabel;
+    private Label nicknameLabel;
     @FXML
     private TextField playerNumber;
     @FXML
-    private Label nicknameLabel;
+    private Label numPlayerLabel;
     @FXML
-    public void initialize()
-    {
-        if(position==0)
-        {
-            numPlayerLabel.setVisible(true);
-            playerNumber.setVisible(true);
+    private Button goNext;
+    @FXML
+    public void initialize() {
+        if(GUI.getPosition() == 0) {
+            nickname.setVisible(false);
+            nicknameLabel.setVisible(true);
         }
-        goNext.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> {
+        else{
+            playerNumber.setVisible(false);
+            numPlayerLabel.setVisible(false);
+        }
+        goNext.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             try {
                 goNextButton();
             } catch (IOException e) {
@@ -49,22 +51,23 @@ public class NicknameSceneController{
     }
 
     private void goNextButton() throws IOException {
-        String string=nickname.getText();
-        int num;
-        if(position==0)
-        {
-            nicknameLabel.setVisible(false);
-            nickname.setVisible(false);
-            num= Integer.parseInt(playerNumber.getText());
-            ClientSocket.sendMessage( new Message_One_Parameter_Int(MessageType.NUM_PLAYERS,position,num));
-            GUI.setRoot("/fxml/nicknameScene");
+        if(GUI.getPosition() == 0) {
+            try {
+                int num = Integer.parseInt(playerNumber.getText());
+                if(num < 1 || num > 4)
+                    GUI.setRoot("/fxml/nicknameScene");
+                else
+                    ClientSocket.sendMessage(new Message_One_Parameter_Int(MessageType.NUM_PLAYERS, GUI.getPosition(), num));
+            } catch (NumberFormatException e){
+                GUI.setRoot("/fxml/nicknameScene");
+            }
         }
-        else
-        {
-            ClientSocket.sendMessage(new Message_One_Parameter_String(MessageType.LOGIN, position, string));
-            GUI.setRoot("/fxml/initScene");
+        else {
+            String username = nickname.getText();
+            if(username.isBlank())
+                GUI.setRoot("/fxml/nicknameScene");
+            else
+                ClientSocket.sendMessage(new Message_One_Parameter_String(MessageType.LOGIN, GUI.getPosition(), username));
         }
     }
-
-
 }

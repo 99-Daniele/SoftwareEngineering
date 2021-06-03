@@ -2,7 +2,7 @@ package it.polimi.ingsw.model.market;
 
 import it.polimi.ingsw.model.games.LightGame;
 import it.polimi.ingsw.model.resourceContainers.Resource;
-import it.polimi.ingsw.view.ColorAnsi;
+import it.polimi.ingsw.view.CLI.ColorAnsi;
 
 /**
  * ResourceMarble is the Marble which increase player's warehouse by 1 resource.

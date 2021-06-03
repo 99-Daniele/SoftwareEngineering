@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.player.depots;
 
 import it.polimi.ingsw.model.resourceContainers.Resource;
-import it.polimi.ingsw.view.ColorAnsi;
 
 /**
  * Depot is a container of only one type of resource with its amount limited to maxAmount.

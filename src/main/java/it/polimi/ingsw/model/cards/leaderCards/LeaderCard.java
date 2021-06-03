@@ -7,7 +7,7 @@ import it.polimi.ingsw.model.cards.developmentCards.DevelopmentCard;
 import it.polimi.ingsw.model.player.Strongbox;
 import it.polimi.ingsw.model.player.Warehouse;
 import it.polimi.ingsw.model.resourceContainers.*;
-import it.polimi.ingsw.view.ColorAnsi;
+import it.polimi.ingsw.view.CLI.ColorAnsi;
 
 /**
  * LeaderCard is one of 16 cards created at the beginning by Game. It has 4 standard methods which will be @Override

@@ -6,6 +6,8 @@ import it.polimi.ingsw.network.messages.ErrorMessage;
 import it.polimi.ingsw.network.messages.ErrorType;
 import it.polimi.ingsw.network.messages.Message;
 import it.polimi.ingsw.view.ClientView;
+import javafx.application.Platform;
+import javafx.event.EventType;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -14,7 +16,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 import java.net.URL;
-import java.net.UnknownHostException;
 
 
 public class GUI extends ClientView {
@@ -22,24 +23,31 @@ public class GUI extends ClientView {
 
     private static Scene scene;
     private static boolean connected = false;
+    private static int position = -1;
 
     @Override
     public void launchGUI() {
+        App.createClient(this);
         launch();
     }
 
     @Override
     public void launchGUI(String hostname, int port){
+        App.createClient(this);
         connectToSever(hostname, port);
-        launch();
+    }
+
+    public static int getPosition(){
+        return position;
     }
 
     private void connectToSever(String hostname, int port){
         try {
-            App.connectionInfo(hostname, port);
-            App.startClient(this);
+            App.startClient(hostname, port);
             connected = true;
+            launch();
         } catch (IOException e) {
+            launch();
         }
     }
 
@@ -56,10 +64,15 @@ public class GUI extends ClientView {
 
     @Override
     public void login_message(Message message) {
-
+        position = message.getClientID();
+        try {
+            setRoot("/fxml/nicknameScene");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    static void setRoot(String fxml) throws IOException {
+    public static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
     }
 
@@ -73,7 +86,11 @@ public class GUI extends ClientView {
 
     @Override
     public void new_player_message(Message message) {
-
+        try {
+            setRoot("/fxml/initScene");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -129,53 +146,6 @@ public class GUI extends ClientView {
     @Override
     public void end_game_message(Message message) {
 
-    }
-
-
-    @Override
-    public void error_message(Message message) {
-        ErrorMessage m = (ErrorMessage) message;
-        switch (m.getErrorType()){
-            case ALREADY_TAKEN_NICKNAME:
-                already_taken_nickName_error();
-                break;
-            case WRONG_PARAMETERS:
-                wrong_parameters_error();
-                break;
-            case NOT_YOUR_TURN:
-                wrong_turn_error();
-                break;
-            case FULL_SLOT:
-                full_slot_error();
-                break;
-            case EMPTY_DECK:
-                empty_deck_error();
-                break;
-            case EMPTY_SLOT:
-                empty_slot_error();
-                break;
-            case WRONG_POWER:
-                wrong_power_error();
-                break;
-            case NOT_ENOUGH_CARDS:
-                not_enough_cards_error();
-                break;
-            case ILLEGAL_OPERATION:
-                illegal_operation_error();
-                break;
-            case IMPOSSIBLE_SWITCH:
-                impossible_switch_error();
-                break;
-            case NOT_ENOUGH_RESOURCES:
-                not_enough_resource_error();
-                break;
-            case ALREADY_ACTIVE_LEADER_CARD:
-                already_active_error();
-                break;
-            case ALREADY_DISCARD_LEADER_CARD:
-                already_discard_error();
-                break;
-        }
     }
 
     @Override

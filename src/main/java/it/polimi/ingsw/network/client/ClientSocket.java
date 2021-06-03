@@ -28,12 +28,6 @@ public class ClientSocket extends Observable{
     private final Object pingLock = new Object();
     private static boolean connected;
 
-    public ClientSocket(Socket socket) throws IOException {
-        out = new ObjectOutputStream(socket.getOutputStream());
-        in = new ObjectInputStream(socket.getInputStream());
-        connected = true;
-    }
-
     public void addObserver(Observer o){
         super.addObserver(o);
     }
@@ -43,7 +37,10 @@ public class ClientSocket extends Observable{
      * threadIn firstly login player and then constantly waits user inputs from System.in
      * threadOut constantly waits Server inputs.
      */
-    public void start() {
+    public void start(Socket socket) throws IOException {
+        out = new ObjectOutputStream(socket.getOutputStream());
+        in = new ObjectInputStream(socket.getInputStream());
+        connected = true;
         if (connectedThread == null) {
             connectedThread = new Thread(() -> {
                 try {

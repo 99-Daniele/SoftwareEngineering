@@ -2,7 +2,6 @@ package it.polimi.ingsw.view.CLI;
 
 import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.parser.CardMapCLI;
-import it.polimi.ingsw.view.ColorAnsi;
 import it.polimi.ingsw.view.model_view.Game_View;
 
 import java.util.ArrayList;
