@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.GUI;
 
 import it.polimi.ingsw.App;
 import it.polimi.ingsw.network.messages.Message;
+import it.polimi.ingsw.network.messages.Message_Two_Parameter_Int;
 import it.polimi.ingsw.view.ClientView;
 import javafx.application.Platform;
 import javafx.stage.Stage;
@@ -58,7 +59,7 @@ public class GUI extends ClientView {
             sceneController = new ConnectionSceneController();
             Platform.runLater(() -> {
                 try {
-                    sceneController.setScene(stage,"/fxml/connectionScene");
+                    sceneController.setScene(stage,"/fxml/yourTurnScene");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -199,5 +200,10 @@ public class GUI extends ClientView {
 
     @Override
     public void already_discard_error() {
+    }
+
+
+    public static void main(String [] args){
+        launch();
     }
 }
