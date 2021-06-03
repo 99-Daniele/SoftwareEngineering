@@ -1,29 +1,20 @@
 package it.polimi.ingsw.view.GUI;
 
 import it.polimi.ingsw.App;
-import it.polimi.ingsw.model.games.states.GAME_STATES;
-import it.polimi.ingsw.network.messages.ErrorMessage;
-import it.polimi.ingsw.network.messages.ErrorType;
 import it.polimi.ingsw.network.messages.Message;
 import it.polimi.ingsw.view.ClientView;
 import javafx.application.Platform;
-import javafx.event.EventType;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
-import java.net.URL;
 
 
 public class GUI extends ClientView {
 
-
-    private static Scene scene;
-    private static boolean connected = false;
-    private static int position = -1;
+    private boolean connected = false;
+    private static SceneController sceneController;
+    private static int position;
 
     @Override
     public void launchGUI() {
@@ -53,49 +44,46 @@ public class GUI extends ClientView {
 
     @Override
     public void start(Stage stage) throws IOException {
-        if(connected)
-            scene = new Scene(loadFXML("/fxml/nicknameScene"), 640, 480);
-        else
-            scene = new Scene(loadFXML("/fxml/connectionScene"), 640, 480);
-        stage.setMaximized(true);
-        stage.setScene(scene);
-        stage.show();
+        if(connected) {
+            sceneController = new NicknameSceneController();
+            sceneController.setScene(stage,"/fxml/nickNameScene");
+        }
+        else{
+            sceneController = new ConnectionSceneController();
+            sceneController.setScene(stage,  "/fxml/connectionScene");
+        }
+    }
+
+
+
+    public static void setRoot(SceneController sceneController, String fxml) {
+        GUI.sceneController = sceneController;
+        Platform.runLater(() ->
+                sceneController.changeRootPane(fxml));
     }
 
     @Override
     public void login_message(Message message) {
         position = message.getClientID();
-        try {
-            setRoot("/fxml/nicknameScene");
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(position == 0) {
+            sceneController.login();
         }
-    }
-
-    public static void setRoot(String fxml) throws IOException {
-        scene.setRoot(loadFXML(fxml));
-    }
-
-
-    private static Parent loadFXML(String fxml) throws IOException {
-        //was:FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
-        URL url = GUI.class.getResource(fxml + ".fxml");
-        FXMLLoader fxmlLoader = new FXMLLoader(url);
-        return fxmlLoader.load();
+        else {
+            SceneController isc = new InitSceneController();
+            setRoot(isc, "/initScene");
+        }
     }
 
     @Override
     public void new_player_message(Message message) {
-        try {
-            setRoot("/fxml/initScene");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        SceneController isc = new InitSceneController();
+        setRoot(isc, "/initScene");
     }
 
     @Override
     public void start_game_message() throws IOException {
-
+        SceneController isc = new InitSceneController();
+        setRoot(isc, "/initScene");
     }
 
     @Override
@@ -105,7 +93,8 @@ public class GUI extends ClientView {
 
     @Override
     public void ok_message() throws IOException, InterruptedException {
-
+        SceneController isc = new InitSceneController();
+        setRoot(isc, "/initScene");
     }
 
     @Override
@@ -150,6 +139,8 @@ public class GUI extends ClientView {
 
     @Override
     public void already_taken_nickName_error() {
+        SceneController nsc = new NicknameSceneController();
+        setRoot(nsc, "/fxml/nicknameScene");
     }
 
     @Override

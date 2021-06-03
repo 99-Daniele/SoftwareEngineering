@@ -7,7 +7,7 @@ import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
 
-public class InitSceneController {
+public class InitSceneController extends SceneController{
 
     public GUI gui;
     @FXML
@@ -49,10 +49,7 @@ public class InitSceneController {
         start.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> startButton());
     }
     private void startButton(){
-        try {
-            GUI.setRoot("/fxml/yourTurnScene");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        SceneController ytsc = new YourTurnSceneController();
+        GUI.setRoot(ytsc, "/fxml/yourTurnScene");
     }
 }

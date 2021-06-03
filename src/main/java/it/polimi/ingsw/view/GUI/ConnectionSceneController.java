@@ -12,7 +12,7 @@ import java.net.UnknownHostException;
 import java.util.concurrent.ExecutionException;
 
 
-public class ConnectionSceneController {
+public class ConnectionSceneController extends SceneController{
 
     @FXML
     private Button connect;
@@ -43,9 +43,11 @@ public class ConnectionSceneController {
             else
                 portNumber = Integer.parseInt(port);
             App.startClient(address, portNumber);
-            GUI.setRoot("/fxml/nicknameScene");
+            SceneController nsc = new NicknameSceneController();
+            GUI.setRoot(nsc, "/fxml/nicknameScene");
         } catch (NumberFormatException | IOException e) {
-            GUI.setRoot("/fxml/connectionScene");
+            SceneController csc = new SceneController();
+            GUI.setRoot(csc, "/fxml/connectionScene");
         }
     }
 

@@ -291,9 +291,9 @@ public class ControllerGame implements Observer {
                 gameManager.createPlayer(views.get(0), views.get(0).getNickname());
                 if (numPlayers > 1) {
                     state = GAME_STARTING_STATES.WAITING_PLAYERS;
-                    views.get(0).ok();
                 }
                 ControllerConnection.newGame();
+                views.get(0).ok();
             } catch (AlreadyTakenNicknameException e) {}
         }
     }

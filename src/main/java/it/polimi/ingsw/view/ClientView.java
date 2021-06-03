@@ -3,6 +3,7 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.App;
 import it.polimi.ingsw.model.games.states.GAME_STATES;
 import it.polimi.ingsw.model.market.Marble;
+import it.polimi.ingsw.network.client.ClientSocket;
 import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.view.model_view.Game_View;
 import javafx.application.Application;
@@ -34,6 +35,13 @@ public abstract class ClientView extends Application implements Observer {
 
     @Override
     public void start(Stage stage) throws Exception {}
+
+    @Override
+    public void stop(){
+        ClientSocket.setDisconnected();
+        ClientSocket.disconnect();
+        System.exit(1);
+    }
 
     public Game_View getGame() {
         return game;

@@ -150,7 +150,7 @@ public class ClientSocket extends Observable{
         try {
             in.close();
             out.close();
-        } catch (IOException e) {
+        } catch (IOException | RuntimeException e) {
         }
     }
 

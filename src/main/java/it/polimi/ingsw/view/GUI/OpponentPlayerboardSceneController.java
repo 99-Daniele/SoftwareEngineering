@@ -11,7 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class OpponentPlayerboardSceneController {
+public class OpponentPlayerboardSceneController extends SceneController{
     @FXML
     private ImageView deposit31;
     @FXML
@@ -23,15 +23,11 @@ public class OpponentPlayerboardSceneController {
     }
 
     private void goBackButton(){
-        try {
-            GUI.setRoot("/fxml/yourTurnScene");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        SceneController ytsc = new YourTurnSceneController();
+        GUI.setRoot(ytsc, "/fxml/yourTurnScene");
     }
 
     private void showBoard(){
-
     }
 
 }

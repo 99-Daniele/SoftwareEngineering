@@ -15,7 +15,7 @@ import javafx.scene.input.MouseEvent;
 import java.io.IOException;
 
 
-public class YourTurnSceneController{
+public class YourTurnSceneController extends SceneController{
     private int pos=0;
     private GAME_STATES currentState;
     private int position=1;
@@ -164,11 +164,8 @@ public class YourTurnSceneController{
 
 
     private void otherPlayerboardButton()  {
-        try {
-            GUI.setRoot("/fxml/opponentPlayerboardScene");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        SceneController opsc = new OpponentPlayerboardSceneController();
+        GUI.setRoot(opsc, "/fxml/opponentPlayerboardScene");
     }
 
     private void discardLeaderButton(){

@@ -1225,10 +1225,8 @@ public class CLI extends ClientView{
     }
 
     private void endGameRequest(){
-        ClientSocket.setDisconnected();
-        ClientSocket.disconnect();
         System.out.println("\nDisconnecting.\n");
-        System.exit(1);
+        super.stop();
     }
 
     @Override
