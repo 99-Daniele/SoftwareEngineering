@@ -129,6 +129,12 @@ public class YourTurnSceneController extends SceneController{
     private RadioButton switch2;
     @FXML
     private RadioButton switch3;
+    @FXML
+    private Pane panelBuy;
+    @FXML
+    private RadioButton radiobutWarehouse;
+    @FXML
+    private RadioButton radiobutStrongbox;
     private int marbleCount;
     @FXML
     public void initialize(){

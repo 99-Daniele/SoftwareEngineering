@@ -283,6 +283,28 @@
             <ImageView fx:id="extra12" fitHeight="20.0" fitWidth="20.0" layoutX="65.0" layoutY="584.0" pickOnBounds="true" preserveRatio="true" />
             <ImageView fx:id="extra21" fitHeight="20.0" fitWidth="20.0" layoutX="159.0" layoutY="584.0" pickOnBounds="true" preserveRatio="true" />
             <ImageView fx:id="extra22" fitHeight="20.0" fitWidth="20.0" layoutX="200.0" layoutY="584.0" pickOnBounds="true" preserveRatio="true" />
+            <Pane fx:id="panelBuy" layoutX="227.0" layoutY="143.0" prefHeight="256.0" prefWidth="446.0" style="-fx-background-color: white;" visible="false">
+               <children>
+                  <Label layoutX="31.0" layoutY="47.0" prefHeight="53.0" prefWidth="384.0" text="Where you preferred to get the resource from?">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <RadioButton fx:id="radiobutWarehouse" layoutX="45.0" layoutY="153.0" mnemonicParsing="false" text="Warehouse">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                     <toggleGroup>
+                        <ToggleGroup fx:id="chooseBtwSW" />
+                     </toggleGroup>
+                  </RadioButton>
+                  <RadioButton fx:id="radiobutStrongbox" layoutX="270.0" layoutY="153.0" mnemonicParsing="false" text="Strongbox" toggleGroup="$chooseBtwSW">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </RadioButton>
+               </children>
+            </Pane>
             <Label fx:id="croceRossa" layoutX="8.0" layoutY="107.0" prefHeight="25.0" prefWidth="28.0" text="✞">
                <font>
                   <Font size="24.0" />
