@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class GUI extends ClientView {
 
-    private boolean connected = false;
+    private static boolean connected = false;
     private static SceneController sceneController;
     private static int position = -1;
 
@@ -69,20 +69,20 @@ public class GUI extends ClientView {
         }
         else {
             SceneController isc = new InitSceneController();
-            setRoot(isc, "/initScene");
+            setRoot(isc, "/fxml/initScene");
         }
     }
 
     @Override
     public void new_player_message(Message message) {
         SceneController isc = new InitSceneController();
-        setRoot(isc, "/initScene");
+        setRoot(isc, "/fxml/initScene");
     }
 
     @Override
     public void start_game_message() throws IOException {
         SceneController isc = new InitSceneController();
-        setRoot(isc, "/initScene");
+        setRoot(isc, "/fxml/initScene");
     }
 
     @Override
@@ -93,7 +93,7 @@ public class GUI extends ClientView {
     @Override
     public void ok_message() throws IOException, InterruptedException {
         SceneController isc = new InitSceneController();
-        setRoot(isc, "/initScene");
+        setRoot(isc, "/fxml/initScene");
     }
 
     @Override
