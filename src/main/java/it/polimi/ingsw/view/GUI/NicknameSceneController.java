@@ -32,7 +32,7 @@ public class NicknameSceneController extends SceneController {
     private Button goNext;
     @FXML
     public void initialize() {
-        if(name != null) {
+        if(GUI.getPosition() == 0) {
             name = null;
             nickname.setVisible(false);
             nicknameLabel.setVisible(false);
@@ -58,12 +58,15 @@ public class NicknameSceneController extends SceneController {
     }
 
     private void goNextButton() throws IOException {
-        if(nicknameLabel.isDisabled()) {
+        if(GUI.getPosition() == 0) {
             try {
                 int num = Integer.parseInt(playerNumber.getText());
-                if(num >= 1 && num <= 4)
+                if(num < 1 || num > 4)
+                    GUI.setRoot(new NicknameSceneController(), "/fxml/nickNameScene");
+                else
                     ClientSocket.sendMessage(new Message_One_Parameter_Int(MessageType.NUM_PLAYERS, GUI.getPosition(), num));
             } catch (NumberFormatException e){
+                GUI.setRoot(new NicknameSceneController(), "/fxml/nickNameScene");
             }
         }
         else {
@@ -71,6 +74,7 @@ public class NicknameSceneController extends SceneController {
             if(!username.isBlank()){
                 name = username;
                 ClientSocket.sendMessage(new Message_One_Parameter_String(MessageType.LOGIN, GUI.getPosition(), username));
+                GUI.setRoot(new NicknameSceneController(), "/fxml/nickNameScene");
             }
         }
     }

@@ -1,10 +1,14 @@
 package it.polimi.ingsw.view.GUI;
 
+import it.polimi.ingsw.parser.CardMapGUI;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class InitSceneController extends SceneController{
@@ -45,7 +49,9 @@ public class InitSceneController extends SceneController{
     @FXML
     private Button start;
     @FXML
-    public void initialize(){
+    public void initialize() throws FileNotFoundException {
+        //FileInputStream fis = new FileInputStream(CardMapGUI.getCard(50));
+        //leader1 = new ImageView(new Image(fis));
         start.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> startButton());
     }
     private void startButton(){

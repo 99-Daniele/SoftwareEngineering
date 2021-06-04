@@ -13,7 +13,7 @@ import java.io.IOException;
 public class GUI extends ClientView {
 
     private static boolean connected = false;
-    private static SceneController sceneController = new SceneController();
+    private static SceneController sceneController;
     private static int position = -1;
 
     @Override
@@ -44,7 +44,6 @@ public class GUI extends ClientView {
 
     @Override
     public void start(Stage stage) throws IOException {
-        /*
         if(connected) {
             sceneController = new NicknameSceneController();
             Platform.runLater(() -> {
@@ -65,7 +64,8 @@ public class GUI extends ClientView {
                 }
             });
         }
-         */
+
+         /*
 
         Platform.runLater(() -> {
             try {
@@ -78,6 +78,7 @@ public class GUI extends ClientView {
                 e.printStackTrace();
             }
         });
+          */
     }
 
     public static void setRoot(SceneController sceneController, String fxml) {
@@ -88,15 +89,17 @@ public class GUI extends ClientView {
     @Override
     public void login_message(Message message) {
         position = message.getClientID();
-        if(position == 0) {
-            //SceneController isc = new NicknameSceneController();
-            //setRoot(sceneController, "/fxml/nickNameScene");
-            sceneController.askNumPlayer();
-        }
-        else {
-            SceneController isc = new InitSceneController();
-            setRoot(isc, "/fxml/initScene");
-        }
+        Platform.runLater(() -> {
+            if(position == 0) {
+                SceneController isc = new NicknameSceneController();
+                setRoot(sceneController, "/fxml/nickNameScene");
+                //sceneController.askNumPlayer();
+            }
+            else {
+                SceneController isc = new InitSceneController();
+                setRoot(isc, "/fxml/initScene");
+            }
+        });
     }
 
     @Override
