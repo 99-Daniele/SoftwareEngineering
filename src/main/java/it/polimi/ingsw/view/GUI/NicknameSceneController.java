@@ -4,6 +4,7 @@ import it.polimi.ingsw.network.client.ClientSocket;
 import it.polimi.ingsw.network.messages.MessageType;
 import it.polimi.ingsw.network.messages.Message_One_Parameter_Int;
 import it.polimi.ingsw.network.messages.Message_One_Parameter_String;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 
 import javafx.scene.control.Button;
@@ -32,13 +33,6 @@ public class NicknameSceneController extends SceneController {
     private Button goNext;
     @FXML
     public void initialize() {
-        if(GUI.getPosition() == 0) {
-            name = null;
-            nickname.setVisible(false);
-            nicknameLabel.setVisible(false);
-            playerNumber.setVisible(true);
-            numPlayerLabel.setVisible(true);
-        }
         goNext.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             try {
                 goNextButton();
@@ -48,21 +42,11 @@ public class NicknameSceneController extends SceneController {
         });
     }
 
-    @FXML
-    @Override
-    public void askNumPlayer(){
-        nickname.setVisible(false);
-        nicknameLabel.setVisible(false);
-        playerNumber.setVisible(true);
-        numPlayerLabel.setVisible(true);
-    }
-
     private void goNextButton() throws IOException {
-        if(GUI.getPosition() == 0) {
+        if(!nicknameLabel.isVisible()) {
             try {
                 int num = Integer.parseInt(playerNumber.getText());
-                if(num < 1 || num > 4)
-                    GUI.setRoot(new NicknameSceneController(), "/fxml/nickNameScene");
+                if(num < 1 || num > 4);
                 else
                     ClientSocket.sendMessage(new Message_One_Parameter_Int(MessageType.NUM_PLAYERS, GUI.getPosition(), num));
             } catch (NumberFormatException e){
@@ -74,7 +58,6 @@ public class NicknameSceneController extends SceneController {
             if(!username.isBlank()){
                 name = username;
                 ClientSocket.sendMessage(new Message_One_Parameter_String(MessageType.LOGIN, GUI.getPosition(), username));
-                GUI.setRoot(new NicknameSceneController(), "/fxml/nickNameScene");
             }
         }
     }

@@ -2,6 +2,8 @@ package it.polimi.ingsw.view.GUI;
 
 import it.polimi.ingsw.App;
 import it.polimi.ingsw.network.messages.Message;
+import it.polimi.ingsw.network.messages.Message_Four_Parameter_Int;
+import it.polimi.ingsw.view.CLI.CLI_Printer;
 import it.polimi.ingsw.view.ClientView;
 import javafx.application.Platform;
 import javafx.stage.Stage;
@@ -48,7 +50,7 @@ public class GUI extends ClientView {
             sceneController = new NicknameSceneController();
             Platform.runLater(() -> {
                 try {
-                    sceneController.setScene(stage,"/fxml/nicknameScene");
+                    sceneController.setScene(stage,sceneController,"/fxml/nicknameScene");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -58,7 +60,7 @@ public class GUI extends ClientView {
             sceneController = new ConnectionSceneController();
             Platform.runLater(() -> {
                 try {
-                    sceneController.setScene(stage,"/fxml/connectionScene");
+                    sceneController.setScene(stage,sceneController, "/fxml/connectionScene");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -66,7 +68,6 @@ public class GUI extends ClientView {
         }
 
          /*
-
         Platform.runLater(() -> {
             try {
                 sceneController.setScene(stage,"/fxml/nicknameScene");
@@ -83,46 +84,48 @@ public class GUI extends ClientView {
 
     public static void setRoot(SceneController sceneController, String fxml) {
         GUI.sceneController = sceneController;
-        sceneController.changeRootPane(fxml);
+        sceneController.changeRootPane(sceneController, fxml);
     }
 
     @Override
     public void login_message(Message message) {
         position = message.getClientID();
         Platform.runLater(() -> {
+            sceneController.askNumPlayer();
             if(position == 0) {
-                SceneController isc = new NicknameSceneController();
-                setRoot(sceneController, "/fxml/nickNameScene");
-                //sceneController.askNumPlayer();
+                //SceneController isc = new NicknameSceneController();
+                //setRoot(sceneController, "/fxml/nickNameScene");
             }
             else {
-                SceneController isc = new InitSceneController();
-                setRoot(isc, "/fxml/initScene");
+                //SceneController isc = new InitSceneController();
+                //setRoot(isc, "/fxml/initScene");
             }
         });
     }
 
     @Override
     public void new_player_message(Message message) {
-        SceneController isc = new InitSceneController();
-        setRoot(isc, "/fxml/initScene");
+        //SceneController isc = new InitSceneController();
+        //setRoot(isc, "/fxml/initScene");
     }
 
     @Override
     public void start_game_message() throws IOException {
-        SceneController isc = new InitSceneController();
-        setRoot(isc, "/fxml/initScene");
+        //SceneController isc = new InitSceneController();
+        //setRoot(isc, "/fxml/initScene");
     }
 
     @Override
     public void leader_card_choice(Message message) throws IOException, InterruptedException {
-
+        Message_Four_Parameter_Int m = (Message_Four_Parameter_Int) message;
+        SceneController isc = new InitSceneController(m.getPar1(), m.getPar2(), m.getPar3(), m.getPar4());
+        Platform.runLater(() -> setRoot(isc, "/fxml/initScene"));
     }
 
     @Override
     public void ok_message() throws IOException, InterruptedException {
-        SceneController isc = new InitSceneController();
-        setRoot(isc, "/fxml/initScene");
+        //SceneController isc = new InitSceneController();
+        //setRoot(isc, "/fxml/initScene");
     }
 
     @Override
