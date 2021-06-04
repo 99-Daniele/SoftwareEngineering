@@ -309,6 +309,7 @@ public class YourTurnSceneController extends SceneController{
             cardProduction(3);
         });
         chooseBase.setOnMouseClicked(mouseEvent -> {
+            chooseBase.setDisable(true);
             basePanel.setVisible(true);
             Message_Three_Resource_One_Int messageToSend=new Message_Three_Resource_One_Int(MessageType.BASIC_POWER, position, null, null, null, 0);
             coin1.setOnMouseClicked(MouseEvent->{
