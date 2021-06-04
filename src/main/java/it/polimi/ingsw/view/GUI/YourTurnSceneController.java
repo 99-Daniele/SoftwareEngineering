@@ -283,6 +283,43 @@ public class YourTurnSceneController extends SceneController{
         chooseSlot2.setDisable(false);
         chooseSlot3.setDisable(false);
         chooseBase.setDisable(false);
+        chooseSlot1.setOnMouseClicked(mouseEvent -> {
+            chooseSlot1.setDisable(true);
+            cardProduction(1);
+        });
+        chooseSlot2.setOnMouseClicked(mouseEvent -> {
+            chooseSlot2.setDisable(true);
+            cardProduction(2);
+        });
+        chooseSlot3.setOnMouseClicked(mouseEvent -> {
+            chooseSlot3.setDisable(true);
+            cardProduction(3);
+        });
+        chooseBase.setOnMouseClicked(mouseEvent -> {
+            eeee
+        });
+    }
+
+    private void cardProduction(int slot){
+        panelBuy.setVisible(true);
+        radiobutWarehouse.setOnMouseClicked(mouseEvent1 -> {
+            panelBuy.setVisible(false);
+            Message message = new Message_Two_Parameter_Int(MessageType.DEVELOPMENT_CARD_POWER, position, slot, 0);
+            try {
+              ClientSocket.sendMessage(message);
+             } catch (IOException e) {
+               e.printStackTrace();
+            }
+        });
+        radiobutStrongbox.setOnMouseClicked(mouseEvent1 -> {
+            panelBuy.setVisible(false);
+            Message message = new Message_Two_Parameter_Int(MessageType.DEVELOPMENT_CARD_POWER, position, slot, 1);
+            try {
+                ClientSocket.sendMessage(message);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     private void actLeaderButton(){
@@ -328,7 +365,21 @@ public class YourTurnSceneController extends SceneController{
     private void buyCardButton(){
         disableAllButton();
         setDisableAllDecks(false);
-        card11.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> deckEvent(1,1));
+        card11.setOnMouseClicked(mouseEvent -> deckEvent(1,1));
+        card12.setOnMouseClicked(mouseEvent -> deckEvent(1,2));
+        card13.setOnMouseClicked(mouseEvent -> deckEvent(1,3));
+        card21.setOnMouseClicked(mouseEvent -> deckEvent(2,1));
+        card22.setOnMouseClicked(mouseEvent -> deckEvent(2,2));
+        card23.setOnMouseClicked(mouseEvent -> deckEvent(2,2));
+        card31.setOnMouseClicked(mouseEvent -> deckEvent(3,1));
+        card32.setOnMouseClicked(mouseEvent -> deckEvent(3,1));
+        card33.setOnMouseClicked(mouseEvent -> deckEvent(3,1));
+        card41.setOnMouseClicked(mouseEvent -> deckEvent(4,1));
+        card42.setOnMouseClicked(mouseEvent -> deckEvent(4,2));
+        card43.setOnMouseClicked(mouseEvent -> deckEvent(4,3));
+    }
+    /*
+    card11.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> deckEvent(1,1));
         card12.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> deckEvent(1,2));
         card13.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> deckEvent(1,3));
         card21.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> deckEvent(2,1));
@@ -340,13 +391,13 @@ public class YourTurnSceneController extends SceneController{
         card41.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> deckEvent(4,1));
         card42.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> deckEvent(4,2));
         card43.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> deckEvent(4,3));
-    }
+     */
 
     private void deckEvent(int column, int row)
     {
         setDisableAllDecks(true);
         panelBuy.setVisible(true);
-        radiobutWarehouse.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent1 -> {
+        radiobutWarehouse.setOnMouseClicked(mouseEvent1 -> {
             panelBuy.setVisible(false);
             Message message = new Message_Three_Parameter_Int(MessageType.BUY_CARD, position, row, column, 0);
             try {
@@ -355,7 +406,7 @@ public class YourTurnSceneController extends SceneController{
                 e.printStackTrace();
             }
         });
-        radiobutStrongbox.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent1 -> {
+        radiobutStrongbox.setOnMouseClicked(mouseEvent1 -> {
             panelBuy.setVisible(false);
             Message message = new Message_Three_Parameter_Int(MessageType.BUY_CARD, position, row, column, 1);
             try {
@@ -385,11 +436,11 @@ public class YourTurnSceneController extends SceneController{
 
     public void buy_card_message(Message message) {
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
-        super.buy_card_message(message);
-        if(m.getClientID() != position)
-            System.out.println("Player " + super.getNickname(m.getClientID()) + " bought a new card and inserted it in " +
-                    "the " + m.getPar2() + "° slot.");//metetre nel quadrato gui laterale
-        else
+        //super.buy_card_message(message);
+       // if(m.getClientID() != position)
+         //   System.out.println("Player " + super.getNickname(m.getClientID()) + " bought a new card and inserted it in " +
+           //         "the " + m.getPar2() + "° slot.");//metetre nel quadrato gui laterale
+       // else
             switch (m.getPar2()){
                 case 1:
                     if(slot11.getImage()==null)
