@@ -114,22 +114,22 @@
             <RadioButton fx:id="switch1" disable="true" layoutX="6.0" layoutY="207.0" mnemonicParsing="false" />
             <RadioButton fx:id="switch2" disable="true" layoutX="6.0" layoutY="241.0" mnemonicParsing="false" />
             <RadioButton fx:id="switch3" disable="true" layoutX="6.0" layoutY="274.0" mnemonicParsing="false" />
-            <ImageView fx:id="coin" fitHeight="30.0" fitWidth="29.0" layoutX="3.0" layoutY="352.0">
+            <ImageView fitHeight="30.0" fitWidth="29.0" layoutX="3.0" layoutY="352.0">
                <image>
                   <Image url="@../photos/coin.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="shield" fitHeight="30.0" fitWidth="29.0" layoutX="3.0" layoutY="315.0">
+            <ImageView fitHeight="30.0" fitWidth="29.0" layoutX="3.0" layoutY="315.0">
                <image>
                   <Image url="@../photos/shield.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="stone" fitHeight="30.0" fitWidth="29.0" layoutX="58.0" layoutY="352.0">
+            <ImageView fitHeight="30.0" fitWidth="29.0" layoutX="58.0" layoutY="352.0">
                <image>
                   <Image url="@../photos/stone.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="servant" fitHeight="30.0" fitWidth="29.0" layoutX="58.0" layoutY="315.0">
+            <ImageView fitHeight="30.0" fitWidth="29.0" layoutX="58.0" layoutY="315.0">
                <image>
                   <Image url="@../photos/servant.png" />
                </image>
@@ -283,6 +283,28 @@
             <ImageView fx:id="extra12" fitHeight="20.0" fitWidth="20.0" layoutX="65.0" layoutY="584.0" pickOnBounds="true" preserveRatio="true" />
             <ImageView fx:id="extra21" fitHeight="20.0" fitWidth="20.0" layoutX="159.0" layoutY="584.0" pickOnBounds="true" preserveRatio="true" />
             <ImageView fx:id="extra22" fitHeight="20.0" fitWidth="20.0" layoutX="200.0" layoutY="584.0" pickOnBounds="true" preserveRatio="true" />
+            <Pane fx:id="panelBuy" layoutX="227.0" layoutY="143.0" prefHeight="256.0" prefWidth="446.0" style="-fx-background-color: white;" visible="false">
+               <children>
+                  <Label layoutX="31.0" layoutY="47.0" prefHeight="53.0" prefWidth="384.0" text="Where you preferred to get the resource from?">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <RadioButton fx:id="radiobutWarehouse" layoutX="45.0" layoutY="153.0" mnemonicParsing="false" text="Warehouse">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                     <toggleGroup>
+                        <ToggleGroup fx:id="chooseBtwSW" />
+                     </toggleGroup>
+                  </RadioButton>
+                  <RadioButton fx:id="radiobutStrongbox" layoutX="270.0" layoutY="153.0" mnemonicParsing="false" text="Strongbox" toggleGroup="$chooseBtwSW">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </RadioButton>
+               </children>
+            </Pane>
             <Label fx:id="croceRossa" layoutX="8.0" layoutY="107.0" prefHeight="25.0" prefWidth="28.0" text="✞">
                <font>
                   <Font size="24.0" />
@@ -326,6 +348,35 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
+               </children>
+            </Pane>
+            <Pane fx:id="basePanel" layoutX="308.0" layoutY="150.0" prefHeight="269.0" prefWidth="458.0" style="-fx-background-color: white;" visible="false">
+               <children>
+                  <Label fx:id="baseLabel" layoutX="110.0" layoutY="48.0" prefHeight="27.0" prefWidth="258.0" text="Choose resources required">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <ImageView fx:id="servant1" fitHeight="50.0" fitWidth="50.0" layoutX="257.0" layoutY="131.0">
+                     <image>
+                        <Image url="@../photos/servant.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="stone1" fitHeight="50.0" fitWidth="50.0" layoutX="150.0" layoutY="131.0">
+                     <image>
+                        <Image url="@../photos/stone.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="coin1" fitHeight="50.0" fitWidth="50.0" layoutX="358.0" layoutY="131.0">
+                     <image>
+                        <Image url="@../photos/coin.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="shield1" fitHeight="50.0" fitWidth="50.0" layoutX="50.0" layoutY="131.0">
+                     <image>
+                        <Image url="@../photos/shield.png" />
+                     </image>
+                  </ImageView>
                </children>
             </Pane>
          </children>
