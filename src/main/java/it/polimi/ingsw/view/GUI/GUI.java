@@ -59,7 +59,7 @@ public class GUI extends ClientView {
             sceneController = new ConnectionSceneController();
             Platform.runLater(() -> {
                 try {
-                    sceneController.setScene(stage,"/fxml/yourTurnScene");
+                    sceneController.setScene(stage,"/fxml/connectionScene");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -200,10 +200,5 @@ public class GUI extends ClientView {
 
     @Override
     public void already_discard_error() {
-    }
-
-
-    public static void main(String [] args){
-        launch();
     }
 }
