@@ -53,7 +53,6 @@ public class ConnectionSceneController extends SceneController{
             GUI.setRoot(nsc, "/fxml/nicknameScene");
         } catch (NumberFormatException | IOException e) {
             errorConnection();
-            connectButton();
         }
     }
 

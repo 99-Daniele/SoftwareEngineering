@@ -13,7 +13,7 @@ import java.io.IOException;
 public class GUI extends ClientView {
 
     private static boolean connected = false;
-    private static SceneController sceneController;
+    private static SceneController sceneController = new SceneController();
     private static int position = -1;
 
     @Override
@@ -44,11 +44,12 @@ public class GUI extends ClientView {
 
     @Override
     public void start(Stage stage) throws IOException {
+        /*
         if(connected) {
             sceneController = new NicknameSceneController();
             Platform.runLater(() -> {
                 try {
-                    sceneController.setScene(stage,"/fxml/nickNameScene");
+                    sceneController.setScene(stage,"/fxml/nicknameScene");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -64,6 +65,19 @@ public class GUI extends ClientView {
                 }
             });
         }
+         */
+
+        Platform.runLater(() -> {
+            try {
+                sceneController.setScene(stage,"/fxml/nicknameScene");
+                //sceneController.setScene(stage,"/fxml/connectionScene");
+                //sceneController.setScene(stage,"/fxml/opponentPlayerboardScene");
+                //sceneController.setScene(stage,"/fxml/initScene");
+                //sceneController.setScene(stage,"/fxml/yourTurnScene");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public static void setRoot(SceneController sceneController, String fxml) {
@@ -75,8 +89,9 @@ public class GUI extends ClientView {
     public void login_message(Message message) {
         position = message.getClientID();
         if(position == 0) {
-            SceneController isc = new NicknameSceneController();
-            setRoot(isc, "/fxml/nickNameScene");
+            //SceneController isc = new NicknameSceneController();
+            //setRoot(sceneController, "/fxml/nickNameScene");
+            sceneController.askNumPlayer();
         }
         else {
             SceneController isc = new InitSceneController();

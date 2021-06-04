@@ -10,12 +10,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import org.w3c.dom.events.Event;
 
 import java.io.IOException;
 
 
 public class NicknameSceneController extends SceneController {
+
+    private String name;
 
     @FXML
     private TextField nickname;
@@ -31,7 +32,8 @@ public class NicknameSceneController extends SceneController {
     private Button goNext;
     @FXML
     public void initialize() {
-        if(GUI.getPosition() == 0) {
+        if(name != null) {
+            name = null;
             nickname.setVisible(false);
             nicknameLabel.setVisible(false);
             playerNumber.setVisible(true);
@@ -56,24 +58,20 @@ public class NicknameSceneController extends SceneController {
     }
 
     private void goNextButton() throws IOException {
-        SceneController nsc = new NicknameSceneController();
-        if(GUI.getPosition() == 0) {
+        if(nicknameLabel.isDisabled()) {
             try {
                 int num = Integer.parseInt(playerNumber.getText());
-                if(num < 1 || num > 4)
-                    GUI.setRoot(nsc, "/fxml/nicknameScene");
-                else
+                if(num >= 1 && num <= 4)
                     ClientSocket.sendMessage(new Message_One_Parameter_Int(MessageType.NUM_PLAYERS, GUI.getPosition(), num));
             } catch (NumberFormatException e){
-                GUI.setRoot(nsc, "/fxml/nicknameScene");
             }
         }
         else {
             String username = nickname.getText();
-            if(username.isBlank())
-                GUI.setRoot(nsc, "/fxml/nicknameScene");
-            else
+            if(!username.isBlank()){
+                name = username;
                 ClientSocket.sendMessage(new Message_One_Parameter_String(MessageType.LOGIN, GUI.getPosition(), username));
+            }
         }
     }
 }
