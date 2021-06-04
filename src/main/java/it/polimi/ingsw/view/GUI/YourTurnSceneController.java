@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.GUI;
 
 import it.polimi.ingsw.model.games.states.GAME_STATES;
+import it.polimi.ingsw.model.resourceContainers.Resource;
 import it.polimi.ingsw.network.client.ClientSocket;
 import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.parser.CardMapGUI;
@@ -153,6 +154,18 @@ public class YourTurnSceneController extends SceneController{
     private ImageView slot32;
     @FXML
     private ImageView slot33;
+    @FXML
+    private Pane basePanel;
+    @FXML
+    private ImageView servant1;
+    @FXML
+    private ImageView stone1;
+    @FXML
+    private ImageView coin1;
+    @FXML
+    private ImageView shield1;
+    @FXML
+    private Label baseLabel;
 
     private int marbleCount;
     @FXML
@@ -296,8 +309,59 @@ public class YourTurnSceneController extends SceneController{
             cardProduction(3);
         });
         chooseBase.setOnMouseClicked(mouseEvent -> {
-            eeee
+            basePanel.setVisible(true);
+            Message_Three_Resource_One_Int messageToSend=new Message_Three_Resource_One_Int(MessageType.BASIC_POWER, position, null, null, null, 0);
+            coin1.setOnMouseClicked(MouseEvent->{
+                baseProduction(Resource.COIN,messageToSend);
+            });
+
+            servant1.setOnMouseClicked(MouseEvent->{
+                baseProduction(Resource.SERVANT,messageToSend);
+            });
+
+            shield1.setOnMouseClicked(MouseEvent->{
+                baseProduction(Resource.SHIELD,messageToSend);
+            });
+
+            stone1.setOnMouseClicked(MouseEvent->{
+                baseProduction(Resource.STONE,messageToSend);
+            });
         });
+    }
+
+    private void baseProduction(Resource resource, Message_Three_Resource_One_Int messageToSend){
+            if(messageToSend.getResource1()==null)
+                messageToSend.setResource1(resource);
+            else
+            if (messageToSend.getResource2()==null)
+            {
+                messageToSend.setResource2(resource);
+                baseLabel.setText("Choose produced resource");
+            }
+            else{
+                basePanel.setVisible(false);
+                baseLabel.setText("Choose resources required");
+                messageToSend.setResource3(resource);
+                panelBuy.setVisible(true);
+                radiobutWarehouse.setOnMouseClicked(mouseEvent1 -> {
+                    panelBuy.setVisible(false);
+                    messageToSend.setPar(0);
+                    try {
+                        ClientSocket.sendMessage(messageToSend);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                radiobutStrongbox.setOnMouseClicked(mouseEvent1 -> {
+                    panelBuy.setVisible(false);
+                    messageToSend.setPar(1);
+                    try {
+                        ClientSocket.sendMessage(messageToSend);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
     }
 
     private void cardProduction(int slot){

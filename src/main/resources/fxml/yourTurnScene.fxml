@@ -114,22 +114,22 @@
             <RadioButton fx:id="switch1" disable="true" layoutX="6.0" layoutY="207.0" mnemonicParsing="false" />
             <RadioButton fx:id="switch2" disable="true" layoutX="6.0" layoutY="241.0" mnemonicParsing="false" />
             <RadioButton fx:id="switch3" disable="true" layoutX="6.0" layoutY="274.0" mnemonicParsing="false" />
-            <ImageView fx:id="coin" fitHeight="30.0" fitWidth="29.0" layoutX="3.0" layoutY="352.0">
+            <ImageView fitHeight="30.0" fitWidth="29.0" layoutX="3.0" layoutY="352.0">
                <image>
                   <Image url="@../photos/coin.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="shield" fitHeight="30.0" fitWidth="29.0" layoutX="3.0" layoutY="315.0">
+            <ImageView fitHeight="30.0" fitWidth="29.0" layoutX="3.0" layoutY="315.0">
                <image>
                   <Image url="@../photos/shield.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="stone" fitHeight="30.0" fitWidth="29.0" layoutX="58.0" layoutY="352.0">
+            <ImageView fitHeight="30.0" fitWidth="29.0" layoutX="58.0" layoutY="352.0">
                <image>
                   <Image url="@../photos/stone.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="servant" fitHeight="30.0" fitWidth="29.0" layoutX="58.0" layoutY="315.0">
+            <ImageView fitHeight="30.0" fitWidth="29.0" layoutX="58.0" layoutY="315.0">
                <image>
                   <Image url="@../photos/servant.png" />
                </image>
@@ -348,6 +348,35 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
+               </children>
+            </Pane>
+            <Pane fx:id="basePanel" layoutX="308.0" layoutY="150.0" prefHeight="269.0" prefWidth="458.0" style="-fx-background-color: white;" visible="false">
+               <children>
+                  <Label fx:id="baseLabel" layoutX="110.0" layoutY="48.0" prefHeight="27.0" prefWidth="258.0" text="Choose resources required">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <ImageView fx:id="servant1" fitHeight="50.0" fitWidth="50.0" layoutX="257.0" layoutY="131.0">
+                     <image>
+                        <Image url="@../photos/servant.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="stone1" fitHeight="50.0" fitWidth="50.0" layoutX="150.0" layoutY="131.0">
+                     <image>
+                        <Image url="@../photos/stone.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="coin1" fitHeight="50.0" fitWidth="50.0" layoutX="358.0" layoutY="131.0">
+                     <image>
+                        <Image url="@../photos/coin.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="shield1" fitHeight="50.0" fitWidth="50.0" layoutX="50.0" layoutY="131.0">
+                     <image>
+                        <Image url="@../photos/shield.png" />
+                     </image>
+                  </ImageView>
                </children>
             </Pane>
          </children>

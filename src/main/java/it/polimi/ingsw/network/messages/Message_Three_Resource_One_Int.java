@@ -3,10 +3,10 @@ package it.polimi.ingsw.network.messages;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 
 public class Message_Three_Resource_One_Int extends Message{
-    private final Resource resource1;
-    private final Resource resource2;
-    private final Resource resource3;
-    private final int par;
+    private Resource resource1;
+    private Resource resource2;
+    private Resource resource3;
+    private int par;
 
     public Message_Three_Resource_One_Int( MessageType messageType, int clientID, Resource resourceDeleted1, Resource resourceDeleted2, Resource resourceObtained, int par) {
         super(messageType, clientID);
@@ -39,5 +39,21 @@ public class Message_Three_Resource_One_Int extends Message{
                 ", resourceDeleted2: " + resource2 +
                 ", resourceObtained: " + resource3 +
                 '}';
+    }
+
+    public void setResource1(Resource resource1){
+        this.resource1=resource1;
+    }
+
+    public void setResource2(Resource resource2) {
+        this.resource2 = resource2;
+    }
+
+    public void setResource3(Resource resource3) {
+        this.resource3 = resource3;
+    }
+
+    public void setPar(int par) {
+        this.par = par;
     }
 }
