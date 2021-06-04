@@ -4,6 +4,7 @@ import it.polimi.ingsw.App;
 import it.polimi.ingsw.network.client.ClientSocket;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 
@@ -20,6 +21,11 @@ public class ConnectionSceneController extends SceneController{
     private TextField serverPort;
     @FXML
     private TextField serverAddress;
+    @FXML
+    private Label errorLabel;
+    @FXML
+    private Button ok;
+
     @FXML
     public void initialize(){
         connect.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
@@ -46,11 +52,18 @@ public class ConnectionSceneController extends SceneController{
             SceneController nsc = new NicknameSceneController();
             GUI.setRoot(nsc, "/fxml/nicknameScene");
         } catch (NumberFormatException | IOException e) {
-            SceneController csc = new SceneController();
-            GUI.setRoot(csc, "/fxml/connectionScene");
+            errorConnection();
+            connectButton();
         }
     }
 
-
+    private void errorConnection(){
+        errorLabel.setVisible(true);
+        ok.setVisible(true);
+        ok.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            errorLabel.setVisible(false);
+            ok.setVisible(false);
+        });
+    }
 
 }
