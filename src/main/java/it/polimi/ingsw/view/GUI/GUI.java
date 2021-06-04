@@ -8,6 +8,7 @@ import it.polimi.ingsw.view.ClientView;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 
@@ -15,7 +16,6 @@ import java.io.IOException;
 public class GUI extends ClientView {
 
     private static boolean connected = false;
-    private static SceneController sceneController;
     private static int position = -1;
 
     @Override
@@ -46,59 +46,36 @@ public class GUI extends ClientView {
 
     @Override
     public void start(Stage stage) throws IOException {
-        if(connected) {
-            sceneController = new NicknameSceneController();
-            Platform.runLater(() -> {
-                try {
-                    sceneController.setScene(stage,sceneController,"/fxml/nicknameScene");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-        }
-        else{
-            sceneController = new ConnectionSceneController();
-            Platform.runLater(() -> {
-                try {
-                    sceneController.setScene(stage,sceneController, "/fxml/connectionScene");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-        }
-
-         /*
         Platform.runLater(() -> {
             try {
-                sceneController.setScene(stage,"/fxml/nicknameScene");
-                //sceneController.setScene(stage,"/fxml/connectionScene");
-                //sceneController.setScene(stage,"/fxml/opponentPlayerboardScene");
-                //sceneController.setScene(stage,"/fxml/initScene");
-                //sceneController.setScene(stage,"/fxml/yourTurnScene");
+                if (connected) {
+                    SceneController.setScene(stage, "/fxml/nicknameScene");
+                } else {
+                    SceneController.setScene(stage, "/fxml/connectionScene");
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
-          */
     }
 
     public static void setRoot(SceneController sceneController, String fxml) {
-        GUI.sceneController = sceneController;
-        sceneController.changeRootPane(sceneController, fxml);
+        SceneController.changeRootPane(sceneController, fxml);
+    }
+
+    public static void setRoot(String fxml) {
+        SceneController.changeRootPane(fxml);
     }
 
     @Override
     public void login_message(Message message) {
         position = message.getClientID();
         Platform.runLater(() -> {
-            sceneController.askNumPlayer();
             if(position == 0) {
-                //SceneController isc = new NicknameSceneController();
-                //setRoot(sceneController, "/fxml/nickNameScene");
+                NicknameSceneController.askNumPlayer();
             }
             else {
-                //SceneController isc = new InitSceneController();
-                //setRoot(isc, "/fxml/initScene");
+                NicknameSceneController.waitPlayers();
             }
         });
     }
@@ -111,21 +88,28 @@ public class GUI extends ClientView {
 
     @Override
     public void start_game_message() throws IOException {
-        //SceneController isc = new InitSceneController();
-        //setRoot(isc, "/fxml/initScene");
+        super.startGame();
     }
 
     @Override
-    public void leader_card_choice(Message message) throws IOException, InterruptedException {
+    public void leader_card_choice(Message message){
         Message_Four_Parameter_Int m = (Message_Four_Parameter_Int) message;
-        SceneController isc = new InitSceneController(m.getPar1(), m.getPar2(), m.getPar3(), m.getPar4());
-        Platform.runLater(() -> setRoot(isc, "/fxml/initScene"));
+        Platform.runLater(() -> {
+            setRoot("/fxml/initScene");
+            try {
+                InitSceneController.askLeaders(m.getPar1(), m.getPar2(), m.getPar3(), m.getPar4());
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override
-    public void ok_message() throws IOException, InterruptedException {
-        //SceneController isc = new InitSceneController();
-        //setRoot(isc, "/fxml/initScene");
+    public void ok_message(){
+        Platform.runLater(() -> {
+            if(!super.getGame().isStartGame())
+                NicknameSceneController.waitPlayers();
+        });
     }
 
     @Override

@@ -1,10 +1,11 @@
 package it.polimi.ingsw.view.GUI;
 
-import it.polimi.ingsw.model.market.WhiteMarble;
+import it.polimi.ingsw.network.client.ClientSocket;
+import it.polimi.ingsw.network.messages.Message;
+import it.polimi.ingsw.network.messages.MessageType;
+import it.polimi.ingsw.network.messages.Message_Two_Parameter_Int;
 import it.polimi.ingsw.parser.CardMapGUI;
-import it.polimi.ingsw.parser.MarbleMapGUI;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,10 +17,10 @@ import java.io.IOException;
 
 public class InitSceneController extends SceneController{
 
-    private int card1;
-    private int card2;
-    private int card3;
-    private int card4;
+    private static int card1;
+    private static int card2;
+    private static int card3;
+    private static int card4;
     private int chosenCard1;
     private int chosenCard2;
 
@@ -58,28 +59,34 @@ public class InitSceneController extends SceneController{
     @FXML
     private Button start;
 
+    /*
     public InitSceneController(int card1, int card2, int card3, int card4) {
         this.card1 = card1;
         this.card2 = card2;
         this.card3 = card3;
         this.card4 = card4;
     }
+    */
 
     @FXML
-    public void initialize() throws FileNotFoundException {
-        FileInputStream fis = new FileInputStream(CardMapGUI.getCard(card1));
-        leader1.setImage(new Image(fis));
-        fis = new FileInputStream(CardMapGUI.getCard(card2));
-        leader2.setImage(new Image(fis));
-        fis = new FileInputStream(CardMapGUI.getCard(card3));
-        leader3.setImage(new Image(fis));
-        fis = new FileInputStream(CardMapGUI.getCard(card4));
-        leader4.setImage(new Image(fis));
+    public void initialize(){
         chooseLeader1.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> leaderButton(chooseLeader1, card1));
         chooseLeader2.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> leaderButton(chooseLeader2, card2));
         chooseLeader3.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> leaderButton(chooseLeader3, card3));
         chooseLeader4.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> leaderButton(chooseLeader4, card4));
         start.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> startButton());
+    }
+
+    public static void askLeaders(int card1, int card2, int card3, int card4) throws FileNotFoundException {
+        SceneController.setImage("#leader1", CardMapGUI.getCard(card1));
+        SceneController.setImage("#leader2", CardMapGUI.getCard(card2));
+        SceneController.setImage("#leader3", CardMapGUI.getCard(card3));
+        SceneController.setImage("#leader4", CardMapGUI.getCard(card4));
+        InitSceneController.card1 = card1;
+        InitSceneController.card2 = card2;
+        InitSceneController.card3 = card3;
+        InitSceneController.card4 = card4;
+        //SceneController.setVisible("#leader1", false);
     }
 
     private void leaderButton(Button leaderButton, int card){
@@ -104,6 +111,11 @@ public class InitSceneController extends SceneController{
     }
 
     private void startButton(){
-        System.out.println(chosenCard2 + " - " + chosenCard2);
+        Message message = new Message_Two_Parameter_Int(MessageType.LEADER_CARD, GUI.getPosition(), card1, card2);
+        try {
+            ClientSocket.sendMessage(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

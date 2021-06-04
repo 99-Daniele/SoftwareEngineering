@@ -1087,7 +1087,7 @@ public class CLI extends ClientView{
             else
                 System.out.println("Player " + super.getNickname(m.getClientID()) + " has increased its faith points. Now it has " + m.getPar());
         }
-        else if (super.getGame().isStartGame() && super.getMarbles().size() > 0)
+        else if (super.getMarbles() != null && super.getMarbles().size() > 0)
             CLI_Printer.printMarbles(super.getGame(), super.getMarbles());
         super.faith_points_message(message);
     }
@@ -1102,7 +1102,7 @@ public class CLI extends ClientView{
                     + " in its " + m.getPar1() + "° depot");
             else {
                 CLI_Printer.printWarehouse(super.getGame(), position);
-                if (super.getGame().isStartGame() &&  super.getMarbles().size() > 0)
+                if (super.getMarbles() != null && super.getMarbles().size() > 0)
                     CLI_Printer.printMarbles(super.getGame(), super.getMarbles());
             }
         }

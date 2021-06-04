@@ -501,10 +501,10 @@ public class YourTurnSceneController extends SceneController{
 
     public void buy_card_message(Message message) {
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
-        super.buy_card_message(message);
-        if(m.getClientID() != position)
-            System.out.println("Player " + super.getNickname(m.getClientID()) + " bought a new card and inserted it in " +
-                    "the " + m.getPar2() + "° slot.");//metetre nel quadrato gui laterale
+        //super.buy_card_message(message);
+        if(m.getClientID() != position);
+        //    System.out.println("Player " + super.getNickname(m.getClientID()) + " bought a new card and inserted it in " +
+                    //"the " + m.getPar2() + "° slot.");//metetre nel quadrato gui laterale
         else
             switch (m.getPar2()){
                 case 1:

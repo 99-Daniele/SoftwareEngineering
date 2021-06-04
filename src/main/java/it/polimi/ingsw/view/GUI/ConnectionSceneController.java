@@ -49,8 +49,7 @@ public class ConnectionSceneController extends SceneController{
             else
                 portNumber = Integer.parseInt(port);
             App.startClient(address, portNumber);
-            SceneController nsc = new NicknameSceneController();
-            GUI.setRoot(nsc, "/fxml/nicknameScene");
+            GUI.setRoot("/fxml/nicknameScene");
         } catch (NumberFormatException | IOException e) {
             errorConnection();
         }
