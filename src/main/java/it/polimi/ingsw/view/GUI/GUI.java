@@ -1,16 +1,19 @@
 package it.polimi.ingsw.view.GUI;
 
 import it.polimi.ingsw.App;
-import it.polimi.ingsw.network.messages.Message;
-import it.polimi.ingsw.network.messages.Message_Four_Parameter_Int;
-import it.polimi.ingsw.view.CLI.CLI_Printer;
+import it.polimi.ingsw.model.games.states.GAME_STATES;
+import it.polimi.ingsw.network.client.ClientSocket;
+import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.view.ClientView;
+import it.polimi.ingsw.view.GUI.sceneController.InitSceneController;
+import it.polimi.ingsw.view.GUI.sceneController.NicknameSceneController;
+import it.polimi.ingsw.view.GUI.sceneController.YourTurnSceneController;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
+import java.nio.channels.Selector;
 
 
 public class GUI extends ClientView {
@@ -59,10 +62,6 @@ public class GUI extends ClientView {
         });
     }
 
-    public static void setRoot(SceneController sceneController, String fxml) {
-        SceneController.changeRootPane(sceneController, fxml);
-    }
-
     public static void setRoot(String fxml) {
         SceneController.changeRootPane(fxml);
     }
@@ -71,24 +70,31 @@ public class GUI extends ClientView {
     public void login_message(Message message) {
         position = message.getClientID();
         Platform.runLater(() -> {
-            if(position == 0) {
-                NicknameSceneController.askNumPlayer();
-            }
-            else {
-                NicknameSceneController.waitPlayers();
-            }
+            try {
+                if (position == 0) {
+                    NicknameSceneController.askNumPlayer();
+                } else {
+                    NicknameSceneController.waitPlayers();
+                }
+            } catch (NullPointerException e){}
         });
     }
 
     @Override
     public void new_player_message(Message message) {
-        //SceneController isc = new InitSceneController();
-        //setRoot(isc, "/fxml/initScene");
+    }
+
+    @Override
+    public void players_message(Message message) {
+        super.players_message(message);
+        GUI.position = message.getClientID();
+        System.out.println(position);
     }
 
     @Override
     public void start_game_message() throws IOException {
         super.startGame();
+        ClientSocket.sendMessage(new Message(MessageType.TURN, position));
     }
 
     @Override
@@ -105,16 +111,28 @@ public class GUI extends ClientView {
     }
 
     @Override
-    public void ok_message(){
+    public void ok_message() {
         Platform.runLater(() -> {
-            if(!super.getGame().isStartGame())
-                NicknameSceneController.waitPlayers();
+            try {
+                if (!super.getGame().isStartGame())
+                    NicknameSceneController.waitPlayers();
+            } catch (NullPointerException e) {
+            }
         });
     }
 
     @Override
     public void turn_message(Message message) throws InterruptedException, IOException {
-
+        Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
+        super.setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
+        Platform.runLater(() -> {
+            if (m.getPar() == 1)
+                setRoot("/fxml/yourTurnScene");
+            else {
+                setRoot("/fxml/yourTurnScene");
+                //YourTurnSceneController.notYourTurn();
+            }
+        });
     }
 
     @Override
@@ -154,8 +172,7 @@ public class GUI extends ClientView {
 
     @Override
     public void already_taken_nickName_error() {
-        SceneController nsc = new NicknameSceneController();
-        setRoot(nsc, "/fxml/nicknameScene");
+        Platform.runLater(() -> NicknameSceneController.alreadyTakenNickName());
     }
 
     @Override

@@ -46,8 +46,8 @@ public class PlayerBoard_View {
         return cards_slots.getDevelopmentCards();
     }
 
-    public int getLeaderCard(int leaderCard){
-        return cards_slots.getLeaderCard(leaderCard);
+    public ArrayList<Integer> getLeaderCards(){
+        return cards_slots.getLeaderCards();
     }
 
     public Warehouse_Strongbox_View getWarehouse_strongbox() {

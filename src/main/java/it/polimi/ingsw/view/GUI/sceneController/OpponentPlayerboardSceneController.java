@@ -1,17 +1,13 @@
-package it.polimi.ingsw.view.GUI;
+package it.polimi.ingsw.view.GUI.sceneController;
 
+import it.polimi.ingsw.view.GUI.GUI;
+import it.polimi.ingsw.view.GUI.SceneController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-
-public class OpponentPlayerboardSceneController extends SceneController{
+public class OpponentPlayerboardSceneController {
     @FXML
     private ImageView deposit31;
     @FXML
@@ -23,8 +19,7 @@ public class OpponentPlayerboardSceneController extends SceneController{
     }
 
     private void goBackButton(){
-        SceneController ytsc = new YourTurnSceneController();
-        GUI.setRoot(ytsc, "/fxml/yourTurnScene");
+        GUI.setRoot("/fxml/yourTurnScene");
     }
 
     private void showBoard(){

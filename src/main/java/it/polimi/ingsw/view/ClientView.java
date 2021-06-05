@@ -3,9 +3,11 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.App;
 import it.polimi.ingsw.model.games.states.GAME_STATES;
 import it.polimi.ingsw.model.market.Marble;
+import it.polimi.ingsw.model.market.Market;
 import it.polimi.ingsw.network.client.ClientSocket;
 import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.view.model_view.Game_View;
+import it.polimi.ingsw.view.model_view.Market_View;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -16,7 +18,7 @@ import java.util.Observer;
 
 public abstract class ClientView extends Application implements Observer {
 
-    private final Game_View game;
+    private static Game_View game;
     private GAME_STATES currentState;
 
     public ClientView() {
@@ -174,12 +176,12 @@ public abstract class ClientView extends Application implements Observer {
         game.startGame();
     }
 
-    private void market_message(Message message){
+    public void market_message(Message message){
         Message_Market m = (Message_Market) message;
         game.setMarket(m.getMarket());
     }
 
-    private void deckBoard_message(Message message){
+    public void deckBoard_message(Message message){
         Message_ArrayList_Int m = (Message_ArrayList_Int) message;
         game.setFirstDeckCards(m.getParams());
     }
@@ -192,7 +194,7 @@ public abstract class ClientView extends Application implements Observer {
         game.discardLeaderCard(position, chosenLeaderCard);
     }
 
-    public void setLeaderCard(int position, int card1, int card2){
+    public static void setLeaderCard(int position, int card1, int card2){
         game.setMyLeaderCards(position, card1, card2);
     }
 
@@ -378,4 +380,16 @@ public abstract class ClientView extends Application implements Observer {
     public abstract void already_active_error();
 
     public abstract void already_discard_error();
+
+    public static Market_View getMarket(){
+        return game.getMarket();
+    }
+
+    public static ArrayList<Integer> getLeaderCards(int position){
+        return game.getLeaderCards(position);
+    }
+
+    public static ArrayList<Integer> getDevelopmentCards(){
+        return game.getDecks().getDevelopmentCards();
+    }
 }

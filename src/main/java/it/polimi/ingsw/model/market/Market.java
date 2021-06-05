@@ -352,6 +352,11 @@ public class Market implements Serializable, Market_View {
         creationRow(s);
     }
 
+    @Override
+    public Marble getMarble(int row, int column) {
+        return marketTray[row][column];
+    }
+
     private String fromMarbleToString(Marble m) {
         String s1 = m.toStringAbb();
         switch (s1) {

@@ -153,8 +153,8 @@ public class Game_View {
         return players.get(viewID).getDevelopmentCards();
     }
 
-    public int getLeaderCard(int viedID, int leaderCard){
-        return players.get(viedID).getLeaderCard(leaderCard);
+    public ArrayList<Integer> getLeaderCards(int viedID){
+        return players.get(viedID).getLeaderCards();
     }
 
     public void addLeaderCard(int viewID, int leaderCard){

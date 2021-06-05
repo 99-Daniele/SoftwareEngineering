@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefHeight="566.0" prefWidth="827.0" spacing="20.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="it.polimi.ingsw.view.GUI.InitSceneController">
+<VBox alignment="CENTER" prefHeight="566.0" prefWidth="827.0" spacing="20.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="it.polimi.ingsw.view.GUI.sceneController.InitSceneController">
     <children>
       <AnchorPane prefHeight="515.0" prefWidth="787.0">
          <children>
@@ -18,10 +18,10 @@
             <Button fx:id="chooseLeader3" layoutX="469.0" layoutY="279.0" mnemonicParsing="false" text="Choose Leader" />
             <Button fx:id="chooseLeader4" layoutX="633.0" layoutY="279.0" mnemonicParsing="false" text="Choose Leader" />
             <ImageView fx:id="leader1" fitHeight="200.0" fitWidth="132.0" layoutX="114.0" layoutY="56.0" />
-            <ImageView fx:id="leader2" fitHeight="200.0" fitWidth="132.0" layoutX="300.0" layoutY="56.0" />
+            <ImageView fx:id="leader2" fitHeight="200.0" fitWidth="132.0" layoutX="285.0" layoutY="56.0" />
             <ImageView fx:id="leader3" fitHeight="200.0" fitWidth="132.0" layoutX="450.0" layoutY="56.0" />
             <ImageView fx:id="leader4" fitHeight="200.0" fitWidth="132.0" layoutX="614.0" layoutY="56.0" />
-            <Label layoutX="265.0" prefHeight="36.0" prefWidth="370.0" text="CHOOSE 2 LEADER CARDS">
+            <Label fx:id="leaderLabel" layoutX="265.0" prefHeight="36.0" prefWidth="370.0" text="CHOOSE 2 LEADER CARDS">
                <font>
                   <Font name="Bell MT" size="24.0" />
                </font>
@@ -50,12 +50,12 @@
             <Button fx:id="resource2" layoutX="173.0" layoutY="476.0" mnemonicParsing="false" text="Choose Resource" visible="false" />
             <Button fx:id="resource3" layoutX="481.0" layoutY="476.0" mnemonicParsing="false" text="Choose Resource" visible="false" />
             <Button fx:id="resource4" layoutX="481.0" layoutY="393.0" mnemonicParsing="false" text="Choose Resource" visible="false" />
-            <Label fx:id="resourceLabel" layoutX="187.0" layoutY="307.0" prefHeight="76.0" prefWidth="506.0" text="CHOOSE RESOURCE TO START GAME " visible="false">
+            <Label fx:id="resourceLabel" layoutX="187.0" layoutY="307.0" prefHeight="76.0" prefWidth="506.0" text="CHOOSE RESOURCES TO START GAME" visible="false">
                <font>
                   <Font name="Bell MT" size="24.0" />
-               </font></Label>
+               </font>
+            </Label>
             <Button fx:id="start" disable="true" layoutX="709.0" layoutY="412.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="114.0" text="START THE GAME " />
-            <ImageView fx:id="leader2" fitHeight="200.0" fitWidth="132.0" layoutX="285.0" layoutY="56.0" />
          </children>
       </AnchorPane>
     </children>

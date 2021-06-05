@@ -1,21 +1,22 @@
-package it.polimi.ingsw.view.GUI;
+package it.polimi.ingsw.view.GUI.sceneController;
 
+import it.polimi.ingsw.model.resourceContainers.Resource;
 import it.polimi.ingsw.network.client.ClientSocket;
-import it.polimi.ingsw.network.messages.Message;
-import it.polimi.ingsw.network.messages.MessageType;
-import it.polimi.ingsw.network.messages.Message_Two_Parameter_Int;
+import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.parser.CardMapGUI;
+import it.polimi.ingsw.view.ClientView;
+import it.polimi.ingsw.view.GUI.GUI;
+import it.polimi.ingsw.view.GUI.SceneController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class InitSceneController extends SceneController{
+public class InitSceneController{
 
     private static int card1;
     private static int card2;
@@ -23,7 +24,12 @@ public class InitSceneController extends SceneController{
     private static int card4;
     private int chosenCard1;
     private int chosenCard2;
+    private Resource r1;
 
+    @FXML
+    private Label leaderLabel;
+    @FXML
+    private Label resourceLabel;
     @FXML
     private ImageView leader1;
     @FXML
@@ -59,21 +65,16 @@ public class InitSceneController extends SceneController{
     @FXML
     private Button start;
 
-    /*
-    public InitSceneController(int card1, int card2, int card3, int card4) {
-        this.card1 = card1;
-        this.card2 = card2;
-        this.card3 = card3;
-        this.card4 = card4;
-    }
-    */
-
     @FXML
     public void initialize(){
         chooseLeader1.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> leaderButton(chooseLeader1, card1));
         chooseLeader2.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> leaderButton(chooseLeader2, card2));
         chooseLeader3.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> leaderButton(chooseLeader3, card3));
         chooseLeader4.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> leaderButton(chooseLeader4, card4));
+        resource1.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> resourceButton(Resource.COIN));
+        resource2.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> resourceButton(Resource.SERVANT));
+        resource3.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> resourceButton(Resource.STONE));
+        resource4.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> resourceButton(Resource.SHIELD));
         start.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> startButton());
     }
 
@@ -86,7 +87,6 @@ public class InitSceneController extends SceneController{
         InitSceneController.card2 = card2;
         InitSceneController.card3 = card3;
         InitSceneController.card4 = card4;
-        //SceneController.setVisible("#leader1", false);
     }
 
     private void leaderButton(Button leaderButton, int card){
@@ -110,12 +110,63 @@ public class InitSceneController extends SceneController{
         }
     }
 
-    private void startButton(){
+    private void resourceButton(Resource r){
+        if(GUI.getPosition() == 3){
+            if(r1 == null)
+                r1 = r;
+            else {
+                SceneController.allInvisible();
+                resourceLabel.setVisible(true);
+                resourceLabel.setText("WAITING OTHER PLAYERS CHOICES");
+                Message m = new Message_Two_Resource(MessageType.TWO_FIRST_RESOURCE, GUI.getPosition(), r1, r);
+                try {
+                    ClientSocket.sendMessage(m);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        else {
+            SceneController.allInvisible();
+            resourceLabel.setVisible(true);
+            resourceLabel.setText("WAITING OTHER PLAYERS CHOICES");
+            Message m = new Message_One_Int_One_Resource(MessageType.ONE_FIRST_RESOURCE, GUI.getPosition(), r, 1);
+            try {
+                ClientSocket.sendMessage(m);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void startButton() {
+        ClientView.setLeaderCard(GUI.getPosition(), card1, card2);
         Message message = new Message_Two_Parameter_Int(MessageType.LEADER_CARD, GUI.getPosition(), card1, card2);
         try {
             ClientSocket.sendMessage(message);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        leader1.setVisible(false);
+        leader2.setVisible(false);
+        leader3.setVisible(false);
+        leader4.setVisible(false);
+        chooseLeader1.setVisible(false);
+        chooseLeader2.setVisible(false);
+        chooseLeader3.setVisible(false);
+        chooseLeader4.setVisible(false);
+        leaderLabel.setVisible(false);
+        start.setVisible(false);
+        if(GUI.getPosition() != 0) {
+            coin.setVisible(true);
+            servant.setVisible(true);
+            stone.setVisible(true);
+            shield.setVisible(true);
+            resource1.setVisible(true);
+            resource2.setVisible(true);
+            resource3.setVisible(true);
+            resource4.setVisible(true);
+            resourceLabel.setVisible(true);
         }
     }
 }

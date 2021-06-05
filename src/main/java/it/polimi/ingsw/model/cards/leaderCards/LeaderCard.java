@@ -167,4 +167,9 @@ public abstract class LeaderCard extends Card {
                 return "";
         }
     }
+
+    @Override
+    public int getLevel() {
+        return 0;
+    }
 }

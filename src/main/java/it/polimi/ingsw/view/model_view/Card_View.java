@@ -8,5 +8,7 @@ public interface Card_View {
 
     int getCardID();
 
+    int getLevel();
+
     int getVictoryPoints();
 }

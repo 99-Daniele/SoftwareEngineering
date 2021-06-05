@@ -6,14 +6,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="429.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.NicknameSceneController">
+<AnchorPane prefHeight="429.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.sceneController.NicknameSceneController">
    <children>
       <Label fx:id="nicknameLabel" layoutX="207.0" layoutY="61.0" text="INSERT NICKNAME">
          <font>
             <Font name="Bell MT" size="24.0" />
          </font>
       </Label>
-      <Label fx:id="numPlayerLabel" layoutX="110.0" layoutY="200.0" text="NUMBER OF PLAYER IN THE GAME " visible="false">
+      <Label fx:id="numPlayerLabel" layoutX="110.0" layoutY="200.0" text="NUMBER OF PLAYER IN THE GAME (1 - 4)" visible="false">
          <font>
             <Font name="Bell MT" size="24.0" />
          </font>
@@ -33,7 +33,7 @@
             <Font name="Bell MT" size="24.0" />
          </font>
       </Label>
-      <Label fx:id="errorLabel" alignment="CENTER" layoutX="384.0" layoutY="167.0" prefHeight="296.0" prefWidth="541.0" style="-fx-background-color: WHITE;" text="SERVER ADDRESS OR PORT ARE WRONG. PLEASE INSERT AGAIN" textAlignment="CENTER" visible="false" wrapText="true">
+      <Label fx:id="errorLabel" alignment="CENTER" layoutX="384.0" layoutY="167.0" prefHeight="296.0" prefWidth="541.0" style="-fx-background-color: WHITE;" text="INSERT A VALID NICKNAME" textAlignment="CENTER" visible="false" wrapText="true">
          <font>
             <Font name="Bell MT" size="24.0" />
          </font>

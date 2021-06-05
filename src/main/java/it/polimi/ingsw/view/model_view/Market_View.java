@@ -19,4 +19,8 @@ public interface Market_View {
     void printColumn(int column);
 
     void printMarbles(ArrayList<Marble> marbles);
+
+    Marble getMarble(int row, int column);
+
+    Marble getExternalMarble();
 }

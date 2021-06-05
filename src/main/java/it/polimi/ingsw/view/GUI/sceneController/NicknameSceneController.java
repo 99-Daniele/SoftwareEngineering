@@ -1,9 +1,11 @@
-package it.polimi.ingsw.view.GUI;
+package it.polimi.ingsw.view.GUI.sceneController;
 
 import it.polimi.ingsw.network.client.ClientSocket;
 import it.polimi.ingsw.network.messages.MessageType;
 import it.polimi.ingsw.network.messages.Message_One_Parameter_Int;
 import it.polimi.ingsw.network.messages.Message_One_Parameter_String;
+import it.polimi.ingsw.view.GUI.GUI;
+import it.polimi.ingsw.view.GUI.SceneController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -13,7 +15,9 @@ import javafx.scene.input.MouseEvent;
 import java.io.IOException;
 
 
-public class NicknameSceneController extends SceneController {
+public class NicknameSceneController{
+
+    private boolean nickNameError = true;
 
     @FXML
     private TextField nickname;
@@ -40,6 +44,19 @@ public class NicknameSceneController extends SceneController {
                 e.printStackTrace();
             }
         });
+        ok.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            errorLabel.setVisible(false);
+            ok.setVisible(false);
+            if(nickNameError) {
+                nickname.setVisible(true);
+                nicknameLabel.setVisible(true);
+            }
+            else {
+                playerNumber.setVisible(true);
+                numPlayerLabel.setVisible(true);
+            }
+            goNext.setVisible(true);
+        });
     }
 
     private void goNextButton() throws IOException {
@@ -50,7 +67,15 @@ public class NicknameSceneController extends SceneController {
                     ClientSocket.sendMessage(new Message_One_Parameter_Int(MessageType.NUM_PLAYERS, GUI.getPosition(), num));
                     goNext.setVisible(false);
                 }
+                else {
+                    errorLabel.setText("INSERT A CORRECT NUM OF PLAYERS (1 - 4)");
+                    nickNameError = false;
+                    error();
+                }
             } catch (NumberFormatException e){
+                errorLabel.setText("INSERT A NUMBER");
+                nickNameError = false;
+                error();
             }
         }
         else {
@@ -58,6 +83,10 @@ public class NicknameSceneController extends SceneController {
             if(!username.isBlank()){
                 ClientSocket.sendMessage(new Message_One_Parameter_String(MessageType.LOGIN, GUI.getPosition(), username));
                 goNext.setVisible(false);
+            }
+            else {
+                errorLabel.setText("INSERT A VALID NICKNAME");
+                error();
             }
         }
     }
@@ -67,7 +96,6 @@ public class NicknameSceneController extends SceneController {
         SceneController.setVisible("#nicknameLabel", false);
         SceneController.setVisible("#playerNumber", true);
         SceneController.setVisible("#numPlayerLabel", true);
-        SceneController.setText("#numPlayerLabel", "ciao");
         SceneController.setVisible("#goNext", true);
     }
 
@@ -80,7 +108,8 @@ public class NicknameSceneController extends SceneController {
     }
 
     public static void alreadyTakenNickName(){
-
+        SceneController.setText("#errorLabel", "NICKNAME ALREADY CHOSEN BY ANOTHER PLAYER");
+        error();
     }
 
     private static void error(){
@@ -89,6 +118,7 @@ public class NicknameSceneController extends SceneController {
         SceneController.setVisible("#playerNumber", false);
         SceneController.setVisible("#numPlayerLabel", false);
         SceneController.setVisible("#goNext", false);
-
+        SceneController.setVisible("#errorLabel", true);
+        SceneController.setVisible("#ok", true);
     }
 }

@@ -1,33 +1,35 @@
-package it.polimi.ingsw.view.GUI;
+package it.polimi.ingsw.view.GUI.sceneController;
 
+import it.polimi.ingsw.model.cards.Card;
 import it.polimi.ingsw.model.games.states.GAME_STATES;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 import it.polimi.ingsw.network.client.ClientSocket;
 import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.parser.CardMapGUI;
 import it.polimi.ingsw.view.ClientView;
+import it.polimi.ingsw.view.GUI.GUI;
+import it.polimi.ingsw.view.GUI.SceneController;
+import it.polimi.ingsw.view.GUI.sceneController.OpponentPlayerboardSceneController;
 import it.polimi.ingsw.view.model_view.Game_View;
-import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 
 
-public class YourTurnSceneController extends SceneController{
-    private int pos=0;
-    private GAME_STATES currentState;
-    private int position=1;
-    private final Game_View game=new Game_View();
+public class YourTurnSceneController{
+
+    private int faithPoints = 0;
+
     @FXML
     private Button chooseSlot1;
     @FXML
@@ -170,6 +172,22 @@ public class YourTurnSceneController extends SceneController{
     private int marbleCount;
     @FXML
     public void initialize(){
+        try {
+            setImage(card11, CardMapGUI.getCard(ClientView.getDevelopmentCards().get(0)));
+            setImage(card21, CardMapGUI.getCard(ClientView.getDevelopmentCards().get(1)));
+            setImage(card31, CardMapGUI.getCard(ClientView.getDevelopmentCards().get(2)));
+            setImage(card41, CardMapGUI.getCard(ClientView.getDevelopmentCards().get(3)));
+            setImage(card12, CardMapGUI.getCard(ClientView.getDevelopmentCards().get(4)));
+            setImage(card22, CardMapGUI.getCard(ClientView.getDevelopmentCards().get(5)));
+            setImage(card32, CardMapGUI.getCard(ClientView.getDevelopmentCards().get(6)));
+            setImage(card42, CardMapGUI.getCard(ClientView.getDevelopmentCards().get(7)));
+            setImage(card13, CardMapGUI.getCard(ClientView.getDevelopmentCards().get(8)));
+            setImage(card23, CardMapGUI.getCard(ClientView.getDevelopmentCards().get(9)));
+            setImage(card33, CardMapGUI.getCard(ClientView.getDevelopmentCards().get(10)));
+            setImage(card43, CardMapGUI.getCard(ClientView.getDevelopmentCards().get(11)));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         shieldAmount.setText("0");
         coinAmount.setText("0");
         servantAmount.setText("0");
@@ -188,6 +206,11 @@ public class YourTurnSceneController extends SceneController{
         column2.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> take_market_marble_column(2));
         column3.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> take_market_marble_column(3));
         column4.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> take_market_marble_column(4));
+    }
+
+    private void setImage(ImageView image, String file) throws FileNotFoundException {
+        FileInputStream fis = new FileInputStream(file);
+        image.setImage(new Image(fis));
     }
 
 
@@ -272,7 +295,7 @@ public class YourTurnSceneController extends SceneController{
     private void take_market_marble_column(int i)  {
         marbleCount=3;
         try {
-            ClientSocket.sendMessage(new Message_Two_Parameter_Int(MessageType.TAKE_MARBLE, position, 1, i));
+            ClientSocket.sendMessage(new Message_Two_Parameter_Int(MessageType.TAKE_MARBLE, GUI.getPosition(), 1, i));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -280,8 +303,7 @@ public class YourTurnSceneController extends SceneController{
 
 
     private void otherPlayerboardButton()  {
-        SceneController opsc = new OpponentPlayerboardSceneController();
-        GUI.setRoot(opsc, "/fxml/opponentPlayerboardScene");
+        GUI.setRoot("/fxml/opponentPlayerboardScene");
     }
 
     private void discardLeaderButton(){
@@ -311,7 +333,7 @@ public class YourTurnSceneController extends SceneController{
         chooseBase.setOnMouseClicked(mouseEvent -> {
             chooseBase.setDisable(true);
             basePanel.setVisible(true);
-            Message_Three_Resource_One_Int messageToSend=new Message_Three_Resource_One_Int(MessageType.BASIC_POWER, position, null, null, null, 0);
+            Message_Three_Resource_One_Int messageToSend=new Message_Three_Resource_One_Int(MessageType.BASIC_POWER, GUI.getPosition(), null, null, null, 0);
             coin1.setOnMouseClicked(MouseEvent->{
                 baseProduction(Resource.COIN,messageToSend);
             });
@@ -369,7 +391,7 @@ public class YourTurnSceneController extends SceneController{
         panelBuy.setVisible(true);
         radiobutWarehouse.setOnMouseClicked(mouseEvent1 -> {
             panelBuy.setVisible(false);
-            Message message = new Message_Two_Parameter_Int(MessageType.DEVELOPMENT_CARD_POWER, position, slot, 0);
+            Message message = new Message_Two_Parameter_Int(MessageType.DEVELOPMENT_CARD_POWER, GUI.getPosition(), slot, 0);
             try {
               ClientSocket.sendMessage(message);
              } catch (IOException e) {
@@ -378,7 +400,7 @@ public class YourTurnSceneController extends SceneController{
         });
         radiobutStrongbox.setOnMouseClicked(mouseEvent1 -> {
             panelBuy.setVisible(false);
-            Message message = new Message_Two_Parameter_Int(MessageType.DEVELOPMENT_CARD_POWER, position, slot, 1);
+            Message message = new Message_Two_Parameter_Int(MessageType.DEVELOPMENT_CARD_POWER, GUI.getPosition(), slot, 1);
             try {
                 ClientSocket.sendMessage(message);
             } catch (IOException e) {
@@ -419,10 +441,10 @@ public class YourTurnSceneController extends SceneController{
     }
 
     private void moveCroce(){
-        pos++;
-        if(pos>2 && pos<5 || pos>16 && pos<19)
+        faithPoints++;
+        if(faithPoints>2 && faithPoints<5 || faithPoints>16 && faithPoints<19)
             croceRossa.setLayoutY(croceRossa.getLayoutY()-28);
-        else if (pos>9 && pos<12)
+        else if (faithPoints>9 && faithPoints<12)
             croceRossa.setLayoutY(croceRossa.getLayoutY()+28);
         else croceRossa.setLayoutX(croceRossa.getLayoutX()+30);
     }
@@ -464,7 +486,7 @@ public class YourTurnSceneController extends SceneController{
         panelBuy.setVisible(true);
         radiobutWarehouse.setOnMouseClicked(mouseEvent1 -> {
             panelBuy.setVisible(false);
-            Message message = new Message_Three_Parameter_Int(MessageType.BUY_CARD, position, row, column, 0);
+            Message message = new Message_Three_Parameter_Int(MessageType.BUY_CARD, GUI.getPosition(), row, column, 0);
             try {
                 ClientSocket.sendMessage(message);
             } catch (IOException e) {
@@ -473,7 +495,7 @@ public class YourTurnSceneController extends SceneController{
         });
         radiobutStrongbox.setOnMouseClicked(mouseEvent1 -> {
             panelBuy.setVisible(false);
-            Message message = new Message_Three_Parameter_Int(MessageType.BUY_CARD, position, row, column, 1);
+            Message message = new Message_Three_Parameter_Int(MessageType.BUY_CARD, GUI.getPosition(), row, column, 1);
             try {
                 ClientSocket.sendMessage(message);
             } catch (IOException e) {
@@ -502,7 +524,7 @@ public class YourTurnSceneController extends SceneController{
     public void buy_card_message(Message message) {
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
         //super.buy_card_message(message);
-        if(m.getClientID() != position);
+        if(m.getClientID() != GUI.getPosition());
         //    System.out.println("Player " + super.getNickname(m.getClientID()) + " bought a new card and inserted it in " +
                     //"the " + m.getPar2() + "° slot.");//metetre nel quadrato gui laterale
         else
@@ -539,6 +561,9 @@ public class YourTurnSceneController extends SceneController{
         radiobutDiscardLeader.setDisable(false);
         radiobutOtherPlayboard.setDisable(false);
         radiobutEndTurn.setDisable(false);
+    }
+
+    public static void setDecks(ArrayList<Integer> deckCards){
     }
 
 

@@ -205,7 +205,7 @@ public class CLI extends ClientView{
                 else if (card1 == card2)
                     System.err.println("You can't chose two same cards.");
                 else {
-                    super.setLeaderCard(position, card1, card2);
+                    ClientView.setLeaderCard(position, card1, card2);
                     ClientSocket.sendMessage(new Message_Two_Parameter_Int(MessageType.LEADER_CARD, position, card1, card2));
                     chose_first_resources();
                     break;

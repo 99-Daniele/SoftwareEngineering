@@ -41,26 +41,10 @@ public class SceneController {
         }
     }
 
-    public static void changeRootPane(SceneController sceneController, String fxml) {
-        try {
-            scene.setRoot(loadFXML(sceneController, fxml));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     private static Parent loadFXML(String fxml) throws IOException {
         //was:FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
         URL url = GUI.class.getResource(fxml + ".fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(url);
-        return fxmlLoader.load();
-    }
-
-    private static Parent loadFXML(SceneController sceneController, String fxml) throws IOException {
-        //was:FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
-        URL url = GUI.class.getResource(fxml + ".fxml");
-        FXMLLoader fxmlLoader = new FXMLLoader(url);
-        fxmlLoader.setController(sceneController);
         return fxmlLoader.load();
     }
 
@@ -69,9 +53,19 @@ public class SceneController {
         label.setVisible(visible);
     }
 
+    public static void allInvisible(){
+        for(Node node: scene.getRoot().getChildrenUnmodifiable())
+            node.setVisible(false);
+    }
+
     public static void setDisable(String selector, boolean visible){
         Node label = scene.lookup(selector);
         label.setDisable(visible);
+    }
+
+    public static void allDisabled(){
+        for(Node node: scene.getRoot().getChildrenUnmodifiable())
+            node.setDisable(true);
     }
 
     public static void setText(String selector, String text){

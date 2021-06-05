@@ -1,7 +1,9 @@
-package it.polimi.ingsw.view.GUI;
+package it.polimi.ingsw.view.GUI.sceneController;
 
 import it.polimi.ingsw.App;
 import it.polimi.ingsw.network.client.ClientSocket;
+import it.polimi.ingsw.view.GUI.GUI;
+import it.polimi.ingsw.view.GUI.SceneController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -13,7 +15,7 @@ import java.net.UnknownHostException;
 import java.util.concurrent.ExecutionException;
 
 
-public class ConnectionSceneController extends SceneController{
+public class ConnectionSceneController{
 
     @FXML
     private Button connect;
