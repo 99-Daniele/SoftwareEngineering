@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.resourceContainers.Resource;
 import it.polimi.ingsw.network.client.ClientSocket;
 import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.parser.CardMapGUI;
+import it.polimi.ingsw.parser.MarbleMapGUI;
 import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.GUI.GUI;
 import it.polimi.ingsw.view.GUI.SceneController;
@@ -84,6 +85,36 @@ public class YourTurnSceneController{
     private ImageView card42;
     @FXML
     private ImageView card43;
+    @FXML
+    private ImageView leader1;
+    @FXML
+    private ImageView leader2;
+    @FXML
+    private ImageView marble11;
+    @FXML
+    private ImageView marble12;
+    @FXML
+    private ImageView marble13;
+    @FXML
+    private ImageView marble14;
+    @FXML
+    private ImageView marble21;
+    @FXML
+    private ImageView marble22;
+    @FXML
+    private ImageView marble23;
+    @FXML
+    private ImageView marble24;
+    @FXML
+    private ImageView marble31;
+    @FXML
+    private ImageView marble32;
+    @FXML
+    private ImageView marble33;
+    @FXML
+    private ImageView marble34;
+    @FXML
+    private ImageView marbleExt;
     @FXML
     private ImageView marbleShow1;
     @FXML
@@ -185,6 +216,21 @@ public class YourTurnSceneController{
             setImage(card23, CardMapGUI.getCard(ClientView.getDevelopmentCards().get(9)));
             setImage(card33, CardMapGUI.getCard(ClientView.getDevelopmentCards().get(10)));
             setImage(card43, CardMapGUI.getCard(ClientView.getDevelopmentCards().get(11)));
+            setImage(leader1, CardMapGUI.getCard(ClientView.getLeaderCards(GUI.getPosition()).get(0)));
+            setImage(leader2, CardMapGUI.getCard(ClientView.getLeaderCards(GUI.getPosition()).get(1)));
+            setImage(marble11, MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(0, 0)));
+            setImage(marble12, MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(0, 1)));
+            setImage(marble13, MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(0, 2)));
+            setImage(marble14, MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(0, 3)));
+            setImage(marble21, MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(1, 0)));
+            setImage(marble22, MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(1, 1)));
+            setImage(marble23, MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(1, 2)));
+            setImage(marble24, MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(1, 3)));
+            setImage(marble31, MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(2, 0)));
+            setImage(marble32, MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(2, 1)));
+            setImage(marble33, MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(2, 2)));
+            setImage(marble34, MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(2, 3)));
+            setImage(marbleExt, MarbleMapGUI.getMarble(ClientView.getMarket().getExternalMarble()));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

@@ -140,8 +140,8 @@ public class InitSceneController{
     }
 
     private void startButton() {
-        ClientView.setLeaderCard(GUI.getPosition(), card1, card2);
-        Message message = new Message_Two_Parameter_Int(MessageType.LEADER_CARD, GUI.getPosition(), card1, card2);
+        ClientView.setLeaderCard(GUI.getPosition(), chosenCard1, chosenCard2);
+        Message message = new Message_Two_Parameter_Int(MessageType.LEADER_CARD, GUI.getPosition(), chosenCard1, chosenCard2);
         try {
             ClientSocket.sendMessage(message);
         } catch (IOException e) {
@@ -166,7 +166,10 @@ public class InitSceneController{
             resource2.setVisible(true);
             resource3.setVisible(true);
             resource4.setVisible(true);
-            resourceLabel.setVisible(true);
         }
+        else {
+            resourceLabel.setText("WAITING OTHER PLAYERS CHOICES");
+        }
+        resourceLabel.setVisible(true);
     }
 }

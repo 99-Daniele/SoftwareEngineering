@@ -175,70 +175,31 @@
                   <Image url="@../photos/planciaMercato.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="marble14" fitHeight="23.0" fitWidth="23.0" layoutX="1177.0" layoutY="149.0">
-               <image>
-                  <Image url="@../photos/bianca.png" />
-               </image>
+            <ImageView fx:id="marble14" fitHeight="23.0" fitWidth="23.0" layoutX="1177.0" layoutY="100.0">
             </ImageView>
-            <ImageView fx:id="marble13" fitHeight="23.0" fitWidth="23.0" layoutX="1154.0" layoutY="148.0">
-               <image>
-                  <Image url="@../photos/bianca.png" />
-               </image>
+            <ImageView fx:id="marble13" fitHeight="23.0" fitWidth="23.0" layoutX="1154.0" layoutY="100.0">
             </ImageView>
-            <ImageView fx:id="marble24" fitHeight="23.0" fitWidth="23.0" layoutX="1177.0" layoutY="123.0">
-               <image>
-                  <Image url="@../photos/bianca.png" />
-               </image>
+            <ImageView fx:id="marble24" fitHeight="23.0" fitWidth="23.0" layoutX="1177.0" layoutY="125.0">
             </ImageView>
-            <ImageView fx:id="marble11" fitHeight="23.0" fitWidth="23.0" layoutX="1108.0" layoutY="147.0">
-               <image>
-                  <Image url="@../photos/bianca.png" />
-               </image>
+            <ImageView fx:id="marble11" fitHeight="23.0" fitWidth="23.0" layoutX="1108.0" layoutY="100.0">
             </ImageView>
-            <ImageView fx:id="marble12" fitHeight="23.0" fitWidth="23.0" layoutX="1130.0" layoutY="147.0">
-               <image>
-                  <Image url="@../photos/bianca.png" />
-               </image>
+            <ImageView fx:id="marble12" fitHeight="23.0" fitWidth="23.0" layoutX="1130.0" layoutY="100.0">
             </ImageView>
-            <ImageView fx:id="marble22" fitHeight="23.0" fitWidth="23.0" layoutX="1130.0" layoutY="123.0">
-               <image>
-                  <Image url="@../photos/bianca.png" />
-               </image>
+            <ImageView fx:id="marble22" fitHeight="23.0" fitWidth="23.0" layoutX="1130.0" layoutY="125.0">
             </ImageView>
-            <ImageView fx:id="marble23" fitHeight="23.0" fitWidth="23.0" layoutX="1154.0" layoutY="122.0">
-               <image>
-                  <Image url="@../photos/bianca.png" />
-               </image>
+            <ImageView fx:id="marble23" fitHeight="23.0" fitWidth="23.0" layoutX="1154.0" layoutY="125.0">
             </ImageView>
-            <ImageView fx:id="marble21" fitHeight="23.0" fitWidth="23.0" layoutX="1108.0" layoutY="122.0">
-               <image>
-                  <Image url="@../photos/bianca.png" />
-               </image>
+            <ImageView fx:id="marble21" fitHeight="23.0" fitWidth="23.0" layoutX="1108.0" layoutY="125.0">
             </ImageView>
-            <ImageView fx:id="marble31" fitHeight="23.0" fitWidth="23.0" layoutX="1108.0" layoutY="97.0">
-               <image>
-                  <Image url="@../photos/bianca.png" />
-               </image>
+            <ImageView fx:id="marble31" fitHeight="23.0" fitWidth="23.0" layoutX="1108.0" layoutY="150.0">
             </ImageView>
-            <ImageView fx:id="marble32" fitHeight="23.0" fitWidth="23.0" layoutX="1130.0" layoutY="98.0">
-               <image>
-                  <Image url="@../photos/bianca.png" />
-               </image>
+            <ImageView fx:id="marble32" fitHeight="23.0" fitWidth="23.0" layoutX="1130.0" layoutY="150.0">
             </ImageView>
-            <ImageView fx:id="marble33" fitHeight="23.0" fitWidth="23.0" layoutX="1154.0" layoutY="98.0">
-               <image>
-                  <Image url="@../photos/bianca.png" />
-               </image>
+            <ImageView fx:id="marble33" fitHeight="23.0" fitWidth="23.0" layoutX="1154.0" layoutY="150.0">
             </ImageView>
-            <ImageView fx:id="marble34" fitHeight="23.0" fitWidth="23.0" layoutX="1177.0" layoutY="98.0">
-               <image>
-                  <Image url="@../photos/bianca.png" />
-               </image>
+            <ImageView fx:id="marble34" fitHeight="23.0" fitWidth="23.0" layoutX="1177.0" layoutY="150.0">
             </ImageView>
             <ImageView fx:id="marbleExt" fitHeight="23.0" fitWidth="23.0" layoutX="1189.0" layoutY="74.0">
-               <image>
-                  <Image url="@../photos/bianca.png" />
-               </image>
             </ImageView>
             <RadioButton fx:id="radiobutOtherPlayboard" layoutX="279.0" layoutY="628.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="222.0" text="SEE OTHER PLAYERBOARD" toggleGroup="$mainAction" />
             <ImageView fx:id="leader2" disable="true" fitHeight="166.0" fitWidth="108.0" layoutX="134.0" layoutY="451.0">
