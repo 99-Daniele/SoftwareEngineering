@@ -39,11 +39,11 @@ public class InitSceneController{
     @FXML
     private ImageView leader4;
     @FXML
+    private ImageView stone;
+    @FXML
     private ImageView coin;
     @FXML
     private ImageView servant;
-    @FXML
-    private ImageView stone;
     @FXML
     private ImageView shield;
     @FXML
@@ -71,9 +71,9 @@ public class InitSceneController{
         chooseLeader2.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> leaderButton(chooseLeader2, card2));
         chooseLeader3.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> leaderButton(chooseLeader3, card3));
         chooseLeader4.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> leaderButton(chooseLeader4, card4));
-        resource1.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> resourceButton(Resource.COIN));
-        resource2.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> resourceButton(Resource.SERVANT));
-        resource3.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> resourceButton(Resource.STONE));
+        resource1.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> resourceButton(Resource.STONE));
+        resource2.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> resourceButton(Resource.COIN));
+        resource3.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> resourceButton(Resource.SERVANT));
         resource4.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> resourceButton(Resource.SHIELD));
         start.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> startButton());
     }
@@ -115,7 +115,7 @@ public class InitSceneController{
             if(r1 == null)
                 r1 = r;
             else {
-                SceneController.allInvisible();
+                allInvisible();
                 resourceLabel.setVisible(true);
                 resourceLabel.setText("WAITING OTHER PLAYERS CHOICES");
                 Message m = new Message_Two_Resource(MessageType.TWO_FIRST_RESOURCE, GUI.getPosition(), r1, r);
@@ -127,7 +127,7 @@ public class InitSceneController{
             }
         }
         else {
-            SceneController.allInvisible();
+            allInvisible();
             resourceLabel.setVisible(true);
             resourceLabel.setText("WAITING OTHER PLAYERS CHOICES");
             Message m = new Message_One_Int_One_Resource(MessageType.ONE_FIRST_RESOURCE, GUI.getPosition(), r, 1);
@@ -147,16 +147,7 @@ public class InitSceneController{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        leader1.setVisible(false);
-        leader2.setVisible(false);
-        leader3.setVisible(false);
-        leader4.setVisible(false);
-        chooseLeader1.setVisible(false);
-        chooseLeader2.setVisible(false);
-        chooseLeader3.setVisible(false);
-        chooseLeader4.setVisible(false);
-        leaderLabel.setVisible(false);
-        start.setVisible(false);
+        allInvisible();
         if(GUI.getPosition() != 0) {
             coin.setVisible(true);
             servant.setVisible(true);
@@ -171,5 +162,27 @@ public class InitSceneController{
             resourceLabel.setText("WAITING OTHER PLAYERS CHOICES");
         }
         resourceLabel.setVisible(true);
+    }
+
+    private void allInvisible(){
+        resourceLabel.setVisible(false);
+        leader1.setVisible(false);
+        leader2.setVisible(false);
+        leader3.setVisible(false);
+        leader4.setVisible(false);
+        chooseLeader1.setVisible(false);
+        chooseLeader2.setVisible(false);
+        chooseLeader3.setVisible(false);
+        chooseLeader4.setVisible(false);
+        leaderLabel.setVisible(false);
+        start.setVisible(false);
+        coin.setVisible(false);
+        resource1.setVisible(false);
+        shield.setVisible(false);
+        resource2.setVisible(false);
+        stone.setVisible(false);
+        resource3.setVisible(false);
+        servant.setVisible(false);
+        resource4.setVisible(false);
     }
 }

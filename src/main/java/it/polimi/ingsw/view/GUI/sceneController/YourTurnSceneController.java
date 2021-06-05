@@ -609,7 +609,14 @@ public class YourTurnSceneController{
         radiobutEndTurn.setDisable(false);
     }
 
-    public static void setDecks(ArrayList<Integer> deckCards){
+    public static void notYourTurn(){
+        SceneController.setDisable("#radiobutTakeMarble", false);
+        SceneController.setDisable("#radiobutBuyCard", false);
+        SceneController.setDisable("#radiobutActivProduc", false);
+        SceneController.setDisable("#radiobutActLeader", false);
+        SceneController.setDisable("#radiobutDiscardLeader", false);
+        SceneController.setDisable("#radiobutEndTurn", false);
+        SceneController.setDisable("#move", false);
     }
 
 

@@ -130,7 +130,7 @@ public class GUI extends ClientView {
                 setRoot("/fxml/yourTurnScene");
             else {
                 setRoot("/fxml/yourTurnScene");
-                //YourTurnSceneController.notYourTurn();
+                YourTurnSceneController.notYourTurn();
             }
         });
     }
