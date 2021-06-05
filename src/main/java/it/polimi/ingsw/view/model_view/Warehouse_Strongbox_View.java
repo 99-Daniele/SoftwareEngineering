@@ -144,4 +144,24 @@ public class Warehouse_Strongbox_View {
             }
         }
     }
+
+    public ArrayList<Resource_Container_View> getWarehouse(){
+        return depots;
+    }
+
+    public int coinAmount(){
+        return coin.getAmount();
+    }
+
+    public int shieldAmount(){
+        return shield.getAmount();
+    }
+
+    public int stoneAmount(){
+        return stone.getAmount();
+    }
+
+    public int servantAmount(){
+        return servant.getAmount();
+    }
 }

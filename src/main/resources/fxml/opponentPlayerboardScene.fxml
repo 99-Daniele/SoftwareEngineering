@@ -17,7 +17,8 @@
       <Button fx:id="goBack" layoutX="604.0" layoutY="568.0" mnemonicParsing="false" prefHeight="53.0" prefWidth="125.0" text="GO BACK">
          <font>
             <Font size="14.0" />
-         </font></Button>
+         </font>
+      </Button>
       <ImageView fx:id="slot11" fitHeight="156.0" fitWidth="107.0" layoutX="468.0" layoutY="305.0" />
       <ImageView fx:id="slot12" fitHeight="156.0" fitWidth="107.0" layoutX="468.0" layoutY="274.0" />
       <ImageView fx:id="slot21" fitHeight="156.0" fitWidth="107.0" layoutX="597.0" layoutY="305.0" />
@@ -77,7 +78,7 @@
       <ImageView fx:id="leader1" fitHeight="200.0" fitWidth="132.0" layoutX="936.0" layoutY="93.0" />
       <ImageView fx:id="leader2" fitHeight="200.0" fitWidth="132.0" layoutX="936.0" layoutY="325.0" />
       <ImageView fx:id="extraResource11" fitHeight="33.0" fitWidth="29.0" layoutX="962.0" layoutY="249.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="extraResource11" fitHeight="33.0" fitWidth="29.0" layoutX="1013.0" layoutY="249.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="extraResource12" fitHeight="33.0" fitWidth="29.0" layoutX="1013.0" layoutY="249.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="extraResource22" fitHeight="33.0" fitWidth="29.0" layoutX="1013.0" layoutY="480.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="extraResource21" fitHeight="33.0" fitWidth="29.0" layoutX="962.0" layoutY="480.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="pope1" fitHeight="42.0" fitWidth="48.0" layoutX="363.0" layoutY="151.0">

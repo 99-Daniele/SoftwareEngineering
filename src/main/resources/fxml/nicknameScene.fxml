@@ -6,43 +6,43 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="429.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.sceneController.NicknameSceneController">
+<AnchorPane prefHeight="540.0" prefWidth="1193.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.sceneController.NicknameSceneController">
    <children>
-      <Label fx:id="nicknameLabel" layoutX="207.0" layoutY="61.0" text="INSERT NICKNAME">
+      <Label fx:id="nicknameLabel" layoutX="645.0" layoutY="147.0" text="INSERT NICKNAME">
          <font>
             <Font name="Bell MT" size="24.0" />
          </font>
       </Label>
-      <Label fx:id="numPlayerLabel" layoutX="110.0" layoutY="200.0" text="NUMBER OF PLAYER IN THE GAME (1 - 4)" visible="false">
+      <Label fx:id="numPlayerLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="498.0" layoutY="334.0" prefHeight="30.0" prefWidth="526.0" text="NUMBER OF PLAYER IN THE GAME (1 - 4)" visible="false">
          <font>
             <Font name="Bell MT" size="24.0" />
          </font>
       </Label>
-      <TextField fx:id="nickname" layoutX="218.0" layoutY="112.0" prefHeight="47.0" prefWidth="211.0">
+      <TextField fx:id="nickname" layoutX="653.0" layoutY="245.0" prefHeight="51.0" prefWidth="211.0">
          <font>
             <Font size="24.0" />
          </font>
       </TextField>
-      <TextField fx:id="playerNumber" layoutX="222.0" layoutY="244.0" prefHeight="47.0" prefWidth="211.0" visible="false">
+      <TextField fx:id="playerNumber" layoutX="655.0" layoutY="396.0" prefHeight="51.0" prefWidth="211.0" visible="false">
          <font>
             <Font size="24.0" />
          </font>
       </TextField>
-      <Label fx:id="waitingLabel" layoutX="110.0" layoutY="200.0" text="WAIT OTHER PLAYERS" visible="false">
+      <Label fx:id="waitingLabel" layoutX="622.0" layoutY="510.0" text="WAIT OTHER PLAYERS" visible="false">
          <font>
             <Font name="Bell MT" size="24.0" />
          </font>
       </Label>
-      <Label fx:id="errorLabel" alignment="CENTER" layoutX="384.0" layoutY="167.0" prefHeight="296.0" prefWidth="541.0" style="-fx-background-color: WHITE;" text="INSERT A VALID NICKNAME" textAlignment="CENTER" visible="false" wrapText="true">
+      <Label fx:id="errorLabel" alignment="CENTER" layoutX="585.0" layoutY="95.0" prefHeight="352.0" prefWidth="347.0" style="-fx-background-color: WHITE;" text="INSERT A VALID NICKNAME" textAlignment="CENTER" visible="false" wrapText="true">
          <font>
             <Font name="Bell MT" size="24.0" />
          </font>
       </Label>
-      <Button fx:id="ok" layoutX="629.0" layoutY="391.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="59.0" text="OK" visible="false">
+      <Button fx:id="ok" layoutX="715.0" layoutY="376.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="87.0" text="OK" visible="false">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button fx:id="goNext" layoutX="284.0" layoutY="322.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="87.0" text="GO NEXT" />
+      <Button fx:id="goNext" layoutX="715.0" layoutY="491.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="87.0" text="GO NEXT" />
    </children>
 </AnchorPane>

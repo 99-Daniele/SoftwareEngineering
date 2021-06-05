@@ -168,4 +168,24 @@ public class Game_View {
     public void discardLeaderCard(int viewID, int chosenLeaderCard){
         players.get(viewID).discardLeaderCard(chosenLeaderCard);
     }
+
+    public ArrayList<Resource_Container_View> getWarehouse(int viewID){
+        return players.get(viewID).getWarehouse();
+    }
+
+    public int coinAmount(int viewID){
+        return players.get(viewID).coinAmount();
+    }
+
+    public int shieldAmount(int viewID){
+        return players.get(viewID).shieldAmount();
+    }
+
+    public int stoneAmount(int viewID){
+        return players.get(viewID).stoneAmount();
+    }
+
+    public int servantAmount(int viewID){
+        return players.get(viewID).servantAmount();
+    }
 }

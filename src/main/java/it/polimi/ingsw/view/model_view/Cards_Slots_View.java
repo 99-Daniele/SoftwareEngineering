@@ -46,9 +46,24 @@ public class Cards_Slots_View {
 
     public ArrayList<Integer> getDevelopmentCards() {
         ArrayList<Integer> cards = new ArrayList<>();
-        cards.addAll(firstSlot);
-        cards.addAll(secondSlot);
-        cards.addAll(thirdSlot);
+        for(int i = 0; i < 3; i++){
+            if(firstSlot.size() > i)
+                cards.add(firstSlot.get(i));
+            else
+                cards.add(-1);
+        }
+        for(int i = 0; i < 3; i++){
+            if(secondSlot.size() > i)
+                cards.add(secondSlot.get(i));
+            else
+                cards.add(-1);
+        }
+        for(int i = 0; i < 3; i++){
+            if(thirdSlot.size() > i)
+                cards.add(thirdSlot.get(i));
+            else
+                cards.add(-1);
+        }
         return cards;
     }
 

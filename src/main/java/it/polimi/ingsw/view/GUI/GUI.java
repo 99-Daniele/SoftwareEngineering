@@ -13,13 +13,14 @@ import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.channels.Selector;
 
 
 public class GUI extends ClientView {
 
     private static boolean connected = false;
     private static int position = -1;
+    private static int otherPlayer = -1;
+    private static boolean turn;
 
     @Override
     public void launchGUI() {
@@ -35,6 +36,14 @@ public class GUI extends ClientView {
 
     public static int getPosition(){
         return position;
+    }
+
+    public static int getOtherPlayer() {
+        return otherPlayer;
+    }
+
+    public static void setOtherPlayer(int otherPlayer) {
+        GUI.otherPlayer = otherPlayer;
     }
 
     private void connectToSever(String hostname, int port){
@@ -126,6 +135,7 @@ public class GUI extends ClientView {
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
         super.setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
         Platform.runLater(() -> {
+            turn = (m.getPar() == 1);
             if (m.getPar() == 1)
                 setRoot("/fxml/yourTurnScene");
             else {
@@ -133,6 +143,10 @@ public class GUI extends ClientView {
                 YourTurnSceneController.notYourTurn();
             }
         });
+    }
+
+    public static boolean isMyTurn() {
+        return turn;
     }
 
     @Override

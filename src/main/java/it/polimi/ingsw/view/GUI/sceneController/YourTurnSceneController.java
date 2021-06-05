@@ -7,6 +7,7 @@ import it.polimi.ingsw.network.client.ClientSocket;
 import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.parser.CardMapGUI;
 import it.polimi.ingsw.parser.MarbleMapGUI;
+import it.polimi.ingsw.parser.ResourceMapGUI;
 import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.GUI.GUI;
 import it.polimi.ingsw.view.GUI.SceneController;
@@ -116,6 +117,26 @@ public class YourTurnSceneController{
     @FXML
     private ImageView marbleExt;
     @FXML
+    private ImageView deposit11;
+    @FXML
+    private ImageView deposit21;
+    @FXML
+    private ImageView deposit22;
+    @FXML
+    private ImageView deposit31;
+    @FXML
+    private ImageView deposit32;
+    @FXML
+    private ImageView deposit33;
+    @FXML
+    private ImageView extra11;
+    @FXML
+    private ImageView extra12;
+    @FXML
+    private ImageView extra21;
+    @FXML
+    private ImageView extra22;
+    @FXML
     private ImageView marbleShow1;
     @FXML
     private ImageView marbleShow2;
@@ -203,41 +224,7 @@ public class YourTurnSceneController{
     private int marbleCount;
     @FXML
     public void initialize(){
-        try {
-            setImage(card11, CardMapGUI.getCard(ClientView.getDevelopmentCards().get(0)));
-            setImage(card21, CardMapGUI.getCard(ClientView.getDevelopmentCards().get(1)));
-            setImage(card31, CardMapGUI.getCard(ClientView.getDevelopmentCards().get(2)));
-            setImage(card41, CardMapGUI.getCard(ClientView.getDevelopmentCards().get(3)));
-            setImage(card12, CardMapGUI.getCard(ClientView.getDevelopmentCards().get(4)));
-            setImage(card22, CardMapGUI.getCard(ClientView.getDevelopmentCards().get(5)));
-            setImage(card32, CardMapGUI.getCard(ClientView.getDevelopmentCards().get(6)));
-            setImage(card42, CardMapGUI.getCard(ClientView.getDevelopmentCards().get(7)));
-            setImage(card13, CardMapGUI.getCard(ClientView.getDevelopmentCards().get(8)));
-            setImage(card23, CardMapGUI.getCard(ClientView.getDevelopmentCards().get(9)));
-            setImage(card33, CardMapGUI.getCard(ClientView.getDevelopmentCards().get(10)));
-            setImage(card43, CardMapGUI.getCard(ClientView.getDevelopmentCards().get(11)));
-            setImage(leader1, CardMapGUI.getCard(ClientView.getLeaderCards(GUI.getPosition()).get(0)));
-            setImage(leader2, CardMapGUI.getCard(ClientView.getLeaderCards(GUI.getPosition()).get(1)));
-            setImage(marble11, MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(0, 0)));
-            setImage(marble12, MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(0, 1)));
-            setImage(marble13, MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(0, 2)));
-            setImage(marble14, MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(0, 3)));
-            setImage(marble21, MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(1, 0)));
-            setImage(marble22, MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(1, 1)));
-            setImage(marble23, MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(1, 2)));
-            setImage(marble24, MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(1, 3)));
-            setImage(marble31, MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(2, 0)));
-            setImage(marble32, MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(2, 1)));
-            setImage(marble33, MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(2, 2)));
-            setImage(marble34, MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(2, 3)));
-            setImage(marbleExt, MarbleMapGUI.getMarble(ClientView.getMarket().getExternalMarble()));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        shieldAmount.setText("0");
-        coinAmount.setText("0");
-        servantAmount.setText("0");
-        stoneAmount.setText("0");
+        showPlayerboard();
         radiobutTakeMarble.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> TakeMarbleButton());
         radiobutBuyCard.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> buyCardButton());
         radiobutActivProduc.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> activProducButton());
@@ -254,11 +241,110 @@ public class YourTurnSceneController{
         column4.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> take_market_marble_column(4));
     }
 
+    private void showPlayerboard(){
+        try {
+            setCard(card11, ClientView.getDevelopmentCards().get(0));
+            setCard(card21, ClientView.getDevelopmentCards().get(1));
+            setCard(card31, ClientView.getDevelopmentCards().get(2));
+            setCard(card41, ClientView.getDevelopmentCards().get(3));
+            setCard(card12, ClientView.getDevelopmentCards().get(4));
+            setCard(card22, ClientView.getDevelopmentCards().get(5));
+            setCard(card32, ClientView.getDevelopmentCards().get(6));
+            setCard(card42, ClientView.getDevelopmentCards().get(7));
+            setCard(card13, ClientView.getDevelopmentCards().get(8));
+            setCard(card23, ClientView.getDevelopmentCards().get(9));
+            setCard(card33, ClientView.getDevelopmentCards().get(10));
+            setCard(card43, ClientView.getDevelopmentCards().get(11));
+            setCard(leader1, ClientView.getLeaderCards(GUI.getPosition()).get(0));
+            setCard(leader2, ClientView.getLeaderCards(GUI.getPosition()).get(1));
+            setCard(slot11, ClientView.getSlotCards(GUI.getPosition()).get(0));
+            setCard(slot12, ClientView.getSlotCards(GUI.getPosition()).get(1));
+            setCard(slot13, ClientView.getSlotCards(GUI.getPosition()).get(2));
+            setCard(slot21, ClientView.getSlotCards(GUI.getPosition()).get(3));
+            setCard(slot22, ClientView.getSlotCards(GUI.getPosition()).get(4));
+            setCard(slot23, ClientView.getSlotCards(GUI.getPosition()).get(5));
+            setCard(slot31, ClientView.getSlotCards(GUI.getPosition()).get(6));
+            setCard(slot32, ClientView.getSlotCards(GUI.getPosition()).get(7));
+            setCard(slot33, ClientView.getSlotCards(GUI.getPosition()).get(8));
+            setImage(marble11, MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(0, 0)));
+            setImage(marble12, MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(0, 1)));
+            setImage(marble13, MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(0, 2)));
+            setImage(marble14, MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(0, 3)));
+            setImage(marble21, MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(1, 0)));
+            setImage(marble22, MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(1, 1)));
+            setImage(marble23, MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(1, 2)));
+            setImage(marble24, MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(1, 3)));
+            setImage(marble31, MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(2, 0)));
+            setImage(marble32, MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(2, 1)));
+            setImage(marble33, MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(2, 2)));
+            setImage(marble34, MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(2, 3)));
+            setImage(marbleExt, MarbleMapGUI.getMarble(ClientView.getMarket().getExternalMarble()));
+            setFirstDepot();
+            setSecondDepot();
+            setThirdDepot();
+            setExtraDepot1();
+            setExtraDepot2();
+            setStrongbox();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void setImage(ImageView image, String file) throws FileNotFoundException {
         FileInputStream fis = new FileInputStream(file);
         image.setImage(new Image(fis));
     }
 
+    private void setCard(ImageView image, int cardID) throws FileNotFoundException {
+        if(cardID != -1)
+            setImage(image, CardMapGUI.getCard(cardID));
+    }
+
+    private void setFirstDepot() throws FileNotFoundException {
+        if(ClientView.getWarehouse(GUI.getPosition()).get(0).getAmount() == 1)
+            setImage(deposit11, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(0).getResource()));
+    }
+
+    private void setSecondDepot() throws FileNotFoundException {
+        if(ClientView.getWarehouse(GUI.getPosition()).get(1).getAmount() >= 1)
+            setImage(deposit21, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(1).getResource()));
+        if(ClientView.getWarehouse(GUI.getPosition()).get(1).getAmount() == 2)
+            setImage(deposit22, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(1).getResource()));
+    }
+
+    private void setThirdDepot() throws FileNotFoundException {
+        if(ClientView.getWarehouse(GUI.getPosition()).get(2).getAmount() >= 1)
+            setImage(deposit31, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(2).getResource()));
+        if(ClientView.getWarehouse(GUI.getPosition()).get(2).getAmount() >= 2)
+            setImage(deposit32, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(2).getResource()));
+        if(ClientView.getWarehouse(GUI.getPosition()).get(2).getAmount() == 3)
+            setImage(deposit33, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(2).getResource()));
+    }
+
+    private void setExtraDepot1() throws FileNotFoundException {
+        if(ClientView.getWarehouse(GUI.getPosition()).size() >= 4){
+            if(ClientView.getWarehouse(GUI.getPosition()).get(3).getAmount() >= 1)
+                setImage(extra11, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(3).getResource()));
+            if(ClientView.getWarehouse(GUI.getPosition()).get(3).getAmount() == 2)
+                setImage(extra12, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(3).getResource()));
+        }
+    }
+
+    private void setExtraDepot2() throws FileNotFoundException {
+        if(ClientView.getWarehouse(GUI.getPosition()).size() == 5){
+            if(ClientView.getWarehouse(GUI.getPosition()).get(4).getAmount() >= 1)
+                setImage(extra21, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(4).getResource()));
+            if(ClientView.getWarehouse(GUI.getPosition()).get(4).getAmount() == 2)
+                setImage(extra22, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(4).getResource()));
+        }
+    }
+
+    private void setStrongbox(){
+        coinAmount.setText(String.valueOf(ClientView.coinAmount(GUI.getPosition())));
+        servantAmount.setText(String.valueOf(ClientView.servantAmount(GUI.getPosition())));
+        shieldAmount.setText(String.valueOf(ClientView.shieldAmount(GUI.getPosition())));
+        stoneAmount.setText(String.valueOf(ClientView.stoneAmount(GUI.getPosition())));
+    }
 
     private void chooseSwitch(Message messagee){
         Message_ArrayList_Marble m = (Message_ArrayList_Marble) messagee;
@@ -349,6 +435,7 @@ public class YourTurnSceneController{
 
 
     private void otherPlayerboardButton()  {
+        GUI.setOtherPlayer(1);
         GUI.setRoot("/fxml/opponentPlayerboardScene");
     }
 
@@ -610,13 +697,15 @@ public class YourTurnSceneController{
     }
 
     public static void notYourTurn(){
-        SceneController.setDisable("#radiobutTakeMarble", false);
-        SceneController.setDisable("#radiobutBuyCard", false);
-        SceneController.setDisable("#radiobutActivProduc", false);
-        SceneController.setDisable("#radiobutActLeader", false);
-        SceneController.setDisable("#radiobutDiscardLeader", false);
-        SceneController.setDisable("#radiobutEndTurn", false);
-        SceneController.setDisable("#move", false);
+        System.out.println("NOT TURN");
+        SceneController.setDisable("#radiobutTakeMarble", true);
+        SceneController.setDisable("#radiobutBuyCard", true);
+        SceneController.setDisable("#radiobutActivProduc", true);
+        SceneController.setDisable("#radiobutActLeader", true);
+        SceneController.setDisable("#radiobutDiscardLeader", true);
+        SceneController.setDisable("#radiobutEndTurn", true);
+        SceneController.setDisable("#radiobutEndProd", true);
+        SceneController.setDisable("#move", true);
     }
 
 

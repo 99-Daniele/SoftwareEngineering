@@ -85,4 +85,24 @@ public class PlayerBoard_View {
         printSlots();
         printLeaderCards();
     }
+
+    public ArrayList<Resource_Container_View> getWarehouse(){
+        return warehouse_strongbox.getWarehouse();
+    }
+
+    public int coinAmount(){
+        return warehouse_strongbox.coinAmount();
+    }
+
+    public int shieldAmount(){
+        return warehouse_strongbox.shieldAmount();
+    }
+
+    public int stoneAmount(){
+        return warehouse_strongbox.stoneAmount();
+    }
+
+    public int servantAmount(){
+        return warehouse_strongbox.servantAmount();
+    }
 }

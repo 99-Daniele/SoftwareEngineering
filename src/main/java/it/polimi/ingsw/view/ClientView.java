@@ -8,6 +8,7 @@ import it.polimi.ingsw.network.client.ClientSocket;
 import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.view.model_view.Game_View;
 import it.polimi.ingsw.view.model_view.Market_View;
+import it.polimi.ingsw.view.model_view.Resource_Container_View;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -389,7 +390,31 @@ public abstract class ClientView extends Application implements Observer {
         return game.getLeaderCards(position);
     }
 
+    public static ArrayList<Integer> getSlotCards(int position){
+        return game.getDevelopmentCards(position);
+    }
+
     public static ArrayList<Integer> getDevelopmentCards(){
         return game.getDecks().getDevelopmentCards();
+    }
+
+    public static ArrayList<Resource_Container_View> getWarehouse(int position){
+        return game.getWarehouse(position);
+    }
+
+    public static int coinAmount(int position){
+        return game.coinAmount(position);
+    }
+
+    public static int shieldAmount(int position){
+        return game.shieldAmount(position);
+    }
+
+    public static int stoneAmount(int position){
+        return game.stoneAmount(position);
+    }
+
+    public static int servantAmount(int position){
+        return game.servantAmount(position);
     }
 }
