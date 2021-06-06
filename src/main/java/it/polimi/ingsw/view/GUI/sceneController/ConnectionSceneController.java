@@ -4,6 +4,7 @@ import it.polimi.ingsw.App;
 import it.polimi.ingsw.network.client.ClientSocket;
 import it.polimi.ingsw.view.GUI.GUI;
 import it.polimi.ingsw.view.GUI.SceneController;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -51,7 +52,7 @@ public class ConnectionSceneController{
             else
                 portNumber = Integer.parseInt(port);
             App.startClient(address, portNumber);
-            GUI.setRoot("/fxml/nicknameScene");
+            Platform.runLater(() -> SceneController.changeRootPane("/fxml/nicknameScene"));
         } catch (NumberFormatException | IOException e) {
             errorConnection();
         }

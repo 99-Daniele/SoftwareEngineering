@@ -13,6 +13,7 @@ import it.polimi.ingsw.view.GUI.GUI;
 import it.polimi.ingsw.view.GUI.SceneController;
 import it.polimi.ingsw.view.GUI.sceneController.OpponentPlayerboardSceneController;
 import it.polimi.ingsw.view.model_view.Game_View;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -436,7 +437,8 @@ public class YourTurnSceneController{
 
     private void otherPlayerboardButton()  {
         GUI.setOtherPlayer(1);
-        GUI.setRoot("/fxml/opponentPlayerboardScene");
+        Platform.runLater(() ->
+                SceneController.changeRootPane("/fxml/opponentPlayerboardScene"));
     }
 
     private void discardLeaderButton(){

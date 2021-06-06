@@ -71,10 +71,6 @@ public class GUI extends ClientView {
         });
     }
 
-    public static void setRoot(String fxml) {
-        SceneController.changeRootPane(fxml);
-    }
-
     @Override
     public void login_message(Message message) {
         position = message.getClientID();
@@ -110,7 +106,7 @@ public class GUI extends ClientView {
     public void leader_card_choice(Message message){
         Message_Four_Parameter_Int m = (Message_Four_Parameter_Int) message;
         Platform.runLater(() -> {
-            setRoot("/fxml/initScene");
+            SceneController.changeRootPane("/fxml/initScene");
             try {
                 InitSceneController.askLeaders(m.getPar1(), m.getPar2(), m.getPar3(), m.getPar4());
             } catch (FileNotFoundException e) {
@@ -137,9 +133,9 @@ public class GUI extends ClientView {
         Platform.runLater(() -> {
             turn = (m.getPar() == 1);
             if (m.getPar() == 1)
-                setRoot("/fxml/yourTurnScene");
+                SceneController.changeRootPane("/fxml/yourTurnScene");
             else {
-                setRoot("/fxml/yourTurnScene");
+                SceneController.changeRootPane("/fxml/yourTurnScene");
                 YourTurnSceneController.notYourTurn();
             }
         });
@@ -147,6 +143,68 @@ public class GUI extends ClientView {
 
     public static boolean isMyTurn() {
         return turn;
+    }
+
+    @Override
+    public void buy_card_message(Message message){
+        Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        super.buy_card_message(message);
+    }
+
+    @Override
+    public void card_remove_message(Message message){
+        Message_Four_Parameter_Int m = (Message_Four_Parameter_Int) message;
+        super.card_remove_message(message);
+    }
+
+    @Override
+    public void market_change(Message message){
+        Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        super.market_change(message);
+    }
+
+    @Override
+    public void faith_points_message(Message message){
+        Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
+        super.faith_points_message(message);
+    }
+
+    @Override
+    public void increase_warehouse_message(Message message){
+        Message_One_Int_One_Resource m = (Message_One_Int_One_Resource) message;
+        if(m.getPar1() != -1) {
+            super.increase_warehouse_message(message);
+        }
+    }
+
+    @Override
+    public void switch_depot_message(Message message){
+        Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        super.switch_depot_message(message);
+    }
+
+    @Override
+    public void leader_card_activation_message(Message message){
+        Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
+        super.leader_card_activation_message(message);
+    }
+
+    @Override
+    public void extra_depot_message(Message message){
+        Message_One_Int_One_Resource m = (Message_One_Int_One_Resource) message;
+        super.extra_depot_message(message);
+    }
+
+    @Override
+    public void leader_card_discard_message(Message message) {
+        Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
+        super.leader_card_discard_message(message);
+    }
+
+    @Override
+    public void take_marble_message(Message message) {
+        Message_ArrayList_Marble m = (Message_ArrayList_Marble) message;
+        super.take_marble_message(message);
     }
 
     @Override

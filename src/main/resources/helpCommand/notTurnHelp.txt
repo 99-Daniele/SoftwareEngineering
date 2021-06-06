@@ -1,29 +1,29 @@
 
-turn/-tu  --> ask Server if it's your turn
+turn/-tu      ask Server if it's your turn
 
 
-see playerboard/see board/see p/-sp 1/2/3/4 --> print other playerboard
+see playerboard/see board/see p/-sp 1/2/3/4         print other playerboard
 
-see my playerboard/see my p/-smp  --> print your playerboard
+see my playerboard/see my p/-smp                    print your playerboard
 
-see warehouse/see wh/-swh 1/2/3/4  --> print other warehouse
+see warehouse/see wh/-swh 1/2/3/4                   print other warehouse
 
-see my warehouse/see my wh/-smw  --> print your warehouse
+see my warehouse/see my wh/-smw                     print your warehouse
 
-see strongbox/see sb/-ssb 1/2/3/4  --> print other strongbox
+see strongbox/see sb/-ssb 1/2/3/4                   print other strongbox
 
-see my strongbox/see my sb/-sms  --> print your strongbox
+see my strongbox/see my sb/-sms                     print your strongbox
 
-see cards/see c/-sc 1/2/3/4  --> print other slots
+see cards/see c/-sc 1/2/3/4                         print other slots
 
-see my cards/see my c/-smc  --> print your slots
+see my cards/see my c/-smc                          print your slots
 
-see leader/see l/-sl 1/2/3/4  --> print other leader cards
+see leader/see l/-sl 1/2/3/4                        print other leader cards
 
-see my leader/see my l/-sml  --> print your leader cards
+see my leader/see my l/-sml                         print your leader cards
 
-see market/see m/-sm  --> print market
+see market/see m/-sm                                print market
 
-see faithtrack/see f/-sf  --> print faithTrack
+see faithtrack/see f/-sf                            print faithTrack
 
-see decks/see d/-sd  --> print current buyable development cards
+see decks/see d/-sd                                 print current buyable development cards

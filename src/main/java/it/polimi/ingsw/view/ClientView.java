@@ -62,6 +62,71 @@ public abstract class ClientView extends Application implements Observer {
         this.currentState = currentState;
     }
 
+
+    public int[] getRowColumn(int cardID){
+        return game.get_Row_Column(cardID);
+    }
+
+    public static void discardLeaderCard(int position, int chosenLeaderCard){
+        game.discardLeaderCard(position, chosenLeaderCard);
+    }
+
+    public static void setLeaderCard(int position, int card1, int card2){
+        game.setMyLeaderCards(position, card1, card2);
+    }
+
+    public static String getNickname(int player){
+        return game.getNickname(player);
+    }
+
+    public static Market_View getMarket(){
+        return game.getMarket();
+    }
+
+    public static ArrayList<Integer> getLeaderCards(int position){
+        return game.getLeaderCards(position);
+    }
+
+    public static ArrayList<Integer> getSlotCards(int position){
+        return game.getDevelopmentCards(position);
+    }
+
+    public static ArrayList<Integer> getDevelopmentCards(){
+        return game.getDecks().getDevelopmentCards();
+    }
+
+    public static ArrayList<Resource_Container_View> getWarehouse(int position){
+        return game.getWarehouse(position);
+    }
+
+    public static ArrayList<Marble> getMarbles(){
+        return game.getChosenMarbles();
+    }
+
+    public static void setMarbles(ArrayList <Marble> marbles){
+        game.setChosenMarbles(marbles);
+    }
+
+    public static int coinAmount(int position){
+        return game.coinAmount(position);
+    }
+
+    public static int shieldAmount(int position){
+        return game.shieldAmount(position);
+    }
+
+    public static int stoneAmount(int position){
+        return game.stoneAmount(position);
+    }
+
+    public static int servantAmount(int position){
+        return game.servantAmount(position);
+    }
+
+    public static int getNumOfPlayers(){
+        return game.getNumOfPlayers();
+    }
+
     @Override
     public void update(Observable o, Object arg) {
         try {
@@ -187,26 +252,6 @@ public abstract class ClientView extends Application implements Observer {
         game.setFirstDeckCards(m.getParams());
     }
 
-    public int[] getRowColumn(int cardID){
-        return game.get_Row_Column(cardID);
-    }
-
-    public void discardLeaderCard(int position, int chosenLeaderCard){
-        game.discardLeaderCard(position, chosenLeaderCard);
-    }
-
-    public static void setLeaderCard(int position, int card1, int card2){
-        game.setMyLeaderCards(position, card1, card2);
-    }
-
-    public String getNickname(int player){
-        return game.getNickname(player);
-    }
-
-    public int getNumOfPlayers(){
-        return game.getNumOfPlayers();
-    }
-
     public abstract void leader_card_choice(Message message) throws IOException, InterruptedException;
 
     public void ok_message() throws IOException, InterruptedException{
@@ -296,14 +341,6 @@ public abstract class ClientView extends Application implements Observer {
         game.setChosenMarbles(m.getMarbles());
     }
 
-    public ArrayList<Marble> getMarbles(){
-        return game.getChosenMarbles();
-    }
-
-    public void setMarbles(ArrayList <Marble> marbles){
-        game.setChosenMarbles(marbles);
-    }
-
     public abstract void quit_message(Message message);
 
     public abstract void end_game_message(Message message);
@@ -381,40 +418,4 @@ public abstract class ClientView extends Application implements Observer {
     public abstract void already_active_error();
 
     public abstract void already_discard_error();
-
-    public static Market_View getMarket(){
-        return game.getMarket();
-    }
-
-    public static ArrayList<Integer> getLeaderCards(int position){
-        return game.getLeaderCards(position);
-    }
-
-    public static ArrayList<Integer> getSlotCards(int position){
-        return game.getDevelopmentCards(position);
-    }
-
-    public static ArrayList<Integer> getDevelopmentCards(){
-        return game.getDecks().getDevelopmentCards();
-    }
-
-    public static ArrayList<Resource_Container_View> getWarehouse(int position){
-        return game.getWarehouse(position);
-    }
-
-    public static int coinAmount(int position){
-        return game.coinAmount(position);
-    }
-
-    public static int shieldAmount(int position){
-        return game.shieldAmount(position);
-    }
-
-    public static int stoneAmount(int position){
-        return game.stoneAmount(position);
-    }
-
-    public static int servantAmount(int position){
-        return game.servantAmount(position);
-    }
 }

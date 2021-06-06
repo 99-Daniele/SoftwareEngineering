@@ -6,6 +6,7 @@ import it.polimi.ingsw.parser.ResourceMapGUI;
 import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.GUI.GUI;
 import it.polimi.ingsw.view.GUI.SceneController;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -86,10 +87,12 @@ public class OpponentPlayerboardSceneController {
         goBack.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> goBackButton());
     }
 
-    private void goBackButton(){
-        GUI.setRoot("/fxml/yourTurnScene");
-        if(!GUI.isMyTurn())
-            YourTurnSceneController.notYourTurn();
+    private void goBackButton() {
+        Platform.runLater(() -> {
+            SceneController.changeRootPane("/fxml/yourTurnScene");
+            if (!GUI.isMyTurn())
+                YourTurnSceneController.notYourTurn();
+        });
     }
 
     private void showPlayerboard(){
