@@ -1019,10 +1019,10 @@ public class CLI extends ClientView{
     @Override
     public void end_turn_message(Message message) {
         if (message.getClientID() != position) {
-            System.out.println("Player " + super.getNickname(message.getClientID()) + " has finished his turn.");
+            System.out.println("Player " + getNickname(message.getClientID()) + " has finished his turn.");
         }
         if (position == 0) {
-            if (message.getClientID() == super.getNumOfPlayers() - 1) {
+            if (message.getClientID() == getNumOfPlayers() - 1) {
                 turn = true;
                 System.out.println("It's your turn");
             }
@@ -1036,7 +1036,7 @@ public class CLI extends ClientView{
     public void buy_card_message(Message message) {
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
         if(m.getClientID() != position)
-            System.out.println("Player " + super.getNickname(m.getClientID()) + " bought a new card and inserted it in " +
+            System.out.println("Player " + getNickname(m.getClientID()) + " bought a new card and inserted it in " +
                 "the " + m.getPar2() + "° slot.");
         super.buy_card_message(message);
     }
@@ -1044,7 +1044,7 @@ public class CLI extends ClientView{
     @Override
     public void card_remove_message(Message message) {
         Message_Four_Parameter_Int m = (Message_Four_Parameter_Int) message;
-        if(super.getNumOfPlayers() == 1 && m.getClientID() == 1)
+        if(getNumOfPlayers() == 1 && m.getClientID() == 1)
             System.out.println("Ludovico has removed one deck card from row " + (m.getPar1() +1 + " and" +
                     " column " + (m.getPar2() +1)));
         else if(m.getClientID() != position)
@@ -1056,7 +1056,7 @@ public class CLI extends ClientView{
     @Override
     public void endProductionMessage(Message message) {
         if(message.getClientID() != position)
-            System.out.println("Player " + super.getNickname(message.getClientID()) + " has activated production powers.");
+            System.out.println("Player " + getNickname(message.getClientID()) + " has activated production powers.");
         else
             CLI_Printer.printWarehouseStrongbox(super.getGame(), position);
     }
@@ -1066,12 +1066,12 @@ public class CLI extends ClientView{
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
         if (m.getPar1() == 0) {
             if(m.getClientID() != position) {
-                System.out.println("Player " + super.getNickname(m.getClientID()) + " has chosen row " + m.getPar2() + " of the market");
+                System.out.println("Player " + getNickname(m.getClientID()) + " has chosen row " + m.getPar2() + " of the market");
                 CLI_Printer.printRowMarket(super.getGame(), m.getPar2());
             }
         } else {
             if(m.getClientID() != position) {
-                System.out.println("Player " + super.getNickname(m.getClientID()) + " has chosen column " + m.getPar2() + " of the market");
+                System.out.println("Player " + getNickname(m.getClientID()) + " has chosen column " + m.getPar2() + " of the market");
                 CLI_Printer.printColumnMarket(super.getGame(), m.getPar2());
             }
         }
@@ -1082,13 +1082,13 @@ public class CLI extends ClientView{
     public void faith_points_message(Message message){
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
         if(m.getClientID() != position) {
-            if (super.getNumOfPlayers() == 1 && m.getClientID() == 1)
+            if (getNumOfPlayers() == 1 && m.getClientID() == 1)
                 System.out.println("Ludovico has increased his faith points. Now it has " + m.getPar());
             else
-                System.out.println("Player " + super.getNickname(m.getClientID()) + " has increased its faith points. Now it has " + m.getPar());
+                System.out.println("Player " + getNickname(m.getClientID()) + " has increased its faith points. Now it has " + m.getPar());
         }
-        else if (super.getMarbles() != null && super.getMarbles().size() > 0)
-            CLI_Printer.printMarbles(super.getGame(), super.getMarbles());
+        else if (getMarbles() != null && getMarbles().size() > 0)
+            CLI_Printer.printMarbles(super.getGame(), getMarbles());
         super.faith_points_message(message);
     }
 
@@ -1098,16 +1098,16 @@ public class CLI extends ClientView{
         super.increase_warehouse_message(message);
         if(m.getPar1() != -1) {
             if(m.getClientID() != position)
-                System.out.println("Player " + super.getNickname(m.getClientID()) + " has inserted 1 " + Resource.printResource(m.getResource())
+                System.out.println("Player " + getNickname(m.getClientID()) + " has inserted 1 " + Resource.printResource(m.getResource())
                     + " in its " + m.getPar1() + "° depot");
             else {
                 CLI_Printer.printWarehouse(super.getGame(), position);
-                if (super.getMarbles() != null && super.getMarbles().size() > 0)
-                    CLI_Printer.printMarbles(super.getGame(), super.getMarbles());
+                if (getMarbles() != null && getMarbles().size() > 0)
+                    CLI_Printer.printMarbles(super.getGame(), getMarbles());
             }
         }
         else if(m.getClientID() != position)
-            System.out.println("Player " + super.getNickname(m.getClientID()) + " has discarded 1 " + Resource.printResource(m.getResource())
+            System.out.println("Player " + getNickname(m.getClientID()) + " has discarded 1 " + Resource.printResource(m.getResource())
                     + " marble");
     }
 
@@ -1116,7 +1116,7 @@ public class CLI extends ClientView{
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
         super.switch_depot_message(message);
         if(m.getClientID() != position)
-            System.out.println("Player " + super.getNickname(m.getClientID()) + " has switched its " + m.getPar1()
+            System.out.println("Player " + getNickname(m.getClientID()) + " has switched its " + m.getPar1()
                 + "° depot with its " + m.getPar2() + "° depot.");
         else
             CLI_Printer.printWarehouse(super.getGame(), position);
@@ -1125,11 +1125,11 @@ public class CLI extends ClientView{
     @Override
     public void vatican_report_message(Message message){
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
-        if(super.getNumOfPlayers() == 1 && m.getPar1() == 1)
+        if(getNumOfPlayers() == 1 && m.getPar1() == 1)
             System.out.println("Ludovico activated Vatican Report." +
                     " Now you have " + m.getPar2() + " victory points from Vatican Report");
         else if(m.getClientID() == position)
-            System.out.println("Player " + super.getNickname(m.getPar1()) + " activated Vatican Report." +
+            System.out.println("Player " + getNickname(m.getPar1()) + " activated Vatican Report." +
                     " Now you have " + m.getPar2() + " victory points from Vatican Report");
         super.vatican_report_message(message);
     }
@@ -1138,7 +1138,7 @@ public class CLI extends ClientView{
     public void leader_card_activation_message(Message message){
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
         if(m.getClientID() != position) {
-            System.out.println("Player " + super.getNickname(m.getClientID()) + " has activated a leader card");
+            System.out.println("Player " + getNickname(m.getClientID()) + " has activated a leader card");
         }
         super.leader_card_activation_message(message);
     }
@@ -1148,7 +1148,7 @@ public class CLI extends ClientView{
         Message_One_Int_One_Resource m = (Message_One_Int_One_Resource) message;
         super.extra_depot_message(message);
         if(m.getClientID() != position) {
-            System.out.println("Player " + super.getNickname(m.getClientID()) + " has a new extra depot of " + Resource.printResource(m.getResource()));
+            System.out.println("Player " + getNickname(m.getClientID()) + " has a new extra depot of " + Resource.printResource(m.getResource()));
         }
         else
             CLI_Printer.printWarehouse(super.getGame(), position);
@@ -1158,7 +1158,7 @@ public class CLI extends ClientView{
     public void leader_card_discard_message(Message message){
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
         if(m.getClientID() != position) {
-            System.out.println("Player " + super.getNickname(m.getClientID()) + " has discarded one leader card: ");
+            System.out.println("Player " + getNickname(m.getClientID()) + " has discarded one leader card: ");
             CLI_Printer.printCard(m.getPar());
         }
         else
@@ -1169,8 +1169,8 @@ public class CLI extends ClientView{
     public void ok_message() {
         if (super.getCurrentState() != GAME_STATES.BUY_CARD_STATE)
             System.out.println("Request successfully completed.\n");
-        if (super.isState(GAME_STATES.TAKE_MARBLE_STATE) && super.getMarbles().size() > 0)
-            CLI_Printer.printMarbles(super.getGame(), super.getMarbles());
+        if (super.isState(GAME_STATES.TAKE_MARBLE_STATE) && getMarbles().size() > 0)
+            CLI_Printer.printMarbles(super.getGame(), getMarbles());
         notifyMessage(new Message(MessageType.OK, position));
     }
 
@@ -1201,7 +1201,7 @@ public class CLI extends ClientView{
     @Override
     public void quit_message(Message message) {
         Message_One_Parameter_String m = (Message_One_Parameter_String) message;
-        if (super.getNumOfPlayers() != 0) {
+        if (getNumOfPlayers() != 0) {
             System.out.println("Player " + m.getPar() + " disconnected. Game ended.");
             System.out.println("You can still see the state of the game.\nPrint \"end game\" to finish");
         } else if (m.getPar() != null)
@@ -1213,11 +1213,11 @@ public class CLI extends ClientView{
     @Override
     public void end_game_message(Message message){
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
-        if(super.getNumOfPlayers() == 1 && m.getClientID() == 1){
+        if(getNumOfPlayers() == 1 && m.getClientID() == 1){
             System.out.println("Game ended. Ludovico win.");
         }
         else {
-            System.out.println("Game ended. " + super.getNickname(m.getClientID()) + " win the game."
+            System.out.println("Game ended. " + getNickname(m.getClientID()) + " win the game."
                     + " It made " + m.getPar1() + " victory points and " + m.getPar2()
                     + " total resources.");
         }

@@ -19,7 +19,7 @@ import java.io.FileNotFoundException;
 
 public class OpponentPlayerboardSceneController {
 
-    private static int position = GUI.getOtherPlayer();
+    private int position = GUI.getOtherPlayer();
 
     @FXML
     private Button goBack;
@@ -81,6 +81,11 @@ public class OpponentPlayerboardSceneController {
     private ImageView pope3;
     @FXML
     private ImageView crocerossa;
+
+    public OpponentPlayerboardSceneController(int position){
+        this.position = position;
+    }
+
     @FXML
     public void initialize() {
         showPlayerboard();

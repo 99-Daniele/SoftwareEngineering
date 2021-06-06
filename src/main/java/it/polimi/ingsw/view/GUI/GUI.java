@@ -127,7 +127,7 @@ public class GUI extends ClientView {
     }
 
     @Override
-    public void turn_message(Message message) throws InterruptedException, IOException {
+    public void turn_message(Message message){
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
         super.setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
         Platform.runLater(() -> {
@@ -139,6 +139,23 @@ public class GUI extends ClientView {
                 YourTurnSceneController.notYourTurn();
             }
         });
+    }
+
+    @Override
+    public void end_turn_message(Message message) throws InterruptedException, IOException {
+        if (message.getClientID() != position) {
+        }
+        if (position == 0) {
+            if (message.getClientID() == getNumOfPlayers() - 1) {
+                turn = true;
+                Platform.runLater(() ->
+                        SceneController.changeRootPane("/fxml/yourTurnScene"));
+            }
+        } else if (message.getClientID() == position - 1) {
+            turn = true;
+            Platform.runLater(() ->
+                    SceneController.changeRootPane("/fxml/yourTurnScene"));
+        }
     }
 
     public static boolean isMyTurn() {
@@ -208,17 +225,12 @@ public class GUI extends ClientView {
     }
 
     @Override
-    public void end_turn_message(Message message) throws InterruptedException, IOException {
-
-    }
-
-    @Override
     public void endProductionMessage(Message message) {
 
     }
 
     @Override
-    public void white_conversion_card_message(Message message) throws IOException {
+    public void white_conversion_card_message(Message message){
 
     }
 
@@ -228,7 +240,7 @@ public class GUI extends ClientView {
     }
 
     @Override
-    public void chosen_slot_message(Message message) throws IOException {
+    public void chosen_slot_message(Message message){
 
     }
 

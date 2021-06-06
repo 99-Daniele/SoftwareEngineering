@@ -436,9 +436,9 @@ public class YourTurnSceneController{
 
 
     private void otherPlayerboardButton()  {
-        GUI.setOtherPlayer(1);
+        OpponentPlayerboardSceneController opsc = new OpponentPlayerboardSceneController(0);
         Platform.runLater(() ->
-                SceneController.changeRootPane("/fxml/opponentPlayerboardScene"));
+                SceneController.changeRootPane(opsc, "/fxml/opponentPlayerboardScene"));
     }
 
     private void discardLeaderButton(){

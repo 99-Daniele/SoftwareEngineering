@@ -2,6 +2,8 @@ package it.polimi.ingsw.view.GUI;
 
 import it.polimi.ingsw.network.messages.Message;
 import it.polimi.ingsw.parser.CardMapGUI;
+import it.polimi.ingsw.view.GUI.sceneController.OpponentPlayerboardSceneController;
+import it.polimi.ingsw.view.GUI.sceneController.YourTurnSceneController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -41,10 +43,26 @@ public class SceneController {
         }
     }
 
+    public static void changeRootPane(OpponentPlayerboardSceneController sceneController, String fxml){
+        try {
+            scene.setRoot(loadFXML(sceneController, fxml));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private static Parent loadFXML(String fxml) throws IOException {
         //was:FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
         URL url = GUI.class.getResource(fxml + ".fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(url);
+        return fxmlLoader.load();
+    }
+
+    private static Parent loadFXML(OpponentPlayerboardSceneController sceneController, String fxml) throws IOException {
+        //was:FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
+        URL url = GUI.class.getResource(fxml + ".fxml");
+        FXMLLoader fxmlLoader = new FXMLLoader(url);
+        fxmlLoader.setController(sceneController);
         return fxmlLoader.load();
     }
 
