@@ -118,11 +118,8 @@ public class GUI extends ClientView {
     @Override
     public void ok_message() {
         Platform.runLater(() -> {
-            try {
-                if (!super.getGame().isStartGame())
-                    NicknameSceneController.waitPlayers();
-            } catch (NullPointerException e) {
-            }
+            if (SceneController.isCurrentScene("#nicknameLabel"))
+                NicknameSceneController.waitPlayers();
         });
     }
 
@@ -166,12 +163,16 @@ public class GUI extends ClientView {
     public void buy_card_message(Message message){
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
         super.buy_card_message(message);
+        if(SceneController.isCurrentScene("#radiobutBuyCard"))
+            Platform.runLater(() -> YourTurnSceneController.buy_card_message(m.getClientID(), m.getPar2(), m.getPar1()));
     }
 
     @Override
     public void card_remove_message(Message message){
         Message_Four_Parameter_Int m = (Message_Four_Parameter_Int) message;
         super.card_remove_message(message);
+        if(SceneController.isCurrentScene("#radiobutBuyCard"))
+            Platform.runLater(() -> YourTurnSceneController.buy_card_message(m.getClientID(), m.getPar2(), m.getPar1()));
     }
 
     @Override

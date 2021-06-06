@@ -1,16 +1,11 @@
 package it.polimi.ingsw.view.GUI;
 
-import it.polimi.ingsw.network.messages.Message;
-import it.polimi.ingsw.parser.CardMapGUI;
 import it.polimi.ingsw.view.GUI.sceneController.OpponentPlayerboardSceneController;
-import it.polimi.ingsw.view.GUI.sceneController.YourTurnSceneController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.Labeled;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
@@ -26,6 +21,16 @@ public class SceneController {
 
     public static Scene getScene() {
         return scene;
+    }
+
+    public static boolean isCurrentScene(String selector){
+        try {
+            Label label = (Label) scene.lookup(selector);
+            label.isDisable();
+            return true;
+        } catch (NullPointerException e){
+            return false;
+        }
     }
 
     public static void setScene(Stage stage,  String fxml) throws IOException {
@@ -71,19 +76,9 @@ public class SceneController {
         label.setVisible(visible);
     }
 
-    public static void allInvisible(){
-        for(Node node: scene.getRoot().getChildrenUnmodifiable())
-            node.setVisible(false);
-    }
-
     public static void setDisable(String selector, boolean visible){
         Node label = scene.lookup(selector);
         label.setDisable(visible);
-    }
-
-    public static void allDisabled(){
-        for(Node node: scene.getRoot().getChildrenUnmodifiable())
-            node.setDisable(true);
     }
 
     public static void setText(String selector, String text){

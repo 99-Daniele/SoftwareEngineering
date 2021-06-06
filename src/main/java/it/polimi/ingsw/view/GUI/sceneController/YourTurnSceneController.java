@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.games.states.GAME_STATES;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 import it.polimi.ingsw.network.client.ClientSocket;
 import it.polimi.ingsw.network.messages.*;
+import it.polimi.ingsw.parser.CardMapCLI;
 import it.polimi.ingsw.parser.CardMapGUI;
 import it.polimi.ingsw.parser.MarbleMapGUI;
 import it.polimi.ingsw.parser.ResourceMapGUI;
@@ -371,8 +372,7 @@ public class YourTurnSceneController{
 
     }
 
-    private void yesSwitch()
-    {
+    private void yesSwitch() {
         switch1.setDisable(false);
         switch2.setDisable(false);
         switch3.setDisable(false);
@@ -406,9 +406,9 @@ public class YourTurnSceneController{
             par1=2;
             par2=3;
         }
-        if (par1!=0 && par2!=0) {
+        if (par1!=0) {
             try {
-                ClientSocket.sendMessage(new Message_Two_Parameter_Int(MessageType.SWITCH_DEPOT, GUI.getPosition(), 1, 2));
+                ClientSocket.sendMessage(new Message_Two_Parameter_Int(MessageType.SWITCH_DEPOT, GUI.getPosition(), par1, par2));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -615,8 +615,7 @@ public class YourTurnSceneController{
         card43.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> deckEvent(4,3));
      */
 
-    private void deckEvent(int column, int row)
-    {
+    private void deckEvent(int column, int row) {
         setDisableAllDecks(true);
         panelBuy.setVisible(true);
         radiobutWarehouse.setOnMouseClicked(mouseEvent1 -> {
@@ -639,8 +638,7 @@ public class YourTurnSceneController{
         });
     }
 
-    private void setDisableAllDecks(boolean b)
-    {
+    private void setDisableAllDecks(boolean b) {
         card11.setDisable(b);
         card12.setDisable(b);
         card13.setDisable(b);
@@ -656,50 +654,49 @@ public class YourTurnSceneController{
     }
 
 
-    public void buy_card_message(Message message) {
-        Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
-        //super.buy_card_message(message);
-        if(m.getClientID() != GUI.getPosition());
+    public static void buy_card_message(int player, int slot, int cardID){
+        if(player != GUI.getPosition());
         //    System.out.println("Player " + super.getNickname(m.getClientID()) + " bought a new card and inserted it in " +
-                    //"the " + m.getPar2() + "° slot.");//metetre nel quadrato gui laterale
-        else
-            switch (m.getPar2()){
-                case 1:
-                    if(slot11.getImage()==null)
-                        slot11.setImage(new Image(CardMapGUI.getCard(m.getPar1())));
-                    else
-                    if (slot12.getImage()==null)
-                        slot12.setImage(new Image(CardMapGUI.getCard(m.getPar1())));
-                    else
-                        slot13.setImage(new Image(CardMapGUI.getCard(m.getPar1())));
-                    break;
-                case 2:
-                    if(slot21.getImage()==null)
-                        slot21.setImage(new Image(CardMapGUI.getCard(m.getPar1())));
-                    else
-                    if (slot22.getImage()==null)
-                        slot22.setImage(new Image(CardMapGUI.getCard(m.getPar1())));
-                    else
-                        slot23.setImage(new Image(CardMapGUI.getCard(m.getPar1())));
-                    break;
-                case 3:
-                    if(slot31.getImage()==null)
-                        slot31.setImage(new Image(CardMapGUI.getCard(m.getPar1())));
-                    else
-                    if (slot32.getImage()==null)
-                        slot32.setImage(new Image(CardMapGUI.getCard(m.getPar1())));
-                    else
-                        slot33.setImage(new Image(CardMapGUI.getCard(m.getPar1())));
-                    break;
+                    //"the " + m.getPar2() + "° slot.");//mettere nel quadrato gui laterale
+        else {
+            try {
+                switch (slot) {
+                    case 1:
+                        if ((CardMapCLI.getCard(cardID)).getLevel() == 1)
+                            SceneController.setImage("#slot11", CardMapGUI.getCard(cardID));
+                        else if ((CardMapCLI.getCard(cardID)).getLevel() == 2)
+                            SceneController.setImage("#slot12", CardMapGUI.getCard(cardID));
+                        else
+                            SceneController.setImage("#slot13", CardMapGUI.getCard(cardID));
+                        break;
+                    case 2:
+                        if ((CardMapCLI.getCard(cardID)).getLevel() == 1)
+                            SceneController.setImage("#slot21", CardMapGUI.getCard(cardID));
+                        else if ((CardMapCLI.getCard(cardID)).getLevel() == 2)
+                            SceneController.setImage("#slot22", CardMapGUI.getCard(cardID));
+                        else
+                            SceneController.setImage("#slot23", CardMapGUI.getCard(cardID));
+                        break;
+                    case 3:
+                        if ((CardMapCLI.getCard(cardID)).getLevel() == 1)
+                            SceneController.setImage("#slot31", CardMapGUI.getCard(cardID));
+                        else if ((CardMapCLI.getCard(cardID)).getLevel() == 2)
+                            SceneController.setImage("#slot32", CardMapGUI.getCard(cardID));
+                        else
+                            SceneController.setImage("#slot33", CardMapGUI.getCard(cardID));
+                        break;
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
             }
-        radiobutActLeader.setDisable(false);
-        radiobutDiscardLeader.setDisable(false);
-        radiobutOtherPlayboard.setDisable(false);
-        radiobutEndTurn.setDisable(false);
+            SceneController.setDisable("#radiobutActLeader", false);
+            SceneController.setDisable("#radiobutDiscardLeader", false);
+            SceneController.setDisable("#radiobutOtherPlayerboard", false);
+            SceneController.setDisable("#radiobutEndTurn", false);
+        }
     }
 
     public static void notYourTurn(){
-        System.out.println("NOT TURN");
         SceneController.setDisable("#radiobutTakeMarble", true);
         SceneController.setDisable("#radiobutBuyCard", true);
         SceneController.setDisable("#radiobutActivProduc", true);

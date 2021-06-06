@@ -292,7 +292,7 @@
                   </ImageView>
                   <ImageView fx:id="coin1" fitHeight="50.0" fitWidth="50.0" layoutX="358.0" layoutY="131.0">
                      <image>
-                        <Image url="@../photos/coin.png" />
+                        <Image url="@../coin.png" />
                      </image>
                   </ImageView>
                   <ImageView fx:id="shield1" fitHeight="50.0" fitWidth="50.0" layoutX="50.0" layoutY="131.0">
