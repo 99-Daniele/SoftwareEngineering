@@ -139,7 +139,7 @@ public class GUI extends ClientView {
     }
 
     @Override
-    public void end_turn_message(Message message) throws InterruptedException, IOException {
+    public void end_turn_message(Message message) {
         if (message.getClientID() != position) {
         }
         if (position == 0) {
@@ -163,16 +163,22 @@ public class GUI extends ClientView {
     public void buy_card_message(Message message){
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
         super.buy_card_message(message);
-        if(SceneController.isCurrentScene("#radiobutBuyCard"))
-            Platform.runLater(() -> YourTurnSceneController.buy_card_message(m.getClientID(), m.getPar2(), m.getPar1()));
+        if(m.getClientID() != GUI.getPosition());
+        //    System.out.println("Player " + super.getNickname(m.getClientID()) + " bought a new card and inserted it in " +
+        //"the " + m.getPar2() + "° slot.");//mettere nel quadrato gui laterale
+        else if(SceneController.isCurrentScene("#radiobutBuyCard"))
+            Platform.runLater(() -> YourTurnSceneController.buy_card_message(m.getPar2(), m.getPar1()));
     }
 
     @Override
     public void card_remove_message(Message message){
         Message_Four_Parameter_Int m = (Message_Four_Parameter_Int) message;
         super.card_remove_message(message);
+        if(getNumOfPlayers() == 1 && m.getClientID() == 1)
+            System.out.println("Ludovico has removed one deck card from row " + (m.getPar1() +1 + " and" +
+                    " column " + (m.getPar2() +1)));
         if(SceneController.isCurrentScene("#radiobutBuyCard"))
-            Platform.runLater(() -> YourTurnSceneController.buy_card_message(m.getClientID(), m.getPar2(), m.getPar1()));
+            Platform.runLater(() -> YourTurnSceneController.cardRemoveMessage(m.getPar1(), m.getPar2(), m.getPar4()));
     }
 
     @Override

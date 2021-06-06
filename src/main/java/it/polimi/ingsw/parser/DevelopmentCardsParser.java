@@ -17,7 +17,7 @@ public class DevelopmentCardsParser {
 
     public DevelopmentCardsParser() {
         Gson gson = new Gson();
-        Reader reader = new InputStreamReader(Objects.requireNonNull(this.getClass().getResourceAsStream("/DevelopmentCards.json")), StandardCharsets.UTF_8);
+        Reader reader = new InputStreamReader(Objects.requireNonNull(this.getClass().getResourceAsStream("/CardsJSON/DevelopmentCards.json")), StandardCharsets.UTF_8);
         developmentCards = gson.fromJson(reader, DevelopmentCard[].class);
     }
 

@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
-public class YourTurnSceneController{
+public class YourTurnSceneController {
 
     private int faithPoints = 0;
 
@@ -224,26 +224,27 @@ public class YourTurnSceneController{
     private Label baseLabel;
 
     private int marbleCount;
+
     @FXML
-    public void initialize(){
+    public void initialize() {
         showPlayerboard();
-        radiobutTakeMarble.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> TakeMarbleButton());
-        radiobutBuyCard.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> buyCardButton());
-        radiobutActivProduc.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> activProducButton());
-        radiobutActLeader.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> actLeaderButton());
-        radiobutDiscardLeader.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> discardLeaderButton());
-        radiobutOtherPlayboard.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> otherPlayerboardButton());
-        move.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> moveCroce());
-        row1.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> take_market_marble_row(1));
-        row2.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> take_market_marble_row(2));
-        row3.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> take_market_marble_row(3));
-        column1.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> take_market_marble_column(1));
-        column2.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> take_market_marble_column(2));
-        column3.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> take_market_marble_column(3));
-        column4.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> take_market_marble_column(4));
+        radiobutTakeMarble.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> TakeMarbleButton());
+        radiobutBuyCard.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> buyCardButton());
+        radiobutActivProduc.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> activProducButton());
+        radiobutActLeader.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> actLeaderButton());
+        radiobutDiscardLeader.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> discardLeaderButton());
+        radiobutOtherPlayboard.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> otherPlayerboardButton());
+        move.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> moveCroce());
+        row1.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> take_market_marble_row(1));
+        row2.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> take_market_marble_row(2));
+        row3.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> take_market_marble_row(3));
+        column1.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> take_market_marble_column(1));
+        column2.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> take_market_marble_column(2));
+        column3.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> take_market_marble_column(3));
+        column4.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> take_market_marble_column(4));
     }
 
-    private void showPlayerboard(){
+    private void showPlayerboard() {
         try {
             setCard(card11, ClientView.getDevelopmentCards().get(0));
             setCard(card21, ClientView.getDevelopmentCards().get(1));
@@ -293,62 +294,68 @@ public class YourTurnSceneController{
     }
 
     private void setImage(ImageView image, String file) throws FileNotFoundException {
-        FileInputStream fis = new FileInputStream(file);
-        image.setImage(new Image(fis));
+        if(file.equals(""))
+            image.setImage(null);
+        else {
+            FileInputStream fis = new FileInputStream(file);
+            image.setImage(new Image(fis));
+        }
     }
 
     private void setCard(ImageView image, int cardID) throws FileNotFoundException {
-        if(cardID != -1)
+        if (cardID != -1)
             setImage(image, CardMapGUI.getCard(cardID));
+        else
+            setImage(image, "");
     }
 
     private void setFirstDepot() throws FileNotFoundException {
-        if(ClientView.getWarehouse(GUI.getPosition()).get(0).getAmount() == 1)
+        if (ClientView.getWarehouse(GUI.getPosition()).get(0).getAmount() == 1)
             setImage(deposit11, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(0).getResource()));
     }
 
     private void setSecondDepot() throws FileNotFoundException {
-        if(ClientView.getWarehouse(GUI.getPosition()).get(1).getAmount() >= 1)
+        if (ClientView.getWarehouse(GUI.getPosition()).get(1).getAmount() >= 1)
             setImage(deposit21, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(1).getResource()));
-        if(ClientView.getWarehouse(GUI.getPosition()).get(1).getAmount() == 2)
+        if (ClientView.getWarehouse(GUI.getPosition()).get(1).getAmount() == 2)
             setImage(deposit22, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(1).getResource()));
     }
 
     private void setThirdDepot() throws FileNotFoundException {
-        if(ClientView.getWarehouse(GUI.getPosition()).get(2).getAmount() >= 1)
+        if (ClientView.getWarehouse(GUI.getPosition()).get(2).getAmount() >= 1)
             setImage(deposit31, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(2).getResource()));
-        if(ClientView.getWarehouse(GUI.getPosition()).get(2).getAmount() >= 2)
+        if (ClientView.getWarehouse(GUI.getPosition()).get(2).getAmount() >= 2)
             setImage(deposit32, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(2).getResource()));
-        if(ClientView.getWarehouse(GUI.getPosition()).get(2).getAmount() == 3)
+        if (ClientView.getWarehouse(GUI.getPosition()).get(2).getAmount() == 3)
             setImage(deposit33, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(2).getResource()));
     }
 
     private void setExtraDepot1() throws FileNotFoundException {
-        if(ClientView.getWarehouse(GUI.getPosition()).size() >= 4){
-            if(ClientView.getWarehouse(GUI.getPosition()).get(3).getAmount() >= 1)
+        if (ClientView.getWarehouse(GUI.getPosition()).size() >= 4) {
+            if (ClientView.getWarehouse(GUI.getPosition()).get(3).getAmount() >= 1)
                 setImage(extra11, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(3).getResource()));
-            if(ClientView.getWarehouse(GUI.getPosition()).get(3).getAmount() == 2)
+            if (ClientView.getWarehouse(GUI.getPosition()).get(3).getAmount() == 2)
                 setImage(extra12, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(3).getResource()));
         }
     }
 
     private void setExtraDepot2() throws FileNotFoundException {
-        if(ClientView.getWarehouse(GUI.getPosition()).size() == 5){
-            if(ClientView.getWarehouse(GUI.getPosition()).get(4).getAmount() >= 1)
+        if (ClientView.getWarehouse(GUI.getPosition()).size() == 5) {
+            if (ClientView.getWarehouse(GUI.getPosition()).get(4).getAmount() >= 1)
                 setImage(extra21, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(4).getResource()));
-            if(ClientView.getWarehouse(GUI.getPosition()).get(4).getAmount() == 2)
+            if (ClientView.getWarehouse(GUI.getPosition()).get(4).getAmount() == 2)
                 setImage(extra22, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(4).getResource()));
         }
     }
 
-    private void setStrongbox(){
+    private void setStrongbox() {
         coinAmount.setText(String.valueOf(ClientView.coinAmount(GUI.getPosition())));
         servantAmount.setText(String.valueOf(ClientView.servantAmount(GUI.getPosition())));
         shieldAmount.setText(String.valueOf(ClientView.shieldAmount(GUI.getPosition())));
         stoneAmount.setText(String.valueOf(ClientView.stoneAmount(GUI.getPosition())));
     }
 
-    private void chooseSwitch(Message messagee){
+    private void chooseSwitch(Message messagee) {
         Message_ArrayList_Marble m = (Message_ArrayList_Marble) messagee;
         //ClientView.take_marble_message(message);
         System.out.println("You have chosen this marbles: ");
@@ -357,18 +364,18 @@ public class YourTurnSceneController{
         yes.setVisible(true);
         no.setVisible(true);
         //show marbles
-        yes.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> yesSwitch());
-        no.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> noSwitch());
+        yes.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> yesSwitch());
+        no.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> noSwitch());
     }
 
-    private void noSwitch(){
+    private void noSwitch() {
         marbleCount--;
-        if(marbleCount>0)
+        if (marbleCount > 0)
             showReducedMarble();
 
     }
 
-    private void showReducedMarble(){
+    private void showReducedMarble() {
 
     }
 
@@ -376,37 +383,36 @@ public class YourTurnSceneController{
         switch1.setDisable(false);
         switch2.setDisable(false);
         switch3.setDisable(false);
-        switch1.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> {
+        switch1.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             switch1.setDisable(true);
             clickedSwitch();
         });
-        switch2.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> {
+        switch2.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             switch2.setDisable(true);
             clickedSwitch();
         });
-        switch3.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> {
+        switch3.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             switch3.setDisable(true);
             clickedSwitch();
         });
     }
 
-    private void clickedSwitch(){
-        int par1=0;
-        int par2=0;
-        if(switch1.isDisable() && switch2.isDisable())
-        {
-            par1=1;
-            par2=2;
+    private void clickedSwitch() {
+        int par1 = 0;
+        int par2 = 0;
+        if (switch1.isDisable() && switch2.isDisable()) {
+            par1 = 1;
+            par2 = 2;
         }
-        if(switch1.isDisable() && switch3.isDisable()){
-            par1=1;
-            par2=3;
+        if (switch1.isDisable() && switch3.isDisable()) {
+            par1 = 1;
+            par2 = 3;
         }
-        if(switch2.isDisable() && switch3.isDisable()){
-            par1=2;
-            par2=3;
+        if (switch2.isDisable() && switch3.isDisable()) {
+            par1 = 2;
+            par2 = 3;
         }
-        if (par1!=0) {
+        if (par1 != 0) {
             try {
                 ClientSocket.sendMessage(new Message_Two_Parameter_Int(MessageType.SWITCH_DEPOT, GUI.getPosition(), par1, par2));
             } catch (IOException e) {
@@ -415,8 +421,8 @@ public class YourTurnSceneController{
         }
     }
 
-    private void take_market_marble_row(int i)  {
-        marbleCount=4;
+    private void take_market_marble_row(int i) {
+        marbleCount = 4;
         try {
             ClientSocket.sendMessage(new Message_Two_Parameter_Int(MessageType.TAKE_MARBLE, GUI.getPosition(), 0, i));
         } catch (IOException e) {
@@ -425,8 +431,8 @@ public class YourTurnSceneController{
     }
 
 
-    private void take_market_marble_column(int i)  {
-        marbleCount=3;
+    private void take_market_marble_column(int i) {
+        marbleCount = 3;
         try {
             ClientSocket.sendMessage(new Message_Two_Parameter_Int(MessageType.TAKE_MARBLE, GUI.getPosition(), 1, i));
         } catch (IOException e) {
@@ -435,19 +441,19 @@ public class YourTurnSceneController{
     }
 
 
-    private void otherPlayerboardButton()  {
+    private void otherPlayerboardButton() {
         OpponentPlayerboardSceneController opsc = new OpponentPlayerboardSceneController(0);
         Platform.runLater(() ->
                 SceneController.changeRootPane(opsc, "/fxml/opponentPlayerboardScene"));
     }
 
-    private void discardLeaderButton(){
+    private void discardLeaderButton() {
         disableAllButton();
         chooseLeader1.setDisable(false);
         chooseLeader2.setDisable(false);
     }
 
-    private void activProducButton(){
+    private void activProducButton() {
         disableAllButton();
         chooseSlot1.setDisable(false);
         chooseSlot2.setDisable(false);
@@ -468,69 +474,66 @@ public class YourTurnSceneController{
         chooseBase.setOnMouseClicked(mouseEvent -> {
             chooseBase.setDisable(true);
             basePanel.setVisible(true);
-            Message_Three_Resource_One_Int messageToSend=new Message_Three_Resource_One_Int(MessageType.BASIC_POWER, GUI.getPosition(), null, null, null, 0);
-            coin1.setOnMouseClicked(MouseEvent->{
-                baseProduction(Resource.COIN,messageToSend);
+            Message_Three_Resource_One_Int messageToSend = new Message_Three_Resource_One_Int(MessageType.BASIC_POWER, GUI.getPosition(), null, null, null, 0);
+            coin1.setOnMouseClicked(MouseEvent -> {
+                baseProduction(Resource.COIN, messageToSend);
             });
 
-            servant1.setOnMouseClicked(MouseEvent->{
-                baseProduction(Resource.SERVANT,messageToSend);
+            servant1.setOnMouseClicked(MouseEvent -> {
+                baseProduction(Resource.SERVANT, messageToSend);
             });
 
-            shield1.setOnMouseClicked(MouseEvent->{
-                baseProduction(Resource.SHIELD,messageToSend);
+            shield1.setOnMouseClicked(MouseEvent -> {
+                baseProduction(Resource.SHIELD, messageToSend);
             });
 
-            stone1.setOnMouseClicked(MouseEvent->{
-                baseProduction(Resource.STONE,messageToSend);
+            stone1.setOnMouseClicked(MouseEvent -> {
+                baseProduction(Resource.STONE, messageToSend);
             });
         });
     }
 
-    private void baseProduction(Resource resource, Message_Three_Resource_One_Int messageToSend){
-            if(messageToSend.getResource1()==null)
-                messageToSend.setResource1(resource);
-            else
-            if (messageToSend.getResource2()==null)
-            {
-                messageToSend.setResource2(resource);
-                baseLabel.setText("Choose produced resource");
-            }
-            else{
-                basePanel.setVisible(false);
-                baseLabel.setText("Choose resources required");
-                messageToSend.setResource3(resource);
-                panelBuy.setVisible(true);
-                radiobutWarehouse.setOnMouseClicked(mouseEvent1 -> {
-                    panelBuy.setVisible(false);
-                    messageToSend.setPar(0);
-                    try {
-                        ClientSocket.sendMessage(messageToSend);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                });
-                radiobutStrongbox.setOnMouseClicked(mouseEvent1 -> {
-                    panelBuy.setVisible(false);
-                    messageToSend.setPar(1);
-                    try {
-                        ClientSocket.sendMessage(messageToSend);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                });
-            }
+    private void baseProduction(Resource resource, Message_Three_Resource_One_Int messageToSend) {
+        if (messageToSend.getResource1() == null)
+            messageToSend.setResource1(resource);
+        else if (messageToSend.getResource2() == null) {
+            messageToSend.setResource2(resource);
+            baseLabel.setText("Choose produced resource");
+        } else {
+            basePanel.setVisible(false);
+            baseLabel.setText("Choose resources required");
+            messageToSend.setResource3(resource);
+            panelBuy.setVisible(true);
+            radiobutWarehouse.setOnMouseClicked(mouseEvent1 -> {
+                panelBuy.setVisible(false);
+                messageToSend.setPar(0);
+                try {
+                    ClientSocket.sendMessage(messageToSend);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+            radiobutStrongbox.setOnMouseClicked(mouseEvent1 -> {
+                panelBuy.setVisible(false);
+                messageToSend.setPar(1);
+                try {
+                    ClientSocket.sendMessage(messageToSend);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
     }
 
-    private void cardProduction(int slot){
+    private void cardProduction(int slot) {
         panelBuy.setVisible(true);
         radiobutWarehouse.setOnMouseClicked(mouseEvent1 -> {
             panelBuy.setVisible(false);
             Message message = new Message_Two_Parameter_Int(MessageType.DEVELOPMENT_CARD_POWER, GUI.getPosition(), slot, 0);
             try {
-              ClientSocket.sendMessage(message);
-             } catch (IOException e) {
-               e.printStackTrace();
+                ClientSocket.sendMessage(message);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
         radiobutStrongbox.setOnMouseClicked(mouseEvent1 -> {
@@ -544,14 +547,14 @@ public class YourTurnSceneController{
         });
     }
 
-    private void actLeaderButton(){
+    private void actLeaderButton() {
         disableAllButton();
         chooseLeader1.setDisable(false);
         chooseLeader2.setDisable(false);
     }
 
 
-    private void TakeMarbleButton(){
+    private void TakeMarbleButton() {
 
         disableAllButton();
         row1.setDisable(false);
@@ -564,7 +567,7 @@ public class YourTurnSceneController{
 
     }
 
-    private void disableAllButton(){
+    private void disableAllButton() {
         radiobutEndProd.setDisable(true);
         radiobutBuyCard.setDisable(true);
         radiobutActLeader.setDisable(true);
@@ -575,30 +578,30 @@ public class YourTurnSceneController{
         radiobutEndTurn.setDisable(true);
     }
 
-    private void moveCroce(){
+    private void moveCroce() {
         faithPoints++;
-        if(faithPoints>2 && faithPoints<5 || faithPoints>16 && faithPoints<19)
-            croceRossa.setLayoutY(croceRossa.getLayoutY()-28);
-        else if (faithPoints>9 && faithPoints<12)
-            croceRossa.setLayoutY(croceRossa.getLayoutY()+28);
-        else croceRossa.setLayoutX(croceRossa.getLayoutX()+30);
+        if (faithPoints > 2 && faithPoints < 5 || faithPoints > 16 && faithPoints < 19)
+            croceRossa.setLayoutY(croceRossa.getLayoutY() - 28);
+        else if (faithPoints > 9 && faithPoints < 12)
+            croceRossa.setLayoutY(croceRossa.getLayoutY() + 28);
+        else croceRossa.setLayoutX(croceRossa.getLayoutX() + 30);
     }
 
-    private void buyCardButton(){
+    private void buyCardButton() {
         disableAllButton();
         setDisableAllDecks(false);
-        card11.setOnMouseClicked(mouseEvent -> deckEvent(1,1));
-        card12.setOnMouseClicked(mouseEvent -> deckEvent(1,2));
-        card13.setOnMouseClicked(mouseEvent -> deckEvent(1,3));
-        card21.setOnMouseClicked(mouseEvent -> deckEvent(2,1));
-        card22.setOnMouseClicked(mouseEvent -> deckEvent(2,2));
-        card23.setOnMouseClicked(mouseEvent -> deckEvent(2,2));
-        card31.setOnMouseClicked(mouseEvent -> deckEvent(3,1));
-        card32.setOnMouseClicked(mouseEvent -> deckEvent(3,1));
-        card33.setOnMouseClicked(mouseEvent -> deckEvent(3,1));
-        card41.setOnMouseClicked(mouseEvent -> deckEvent(4,1));
-        card42.setOnMouseClicked(mouseEvent -> deckEvent(4,2));
-        card43.setOnMouseClicked(mouseEvent -> deckEvent(4,3));
+        card11.setOnMouseClicked(mouseEvent -> deckEvent(1, 1));
+        card12.setOnMouseClicked(mouseEvent -> deckEvent(1, 2));
+        card13.setOnMouseClicked(mouseEvent -> deckEvent(1, 3));
+        card21.setOnMouseClicked(mouseEvent -> deckEvent(2, 1));
+        card22.setOnMouseClicked(mouseEvent -> deckEvent(2, 2));
+        card23.setOnMouseClicked(mouseEvent -> deckEvent(2, 2));
+        card31.setOnMouseClicked(mouseEvent -> deckEvent(3, 1));
+        card32.setOnMouseClicked(mouseEvent -> deckEvent(3, 1));
+        card33.setOnMouseClicked(mouseEvent -> deckEvent(3, 1));
+        card41.setOnMouseClicked(mouseEvent -> deckEvent(4, 1));
+        card42.setOnMouseClicked(mouseEvent -> deckEvent(4, 2));
+        card43.setOnMouseClicked(mouseEvent -> deckEvent(4, 3));
     }
     /*
     card11.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> deckEvent(1,1));
@@ -654,45 +657,82 @@ public class YourTurnSceneController{
     }
 
 
-    public static void buy_card_message(int player, int slot, int cardID){
-        if(player != GUI.getPosition());
-        //    System.out.println("Player " + super.getNickname(m.getClientID()) + " bought a new card and inserted it in " +
-                    //"the " + m.getPar2() + "° slot.");//mettere nel quadrato gui laterale
-        else {
-            try {
-                switch (slot) {
-                    case 1:
-                        if ((CardMapCLI.getCard(cardID)).getLevel() == 1)
-                            SceneController.setImage("#slot11", CardMapGUI.getCard(cardID));
-                        else if ((CardMapCLI.getCard(cardID)).getLevel() == 2)
-                            SceneController.setImage("#slot12", CardMapGUI.getCard(cardID));
-                        else
-                            SceneController.setImage("#slot13", CardMapGUI.getCard(cardID));
-                        break;
-                    case 2:
-                        if ((CardMapCLI.getCard(cardID)).getLevel() == 1)
-                            SceneController.setImage("#slot21", CardMapGUI.getCard(cardID));
-                        else if ((CardMapCLI.getCard(cardID)).getLevel() == 2)
-                            SceneController.setImage("#slot22", CardMapGUI.getCard(cardID));
-                        else
-                            SceneController.setImage("#slot23", CardMapGUI.getCard(cardID));
-                        break;
-                    case 3:
-                        if ((CardMapCLI.getCard(cardID)).getLevel() == 1)
-                            SceneController.setImage("#slot31", CardMapGUI.getCard(cardID));
-                        else if ((CardMapCLI.getCard(cardID)).getLevel() == 2)
-                            SceneController.setImage("#slot32", CardMapGUI.getCard(cardID));
-                        else
-                            SceneController.setImage("#slot33", CardMapGUI.getCard(cardID));
-                        break;
-                }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+    public static void buy_card_message(int slot, int cardID) {
+        try {
+            switch (slot) {
+                case 1:
+                    if ((CardMapCLI.getCard(cardID)).getLevel() == 1)
+                        SceneController.setImage("#slot11", CardMapGUI.getCard(cardID));
+                    else if ((CardMapCLI.getCard(cardID)).getLevel() == 2)
+                        SceneController.setImage("#slot12", CardMapGUI.getCard(cardID));
+                    else
+                        SceneController.setImage("#slot13", CardMapGUI.getCard(cardID));
+                    break;
+                case 2:
+                    if ((CardMapCLI.getCard(cardID)).getLevel() == 1)
+                        SceneController.setImage("#slot21", CardMapGUI.getCard(cardID));
+                    else if ((CardMapCLI.getCard(cardID)).getLevel() == 2)
+                        SceneController.setImage("#slot22", CardMapGUI.getCard(cardID));
+                    else
+                        SceneController.setImage("#slot23", CardMapGUI.getCard(cardID));
+                    break;
+                case 3:
+                    if ((CardMapCLI.getCard(cardID)).getLevel() == 1)
+                        SceneController.setImage("#slot31", CardMapGUI.getCard(cardID));
+                    else if ((CardMapCLI.getCard(cardID)).getLevel() == 2)
+                        SceneController.setImage("#slot32", CardMapGUI.getCard(cardID));
+                    else
+                        SceneController.setImage("#slot33", CardMapGUI.getCard(cardID));
+                    break;
             }
-            SceneController.setDisable("#radiobutActLeader", false);
-            SceneController.setDisable("#radiobutDiscardLeader", false);
-            SceneController.setDisable("#radiobutOtherPlayerboard", false);
-            SceneController.setDisable("#radiobutEndTurn", false);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        SceneController.setDisable("#radiobutActLeader", false);
+        SceneController.setDisable("#radiobutDiscardLeader", false);
+        SceneController.setDisable("#radiobutOtherPlayerboard", false);
+        SceneController.setDisable("#radiobutEndTurn", false);
+    }
+
+    public static void cardRemoveMessage(int row, int column, int cardID){
+        String cardFile;
+        if(cardID == -1)
+            cardFile = "";
+        else
+            cardFile = CardMapGUI.getCard(cardID);
+        try {
+            switch (column) {
+                case 0:
+                    if (row == 0)
+                        SceneController.setImage("#card11", cardFile);
+                    else if (row == 1)
+                        SceneController.setImage("#card12", cardFile);
+                    else
+                        SceneController.setImage("#card13", cardFile);
+                case 1:
+                    if (row == 0)
+                        SceneController.setImage("#card21", cardFile);
+                    else if (row == 1)
+                        SceneController.setImage("#card22", cardFile);
+                    else
+                        SceneController.setImage("#card23", cardFile);
+                case 2:
+                    if (row == 0)
+                        SceneController.setImage("#card31", cardFile);
+                    else if (row == 1)
+                        SceneController.setImage("#card32", cardFile);
+                    else
+                        SceneController.setImage("#card33", cardFile);
+                case 3:
+                    if (row == 0)
+                        SceneController.setImage("#card41", cardFile);
+                    else if (row == 1)
+                        SceneController.setImage("#card42", cardFile);
+                    else
+                        SceneController.setImage("#card43", cardFile);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
 

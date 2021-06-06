@@ -87,8 +87,13 @@ public class SceneController {
     }
 
     public static void setImage(String selector, String file) throws FileNotFoundException {
-        FileInputStream fis = new FileInputStream(file);
         ImageView imageView = (ImageView) scene.lookup(selector);
-        imageView.setImage(new Image(fis));
+        System.out.println(file);
+        if(file.equals(""))
+            imageView.setImage(null);
+        else {
+            FileInputStream fis = new FileInputStream(file);
+            imageView.setImage(new Image(fis));
+        }
     }
 }

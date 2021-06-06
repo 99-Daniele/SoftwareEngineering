@@ -19,13 +19,13 @@ public class LeaderCardsParser {
 
     public LeaderCardsParser() {
         Gson gson = new Gson();
-        Reader reader1 = new InputStreamReader(Objects.requireNonNull(this.getClass().getResourceAsStream("/DiscountCards.json")), StandardCharsets.UTF_8);
+        Reader reader1 = new InputStreamReader(Objects.requireNonNull(this.getClass().getResourceAsStream("/CardsJSON/DiscountCards.json")), StandardCharsets.UTF_8);
         LeaderCard[] discountCards = gson.fromJson(reader1, DiscountCard[].class);
-        Reader reader2 = new InputStreamReader(Objects.requireNonNull(this.getClass().getResourceAsStream("/ExtraDepotCards.json")), StandardCharsets.UTF_8);
+        Reader reader2 = new InputStreamReader(Objects.requireNonNull(this.getClass().getResourceAsStream("/CardsJSON/ExtraDepotCards.json")), StandardCharsets.UTF_8);
         LeaderCard[] extraDepotCards = gson.fromJson(reader2, ExtraDepotCard[].class);
-        Reader reader3 = new InputStreamReader(Objects.requireNonNull(this.getClass().getResourceAsStream("/WhiteConversionCards.json")), StandardCharsets.UTF_8);
+        Reader reader3 = new InputStreamReader(Objects.requireNonNull(this.getClass().getResourceAsStream("/CardsJSON/WhiteConversionCards.json")), StandardCharsets.UTF_8);
         LeaderCard[] whiteConversionCards = gson.fromJson(reader3, WhiteConversionCard[].class);
-        Reader reader4 = new InputStreamReader(Objects.requireNonNull(this.getClass().getResourceAsStream("/AdditionalProductionPowerCards.json")), StandardCharsets.UTF_8);
+        Reader reader4 = new InputStreamReader(Objects.requireNonNull(this.getClass().getResourceAsStream("/CardsJSON/AdditionalProductionPowerCards.json")), StandardCharsets.UTF_8);
         LeaderCard[] additionalProductionPowerCards = gson.fromJson(reader4, AdditionalProductionPowerCard[].class);
         leaderCards.addAll(Arrays.asList(discountCards).subList(0, 4));
         leaderCards.addAll(Arrays.asList(extraDepotCards).subList(0, 4));
