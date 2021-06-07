@@ -20,7 +20,7 @@ import java.util.Observer;
 public abstract class ClientView extends Application implements Observer {
 
     private static Game_View game;
-    private GAME_STATES currentState;
+    private static GAME_STATES currentState;
 
     public ClientView() {
         game = new Game_View();
@@ -34,7 +34,6 @@ public abstract class ClientView extends Application implements Observer {
     public void launchCLI(){}
 
     public void launchCLI(String hostname, int port){}
-
 
     @Override
     public void start(Stage stage) throws Exception {}
@@ -50,18 +49,17 @@ public abstract class ClientView extends Application implements Observer {
         return game;
     }
 
-    public GAME_STATES getCurrentState() {
+    public static GAME_STATES getCurrentState() {
         return currentState;
     }
 
-    public boolean isState(GAME_STATES state){
+    public static boolean isState(GAME_STATES state){
         return  currentState  == state;
     }
 
-    public void setCurrentState(GAME_STATES currentState) {
-        this.currentState = currentState;
+    public static void setCurrentState(GAME_STATES currentState) {
+        ClientView.currentState = currentState;
     }
-
 
     public int[] getRowColumn(int cardID){
         return game.get_Row_Column(cardID);
