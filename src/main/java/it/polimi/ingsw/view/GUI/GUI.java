@@ -166,10 +166,11 @@ public class GUI extends ClientView {
     public void card_remove_message(Message message){
         Message_Four_Parameter_Int m = (Message_Four_Parameter_Int) message;
         super.card_remove_message(message);
-        if(getNumOfPlayers() == 1 && m.getClientID() == 1)
-            System.out.println("Ludovico has removed one deck card from row " + (m.getPar1() +1 + " and" +
-                    " column " + (m.getPar2() +1)));
-        if(SceneController.isCurrentScene("#radiobutBuyCard"))
+        if(getNumOfPlayers() == 1 && m.getClientID() == 1);
+        //System.out.println("Ludovico has removed one deck card from row " + (m.getPar1() +1 + " and" + " column " + (m.getPar2() +1)));
+        else if(m.getClientID() != GUI.getPosition());
+        //print message of removed card
+        else if(SceneController.isCurrentScene("#radiobutBuyCard"))
             Platform.runLater(() -> YourTurnSceneController.cardRemoveMessage(m.getPar1(), m.getPar2(), m.getPar4()));
     }
 
@@ -177,7 +178,9 @@ public class GUI extends ClientView {
     public void market_change(Message message){
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
         super.market_change(message);
-        if(SceneController.isCurrentScene("#radiobutBuyCard"))
+        if(m.getClientID() != GUI.getPosition());
+        //print change market message
+        else if(SceneController.isCurrentScene("#radiobutBuyCard"))
             Platform.runLater(() -> YourTurnSceneController.marketChangeMessage(m.getPar1() == 0, m.getPar2()));
     }
 
@@ -185,11 +188,16 @@ public class GUI extends ClientView {
     public void faith_points_message(Message message){
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
         super.faith_points_message(message);
-        if(m.getClientID() != position);
-        else {
+        if(m.getClientID() == position){
             if (SceneController.isCurrentScene("#radiobutBuyCard"))
-                Platform.runLater(() -> YourTurnSceneController.increaseFaithPointsMessage(m.getPar()));
+                Platform.runLater(() -> YourTurnSceneController.increaseFaithPointsMessage(m.getPar(), false));
         }
+        else if(GUI.getNumOfPlayers() == 1){
+            if (SceneController.isCurrentScene("#radiobutBuyCard"))
+                Platform.runLater(() -> YourTurnSceneController.increaseFaithPointsMessage(m.getPar(), true));
+        }
+        else;
+        //print faith points increase
     }
 
     @Override
@@ -197,6 +205,7 @@ public class GUI extends ClientView {
         Message_One_Int_One_Resource m = (Message_One_Int_One_Resource) message;
         super.increase_warehouse_message(message);
         if(m.getClientID() != position);
+        //print warehouse increase
         else if(m.getPar1() != -1){
             if(SceneController.isCurrentScene("#radiobutBuyCard"))
                 Platform.runLater(() -> YourTurnSceneController.increaseWarehouseMessage(m.getPar1()));
@@ -209,6 +218,7 @@ public class GUI extends ClientView {
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
         super.switch_depot_message(message);
         if(m.getClientID() != position);
+        //print switch depot message
         else {
             if(SceneController.isCurrentScene("#radiobutBuyCard"))
                 Platform.runLater(() -> YourTurnSceneController.switchDepotMessage(m.getPar1(), m.getPar2()));
@@ -263,7 +273,7 @@ public class GUI extends ClientView {
 
     @Override
     public void white_conversion_card_message(Message message){
-
+        YourTurnSceneController.whiteConversionMessage();
     }
 
     @Override
@@ -278,17 +288,18 @@ public class GUI extends ClientView {
 
     @Override
     public void chosen_slot_message(Message message){
-
+        Message_Three_Parameter_Int m = (Message_Three_Parameter_Int) message;
+        YourTurnSceneController.choseSlotMessage(m.getPar1(), m.getPar2(), m.getPar3());
     }
 
     @Override
     public void quit_message(Message message) {
-
+        super.stop();
     }
 
     @Override
     public void end_game_message(Message message) {
-
+        super.stop();
     }
 
     @Override

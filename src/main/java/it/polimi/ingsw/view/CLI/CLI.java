@@ -1210,6 +1210,7 @@ public class CLI extends ClientView{
             System.out.println("Player " + m.getPar() + " disconnected before game is started");
         else
             System.out.println("One player disconnected before game is started");
+        endGameRequest();
     }
 
     @Override
@@ -1224,6 +1225,7 @@ public class CLI extends ClientView{
                     + " total resources.");
         }
         System.out.println("You can still see the state of the game.\nPrint \"end game\" to finish");
+        endGameRequest();
     }
 
     private void endGameRequest(){

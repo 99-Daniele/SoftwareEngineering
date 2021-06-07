@@ -22,8 +22,8 @@
                </image>
             </ImageView>
             <ImageView fx:id="leader1" fitHeight="166.0" fitWidth="108.0" layoutY="451.0" />
-            <ImageView fx:id="card13" fitHeight="159.0" fitWidth="99.0" layoutX="600.0" layoutY="42.0"/>
-            <ImageView fx:id="card33" fitHeight="159.0" fitWidth="99.0" layoutX="825.0" layoutY="42.0"/>
+            <ImageView fx:id="card13" fitHeight="159.0" fitWidth="99.0" layoutX="600.0" layoutY="42.0" />
+            <ImageView fx:id="card33" fitHeight="159.0" fitWidth="99.0" layoutX="825.0" layoutY="42.0" />
             <ImageView fx:id="card23" fitHeight="159.0" fitWidth="99.0" layoutX="712.0" layoutY="42.0">
             </ImageView>
             <ImageView fx:id="card22" fitHeight="159.0" fitWidth="99.0" layoutX="712.0" layoutY="221.0">
@@ -43,9 +43,9 @@
                   <Image url="@../photos/plancia portabiglie.png" />
                </image>
             </ImageView>
-            <Button fx:id="chooseSlot1" disable="true" layoutX="228.0" layoutY="371.0" mnemonicParsing="false" text="Choose slot" />
-            <Button fx:id="chooseSlot2" disable="true" layoutX="355.0" layoutY="371.0" mnemonicParsing="false" text="Choose slot" />
-            <Button fx:id="chooseSlot3" disable="true" layoutX="475.0" layoutY="371.0" mnemonicParsing="false" text="Choose slot" />
+            <Button fx:id="chooseSlot1" layoutX="228.0" layoutY="371.0" mnemonicParsing="false" text="Choose slot" visible="false" />
+            <Button fx:id="chooseSlot2" layoutX="355.0" layoutY="371.0" mnemonicParsing="false" text="Choose slot" visible="false" />
+            <Button fx:id="chooseSlot3" layoutX="475.0" layoutY="371.0" mnemonicParsing="false" text="Choose slot" visible="false" />
             <Label layoutX="601.0" prefHeight="37.0" prefWidth="222.0" text="DECKS">
                <font>
                   <Font name="Bell MT" size="24.0" />
@@ -79,9 +79,9 @@
                   <Font name="Bell MT" size="24.0" />
                </font>
             </Label>
-            <Button fx:id="chooseLeader1" disable="true" layoutX="17.0" layoutY="624.0" mnemonicParsing="false" text="Choose card" />
-            <Button fx:id="chooseLeader2" disable="true" layoutX="147.0" layoutY="624.0" mnemonicParsing="false" text="Choose card" />
-            <Button fx:id="chooseBase" disable="true" layoutX="141.0" layoutY="371.0" mnemonicParsing="false" text="Choose" />
+            <Button fx:id="chooseLeader1" layoutX="17.0" layoutY="624.0" mnemonicParsing="false" text="Choose card" visible="false" />
+            <Button fx:id="chooseLeader2" layoutX="147.0" layoutY="624.0" mnemonicParsing="false" text="Choose card" visible="false" />
+            <Button fx:id="chooseBase" disable="true" layoutX="141.0" layoutY="371.0" mnemonicParsing="false" text="Choose" visible="false" />
             <RadioButton fx:id="switch1" disable="true" layoutX="6.0" layoutY="207.0" mnemonicParsing="false" />
             <RadioButton fx:id="switch2" disable="true" layoutX="6.0" layoutY="241.0" mnemonicParsing="false" />
             <RadioButton fx:id="switch3" disable="true" layoutX="6.0" layoutY="274.0" mnemonicParsing="false" />
@@ -105,19 +105,19 @@
                   <Image url="@../photos/servant.png" />
                </image>
             </ImageView>
-            <Label fx:id="shieldAmount" layoutX="35.0" layoutY="315.0" prefHeight="30.0" prefWidth="28.0" textFill="WHITE" text="0">
+            <Label fx:id="shieldAmount" layoutX="35.0" layoutY="315.0" prefHeight="30.0" prefWidth="28.0" text="0" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font></Label>
-            <Label fx:id="coinAmount" layoutX="35.0" layoutY="352.0" prefHeight="30.0" prefWidth="28.0" textFill="WHITE" text="0">
+            <Label fx:id="coinAmount" layoutX="35.0" layoutY="352.0" prefHeight="30.0" prefWidth="28.0" text="0" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font></Label>
-            <Label fx:id="servantAmount" layoutX="85.0" layoutY="315.0" prefHeight="30.0" prefWidth="28.0" textFill="WHITE" text="0">
+            <Label fx:id="servantAmount" layoutX="85.0" layoutY="315.0" prefHeight="30.0" prefWidth="28.0" text="0" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font></Label>
-            <Label fx:id="stoneAmount" layoutX="85.0" layoutY="352.0" prefHeight="30.0" prefWidth="28.0" textFill="WHITE" text="0">
+            <Label fx:id="stoneAmount" layoutX="85.0" layoutY="352.0" prefHeight="30.0" prefWidth="28.0" text="0" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font></Label>
@@ -219,7 +219,12 @@
                   </RadioButton>
                </children>
             </Pane>
-            <Label fx:id="croceRossa" layoutX="8.0" layoutY="107.0" prefHeight="25.0" prefWidth="28.0" text="✞">
+            <Label fx:id="croceRossa" layoutX="8.0" layoutY="107.0" prefHeight="25.0" prefWidth="28.0" text="✞" textFill="RED">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label fx:id="croceNera" layoutX="8.0" layoutY="107.0" prefHeight="25.0" prefWidth="28.0" text="✞">
                <font>
                   <Font size="24.0" />
                </font>

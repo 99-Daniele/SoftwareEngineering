@@ -165,6 +165,8 @@ public class YourTurnSceneController {
     @FXML
     private Label croceRossa;
     @FXML
+    private Label croceNera;
+    @FXML
     private Button move;
     @FXML
     private Label message;
@@ -394,6 +396,38 @@ public class YourTurnSceneController {
                 faithPoints = 24;
             croceRossa.setLayoutX(30*faithPoints - 172);
             croceRossa.setLayoutY(56);
+        }
+        if(GUI.getNumOfPlayers() == 1){
+            faithPoints = ClientView.getFaithPoints(1);
+            if(faithPoints < 3){
+                croceNera.setLayoutX(30*faithPoints + 7);
+            }
+            else if (faithPoints >= 3 && faithPoints < 5) {
+                croceNera.setLayoutX(67);
+                croceNera.setLayoutY(168 - faithPoints*28);
+            }
+            else if(faithPoints >= 5 && faithPoints < 10){
+                croceNera.setLayoutX(30*faithPoints - 52);
+                croceNera.setLayoutY(56);
+            }
+            else if (faithPoints >= 10 && faithPoints < 12) {
+                croceNera.setLayoutX(218);
+                croceNera.setLayoutY(faithPoints*28 - 200);
+            }
+            else if(faithPoints >= 12 && faithPoints < 17){
+                croceNera.setLayoutX(30*faithPoints - 112);
+                croceNera.setLayoutY(107);
+            }
+            else if(faithPoints >= 17 && faithPoints < 19){
+                croceNera.setLayoutX(368);
+                croceNera.setLayoutY(555 - 28*faithPoints);
+            }
+            else {
+                if(faithPoints > 24)
+                    faithPoints = 24;
+                croceNera.setLayoutX(30*faithPoints - 172);
+                croceNera.setLayoutY(56);
+            }
         }
     }
 
@@ -845,7 +879,7 @@ public class YourTurnSceneController {
         }
     }
 
-    public static void increaseFaithPointsMessage(int faithPoints){
+    public static void increaseFaithPointsMessage(int faithPoints, boolean Ludovico){
         int x;
         int y;
         if(faithPoints < 3){
@@ -878,8 +912,14 @@ public class YourTurnSceneController {
             x = 30*faithPoints - 172;
             y = 56;
         }
-        SceneController.setLayoutX("#croceRossa", x);
-        SceneController.setLayoutY("#croceRossa", y);
+        if(Ludovico){
+            SceneController.setLayoutX("#croceNera", x);
+            SceneController.setLayoutY("#croceNera", y);
+        }
+        else {
+            SceneController.setLayoutX("#croceRossa", x);
+            SceneController.setLayoutY("#croceRossa", y);
+        }
     }
 
     public static void increaseWarehouseMessage(int depot){
@@ -1017,6 +1057,24 @@ public class YourTurnSceneController {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void whiteConversionMessage(){
+        notYourTurn();
+        SceneController.setDisable("#radiobutOtherPlayboard", true);
+        SceneController.setVisible("#chooseLeader1", true);
+        SceneController.setVisible("#chooseLeader2", true);
+    }
+
+    public static void choseSlotMessage(int slot1, int slot2, int slot3){
+        notYourTurn();
+        SceneController.setDisable("#radiobutOtherPlayboard", true);
+        if(slot1 == 1)
+            SceneController.setVisible("#chooseSlot1", true);
+        if(slot2 == 2 || slot1 == 2)
+            SceneController.setVisible("#chooseSlot2", true);
+        if(slot3 == 3 || slot2 == 3)
+            SceneController.setVisible("#chooseSlot3", true);
     }
 
     public static void notYourTurn(){
