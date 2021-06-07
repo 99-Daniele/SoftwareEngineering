@@ -121,6 +121,7 @@ public class OpponentPlayerboardSceneController {
             setExtraDepot2();
             setStrongbox();
             setFaithPoints();
+            setVictoryPoints();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -219,6 +220,29 @@ public class OpponentPlayerboardSceneController {
                 faithPoints = 24;
             croceRossa.setLayoutX(30*faithPoints + 245);
             croceRossa.setLayoutY(121);
+        }
+    }
+
+    private void setVictoryPoints() {
+        int victoryPoints = ClientView.getVictoryPoints(position);
+        switch (ClientView.getCurrentPope()) {
+            case 1:
+                if (victoryPoints == 0)
+                    setImage(pope1, "/photos/quadrato giallo.png");
+                else
+                    setImage(pope1, "/photos/quadratoGiallo.png");
+                break;
+            case 2:
+                if (victoryPoints == 0 || victoryPoints == 2)
+                    setImage(pope2, "/photos/quadrato arancione.png");
+                else
+                    setImage(pope2, "/photos/quadratoArancione.png");
+                break;
+            case 3:
+                if (victoryPoints == 0 || victoryPoints == 2 || victoryPoints == 3 || victoryPoints == 5)
+                    setImage(pope3, "/photos/quadrato rosso.png");
+                else
+                    setImage(pope3, "/photos/quadratoRosso.png");
         }
     }
 }

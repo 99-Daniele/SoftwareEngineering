@@ -220,6 +220,12 @@ public class YourTurnSceneController {
     private ImageView shield1;
     @FXML
     private Label baseLabel;
+    @FXML
+    private ImageView pope1;
+    @FXML
+    private ImageView pope2;
+    @FXML
+    private ImageView pope3;
 
     private int marbleCount;
 
@@ -290,6 +296,7 @@ public class YourTurnSceneController {
             setExtraDepot2();
             setStrongbox();
             setFaithPoints();
+            setVictoryPoints();
         } catch (FileNotFoundException | URISyntaxException e) {
             e.printStackTrace();
         }
@@ -387,6 +394,29 @@ public class YourTurnSceneController {
                 faithPoints = 24;
             croceRossa.setLayoutX(30*faithPoints - 172);
             croceRossa.setLayoutY(56);
+        }
+    }
+
+    private void setVictoryPoints() {
+        int victoryPoints = ClientView.getVictoryPoints(GUI.getPosition());
+        switch (ClientView.getCurrentPope()) {
+            case 1:
+                if (victoryPoints == 0)
+                    setImage(pope1, "/photos/quadrato giallo.png");
+                else
+                    setImage(pope1, "/photos/quadratoGiallo.png");
+                break;
+            case 2:
+                if (victoryPoints == 0 || victoryPoints == 2)
+                    setImage(pope2, "/photos/quadrato arancione.png");
+                else
+                    setImage(pope2, "/photos/quadratoArancione.png");
+                break;
+            case 3:
+                if (victoryPoints == 0 || victoryPoints == 2 || victoryPoints == 3 || victoryPoints == 5)
+                    setImage(pope3, "/photos/quadrato rosso.png");
+                else
+                    setImage(pope3, "/photos/quadratoRosso.png");
         }
     }
 
@@ -958,6 +988,32 @@ public class YourTurnSceneController {
             if (leaderCard == 1)
                 SceneController.setImage("#leader1", CardMapGUI.getCard(ClientView.getLeaderCards(GUI.getPosition()).get(0)));
             SceneController.setImage("#leader2", "");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void vaticanReportMessage(int pope, int victoryPoints){
+        try {
+            switch (pope){
+                case 1:
+                    if(victoryPoints == 0)
+                        SceneController.setImage("#pope1", "/photos/quadrato giallo.png");
+                    else
+                        SceneController.setImage("#pope1", "/photos/quadratoGiallo.png");
+                    break;
+                case 2:
+                    if(victoryPoints == 0 || victoryPoints == 2)
+                        SceneController.setImage("#pope2", "/photos/quadrato arancione.png");
+                    else
+                        SceneController.setImage("#pope2", "/photos/quadratoArancione.png");
+                    break;
+                case 3:
+                    if(victoryPoints == 0 || victoryPoints == 2 || victoryPoints == 3 || victoryPoints == 5)
+                        SceneController.setImage("#pope3", "/photos/quadrato rosso.png");
+                    else
+                        SceneController.setImage("#pope3", "/photos/quadratoRosso.png");
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

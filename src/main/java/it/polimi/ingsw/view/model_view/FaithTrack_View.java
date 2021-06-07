@@ -150,4 +150,27 @@ public class FaithTrack_View {
         }
         return 0;
     }
+
+    public int getVictoryPoints(int player){
+        String[][] faithTrack = faithTracks.get(player);
+        int victoryPoints = 0;
+        if(!faithTrack[4][49].equals(" "))
+            victoryPoints += Integer.parseInt(faithTrack[4][49]);
+        if(!faithTrack[4][33].equals(" "))
+            victoryPoints += Integer.parseInt(faithTrack[4][33]);
+        if(!faithTrack[4][17].equals(" "))
+            victoryPoints += Integer.parseInt(faithTrack[4][17]);
+        return victoryPoints;
+    }
+
+    public int getCurrentPope(){
+        String[][] faithTrack = faithTracks.get(0);
+        if(!faithTrack[4][49].equals(" "))
+            return 3;
+        if(!faithTrack[4][33].equals(" "))
+            return 2;
+        if(!faithTrack[4][17].equals(" "))
+            return 1;
+        return 0;
+    }
 }

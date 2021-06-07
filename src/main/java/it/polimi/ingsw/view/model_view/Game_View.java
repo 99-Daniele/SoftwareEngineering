@@ -191,4 +191,8 @@ public class Game_View {
     }
 
     public int getFaithPoints(int viewID){return faithTrack.getFaithPoints(viewID);}
+
+    public int getVictoryPoints(int viewID){return faithTrack.getVictoryPoints(viewID);}
+
+    public int getCurrentPope(){return faithTrack.getCurrentPope();}
 }

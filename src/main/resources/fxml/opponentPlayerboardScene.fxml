@@ -82,19 +82,10 @@
       <ImageView fx:id="extraResource22" fitHeight="33.0" fitWidth="29.0" layoutX="1013.0" layoutY="480.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="extraResource21" fitHeight="33.0" fitWidth="29.0" layoutX="962.0" layoutY="480.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="pope1" fitHeight="42.0" fitWidth="48.0" layoutX="363.0" layoutY="151.0">
-         <image>
-            <Image url="@../photos/quadrato giallo.png" />
-         </image>
       </ImageView>
       <ImageView fx:id="pope2" fitHeight="42.0" fitWidth="48.0" layoutX="530.0" layoutY="124.0">
-         <image>
-            <Image url="@../photos/quadrato arancione.png" />
-         </image>
       </ImageView>
       <ImageView fx:id="pope3" fitHeight="42.0" fitWidth="48.0" layoutX="730.0" layoutY="151.0">
-         <image>
-            <Image url="@../photos/quadrato rosso.png" />
-         </image>
       </ImageView>
       <Label fx:id="croceRossa" layoutX="225.0" layoutY="172.0" prefHeight="25.0" prefWidth="29.0" text="✞">
          <font>

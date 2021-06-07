@@ -116,7 +116,7 @@ public class GUI extends ClientView {
     @Override
     public void turn_message(Message message){
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
-        super.setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
+        setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
         Platform.runLater(() -> {
             turn = (m.getPar() == 1);
             if (m.getPar() == 1) {
@@ -219,29 +219,46 @@ public class GUI extends ClientView {
     public void leader_card_activation_message(Message message){
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
         super.leader_card_activation_message(message);
+        if(m.getClientID() != position);
+        //print message of activate leader
+        else {
+            if(SceneController.isCurrentScene("#radiobutBuyCard"))
+                Platform.runLater(() -> YourTurnSceneController.leaderCardActivationMessage(m.getPar()));
+        }
     }
 
     @Override
     public void extra_depot_message(Message message){
         Message_One_Int_One_Resource m = (Message_One_Int_One_Resource) message;
         super.extra_depot_message(message);
+        if(m.getClientID() != position);
+        //print message of extra depot
     }
 
     @Override
-    public void leader_card_discard_message(Message message) {
+    public void leader_card_discard_message(Message message){
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
         super.leader_card_discard_message(message);
+        if(m.getClientID() != position);
+        //print message of discard leader and print leader card
+        else {
+            if(SceneController.isCurrentScene("#radiobutBuyCard"))
+                Platform.runLater(() -> YourTurnSceneController.leaderCardDiscardMessage(m.getPar()));
+        }
     }
 
     @Override
     public void take_marble_message(Message message) {
         Message_ArrayList_Marble m = (Message_ArrayList_Marble) message;
         super.take_marble_message(message);
+        if(m.getClientID() != position);
+        //print chosen marbles
     }
 
     @Override
     public void endProductionMessage(Message message) {
-
+        if(message.getClientID() != position);
+        //print message of end production
     }
 
     @Override
@@ -251,7 +268,12 @@ public class GUI extends ClientView {
 
     @Override
     public void vatican_report_message(Message message) {
-
+        Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        super.vatican_report_message(message);
+        if(m.getClientID() != position);
+        //message of vatican report
+        if(SceneController.isCurrentScene("#radiobutBuyCard"))
+            Platform.runLater(() -> YourTurnSceneController.vaticanReportMessage(m.getPar1(), m.getPar2()));
     }
 
     @Override

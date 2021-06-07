@@ -89,7 +89,6 @@ public class SceneController {
         if(file.equals(""))
             imageView.setImage(null);
         else {
-            //FileInputStream fis = new FileInputStream(new File(SceneController.class.getResourceAsStream(file)));
             InputStream fis = SceneController.class.getResourceAsStream(file);
             imageView.setImage(new Image(fis));
         }
