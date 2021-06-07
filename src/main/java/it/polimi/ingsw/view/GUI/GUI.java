@@ -13,14 +13,12 @@ import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URISyntaxException;
 
 
 public class GUI extends ClientView {
 
     private static boolean connected = false;
     private static int position = -1;
-    private static int otherPlayer = -1;
     private static boolean turn;
 
     @Override
@@ -37,14 +35,6 @@ public class GUI extends ClientView {
 
     public static int getPosition(){
         return position;
-    }
-
-    public static int getOtherPlayer() {
-        return otherPlayer;
-    }
-
-    public static void setOtherPlayer(int otherPlayer) {
-        GUI.otherPlayer = otherPlayer;
     }
 
     private void connectToSever(String hostname, int port){
@@ -218,6 +208,11 @@ public class GUI extends ClientView {
     public void switch_depot_message(Message message){
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
         super.switch_depot_message(message);
+        if(m.getClientID() != position);
+        else {
+            if(SceneController.isCurrentScene("#radiobutBuyCard"))
+                Platform.runLater(() -> YourTurnSceneController.switchDepotMessage(m.getPar1(), m.getPar2()));
+        }
     }
 
     @Override

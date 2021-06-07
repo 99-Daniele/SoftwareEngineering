@@ -158,6 +158,10 @@ public class Game_View {
         players.get(viewID).addLeaderCard(leaderCard);
     }
 
+    public boolean isLeaderCardActive(int player, int leaderCard){
+        return players.get(player).isLeaderCardActive(leaderCard);
+    }
+
     public void addDevelopmentCard(int viewID, int cardID, int slot){
         players.get(viewID).addDevelopmentCard(cardID, slot);
     }

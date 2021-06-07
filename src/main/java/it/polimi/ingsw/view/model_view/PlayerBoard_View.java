@@ -50,6 +50,10 @@ public class PlayerBoard_View {
         return cards_slots.getLeaderCards();
     }
 
+    public boolean isLeaderCardActive(int leaderCard){
+        return cards_slots.isLeaderCardActive(leaderCard);
+    }
+
     public Warehouse_Strongbox_View getWarehouse_strongbox() {
         return warehouse_strongbox;
     }

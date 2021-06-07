@@ -74,6 +74,13 @@ public class Cards_Slots_View {
         return leaderCards;
     }
 
+    public boolean isLeaderCardActive(int leaderCard){
+        if(leaderCard == 1)
+            return firstActive;
+        else
+            return secondActive;
+    }
+
     public void addDevelopmentCard(int cardID, int slot){
         if(slot == 1)
             firstSlot.add(cardID);

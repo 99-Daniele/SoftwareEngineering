@@ -104,4 +104,9 @@ public class SceneController {
         Label label = (Label) scene.lookup(selector);
         label.setLayoutY(y);
     }
+
+    public static void setOpacity(String selector, int opacity){
+        ImageView imageView = (ImageView) scene.lookup(selector);
+        imageView.setOpacity(opacity);
+    }
 }

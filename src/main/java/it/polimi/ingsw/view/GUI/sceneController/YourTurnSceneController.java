@@ -256,7 +256,11 @@ public class YourTurnSceneController {
             setCard(card33, ClientView.getDevelopmentCards().get(10));
             setCard(card43, ClientView.getDevelopmentCards().get(11));
             setCard(leader1, ClientView.getLeaderCards(GUI.getPosition()).get(0));
+            if(!ClientView.isLeaderCardActive(GUI.getPosition(), 1))
+                leader1.setOpacity(0.5);
             setCard(leader2, ClientView.getLeaderCards(GUI.getPosition()).get(1));
+            if(!ClientView.isLeaderCardActive(GUI.getPosition(), 2))
+                leader2.setOpacity(0.5);
             setCard(slot11, ClientView.getSlotCards(GUI.getPosition()).get(0));
             setCard(slot12, ClientView.getSlotCards(GUI.getPosition()).get(1));
             setCard(slot13, ClientView.getSlotCards(GUI.getPosition()).get(2));
@@ -883,6 +887,77 @@ public class YourTurnSceneController {
                         SceneController.setImage("#extra22", ResourceMapGUI.getResource(r));
                     break;
             }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void switchDepotMessage(int depot1, int depot2){
+        try {
+            setSwitchedDepot(depot1);
+            setSwitchedDepot(depot2);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void setSwitchedDepot(int depot) throws FileNotFoundException {
+        Resource r = ClientView.getWarehouse(GUI.getPosition()).get(depot - 1).getResource();
+        int amount = ClientView.getWarehouse(GUI.getPosition()).get(depot - 1).getAmount();
+        switch (depot) {
+            case 1:
+                if (amount > 0)
+                    SceneController.setImage("#deposit11", ResourceMapGUI.getResource(r));
+                else
+                    SceneController.setImage("#deposit11", "");
+                break;
+            case 2:
+                if (amount == 2)
+                    SceneController.setImage("#deposit22", ResourceMapGUI.getResource(r));
+                if(amount >= 1)
+                    SceneController.setImage("#deposit21", ResourceMapGUI.getResource(r));
+                else
+                    SceneController.setImage("#deposit21", "");
+                break;
+            case 3:
+                if (amount >= 2)
+                    SceneController.setImage("#deposit32", ResourceMapGUI.getResource(r));
+                if(amount >= 1)
+                    SceneController.setImage("#deposit31", ResourceMapGUI.getResource(r));
+                else
+                    SceneController.setImage("#deposit31", "");
+                break;
+            case 4:
+                if (amount == 2)
+                    SceneController.setImage("#extra12", ResourceMapGUI.getResource(r));
+                if(amount >= 1)
+                    SceneController.setImage("#extra11", ResourceMapGUI.getResource(r));
+                else
+                    SceneController.setImage("#extra11", "");
+                break;
+            case 5:
+                if (amount == 2)
+                    SceneController.setImage("#extra22", ResourceMapGUI.getResource(r));
+                if(amount >= 1)
+                    SceneController.setImage("#extra21", ResourceMapGUI.getResource(r));
+                else
+                    SceneController.setImage("#extra21", "");
+                break;
+        }
+    }
+
+    public static void leaderCardActivationMessage(int leaderCard){
+        if(leaderCard == 1)
+            SceneController.setOpacity("#leader1", 1);
+        else
+            SceneController.setOpacity("#leader2", 1);
+    }
+
+    public static void leaderCardDiscardMessage(int leaderCard){
+        try {
+            if (leaderCard == 1)
+                SceneController.setImage("#leader1", CardMapGUI.getCard(ClientView.getLeaderCards(GUI.getPosition()).get(0)));
+            SceneController.setImage("#leader2", "");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
