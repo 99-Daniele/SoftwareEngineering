@@ -294,11 +294,13 @@ public class GUI extends ClientView {
 
     @Override
     public void quit_message(Message message) {
+        //print quit message
         super.stop();
     }
 
     @Override
     public void end_game_message(Message message) {
+        //print end game message
         super.stop();
     }
 
@@ -349,9 +351,11 @@ public class GUI extends ClientView {
 
     @Override
     public void already_active_error() {
+        //already activated error message
     }
 
     @Override
     public void already_discard_error() {
+        //already discarded error message
     }
 }

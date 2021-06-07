@@ -165,7 +165,7 @@ public class YourTurnSceneController {
     @FXML
     private Label croceRossa;
     @FXML
-    private Label croceNera;
+    private ImageView croceNera;
     @FXML
     private Button move;
     @FXML
@@ -438,19 +438,19 @@ public class YourTurnSceneController {
                 if (victoryPoints == 0)
                     setImage(pope1, "/photos/quadrato giallo.png");
                 else
-                    setImage(pope1, "/photos/quadratoGiallo.png");
+                    setImage(pope1, "/photos/pope_favor1_front.png");
                 break;
             case 2:
                 if (victoryPoints == 0 || victoryPoints == 2)
                     setImage(pope2, "/photos/quadrato arancione.png");
                 else
-                    setImage(pope2, "/photos/quadratoArancione.png");
+                    setImage(pope2, "/photos/pope_favor2_front.png");
                 break;
             case 3:
                 if (victoryPoints == 0 || victoryPoints == 2 || victoryPoints == 3 || victoryPoints == 5)
                     setImage(pope3, "/photos/quadrato rosso.png");
                 else
-                    setImage(pope3, "/photos/quadratoRosso.png");
+                    setImage(pope3, "/photos/pope_favor3_front.png");
         }
     }
 
@@ -1040,19 +1040,19 @@ public class YourTurnSceneController {
                     if(victoryPoints == 0)
                         SceneController.setImage("#pope1", "/photos/quadrato giallo.png");
                     else
-                        SceneController.setImage("#pope1", "/photos/quadratoGiallo.png");
+                        SceneController.setImage("#pope1", "/photos/pope_favor1_front.png");
                     break;
                 case 2:
                     if(victoryPoints == 0 || victoryPoints == 2)
                         SceneController.setImage("#pope2", "/photos/quadrato arancione.png");
                     else
-                        SceneController.setImage("#pope2", "/photos/quadratoArancione.png");
+                        SceneController.setImage("#pope2", "/photos/pope_favor2_front.png");
                     break;
                 case 3:
                     if(victoryPoints == 0 || victoryPoints == 2 || victoryPoints == 3 || victoryPoints == 5)
                         SceneController.setImage("#pope3", "/photos/quadrato rosso.png");
                     else
-                        SceneController.setImage("#pope3", "/photos/quadratoRosso.png");
+                        SceneController.setImage("#pope3", "/photos/pope_favor3_front.png");
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();

@@ -224,11 +224,11 @@
                   <Font size="24.0" />
                </font>
             </Label>
-            <Label fx:id="croceNera" layoutX="8.0" layoutY="107.0" prefHeight="25.0" prefWidth="28.0" text="✞">
-               <font>
-                  <Font size="24.0" />
-               </font>
-            </Label>
+            <ImageView fx:id="croceNera" layoutX="8.0" layoutY="112.0" fitHeight="23.0" fitWidth="23.0" >
+               <image>
+                  <Image url="@../photos/croce.png" />
+               </image>
+            </ImageView>
             <Button fx:id="move" layoutX="586.0" layoutY="592.0" mnemonicParsing="false" text="Button" />
             <Label fx:id="message" alignment="TOP_CENTER" layoutX="344.0" layoutY="118.0" prefHeight="345.0" prefWidth="644.0" style="-fx-background-color: white;" textAlignment="CENTER" visible="false" wrapText="true">
                <font>
