@@ -1171,6 +1171,8 @@ public class CLI extends ClientView{
             System.out.println("Request successfully completed.\n");
         if (super.isState(GAME_STATES.TAKE_MARBLE_STATE) && getMarbles().size() > 0)
             CLI_Printer.printMarbles(super.getGame(), getMarbles());
+        if(super.isState(GAME_STATES.FIRST_POWER_STATE))
+            super.setCurrentState(GAME_STATES.ACTIVATE_PRODUCTION_STATE);
         notifyMessage(new Message(MessageType.OK, position));
     }
 

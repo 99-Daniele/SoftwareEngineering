@@ -9,12 +9,12 @@ public class MarbleMapGUI {
     private static MarbleMapGUI marbleParser;
     private static HashMap<String, String> marbleMap = new HashMap<>();
     private MarbleMapGUI(){
-        marbleMap.put("RED","src/main/resources/photos/rossa.png");
-        marbleMap.put("PURPLE","src/main/resources/photos/viola.png");
-        marbleMap.put("WHITE", "src/main/resources/photos/bianca.png");
-        marbleMap.put("BLUE","src/main/resources/photos/blu.png");
-        marbleMap.put("GREY","src/main/resources/photos/grigio.png");
-        marbleMap.put("YELLOW","src/main/resources/photos/gialla.png");
+        marbleMap.put("RED","/photos/rossa.png");
+        marbleMap.put("PURPLE","/photos/viola.png");
+        marbleMap.put("WHITE", "/photos/bianca.png");
+        marbleMap.put("BLUE","/photos/blu.png");
+        marbleMap.put("GREY","/photos/grigio.png");
+        marbleMap.put("YELLOW","/photos/gialla.png");
     }
     public static String getMarble(Marble marbleID){
         if(marbleParser == null)

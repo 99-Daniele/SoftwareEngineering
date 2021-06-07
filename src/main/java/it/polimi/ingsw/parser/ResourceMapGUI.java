@@ -11,10 +11,10 @@ public class ResourceMapGUI {
     private static HashMap<Resource, String> resourceMap = new HashMap<>();
 
     private ResourceMapGUI(){
-        resourceMap.put(Resource.COIN, "src/main/resources/photos/coin.png");
-        resourceMap.put(Resource.STONE, "src/main/resources/photos/stone.png");
-        resourceMap.put(Resource.SHIELD, "src/main/resources/photos/shield.png");
-        resourceMap.put(Resource.SERVANT,"src/main/resources/photos/servant.png");
+        resourceMap.put(Resource.COIN, "/photos/coin.png");
+        resourceMap.put(Resource.STONE, "/photos/stone.png");
+        resourceMap.put(Resource.SHIELD, "/photos/shield.png");
+        resourceMap.put(Resource.SERVANT,"/photos/servant.png");
     }
 
     public static String getResource(Resource r){

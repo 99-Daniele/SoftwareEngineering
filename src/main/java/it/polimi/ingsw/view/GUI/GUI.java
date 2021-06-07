@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 
 public class GUI extends ClientView {
@@ -129,8 +130,9 @@ public class GUI extends ClientView {
         super.setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
         Platform.runLater(() -> {
             turn = (m.getPar() == 1);
-            if (m.getPar() == 1)
+            if (m.getPar() == 1) {
                 SceneController.changeRootPane("/fxml/yourTurnScene");
+            }
             else {
                 SceneController.changeRootPane("/fxml/yourTurnScene");
                 YourTurnSceneController.notYourTurn();
@@ -141,6 +143,7 @@ public class GUI extends ClientView {
     @Override
     public void end_turn_message(Message message) {
         if (message.getClientID() != position) {
+            //segnalo che un altro giocatore ha finito il suo turno
         }
         if (position == 0) {
             if (message.getClientID() == getNumOfPlayers() - 1) {
@@ -185,6 +188,8 @@ public class GUI extends ClientView {
     public void market_change(Message message){
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
         super.market_change(message);
+        if(SceneController.isCurrentScene("#radiobutBuyCard"))
+            Platform.runLater(() -> YourTurnSceneController.marketChangeMessage(m.getPar1() == 0, m.getPar2()));
     }
 
     @Override

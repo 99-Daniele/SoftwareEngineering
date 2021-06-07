@@ -5,7 +5,7 @@ takemarble/market/-tm row(r)/column(c) 1/2/3/4                              take
 
 card power/-cp 1/2/3 warehouse(w)/strongbox(s)                              activate slot production power
 
-basic power/-bp  resource  resource  resource warehouse(w)/strongbox(s)     activate basic production power                                                                                                                                              -->
+basic power/-bp  resource  resource  resource warehouse(w)/strongbox(s)     activate basic production power
 
 leader power/-lp 1/2  resource  warehouse(w)/strongbox(s)                   activate leader card production power
 

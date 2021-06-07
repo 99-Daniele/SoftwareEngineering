@@ -24,9 +24,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 
@@ -288,40 +287,40 @@ public class YourTurnSceneController {
             setExtraDepot1();
             setExtraDepot2();
             setStrongbox();
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException | URISyntaxException e) {
             e.printStackTrace();
         }
     }
 
-    private void setImage(ImageView image, String file) throws FileNotFoundException {
+    private void setImage(ImageView image, String file) throws FileNotFoundException{
         if(file.equals(""))
             image.setImage(null);
         else {
-            FileInputStream fis = new FileInputStream(file);
+            InputStream fis = SceneController.class.getResourceAsStream(file);
             image.setImage(new Image(fis));
         }
     }
 
-    private void setCard(ImageView image, int cardID) throws FileNotFoundException {
+    private void setCard(ImageView image, int cardID) throws FileNotFoundException{
         if (cardID != -1)
             setImage(image, CardMapGUI.getCard(cardID));
         else
             setImage(image, "");
     }
 
-    private void setFirstDepot() throws FileNotFoundException {
+    private void setFirstDepot() throws FileNotFoundException, URISyntaxException {
         if (ClientView.getWarehouse(GUI.getPosition()).get(0).getAmount() == 1)
             setImage(deposit11, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(0).getResource()));
     }
 
-    private void setSecondDepot() throws FileNotFoundException {
+    private void setSecondDepot() throws FileNotFoundException{
         if (ClientView.getWarehouse(GUI.getPosition()).get(1).getAmount() >= 1)
             setImage(deposit21, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(1).getResource()));
         if (ClientView.getWarehouse(GUI.getPosition()).get(1).getAmount() == 2)
             setImage(deposit22, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(1).getResource()));
     }
 
-    private void setThirdDepot() throws FileNotFoundException {
+    private void setThirdDepot() throws FileNotFoundException{
         if (ClientView.getWarehouse(GUI.getPosition()).get(2).getAmount() >= 1)
             setImage(deposit31, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(2).getResource()));
         if (ClientView.getWarehouse(GUI.getPosition()).get(2).getAmount() >= 2)
@@ -330,7 +329,7 @@ public class YourTurnSceneController {
             setImage(deposit33, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(2).getResource()));
     }
 
-    private void setExtraDepot1() throws FileNotFoundException {
+    private void setExtraDepot1() throws FileNotFoundException{
         if (ClientView.getWarehouse(GUI.getPosition()).size() >= 4) {
             if (ClientView.getWarehouse(GUI.getPosition()).get(3).getAmount() >= 1)
                 setImage(extra11, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(3).getResource()));
@@ -339,7 +338,7 @@ public class YourTurnSceneController {
         }
     }
 
-    private void setExtraDepot2() throws FileNotFoundException {
+    private void setExtraDepot2() throws FileNotFoundException{
         if (ClientView.getWarehouse(GUI.getPosition()).size() == 5) {
             if (ClientView.getWarehouse(GUI.getPosition()).get(4).getAmount() >= 1)
                 setImage(extra21, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(4).getResource()));
@@ -690,7 +689,7 @@ public class YourTurnSceneController {
         }
         SceneController.setDisable("#radiobutActLeader", false);
         SceneController.setDisable("#radiobutDiscardLeader", false);
-        SceneController.setDisable("#radiobutOtherPlayerboard", false);
+        SceneController.setDisable("#radiobutOtherPlayboard", false);
         SceneController.setDisable("#radiobutEndTurn", false);
     }
 
@@ -731,6 +730,59 @@ public class YourTurnSceneController {
                     else
                         SceneController.setImage("#card43", cardFile);
             }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void marketChangeMessage(boolean row, int index){
+        try {
+            if (row) {
+                switch (index) {
+                    case 1:
+                        SceneController.setImage("#marble11", MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(0, 0)));
+                        SceneController.setImage("#marble12", MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(0, 1)));
+                        SceneController.setImage("#marble13", MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(0, 2)));
+                        SceneController.setImage("#marble14", MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(0, 3)));
+                        break;
+                    case 2:
+                        SceneController.setImage("#marble21", MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(1, 0)));
+                        SceneController.setImage("#marble22", MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(1, 1)));
+                        SceneController.setImage("#marble23", MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(1, 2)));
+                        SceneController.setImage("#marble24", MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(1, 3)));
+                        break;
+                    case 3:
+                        SceneController.setImage("#marble31", MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(2, 0)));
+                        SceneController.setImage("#marble32", MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(2, 1)));
+                        SceneController.setImage("#marble33", MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(2, 2)));
+                        SceneController.setImage("#marble34", MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(2, 3)));
+                        break;
+                }
+            } else {
+                switch (index) {
+                    case 1:
+                        SceneController.setImage("#marble11", MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(0, 0)));
+                        SceneController.setImage("#marble21", MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(1, 0)));
+                        SceneController.setImage("#marble31", MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(2, 0)));
+                        break;
+                    case 2:
+                        SceneController.setImage("#marble12", MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(0, 1)));
+                        SceneController.setImage("#marble22", MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(1, 1)));
+                        SceneController.setImage("#marble32", MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(2, 1)));
+                        break;
+                    case 3:
+                        SceneController.setImage("#marble13", MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(0, 2)));
+                        SceneController.setImage("#marble23", MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(1, 2)));
+                        SceneController.setImage("#marble33", MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(2, 2)));
+                        break;
+                    case 4:
+                        SceneController.setImage("#marble14", MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(0, 3)));
+                        SceneController.setImage("#marble24", MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(1, 3)));
+                        SceneController.setImage("#marble34", MarbleMapGUI.getMarble(ClientView.getMarket().getMarble(2, 3)));
+                        break;
+                }
+            }
+            SceneController.setImage("#marbleExt", MarbleMapGUI.getMarble(ClientView.getMarket().getExternalMarble()));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

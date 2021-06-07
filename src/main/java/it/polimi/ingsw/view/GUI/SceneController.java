@@ -10,9 +10,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 
 public class SceneController {
@@ -25,8 +23,8 @@ public class SceneController {
 
     public static boolean isCurrentScene(String selector){
         try {
-            Label label = (Label) scene.lookup(selector);
-            label.isDisable();
+            Node node = scene.lookup(selector);
+            node.isDisable();
             return true;
         } catch (NullPointerException e){
             return false;
@@ -88,11 +86,11 @@ public class SceneController {
 
     public static void setImage(String selector, String file) throws FileNotFoundException {
         ImageView imageView = (ImageView) scene.lookup(selector);
-        System.out.println(file);
         if(file.equals(""))
             imageView.setImage(null);
         else {
-            FileInputStream fis = new FileInputStream(file);
+            //FileInputStream fis = new FileInputStream(new File(SceneController.class.getResourceAsStream(file)));
+            InputStream fis = SceneController.class.getResourceAsStream(file);
             imageView.setImage(new Image(fis));
         }
     }
