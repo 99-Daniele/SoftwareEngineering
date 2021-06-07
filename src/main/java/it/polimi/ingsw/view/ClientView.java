@@ -123,6 +123,8 @@ public abstract class ClientView extends Application implements Observer {
         return game.servantAmount(position);
     }
 
+    public static int getFaithPoints(int position){return game.getFaithPoints(position);}
+
     public static int getNumOfPlayers(){
         return game.getNumOfPlayers();
     }

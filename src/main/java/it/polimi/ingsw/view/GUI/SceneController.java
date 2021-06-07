@@ -94,4 +94,14 @@ public class SceneController {
             imageView.setImage(new Image(fis));
         }
     }
+
+    public static void setLayoutX(String selector, int x){
+        Label label = (Label) scene.lookup(selector);
+        label.setLayoutX(x);
+    }
+
+    public static void setLayoutY(String selector, int y){
+        Label label = (Label) scene.lookup(selector);
+        label.setLayoutY(y);
+    }
 }

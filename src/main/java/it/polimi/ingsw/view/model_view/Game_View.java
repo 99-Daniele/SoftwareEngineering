@@ -8,7 +8,6 @@ import java.util.ArrayList;
 public class Game_View {
 
     private ArrayList<PlayerBoard_View> players = new ArrayList<>();
-    private PlayerBoard_View Ludovico;
     private FaithTrack_View faithTrack;
     private Market_View market;
     private Decks_View decks;
@@ -19,8 +18,6 @@ public class Game_View {
         this.players = new ArrayList<>();
         for (String player: players)
             addPlayer(player);
-        if(players.size() == 1)
-            Ludovico = new PlayerBoard_View("LorenzoIlMagnifico");
         initFaithTrack();
         startGame = false;
     }
@@ -188,4 +185,6 @@ public class Game_View {
     public int servantAmount(int viewID){
         return players.get(viewID).servantAmount();
     }
+
+    public int getFaithPoints(int viewID){return faithTrack.getFaithPoints(viewID);}
 }

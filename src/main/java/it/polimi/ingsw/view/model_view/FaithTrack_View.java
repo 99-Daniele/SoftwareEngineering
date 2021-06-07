@@ -100,6 +100,8 @@ public class FaithTrack_View {
         for (int y=1;y<51;y+=2) {
             faithTrack[2][y] = " ";
         }
+        if(newFaithPoints > 24)
+            newFaithPoints = 24;
         faithTrack[2][newFaithPoints*2 + 1] = playerColor(player) + "●" + ColorAnsi.RESET;
     }
 
@@ -138,5 +140,14 @@ public class FaithTrack_View {
             else
                 System.out.println();
         }
+    }
+
+    public int getFaithPoints(int player){
+        String[][] faithTrack = faithTracks.get(player);
+        for (int y = 0; y < 25; y++){
+            if(!(faithTrack[2][y*2 + 1].equals(" ")))
+                return y;
+        }
+        return 0;
     }
 }

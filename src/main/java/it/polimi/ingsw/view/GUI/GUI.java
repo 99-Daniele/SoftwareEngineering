@@ -94,7 +94,6 @@ public class GUI extends ClientView {
     public void players_message(Message message) {
         super.players_message(message);
         GUI.position = message.getClientID();
-        System.out.println(position);
     }
 
     @Override
@@ -196,14 +195,23 @@ public class GUI extends ClientView {
     public void faith_points_message(Message message){
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
         super.faith_points_message(message);
+        if(m.getClientID() != position);
+        else {
+            if (SceneController.isCurrentScene("#radiobutBuyCard"))
+                Platform.runLater(() -> YourTurnSceneController.increaseFaithPointsMessage(m.getPar()));
+        }
     }
 
     @Override
     public void increase_warehouse_message(Message message){
         Message_One_Int_One_Resource m = (Message_One_Int_One_Resource) message;
-        if(m.getPar1() != -1) {
-            super.increase_warehouse_message(message);
+        super.increase_warehouse_message(message);
+        if(m.getClientID() != position);
+        else if(m.getPar1() != -1){
+            if(SceneController.isCurrentScene("#radiobutBuyCard"))
+                Platform.runLater(() -> YourTurnSceneController.increaseWarehouseMessage(m.getPar1()));
         }
+        else;
     }
 
     @Override

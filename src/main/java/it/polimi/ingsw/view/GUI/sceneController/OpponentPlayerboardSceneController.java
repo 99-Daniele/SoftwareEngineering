@@ -16,10 +16,11 @@ import javafx.scene.input.MouseEvent;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 public class OpponentPlayerboardSceneController {
 
-    private int position = GUI.getOtherPlayer();
+    private int position;
 
     @FXML
     private Button goBack;
@@ -80,7 +81,7 @@ public class OpponentPlayerboardSceneController {
     @FXML
     private ImageView pope3;
     @FXML
-    private ImageView crocerossa;
+    private Label croceRossa;
 
     public OpponentPlayerboardSceneController(int position){
         this.position = position;
@@ -119,19 +120,26 @@ public class OpponentPlayerboardSceneController {
             setExtraDepot1();
             setExtraDepot2();
             setStrongbox();
+            setFaithPoints();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    private void setImage(ImageView image, String file) throws FileNotFoundException {
-        FileInputStream fis = new FileInputStream(file);
-        image.setImage(new Image(fis));
+    private void setImage(ImageView image, String file){
+        if(file.equals(""))
+            image.setImage(null);
+        else {
+            InputStream fis = SceneController.class.getResourceAsStream(file);
+            image.setImage(new Image(fis));
+        }
     }
 
     private void setCard(ImageView image, int cardID) throws FileNotFoundException {
-        if(cardID != -1)
+        if (cardID != -1)
             setImage(image, CardMapGUI.getCard(cardID));
+        else
+            setImage(image, "");
     }
 
     private void setFirstDepot() throws FileNotFoundException {
@@ -158,7 +166,7 @@ public class OpponentPlayerboardSceneController {
     private void setExtraDepot1() throws FileNotFoundException {
         if(ClientView.getWarehouse(position).size() >= 4){
             if(ClientView.getWarehouse(position).get(3).getAmount() >= 1)
-                setImage(extraResource11, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(3).getResource()));
+                setImage(extraResource11, ResourceMapGUI.getResource(ClientView.getWarehouse(position).get(3).getResource()));
             if(ClientView.getWarehouse(position).get(3).getAmount() == 2)
                 setImage(extraResource12, ResourceMapGUI.getResource(ClientView.getWarehouse(position).get(3).getResource()));
         }
@@ -178,5 +186,39 @@ public class OpponentPlayerboardSceneController {
         servantAmount.setText(String.valueOf(ClientView.servantAmount(position)));
         shieldAmount.setText(String.valueOf(ClientView.shieldAmount(position)));
         stoneAmount.setText(String.valueOf(ClientView.stoneAmount(position)));
+    }
+
+    private void setFaithPoints() {
+        int faithPoints = ClientView.getFaithPoints(position);
+        System.out.println(faithPoints);
+        if(faithPoints < 3){
+            croceRossa.setLayoutX(30*faithPoints + 225);
+        }
+        else if (faithPoints < 5) {
+            croceRossa.setLayoutX(285);
+            croceRossa.setLayoutY(233 - faithPoints*28);
+        }
+        else if(faithPoints < 10){
+            croceRossa.setLayoutX(30*faithPoints + 148);
+            croceRossa.setLayoutY(121);
+        }
+        else if (faithPoints < 12) {
+            croceRossa.setLayoutX(436);
+            croceRossa.setLayoutY(faithPoints*28 - 135);
+        }
+        else if(faithPoints < 17){
+            croceRossa.setLayoutX(30*faithPoints + 88);
+            croceRossa.setLayoutY(172);
+        }
+        else if(faithPoints < 19){
+            croceRossa.setLayoutX(586);
+            croceRossa.setLayoutY(620 - 28*faithPoints);
+        }
+        else {
+            if(faithPoints > 24)
+                faithPoints = 24;
+            croceRossa.setLayoutX(30*faithPoints + 245);
+            croceRossa.setLayoutY(121);
+        }
     }
 }

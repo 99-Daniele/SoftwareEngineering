@@ -27,11 +27,10 @@ import javafx.scene.layout.Pane;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 
 public class YourTurnSceneController {
-
-    private int faithPoints = 0;
 
     @FXML
     private Button chooseSlot1;
@@ -233,7 +232,6 @@ public class YourTurnSceneController {
         radiobutActLeader.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> actLeaderButton());
         radiobutDiscardLeader.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> discardLeaderButton());
         radiobutOtherPlayboard.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> otherPlayerboardButton());
-        move.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> moveCroce());
         row1.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> take_market_marble_row(1));
         row2.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> take_market_marble_row(2));
         row3.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> take_market_marble_row(3));
@@ -287,12 +285,13 @@ public class YourTurnSceneController {
             setExtraDepot1();
             setExtraDepot2();
             setStrongbox();
+            setFaithPoints();
         } catch (FileNotFoundException | URISyntaxException e) {
             e.printStackTrace();
         }
     }
 
-    private void setImage(ImageView image, String file) throws FileNotFoundException{
+    private void setImage(ImageView image, String file){
         if(file.equals(""))
             image.setImage(null);
         else {
@@ -354,8 +353,41 @@ public class YourTurnSceneController {
         stoneAmount.setText(String.valueOf(ClientView.stoneAmount(GUI.getPosition())));
     }
 
-    private void chooseSwitch(Message messagee) {
-        Message_ArrayList_Marble m = (Message_ArrayList_Marble) messagee;
+    private void setFaithPoints() {
+        int faithPoints = ClientView.getFaithPoints(GUI.getPosition());
+        if(faithPoints < 3){
+            croceRossa.setLayoutX(30*faithPoints + 7);
+        }
+        else if (faithPoints >= 3 && faithPoints < 5) {
+            croceRossa.setLayoutX(67);
+            croceRossa.setLayoutY(168 - faithPoints*28);
+        }
+        else if(faithPoints >= 5 && faithPoints < 10){
+            croceRossa.setLayoutX(30*faithPoints - 52);
+            croceRossa.setLayoutY(56);
+        }
+        else if (faithPoints >= 10 && faithPoints < 12) {
+            croceRossa.setLayoutX(218);
+            croceRossa.setLayoutY(faithPoints*28 - 200);
+        }
+        else if(faithPoints >= 12 && faithPoints < 17){
+            croceRossa.setLayoutX(30*faithPoints - 112);
+            croceRossa.setLayoutY(107);
+        }
+        else if(faithPoints >= 17 && faithPoints < 19){
+            croceRossa.setLayoutX(368);
+            croceRossa.setLayoutY(555 - 28*faithPoints);
+        }
+        else {
+            if(faithPoints > 24)
+                faithPoints = 24;
+            croceRossa.setLayoutX(30*faithPoints - 172);
+            croceRossa.setLayoutY(56);
+        }
+    }
+
+    private void chooseSwitch(Message switchmessage) {
+        Message_ArrayList_Marble m = (Message_ArrayList_Marble) switchmessage;
         //ClientView.take_marble_message(message);
         System.out.println("You have chosen this marbles: ");
         message.setVisible(true);
@@ -577,15 +609,6 @@ public class YourTurnSceneController {
         radiobutEndTurn.setDisable(true);
     }
 
-    private void moveCroce() {
-        faithPoints++;
-        if (faithPoints > 2 && faithPoints < 5 || faithPoints > 16 && faithPoints < 19)
-            croceRossa.setLayoutY(croceRossa.getLayoutY() - 28);
-        else if (faithPoints > 9 && faithPoints < 12)
-            croceRossa.setLayoutY(croceRossa.getLayoutY() + 28);
-        else croceRossa.setLayoutX(croceRossa.getLayoutX() + 30);
-    }
-
     private void buyCardButton() {
         disableAllButton();
         setDisableAllDecks(false);
@@ -783,6 +806,83 @@ public class YourTurnSceneController {
                 }
             }
             SceneController.setImage("#marbleExt", MarbleMapGUI.getMarble(ClientView.getMarket().getExternalMarble()));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void increaseFaithPointsMessage(int faithPoints){
+        int x;
+        int y;
+        if(faithPoints < 3){
+            x = 30*faithPoints + 7;
+            y = 107;
+        }
+        else if (faithPoints >= 3 && faithPoints < 5) {
+            x = 67;
+            y = 168 - faithPoints*28;
+        }
+        else if(faithPoints >= 5 && faithPoints < 10){
+            x = 30*faithPoints - 52;
+            y = 56;
+        }
+        else if (faithPoints >= 10 && faithPoints < 12) {
+            x = 218;
+            y = faithPoints*28 - 200;
+        }
+        else if(faithPoints >= 12 && faithPoints < 17){
+            x = 30*faithPoints - 112;
+            y = 107;
+        }
+        else if(faithPoints >= 17 && faithPoints < 19){
+            x = 368;
+            y = 555 - 28*faithPoints;
+        }
+        else {
+            if(faithPoints > 24)
+                faithPoints = 24;
+            x = 30*faithPoints - 172;
+            y = 56;
+        }
+        SceneController.setLayoutX("#croceRossa", x);
+        SceneController.setLayoutY("#croceRossa", y);
+    }
+
+    public static void increaseWarehouseMessage(int depot){
+        Resource r = ClientView.getWarehouse(GUI.getPosition()).get(depot - 1).getResource();
+        int amount = ClientView.getWarehouse(GUI.getPosition()).get(depot - 1).getAmount();
+        try {
+            switch (depot){
+                case 1:
+                    SceneController.setImage("#deposit11", ResourceMapGUI.getResource(r));
+                    break;
+                case 2:
+                    if(amount == 1)
+                        SceneController.setImage("#deposit21", ResourceMapGUI.getResource(r));
+                    else
+                        SceneController.setImage("#deposit22", ResourceMapGUI.getResource(r));
+                    break;
+                case 3:
+                    if(amount == 1)
+                        SceneController.setImage("#deposit31", ResourceMapGUI.getResource(r));
+                    else if(amount == 2)
+                        SceneController.setImage("#deposit32", ResourceMapGUI.getResource(r));
+                    else
+                        SceneController.setImage("#deposit33", ResourceMapGUI.getResource(r));
+                    break;
+                case 4:
+                    if(amount == 1)
+                        SceneController.setImage("#extra11", ResourceMapGUI.getResource(r));
+                    else
+                        SceneController.setImage("#extra12", ResourceMapGUI.getResource(r));
+                    break;
+                case 5:
+                    if(amount == 1)
+                        SceneController.setImage("#extra21", ResourceMapGUI.getResource(r));
+                    else
+                        SceneController.setImage("#extra22", ResourceMapGUI.getResource(r));
+                    break;
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
