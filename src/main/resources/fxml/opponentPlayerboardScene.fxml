@@ -87,7 +87,7 @@
       </ImageView>
       <ImageView fx:id="pope3" fitHeight="42.0" fitWidth="48.0" layoutX="730.0" layoutY="151.0">
       </ImageView>
-      <Label fx:id="croceRossa" layoutX="225.0" layoutY="172.0" prefHeight="25.0" prefWidth="29.0" text="✞">
+      <Label fx:id="croceRossa" layoutX="225.0" layoutY="172.0" prefHeight="25.0" prefWidth="29.0" text="✞" textFill="RED">
          <font>
             <Font size="24.0" />
          </font>

@@ -228,6 +228,18 @@ public class YourTurnSceneController {
     private ImageView pope2;
     @FXML
     private ImageView pope3;
+    @FXML
+    private Pane otherPlayers;
+    @FXML
+    private RadioButton player13;
+    @FXML
+    private RadioButton player23;
+    @FXML
+    private RadioButton player33;
+    @FXML
+    private RadioButton player12;
+    @FXML
+    private RadioButton player22;
 
     private int marbleCount;
 
@@ -299,6 +311,8 @@ public class YourTurnSceneController {
             setStrongbox();
             setFaithPoints();
             setVictoryPoints();
+            if(GUI.getNumOfPlayers() == 1)
+                radiobutOtherPlayboard.setVisible(false);
         } catch (FileNotFoundException | URISyntaxException e) {
             e.printStackTrace();
         }
@@ -399,6 +413,7 @@ public class YourTurnSceneController {
         }
         if(GUI.getNumOfPlayers() == 1){
             faithPoints = ClientView.getFaithPoints(1);
+            croceNera.setVisible(true);
             if(faithPoints < 3){
                 croceNera.setLayoutX(30*faithPoints + 7);
             }
@@ -541,9 +556,121 @@ public class YourTurnSceneController {
 
 
     private void otherPlayerboardButton() {
-        OpponentPlayerboardSceneController opsc = new OpponentPlayerboardSceneController(0);
+        if(GUI.getNumOfPlayers() == 2){
+            twoPlayersOtherPlayerboard();
+        }
+        else if(GUI.getNumOfPlayers() == 3){
+            threePlayersOtherPlayerboard();
+        }
+        else
+            fourPlayersOtherPlayerboard();
+    }
+
+    private void twoPlayersOtherPlayerboard(){
+        final OpponentPlayerboardSceneController[] opsc = new OpponentPlayerboardSceneController[1];
+        if(GUI.getPosition() == 0)
+            opsc[0] = new OpponentPlayerboardSceneController(1);
+        else
+            opsc[0] = new OpponentPlayerboardSceneController(0);
         Platform.runLater(() ->
-                SceneController.changeRootPane(opsc, "/fxml/opponentPlayerboardScene"));
+                SceneController.changeRootPane(opsc[0], "/fxml/opponentPlayerboardScene"));
+    }
+
+    private void threePlayersOtherPlayerboard(){
+        final OpponentPlayerboardSceneController[] opsc = new OpponentPlayerboardSceneController[1];
+        disableAllButton();
+        otherPlayers.setVisible(true);
+        player12.setVisible(true);
+        player22.setVisible(true);
+        final int player1;
+        final int player2;
+        switch (GUI.getPosition()){
+            case 0:
+                player1 = 1;
+                player2 = 2;
+                break;
+            case 1:
+                player1 = 0;
+                player2 = 2;
+                break;
+            case 2:
+                player1 = 0;
+                player2 = 1;
+                break;
+            default:
+                player1 = 0;
+                player2 = 0;
+                break;
+        }
+        player12.setText(GUI.getNickname(player1));
+        player22.setText(GUI.getNickname(player2));
+        player12.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            opsc[0] = new OpponentPlayerboardSceneController(player1);
+            Platform.runLater(() ->
+                    SceneController.changeRootPane(opsc[0], "/fxml/opponentPlayerboardScene"));
+        });
+        player22.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            opsc[0] = new OpponentPlayerboardSceneController(player2);
+            Platform.runLater(() ->
+                    SceneController.changeRootPane(opsc[0], "/fxml/opponentPlayerboardScene"));
+        });
+    }
+
+    private void fourPlayersOtherPlayerboard(){
+        final OpponentPlayerboardSceneController[] opsc = new OpponentPlayerboardSceneController[1];
+        disableAllButton();
+        otherPlayers.setVisible(true);
+        player13.setVisible(true);
+        player23.setVisible(true);
+        player33.setVisible(true);
+        final int player1;
+        final int player2;
+        final int player3;
+        switch (GUI.getPosition()){
+            case 0:
+                player1 = 1;
+                player2 = 2;
+                player3 = 3;
+                break;
+            case 1:
+                player1 = 0;
+                player2 = 2;
+                player3 = 3;
+                break;
+            case 2:
+                player1 = 0;
+                player2 = 1;
+                player3 = 3;
+                break;
+            case 3:
+                player1 = 0;
+                player2 = 1;
+                player3 = 2;
+                break;
+            default:
+                player1 = 0;
+                player2 = 0;
+                player3 = 0;
+                break;
+        }
+        player13.setText(GUI.getNickname(player1));
+        player23.setText(GUI.getNickname(player2));
+        player33.setText(GUI.getNickname(player3));
+        player13.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            opsc[0] = new OpponentPlayerboardSceneController(player1);
+            Platform.runLater(() ->
+                    SceneController.changeRootPane(opsc[0], "/fxml/opponentPlayerboardScene"));
+        });
+        player23.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            opsc[0] = new OpponentPlayerboardSceneController(player2);
+            Platform.runLater(() ->
+                    SceneController.changeRootPane(opsc[0], "/fxml/opponentPlayerboardScene"));
+        });
+        player33.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            opsc[0] = new OpponentPlayerboardSceneController(player3);
+            Platform.runLater(() ->
+                    SceneController.changeRootPane(opsc[0], "/fxml/opponentPlayerboardScene"));
+        });
     }
 
     private void discardLeaderButton() {

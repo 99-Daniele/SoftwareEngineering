@@ -69,7 +69,8 @@
             <RadioButton fx:id="radiobutBuyCard" layoutX="279.0" layoutY="478.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="115.0" text="BUY CARD">
                <toggleGroup>
                   <ToggleGroup fx:id="mainAction" />
-               </toggleGroup></RadioButton>
+               </toggleGroup>
+            </RadioButton>
             <RadioButton fx:id="radiobutTakeMarble" layoutX="450.0" layoutY="521.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="108.0" text="TAKE MARBLE" toggleGroup="$mainAction" />
             <RadioButton fx:id="radiobutActivProduc" layoutX="279.0" layoutY="521.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="171.0" text="ACTIVATE PRODUCTION" toggleGroup="$mainAction" />
             <RadioButton fx:id="radiobutActLeader" layoutX="279.0" layoutY="558.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="183.0" text="ACTIVATE LEADER CARD" toggleGroup="$mainAction" />
@@ -224,7 +225,7 @@
                   <Font size="24.0" />
                </font>
             </Label>
-            <ImageView fx:id="croceNera" layoutX="8.0" layoutY="112.0" fitHeight="23.0" fitWidth="23.0" >
+            <ImageView fx:id="croceNera" fitHeight="23.0" fitWidth="23.0" layoutX="8.0" layoutY="112.0" visible="false">
                <image>
                   <Image url="@../photos/croce.png" />
                </image>
@@ -262,7 +263,7 @@
             <RadioButton fx:id="radiobutEndProd" layoutX="450.0" layoutY="478.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="END PRODUCTION" toggleGroup="$mainAction" />
             <Pane layoutX="1053.0" layoutY="314.0" prefHeight="313.0" prefWidth="200.0">
                <children>
-                  <Label fx:id="chat" alignment="BOTTOM_LEFT" layoutX="-1.0" prefHeight="313.0" prefWidth="203.0" textOverrun="LEADING_ELLIPSIS" wrapText="true">
+                  <Label fx:id="chat" alignment="BOTTOM_LEFT" layoutX="-1.0" prefHeight="313.0" prefWidth="203.0" style="-fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;"  textOverrun="LEADING_ELLIPSIS" wrapText="true">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -296,6 +297,23 @@
                         <Image url="@../photos/shield.png" />
                      </image>
                   </ImageView>
+               </children>
+            </Pane>
+            <Pane fx:id="otherPlayers" layoutX="272.0" layoutY="186.0" prefHeight="256.0" prefWidth="446.0" style="-fx-background-color: white;" visible="false">
+               <children>
+                  <Label layoutX="31.0" layoutY="47.0" prefHeight="53.0" prefWidth="384.0" text="Which player you want to see the playerboard?">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <RadioButton fx:id="player13" visible="false" layoutX="57.0" layoutY="153.0" mnemonicParsing="false">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="playersChoice" />
+                     </toggleGroup></RadioButton>
+                  <RadioButton fx:id="player12" visible="false" layoutX="121.0" layoutY="153.0" mnemonicParsing="false" toggleGroup="$playersChoice"/>
+                  <RadioButton fx:id="player23" visible="false" layoutX="211.0" layoutY="153.0" mnemonicParsing="false" toggleGroup="$playersChoice"/>
+                  <RadioButton fx:id="player33" layoutX="371.0" layoutY="153.0" mnemonicParsing="false" visible="false" toggleGroup="$playersChoice"/>
+                  <RadioButton fx:id="player22" layoutX="313.0" layoutY="153.0" mnemonicParsing="false" visible="false" toggleGroup="$playersChoice"/>
                </children>
             </Pane>
          </children>

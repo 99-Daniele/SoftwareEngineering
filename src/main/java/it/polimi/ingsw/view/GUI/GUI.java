@@ -64,10 +64,9 @@ public class GUI extends ClientView {
 
     @Override
     public void login_message(Message message) {
-        position = message.getClientID();
         Platform.runLater(() -> {
             try {
-                if (position == 0) {
+                if (message.getClientID() == 0) {
                     NicknameSceneController.askNumPlayer();
                 } else {
                     NicknameSceneController.waitPlayers();
@@ -84,6 +83,7 @@ public class GUI extends ClientView {
     public void players_message(Message message) {
         super.players_message(message);
         GUI.position = message.getClientID();
+        System.out.println(GUI.position);
     }
 
     @Override

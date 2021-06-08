@@ -1,9 +1,7 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.App;
 import it.polimi.ingsw.model.games.states.GAME_STATES;
 import it.polimi.ingsw.model.market.Marble;
-import it.polimi.ingsw.model.market.Market;
 import it.polimi.ingsw.network.client.ClientSocket;
 import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.view.model_view.Game_View;
