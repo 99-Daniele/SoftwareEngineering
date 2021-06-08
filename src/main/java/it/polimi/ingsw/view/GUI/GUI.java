@@ -2,8 +2,10 @@ package it.polimi.ingsw.view.GUI;
 
 import it.polimi.ingsw.App;
 import it.polimi.ingsw.model.games.states.GAME_STATES;
+import it.polimi.ingsw.model.resourceContainers.Resource;
 import it.polimi.ingsw.network.client.ClientSocket;
 import it.polimi.ingsw.network.messages.*;
+import it.polimi.ingsw.view.CLI.CLI_Printer;
 import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.GUI.sceneController.InitSceneController;
 import it.polimi.ingsw.view.GUI.sceneController.NicknameSceneController;
@@ -13,6 +15,7 @@ import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 public class GUI extends ClientView {
@@ -20,6 +23,7 @@ public class GUI extends ClientView {
     private static boolean connected = false;
     private static int position = -1;
     private static boolean turn;
+    private static ArrayList<String> serverMessages = new ArrayList<>();
 
     @Override
     public void launchGUI() {
@@ -35,6 +39,10 @@ public class GUI extends ClientView {
 
     public static int getPosition(){
         return position;
+    }
+
+    public static ArrayList<String> getServerMessages() {
+        return serverMessages;
     }
 
     private void connectToSever(String hostname, int port){
@@ -132,7 +140,10 @@ public class GUI extends ClientView {
     @Override
     public void end_turn_message(Message message) {
         if (message.getClientID() != position) {
-            //segnalo che un altro giocatore ha finito il suo turno
+            String newMessage = "Player " + getNickname(message.getClientID()) + " has finished his turn.";
+            if(SceneController.isCurrentScene("#radiobutBuyCard"))
+                SceneController.addMessage(newMessage);
+            serverMessages.add(newMessage);
         }
         if (position == 0) {
             if (message.getClientID() == getNumOfPlayers() - 1) {
@@ -154,107 +165,150 @@ public class GUI extends ClientView {
     @Override
     public void buy_card_message(Message message){
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        String newMessage = "Player " + getNickname(m.getClientID()) + " bought a new card and inserted it in " +
+                "the " + m.getPar2() + "° slot.";
         super.buy_card_message(message);
-        if(m.getClientID() != GUI.getPosition());
-        //    System.out.println("Player " + super.getNickname(m.getClientID()) + " bought a new card and inserted it in " +
-        //"the " + m.getPar2() + "° slot.");//mettere nel quadrato gui laterale
+        if(m.getClientID() != GUI.getPosition()) {
+            if (SceneController.isCurrentScene("#radiobutBuyCard"))
+                Platform.runLater(() -> SceneController.addMessage(newMessage));
+        }
         else if(SceneController.isCurrentScene("#radiobutBuyCard"))
-            Platform.runLater(() -> YourTurnSceneController.buy_card_message(m.getPar2(), m.getPar1()));
+            Platform.runLater(() -> YourTurnSceneController.buy_card_message(m.getPar2(), m.getPar1(), newMessage));
+        serverMessages.add(newMessage);
     }
 
     @Override
     public void card_remove_message(Message message){
         Message_Four_Parameter_Int m = (Message_Four_Parameter_Int) message;
+        String newMessage;
         super.card_remove_message(message);
-        if(getNumOfPlayers() == 1 && m.getClientID() == 1);
-        //System.out.println("Ludovico has removed one deck card from row " + (m.getPar1() +1 + " and" + " column " + (m.getPar2() +1)));
-        else if(m.getClientID() != GUI.getPosition());
-        //print message of removed card
-        else if(SceneController.isCurrentScene("#radiobutBuyCard"))
-            Platform.runLater(() -> YourTurnSceneController.cardRemoveMessage(m.getPar1(), m.getPar2(), m.getPar4()));
+        if(getNumOfPlayers() == 1 && m.getClientID() == 1)
+            newMessage = "Ludovico has removed one deck card from row " + (m.getPar1() +1 + " and" + " column " + (m.getPar2() +1));
+        else
+            newMessage = "Deck card from row " + (m.getPar1() + 1) + " and column " + (m.getPar2() + 1) + " has been removed";
+        if (SceneController.isCurrentScene("#radiobutBuyCard"))
+            Platform.runLater(() -> YourTurnSceneController.cardRemoveMessage(m.getPar1(), m.getPar2(), m.getPar4(), newMessage));
+        serverMessages.add(newMessage);
     }
 
     @Override
     public void market_change(Message message){
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        String newMessage;
+        if (m.getPar1() == 0) {
+            newMessage = "Player " + getNickname(m.getClientID()) + " has chosen row " + m.getPar2() + " of the market";
+        } else {
+            newMessage = "Player " + getNickname(m.getClientID()) + " has chosen column " + m.getPar2() + " of the market";
+        }
         super.market_change(message);
-        if(m.getClientID() != GUI.getPosition());
-        //print change market message
-        else if(SceneController.isCurrentScene("#radiobutBuyCard"))
-            Platform.runLater(() -> YourTurnSceneController.marketChangeMessage(m.getPar1() == 0, m.getPar2()));
+        if(SceneController.isCurrentScene("#radiobutBuyCard"))
+            Platform.runLater(() -> YourTurnSceneController.marketChangeMessage(m.getPar1() == 0, m.getPar2(), newMessage));
+        serverMessages.add(newMessage);
     }
 
     @Override
-    public void faith_points_message(Message message){
+    public void faith_points_message(Message message) {
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
+        String newMessage;
+        if (getNumOfPlayers() == 1 && m.getClientID() == 1)
+            newMessage = "Ludovico has increased his faith points. Now it has " + m.getPar();
+        else
+            newMessage = "Player " + getNickname(m.getClientID()) + " has increased its faith points. Now it has " + m.getPar();
         super.faith_points_message(message);
-        if(m.getClientID() == position){
+        if(m.getClientID() != position){
             if (SceneController.isCurrentScene("#radiobutBuyCard"))
-                Platform.runLater(() -> YourTurnSceneController.increaseFaithPointsMessage(m.getPar(), false));
+                Platform.runLater(() -> SceneController.addMessage(newMessage));
         }
-        else if(GUI.getNumOfPlayers() == 1){
+        else if (GUI.getNumOfPlayers() > 1) {
             if (SceneController.isCurrentScene("#radiobutBuyCard"))
-                Platform.runLater(() -> YourTurnSceneController.increaseFaithPointsMessage(m.getPar(), true));
+                Platform.runLater(() -> YourTurnSceneController.increaseFaithPointsMessage(m.getPar(), false, newMessage));
         }
-        else;
-        //print faith points increase
+        else if (GUI.getNumOfPlayers() == 1) {
+            if (SceneController.isCurrentScene("#radiobutBuyCard"))
+                Platform.runLater(() -> YourTurnSceneController.increaseFaithPointsMessage(m.getPar(), true, newMessage));
+        }
+        serverMessages.add(newMessage);
     }
 
     @Override
     public void increase_warehouse_message(Message message){
         Message_One_Int_One_Resource m = (Message_One_Int_One_Resource) message;
+        String newMessage;
+        if(m.getPar1() != -1)
+            newMessage = "Player " + getNickname(m.getClientID()) + " has inserted 1 " + Resource.printResource(m.getResource())
+                + " in its " + m.getPar1() + "° depot";
+        else
+            newMessage = "Player " + getNickname(m.getClientID()) + " has discarded 1 " + Resource.printResource(m.getResource())
+                    + " marble";
         super.increase_warehouse_message(message);
-        if(m.getClientID() != position);
-        //print warehouse increase
-        else if(m.getPar1() != -1){
+        if(m.getPar1() == -1 || m.getClientID() != position){
             if(SceneController.isCurrentScene("#radiobutBuyCard"))
-                Platform.runLater(() -> YourTurnSceneController.increaseWarehouseMessage(m.getPar1()));
+                Platform.runLater(() -> SceneController.addMessage(newMessage));
         }
-        else;
+        else{
+            if(SceneController.isCurrentScene("#radiobutBuyCard"))
+                Platform.runLater(() -> YourTurnSceneController.increaseWarehouseMessage(m.getPar1(), newMessage));
+        }
+        serverMessages.add(newMessage);
     }
 
     @Override
     public void switch_depot_message(Message message){
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        String newMessage = "Player " + getNickname(m.getClientID()) + " has switched its " + m.getPar1()
+                + "° depot with its " + m.getPar2() + "° depot";
         super.switch_depot_message(message);
-        if(m.getClientID() != position);
-        //print switch depot message
+        if(m.getClientID() != position) {
+            if(SceneController.isCurrentScene("#radiobutBuyCard"))
+                Platform.runLater(() -> SceneController.addMessage(newMessage));
+        }
         else {
             if(SceneController.isCurrentScene("#radiobutBuyCard"))
-                Platform.runLater(() -> YourTurnSceneController.switchDepotMessage(m.getPar1(), m.getPar2()));
+                Platform.runLater(() -> YourTurnSceneController.switchDepotMessage(m.getPar1(), m.getPar2(), newMessage));
         }
+        serverMessages.add(newMessage);
     }
 
     @Override
     public void leader_card_activation_message(Message message){
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
+        String newMessage = "Player " + getNickname(m.getClientID()) + " has activated a leader card";
         super.leader_card_activation_message(message);
-        if(m.getClientID() != position);
-        //print message of activate leader
+        if(m.getClientID() != position) {
+            if(SceneController.isCurrentScene("#radiobutBuyCard"))
+                Platform.runLater(() -> SceneController.addMessage(newMessage));
+        }
         else {
             if(SceneController.isCurrentScene("#radiobutBuyCard"))
-                Platform.runLater(() -> YourTurnSceneController.leaderCardActivationMessage(m.getPar()));
+                Platform.runLater(() -> YourTurnSceneController.leaderCardActivationMessage(m.getPar(), newMessage));
         }
+        serverMessages.add(newMessage);
     }
 
     @Override
     public void extra_depot_message(Message message){
         Message_One_Int_One_Resource m = (Message_One_Int_One_Resource) message;
+        String newMessage = "Player " + getNickname(m.getClientID()) + " has a new extra depot of " + Resource.printResource(m.getResource());
         super.extra_depot_message(message);
-        if(m.getClientID() != position);
-        //print message of extra depot
+        if(SceneController.isCurrentScene("#radiobutBuyCard"))
+            Platform.runLater(() -> SceneController.addMessage(newMessage));
+        serverMessages.add(newMessage);
     }
 
     @Override
     public void leader_card_discard_message(Message message){
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
+        String newMessage = "Player " + getNickname(m.getClientID()) + " has discarded one leader card";
         super.leader_card_discard_message(message);
-        if(m.getClientID() != position);
-        //print message of discard leader and print leader card
+        if(m.getClientID() != position) {
+            if(SceneController.isCurrentScene("#radiobutBuyCard"))
+                Platform.runLater(() -> SceneController.addMessage(newMessage));
+        }
         else {
             if(SceneController.isCurrentScene("#radiobutBuyCard"))
-                Platform.runLater(() -> YourTurnSceneController.leaderCardDiscardMessage(m.getPar()));
+                Platform.runLater(() -> YourTurnSceneController.leaderCardDiscardMessage(m.getPar(), newMessage));
         }
+        serverMessages.add(newMessage);
     }
 
     @Override
@@ -267,23 +321,30 @@ public class GUI extends ClientView {
 
     @Override
     public void endProductionMessage(Message message) {
-        if(message.getClientID() != position);
-        //print message of end production
+        String newMessage = "Player " + getNickname(message.getClientID()) + " has activated production powers";
+        if(SceneController.isCurrentScene("#radiobutBuyCard"))
+            Platform.runLater(() -> SceneController.addMessage(newMessage));
+        serverMessages.add(newMessage);
     }
 
     @Override
     public void white_conversion_card_message(Message message){
+        ClientView.setCurrentState(GAME_STATES.WHITE_CONVERSION_CARD_STATE);
         YourTurnSceneController.whiteConversionMessage();
     }
 
     @Override
     public void vatican_report_message(Message message) {
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        String newMessage;
+        if(getNumOfPlayers() == 1 && m.getPar1() == 1)
+            newMessage = "Ludovico activated Vatican Report";
+        else
+            newMessage = "Player " + getNickname(m.getPar1()) + " activated Vatican Report";
         super.vatican_report_message(message);
-        if(m.getClientID() != position);
-        //message of vatican report
         if(SceneController.isCurrentScene("#radiobutBuyCard"))
-            Platform.runLater(() -> YourTurnSceneController.vaticanReportMessage(m.getPar1(), m.getPar2()));
+            Platform.runLater(() -> YourTurnSceneController.vaticanReportMessage(m.getPar1(), m.getPar2(), newMessage));
+        serverMessages.add(newMessage);
     }
 
     @Override

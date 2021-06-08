@@ -1056,7 +1056,7 @@ public class CLI extends ClientView{
     @Override
     public void endProductionMessage(Message message) {
         if(message.getClientID() != position)
-            System.out.println("Player " + getNickname(message.getClientID()) + " has activated production powers.");
+            System.out.println("Player " + getNickname(message.getClientID()) + " has activated production powers");
         else
             CLI_Printer.printWarehouseStrongbox(super.getGame(), position);
     }
@@ -1158,8 +1158,7 @@ public class CLI extends ClientView{
     public void leader_card_discard_message(Message message){
         Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
         if(m.getClientID() != position) {
-            System.out.println("Player " + getNickname(m.getClientID()) + " has discarded one leader card: ");
-            CLI_Printer.printCard(m.getPar());
+            System.out.println("Player " + getNickname(m.getClientID()) + " has discarded one leader card");
         }
         else
             super.leader_card_discard_message(message);

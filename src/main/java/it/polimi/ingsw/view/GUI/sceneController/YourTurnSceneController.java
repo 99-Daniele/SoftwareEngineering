@@ -19,10 +19,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
 import java.io.*;
 import java.net.URISyntaxException;
@@ -177,8 +180,6 @@ public class YourTurnSceneController {
     @FXML
     private Button ok;
     @FXML
-    private Label chat;
-    @FXML
     private RadioButton radiobutEndProd;
     @FXML
     private RadioButton switch1;
@@ -240,6 +241,10 @@ public class YourTurnSceneController {
     private RadioButton player12;
     @FXML
     private RadioButton player22;
+    @FXML
+    private ScrollPane messages;
+    @FXML
+    public VBox display;
 
     private int marbleCount;
 
@@ -313,6 +318,7 @@ public class YourTurnSceneController {
             setVictoryPoints();
             if(GUI.getNumOfPlayers() == 1)
                 radiobutOtherPlayboard.setVisible(false);
+            setMessages();
         } catch (FileNotFoundException | URISyntaxException e) {
             e.printStackTrace();
         }
@@ -467,6 +473,11 @@ public class YourTurnSceneController {
                 else
                     setImage(pope3, "/photos/pope_favor3_front.png");
         }
+    }
+
+    private void setMessages(){
+        for (String message: GUI.getServerMessages())
+            display.getChildren().add(new Label(message));
     }
 
     private void chooseSwitch(Message switchmessage) {
@@ -874,7 +885,7 @@ public class YourTurnSceneController {
     }
 
 
-    public static void buy_card_message(int slot, int cardID) {
+    public static void buy_card_message(int slot, int cardID, String newMessage) {
         try {
             switch (slot) {
                 case 1:
@@ -909,9 +920,10 @@ public class YourTurnSceneController {
         SceneController.setDisable("#radiobutDiscardLeader", false);
         SceneController.setDisable("#radiobutOtherPlayboard", false);
         SceneController.setDisable("#radiobutEndTurn", false);
+        SceneController.addMessage(newMessage);
     }
 
-    public static void cardRemoveMessage(int row, int column, int cardID){
+    public static void cardRemoveMessage(int row, int column, int cardID, String newMessage){
         String cardFile;
         if(cardID == -1)
             cardFile = "";
@@ -948,12 +960,13 @@ public class YourTurnSceneController {
                     else
                         SceneController.setImage("#card43", cardFile);
             }
+            SceneController.addMessage(newMessage);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    public static void marketChangeMessage(boolean row, int index){
+    public static void marketChangeMessage(boolean row, int index, String newMessage){
         try {
             if (row) {
                 switch (index) {
@@ -1000,13 +1013,14 @@ public class YourTurnSceneController {
                         break;
                 }
             }
+            SceneController.addMessage(newMessage);
             SceneController.setImage("#marbleExt", MarbleMapGUI.getMarble(ClientView.getMarket().getExternalMarble()));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    public static void increaseFaithPointsMessage(int faithPoints, boolean Ludovico){
+    public static void increaseFaithPointsMessage(int faithPoints, boolean Ludovico, String newMessage){
         int x;
         int y;
         if(faithPoints < 3){
@@ -1047,9 +1061,10 @@ public class YourTurnSceneController {
             SceneController.setLayoutX("#croceRossa", x);
             SceneController.setLayoutY("#croceRossa", y);
         }
+        SceneController.addMessage(newMessage);
     }
 
-    public static void increaseWarehouseMessage(int depot){
+    public static void increaseWarehouseMessage(int depot, String newMessage){
         Resource r = ClientView.getWarehouse(GUI.getPosition()).get(depot - 1).getResource();
         int amount = ClientView.getWarehouse(GUI.getPosition()).get(depot - 1).getAmount();
         try {
@@ -1084,15 +1099,17 @@ public class YourTurnSceneController {
                         SceneController.setImage("#extra22", ResourceMapGUI.getResource(r));
                     break;
             }
+            SceneController.addMessage(newMessage);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    public static void switchDepotMessage(int depot1, int depot2){
+    public static void switchDepotMessage(int depot1, int depot2, String newMessage){
         try {
             setSwitchedDepot(depot1);
             setSwitchedDepot(depot2);
+            SceneController.addMessage(newMessage);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -1143,24 +1160,26 @@ public class YourTurnSceneController {
         }
     }
 
-    public static void leaderCardActivationMessage(int leaderCard){
+    public static void leaderCardActivationMessage(int leaderCard, String newMessage){
         if(leaderCard == 1)
             SceneController.setOpacity("#leader1", 1);
         else
             SceneController.setOpacity("#leader2", 1);
+        SceneController.addMessage(newMessage);
     }
 
-    public static void leaderCardDiscardMessage(int leaderCard){
+    public static void leaderCardDiscardMessage(int leaderCard, String newMessage){
         try {
             if (leaderCard == 1)
                 SceneController.setImage("#leader1", CardMapGUI.getCard(ClientView.getLeaderCards(GUI.getPosition()).get(0)));
             SceneController.setImage("#leader2", "");
+            SceneController.addMessage(newMessage);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    public static void vaticanReportMessage(int pope, int victoryPoints){
+    public static void vaticanReportMessage(int pope, int victoryPoints, String newMessage){
         try {
             switch (pope){
                 case 1:
@@ -1181,6 +1200,7 @@ public class YourTurnSceneController {
                     else
                         SceneController.setImage("#pope3", "/photos/pope_favor3_front.png");
             }
+            SceneController.addMessage(newMessage);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -1214,7 +1234,6 @@ public class YourTurnSceneController {
         SceneController.setDisable("#radiobutEndProd", true);
         SceneController.setDisable("#move", true);
     }
-
 
 /*
     public void update() {

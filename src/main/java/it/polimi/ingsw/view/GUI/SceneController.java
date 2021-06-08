@@ -6,8 +6,10 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.*;
@@ -107,5 +109,11 @@ public class SceneController {
     public static void setOpacity(String selector, int opacity){
         ImageView imageView = (ImageView) scene.lookup(selector);
         imageView.setOpacity(opacity);
+    }
+
+    public static void addMessage(String message){
+        ScrollPane messages = (ScrollPane) scene.lookup("#messages");
+        VBox vbox = (VBox) messages.getContent();
+        vbox.getChildren().add(new Label(message));
     }
 }
