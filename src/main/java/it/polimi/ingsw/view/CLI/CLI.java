@@ -860,7 +860,7 @@ public class CLI extends ClientView{
     }
 
     private void cardPowerRequest(ArrayList<String> command) throws IOException {
-        if(super.isState(GAME_STATES.FIRST_ACTION_STATE) || super.isState(GAME_STATES.ACTIVATE_PRODUCTION_STATE)) {
+        if(isState(GAME_STATES.FIRST_ACTION_STATE) || isState(GAME_STATES.ACTIVATE_PRODUCTION_STATE)) {
             try {
                 int slot = Integer.parseInt(command.get(1));
                 int choice;
@@ -872,8 +872,8 @@ public class CLI extends ClientView{
                     System.err.println("Illegal command from player");
                     return;
                 }
-                if(super.isState(GAME_STATES.FIRST_ACTION_STATE))
-                    super.setCurrentState(GAME_STATES.FIRST_POWER_STATE);
+                if(isState(GAME_STATES.FIRST_ACTION_STATE))
+                    setCurrentState(GAME_STATES.FIRST_POWER_STATE);
                 Message message = new Message_Two_Parameter_Int(MessageType.DEVELOPMENT_CARD_POWER, position, slot, choice);
                 ClientSocket.sendMessage(message);
             } catch (NumberFormatException e) {
@@ -885,7 +885,7 @@ public class CLI extends ClientView{
     }
 
     private void leaderPowerRequest(ArrayList<String> command) throws IOException {
-        if(super.isState(GAME_STATES.FIRST_ACTION_STATE) || super.isState(GAME_STATES.ACTIVATE_PRODUCTION_STATE)) {
+        if(isState(GAME_STATES.FIRST_ACTION_STATE) || isState(GAME_STATES.ACTIVATE_PRODUCTION_STATE)) {
             try {
                 int slot = Integer.parseInt(command.get(1));
                 Resource r = correctResource(command.get(2));
@@ -902,8 +902,8 @@ public class CLI extends ClientView{
                     System.err.println("Illegal command from player");
                     return;
                 }
-                if (super.isState(GAME_STATES.FIRST_ACTION_STATE))
-                    super.setCurrentState(GAME_STATES.FIRST_POWER_STATE);
+                if (isState(GAME_STATES.FIRST_ACTION_STATE))
+                    setCurrentState(GAME_STATES.FIRST_POWER_STATE);
                 Message message = new Message_One_Resource_Two_Int(MessageType.LEADER_CARD_POWER, position, r, slot, choice);
                 ClientSocket.sendMessage(message);
             } catch (NumberFormatException e) {
@@ -1166,12 +1166,12 @@ public class CLI extends ClientView{
 
     @Override
     public void ok_message() {
-        if (super.getCurrentState() != GAME_STATES.BUY_CARD_STATE)
+        if (getCurrentState() != GAME_STATES.BUY_CARD_STATE)
             System.out.println("Request successfully completed.\n");
-        if (super.isState(GAME_STATES.TAKE_MARBLE_STATE) && getMarbles().size() > 0)
+        if (isState(GAME_STATES.TAKE_MARBLE_STATE) && getMarbles().size() > 0)
             CLI_Printer.printMarbles(super.getGame(), getMarbles());
-        if(super.isState(GAME_STATES.FIRST_POWER_STATE))
-            super.setCurrentState(GAME_STATES.ACTIVATE_PRODUCTION_STATE);
+        if(isState(GAME_STATES.FIRST_POWER_STATE))
+            setCurrentState(GAME_STATES.ACTIVATE_PRODUCTION_STATE);
         notifyMessage(new Message(MessageType.OK, position));
     }
 

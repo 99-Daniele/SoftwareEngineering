@@ -87,6 +87,10 @@ public abstract class ClientView extends Application implements Observer {
         return game.isLeaderCardActive(player, leaderCard);
     }
 
+    public static boolean isSlotEmpty(int player, int slot){
+        return game.isSlotEmpty(player, slot);
+    }
+
     public static ArrayList<Integer> getSlotCards(int position){
         return game.getDevelopmentCards(position);
     }

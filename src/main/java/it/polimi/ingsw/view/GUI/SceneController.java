@@ -114,6 +114,6 @@ public class SceneController {
     public static void addMessage(String message){
         ScrollPane messages = (ScrollPane) scene.lookup("#messages");
         VBox vbox = (VBox) messages.getContent();
-        vbox.getChildren().add(new Label(message));
+        vbox.getChildren().add(0, new Label(message));
     }
 }

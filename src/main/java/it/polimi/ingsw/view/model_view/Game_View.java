@@ -162,6 +162,10 @@ public class Game_View {
         return players.get(player).isLeaderCardActive(leaderCard);
     }
 
+    public boolean isSlotEmpty(int viewID, int slot){
+        return players.get(viewID).getCards_slots().isSlotEmpty(slot);
+    }
+
     public void addDevelopmentCard(int viewID, int cardID, int slot){
         players.get(viewID).addDevelopmentCard(cardID, slot);
     }

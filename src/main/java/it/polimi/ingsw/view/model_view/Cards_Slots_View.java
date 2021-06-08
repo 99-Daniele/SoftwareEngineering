@@ -81,6 +81,19 @@ public class Cards_Slots_View {
             return secondActive;
     }
 
+    public boolean isSlotEmpty(int slot){
+        switch (slot){
+            case 1:
+                return firstSlot.size() == 0;
+            case 2:
+                return secondSlot.size() == 0;
+            case 3:
+                return thirdSlot.size() == 0;
+            default:
+                return false;
+        }
+    }
+
     public void addDevelopmentCard(int cardID, int slot){
         if(slot == 1)
             firstSlot.add(cardID);

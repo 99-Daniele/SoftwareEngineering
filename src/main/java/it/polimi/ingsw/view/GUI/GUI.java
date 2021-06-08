@@ -139,22 +139,21 @@ public class GUI extends ClientView {
 
     @Override
     public void end_turn_message(Message message) {
-        if (message.getClientID() != position) {
-            String newMessage = "Player " + getNickname(message.getClientID()) + " has finished his turn.";
-            if(SceneController.isCurrentScene("#radiobutBuyCard"))
-                SceneController.addMessage(newMessage);
-            serverMessages.add(newMessage);
-        }
         if (position == 0) {
             if (message.getClientID() == getNumOfPlayers() - 1) {
                 turn = true;
-                Platform.runLater(() ->
-                        SceneController.changeRootPane("/fxml/yourTurnScene"));
+                if (SceneController.isCurrentScene("#radiobutBuyCard"))
+                    Platform.runLater(() -> YourTurnSceneController.yourTurn());
             }
-        } else if (message.getClientID() == position - 1) {
+        }
+        else if (message.getClientID() == position - 1) {
             turn = true;
-            Platform.runLater(() ->
-                    SceneController.changeRootPane("/fxml/yourTurnScene"));
+            if (SceneController.isCurrentScene("#radiobutBuyCard"))
+                Platform.runLater(() -> YourTurnSceneController.yourTurn());
+        }
+        else {
+            if (SceneController.isCurrentScene("#radiobutBuyCard"))
+                Platform.runLater(() -> YourTurnSceneController.notYourTurn());
         }
     }
 
@@ -174,7 +173,7 @@ public class GUI extends ClientView {
         }
         else if(SceneController.isCurrentScene("#radiobutBuyCard"))
             Platform.runLater(() -> YourTurnSceneController.buy_card_message(m.getPar2(), m.getPar1(), newMessage));
-        serverMessages.add(newMessage);
+        serverMessages.add(0, newMessage);
     }
 
     @Override
@@ -188,7 +187,7 @@ public class GUI extends ClientView {
             newMessage = "Deck card from row " + (m.getPar1() + 1) + " and column " + (m.getPar2() + 1) + " has been removed";
         if (SceneController.isCurrentScene("#radiobutBuyCard"))
             Platform.runLater(() -> YourTurnSceneController.cardRemoveMessage(m.getPar1(), m.getPar2(), m.getPar4(), newMessage));
-        serverMessages.add(newMessage);
+        serverMessages.add(0, newMessage);
     }
 
     @Override
@@ -203,7 +202,7 @@ public class GUI extends ClientView {
         super.market_change(message);
         if(SceneController.isCurrentScene("#radiobutBuyCard"))
             Platform.runLater(() -> YourTurnSceneController.marketChangeMessage(m.getPar1() == 0, m.getPar2(), newMessage));
-        serverMessages.add(newMessage);
+        serverMessages.add(0, newMessage);
     }
 
     @Override
@@ -213,7 +212,7 @@ public class GUI extends ClientView {
         if (getNumOfPlayers() == 1 && m.getClientID() == 1)
             newMessage = "Ludovico has increased his faith points. Now it has " + m.getPar();
         else
-            newMessage = "Player " + getNickname(m.getClientID()) + " has increased its faith points. Now it has " + m.getPar();
+            newMessage = "Player " + getNickname(m.getClientID()) + " has increased its faith points";
         super.faith_points_message(message);
         if(m.getClientID() != position){
             if (SceneController.isCurrentScene("#radiobutBuyCard"))
@@ -227,7 +226,7 @@ public class GUI extends ClientView {
             if (SceneController.isCurrentScene("#radiobutBuyCard"))
                 Platform.runLater(() -> YourTurnSceneController.increaseFaithPointsMessage(m.getPar(), true, newMessage));
         }
-        serverMessages.add(newMessage);
+        serverMessages.add(0, newMessage);
     }
 
     @Override
@@ -235,11 +234,10 @@ public class GUI extends ClientView {
         Message_One_Int_One_Resource m = (Message_One_Int_One_Resource) message;
         String newMessage;
         if(m.getPar1() != -1)
-            newMessage = "Player " + getNickname(m.getClientID()) + " has inserted 1 " + Resource.printResource(m.getResource())
+            newMessage = "Player " + getNickname(m.getClientID()) + " has inserted 1 " + m.getResource().toString()
                 + " in its " + m.getPar1() + "° depot";
         else
-            newMessage = "Player " + getNickname(m.getClientID()) + " has discarded 1 " + Resource.printResource(m.getResource())
-                    + " marble";
+            newMessage = "Player " + getNickname(m.getClientID()) + " has discarded 1 marble";
         super.increase_warehouse_message(message);
         if(m.getPar1() == -1 || m.getClientID() != position){
             if(SceneController.isCurrentScene("#radiobutBuyCard"))
@@ -249,7 +247,7 @@ public class GUI extends ClientView {
             if(SceneController.isCurrentScene("#radiobutBuyCard"))
                 Platform.runLater(() -> YourTurnSceneController.increaseWarehouseMessage(m.getPar1(), newMessage));
         }
-        serverMessages.add(newMessage);
+        serverMessages.add(0, newMessage);
     }
 
     @Override
@@ -266,7 +264,7 @@ public class GUI extends ClientView {
             if(SceneController.isCurrentScene("#radiobutBuyCard"))
                 Platform.runLater(() -> YourTurnSceneController.switchDepotMessage(m.getPar1(), m.getPar2(), newMessage));
         }
-        serverMessages.add(newMessage);
+        serverMessages.add(0, newMessage);
     }
 
     @Override
@@ -282,17 +280,17 @@ public class GUI extends ClientView {
             if(SceneController.isCurrentScene("#radiobutBuyCard"))
                 Platform.runLater(() -> YourTurnSceneController.leaderCardActivationMessage(m.getPar(), newMessage));
         }
-        serverMessages.add(newMessage);
+        serverMessages.add(0, newMessage);
     }
 
     @Override
     public void extra_depot_message(Message message){
         Message_One_Int_One_Resource m = (Message_One_Int_One_Resource) message;
-        String newMessage = "Player " + getNickname(m.getClientID()) + " has a new extra depot of " + Resource.printResource(m.getResource());
+        String newMessage = "Player " + getNickname(m.getClientID()) + " has a new extra depot of " + m.getResource().toString();
         super.extra_depot_message(message);
         if(SceneController.isCurrentScene("#radiobutBuyCard"))
             Platform.runLater(() -> SceneController.addMessage(newMessage));
-        serverMessages.add(newMessage);
+        serverMessages.add(0, newMessage);
     }
 
     @Override
@@ -308,7 +306,7 @@ public class GUI extends ClientView {
             if(SceneController.isCurrentScene("#radiobutBuyCard"))
                 Platform.runLater(() -> YourTurnSceneController.leaderCardDiscardMessage(m.getPar(), newMessage));
         }
-        serverMessages.add(newMessage);
+        serverMessages.add(0, newMessage);
     }
 
     @Override
@@ -324,7 +322,7 @@ public class GUI extends ClientView {
         String newMessage = "Player " + getNickname(message.getClientID()) + " has activated production powers";
         if(SceneController.isCurrentScene("#radiobutBuyCard"))
             Platform.runLater(() -> SceneController.addMessage(newMessage));
-        serverMessages.add(newMessage);
+        serverMessages.add(0, newMessage);
     }
 
     @Override
@@ -344,7 +342,7 @@ public class GUI extends ClientView {
         super.vatican_report_message(message);
         if(SceneController.isCurrentScene("#radiobutBuyCard"))
             Platform.runLater(() -> YourTurnSceneController.vaticanReportMessage(m.getPar1(), m.getPar2(), newMessage));
-        serverMessages.add(newMessage);
+        serverMessages.add(0, newMessage);
     }
 
     @Override

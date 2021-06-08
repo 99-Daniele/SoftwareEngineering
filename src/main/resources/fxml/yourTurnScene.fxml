@@ -4,16 +4,16 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.control.ScrollPane?>
 <VBox alignment="CENTER" prefHeight="714.0" prefWidth="1161.0" spacing="20.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.sceneController.YourTurnSceneController">
    <children>
       <AnchorPane prefHeight="660.0" prefWidth="1213.0">
@@ -84,7 +84,7 @@
             </Label>
             <Button fx:id="chooseLeader1" layoutX="17.0" layoutY="624.0" mnemonicParsing="false" text="Choose card" visible="false" />
             <Button fx:id="chooseLeader2" layoutX="147.0" layoutY="624.0" mnemonicParsing="false" text="Choose card" visible="false" />
-            <Button fx:id="chooseBase" disable="true" layoutX="141.0" layoutY="371.0" mnemonicParsing="false" text="Choose" visible="false" />
+            <Button fx:id="chooseBase" layoutX="141.0" layoutY="371.0" mnemonicParsing="false" text="Choose" visible="false" />
             <RadioButton fx:id="switch1" disable="true" layoutX="6.0" layoutY="207.0" mnemonicParsing="false" />
             <RadioButton fx:id="switch2" disable="true" layoutX="6.0" layoutY="241.0" mnemonicParsing="false" />
             <RadioButton fx:id="switch3" disable="true" layoutX="6.0" layoutY="274.0" mnemonicParsing="false" />
@@ -200,7 +200,7 @@
             <ImageView fx:id="extra12" fitHeight="20.0" fitWidth="20.0" layoutX="65.0" layoutY="584.0" pickOnBounds="true" preserveRatio="true" />
             <ImageView fx:id="extra21" fitHeight="20.0" fitWidth="20.0" layoutX="159.0" layoutY="584.0" pickOnBounds="true" preserveRatio="true" />
             <ImageView fx:id="extra22" fitHeight="20.0" fitWidth="20.0" layoutX="200.0" layoutY="584.0" pickOnBounds="true" preserveRatio="true" />
-            <Pane fx:id="panelBuy" layoutX="227.0" layoutY="143.0" prefHeight="256.0" prefWidth="446.0" style="-fx-background-color: white;" visible="false">
+            <Pane fx:id="panelBuy" layoutX="308.0" layoutY="150.0" prefHeight="269.0" prefWidth="458.0" style="-fx-background-color: white;" visible="false">
                <children>
                   <Label layoutX="31.0" layoutY="47.0" prefHeight="53.0" prefWidth="384.0" text="Where you preferred to get the resource from?">
                      <font>
@@ -265,7 +265,7 @@
             <RadioButton fx:id="radiobutEndProd" layoutX="450.0" layoutY="478.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="END PRODUCTION" toggleGroup="$mainAction" />
             <ScrollPane fx:id="messages" layoutX="1053.0" layoutY="314.0" prefHeight="313.0" prefWidth="200.0" style="-fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;">
                <content>
-                  <VBox GridPane.rowIndex="5" GridPane.columnIndex="0" fx:id="display"/>
+                  <VBox fx:id="display" GridPane.columnIndex="0" GridPane.rowIndex="5" />
                </content>
             </ScrollPane>
             <Pane fx:id="basePanel" layoutX="308.0" layoutY="150.0" prefHeight="269.0" prefWidth="458.0" style="-fx-background-color: white;" visible="false">
@@ -297,21 +297,21 @@
                   </ImageView>
                </children>
             </Pane>
-            <Pane fx:id="otherPlayers" layoutX="272.0" layoutY="186.0" prefHeight="256.0" prefWidth="446.0" style="-fx-background-color: white;" visible="false">
+            <Pane fx:id="otherPlayers" layoutX="308.0" layoutY="150.0" prefHeight="269.0" prefWidth="458.0" style="-fx-background-color: white;" visible="false">
                <children>
                   <Label layoutX="31.0" layoutY="47.0" prefHeight="53.0" prefWidth="384.0" text="Which player you want to see the playerboard?">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <RadioButton fx:id="player13" visible="false" layoutX="57.0" layoutY="153.0" mnemonicParsing="false">
+                  <RadioButton fx:id="player13" layoutX="57.0" layoutY="153.0" mnemonicParsing="false" visible="false">
                      <toggleGroup>
                         <ToggleGroup fx:id="playersChoice" />
                      </toggleGroup></RadioButton>
-                  <RadioButton fx:id="player12" visible="false" layoutX="121.0" layoutY="153.0" mnemonicParsing="false" toggleGroup="$playersChoice"/>
-                  <RadioButton fx:id="player23" visible="false" layoutX="211.0" layoutY="153.0" mnemonicParsing="false" toggleGroup="$playersChoice"/>
-                  <RadioButton fx:id="player33" layoutX="371.0" layoutY="153.0" mnemonicParsing="false" visible="false" toggleGroup="$playersChoice"/>
-                  <RadioButton fx:id="player22" layoutX="313.0" layoutY="153.0" mnemonicParsing="false" visible="false" toggleGroup="$playersChoice"/>
+                  <RadioButton fx:id="player12" layoutX="100.0" layoutY="153.0" mnemonicParsing="false" toggleGroup="$playersChoice" visible="false" />
+                  <RadioButton fx:id="player23" layoutX="190.0" layoutY="153.0" mnemonicParsing="false" toggleGroup="$playersChoice" visible="false" />
+                  <RadioButton fx:id="player33" layoutX="323.0" layoutY="153.0" mnemonicParsing="false" toggleGroup="$playersChoice" visible="false" />
+                  <RadioButton fx:id="player22" layoutX="300.0" layoutY="153.0" mnemonicParsing="false" toggleGroup="$playersChoice" visible="false" />
                </children>
             </Pane>
          </children>
