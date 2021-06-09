@@ -239,9 +239,11 @@ public class YourTurnSceneController {
     @FXML
     private RadioButton player22;
     @FXML
-    private ScrollPane messages;
+    private VBox display;
     @FXML
-    public VBox display;
+    private Pane errorPane;
+    @FXML
+    private Button okError;
 
     private int marbleCount;
 
@@ -274,6 +276,7 @@ public class YourTurnSceneController {
         chooseSlot3.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> choseSlot(3));
         chooseLeader1.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> choseLeader(1));
         chooseLeader2.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> choseLeader(2));
+        okError.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> errorPane.setVisible(false));
     }
 
     private static boolean leaderCardAvailable(){

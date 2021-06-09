@@ -1205,11 +1205,12 @@ public class CLI extends ClientView{
         if (getNumOfPlayers() != 0) {
             System.out.println("Player " + m.getPar() + " disconnected. Game ended.");
             System.out.println("You can still see the state of the game.\nPrint \"end game\" to finish");
-        } else if (m.getPar() != null)
+            endGameRequest();
+        }
+        else if (m.getPar() != null)
             System.out.println("Player " + m.getPar() + " disconnected before game is started");
         else
             System.out.println("One player disconnected before game is started");
-        endGameRequest();
     }
 
     @Override
