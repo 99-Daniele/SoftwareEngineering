@@ -1261,6 +1261,8 @@ public class CLI extends ClientView{
 
     @Override
     public void wrong_power_error() {
+        if(isState(GAME_STATES.FIRST_POWER_STATE))
+            setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
         System.err.println("You can't activate this production power");
     }
 
@@ -1287,6 +1289,9 @@ public class CLI extends ClientView{
 
     @Override
     public void not_enough_resource_error() {
+        if(isState(GAME_STATES.FIRST_POWER_STATE) || isState(GAME_STATES.BUY_CARD_STATE)) {
+            setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
+        }
         System.err.println("You have not enough resources to do this operation");
         notifyMessage(new ErrorMessage(position, ErrorType.NOT_ENOUGH_RESOURCES));
     }

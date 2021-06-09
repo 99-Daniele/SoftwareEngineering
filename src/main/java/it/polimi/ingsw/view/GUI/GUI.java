@@ -118,6 +118,15 @@ public class GUI extends ClientView {
         Platform.runLater(() -> {
             if (SceneController.isCurrentScene("#nicknameLabel"))
                 NicknameSceneController.waitPlayers();
+            if(isState(GAME_STATES.BUY_CARD_STATE))
+                YourTurnSceneController.endTurn();
+            if(isState(GAME_STATES.FIRST_POWER_STATE) || ClientView.isState(GAME_STATES.ACTIVATE_PRODUCTION_STATE)){
+                setCurrentState(GAME_STATES.ACTIVATE_PRODUCTION_STATE);
+                YourTurnSceneController.production();
+            }
+            if(isState(GAME_STATES.END_TURN_STATE)){
+                YourTurnSceneController.endTurn();
+            }
         });
     }
 
@@ -141,12 +150,14 @@ public class GUI extends ClientView {
     public void end_turn_message(Message message) {
         if (position == 0) {
             if (message.getClientID() == getNumOfPlayers() - 1) {
+                setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
                 turn = true;
                 if (SceneController.isCurrentScene("#radiobutBuyCard"))
                     Platform.runLater(() -> YourTurnSceneController.yourTurn());
             }
         }
         else if (message.getClientID() == position - 1) {
+            setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
             turn = true;
             if (SceneController.isCurrentScene("#radiobutBuyCard"))
                 Platform.runLater(() -> YourTurnSceneController.yourTurn());
@@ -214,13 +225,13 @@ public class GUI extends ClientView {
         else
             newMessage = "Player " + getNickname(m.getClientID()) + " has increased its faith points";
         super.faith_points_message(message);
-        if(m.getClientID() != position){
+        if(m.getClientID() == position){
             if (SceneController.isCurrentScene("#radiobutBuyCard"))
-                Platform.runLater(() -> SceneController.addMessage(newMessage));
+                Platform.runLater(() -> YourTurnSceneController.increaseFaithPointsMessage(m.getPar(), false, newMessage));
         }
         else if (GUI.getNumOfPlayers() > 1) {
             if (SceneController.isCurrentScene("#radiobutBuyCard"))
-                Platform.runLater(() -> YourTurnSceneController.increaseFaithPointsMessage(m.getPar(), false, newMessage));
+                Platform.runLater(() -> SceneController.addMessage(newMessage));
         }
         else if (GUI.getNumOfPlayers() == 1) {
             if (SceneController.isCurrentScene("#radiobutBuyCard"))
@@ -278,7 +289,7 @@ public class GUI extends ClientView {
         }
         else {
             if(SceneController.isCurrentScene("#radiobutBuyCard"))
-                Platform.runLater(() -> YourTurnSceneController.leaderCardActivationMessage(m.getPar(), newMessage));
+                Platform.runLater(() -> YourTurnSceneController.leaderCardActivationMessage(newMessage));
         }
         serverMessages.add(0, newMessage);
     }
@@ -304,7 +315,7 @@ public class GUI extends ClientView {
         }
         else {
             if(SceneController.isCurrentScene("#radiobutBuyCard"))
-                Platform.runLater(() -> YourTurnSceneController.leaderCardDiscardMessage(m.getPar(), newMessage));
+                Platform.runLater(() -> YourTurnSceneController.leaderCardDiscardMessage(newMessage));
         }
         serverMessages.add(0, newMessage);
     }
@@ -323,6 +334,13 @@ public class GUI extends ClientView {
         if(SceneController.isCurrentScene("#radiobutBuyCard"))
             Platform.runLater(() -> SceneController.addMessage(newMessage));
         serverMessages.add(0, newMessage);
+    }
+
+    @Override
+    public void resource_amount_message(Message message) {
+        super.resource_amount_message(message);
+        if(SceneController.isCurrentScene("#radiobutBuyCard"))
+            Platform.runLater(() -> YourTurnSceneController.modifiedResource());
     }
 
     @Override
@@ -378,6 +396,8 @@ public class GUI extends ClientView {
 
     @Override
     public void empty_deck_error() {
+        //empty deck message
+        Platform.runLater(() -> YourTurnSceneController.yourTurn());
     }
 
     @Override
@@ -386,6 +406,17 @@ public class GUI extends ClientView {
 
     @Override
     public void wrong_power_error() {
+        //wrong power message
+        Platform.runLater(() -> {
+            if(isState(GAME_STATES.FIRST_POWER_STATE)){
+                setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
+                YourTurnSceneController.disableProductions();
+                YourTurnSceneController.yourTurn();
+            }
+            else {
+                YourTurnSceneController.production();
+            }
+        });
     }
 
     @Override
@@ -394,6 +425,7 @@ public class GUI extends ClientView {
 
     @Override
     public void full_slot_error() {
+        Platform.runLater(() -> YourTurnSceneController.yourTurn());
     }
 
     @Override
@@ -406,6 +438,18 @@ public class GUI extends ClientView {
 
     @Override
     public void not_enough_resource_error() {
+        Platform.runLater(() -> {
+            if(isState(GAME_STATES.BUY_CARD_STATE))
+                YourTurnSceneController.yourTurn();
+            else if(isState(GAME_STATES.FIRST_POWER_STATE)){
+                setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
+                YourTurnSceneController.disableProductions();
+                YourTurnSceneController.yourTurn();
+            }
+            else if(isState(GAME_STATES.ACTIVATE_PRODUCTION_STATE)){
+                YourTurnSceneController.production();
+            }
+        });
     }
 
     @Override

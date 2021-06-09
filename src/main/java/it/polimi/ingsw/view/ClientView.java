@@ -289,7 +289,7 @@ public abstract class ClientView extends Application implements Observer {
         game.replaceCard(m.getPar1(), m.getPar2(), m.getPar4());
     }
 
-    private void resource_amount_message(Message message) {
+    public void resource_amount_message(Message message) {
         Message_One_Resource_Two_Int m = (Message_One_Resource_Two_Int) message;
         game.newAmount(m.getClientID(), m.getResource(), m.getPar1(), m.getPar2());
     }
@@ -356,9 +356,6 @@ public abstract class ClientView extends Application implements Observer {
     public abstract void end_game_message(Message message);
 
     public void error_message(Message message) throws IOException, InterruptedException{
-        if(isState(GAME_STATES.FIRST_POWER_STATE) || isState(GAME_STATES.BUY_CARD_STATE)) {
-            setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
-        }
         ErrorMessage m = (ErrorMessage) message;
         switch (m.getErrorType()){
             case ALREADY_TAKEN_NICKNAME:

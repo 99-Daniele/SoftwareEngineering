@@ -3,6 +3,7 @@ package it.polimi.ingsw.network.messages;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 
 public class Message_One_Int_One_Resource extends Message{
+
     private final int par1;
     private final Resource resource;
 
@@ -19,7 +20,6 @@ public class Message_One_Int_One_Resource extends Message{
     public Resource getResource() {
         return resource;
     }
-
 
     @Override
     public String toString() {

@@ -261,9 +261,9 @@
                   <Image url="@../photos/bianca.png" />
                </image>
             </ImageView>
-            <RadioButton fx:id="radiobutEndTurn" layoutX="450.0" layoutY="562.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="90.0" text="END TURN" toggleGroup="$mainAction" />
-            <RadioButton fx:id="radiobutEndProd" layoutX="450.0" layoutY="478.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="END PRODUCTION" toggleGroup="$mainAction" />
-            <ScrollPane fx:id="messages" layoutX="1053.0" layoutY="314.0" prefHeight="313.0" prefWidth="200.0" style="-fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;">
+            <RadioButton fx:id="radiobutEndTurn" layoutX="450.0" layoutY="562.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="90.0" text="END TURN" toggleGroup="$mainAction" disable="true"/>
+            <RadioButton fx:id="radiobutEndProd" layoutX="450.0" layoutY="478.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="END PRODUCTION" toggleGroup="$mainAction" disable="true"/>
+            <ScrollPane fx:id="messages" layoutX="1053.0" layoutY="314.0" prefHeight="313.0" prefWidth="300.0" style="-fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;">
                <content>
                   <VBox fx:id="display" GridPane.columnIndex="0" GridPane.rowIndex="5" />
                </content>

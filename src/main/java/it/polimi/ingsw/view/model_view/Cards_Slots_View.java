@@ -44,6 +44,13 @@ public class Cards_Slots_View {
             activateLeaderCard(leaderCard);
     }
 
+    private void activateLeaderCard(int leaderCard){
+        if(firstLeaderCard == leaderCard)
+            firstActive = true;
+        else
+            secondActive = true;
+    }
+
     public ArrayList<Integer> getDevelopmentCards() {
         ArrayList<Integer> cards = new ArrayList<>();
         for(int i = 0; i < 3; i++){
@@ -103,15 +110,8 @@ public class Cards_Slots_View {
             thirdSlot.add(cardID);
     }
 
-    public void activateLeaderCard(int leaderCard){
-        if(firstLeaderCard == leaderCard)
-            firstActive = true;
-        else
-            secondActive = true;
-    }
-
     public void discardLeaderCard(int chosenLeaderCard){
-        if(chosenLeaderCard == 1){
+        if(firstLeaderCard == chosenLeaderCard){
             firstLeaderCard = secondLeaderCard;
             firstActive = secondActive;
         }

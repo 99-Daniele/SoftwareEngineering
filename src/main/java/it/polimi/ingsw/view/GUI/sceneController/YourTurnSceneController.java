@@ -23,14 +23,11 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import java.io.*;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 
 public class YourTurnSceneController {
@@ -251,12 +248,20 @@ public class YourTurnSceneController {
     @FXML
     public void initialize() {
         showPlayerboard();
-        radiobutTakeMarble.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> TakeMarbleButton());
+        radiobutTakeMarble.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> takeMarbleButton());
         radiobutBuyCard.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> buyCardButton());
         radiobutActivProduc.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> activProducButton());
-        radiobutActLeader.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> actLeaderButton());
-        radiobutDiscardLeader.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> discardLeaderButton());
+        if(leaderCardAvailable()) {
+            radiobutActLeader.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> choseLeaderButton());
+            radiobutDiscardLeader.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> choseLeaderButton());
+        }
         radiobutOtherPlayboard.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> otherPlayerboardButton());
+        radiobutEndProd.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> endProductionButton());
+        radiobutEndTurn.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> endTurnButton());
+        chooseBase.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            chooseBase.setDisable(true);
+            basicProduction();
+        });
         row1.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> take_market_marble_row(1));
         row2.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> take_market_marble_row(2));
         row3.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> take_market_marble_row(3));
@@ -264,8 +269,16 @@ public class YourTurnSceneController {
         column2.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> take_market_marble_column(2));
         column3.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> take_market_marble_column(3));
         column4.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> take_market_marble_column(4));
-        chooseLeader1.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> whiteConversionChoice(1));
-        chooseLeader2.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> whiteConversionChoice(2));
+        chooseSlot1.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> choseSlot(1));
+        chooseSlot2.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> choseSlot(2));
+        chooseSlot3.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> choseSlot(3));
+        chooseLeader1.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> choseLeader(1));
+        chooseLeader2.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> choseLeader(2));
+    }
+
+    private static boolean leaderCardAvailable(){
+        return ((!ClientView.isLeaderCardActive(GUI.getPosition(), 1) && ClientView.getLeaderCards(GUI.getPosition()).get(0) != -1)
+                    || (!ClientView.isLeaderCardActive(GUI.getPosition(), 2) && ClientView.getLeaderCards(GUI.getPosition()).get(1) != -1));
     }
 
     private void showPlayerboard() {
@@ -321,7 +334,7 @@ public class YourTurnSceneController {
             if(GUI.getNumOfPlayers() == 1)
                 radiobutOtherPlayboard.setVisible(false);
             setMessages();
-        } catch (FileNotFoundException | URISyntaxException e) {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -342,7 +355,7 @@ public class YourTurnSceneController {
             setImage(image, "");
     }
 
-    private void setFirstDepot() throws FileNotFoundException, URISyntaxException {
+    private void setFirstDepot() throws FileNotFoundException{
         if (ClientView.getWarehouse(GUI.getPosition()).get(0).getAmount() == 1)
             setImage(deposit11, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(0).getResource()));
     }
@@ -685,134 +698,85 @@ public class YourTurnSceneController {
         });
     }
 
-    private void actLeaderButton() {
-            disableAllButton();
-            chooseLeader1.setVisible(true);
-            chooseLeader2.setVisible(true);
-            chooseLeader1.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-                try {
-                    ClientSocket.sendMessage(new Message_One_Parameter_Int(MessageType.LEADER_CARD_ACTIVATION, GUI.getPosition(), 1));
-                    chooseLeader1.setVisible(false);
-                    chooseLeader2.setVisible(false);
-                    if(ClientView.isState(GAME_STATES.FIRST_ACTION_STATE))
-                        enableAllButton();
-                    else
-                        enableEndTurnButton();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-            chooseLeader2.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-                try {
-                    ClientSocket.sendMessage(new Message_One_Parameter_Int(MessageType.LEADER_CARD_ACTIVATION, GUI.getPosition(), 2));
-                    chooseLeader1.setVisible(false);
-                    chooseLeader2.setVisible(false);
-                    if(ClientView.isState(GAME_STATES.FIRST_ACTION_STATE))
-                        enableAllButton();
-                    else
-                        enableEndTurnButton();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-    }
-
-    private void discardLeaderButton() {
+    private void choseLeaderButton(){
         disableAllButton();
-        chooseLeader1.setVisible(true);
-        chooseLeader2.setVisible(true);
-        chooseLeader1.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-            try {
-                ClientSocket.sendMessage(new Message_One_Parameter_Int(MessageType.LEADER_CARD_DISCARD, GUI.getPosition(), 1));
-                chooseLeader1.setVisible(false);
-                chooseLeader2.setVisible(false);
-                if(ClientView.isState(GAME_STATES.FIRST_ACTION_STATE))
-                    enableAllButton();
-                else
-                    enableEndTurnButton();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-        chooseLeader2.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-            try {
-                ClientSocket.sendMessage(new Message_One_Parameter_Int(MessageType.LEADER_CARD_DISCARD, GUI.getPosition(), 2));
-                chooseLeader1.setVisible(false);
-                chooseLeader2.setVisible(false);
-                if(ClientView.isState(GAME_STATES.FIRST_ACTION_STATE))
-                    enableAllButton();
-                else
-                    enableEndTurnButton();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+        if(!ClientView.isLeaderCardActive(GUI.getPosition(), 1) && ClientView.getLeaderCards(GUI.getPosition()).get(0) != -1)
+            chooseLeader1.setVisible(true);
+        if(!ClientView.isLeaderCardActive(GUI.getPosition(), 2) && ClientView.getLeaderCards(GUI.getPosition()).get(1) != -1)
+            chooseLeader2.setVisible(true);
     }
 
     private void activProducButton() {
         if(ClientView.isState(GAME_STATES.FIRST_ACTION_STATE))
             ClientView.setCurrentState(GAME_STATES.FIRST_POWER_STATE);
         disableAllButton();
-        if(!ClientView.isSlotEmpty(GUI.getPosition(), 1))
-            chooseSlot1.setVisible(true);
-        if(!ClientView.isSlotEmpty(GUI.getPosition(), 2))
-            chooseSlot2.setVisible(true);
-        if(!ClientView.isSlotEmpty(GUI.getPosition(), 3))
-            chooseSlot3.setVisible(true);
-        chooseBase.setVisible(true);
-        if(ClientView.isLeaderCardActive(GUI.getPosition(), 1))
-            chooseLeader1.setVisible(true);
-        if(ClientView.isLeaderCardActive(GUI.getPosition(), 2))
-            chooseLeader2.setVisible(true);
-        chooseSlot1.setOnMouseClicked(mouseEvent -> {
-            chooseSlot1.setVisible(false);
-            cardProduction(1);
-        });
-        chooseSlot2.setOnMouseClicked(mouseEvent -> {
-            chooseSlot2.setVisible(false);
-            cardProduction(2);
-        });
-        chooseSlot3.setOnMouseClicked(mouseEvent -> {
-            chooseSlot3.setVisible(false);
-            cardProduction(3);
-        });
-        chooseBase.setOnMouseClicked(mouseEvent -> {
-            chooseBase.setVisible(false);
-            basePanel.setVisible(true);
-            Message_Three_Resource_One_Int messageToSend = new Message_Three_Resource_One_Int(MessageType.BASIC_POWER, GUI.getPosition(), null, null, null, 0);
-            coin1.setOnMouseClicked(MouseEvent -> {
-                baseProduction(Resource.COIN, messageToSend);
-            });
+        enableProductionsButton();
+    }
 
-            servant1.setOnMouseClicked(MouseEvent -> {
-                baseProduction(Resource.SERVANT, messageToSend);
-            });
-
-            shield1.setOnMouseClicked(MouseEvent -> {
-                baseProduction(Resource.SHIELD, messageToSend);
-            });
-
-            stone1.setOnMouseClicked(MouseEvent -> {
-                baseProduction(Resource.STONE, messageToSend);
-            });
+    private void basicProduction(){
+        basePanel.setVisible(true);
+        Message_Three_Resource_One_Int messageToSend = new Message_Three_Resource_One_Int(MessageType.BASIC_POWER, GUI.getPosition());
+        coin1.setOnMouseClicked(MouseEvent -> {
+            choseResource(Resource.COIN, messageToSend);
         });
-        chooseLeader1.setOnMouseClicked(mouseEvent -> {
-            chooseLeader1.setVisible(false);
-            leaderProduction(1);
+        servant1.setOnMouseClicked(MouseEvent -> {
+            choseResource(Resource.SERVANT, messageToSend);
         });
-        chooseLeader2.setOnMouseClicked(mouseEvent -> {
-            chooseLeader2.setVisible(false);
-            leaderProduction(2);
+        shield1.setOnMouseClicked(MouseEvent -> {
+            choseResource(Resource.SHIELD, messageToSend);
+        });
+        stone1.setOnMouseClicked(MouseEvent -> {
+            choseResource(Resource.STONE, messageToSend);
         });
     }
 
-    private void baseProduction(Resource resource, Message_Three_Resource_One_Int messageToSend) {
+    private void cardProduction(int slot) {
+        panelBuy.setVisible(true);
+        radiobutWarehouse.setOnMouseClicked(mouseEvent1 -> {
+            panelBuy.setVisible(false);
+            Message message = new Message_Two_Parameter_Int(MessageType.DEVELOPMENT_CARD_POWER, GUI.getPosition(), slot, 0);
+            try {
+                ClientSocket.sendMessage(message);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        radiobutStrongbox.setOnMouseClicked(mouseEvent1 -> {
+            panelBuy.setVisible(false);
+            Message message = new Message_Two_Parameter_Int(MessageType.DEVELOPMENT_CARD_POWER, GUI.getPosition(), slot, 1);
+            try {
+                ClientSocket.sendMessage(message);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void leaderProduction(int leader) {
+        basePanel.setVisible(true);
+        Message_One_Resource_Two_Int messageToSend = new Message_One_Resource_Two_Int(MessageType.LEADER_CARD_POWER, GUI.getPosition(), leader);
+        coin1.setOnMouseClicked(MouseEvent -> {
+            choseResource(Resource.COIN, messageToSend);
+        });
+        servant1.setOnMouseClicked(MouseEvent -> {
+            choseResource(Resource.SERVANT, messageToSend);
+        });
+        shield1.setOnMouseClicked(MouseEvent -> {
+            choseResource(Resource.SHIELD, messageToSend);
+        });
+        stone1.setOnMouseClicked(MouseEvent -> {
+            choseResource(Resource.STONE, messageToSend);
+        });
+    }
+
+    private void choseResource(Resource resource, Message_Three_Resource_One_Int messageToSend) {
         if (messageToSend.getResource1() == null)
             messageToSend.setResource1(resource);
         else if (messageToSend.getResource2() == null) {
             messageToSend.setResource2(resource);
             baseLabel.setText("Choose produced resource");
-        } else {
+        }
+        else {
             basePanel.setVisible(false);
             baseLabel.setText("Choose resources required");
             messageToSend.setResource3(resource);
@@ -838,70 +802,31 @@ public class YourTurnSceneController {
         }
     }
 
-    private void cardProduction(int slot) {
+    private void choseResource(Resource resource, Message_One_Resource_Two_Int messageToSend) {
+        messageToSend.setResource(resource);
+        basePanel.setVisible(false);
         panelBuy.setVisible(true);
         radiobutWarehouse.setOnMouseClicked(mouseEvent1 -> {
             panelBuy.setVisible(false);
-            Message message = new Message_Two_Parameter_Int(MessageType.DEVELOPMENT_CARD_POWER, GUI.getPosition(), slot, 0);
+            messageToSend.setPar2(0);
             try {
-                ClientSocket.sendMessage(message);
+                ClientSocket.sendMessage(messageToSend);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
         radiobutStrongbox.setOnMouseClicked(mouseEvent1 -> {
             panelBuy.setVisible(false);
-            Message message = new Message_Two_Parameter_Int(MessageType.DEVELOPMENT_CARD_POWER, GUI.getPosition(), slot, 1);
+            messageToSend.setPar2(1);
             try {
-                ClientSocket.sendMessage(message);
+                ClientSocket.sendMessage(messageToSend);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
     }
 
-    private void leaderProduction(int leader){
-        basePanel.setVisible(true);
-        basePanel.setVisible(true);
-        final Resource[] r = new Resource[1];
-        coin1.setOnMouseClicked(MouseEvent -> {
-            r[0] = Resource.COIN;
-            basePanel.setVisible(false);
-        });
-        servant1.setOnMouseClicked(MouseEvent -> {
-            r[0] = Resource.SERVANT;
-            basePanel.setVisible(false);
-        });
-        shield1.setOnMouseClicked(MouseEvent -> {
-            r[0] = Resource.SHIELD;
-            basePanel.setVisible(false);
-        });
-        stone1.setOnMouseClicked(MouseEvent -> {
-            r[0] = Resource.STONE;
-            basePanel.setVisible(false);
-        });
-        panelBuy.setVisible(true);
-        radiobutWarehouse.setOnMouseClicked(mouseEvent1 -> {
-            panelBuy.setVisible(false);
-            Message message = new Message_One_Resource_Two_Int(MessageType.LEADER_CARD_POWER, GUI.getPosition(), r[0], leader, 0);
-            try {
-                ClientSocket.sendMessage(message);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-        radiobutStrongbox.setOnMouseClicked(mouseEvent1 -> {
-            panelBuy.setVisible(false);
-            Message message = new Message_One_Resource_Two_Int(MessageType.LEADER_CARD_POWER, GUI.getPosition(), r[0], leader, 1);
-            try {
-                ClientSocket.sendMessage(message);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-    }
-
-    private void TakeMarbleButton() {
+    private void takeMarbleButton() {
         disableAllButton();
         row1.setDisable(false);
         row2.setDisable(false);
@@ -912,21 +837,62 @@ public class YourTurnSceneController {
         column4.setDisable(false);
     }
 
+    private void endProductionButton(){
+        radiobutEndProd.setDisable(true);
+        disableProductionButton();
+        ClientView.setCurrentState(GAME_STATES.END_TURN_STATE);
+        Message message = new Message(MessageType.END_PRODUCTION, GUI.getPosition());
+        try{
+            ClientSocket.sendMessage(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void endTurnButton(){
+        if(ClientView.isState(GAME_STATES.END_TURN_STATE)) {
+            Message message = new Message(MessageType.END_TURN, GUI.getPosition());
+            try {
+                ClientSocket.sendMessage(message);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            radiobutEndTurn.setDisable(true);
+        }
+    }
+
     private void enableAllButton() {
-        radiobutEndProd.setDisable(false);
         radiobutBuyCard.setDisable(false);
         radiobutActLeader.setDisable(false);
         radiobutActivProduc.setDisable(false);
         radiobutDiscardLeader.setDisable(false);
         radiobutOtherPlayboard.setDisable(false);
         radiobutTakeMarble.setDisable(false);
-        radiobutEndTurn.setDisable(false);
     }
 
-    private void enableProductionButton(){
-        radiobutEndProd.setDisable(false);
-        radiobutActivProduc.setDisable(false);
-        radiobutOtherPlayboard.setDisable(false);
+    private void enableProductionsButton() {
+        if (!ClientView.isSlotEmpty(GUI.getPosition(), 1)) {
+            chooseSlot1.setVisible(true);
+            chooseSlot1.setDisable(false);
+        }
+        if (!ClientView.isSlotEmpty(GUI.getPosition(), 2)) {
+            chooseSlot2.setVisible(true);
+            chooseSlot2.setDisable(false);
+        }
+        if (!ClientView.isSlotEmpty(GUI.getPosition(), 3)) {
+            chooseSlot3.setVisible(true);
+            chooseSlot3.setDisable(false);
+        }
+        chooseBase.setVisible(true);
+        chooseBase.setDisable(false);
+        if (ClientView.isLeaderCardActive(GUI.getPosition(), 1)) {
+            chooseLeader1.setVisible(true);
+            chooseLeader1.setDisable(false);
+        }
+        if (ClientView.isLeaderCardActive(GUI.getPosition(), 2)) {
+            chooseLeader2.setVisible(true);
+            chooseLeader2.setDisable(false);
+        }
     }
 
     private void enableEndTurnButton(){
@@ -947,15 +913,16 @@ public class YourTurnSceneController {
     }
 
     private void disableProductionButton(){
-        chooseSlot1.setVisible(true);
-        chooseSlot2.setVisible(true);
-        chooseSlot3.setVisible(true);
-        chooseBase.setVisible(true);
-        chooseLeader1.setVisible(true);
-        chooseLeader2.setVisible(true);
+        chooseSlot1.setVisible(false);
+        chooseSlot2.setVisible(false);
+        chooseSlot3.setVisible(false);
+        chooseBase.setVisible(false);
+        chooseLeader1.setVisible(false);
+        chooseLeader2.setVisible(false);
     }
 
     private void buyCardButton() {
+        ClientView.setCurrentState(GAME_STATES.BUY_CARD_STATE);
         disableAllButton();
         setDisableAllDecks(false);
         card11.setOnMouseClicked(mouseEvent -> deckEvent(1, 1));
@@ -963,10 +930,10 @@ public class YourTurnSceneController {
         card13.setOnMouseClicked(mouseEvent -> deckEvent(1, 3));
         card21.setOnMouseClicked(mouseEvent -> deckEvent(2, 1));
         card22.setOnMouseClicked(mouseEvent -> deckEvent(2, 2));
-        card23.setOnMouseClicked(mouseEvent -> deckEvent(2, 2));
+        card23.setOnMouseClicked(mouseEvent -> deckEvent(2, 3));
         card31.setOnMouseClicked(mouseEvent -> deckEvent(3, 1));
-        card32.setOnMouseClicked(mouseEvent -> deckEvent(3, 1));
-        card33.setOnMouseClicked(mouseEvent -> deckEvent(3, 1));
+        card32.setOnMouseClicked(mouseEvent -> deckEvent(3, 2));
+        card33.setOnMouseClicked(mouseEvent -> deckEvent(3, 3));
         card41.setOnMouseClicked(mouseEvent -> deckEvent(4, 1));
         card42.setOnMouseClicked(mouseEvent -> deckEvent(4, 2));
         card43.setOnMouseClicked(mouseEvent -> deckEvent(4, 3));
@@ -1009,13 +976,53 @@ public class YourTurnSceneController {
         });
     }
 
-    private void whiteConversionChoice(int leader){
+    private void choseSlot(int slot){
+        try {
+            if (ClientView.isState(GAME_STATES.BUY_CARD_STATE)) {
+                ClientSocket.sendMessage(new Message_One_Parameter_Int(MessageType.CHOSEN_SLOT, GUI.getPosition(), slot));
+                chooseSlot1.setVisible(false);
+                chooseSlot2.setVisible(false);
+                chooseSlot3.setVisible(false);
+            }
+            if(ClientView.isState(GAME_STATES.FIRST_POWER_STATE) || ClientView.isState(GAME_STATES.ACTIVATE_PRODUCTION_STATE)){
+                if(slot == 1)
+                    chooseSlot1.setDisable(true);
+                else if(slot == 2)
+                    chooseSlot2.setDisable(true);
+                else
+                    chooseSlot3.setDisable(true);
+                cardProduction(slot);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void choseLeader(int leader){
         try {
             if (ClientView.isState(GAME_STATES.WHITE_CONVERSION_CARD_STATE)) {
                 ClientSocket.sendMessage(new Message_One_Parameter_Int(MessageType.WHITE_CONVERSION_CARD, GUI.getPosition(), leader));
                 chooseLeader1.setVisible(false);
                 chooseLeader2.setVisible(false);
-
+            }
+            if(ClientView.isState(GAME_STATES.FIRST_POWER_STATE) || ClientView.isState(GAME_STATES.ACTIVATE_PRODUCTION_STATE)){
+                if(leader == 1)
+                    chooseLeader1.setDisable(true);
+                else
+                    chooseLeader2.setDisable(true);
+                leaderProduction(leader);
+            }
+            if(ClientView.isState(GAME_STATES.FIRST_ACTION_STATE) || ClientView.isState(GAME_STATES.END_TURN_STATE)){
+                if(radiobutActLeader.isSelected())
+                    ClientSocket.sendMessage(new Message_One_Parameter_Int(MessageType.LEADER_CARD_ACTIVATION, GUI.getPosition(), leader));
+                else if(radiobutDiscardLeader.isSelected())
+                    ClientSocket.sendMessage(new Message_One_Parameter_Int(MessageType.LEADER_CARD_DISCARD, GUI.getPosition(), leader));
+                chooseLeader1.setVisible(false);
+                chooseLeader2.setVisible(false);
+                if (ClientView.isState(GAME_STATES.FIRST_ACTION_STATE))
+                    enableAllButton();
+                else
+                    enableEndTurnButton();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -1036,7 +1043,6 @@ public class YourTurnSceneController {
         card42.setDisable(b);
         card43.setDisable(b);
     }
-
 
     public static void buy_card_message(int slot, int cardID, String newMessage) {
         try {
@@ -1091,6 +1097,7 @@ public class YourTurnSceneController {
                         SceneController.setImage("#card12", cardFile);
                     else
                         SceneController.setImage("#card13", cardFile);
+                    break;
                 case 1:
                     if (row == 0)
                         SceneController.setImage("#card21", cardFile);
@@ -1098,6 +1105,7 @@ public class YourTurnSceneController {
                         SceneController.setImage("#card22", cardFile);
                     else
                         SceneController.setImage("#card23", cardFile);
+                    break;
                 case 2:
                     if (row == 0)
                         SceneController.setImage("#card31", cardFile);
@@ -1105,6 +1113,7 @@ public class YourTurnSceneController {
                         SceneController.setImage("#card32", cardFile);
                     else
                         SceneController.setImage("#card33", cardFile);
+                    break;
                 case 3:
                     if (row == 0)
                         SceneController.setImage("#card41", cardFile);
@@ -1112,6 +1121,7 @@ public class YourTurnSceneController {
                         SceneController.setImage("#card42", cardFile);
                     else
                         SceneController.setImage("#card43", cardFile);
+                    break;
             }
             SceneController.addMessage(newMessage);
         } catch (FileNotFoundException e) {
@@ -1313,20 +1323,27 @@ public class YourTurnSceneController {
         }
     }
 
-    public static void leaderCardActivationMessage(int leaderCard, String newMessage){
-        if(leaderCard == 1)
+    public static void leaderCardActivationMessage(String newMessage){
+        if(ClientView.isLeaderCardActive(GUI.getPosition(), 1))
             SceneController.setOpacity("#leader1", 1);
-        else
+        if (ClientView.isLeaderCardActive(GUI.getPosition(), 2))
             SceneController.setOpacity("#leader2", 1);
+        if(!leaderCardAvailable()){
+            SceneController.setDisable("#radiobutActLeader", true);
+            SceneController.setDisable("#radiobutDiscardLeader", true);
+        }
         SceneController.addMessage(newMessage);
     }
 
-    public static void leaderCardDiscardMessage(int leaderCard, String newMessage){
+    public static void leaderCardDiscardMessage(String newMessage){
         try {
-            if (leaderCard == 1)
-                SceneController.setImage("#leader1", CardMapGUI.getCard(ClientView.getLeaderCards(GUI.getPosition()).get(0)));
+            SceneController.setImage("#leader1", CardMapGUI.getCard(ClientView.getLeaderCards(GUI.getPosition()).get(0)));
             SceneController.setImage("#leader2", "");
             SceneController.addMessage(newMessage);
+            if(!leaderCardAvailable()){
+                SceneController.setDisable("#radiobutActLeader", true);
+                SceneController.setDisable("#radiobutDiscardLeader", true);
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -1369,23 +1386,92 @@ public class YourTurnSceneController {
     public static void choseSlotMessage(int slot1, int slot2, int slot3){
         notYourTurn();
         SceneController.setDisable("#radiobutOtherPlayboard", true);
-        if(slot1 == 1)
+        if(slot1 == 1) {
             SceneController.setVisible("#chooseSlot1", true);
-        if(slot2 == 2 || slot1 == 2)
+            SceneController.setDisable("#chooseSlot1", false);
+        }
+        if(slot2 == 2 || slot1 == 2) {
             SceneController.setVisible("#chooseSlot2", true);
-        if(slot3 == 3 || slot2 == 3)
+            SceneController.setDisable("#chooseSlot2", false);
+        }
+        if(slot3 == 3 || slot2 == 3) {
             SceneController.setVisible("#chooseSlot3", true);
+            SceneController.setDisable("#chooseSlot3", false);
+        }
+    }
+
+    public static void modifiedResource() {
+        try {
+            if (ClientView.getWarehouse(GUI.getPosition()).get(0).getAmount() == 1)
+                SceneController.setImage("#deposit11", ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(0).getResource()));
+            if (ClientView.getWarehouse(GUI.getPosition()).get(1).getAmount() >= 1)
+                SceneController.setImage("#deposit21", ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(1).getResource()));
+            if (ClientView.getWarehouse(GUI.getPosition()).get(1).getAmount() == 2)
+                SceneController.setImage("#deposit22", ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(1).getResource()));
+            if (ClientView.getWarehouse(GUI.getPosition()).get(2).getAmount() >= 1)
+                SceneController.setImage("#deposit31", ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(2).getResource()));
+            if (ClientView.getWarehouse(GUI.getPosition()).get(2).getAmount() >= 2)
+                SceneController.setImage("#deposit32", ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(2).getResource()));
+            if (ClientView.getWarehouse(GUI.getPosition()).get(2).getAmount() == 3)
+                SceneController.setImage("#deposit33", ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(2).getResource()));
+            if (ClientView.getWarehouse(GUI.getPosition()).size() >= 4) {
+                if (ClientView.getWarehouse(GUI.getPosition()).get(3).getAmount() >= 1)
+                    SceneController.setImage("#extra11", ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(3).getResource()));
+                if (ClientView.getWarehouse(GUI.getPosition()).get(3).getAmount() == 2)
+                    SceneController.setImage("#extra12", ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(3).getResource()));
+            }
+            if (ClientView.getWarehouse(GUI.getPosition()).size() == 5) {
+                if (ClientView.getWarehouse(GUI.getPosition()).get(4).getAmount() >= 1)
+                    SceneController.setImage("#extra21", ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(4).getResource()));
+                if (ClientView.getWarehouse(GUI.getPosition()).get(4).getAmount() == 2)
+                    SceneController.setImage("#extra22", ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(4).getResource()));
+            }
+            SceneController.setText("#coinAmount", String.valueOf(ClientView.coinAmount(GUI.getPosition())));
+            SceneController.setText("#servantAmount", String.valueOf(ClientView.servantAmount(GUI.getPosition())));
+            SceneController.setText("#shieldAmount", String.valueOf(ClientView.shieldAmount(GUI.getPosition())));
+            SceneController.setText("#stoneAmount", String.valueOf(ClientView.stoneAmount(GUI.getPosition())));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void yourTurn(){
         SceneController.setDisable("#radiobutTakeMarble", false);
         SceneController.setDisable("#radiobutBuyCard", false);
         SceneController.setDisable("#radiobutActivProduc", false);
-        SceneController.setDisable("#radiobutActLeader", false);
-        SceneController.setDisable("#radiobutDiscardLeader", false);
-        SceneController.setDisable("#radiobutEndTurn", false);
-        SceneController.setDisable("#radiobutEndProd", false);
+        if(!leaderCardAvailable()){
+            SceneController.setDisable("#radiobutActLeader", true);
+            SceneController.setDisable("#radiobutDiscardLeader", true);
+        }
         SceneController.setDisable("#move", false);
+    }
+
+    public static void disableProductions(){
+        SceneController.setVisible("#chooseSlot1", false);
+        SceneController.setVisible("#chooseSlot2", false);
+        SceneController.setVisible("#chooseSlot3", false);
+        SceneController.setVisible("#chooseBase", false);
+        SceneController.setVisible("#chooseLeader1", false);
+        SceneController.setVisible("#chooseLeader2", false);
+    }
+
+    public static void production(){
+        SceneController.setDisable("#radiobutEndProd", false);
+        SceneController.setDisable("#radiobutOtherPlayboard", false);
+    }
+
+    public static void endTurn(){
+        ClientView.setCurrentState(GAME_STATES.END_TURN_STATE);
+        SceneController.setDisable("#radiobutEndTurn", false);
+        if(!leaderCardAvailable()){
+            SceneController.setDisable("#radiobutActLeader", true);
+            SceneController.setDisable("#radiobutDiscardLeader", true);
+        }
+        else {
+            SceneController.setDisable("#radiobutActLeader", false);
+            SceneController.setDisable("#radiobutDiscardLeader", false);
+
+        }
     }
 
     public static void notYourTurn(){
