@@ -196,7 +196,6 @@ public class OpponentPlayerboardSceneController {
 
     private void setFaithPoints() {
         int faithPoints = ClientView.getFaithPoints(position);
-        System.out.println(faithPoints);
         if(faithPoints < 3){
             croceRossa.setLayoutX(50*faithPoints + 80);
         }

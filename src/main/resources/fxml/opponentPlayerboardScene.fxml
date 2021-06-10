@@ -28,22 +28,22 @@
       <ImageView fx:id="slot31" fitHeight="212.0" fitWidth="163.0" layoutX="856.0" layoutY="449.0" />
       <ImageView fx:id="slot32" fitHeight="212.0" fitWidth="156.0" layoutX="856.0" layoutY="413.0" />
       <ImageView fx:id="slot33" fitHeight="212.0" fitWidth="156.0" layoutX="856.0" layoutY="373.0" />
-      <ImageView fitHeight="35.0" fitWidth="37.0" layoutX="81.0" layoutY="582.0">
+      <ImageView fitHeight="35.0" fitWidth="37.0" layoutX="170.0" layoutY="590.0">
          <image>
             <Image url="@../photos/servant.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="33.0" fitWidth="37.0" layoutX="173.0" layoutY="628.0">
+      <ImageView fitHeight="33.0" fitWidth="37.0" layoutX="80.0" layoutY="630.0">
          <image>
             <Image url="@../photos/coin.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="33.0" fitWidth="37.0" layoutX="173.0" layoutY="583.0">
+      <ImageView fitHeight="33.0" fitWidth="37.0" layoutX="80.0" layoutY="590.0">
          <image>
             <Image url="@../photos/shield.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="33.0" fitWidth="37.0" layoutX="81.0" layoutY="628.0">
+      <ImageView fitHeight="33.0" fitWidth="37.0" layoutX="170.0" layoutY="630.0">
          <image>
             <Image url="@../photos/stone.png" />
          </image>
@@ -55,24 +55,24 @@
       </ImageView>
       <ImageView fx:id="deposit32" fitHeight="33.0" fitWidth="37.0" layoutX="153.0" layoutY="460.0" />
       <ImageView fx:id="deposit33" fitHeight="33.0" fitWidth="37.0" layoutX="190.0" layoutY="460.0" />
-      <Label fx:id="servantAmount" layoutX="125.0" layoutY="586.0" prefHeight="25.0" prefWidth="22.0" textFill="#fffbfb">
+      <Label fx:id="servantAmount" layoutX="215.0" layoutY="595.0" prefHeight="25.0" prefWidth="22.0" textFill="#fffbfb">
          <font>
-            <Font size="14.0" />
+            <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <Label fx:id="stoneAmount" layoutX="214.0" layoutY="586.0" prefHeight="25.0" prefWidth="22.0" textFill="#fffbfb">
+      <Label fx:id="stoneAmount" layoutX="215.0" layoutY="635.0" prefHeight="25.0" prefWidth="22.0" textFill="#fffbfb">
          <font>
-            <Font size="14.0" />
+            <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <Label fx:id="shieldAmount" layoutX="125.0" layoutY="631.0" prefHeight="25.0" prefWidth="22.0" textFill="#fffbfb">
+      <Label fx:id="shieldAmount" layoutX="125.0" layoutY="595.0" prefHeight="25.0" prefWidth="22.0" textFill="#fffbfb">
          <font>
-            <Font size="14.0" />
+            <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <Label fx:id="coinAmount" layoutX="214.0" layoutY="631.0" prefHeight="25.0" prefWidth="22.0" textFill="#fffbfb">
+      <Label fx:id="coinAmount" layoutX="125.0" layoutY="635.0" prefHeight="25.0" prefWidth="22.0" textFill="#fffbfb">
          <font>
-            <Font size="14.0" />
+            <Font name="System Bold" size="14.0" />
          </font>
       </Label>
       <ImageView fx:id="leader1" fitHeight="230.0" fitWidth="176.0" layoutX="1093.0" layoutY="48.0" />

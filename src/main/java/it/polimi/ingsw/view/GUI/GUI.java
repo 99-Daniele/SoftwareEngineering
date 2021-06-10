@@ -118,8 +118,10 @@ public class GUI extends ClientView {
         Platform.runLater(() -> {
             if (SceneController.isCurrentScene("#nicknameLabel"))
                 NicknameSceneController.waitPlayers();
-            if(isState(GAME_STATES.BUY_CARD_STATE))
+            if(isState(GAME_STATES.BUY_CARD_STATE)) {
+                setCurrentState(GAME_STATES.END_TURN_STATE);
                 YourTurnSceneController.endTurn();
+            }
             if(isState(GAME_STATES.FIRST_POWER_STATE) || ClientView.isState(GAME_STATES.ACTIVATE_PRODUCTION_STATE)){
                 setCurrentState(GAME_STATES.ACTIVATE_PRODUCTION_STATE);
                 YourTurnSceneController.production();
@@ -339,6 +341,7 @@ public class GUI extends ClientView {
     @Override
     public void endProductionMessage(Message message) {
         String newMessage = "Player " + getNickname(message.getClientID()) + " has activated production powers";
+        setCurrentState(GAME_STATES.END_TURN_STATE);
         if(SceneController.isCurrentScene("#radiobutBuyCard"))
             Platform.runLater(() -> {
                 SceneController.addMessage(newMessage);
@@ -368,13 +371,13 @@ public class GUI extends ClientView {
         if(getNumOfPlayers() == 1 && m.getPar1() == 1) {
             newMessage = "Ludovico activated Vatican Report";
             if(SceneController.isCurrentScene("#radiobutBuyCard"))
-                Platform.runLater(() -> YourTurnSceneController.vaticanReportMessage(m.getPar1(), m.getPar2(), newMessage));
+                Platform.runLater(() -> YourTurnSceneController.vaticanReportMessage(newMessage));
             serverMessages.add(0, newMessage);
         }
         else if(message.getClientID() == position) {
             newMessage = "Player " + getNickname(m.getPar1()) + " activated Vatican Report";
             if(SceneController.isCurrentScene("#radiobutBuyCard"))
-                Platform.runLater(() -> YourTurnSceneController.vaticanReportMessage(m.getPar1(), m.getPar2(), newMessage));
+                Platform.runLater(() -> YourTurnSceneController.vaticanReportMessage(newMessage));
             serverMessages.add(0, newMessage);
         }
     }
@@ -411,8 +414,8 @@ public class GUI extends ClientView {
             quitMessage = "Game ended. Ludovico win.";
         }
         else {
-            quitMessage = "Game ended. " + getNickname(m.getClientID()) + " win the game."
-                    + " It made " + m.getPar1() + " victory points and " + m.getPar2()
+            quitMessage = "Game ended. " + getNickname(m.getClientID()) + " win the game.\n"
+                    + m.getPar1() + " victory points and " + m.getPar2()
                     + " total resources.";
         }
         Platform.runLater(() -> {

@@ -167,8 +167,6 @@ public class YourTurnSceneController {
     @FXML
     private ImageView croceNera;
     @FXML
-    private Button move;
-    @FXML
     private Label message;
     @FXML
     private Button yes;
@@ -596,7 +594,6 @@ public class YourTurnSceneController {
             e.printStackTrace();
         }
     }
-
 
     private void take_market_marble_column(int i) {
         marbleCount = 3;
@@ -1419,7 +1416,10 @@ public class YourTurnSceneController {
 
     public static void leaderCardDiscardMessage(String newMessage){
         try {
-            SceneController.setImage("#leader1", CardMapGUI.getCard(ClientView.getLeaderCards(GUI.getPosition()).get(0)));
+            if(ClientView.getLeaderCards(GUI.getPosition()).get(0) != -1)
+                SceneController.setImage("#leader1", CardMapGUI.getCard(ClientView.getLeaderCards(GUI.getPosition()).get(0)));
+            else
+                SceneController.setImage("#leader1", "");
             SceneController.setImage("#leader2", "");
             SceneController.addMessage(newMessage);
             if(!leaderCardAvailable()){
@@ -1435,9 +1435,10 @@ public class YourTurnSceneController {
         }
     }
 
-    public static void vaticanReportMessage(int pope, int victoryPoints, String newMessage){
+    public static void vaticanReportMessage(String newMessage){
+        int victoryPoints = ClientView.getVictoryPoints(GUI.getPosition());
         try {
-            switch (pope){
+            switch (ClientView.getCurrentPope()){
                 case 1:
                     if(victoryPoints == 0)
                         SceneController.setImage("#pope1", "/photos/quadrato giallo.png");
@@ -1455,6 +1456,7 @@ public class YourTurnSceneController {
                         SceneController.setImage("#pope3", "/photos/quadrato rosso.png");
                     else
                         SceneController.setImage("#pope3", "/photos/pope_favor3_front.png");
+                    break;
             }
             SceneController.addMessage(newMessage);
         } catch (FileNotFoundException e) {
@@ -1525,6 +1527,7 @@ public class YourTurnSceneController {
         SceneController.setDisable("#radiobutTakeMarble", false);
         SceneController.setDisable("#radiobutBuyCard", false);
         SceneController.setDisable("#radiobutActivProduc", false);
+        SceneController.setDisable("#radiobutOtherPlayboard", false);
         if(!leaderCardAvailable()){
             SceneController.setDisable("#radiobutActLeader", true);
             SceneController.setDisable("#radiobutDiscardLeader", true);
@@ -1533,7 +1536,6 @@ public class YourTurnSceneController {
             SceneController.setDisable("#radiobutActLeader", false);
             SceneController.setDisable("#radiobutDiscardLeader", false);
         }
-        SceneController.setDisable("#move", false);
     }
 
     public static void disableProductions(){
@@ -1546,12 +1548,20 @@ public class YourTurnSceneController {
     }
 
     public static void production(){
+        SceneController.setDisable("#radiobutTakeMarble", true);
+        SceneController.setDisable("#radiobutBuyCard", true);
+        SceneController.setDisable("#radiobutActivProduc", true);
+        SceneController.setDisable("#radiobutActLeader", true);
+        SceneController.setDisable("#radiobutDiscardLeader", true);
         SceneController.setDisable("#radiobutEndProd", false);
         SceneController.setDisable("#radiobutOtherPlayboard", false);
     }
 
     public static void endTurn(){
-        ClientView.setCurrentState(GAME_STATES.END_TURN_STATE);
+        SceneController.setDisable("#radiobutTakeMarble", true);
+        SceneController.setDisable("#radiobutBuyCard", true);
+        SceneController.setDisable("#radiobutActivProduc", true);
+        SceneController.setDisable("#radiobutEndProd", true);
         SceneController.setDisable("#radiobutEndTurn", false);
         if(!leaderCardAvailable()){
             SceneController.setDisable("#radiobutActLeader", true);
@@ -1575,7 +1585,6 @@ public class YourTurnSceneController {
         SceneController.setDisable("#radiobutDiscardLeader", true);
         SceneController.setDisable("#radiobutEndTurn", true);
         SceneController.setDisable("#radiobutEndProd", true);
-        SceneController.setDisable("#move", true);
     }
 
 /*
