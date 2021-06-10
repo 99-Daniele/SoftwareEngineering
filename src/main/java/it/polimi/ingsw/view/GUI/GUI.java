@@ -340,7 +340,10 @@ public class GUI extends ClientView {
     public void endProductionMessage(Message message) {
         String newMessage = "Player " + getNickname(message.getClientID()) + " has activated production powers";
         if(SceneController.isCurrentScene("#radiobutBuyCard"))
-            Platform.runLater(() -> SceneController.addMessage(newMessage));
+            Platform.runLater(() -> {
+                SceneController.addMessage(newMessage);
+                YourTurnSceneController.endTurn();
+            });
         serverMessages.add(0, newMessage);
     }
 
@@ -361,14 +364,19 @@ public class GUI extends ClientView {
     public void vatican_report_message(Message message) {
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
         String newMessage;
-        if(getNumOfPlayers() == 1 && m.getPar1() == 1)
-            newMessage = "Ludovico activated Vatican Report";
-        else
-            newMessage = "Player " + getNickname(m.getPar1()) + " activated Vatican Report";
         super.vatican_report_message(message);
-        if(SceneController.isCurrentScene("#radiobutBuyCard"))
-            Platform.runLater(() -> YourTurnSceneController.vaticanReportMessage(m.getPar1(), m.getPar2(), newMessage));
-        serverMessages.add(0, newMessage);
+        if(getNumOfPlayers() == 1 && m.getPar1() == 1) {
+            newMessage = "Ludovico activated Vatican Report";
+            if(SceneController.isCurrentScene("#radiobutBuyCard"))
+                Platform.runLater(() -> YourTurnSceneController.vaticanReportMessage(m.getPar1(), m.getPar2(), newMessage));
+            serverMessages.add(0, newMessage);
+        }
+        else if(message.getClientID() == position) {
+            newMessage = "Player " + getNickname(m.getPar1()) + " activated Vatican Report";
+            if(SceneController.isCurrentScene("#radiobutBuyCard"))
+                Platform.runLater(() -> YourTurnSceneController.vaticanReportMessage(m.getPar1(), m.getPar2(), newMessage));
+            serverMessages.add(0, newMessage);
+        }
     }
 
     @Override

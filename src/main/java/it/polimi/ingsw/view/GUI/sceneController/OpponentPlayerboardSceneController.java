@@ -101,6 +101,8 @@ public class OpponentPlayerboardSceneController {
                 YourTurnSceneController.notYourTurn();
             if(ClientView.isState(GAME_STATES.END_TURN_STATE))
                 YourTurnSceneController.endTurn();
+            if(ClientView.isState(GAME_STATES.ACTIVATE_PRODUCTION_STATE))
+                YourTurnSceneController.production();
         });
     }
 
