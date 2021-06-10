@@ -754,8 +754,13 @@ public class CLI extends ClientView{
                         waitMessage();
                         if(receivedMessage.getMessageType() == MessageType.CHOSEN_SLOT)
                             choseSlotRequest();
-                        else if(receivedMessage.getMessageType() == MessageType.OK)
+                        else if(receivedMessage.getMessageType() == MessageType.OK) {
                             CLI_Printer.printCardSlot(super.getGame(), position);
+                            setCurrentState(GAME_STATES.END_TURN_STATE);
+                        }
+                        else {
+                            setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
+                        }
                     }
                 }
             } catch (NumberFormatException | InterruptedException e) {
@@ -1168,8 +1173,12 @@ public class CLI extends ClientView{
     public void ok_message() {
         if (getCurrentState() != GAME_STATES.BUY_CARD_STATE)
             System.out.println("Request successfully completed.\n");
-        if (isState(GAME_STATES.TAKE_MARBLE_STATE) && getMarbles().size() > 0)
-            CLI_Printer.printMarbles(super.getGame(), getMarbles());
+        if (isState(GAME_STATES.TAKE_MARBLE_STATE)) {
+            if(getMarbles().size() > 0)
+                CLI_Printer.printMarbles(super.getGame(), getMarbles());
+            else
+                setCurrentState(GAME_STATES.END_TURN_STATE);
+        }
         if(isState(GAME_STATES.FIRST_POWER_STATE))
             setCurrentState(GAME_STATES.ACTIVATE_PRODUCTION_STATE);
         notifyMessage(new Message(MessageType.OK, position));
@@ -1195,6 +1204,7 @@ public class CLI extends ClientView{
 
     @Override
     public void white_conversion_card_message(Message message) {
+        CLI_Printer.printLeaderCard(getGame(), position);
         System.out.println("You have chosen a white marble and you have two active WhiteConversionCard. Chose one of them");
         notifyMessage(message);
     }
@@ -1290,7 +1300,7 @@ public class CLI extends ClientView{
 
     @Override
     public void not_enough_resource_error() {
-        if(isState(GAME_STATES.FIRST_POWER_STATE) || isState(GAME_STATES.BUY_CARD_STATE)) {
+        if(isState(GAME_STATES.FIRST_POWER_STATE)) {
             setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
         }
         System.err.println("You have not enough resources to do this operation");
