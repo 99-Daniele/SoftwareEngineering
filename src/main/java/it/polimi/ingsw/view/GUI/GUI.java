@@ -153,18 +153,27 @@ public class GUI extends ClientView {
                 setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
                 turn = true;
                 if (SceneController.isCurrentScene("#radiobutBuyCard"))
-                    Platform.runLater(() -> YourTurnSceneController.yourTurn());
+                    Platform.runLater(() -> {
+                                YourTurnSceneController.yourTurn();
+                                if(getNumOfPlayers() > 1)
+                                    SceneController.errorMessage("It's your turn");
+                            }
+                    );
             }
-        }
-        else if (message.getClientID() == position - 1) {
+        } else if (message.getClientID() == position - 1) {
             setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
             turn = true;
             if (SceneController.isCurrentScene("#radiobutBuyCard"))
-                Platform.runLater(() -> YourTurnSceneController.yourTurn());
-        }
-        else {
+                Platform.runLater(() -> {
+                    YourTurnSceneController.yourTurn();
+                    SceneController.errorMessage("It's your turn");
+                });
+        } else {
             if (SceneController.isCurrentScene("#radiobutBuyCard"))
-                Platform.runLater(() -> YourTurnSceneController.notYourTurn());
+                Platform.runLater(() -> {
+                    YourTurnSceneController.notYourTurn();
+                    SceneController.errorMessage("Player " + getNickname(message.getClientID()) + " has finished his turn.");
+                });
         }
     }
 
@@ -428,12 +437,14 @@ public class GUI extends ClientView {
             if(!SceneController.isCurrentScene("#radiobutBuyCard"))
                 SceneController.changeRootPane("/fxml/yourTurnScene");
             SceneController.errorMessage(quitMessage);
+            YourTurnSceneController.notYourTurn();
         });
     }
 
     @Override
     public void empty_deck_error() {
         String quitMessage = "You have chosen an empty deck";
+        setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
         Platform.runLater(() -> {
             if(!SceneController.isCurrentScene("#radiobutBuyCard"))
                 SceneController.changeRootPane("/fxml/yourTurnScene");
@@ -480,7 +491,7 @@ public class GUI extends ClientView {
 
     @Override
     public void not_enough_cards_error() {
-        String quitMessage = "You don't have enough development cards to activate this leader card";
+        String quitMessage = "You don't have enough development cards\n to activate this leader card";
         Platform.runLater(() -> {
             if(!SceneController.isCurrentScene("#radiobutBuyCard"))
                 SceneController.changeRootPane("/fxml/yourTurnScene");
@@ -491,6 +502,7 @@ public class GUI extends ClientView {
     @Override
     public void full_slot_error() {
         String quitMessage = "You can't insert this card in any slot";
+        setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
         Platform.runLater(() -> {
             if(!SceneController.isCurrentScene("#radiobutBuyCard"))
                 SceneController.changeRootPane("/fxml/yourTurnScene");
@@ -527,8 +539,10 @@ public class GUI extends ClientView {
             if(!SceneController.isCurrentScene("#radiobutBuyCard"))
                 SceneController.changeRootPane("/fxml/yourTurnScene");
             SceneController.errorMessage(quitMessage);
-            if(isState(GAME_STATES.BUY_CARD_STATE))
+            if(isState(GAME_STATES.BUY_CARD_STATE)) {
+                setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
                 YourTurnSceneController.yourTurn();
+            }
             else if(isState(GAME_STATES.FIRST_POWER_STATE)){
                 setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
                 YourTurnSceneController.disableProductions();

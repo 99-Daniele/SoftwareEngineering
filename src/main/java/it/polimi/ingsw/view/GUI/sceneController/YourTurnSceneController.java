@@ -254,8 +254,8 @@ public class YourTurnSceneController {
         radiobutBuyCard.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> buyCardButton());
         radiobutActivProduc.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> activProducButton());
         if(leaderCardAvailable()) {
-            radiobutActLeader.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> choseLeaderButton());
-            radiobutDiscardLeader.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> choseLeaderButton());
+            radiobutActLeader.setOnMouseClicked(mouseEvent -> choseLeaderButton());
+            radiobutDiscardLeader.setOnMouseClicked(mouseEvent -> choseLeaderButton());
         }
         radiobutOtherPlayboard.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> otherPlayerboardButton());
         radiobutEndProd.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> endProductionButton());
@@ -271,11 +271,11 @@ public class YourTurnSceneController {
         column2.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> take_market_marble_column(2));
         column3.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> take_market_marble_column(3));
         column4.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> take_market_marble_column(4));
-        chooseSlot1.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> choseSlot(1));
-        chooseSlot2.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> choseSlot(2));
-        chooseSlot3.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> choseSlot(3));
-        chooseLeader1.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> choseLeader(1));
-        chooseLeader2.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> choseLeader(2));
+        chooseSlot1.setOnMouseClicked(mouseEvent -> choseSlot(1));
+        chooseSlot2.setOnMouseClicked(mouseEvent -> choseSlot(2));
+        chooseSlot3.setOnMouseClicked(mouseEvent -> choseSlot(3));
+        chooseLeader1.setOnMouseClicked(mouseEvent -> choseLeader(1));
+        chooseLeader2.setOnMouseClicked(mouseEvent -> choseLeader(2));
         okError.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> errorPane.setVisible(false));
     }
 
@@ -507,8 +507,8 @@ public class YourTurnSceneController {
         yes.setVisible(true);
         no.setVisible(true);
         //show marbles
-        yes.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> yesSwitch());
-        no.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> noSwitch());
+        yes.setOnMouseClicked(mouseEvent -> yesSwitch());
+        no.setOnMouseClicked(mouseEvent -> noSwitch());
     }
 
     private void noSwitch() {
@@ -526,15 +526,15 @@ public class YourTurnSceneController {
         switch1.setDisable(false);
         switch2.setDisable(false);
         switch3.setDisable(false);
-        switch1.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+        switch1.setOnMouseClicked(mouseEvent -> {
             switch1.setDisable(true);
             clickedSwitch();
         });
-        switch2.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+        switch2.setOnMouseClicked(mouseEvent -> {
             switch2.setDisable(true);
             clickedSwitch();
         });
-        switch3.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+        switch3.setOnMouseClicked(mouseEvent -> {
             switch3.setDisable(true);
             clickedSwitch();
         });
@@ -632,12 +632,12 @@ public class YourTurnSceneController {
         }
         player12.setText(GUI.getNickname(player1));
         player22.setText(GUI.getNickname(player2));
-        player12.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+        player12.setOnMouseClicked(mouseEventt -> {
             opsc[0] = new OpponentPlayerboardSceneController(player1);
             Platform.runLater(() ->
                     SceneController.changeRootPane(opsc[0], "/fxml/opponentPlayerboardScene"));
         });
-        player22.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+        player22.setOnMouseClicked(mouseEvent -> {
             opsc[0] = new OpponentPlayerboardSceneController(player2);
             Platform.runLater(() ->
                     SceneController.changeRootPane(opsc[0], "/fxml/opponentPlayerboardScene"));
@@ -684,17 +684,17 @@ public class YourTurnSceneController {
         player13.setText(GUI.getNickname(player1));
         player23.setText(GUI.getNickname(player2));
         player33.setText(GUI.getNickname(player3));
-        player13.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+        player13.setOnMouseClicked(mouseEvent -> {
             opsc[0] = new OpponentPlayerboardSceneController(player1);
             Platform.runLater(() ->
                     SceneController.changeRootPane(opsc[0], "/fxml/opponentPlayerboardScene"));
         });
-        player23.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+        player23.setOnMouseClicked(mouseEvent -> {
             opsc[0] = new OpponentPlayerboardSceneController(player2);
             Platform.runLater(() ->
                     SceneController.changeRootPane(opsc[0], "/fxml/opponentPlayerboardScene"));
         });
-        player33.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+        player33.setOnMouseClicked(mouseEvent -> {
             opsc[0] = new OpponentPlayerboardSceneController(player3);
             Platform.runLater(() ->
                     SceneController.changeRootPane(opsc[0], "/fxml/opponentPlayerboardScene"));
@@ -925,21 +925,70 @@ public class YourTurnSceneController {
     }
 
     private void buyCardButton() {
+        radiobutBuyCard.setSelected(false);
         ClientView.setCurrentState(GAME_STATES.BUY_CARD_STATE);
         disableAllButton();
         setDisableAllDecks(false);
-        card11.setOnMouseClicked(mouseEvent -> deckEvent(1, 1));
-        card12.setOnMouseClicked(mouseEvent -> deckEvent(1, 2));
-        card13.setOnMouseClicked(mouseEvent -> deckEvent(1, 3));
-        card21.setOnMouseClicked(mouseEvent -> deckEvent(2, 1));
-        card22.setOnMouseClicked(mouseEvent -> deckEvent(2, 2));
-        card23.setOnMouseClicked(mouseEvent -> deckEvent(2, 3));
-        card31.setOnMouseClicked(mouseEvent -> deckEvent(3, 1));
-        card32.setOnMouseClicked(mouseEvent -> deckEvent(3, 2));
-        card33.setOnMouseClicked(mouseEvent -> deckEvent(3, 3));
-        card41.setOnMouseClicked(mouseEvent -> deckEvent(4, 1));
-        card42.setOnMouseClicked(mouseEvent -> deckEvent(4, 2));
-        card43.setOnMouseClicked(mouseEvent -> deckEvent(4, 3));
+        if(ClientView.getDevelopmentCards().get(0) != -1) {
+            card11.setOnMouseClicked(mouseEvent -> deckEvent(1, 1));
+        }
+        else
+            card11.setDisable(true);
+        if(ClientView.getDevelopmentCards().get(4) != -1) {
+            card12.setOnMouseClicked(mouseEvent -> deckEvent(1, 2));
+        }
+        else
+            card12.setDisable(true);
+        if(ClientView.getDevelopmentCards().get(8) != -1) {
+            card13.setOnMouseClicked(mouseEvent -> deckEvent(1, 3));
+        }
+        else
+            card13.setDisable(true);
+        if(ClientView.getDevelopmentCards().get(1) != -1) {
+            card21.setOnMouseClicked(mouseEvent -> deckEvent(2, 1));
+        }
+        else
+            card21.setDisable(true);
+        if(ClientView.getDevelopmentCards().get(5) != -1) {
+            card22.setOnMouseClicked(mouseEvent -> deckEvent(2, 2));
+        }
+        else
+            card22.setDisable(true);
+        if(ClientView.getDevelopmentCards().get(9) != -1) {
+            card23.setOnMouseClicked(mouseEvent -> deckEvent(2, 3));
+        }
+        else
+            card23.setDisable(true);
+        if(ClientView.getDevelopmentCards().get(2) != -1) {
+            card31.setOnMouseClicked(mouseEvent -> deckEvent(3, 1));
+        }
+        else
+            card31.setDisable(true);
+        if(ClientView.getDevelopmentCards().get(6) != -1) {
+            card32.setOnMouseClicked(mouseEvent -> deckEvent(3, 2));
+        }
+        else
+            card32.setDisable(true);
+        if(ClientView.getDevelopmentCards().get(10) != -1) {
+            card33.setOnMouseClicked(mouseEvent -> deckEvent(3, 3));
+        }
+        else
+            card33.setDisable(true);
+        if(ClientView.getDevelopmentCards().get(3) != -1) {
+            card41.setOnMouseClicked(mouseEvent -> deckEvent(4, 1));
+        }
+        else
+            card41.setDisable(true);
+        if(ClientView.getDevelopmentCards().get(7) != -1) {
+            card42.setOnMouseClicked(mouseEvent -> deckEvent(4, 2));
+        }
+        else
+            card42.setDisable(true);
+        if(ClientView.getDevelopmentCards().get(11) != -1) {
+            card43.setOnMouseClicked(mouseEvent -> deckEvent(4, 3));
+        }
+        else
+            card43.setDisable(true);
     }
     /*
     card11.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> deckEvent(1,1));
@@ -1335,6 +1384,10 @@ public class YourTurnSceneController {
             SceneController.setDisable("#radiobutActLeader", true);
             SceneController.setDisable("#radiobutDiscardLeader", true);
         }
+        else {
+            SceneController.setDisable("#radiobutActLeader", false);
+            SceneController.setDisable("#radiobutDiscardLeader", false);
+        }
         SceneController.addMessage(newMessage);
     }
 
@@ -1346,6 +1399,10 @@ public class YourTurnSceneController {
             if(!leaderCardAvailable()){
                 SceneController.setDisable("#radiobutActLeader", true);
                 SceneController.setDisable("#radiobutDiscardLeader", true);
+            }
+            else {
+                SceneController.setDisable("#radiobutActLeader", false);
+                SceneController.setDisable("#radiobutDiscardLeader", false);
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -1446,6 +1503,10 @@ public class YourTurnSceneController {
             SceneController.setDisable("#radiobutActLeader", true);
             SceneController.setDisable("#radiobutDiscardLeader", true);
         }
+        else {
+            SceneController.setDisable("#radiobutActLeader", false);
+            SceneController.setDisable("#radiobutDiscardLeader", false);
+        }
         SceneController.setDisable("#move", false);
     }
 
@@ -1473,7 +1534,10 @@ public class YourTurnSceneController {
         else {
             SceneController.setDisable("#radiobutActLeader", false);
             SceneController.setDisable("#radiobutDiscardLeader", false);
-
+        }
+        if(GUI.getNumOfPlayers() > 1){
+            SceneController.setVisible("#radiobutOtherPlayboard", true);
+            SceneController.setDisable("#radiobutOtherPlayboard", false);
         }
     }
 

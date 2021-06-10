@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.GUI.sceneController;
 
+import it.polimi.ingsw.model.games.states.GAME_STATES;
 import it.polimi.ingsw.parser.CardMapGUI;
 import it.polimi.ingsw.parser.MarbleMapGUI;
 import it.polimi.ingsw.parser.ResourceMapGUI;
@@ -98,6 +99,8 @@ public class OpponentPlayerboardSceneController {
             SceneController.changeRootPane("/fxml/yourTurnScene");
             if (!GUI.isMyTurn())
                 YourTurnSceneController.notYourTurn();
+            if(ClientView.isState(GAME_STATES.END_TURN_STATE))
+                YourTurnSceneController.endTurn();
         });
     }
 
