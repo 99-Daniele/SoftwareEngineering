@@ -196,33 +196,33 @@ public class OpponentPlayerboardSceneController {
         int faithPoints = ClientView.getFaithPoints(position);
         System.out.println(faithPoints);
         if(faithPoints < 3){
-            croceRossa.setLayoutX(30*faithPoints + 225);
+            croceRossa.setLayoutX(50*faithPoints + 80);
         }
         else if (faithPoints < 5) {
-            croceRossa.setLayoutX(285);
-            croceRossa.setLayoutY(233 - faithPoints*28);
+            croceRossa.setLayoutX(180);
+            croceRossa.setLayoutY(261 - faithPoints*47);
         }
         else if(faithPoints < 10){
-            croceRossa.setLayoutX(30*faithPoints + 148);
-            croceRossa.setLayoutY(121);
+            croceRossa.setLayoutX(50*faithPoints - 20);
+            croceRossa.setLayoutY(73);
         }
         else if (faithPoints < 12) {
-            croceRossa.setLayoutX(436);
-            croceRossa.setLayoutY(faithPoints*28 - 135);
+            croceRossa.setLayoutX(430);
+            croceRossa.setLayoutY(faithPoints*47 - 350);
         }
         else if(faithPoints < 17){
-            croceRossa.setLayoutX(30*faithPoints + 88);
-            croceRossa.setLayoutY(172);
+            croceRossa.setLayoutX(50*faithPoints - 120);
+            croceRossa.setLayoutY(167);
         }
         else if(faithPoints < 19){
-            croceRossa.setLayoutX(586);
-            croceRossa.setLayoutY(620 - 28*faithPoints);
+            croceRossa.setLayoutX(680);
+            croceRossa.setLayoutY(919 - 47*faithPoints);
         }
         else {
             if(faithPoints > 24)
                 faithPoints = 24;
-            croceRossa.setLayoutX(30*faithPoints + 245);
-            croceRossa.setLayoutY(121);
+            croceRossa.setLayoutX(50*faithPoints - 220);
+            croceRossa.setLayoutY(73);
         }
     }
 
