@@ -264,13 +264,34 @@ public class YourTurnSceneController {
             chooseBase.setDisable(true);
             basicProduction();
         });
-        row1.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> take_market_marble_row(1));
-        row2.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> take_market_marble_row(2));
-        row3.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> take_market_marble_row(3));
-        column1.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> take_market_marble_column(1));
-        column2.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> take_market_marble_column(2));
-        column3.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> take_market_marble_column(3));
-        column4.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> take_market_marble_column(4));
+        row1.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            row1.setSelected(false);
+            take_market_marble_row(1);
+        });
+        row2.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            row2.setSelected(false);
+            take_market_marble_row(2);
+        });
+        row3.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            row3.setSelected(false);
+            take_market_marble_row(3);
+        });
+        column1.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            column1.setSelected(false);
+            take_market_marble_column(1);
+        });
+        column2.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            column2.setSelected(false);
+            take_market_marble_column(2);
+        });
+        column3.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            column3.setSelected(false);
+            take_market_marble_column(3);
+        });
+        column4.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            column4.setSelected(false);
+            take_market_marble_column(4);
+        });
         chooseSlot1.setOnMouseClicked(mouseEvent -> choseSlot(1));
         chooseSlot2.setOnMouseClicked(mouseEvent -> choseSlot(2));
         chooseSlot3.setOnMouseClicked(mouseEvent -> choseSlot(3));
@@ -528,14 +549,17 @@ public class YourTurnSceneController {
         switch3.setDisable(false);
         switch1.setOnMouseClicked(mouseEvent -> {
             switch1.setDisable(true);
+            switch1.setSelected(false);
             clickedSwitch();
         });
         switch2.setOnMouseClicked(mouseEvent -> {
             switch2.setDisable(true);
+            switch2.setSelected(false);
             clickedSwitch();
         });
         switch3.setOnMouseClicked(mouseEvent -> {
             switch3.setDisable(true);
+            switch3.setSelected(false);
             clickedSwitch();
         });
     }
@@ -584,6 +608,7 @@ public class YourTurnSceneController {
     }
 
     private void otherPlayerboardButton() {
+        radiobutOtherPlayboard.setSelected(false);
         if(GUI.getNumOfPlayers() == 2){
             twoPlayersOtherPlayerboard();
         }
@@ -632,7 +657,7 @@ public class YourTurnSceneController {
         }
         player12.setText(GUI.getNickname(player1));
         player22.setText(GUI.getNickname(player2));
-        player12.setOnMouseClicked(mouseEventt -> {
+        player12.setOnMouseClicked(mouseEvent -> {
             opsc[0] = new OpponentPlayerboardSceneController(player1);
             Platform.runLater(() ->
                     SceneController.changeRootPane(opsc[0], "/fxml/opponentPlayerboardScene"));
@@ -710,6 +735,7 @@ public class YourTurnSceneController {
     }
 
     private void activProducButton() {
+        radiobutActivProduc.setSelected(false);
         if(ClientView.isState(GAME_STATES.FIRST_ACTION_STATE))
             ClientView.setCurrentState(GAME_STATES.FIRST_POWER_STATE);
         disableAllButton();
@@ -736,6 +762,7 @@ public class YourTurnSceneController {
     private void cardProduction(int slot) {
         panelBuy.setVisible(true);
         radiobutWarehouse.setOnMouseClicked(mouseEvent1 -> {
+            radiobutWarehouse.setSelected(false);
             panelBuy.setVisible(false);
             Message message = new Message_Two_Parameter_Int(MessageType.DEVELOPMENT_CARD_POWER, GUI.getPosition(), slot, 0);
             try {
@@ -745,6 +772,7 @@ public class YourTurnSceneController {
             }
         });
         radiobutStrongbox.setOnMouseClicked(mouseEvent1 -> {
+            radiobutStrongbox.setSelected(false);
             panelBuy.setVisible(false);
             Message message = new Message_Two_Parameter_Int(MessageType.DEVELOPMENT_CARD_POWER, GUI.getPosition(), slot, 1);
             try {
@@ -785,6 +813,7 @@ public class YourTurnSceneController {
             messageToSend.setResource3(resource);
             panelBuy.setVisible(true);
             radiobutWarehouse.setOnMouseClicked(mouseEvent1 -> {
+                radiobutWarehouse.setSelected(false);
                 panelBuy.setVisible(false);
                 messageToSend.setPar(0);
                 try {
@@ -794,6 +823,7 @@ public class YourTurnSceneController {
                 }
             });
             radiobutStrongbox.setOnMouseClicked(mouseEvent1 -> {
+                radiobutStrongbox.setSelected(false);
                 panelBuy.setVisible(false);
                 messageToSend.setPar(1);
                 try {
@@ -842,6 +872,7 @@ public class YourTurnSceneController {
 
     private void endProductionButton(){
         radiobutEndProd.setDisable(true);
+        radiobutEndProd.setSelected(false);
         disableProductionButton();
         ClientView.setCurrentState(GAME_STATES.END_TURN_STATE);
         Message message = new Message(MessageType.END_PRODUCTION, GUI.getPosition());
@@ -853,6 +884,7 @@ public class YourTurnSceneController {
     }
 
     private void endTurnButton(){
+        radiobutEndTurn.setSelected(false);
         if(ClientView.isState(GAME_STATES.END_TURN_STATE)) {
             Message message = new Message(MessageType.END_TURN, GUI.getPosition());
             try {
@@ -990,20 +1022,6 @@ public class YourTurnSceneController {
         else
             card43.setDisable(true);
     }
-    /*
-    card11.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> deckEvent(1,1));
-        card12.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> deckEvent(1,2));
-        card13.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> deckEvent(1,3));
-        card21.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> deckEvent(2,1));
-        card22.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> deckEvent(2,2));
-        card23.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> deckEvent(2,2));
-        card31.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> deckEvent(3,1));
-        card32.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> deckEvent(3,1));
-        card33.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> deckEvent(3,1));
-        card41.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> deckEvent(4,1));
-        card42.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> deckEvent(4,2));
-        card43.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> deckEvent(4,3));
-     */
 
     private void deckEvent(int column, int row) {
         setDisableAllDecks(true);
@@ -1065,10 +1083,14 @@ public class YourTurnSceneController {
                 leaderProduction(leader);
             }
             if(ClientView.isState(GAME_STATES.FIRST_ACTION_STATE) || ClientView.isState(GAME_STATES.END_TURN_STATE)){
-                if(radiobutActLeader.isSelected())
+                if(radiobutActLeader.isSelected()) {
+                    radiobutActLeader.setSelected(false);
                     ClientSocket.sendMessage(new Message_One_Parameter_Int(MessageType.LEADER_CARD_ACTIVATION, GUI.getPosition(), leader));
-                else if(radiobutDiscardLeader.isSelected())
+                }
+                else if(radiobutDiscardLeader.isSelected()){
+                    radiobutDiscardLeader.setSelected(false);
                     ClientSocket.sendMessage(new Message_One_Parameter_Int(MessageType.LEADER_CARD_DISCARD, GUI.getPosition(), leader));
+                }
                 chooseLeader1.setVisible(false);
                 chooseLeader2.setVisible(false);
                 if (ClientView.isState(GAME_STATES.FIRST_ACTION_STATE))

@@ -148,18 +148,16 @@ public class GUI extends ClientView {
 
     @Override
     public void end_turn_message(Message message) {
-        if (position == 0) {
-            if (message.getClientID() == getNumOfPlayers() - 1) {
-                setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
-                turn = true;
-                if (SceneController.isCurrentScene("#radiobutBuyCard"))
-                    Platform.runLater(() -> {
-                                YourTurnSceneController.yourTurn();
-                                if(getNumOfPlayers() > 1)
-                                    SceneController.errorMessage("It's your turn");
-                            }
-                    );
-            }
+        if (position == 0 && message.getClientID() == getNumOfPlayers() -1) {
+            setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
+            turn = true;
+            if (SceneController.isCurrentScene("#radiobutBuyCard"))
+                Platform.runLater(() -> {
+                            YourTurnSceneController.yourTurn();
+                            if (getNumOfPlayers() > 1)
+                                SceneController.errorMessage("It's your turn");
+                        }
+                );
         } else if (message.getClientID() == position - 1) {
             setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
             turn = true;
@@ -172,7 +170,8 @@ public class GUI extends ClientView {
             if (SceneController.isCurrentScene("#radiobutBuyCard"))
                 Platform.runLater(() -> {
                     YourTurnSceneController.notYourTurn();
-                    SceneController.errorMessage("Player " + getNickname(message.getClientID()) + " has finished his turn.");
+                    if(message.getClientID() != position)
+                        SceneController.errorMessage("Player " + getNickname(message.getClientID()) + " has finished his turn.");
                 });
         }
     }

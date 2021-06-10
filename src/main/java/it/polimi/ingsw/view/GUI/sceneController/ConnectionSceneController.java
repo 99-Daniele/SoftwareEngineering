@@ -59,6 +59,8 @@ public class ConnectionSceneController{
     }
 
     private void errorConnection(){
+        serverPort.clear();
+        serverAddress.clear();
         errorLabel.setVisible(true);
         ok.setVisible(true);
         ok.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {

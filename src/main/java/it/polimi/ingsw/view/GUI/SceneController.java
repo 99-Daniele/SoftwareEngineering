@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -85,6 +86,11 @@ public class SceneController {
     public static void setText(String selector, String text){
         Label label = (Label) scene.lookup(selector);
         label.setText(text);
+    }
+
+    public static void clearText(String selector){
+        TextField textField = (TextField) scene.lookup(selector);
+        textField.clear();
     }
 
     public static void setImage(String selector, String file) throws FileNotFoundException {

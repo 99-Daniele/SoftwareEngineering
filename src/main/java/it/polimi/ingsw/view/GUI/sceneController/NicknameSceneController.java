@@ -70,11 +70,13 @@ public class NicknameSceneController{
                 else {
                     errorLabel.setText("INSERT A CORRECT NUM OF PLAYERS (1 - 4)");
                     nickNameError = false;
+                    playerNumber.clear();
                     error();
                 }
             } catch (NumberFormatException e){
                 errorLabel.setText("INSERT A NUMBER");
                 nickNameError = false;
+                playerNumber.clear();
                 error();
             }
         }
@@ -86,6 +88,7 @@ public class NicknameSceneController{
             }
             else {
                 errorLabel.setText("INSERT A VALID NICKNAME");
+                nickname.clear();
                 error();
             }
         }
@@ -110,6 +113,7 @@ public class NicknameSceneController{
     public static void alreadyTakenNickName(){
         SceneController.setText("#errorLabel", "NICKNAME ALREADY CHOSEN BY ANOTHER PLAYER");
         error();
+        SceneController.clearText("#nickname");
     }
 
     private static void error(){
