@@ -330,12 +330,28 @@ public class GUI extends ClientView {
         serverMessages.add(0, newMessage);
     }
 
+
+
     @Override
-    public void take_marble_message(Message message) {
+    public void take_marble_message(Message message){
+        int i=0;
         Message_ArrayList_Marble m = (Message_ArrayList_Marble) message;
         super.take_marble_message(message);
-        if(m.getClientID() != position);
-        //print chosen marbles
+        if (m.getMarbles().size()==4)
+            Platform.runLater(()-> {
+                try {
+                    YourTurnSceneController.showFourMarble(m.getMarbles());
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            });
+        else Platform.runLater(()-> {
+            try {
+                YourTurnSceneController.showThreeMarble(m.getMarbles());
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override
@@ -539,7 +555,7 @@ public class GUI extends ClientView {
                 SceneController.changeRootPane("/fxml/yourTurnScene");
             SceneController.errorMessage(quitMessage);
         });
-        //handle switch error
+        Platform.runLater(()->YourTurnSceneController.errorSwitch());
     }
 
     @Override

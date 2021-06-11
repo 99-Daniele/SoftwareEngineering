@@ -85,9 +85,6 @@
             <Button fx:id="chooseLeader1" layoutX="17.0" layoutY="624.0" mnemonicParsing="false" text="Choose card" visible="false" />
             <Button fx:id="chooseLeader2" layoutX="147.0" layoutY="624.0" mnemonicParsing="false" text="Choose card" visible="false" />
             <Button fx:id="chooseBase" layoutX="141.0" layoutY="371.0" mnemonicParsing="false" text="Choose" visible="false" />
-            <RadioButton fx:id="switch1" disable="true" layoutX="6.0" layoutY="207.0" mnemonicParsing="false" />
-            <RadioButton fx:id="switch2" disable="true" layoutX="6.0" layoutY="241.0" mnemonicParsing="false" />
-            <RadioButton fx:id="switch3" disable="true" layoutX="6.0" layoutY="274.0" mnemonicParsing="false" />
             <ImageView fitHeight="30.0" fitWidth="29.0" layoutX="3.0" layoutY="352.0">
                <image>
                   <Image url="@../photos/coin.png" />
@@ -239,23 +236,22 @@
             </Label>
             <Button fx:id="yes" layoutX="472.0" layoutY="335.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="72.0" text="YES" visible="false" />
             <Button fx:id="no" layoutX="816.0" layoutY="335.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="72.0" text="NO" visible="false" />
-            <Button fx:id="ok" layoutX="641.0" layoutY="335.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="72.0" text="OK" visible="false" />
-            <ImageView fx:id="marbleShow1" fitHeight="23.0" fitWidth="23.0" layoutX="630.0" layoutY="266.0" visible="false">
+            <ImageView fx:id="marbleShow1" disable="true" fitHeight="23.0" fitWidth="23.0" layoutX="630.0" layoutY="266.0" visible="false">
                <image>
                   <Image url="@../photos/bianca.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="marbleShow2" fitHeight="23.0" fitWidth="23.0" layoutX="653.0" layoutY="267.0" visible="false">
+            <ImageView fx:id="marbleShow2" disable="true" fitHeight="23.0" fitWidth="23.0" layoutX="653.0" layoutY="267.0" visible="false">
                <image>
                   <Image url="@../photos/bianca.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="marbleShow3" fitHeight="23.0" fitWidth="23.0" layoutX="677.0" layoutY="266.0" visible="false">
+            <ImageView fx:id="marbleShow3" disable="true" fitHeight="23.0" fitWidth="23.0" layoutX="677.0" layoutY="266.0" visible="false">
                <image>
                   <Image url="@../photos/bianca.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="marbleShow4" fitHeight="23.0" fitWidth="23.0" layoutX="700.0" layoutY="266.0" visible="false">
+            <ImageView fx:id="marbleShow4" disable="true" fitHeight="23.0" fitWidth="23.0" layoutX="700.0" layoutY="266.0" visible="false">
                <image>
                   <Image url="@../photos/bianca.png" />
                </image>
@@ -323,6 +319,11 @@
                   <Button fx:id="okError" layoutX="198.0" layoutY="170.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="50.0" text="OK" />
                </children>
             </Pane>
+            <Button fx:id="one" disable="true" layoutX="2.0" layoutY="203.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="1" />
+            <Button fx:id="two" disable="true" layoutX="3.0" layoutY="237.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="2" />
+            <Button fx:id="three" disable="true" layoutX="3.0" layoutY="270.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="3" />
+            <Button fx:id="four" disable="true" layoutX="38.0" layoutY="624.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="4" />
+            <Button fx:id="five" disable="true" layoutX="177.0" layoutY="624.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="5" />
          </children>
       </AnchorPane>
    </children>
