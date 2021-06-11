@@ -319,11 +319,11 @@
                   <Button fx:id="okError" layoutX="198.0" layoutY="170.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="50.0" text="OK" />
                </children>
             </Pane>
-            <Button fx:id="one" disable="true" layoutX="2.0" layoutY="203.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="1" />
-            <Button fx:id="two" disable="true" layoutX="3.0" layoutY="237.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="2" />
-            <Button fx:id="three" disable="true" layoutX="3.0" layoutY="270.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="3" />
-            <Button fx:id="four" disable="true" layoutX="38.0" layoutY="624.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="4" />
-            <Button fx:id="five" disable="true" layoutX="177.0" layoutY="624.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="5" />
+            <Button fx:id="one" visible="false" layoutX="2.0" layoutY="203.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="1" />
+            <Button fx:id="two" visible="false" layoutX="3.0" layoutY="237.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="2" />
+            <Button fx:id="three" visible="false" layoutX="3.0" layoutY="270.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="3" />
+            <Button fx:id="four" visible="false" layoutX="38.0" layoutY="624.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="4" />
+            <Button fx:id="five" visible="false" layoutX="177.0" layoutY="624.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="5" />
          </children>
       </AnchorPane>
    </children>

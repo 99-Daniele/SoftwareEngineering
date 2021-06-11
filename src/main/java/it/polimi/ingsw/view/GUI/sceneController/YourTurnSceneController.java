@@ -256,9 +256,7 @@ public class YourTurnSceneController {
     private Button okError;
 
     private ArrayList<Integer> switchCounter=new ArrayList<>(2);
-    private int marbleCount;
     private static int red;
-    private static ArrayList<Marble> takenMarble;
 
     @FXML
     public void initialize() {
@@ -323,7 +321,7 @@ public class YourTurnSceneController {
         });
         marbleShow1.setOnMouseClicked(mouseEvent ->{
             try {
-                ClientSocket.sendMessage(new Message_One_Parameter_Marble(MessageType.USE_MARBLE, GUI.getPosition(), takenMarble.get(0)));
+                ClientSocket.sendMessage(new Message_One_Parameter_Marble(MessageType.USE_MARBLE, GUI.getPosition(), ClientView.getMarbles().remove(0)));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -332,7 +330,7 @@ public class YourTurnSceneController {
         });
         marbleShow2.setOnMouseClicked(mouseEvent ->{
             try {
-                ClientSocket.sendMessage(new Message_One_Parameter_Marble(MessageType.USE_MARBLE, GUI.getPosition(), takenMarble.get(1)));
+                ClientSocket.sendMessage(new Message_One_Parameter_Marble(MessageType.USE_MARBLE, GUI.getPosition(), ClientView.getMarbles().remove(0)));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -341,7 +339,7 @@ public class YourTurnSceneController {
         });
         marbleShow3.setOnMouseClicked(mouseEvent ->{
             try {
-                ClientSocket.sendMessage(new Message_One_Parameter_Marble(MessageType.USE_MARBLE, GUI.getPosition(), takenMarble.get(2)));
+                ClientSocket.sendMessage(new Message_One_Parameter_Marble(MessageType.USE_MARBLE, GUI.getPosition(), ClientView.getMarbles().remove(0)));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -350,7 +348,7 @@ public class YourTurnSceneController {
         });
         marbleShow4.setOnMouseClicked(mouseEvent ->{
             try {
-                ClientSocket.sendMessage(new Message_One_Parameter_Marble(MessageType.USE_MARBLE, GUI.getPosition(), takenMarble.get(3)));
+                ClientSocket.sendMessage(new Message_One_Parameter_Marble(MessageType.USE_MARBLE, GUI.getPosition(), ClientView.getMarbles().remove(0)));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -603,18 +601,16 @@ public class YourTurnSceneController {
     }
 
     private void disableSwitches(){
-        one.setDisable(true);
-        two.setDisable(true);
-        three.setDisable(true);
-        four.setDisable(true);
-        five.setDisable(true);
+        one.setVisible(false);
+        two.setVisible(false);
+        three.setVisible(false);
+        four.setVisible(false);
+        five.setVisible(false);
     }
 
     public static void showThreeMarble(ArrayList<Marble> marbles) throws FileNotFoundException {
         SceneController.setVisible("#message",true);
-        takenMarble=marbles;
-        for(int i=0;i<marbles.size();i++)
-        {
+        for(int i=0;i<marbles.size();i++) {
             if(marbles.get(i).toString().equals("RED"))
                 red=i+1;
             switch(i){
@@ -640,8 +636,6 @@ public class YourTurnSceneController {
 
     public static void showFourMarble(ArrayList<Marble> marbles) throws FileNotFoundException {
         SceneController.setVisible("#message",true);
-
-        takenMarble=marbles;
         for(int i=0;i<marbles.size();i++)
         {
             if(marbles.get(i).toString().equals("RED"))
@@ -680,13 +674,13 @@ public class YourTurnSceneController {
     }
 
     public static void yes(){
-        SceneController.setVisible("#yes",false);
-        SceneController.setVisible("#no",false);
-        SceneController.setDisable("#one",false);
-        SceneController.setDisable("#two",false);
-        SceneController.setDisable("#three",false);
-        SceneController.setDisable("#four",false);
-        SceneController.setDisable("#five",false);
+        SceneController.setVisible("#one",true);
+        SceneController.setVisible("#two",true);
+        SceneController.setVisible("#three",true);
+        if(ClientView.getWarehouse(GUI.getPosition()).size() >= 4)
+            SceneController.setVisible("#four",true);
+        if(ClientView.getWarehouse(GUI.getPosition()).size() == 5)
+            SceneController.setVisible("#five",true);
     }
 
     private static void chooseMarble(){
@@ -695,11 +689,10 @@ public class YourTurnSceneController {
     }
 
     private void useMarble(){
-        marbleCount--;
-        if(marbleCount>0)
-        {
+        if(ClientView.getMarbles().size() > 0) {
             ask();
-        }else {
+        }
+        else {
             message.setVisible(false);
             yes.setVisible(false);
             no.setVisible(false);
@@ -711,8 +704,6 @@ public class YourTurnSceneController {
     }
 
     private void take_market_marble_row(int i) {
-        marbleCount = 4;
-        ClientView.setCurrentState(GAME_STATES.TAKE_MARBLE_STATE);
         disableMarketButton();
         try {
             ClientSocket.sendMessage(new Message_Two_Parameter_Int(MessageType.TAKE_MARBLE, GUI.getPosition(), 0, i));
@@ -722,8 +713,6 @@ public class YourTurnSceneController {
     }
 
     private void take_market_marble_column(int i) {
-        marbleCount = 3;
-        ClientView.setCurrentState(GAME_STATES.TAKE_MARBLE_STATE);
         disableMarketButton();
         try {
             ClientSocket.sendMessage(new Message_Two_Parameter_Int(MessageType.TAKE_MARBLE, GUI.getPosition(), 1, i));
@@ -740,11 +729,6 @@ public class YourTurnSceneController {
         column2.setDisable(true);
         column3.setDisable(true);
         column4.setDisable(true);
-    }
-
-    public static void errorSwitch(){
-        SceneController.setText("#message","You can't switch this depots");
-        Platform.runLater(()->ask());
     }
 
     private void otherPlayerboardButton() {
@@ -1543,19 +1527,25 @@ public class YourTurnSceneController {
     }
 
     public static void leaderCardActivationMessage(String newMessage){
-        if(ClientView.isLeaderCardActive(GUI.getPosition(), 1))
-            SceneController.setOpacity("#leader1", 1);
-        if (ClientView.isLeaderCardActive(GUI.getPosition(), 2))
-            SceneController.setOpacity("#leader2", 1);
-        if(!leaderCardAvailable()){
-            SceneController.setDisable("#radiobutActLeader", true);
-            SceneController.setDisable("#radiobutDiscardLeader", true);
+        try {
+            SceneController.setImage("#leader1", CardMapGUI.getCard(ClientView.getLeaderCards(GUI.getPosition()).get(0)));
+            SceneController.setImage("#leader2", CardMapGUI.getCard(ClientView.getLeaderCards(GUI.getPosition()).get(1)));
+            if (ClientView.isLeaderCardActive(GUI.getPosition(), 1))
+                SceneController.setOpacity("#leader1", 1);
+            if (ClientView.isLeaderCardActive(GUI.getPosition(), 2)) {
+                SceneController.setOpacity("#leader2", 1);
+            }
+            if (!leaderCardAvailable()) {
+                SceneController.setDisable("#radiobutActLeader", true);
+                SceneController.setDisable("#radiobutDiscardLeader", true);
+            } else {
+                SceneController.setDisable("#radiobutActLeader", false);
+                SceneController.setDisable("#radiobutDiscardLeader", false);
+            }
+            SceneController.addMessage(newMessage);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
-        else {
-            SceneController.setDisable("#radiobutActLeader", false);
-            SceneController.setDisable("#radiobutDiscardLeader", false);
-        }
-        SceneController.addMessage(newMessage);
     }
 
     public static void leaderCardDiscardMessage(String newMessage){

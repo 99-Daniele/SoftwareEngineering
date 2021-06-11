@@ -488,7 +488,6 @@ public class CLI extends ClientView{
         marble = marble.toUpperCase();
         Marble chosenMarble = correct_marble(marble, marbles);
         if (chosenMarble != null){
-            super.setMarbles(marbles);
             if(marbles.size() == 0)
                 super.setCurrentState(GAME_STATES.END_TURN_STATE);
             Message message = new Message_One_Parameter_Marble(MessageType.USE_MARBLE, position, chosenMarble);

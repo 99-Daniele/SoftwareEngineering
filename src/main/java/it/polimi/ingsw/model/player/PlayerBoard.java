@@ -7,6 +7,7 @@ import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 
 import java.util.ArrayList;
+import static java.util.Collections.swap;
 
 /**
  * PlayerBoard is the board of the player. Contains his nickname, his warehouse, his strongbox, his owned DevelopmentCards,
@@ -237,6 +238,8 @@ public class PlayerBoard extends SimplePlayerBoard{
         LeaderRequirements leaderRequirements = createMyLeaderRequirements();
         boolean extraDepot = leaderCards.get(chosenLeaderCard -1).activateCard(warehouse, strongbox, leaderRequirements);
         victoryPoints.increaseVictoryPointsByCards(leaderCards.get(chosenLeaderCard -1).getVictoryPoints());
+        if(chosenLeaderCard == 2 && !leaderCards.get(0).isActive())
+            swap(leaderCards, 0, 1);
         return extraDepot;
     }
 

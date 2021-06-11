@@ -45,10 +45,14 @@ public class Cards_Slots_View {
     }
 
     private void activateLeaderCard(int leaderCard){
-        if(firstLeaderCard == leaderCard)
-            firstActive = true;
-        else
+        if(secondLeaderCard == leaderCard && !firstActive){
+            int temp = firstLeaderCard;
+            firstLeaderCard = secondLeaderCard;
+            secondLeaderCard = temp;
+        }
+        else if(secondLeaderCard == leaderCard)
             secondActive = true;
+        firstActive = true;
     }
 
     public ArrayList<Integer> getDevelopmentCards() {

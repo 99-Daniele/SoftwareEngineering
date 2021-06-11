@@ -118,16 +118,14 @@ public class GUI extends ClientView {
         Platform.runLater(() -> {
             if (SceneController.isCurrentScene("#nicknameLabel"))
                 NicknameSceneController.waitPlayers();
-            if(isState(GAME_STATES.BUY_CARD_STATE)) {
+            else if(isState(GAME_STATES.BUY_CARD_STATE) || (isState(GAME_STATES.TAKE_MARBLE_STATE) && getMarbles().size() == 0)
+                || isState(GAME_STATES.END_TURN_STATE)) {
                 setCurrentState(GAME_STATES.END_TURN_STATE);
                 YourTurnSceneController.endTurn();
             }
-            if(isState(GAME_STATES.FIRST_POWER_STATE) || ClientView.isState(GAME_STATES.ACTIVATE_PRODUCTION_STATE)){
+            else if(isState(GAME_STATES.FIRST_POWER_STATE) || ClientView.isState(GAME_STATES.ACTIVATE_PRODUCTION_STATE)){
                 setCurrentState(GAME_STATES.ACTIVATE_PRODUCTION_STATE);
                 YourTurnSceneController.production();
-            }
-            if(isState(GAME_STATES.END_TURN_STATE)){
-                YourTurnSceneController.endTurn();
             }
         });
     }
@@ -334,9 +332,9 @@ public class GUI extends ClientView {
 
     @Override
     public void take_marble_message(Message message){
-        int i=0;
         Message_ArrayList_Marble m = (Message_ArrayList_Marble) message;
         super.take_marble_message(message);
+        setCurrentState(GAME_STATES.TAKE_MARBLE_STATE);
         if (m.getMarbles().size()==4)
             Platform.runLater(()-> {
                 try {
@@ -425,19 +423,19 @@ public class GUI extends ClientView {
     @Override
     public void end_game_message(Message message) {
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
-        String quitMessage;
+        String endMessage;
         if(getNumOfPlayers() == 1 && m.getClientID() == 1){
-            quitMessage = "Game ended. Ludovico win.";
+            endMessage = "Game ended. Ludovico win.";
         }
         else {
-            quitMessage = "Game ended. " + getNickname(m.getClientID()) + " win the game.\n"
+            endMessage = "Game ended. " + getNickname(m.getClientID()) + " win the game.\n"
                     + m.getPar1() + " victory points and " + m.getPar2()
                     + " total resources.";
         }
         Platform.runLater(() -> {
             if(!SceneController.isCurrentScene("#radiobutBuyCard"))
                 SceneController.changeRootPane("/fxml/yourTurnScene");
-            SceneController.errorMessage(quitMessage);
+            SceneController.errorMessage(endMessage);
         });
     }
 
@@ -448,44 +446,44 @@ public class GUI extends ClientView {
 
     @Override
     public void wrong_parameters_error() {
-        String quitMessage = "You have inserted wrong parameters";
+        String errorMessage = "You have inserted wrong parameters";
         Platform.runLater(() -> {
             if(!SceneController.isCurrentScene("#radiobutBuyCard"))
                 SceneController.changeRootPane("/fxml/yourTurnScene");
-            SceneController.errorMessage(quitMessage);
+            SceneController.errorMessage(errorMessage);
         });
     }
 
     @Override
     public void wrong_turn_error(){
-        String quitMessage = "It's not your turn";
+        String errorMessage = "It's not your turn";
         Platform.runLater(() -> {
             if(!SceneController.isCurrentScene("#radiobutBuyCard"))
                 SceneController.changeRootPane("/fxml/yourTurnScene");
-            SceneController.errorMessage(quitMessage);
+            SceneController.errorMessage(errorMessage);
             YourTurnSceneController.notYourTurn();
         });
     }
 
     @Override
     public void empty_deck_error() {
-        String quitMessage = "You have chosen an empty deck";
+        String errorMessage = "You have chosen an empty deck";
         setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
         Platform.runLater(() -> {
             if(!SceneController.isCurrentScene("#radiobutBuyCard"))
                 SceneController.changeRootPane("/fxml/yourTurnScene");
-            SceneController.errorMessage(quitMessage);
+            SceneController.errorMessage(errorMessage);
             YourTurnSceneController.yourTurn();
         });
     }
 
     @Override
     public void empty_slot_error() {
-        String quitMessage = "You have no cards in this slot";
+        String errorMessage = "You have no cards in this slot";
         Platform.runLater(() -> {
             if(!SceneController.isCurrentScene("#radiobutBuyCard"))
                 SceneController.changeRootPane("/fxml/yourTurnScene");
-            SceneController.errorMessage(quitMessage);
+            SceneController.errorMessage(errorMessage);
             if(isState(GAME_STATES.FIRST_POWER_STATE)){
                 setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
                 YourTurnSceneController.disableProductions();
@@ -499,11 +497,11 @@ public class GUI extends ClientView {
 
     @Override
     public void wrong_power_error() {
-        String quitMessage = "You can't activate this production power";
+        String errorMessage = "You can't activate this production power";
         Platform.runLater(() -> {
             if(!SceneController.isCurrentScene("#radiobutBuyCard"))
                 SceneController.changeRootPane("/fxml/yourTurnScene");
-            SceneController.errorMessage(quitMessage);
+            SceneController.errorMessage(errorMessage);
             if(isState(GAME_STATES.FIRST_POWER_STATE)){
                 setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
                 YourTurnSceneController.disableProductions();
@@ -517,54 +515,53 @@ public class GUI extends ClientView {
 
     @Override
     public void not_enough_cards_error() {
-        String quitMessage = "You don't have enough development cards\n to activate this leader card";
+        String errorMessage = "You don't have enough development cards\n to activate this leader card";
         Platform.runLater(() -> {
             if(!SceneController.isCurrentScene("#radiobutBuyCard"))
                 SceneController.changeRootPane("/fxml/yourTurnScene");
-            SceneController.errorMessage(quitMessage);
+            SceneController.errorMessage(errorMessage);
         });
     }
 
     @Override
     public void full_slot_error() {
-        String quitMessage = "You can't insert this card in any slot";
+        String errorMessage = "You can't insert this card in any slot";
         setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
         Platform.runLater(() -> {
             if(!SceneController.isCurrentScene("#radiobutBuyCard"))
                 SceneController.changeRootPane("/fxml/yourTurnScene");
-            SceneController.errorMessage(quitMessage);
+            SceneController.errorMessage(errorMessage);
             YourTurnSceneController.yourTurn();
         });
     }
 
     @Override
     public void illegal_operation_error() {
-        String quitMessage = "You can't do this operation at this moment";
+        String errorMessage = "You can't do this operation at this moment";
         Platform.runLater(() -> {
             if(!SceneController.isCurrentScene("#radiobutBuyCard"))
                 SceneController.changeRootPane("/fxml/yourTurnScene");
-            SceneController.errorMessage(quitMessage);
+            SceneController.errorMessage(errorMessage);
         });
     }
 
     @Override
     public void impossible_switch_error() {
-        String quitMessage = "You can't switch this depots";
+        String errorMessage = "You can't switch this depots";
         Platform.runLater(() -> {
             if(!SceneController.isCurrentScene("#radiobutBuyCard"))
                 SceneController.changeRootPane("/fxml/yourTurnScene");
-            SceneController.errorMessage(quitMessage);
+            SceneController.errorMessage(errorMessage);
         });
-        Platform.runLater(()->YourTurnSceneController.errorSwitch());
     }
 
     @Override
     public void not_enough_resource_error() {
-        String quitMessage = "You have not enough resources to do this operation";
+        String errorMessage = "You have not enough resources to do this operation";
         Platform.runLater(() -> {
             if(!SceneController.isCurrentScene("#radiobutBuyCard"))
                 SceneController.changeRootPane("/fxml/yourTurnScene");
-            SceneController.errorMessage(quitMessage);
+            SceneController.errorMessage(errorMessage);
             if(isState(GAME_STATES.BUY_CARD_STATE)) {
                 setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
                 YourTurnSceneController.yourTurn();
@@ -582,21 +579,21 @@ public class GUI extends ClientView {
 
     @Override
     public void already_active_error() {
-        String quitMessage = "You activated this leader card previously";
+        String errorMessage = "You activated this leader card previously";
         Platform.runLater(() -> {
             if(!SceneController.isCurrentScene("#radiobutBuyCard"))
                 SceneController.changeRootPane("/fxml/yourTurnScene");
-            SceneController.errorMessage(quitMessage);
+            SceneController.errorMessage(errorMessage);
         });
     }
 
     @Override
     public void already_discard_error() {
-        String quitMessage = "You discard this leader card previously";
+        String errorMessage = "You discard this leader card previously";
         Platform.runLater(() -> {
             if(!SceneController.isCurrentScene("#radiobutBuyCard"))
                 SceneController.changeRootPane("/fxml/yourTurnScene");
-            SceneController.errorMessage(quitMessage);
+            SceneController.errorMessage(errorMessage);
         });
     }
 }
