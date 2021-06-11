@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.GUI.sceneController;
 
 import it.polimi.ingsw.model.cards.Card;
 import it.polimi.ingsw.model.games.states.GAME_STATES;
+import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 import it.polimi.ingsw.network.client.ClientSocket;
 import it.polimi.ingsw.network.messages.*;
@@ -28,10 +29,21 @@ import javafx.scene.layout.VBox;
 
 import java.io.*;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 
 
 public class YourTurnSceneController {
 
+    @FXML
+    private Button one;
+    @FXML
+    private Button two;
+    @FXML
+    private Button three;
+    @FXML
+    private Button four;
+    @FXML
+    private Button five;
     @FXML
     private Button chooseSlot1;
     @FXML
@@ -243,7 +255,10 @@ public class YourTurnSceneController {
     @FXML
     private Button okError;
 
+    private ArrayList<Integer> switchCounter=new ArrayList<>(2);
     private int marbleCount;
+    private static int red;
+    private static ArrayList<Marble> takenMarble;
 
     @FXML
     public void initialize() {
@@ -264,7 +279,7 @@ public class YourTurnSceneController {
         });
         row1.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             row1.setSelected(false);
-            take_market_marble_row(1);
+            take_market_marble_row(3);
         });
         row2.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             row2.setSelected(false);
@@ -272,7 +287,7 @@ public class YourTurnSceneController {
         });
         row3.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             row3.setSelected(false);
-            take_market_marble_row(3);
+            take_market_marble_row(1);
         });
         column1.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             column1.setSelected(false);
@@ -296,6 +311,72 @@ public class YourTurnSceneController {
         chooseLeader1.setOnMouseClicked(mouseEvent -> choseLeader(1));
         chooseLeader2.setOnMouseClicked(mouseEvent -> choseLeader(2));
         okError.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> errorPane.setVisible(false));
+        yes.setOnMouseClicked(mouseEvent -> {
+            switchCounter=new ArrayList<>(2);
+            yes();
+        });
+        no.setOnMouseClicked(mouseEvent -> {
+            message.setText("Choose a marble.");
+            yes.setVisible(false);
+            no.setVisible(false);
+            chooseMarble();
+        });
+        marbleShow1.setOnMouseClicked(mouseEvent ->{
+            try {
+                ClientSocket.sendMessage(new Message_One_Parameter_Marble(MessageType.USE_MARBLE, GUI.getPosition(), takenMarble.get(0)));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            marbleShow1.setVisible(false);
+            useMarble();
+        });
+        marbleShow2.setOnMouseClicked(mouseEvent ->{
+            try {
+                ClientSocket.sendMessage(new Message_One_Parameter_Marble(MessageType.USE_MARBLE, GUI.getPosition(), takenMarble.get(1)));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            marbleShow2.setVisible(false);
+            useMarble();
+        });
+        marbleShow3.setOnMouseClicked(mouseEvent ->{
+            try {
+                ClientSocket.sendMessage(new Message_One_Parameter_Marble(MessageType.USE_MARBLE, GUI.getPosition(), takenMarble.get(2)));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            marbleShow3.setVisible(false);
+            useMarble();
+        });
+        marbleShow4.setOnMouseClicked(mouseEvent ->{
+            try {
+                ClientSocket.sendMessage(new Message_One_Parameter_Marble(MessageType.USE_MARBLE, GUI.getPosition(), takenMarble.get(3)));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            marbleShow4.setVisible(false);
+            useMarble();
+        });
+        one.setOnMouseClicked(mouseEvent -> {
+            one.setDisable(true);
+            clickedSwitch(1);
+        });
+        two.setOnMouseClicked(mouseEvent -> {
+            two.setDisable(true);
+            clickedSwitch(2);
+        });
+        three.setOnMouseClicked(mouseEvent -> {
+            three.setDisable(true);
+            clickedSwitch(3);
+        });
+        four.setOnMouseClicked(mouseEvent -> {
+            four.setDisable(true);
+            clickedSwitch(4);
+        });
+        five.setOnMouseClicked(mouseEvent -> {
+            five.setDisable(true);
+            clickedSwitch(5);
+        });
     }
 
     private static boolean leaderCardAvailable(){
@@ -517,77 +598,137 @@ public class YourTurnSceneController {
             display.getChildren().add(new Label(message));
     }
 
-    private void chooseSwitch(Message switchmessage) {
-        Message_ArrayList_Marble m = (Message_ArrayList_Marble) switchmessage;
-        //ClientView.take_marble_message(message);
-        System.out.println("You have chosen this marbles: ");
-        message.setVisible(true);
-        message.setText("Wanna switch your deposit?");
-        yes.setVisible(true);
-        no.setVisible(true);
-        //show marbles
-        yes.setOnMouseClicked(mouseEvent -> yesSwitch());
-        no.setOnMouseClicked(mouseEvent -> noSwitch());
-    }
-
-    private void noSwitch() {
-        marbleCount--;
-        if (marbleCount > 0)
-            showReducedMarble();
-
-    }
-
-    private void showReducedMarble() {
-
-    }
-
-    private void yesSwitch() {
-        switch1.setDisable(false);
-        switch2.setDisable(false);
-        switch3.setDisable(false);
-        switch1.setOnMouseClicked(mouseEvent -> {
-            switch1.setDisable(true);
-            switch1.setSelected(false);
-            clickedSwitch();
-        });
-        switch2.setOnMouseClicked(mouseEvent -> {
-            switch2.setDisable(true);
-            switch2.setSelected(false);
-            clickedSwitch();
-        });
-        switch3.setOnMouseClicked(mouseEvent -> {
-            switch3.setDisable(true);
-            switch3.setSelected(false);
-            clickedSwitch();
-        });
-    }
-
-    private void clickedSwitch() {
-        int par1 = 0;
-        int par2 = 0;
-        if (switch1.isDisable() && switch2.isDisable()) {
-            par1 = 1;
-            par2 = 2;
-        }
-        if (switch1.isDisable() && switch3.isDisable()) {
-            par1 = 1;
-            par2 = 3;
-        }
-        if (switch2.isDisable() && switch3.isDisable()) {
-            par1 = 2;
-            par2 = 3;
-        }
-        if (par1 != 0) {
+    private void clickedSwitch(int i){
+        switchCounter.add(i);
+        if (switchCounter.size()==2) {
+            disableSwitches();
             try {
-                ClientSocket.sendMessage(new Message_Two_Parameter_Int(MessageType.SWITCH_DEPOT, GUI.getPosition(), par1, par2));
+                ClientSocket.sendMessage(new Message_Two_Parameter_Int(MessageType.SWITCH_DEPOT, GUI.getPosition(), switchCounter.get(0), switchCounter.get(1)));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
+    private static void disableMarbleShow(Boolean bool){
+        SceneController.setDisable("#marbleShow1",bool);
+        SceneController.setDisable("#marbleShow2",bool);
+        SceneController.setDisable("#marbleShow3",bool);
+        SceneController.setDisable("#marbleShow4",bool);
+    }
+
+    private void disableSwitches(){
+        one.setDisable(true);
+        two.setDisable(true);
+        three.setDisable(true);
+        four.setDisable(true);
+        five.setDisable(true);
+    }
+
+    public static void showThreeMarble(ArrayList<Marble> marbles) throws FileNotFoundException {
+        SceneController.setVisible("#message",true);
+        takenMarble=marbles;
+        for(int i=0;i<marbles.size();i++)
+        {
+            if(marbles.get(i).toString().equals("RED"))
+                red=i+1;
+            switch(i){
+                case 0:{
+                    SceneController.setImage("#marbleShow1",MarbleMapGUI.getMarble(marbles.get(i)));
+                    SceneController.setVisible("#marbleShow1",true);
+                    SceneController.setDisable("#marbleShow1",true);
+                }
+                case 1:{
+                    SceneController.setImage("#marbleShow2",MarbleMapGUI.getMarble(marbles.get(i)));
+                    SceneController.setVisible("#marbleShow2",true);
+                    SceneController.setDisable("#marbleShow2",true);
+                }
+                case 2:{
+                    SceneController.setImage("#marbleShow3",MarbleMapGUI.getMarble(marbles.get(i)));
+                    SceneController.setVisible("#marbleShow3",true);
+                    SceneController.setDisable("#marbleShow3",true);
+                }
+            }
+        }
+        Platform.runLater(()->ask());
+    }
+
+    public static void showFourMarble(ArrayList<Marble> marbles) throws FileNotFoundException {
+        SceneController.setVisible("#message",true);
+
+        takenMarble=marbles;
+        for(int i=0;i<marbles.size();i++)
+        {
+            if(marbles.get(i).toString().equals("RED"))
+                red=i+1;
+            switch(i){
+                case 0:{
+                    SceneController.setImage("#marbleShow1",MarbleMapGUI.getMarble(marbles.get(i)));
+                    SceneController.setVisible("#marbleShow1",true);
+                    SceneController.setDisable("#marbleShow1",true);
+                }
+                case 1:{
+                    SceneController.setImage("#marbleShow2",MarbleMapGUI.getMarble(marbles.get(i)));
+                    SceneController.setVisible("#marbleShow2",true);
+                    SceneController.setDisable("#marbleShow2",true);
+                }
+                case 2:{
+                    SceneController.setImage("#marbleShow3",MarbleMapGUI.getMarble(marbles.get(i)));
+                    SceneController.setVisible("#marbleShow3",true);
+                    SceneController.setDisable("#marbleShow3",true);
+                }
+                case 3:{
+                    SceneController.setImage("#marbleShow4",MarbleMapGUI.getMarble(marbles.get(i)));
+                    SceneController.setVisible("#marbleShow4",true);
+                    SceneController.setDisable("#marbleShow4",true);
+                }
+            }
+        }
+        Platform.runLater(()->ask());
+    }
+
+    public static void ask(){
+        disableMarbleShow(true);
+        SceneController.setText("#message","Wanna switch your deposit?");
+        SceneController.setVisible("#yes",true);
+        SceneController.setVisible("#no",true);
+    }
+
+    public static void yes(){
+        SceneController.setVisible("#yes",false);
+        SceneController.setVisible("#no",false);
+        SceneController.setDisable("#one",false);
+        SceneController.setDisable("#two",false);
+        SceneController.setDisable("#three",false);
+        SceneController.setDisable("#four",false);
+        SceneController.setDisable("#five",false);
+    }
+
+    private static void chooseMarble(){
+        SceneController.setText("#message","Choose a marble to activate.");
+        disableMarbleShow(false);
+    }
+
+    private void useMarble(){
+        marbleCount--;
+        if(marbleCount>0)
+        {
+            ask();
+        }else {
+            message.setVisible(false);
+            yes.setVisible(false);
+            no.setVisible(false);
+            marbleShow1.setVisible(false);
+            marbleShow2.setVisible(false);
+            marbleShow3.setVisible(false);
+            marbleShow4.setVisible(false);
+        }
+    }
+
     private void take_market_marble_row(int i) {
         marbleCount = 4;
+        ClientView.setCurrentState(GAME_STATES.TAKE_MARBLE_STATE);
+        disableMarketButton();
         try {
             ClientSocket.sendMessage(new Message_Two_Parameter_Int(MessageType.TAKE_MARBLE, GUI.getPosition(), 0, i));
         } catch (IOException e) {
@@ -597,11 +738,28 @@ public class YourTurnSceneController {
 
     private void take_market_marble_column(int i) {
         marbleCount = 3;
+        ClientView.setCurrentState(GAME_STATES.TAKE_MARBLE_STATE);
+        disableMarketButton();
         try {
             ClientSocket.sendMessage(new Message_Two_Parameter_Int(MessageType.TAKE_MARBLE, GUI.getPosition(), 1, i));
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void disableMarketButton(){
+        row1.setDisable(true);
+        row2.setDisable(true);
+        row3.setDisable(true);
+        column1.setDisable(true);
+        column2.setDisable(true);
+        column3.setDisable(true);
+        column4.setDisable(true);
+    }
+
+    public static void errorSwitch(){
+        SceneController.setText("#message","You can't switch this depots");
+        Platform.runLater(()->ask());
     }
 
     private void otherPlayerboardButton() {
@@ -1351,6 +1509,7 @@ public class YourTurnSceneController {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+        Platform.runLater(()->chooseMarble());
     }
 
     private static void setSwitchedDepot(int depot) throws FileNotFoundException {
