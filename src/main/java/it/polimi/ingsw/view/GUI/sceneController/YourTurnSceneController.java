@@ -425,67 +425,52 @@ public class YourTurnSceneController {
 
     private void setFaithPoints() {
         int faithPoints = ClientView.getFaithPoints(GUI.getPosition());
+        int LudovicoFaithPoints = ClientView.getFaithPoints(1);
+        if(GUI.getNumOfPlayers() == 1)
+            croceNera.setVisible(true);
         if(faithPoints < 3){
-            croceRossa.setLayoutX(30*faithPoints + 7);
+            croceRossa.setLayoutX(30*faithPoints + 6);
+            croceRossa.setLayoutY(107);
+            croceNera.setLayoutX(30*LudovicoFaithPoints + 11);
+            croceNera.setLayoutY(114);
         }
         else if (faithPoints >= 3 && faithPoints < 5) {
-            croceRossa.setLayoutX(67);
-            croceRossa.setLayoutY(168 - faithPoints*28);
+            croceRossa.setLayoutX(66);
+            croceRossa.setLayoutY(159 - 26*faithPoints);
+            croceNera.setLayoutX(71);
+            croceNera.setLayoutY(166 - 26*LudovicoFaithPoints);
         }
         else if(faithPoints >= 5 && faithPoints < 10){
-            croceRossa.setLayoutX(30*faithPoints - 52);
-            croceRossa.setLayoutY(56);
+            croceRossa.setLayoutX(30*faithPoints - 54);
+            croceRossa.setLayoutY(55);
+            croceNera.setLayoutX(30*LudovicoFaithPoints - 49);
+            croceNera.setLayoutY(62);
         }
         else if (faithPoints >= 10 && faithPoints < 12) {
-            croceRossa.setLayoutX(218);
-            croceRossa.setLayoutY(faithPoints*28 - 200);
+            croceRossa.setLayoutX(216);
+            croceRossa.setLayoutY(26*faithPoints - 179);
+            croceNera.setLayoutX(221);
+            croceNera.setLayoutY(26*LudovicoFaithPoints - 172);
         }
         else if(faithPoints >= 12 && faithPoints < 17){
-            croceRossa.setLayoutX(30*faithPoints - 112);
+            croceRossa.setLayoutX(30*faithPoints - 114);
             croceRossa.setLayoutY(107);
+            croceNera.setLayoutX(30*LudovicoFaithPoints - 109);
+            croceNera.setLayoutY(114);
         }
         else if(faithPoints >= 17 && faithPoints < 19){
-            croceRossa.setLayoutX(368);
-            croceRossa.setLayoutY(555 - 28*faithPoints);
+            croceRossa.setLayoutX(366);
+            croceRossa.setLayoutY(523 - 26*faithPoints);
+            croceNera.setLayoutX(371);
+            croceNera.setLayoutY(530 - 26*LudovicoFaithPoints);
         }
         else {
             if(faithPoints > 24)
                 faithPoints = 24;
-            croceRossa.setLayoutX(30*faithPoints - 172);
-            croceRossa.setLayoutY(56);
-        }
-        if(GUI.getNumOfPlayers() == 1){
-            faithPoints = ClientView.getFaithPoints(1);
-            croceNera.setVisible(true);
-            if(faithPoints < 3){
-                croceNera.setLayoutX(30*faithPoints + 7);
-            }
-            else if (faithPoints >= 3 && faithPoints < 5) {
-                croceNera.setLayoutX(67);
-                croceNera.setLayoutY(168 - faithPoints*28);
-            }
-            else if(faithPoints >= 5 && faithPoints < 10){
-                croceNera.setLayoutX(30*faithPoints - 52);
-                croceNera.setLayoutY(56);
-            }
-            else if (faithPoints >= 10 && faithPoints < 12) {
-                croceNera.setLayoutX(218);
-                croceNera.setLayoutY(faithPoints*28 - 200);
-            }
-            else if(faithPoints >= 12 && faithPoints < 17){
-                croceNera.setLayoutX(30*faithPoints - 112);
-                croceNera.setLayoutY(107);
-            }
-            else if(faithPoints >= 17 && faithPoints < 19){
-                croceNera.setLayoutX(368);
-                croceNera.setLayoutY(555 - 28*faithPoints);
-            }
-            else {
-                if(faithPoints > 24)
-                    faithPoints = 24;
-                croceNera.setLayoutX(30*faithPoints - 172);
-                croceNera.setLayoutY(56);
-            }
+            croceRossa.setLayoutX(30*faithPoints - 174);
+            croceRossa.setLayoutY(55);
+            croceNera.setLayoutX(30*LudovicoFaithPoints - 169);
+            croceNera.setLayoutY(62);
         }
     }
 
