@@ -197,14 +197,14 @@
             <ImageView fx:id="extra12" fitHeight="20.0" fitWidth="20.0" layoutX="65.0" layoutY="584.0" pickOnBounds="true" preserveRatio="true" />
             <ImageView fx:id="extra21" fitHeight="20.0" fitWidth="20.0" layoutX="159.0" layoutY="584.0" pickOnBounds="true" preserveRatio="true" />
             <ImageView fx:id="extra22" fitHeight="20.0" fitWidth="20.0" layoutX="200.0" layoutY="584.0" pickOnBounds="true" preserveRatio="true" />
-            <Pane fx:id="panelBuy" layoutX="308.0" layoutY="150.0" prefHeight="269.0" prefWidth="458.0" style="-fx-background-color: white;" visible="false">
+            <Pane fx:id="panelBuy" layoutX="344.0" layoutY="120.0" prefHeight="345.0" prefWidth="644.0" style="-fx-background-color: white;" visible="false">
                <children>
-                  <Label layoutX="31.0" layoutY="47.0" prefHeight="53.0" prefWidth="384.0" text="Where you preferred to get the resource from?">
+                  <Label alignment="CENTER" layoutX="1.0" layoutY="47.0" prefHeight="53.0" prefWidth="644.0" text="Where you preferred to get the resource from?">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <RadioButton fx:id="radiobutWarehouse" layoutX="45.0" layoutY="153.0" mnemonicParsing="false" text="Warehouse">
+                  <RadioButton fx:id="radiobutWarehouse" accessibleRole="BUTTON" layoutX="103.0" layoutY="207.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="157.0" text="Warehouse">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -212,7 +212,7 @@
                         <ToggleGroup fx:id="chooseBtwSW" />
                      </toggleGroup>
                   </RadioButton>
-                  <RadioButton fx:id="radiobutStrongbox" layoutX="270.0" layoutY="153.0" mnemonicParsing="false" text="Strongbox" toggleGroup="$chooseBtwSW">
+                  <RadioButton fx:id="radiobutStrongbox" accessibleRole="BUTTON" layoutX="415.0" layoutY="207.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="140.0" text="Strongbox" toggleGroup="$chooseBtwSW">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -263,67 +263,67 @@
                   <VBox fx:id="display" GridPane.columnIndex="0" GridPane.rowIndex="5" />
                </content>
             </ScrollPane>
-            <Pane fx:id="basePanel" layoutX="308.0" layoutY="150.0" prefHeight="269.0" prefWidth="458.0" style="-fx-background-color: white;" visible="false">
+            <Pane fx:id="basePanel" layoutX="344.0" layoutY="120.0" prefHeight="345.0" prefWidth="644.0" style="-fx-background-color: white;" visible="false">
                <children>
-                  <Label fx:id="baseLabel" layoutX="110.0" layoutY="48.0" prefHeight="27.0" prefWidth="258.0" text="Choose resources required">
+                  <Label fx:id="baseLabel" alignment="CENTER" layoutY="48.0" prefHeight="27.0" prefWidth="644.0" text="Choose resources required">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <ImageView fx:id="servant1" fitHeight="50.0" fitWidth="50.0" layoutX="257.0" layoutY="131.0">
+                  <ImageView fx:id="servant1" fitHeight="50.0" fitWidth="50.0" layoutX="350.0" layoutY="214.0">
                      <image>
                         <Image url="@../photos/servant.png" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="stone1" fitHeight="50.0" fitWidth="50.0" layoutX="150.0" layoutY="131.0">
+                  <ImageView fx:id="stone1" fitHeight="50.0" fitWidth="50.0" layoutX="243.0" layoutY="214.0">
                      <image>
                         <Image url="@../photos/stone.png" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="coin1" fitHeight="50.0" fitWidth="50.0" layoutX="358.0" layoutY="131.0">
+                  <ImageView fx:id="coin1" fitHeight="50.0" fitWidth="50.0" layoutX="451.0" layoutY="214.0">
                      <image>
                         <Image url="@../photos/coin.png" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="shield1" fitHeight="50.0" fitWidth="50.0" layoutX="50.0" layoutY="131.0">
+                  <ImageView fx:id="shield1" fitHeight="50.0" fitWidth="50.0" layoutX="143.0" layoutY="214.0">
                      <image>
                         <Image url="@../photos/shield.png" />
                      </image>
                   </ImageView>
                </children>
             </Pane>
-            <Pane fx:id="otherPlayers" layoutX="308.0" layoutY="150.0" prefHeight="269.0" prefWidth="458.0" style="-fx-background-color: white;" visible="false">
+            <Pane fx:id="otherPlayers" layoutX="344.0" layoutY="115.0" prefHeight="345.0" prefWidth="644.0" style="-fx-background-color: white;" visible="false">
                <children>
-                  <Label layoutX="31.0" layoutY="47.0" prefHeight="53.0" prefWidth="384.0" text="Which player you want to see the playerboard?">
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutY="41.0" prefHeight="83.0" prefWidth="644.0" text="Which player you want to see the playerboard?">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <RadioButton fx:id="player13" layoutX="57.0" layoutY="153.0" mnemonicParsing="false" visible="false">
+                  <RadioButton fx:id="player13" layoutX="60.0" layoutY="213.0" mnemonicParsing="false" visible="false">
                      <toggleGroup>
                         <ToggleGroup fx:id="playersChoice" />
                      </toggleGroup></RadioButton>
-                  <RadioButton fx:id="player12" layoutX="100.0" layoutY="153.0" mnemonicParsing="false" toggleGroup="$playersChoice" visible="false" />
-                  <RadioButton fx:id="player23" layoutX="190.0" layoutY="153.0" mnemonicParsing="false" toggleGroup="$playersChoice" visible="false" />
-                  <RadioButton fx:id="player33" layoutX="323.0" layoutY="153.0" mnemonicParsing="false" toggleGroup="$playersChoice" visible="false" />
-                  <RadioButton fx:id="player22" layoutX="300.0" layoutY="153.0" mnemonicParsing="false" toggleGroup="$playersChoice" visible="false" />
+                  <RadioButton fx:id="player12" layoutX="146.0" layoutY="213.0" mnemonicParsing="false" toggleGroup="$playersChoice" visible="false" />
+                  <RadioButton fx:id="player23" layoutX="266.0" layoutY="213.0" mnemonicParsing="false" toggleGroup="$playersChoice" visible="false" />
+                  <RadioButton fx:id="player33" layoutX="484.0" layoutY="213.0" mnemonicParsing="false" toggleGroup="$playersChoice" visible="false" />
+                  <RadioButton fx:id="player22" layoutX="412.0" layoutY="213.0" mnemonicParsing="false" toggleGroup="$playersChoice" visible="false" />
                </children>
             </Pane>
-            <Pane fx:id="errorPane" layoutX="258.0" layoutY="180.0" prefHeight="269.0" prefWidth="458.0" style="-fx-background-color: white;" visible="false">
+            <RadioButton fx:id="one" layoutX="2.0" layoutY="203.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="1" visible="false" />
+            <RadioButton fx:id="two" layoutX="3.0" layoutY="237.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="2" visible="false" />
+            <RadioButton fx:id="three" layoutX="3.0" layoutY="270.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="3" visible="false" />
+            <RadioButton fx:id="four" layoutX="38.0" layoutY="624.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="4" visible="false" />
+            <RadioButton fx:id="five" layoutX="177.0" layoutY="624.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="5" visible="false" />
+            <Pane fx:id="errorPane" layoutX="349.0" layoutY="120.0" prefHeight="345.0" prefWidth="644.0" style="-fx-background-color: white;" visible="false">
                <children>
-                  <Label alignment="CENTER" layoutX="17.0" layoutY="47.0" prefHeight="115.0" prefWidth="423.0">
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="2.0" layoutY="47.0" prefHeight="115.0" prefWidth="644.0">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <Button fx:id="okError" layoutX="198.0" layoutY="170.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="50.0" text="OK" />
+                  <Button fx:id="okError" layoutX="286.0" layoutY="244.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="79.0" text="OK" />
                </children>
             </Pane>
-            <Button fx:id="one" visible="false" layoutX="2.0" layoutY="203.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="1" />
-            <Button fx:id="two" visible="false" layoutX="3.0" layoutY="237.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="2" />
-            <Button fx:id="three" visible="false" layoutX="3.0" layoutY="270.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="3" />
-            <Button fx:id="four" visible="false" layoutX="38.0" layoutY="624.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="4" />
-            <Button fx:id="five" visible="false" layoutX="177.0" layoutY="624.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="5" />
          </children>
       </AnchorPane>
    </children>

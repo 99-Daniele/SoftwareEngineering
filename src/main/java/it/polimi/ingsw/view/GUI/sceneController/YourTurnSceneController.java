@@ -36,15 +36,15 @@ import java.util.ArrayList;
 public class YourTurnSceneController {
 
     @FXML
-    private Button one;
+    private RadioButton one;
     @FXML
-    private Button two;
+    private RadioButton two;
     @FXML
-    private Button three;
+    private RadioButton three;
     @FXML
-    private Button four;
+    private RadioButton four;
     @FXML
-    private Button five;
+    private RadioButton five;
     @FXML
     private Button chooseSlot1;
     @FXML
