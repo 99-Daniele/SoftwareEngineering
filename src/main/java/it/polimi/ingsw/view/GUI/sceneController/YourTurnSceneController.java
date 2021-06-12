@@ -190,17 +190,11 @@ public class YourTurnSceneController {
     @FXML
     private RadioButton radiobutEndProd;
     @FXML
-    private RadioButton switch1;
-    @FXML
-    private RadioButton switch2;
-    @FXML
-    private RadioButton switch3;
-    @FXML
     private Pane panelBuy;
     @FXML
-    private RadioButton radiobutWarehouse;
+    private Button radiobutWarehouse;
     @FXML
-    private RadioButton radiobutStrongbox;
+    private Button radiobutStrongbox;
     @FXML
     private ImageView slot11;
     @FXML
@@ -573,6 +567,11 @@ public class YourTurnSceneController {
     private void clickedSwitch(int i){
         switchCounter.add(i);
         if (switchCounter.size()==2) {
+            one.setSelected(false);
+            two.setSelected(false);
+            three.setSelected(false);
+            four.setSelected(false);
+            five.setSelected(false);
             try {
                 ClientSocket.sendMessage(new Message_Two_Parameter_Int(MessageType.SWITCH_DEPOT, GUI.getPosition(), switchCounter.get(0), switchCounter.get(1)));
             } catch (IOException e) {
@@ -828,7 +827,6 @@ public class YourTurnSceneController {
     private void cardProduction(int slot) {
         panelBuy.setVisible(true);
         radiobutWarehouse.setOnMouseClicked(mouseEvent1 -> {
-            radiobutWarehouse.setSelected(false);
             panelBuy.setVisible(false);
             Message message = new Message_Two_Parameter_Int(MessageType.DEVELOPMENT_CARD_POWER, GUI.getPosition(), slot, 0);
             try {
@@ -838,7 +836,6 @@ public class YourTurnSceneController {
             }
         });
         radiobutStrongbox.setOnMouseClicked(mouseEvent1 -> {
-            radiobutStrongbox.setSelected(false);
             panelBuy.setVisible(false);
             Message message = new Message_Two_Parameter_Int(MessageType.DEVELOPMENT_CARD_POWER, GUI.getPosition(), slot, 1);
             try {
@@ -879,7 +876,6 @@ public class YourTurnSceneController {
             messageToSend.setResource3(resource);
             panelBuy.setVisible(true);
             radiobutWarehouse.setOnMouseClicked(mouseEvent1 -> {
-                radiobutWarehouse.setSelected(false);
                 panelBuy.setVisible(false);
                 messageToSend.setPar(0);
                 try {
@@ -889,7 +885,6 @@ public class YourTurnSceneController {
                 }
             });
             radiobutStrongbox.setOnMouseClicked(mouseEvent1 -> {
-                radiobutStrongbox.setSelected(false);
                 panelBuy.setVisible(false);
                 messageToSend.setPar(1);
                 try {
@@ -906,7 +901,6 @@ public class YourTurnSceneController {
         basePanel.setVisible(false);
         panelBuy.setVisible(true);
         radiobutWarehouse.setOnMouseClicked(mouseEvent1 -> {
-            radiobutWarehouse.setSelected(false);
             panelBuy.setVisible(false);
             messageToSend.setPar2(0);
             try {
@@ -916,7 +910,6 @@ public class YourTurnSceneController {
             }
         });
         radiobutStrongbox.setOnMouseClicked(mouseEvent1 -> {
-            radiobutStrongbox.setSelected(false);
             panelBuy.setVisible(false);
             messageToSend.setPar2(1);
             try {
@@ -1095,7 +1088,6 @@ public class YourTurnSceneController {
         setDisableAllDecks(true);
         panelBuy.setVisible(true);
         radiobutWarehouse.setOnMouseClicked(mouseEvent1 -> {
-            radiobutWarehouse.setSelected(false);
             panelBuy.setVisible(false);
             Message message = new Message_Three_Parameter_Int(MessageType.BUY_CARD, GUI.getPosition(), row, column, 0);
             try {
@@ -1105,7 +1097,6 @@ public class YourTurnSceneController {
             }
         });
         radiobutStrongbox.setOnMouseClicked(mouseEvent1 -> {
-            radiobutStrongbox.setSelected(false);
             panelBuy.setVisible(false);
             Message message = new Message_Three_Parameter_Int(MessageType.BUY_CARD, GUI.getPosition(), row, column, 1);
             try {

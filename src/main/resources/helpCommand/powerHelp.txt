@@ -1,11 +1,11 @@
 
-card power/-cp 1/2/3 warehouse(w)/strongbox(s)                              activate slot production power
+card power/-cp 1/2/3                       activate slot production power
 
-basic power/-bp  resource  resource  resource warehouse(w)/strongbox(s)     activate basic production power                                                                                                                                              -->
+basic power/-bp                            activate basic production power                                                                                                                                              -->
 
-leader power/-lp 1/2  resource  warehouse(w)/strongbox(s)                   activate leader card production power
+leader power/-lp 1/2                       activate leader card production power
 
-end power/-ep                                                               end power productions
+end power/-ep                              end power productions
 
 
 see playerboard/see board/see p/-sp 1/2/3/4         print other playerboard

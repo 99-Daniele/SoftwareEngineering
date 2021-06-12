@@ -204,19 +204,16 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <RadioButton fx:id="radiobutWarehouse" accessibleRole="BUTTON" layoutX="103.0" layoutY="207.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="157.0" text="Warehouse">
+                  <Button fx:id="radiobutWarehouse" layoutX="103.0" layoutY="207.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="157.0" text="Warehouse">
                      <font>
                         <Font size="18.0" />
                      </font>
-                     <toggleGroup>
-                        <ToggleGroup fx:id="chooseBtwSW" />
-                     </toggleGroup>
-                  </RadioButton>
-                  <RadioButton fx:id="radiobutStrongbox" accessibleRole="BUTTON" layoutX="415.0" layoutY="207.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="140.0" text="Strongbox" toggleGroup="$chooseBtwSW">
+                  </Button>
+                  <Button fx:id="radiobutStrongbox" layoutX="415.0" layoutY="207.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="140.0" text="Strongbox" >
                      <font>
                         <Font size="18.0" />
                      </font>
-                  </RadioButton>
+                  </Button>
                </children>
             </Pane>
             <Label fx:id="croceRossa" layoutX="6.0" layoutY="107.0" prefHeight="25.0" prefWidth="28.0" text="✞" textFill="RED">

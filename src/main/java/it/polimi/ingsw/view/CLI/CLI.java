@@ -222,21 +222,21 @@ public class CLI extends ClientView{
                 System.out.println("You are the 1st player. Wait for the other players to make their choices...");
                 break;
             case 1: {
-                System.out.println("You are the 2nd player. You gain 1 resource. Chose the resource:");
-                Resource r = choseResource();
+                System.out.println("You are the 2nd player. You gain 1 resource.");
+                Resource r = choseResource("Chose the resource:");
                 ClientSocket.sendMessage(new Message_One_Int_One_Resource(MessageType.ONE_FIRST_RESOURCE, position, r, 1));
             }
                 break;
             case 2: {
-                System.out.println("You are the 3rd player. You gain 1 resource and 1 faith point. Chose the resource:");
-                Resource r = choseResource();
+                System.out.println("You are the 3rd player. You gain 1 resource and 1 faith point.");
+                Resource r = choseResource("Chose the resource:");
                 ClientSocket.sendMessage(new Message_One_Int_One_Resource(MessageType.ONE_FIRST_RESOURCE, position, r, 1));
             }
                 break;
             case 3: {
-                System.out.println("You are the 4th player. You gain 2 resources and 1 faith point. Chose the resources:");
-                Resource r1 = choseResource();
-                Resource r2 = choseResource();
+                System.out.println("You are the 4th player. You gain 2 resources and 1 faith point.");
+                Resource r1 = choseResource("Chose first resource:");
+                Resource r2 = choseResource("Chose second resource:");
                 ClientSocket.sendMessage(new Message_Two_Resource(MessageType.TWO_FIRST_RESOURCE, position, r1, r2));
             }
                 break;
@@ -244,13 +244,15 @@ public class CLI extends ClientView{
         super.startGame();
     }
 
-    private Resource choseResource() throws IOException {
+    private Resource choseResource(String text) throws IOException {
         while (true) {
+            System.out.println(text);
             System.out.println("COIN(CO) / SHIELD(SH) / SERVANT/(SE) / STONE(ST)");
             Resource r = correctResource(stdIn.readLine());
-            if(r != null){
+            if(r != null)
                 return r;
-            }
+            else
+                System.err.println("Chose a correct resource");
         }
     }
 
@@ -271,6 +273,21 @@ public class CLI extends ClientView{
                 return Resource.SERVANT;
             default:
                 return null;
+        }
+    }
+
+    private int choseWarehouseStrongbox() throws IOException {
+        while (true) {
+            System.out.println("Where do you want to take the resources from?");
+            System.out.println("WAREHOUSE(W) / STRONGBOX(S)");
+            String choice = stdIn.readLine();
+            choice = choice.toUpperCase(Locale.ROOT);
+            if(choice.equals("WAREHOUSE") || choice.equals("W"))
+                return 0;
+            else if(choice.equals("STRONGBOX") || choice.equals("S"))
+                return 1;
+            else
+                System.err.println("Insert a correct input");
         }
     }
 
@@ -315,15 +332,6 @@ public class CLI extends ClientView{
                 break;
             case 3:
                 threeCommandRequest(command);
-                break;
-            case 4:
-                fourCommandRequest(command);
-                break;
-            case 5:
-                fiveCommandRequest(command);
-                break;
-            case 6:
-                sixCommandRequest(command);
                 break;
             default:
                 System.err.println("Illegal command from player");
@@ -391,7 +399,7 @@ public class CLI extends ClientView{
                 CLI_Printer.printLeaderCard(super.getGame(), position);
                 break;
             case"-smb":
-                if(isState(GAME_STATES.TAKE_MARBLE_STATE))
+                if(isState(GAME_STATES.TAKE_MARBLE_STATE) && getMarbles().size() > 0)
                     CLI_Printer.printMarbles(super.getGame(), getMarbles());
                 else
                     System.err.println("Illegal command from player");
@@ -451,8 +459,25 @@ public class CLI extends ClientView{
             case "-um":
                 useMarbleRequest(command.get(1), getMarbles());
                 break;
+            case "buycard":
+            case "buy":
+            case "-bc":
+                buyCardRequest(command);
+                break;
+            case "basic":
+                if(command.get(1).equals("power"))
+                    basicPowerRequest();
+                else
+                    System.err.println("Illegal command from player");
+                break;
             case "end":
                 endRequest(command.get(1));
+                break;
+            case "-cp":
+                cardPowerRequest(command);
+                break;
+            case "-lp":
+                leaderPowerRequest(command);
                 break;
             case "-al":
                 leaderActiveRequest(command.get(1));
@@ -482,7 +507,7 @@ public class CLI extends ClientView{
                 break;
             case "marbles":
             case "mb":
-                if(isState(GAME_STATES.TAKE_MARBLE_STATE))
+                if(isState(GAME_STATES.TAKE_MARBLE_STATE) && getMarbles().size() > 0)
                     CLI_Printer.printMarbles(super.getGame(), getMarbles());
                 else
                     System.err.println("Illegal command from player");
@@ -580,11 +605,6 @@ public class CLI extends ClientView{
             case "see":
                 seeRequest(command);
                 break;
-            case "buycard":
-            case "buy":
-            case "-bc":
-                buyCardRequest(command);
-                break;
             case "takemarble":
             case "market":
             case "-tm":
@@ -608,6 +628,22 @@ public class CLI extends ClientView{
                     leaderDiscardRequest(command.get(2));
                 else
                     System.err.println("Illegal command from player");
+            case "card":
+                if(command.get(1).equals("power")){
+                    command.remove(0);
+                    cardPowerRequest(command);
+                }
+                else
+                    System.err.println("Illegal command from player");
+                break;
+            case "leader":
+                if(command.get(1).equals("power")){
+                    command.remove(0);
+                    leaderPowerRequest(command);
+                }
+                else
+                    System.err.println("Illegal command from player");
+                break;
             default:
                 System.err.println("Illegal command from player");
                 break;
@@ -748,31 +784,22 @@ public class CLI extends ClientView{
                     System.err.println("You have inserted a wrong number (1 - 48)");
                 else {
                     int[] rowColumn = super.getRowColumn(cardID);
-                    if(rowColumn[0] == -1){
+                    if (rowColumn[0] == -1) {
                         System.err.println("You have chosen a wrong card");
                         return;
                     }
-                    int choice = -1;
-                    if (command.get(2).equals("warehouse") || command.get(2).equals("w"))
-                        choice = 0;
-                    else if (command.get(2).equals("strongbox") || command.get(2).equals("s"))
-                        choice = 1;
-                    if(choice == -1)
-                        System.err.println("Illegal command from player");
-                    else {
-                        setCurrentState(GAME_STATES.BUY_CARD_STATE);
-                        Message message = new Message_Three_Parameter_Int(MessageType.BUY_CARD, position, rowColumn[0], rowColumn[1], choice);
-                        ClientSocket.sendMessage(message);
-                        waitMessage();
-                        if(receivedMessage.getMessageType() == MessageType.CHOSEN_SLOT)
-                            choseSlotRequest();
-                        else if(receivedMessage.getMessageType() == MessageType.OK) {
-                            CLI_Printer.printCardSlot(super.getGame(), position);
-                            setCurrentState(GAME_STATES.END_TURN_STATE);
-                        }
-                        else {
-                            setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
-                        }
+                    int choice = choseWarehouseStrongbox();
+                    setCurrentState(GAME_STATES.BUY_CARD_STATE);
+                    Message message = new Message_Three_Parameter_Int(MessageType.BUY_CARD, position, rowColumn[0], rowColumn[1], choice);
+                    ClientSocket.sendMessage(message);
+                    waitMessage();
+                    if (receivedMessage.getMessageType() == MessageType.CHOSEN_SLOT)
+                        choseSlotRequest();
+                    else if (receivedMessage.getMessageType() == MessageType.OK) {
+                        CLI_Printer.printCardSlot(super.getGame(), position);
+                        setCurrentState(GAME_STATES.END_TURN_STATE);
+                    } else {
+                        setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
                     }
                 }
             } catch (NumberFormatException | InterruptedException e) {
@@ -857,68 +884,28 @@ public class CLI extends ClientView{
             System.err.println("You can't do this operation at this moment");
     }
 
-    private void fourCommandRequest(ArrayList<String> command) throws IOException {
-        switch (command.get(0)){
-            case "card":
-                if(command.get(1).equals("power")) {
-                    command.remove(0);
-                    cardPowerRequest(command);
-                }
-                else
-                    System.err.println("Illegal command from player");
-                break;
-            case "-lp":
-                leaderPowerRequest(command);
-                break;
-            default:
-                System.err.println("Illegal command from player");
-                break;
-        }
-    }
-
     private void cardPowerRequest(ArrayList<String> command) throws IOException {
-        if(isState(GAME_STATES.FIRST_ACTION_STATE) || isState(GAME_STATES.ACTIVATE_PRODUCTION_STATE)) {
+        if (isState(GAME_STATES.FIRST_ACTION_STATE) || isState(GAME_STATES.ACTIVATE_PRODUCTION_STATE)) {
             try {
                 int slot = Integer.parseInt(command.get(1));
-                int choice;
-                if (command.get(2).equals("warehouse") || command.get(2).equals("w"))
-                    choice = 0;
-                else if (command.get(2).equals("strongbox") || command.get(2).equals("s"))
-                    choice = 1;
-                else {
-                    System.err.println("Illegal command from player");
-                    return;
-                }
-                if(isState(GAME_STATES.FIRST_ACTION_STATE))
+                int choice = choseWarehouseStrongbox();
+                if (isState(GAME_STATES.FIRST_ACTION_STATE))
                     setCurrentState(GAME_STATES.FIRST_POWER_STATE);
                 Message message = new Message_Two_Parameter_Int(MessageType.DEVELOPMENT_CARD_POWER, position, slot, choice);
                 ClientSocket.sendMessage(message);
             } catch (NumberFormatException e) {
                 System.err.println("Illegal command from player");
             }
-        }
-        else
+        } else
             System.err.println("You can't do this operation at this moment");
     }
 
     private void leaderPowerRequest(ArrayList<String> command) throws IOException {
-        if(isState(GAME_STATES.FIRST_ACTION_STATE) || isState(GAME_STATES.ACTIVATE_PRODUCTION_STATE)) {
+        if (isState(GAME_STATES.FIRST_ACTION_STATE) || isState(GAME_STATES.ACTIVATE_PRODUCTION_STATE)) {
             try {
                 int slot = Integer.parseInt(command.get(1));
-                Resource r = correctResource(command.get(2));
-                if (r == null) {
-                    System.err.println("Illegal command from player");
-                    return;
-                }
-                int choice;
-                if (command.get(3).equals("warehouse") || command.get(3).equals("w"))
-                    choice = 0;
-                else if (command.get(3).equals("strongbox") || command.get(3).equals("s"))
-                    choice = 1;
-                else {
-                    System.err.println("Illegal command from player");
-                    return;
-                }
+                Resource r = choseResource("Which resource you want to gain?");
+                int choice = choseWarehouseStrongbox();
                 if (isState(GAME_STATES.FIRST_ACTION_STATE))
                     setCurrentState(GAME_STATES.FIRST_POWER_STATE);
                 Message message = new Message_One_Resource_Two_Int(MessageType.LEADER_CARD_POWER, position, r, slot, choice);
@@ -926,52 +913,20 @@ public class CLI extends ClientView{
             } catch (NumberFormatException e) {
                 System.err.println("Illegal command from player");
             }
-        }
-        else
+        } else
             System.err.println("You can't do this operation at this moment");
     }
 
-    private void fiveCommandRequest(ArrayList<String> command) throws IOException {
-        if(command.get(0).equals("leader") && (command.get(1).equals("power"))){
-            command.remove(0);
-            leaderPowerRequest(command);
-        }
-        else if(command.get(0).equals("-bp"))
-            basicPowerRequest(command);
-        else
-            System.err.println("Illegal command from player");
-    }
-
-    private void sixCommandRequest(ArrayList<String> command) throws IOException {
-        if(command.get(0).equals("basic") && (command.get(1).equals("power"))){
-            command.remove(0);
-            basicPowerRequest(command);
-        }
-        else
-            System.err.println("Illegal command from player");
-    }
-
-    private void basicPowerRequest(ArrayList<String> command) throws IOException {
+    private void basicPowerRequest() throws IOException {
         if(isState(GAME_STATES.FIRST_ACTION_STATE) || isState(GAME_STATES.ACTIVATE_PRODUCTION_STATE)) {
-            Resource r1 = correctResource(command.get(1));
-            Resource r2 = correctResource(command.get(2));
-            Resource r3 = correctResource(command.get(3));
-            if (r1 == null || r2 == null || r3 == null) {
-                System.err.println("Illegal command from player");
-                return;
-            }
-            if (command.get(4).equals("warehouse") || command.get(4).equals("w")) {
-                if(isState(GAME_STATES.FIRST_ACTION_STATE))
-                    setCurrentState(GAME_STATES.FIRST_POWER_STATE);
-                Message message = new Message_Three_Resource_One_Int(MessageType.BASIC_POWER, position, r1, r2, r3, 0);
-                ClientSocket.sendMessage(message);
-            } else if (command.get(4).equals("strongbox") || command.get(4).equals("s")) {
-                if(isState(GAME_STATES.FIRST_ACTION_STATE))
-                    setCurrentState(GAME_STATES.FIRST_POWER_STATE);
-                Message message = new Message_Three_Resource_One_Int(MessageType.BASIC_POWER, position, r1, r2, r3, 1);
-                ClientSocket.sendMessage(message);
-            } else
-                System.err.println("Illegal command from player");
+            Resource r1 = choseResource("Which resource you want to decrease?");
+            Resource r2 = choseResource("Which resource you want to decrease?");
+            Resource r3 = choseResource("Which resource you want to gain?");
+            int choice = choseWarehouseStrongbox();
+            if (isState(GAME_STATES.FIRST_ACTION_STATE))
+                setCurrentState(GAME_STATES.FIRST_POWER_STATE);
+            Message message = new Message_Three_Resource_One_Int(MessageType.BASIC_POWER, position, r1, r2, r3, choice);
+            ClientSocket.sendMessage(message);
         }
         else
             System.err.println("You can't do this operation at this moment");
