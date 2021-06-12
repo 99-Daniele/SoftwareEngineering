@@ -2,10 +2,8 @@ package it.polimi.ingsw.view.GUI;
 
 import it.polimi.ingsw.App;
 import it.polimi.ingsw.model.games.states.GAME_STATES;
-import it.polimi.ingsw.model.resourceContainers.Resource;
 import it.polimi.ingsw.network.client.ClientSocket;
 import it.polimi.ingsw.network.messages.*;
-import it.polimi.ingsw.view.CLI.CLI_Printer;
 import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.GUI.sceneController.InitSceneController;
 import it.polimi.ingsw.view.GUI.sceneController.NicknameSceneController;
@@ -118,14 +116,31 @@ public class GUI extends ClientView {
         Platform.runLater(() -> {
             if (SceneController.isCurrentScene("#nicknameLabel"))
                 NicknameSceneController.waitPlayers();
-            else if(isState(GAME_STATES.BUY_CARD_STATE) || (isState(GAME_STATES.TAKE_MARBLE_STATE) && getMarbles().size() == 0)
-                || isState(GAME_STATES.END_TURN_STATE)) {
+            else if(isState(GAME_STATES.BUY_CARD_STATE) || isState(GAME_STATES.END_TURN_STATE)) {
                 setCurrentState(GAME_STATES.END_TURN_STATE);
                 YourTurnSceneController.endTurn();
             }
             else if(isState(GAME_STATES.FIRST_POWER_STATE) || ClientView.isState(GAME_STATES.ACTIVATE_PRODUCTION_STATE)){
                 setCurrentState(GAME_STATES.ACTIVATE_PRODUCTION_STATE);
                 YourTurnSceneController.production();
+            }
+            else if(isState(GAME_STATES.TAKE_MARBLE_STATE)){
+                if(getMarbles().size() == 0){
+                    SceneController.setVisible("#message", false);
+                    SceneController.setVisible("#marbleShow1", false);
+                    setCurrentState(GAME_STATES.END_TURN_STATE);
+                    YourTurnSceneController.endTurn();
+                }
+                else
+                    YourTurnSceneController.chooseMarble();
+            }
+            else if(isState(GAME_STATES.WHITE_CONVERSION_CARD_STATE)){
+                if(getMarbles().size() == 0){
+                    setCurrentState(GAME_STATES.END_TURN_STATE);
+                    YourTurnSceneController.endTurn();
+                }
+                else
+                    YourTurnSceneController.chooseMarble();
             }
         });
     }
@@ -328,24 +343,14 @@ public class GUI extends ClientView {
         serverMessages.add(0, newMessage);
     }
 
-
-
     @Override
-    public void take_marble_message(Message message){
+    public void take_marble_message(Message message) {
         Message_ArrayList_Marble m = (Message_ArrayList_Marble) message;
         super.take_marble_message(message);
         setCurrentState(GAME_STATES.TAKE_MARBLE_STATE);
-        if (m.getMarbles().size()==4)
-            Platform.runLater(()-> {
-                try {
-                    YourTurnSceneController.showFourMarble(m.getMarbles());
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-            });
-        else Platform.runLater(()-> {
+        Platform.runLater(() -> {
             try {
-                YourTurnSceneController.showThreeMarble(m.getMarbles());
+                YourTurnSceneController.showMarbles(m.getMarbles());
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -374,6 +379,11 @@ public class GUI extends ClientView {
     @Override
     public void white_conversion_card_message(Message message){
         ClientView.setCurrentState(GAME_STATES.WHITE_CONVERSION_CARD_STATE);
+        SceneController.setVisible("#message", false);
+        SceneController.setVisible("#marbleShow1", false);
+        SceneController.setVisible("#marbleShow2", false);
+        SceneController.setVisible("#marbleShow3", false);
+        SceneController.setVisible("#marbleShow4", false);
         YourTurnSceneController.whiteConversionMessage();
     }
 

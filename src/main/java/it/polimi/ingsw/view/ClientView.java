@@ -107,9 +107,6 @@ public abstract class ClientView extends Application implements Observer {
         return game.getChosenMarbles();
     }
 
-    public static void setMarbles(ArrayList <Marble> marbles){
-        game.setChosenMarbles(marbles);
-    }
 
     public static int coinAmount(int position){
         return game.coinAmount(position);

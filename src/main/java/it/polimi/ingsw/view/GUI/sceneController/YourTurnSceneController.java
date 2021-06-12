@@ -17,6 +17,7 @@ import it.polimi.ingsw.view.GUI.sceneController.OpponentPlayerboardSceneControll
 import it.polimi.ingsw.view.model_view.Game_View;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -175,9 +176,9 @@ public class YourTurnSceneController {
     @FXML
     private Label shieldAmount;
     @FXML
-    private Label croceRossa;
+    private Node croceRossa;
     @FXML
-    private ImageView croceNera;
+    private Node croceNera;
     @FXML
     private Label message;
     @FXML
@@ -256,7 +257,6 @@ public class YourTurnSceneController {
     private Button okError;
 
     private ArrayList<Integer> switchCounter=new ArrayList<>(2);
-    private static int red;
 
     @FXML
     public void initialize() {
@@ -309,72 +309,55 @@ public class YourTurnSceneController {
         chooseLeader1.setOnMouseClicked(mouseEvent -> choseLeader(1));
         chooseLeader2.setOnMouseClicked(mouseEvent -> choseLeader(2));
         okError.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> errorPane.setVisible(false));
-        yes.setOnMouseClicked(mouseEvent -> {
-            switchCounter=new ArrayList<>(2);
-            yes();
+        yes.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            switchCounter = new ArrayList<>(2);
+            switchDepots();
         });
-        no.setOnMouseClicked(mouseEvent -> {
-            message.setText("Choose a marble.");
+        no.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            disableSwitches();
             yes.setVisible(false);
             no.setVisible(false);
-            chooseMarble();
+            SceneController.setText("#message", "Choose which marble activate");
+            disableMarbleShow(false);
         });
-        marbleShow1.setOnMouseClicked(mouseEvent ->{
+        marbleShow1.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             try {
                 ClientSocket.sendMessage(new Message_One_Parameter_Marble(MessageType.USE_MARBLE, GUI.getPosition(), ClientView.getMarbles().remove(0)));
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            marbleShow1.setVisible(false);
-            useMarble();
         });
-        marbleShow2.setOnMouseClicked(mouseEvent ->{
+        marbleShow2.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             try {
-                ClientSocket.sendMessage(new Message_One_Parameter_Marble(MessageType.USE_MARBLE, GUI.getPosition(), ClientView.getMarbles().remove(0)));
+                ClientSocket.sendMessage(new Message_One_Parameter_Marble(MessageType.USE_MARBLE, GUI.getPosition(), ClientView.getMarbles().remove(1)));
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            marbleShow2.setVisible(false);
-            useMarble();
         });
-        marbleShow3.setOnMouseClicked(mouseEvent ->{
+        marbleShow3.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             try {
-                ClientSocket.sendMessage(new Message_One_Parameter_Marble(MessageType.USE_MARBLE, GUI.getPosition(), ClientView.getMarbles().remove(0)));
+                ClientSocket.sendMessage(new Message_One_Parameter_Marble(MessageType.USE_MARBLE, GUI.getPosition(), ClientView.getMarbles().remove(2)));
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            marbleShow3.setVisible(false);
-            useMarble();
         });
-        marbleShow4.setOnMouseClicked(mouseEvent ->{
+        marbleShow4.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent ->{
             try {
-                ClientSocket.sendMessage(new Message_One_Parameter_Marble(MessageType.USE_MARBLE, GUI.getPosition(), ClientView.getMarbles().remove(0)));
+                ClientSocket.sendMessage(new Message_One_Parameter_Marble(MessageType.USE_MARBLE, GUI.getPosition(), ClientView.getMarbles().remove(3)));
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            marbleShow4.setVisible(false);
-            useMarble();
         });
-        one.setOnMouseClicked(mouseEvent -> {
-            one.setDisable(true);
-            clickedSwitch(1);
-        });
-        two.setOnMouseClicked(mouseEvent -> {
-            two.setDisable(true);
-            clickedSwitch(2);
-        });
-        three.setOnMouseClicked(mouseEvent -> {
-            three.setDisable(true);
-            clickedSwitch(3);
-        });
-        four.setOnMouseClicked(mouseEvent -> {
-            four.setDisable(true);
-            clickedSwitch(4);
-        });
-        five.setOnMouseClicked(mouseEvent -> {
-            five.setDisable(true);
-            clickedSwitch(5);
-        });
+        one.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent ->
+            clickedSwitch(1));
+        two.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent ->
+            clickedSwitch(2));
+        three.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent ->
+            clickedSwitch(3));
+        four.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent ->
+            clickedSwitch(4));
+        five.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent ->
+            clickedSwitch(5));
     }
 
     private static boolean leaderCardAvailable(){
@@ -430,10 +413,12 @@ public class YourTurnSceneController {
             setExtraDepot1();
             setExtraDepot2();
             setStrongbox();
-            setFaithPoints();
+            setFaithPoints(false);
             setVictoryPoints();
-            if(GUI.getNumOfPlayers() == 1)
+            if(GUI.getNumOfPlayers() == 1) {
                 radiobutOtherPlayboard.setVisible(false);
+                setFaithPoints(true);
+            }
             setMessages();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -502,54 +487,58 @@ public class YourTurnSceneController {
         stoneAmount.setText(String.valueOf(ClientView.stoneAmount(GUI.getPosition())));
     }
 
-    private void setFaithPoints() {
-        int faithPoints = ClientView.getFaithPoints(GUI.getPosition());
-        int LudovicoFaithPoints = ClientView.getFaithPoints(1);
-        if(GUI.getNumOfPlayers() == 1)
+    private void setFaithPoints(boolean Ludovico) {
+        int faithPoints;
+        int offsetX = 0;
+        int offsetY = 0;
+        int x;
+        int y;
+        if(!Ludovico) {
+            faithPoints = ClientView.getFaithPoints(GUI.getPosition());
+        }
+        else {
+            faithPoints = ClientView.getFaithPoints(1);
             croceNera.setVisible(true);
+            offsetX = 5;
+            offsetY = 7;
+        }
         if(faithPoints < 3){
-            croceRossa.setLayoutX(30*faithPoints + 6);
-            croceRossa.setLayoutY(107);
-            croceNera.setLayoutX(30*LudovicoFaithPoints + 11);
-            croceNera.setLayoutY(114);
+            x = 30*faithPoints + 6 + offsetX;
+            y = 107 + offsetY;
         }
-        else if (faithPoints >= 3 && faithPoints < 5) {
-            croceRossa.setLayoutX(66);
-            croceRossa.setLayoutY(159 - 26*faithPoints);
-            croceNera.setLayoutX(71);
-            croceNera.setLayoutY(166 - 26*LudovicoFaithPoints);
+        else if (faithPoints < 5) {
+            x = 66 + offsetX;
+            y = 159 + offsetY - 26*faithPoints;
         }
-        else if(faithPoints >= 5 && faithPoints < 10){
-            croceRossa.setLayoutX(30*faithPoints - 54);
-            croceRossa.setLayoutY(55);
-            croceNera.setLayoutX(30*LudovicoFaithPoints - 49);
-            croceNera.setLayoutY(62);
+        else if(faithPoints < 10){
+            x = 30*faithPoints - 54 + offsetX;
+            y = 55 + offsetY;
         }
-        else if (faithPoints >= 10 && faithPoints < 12) {
-            croceRossa.setLayoutX(216);
-            croceRossa.setLayoutY(26*faithPoints - 179);
-            croceNera.setLayoutX(221);
-            croceNera.setLayoutY(26*LudovicoFaithPoints - 172);
+        else if (faithPoints < 12) {
+            x = 216 + offsetX;
+            y = 26*faithPoints - 179 + offsetY;
         }
-        else if(faithPoints >= 12 && faithPoints < 17){
-            croceRossa.setLayoutX(30*faithPoints - 114);
-            croceRossa.setLayoutY(107);
-            croceNera.setLayoutX(30*LudovicoFaithPoints - 109);
-            croceNera.setLayoutY(114);
+        else if(faithPoints < 17){
+            x = 30*faithPoints - 114 + offsetX;
+            y = 107 + offsetY;
         }
-        else if(faithPoints >= 17 && faithPoints < 19){
-            croceRossa.setLayoutX(366);
-            croceRossa.setLayoutY(523 - 26*faithPoints);
-            croceNera.setLayoutX(371);
-            croceNera.setLayoutY(530 - 26*LudovicoFaithPoints);
+        else if(faithPoints < 19){
+            x = 366 + offsetX;
+            y = 523 - 26*faithPoints + offsetY;
         }
         else {
             if(faithPoints > 24)
                 faithPoints = 24;
-            croceRossa.setLayoutX(30*faithPoints - 174);
-            croceRossa.setLayoutY(55);
-            croceNera.setLayoutX(30*LudovicoFaithPoints - 169);
-            croceNera.setLayoutY(62);
+            x = 30*faithPoints - 174 + offsetX;
+            y = 55 + offsetY;
+        }
+        if(Ludovico){
+            croceNera.setLayoutX(x);
+            croceNera.setLayoutY(y);
+        }
+        else {
+            croceRossa.setLayoutX(x);
+            croceRossa.setLayoutY(y);
         }
     }
 
@@ -584,7 +573,6 @@ public class YourTurnSceneController {
     private void clickedSwitch(int i){
         switchCounter.add(i);
         if (switchCounter.size()==2) {
-            disableSwitches();
             try {
                 ClientSocket.sendMessage(new Message_Two_Parameter_Int(MessageType.SWITCH_DEPOT, GUI.getPosition(), switchCounter.get(0), switchCounter.get(1)));
             } catch (IOException e) {
@@ -593,11 +581,11 @@ public class YourTurnSceneController {
         }
     }
 
-    private static void disableMarbleShow(Boolean bool){
-        SceneController.setDisable("#marbleShow1",bool);
-        SceneController.setDisable("#marbleShow2",bool);
-        SceneController.setDisable("#marbleShow3",bool);
-        SceneController.setDisable("#marbleShow4",bool);
+    private static void disableMarbleShow(Boolean disabled){
+        SceneController.setDisable("#marbleShow1", disabled);
+        SceneController.setDisable("#marbleShow2", disabled);
+        SceneController.setDisable("#marbleShow3", disabled);
+        SceneController.setDisable("#marbleShow4", disabled);
     }
 
     private void disableSwitches(){
@@ -608,72 +596,38 @@ public class YourTurnSceneController {
         five.setVisible(false);
     }
 
-    public static void showThreeMarble(ArrayList<Marble> marbles) throws FileNotFoundException {
-        SceneController.setVisible("#message",true);
-        for(int i=0;i<marbles.size();i++) {
-            if(marbles.get(i).toString().equals("RED"))
-                red=i+1;
-            switch(i){
-                case 0:{
-                    SceneController.setImage("#marbleShow1",MarbleMapGUI.getMarble(marbles.get(i)));
-                    SceneController.setVisible("#marbleShow1",true);
-                    SceneController.setDisable("#marbleShow1",true);
-                }
-                case 1:{
-                    SceneController.setImage("#marbleShow2",MarbleMapGUI.getMarble(marbles.get(i)));
-                    SceneController.setVisible("#marbleShow2",true);
-                    SceneController.setDisable("#marbleShow2",true);
-                }
-                case 2:{
-                    SceneController.setImage("#marbleShow3",MarbleMapGUI.getMarble(marbles.get(i)));
-                    SceneController.setVisible("#marbleShow3",true);
-                    SceneController.setDisable("#marbleShow3",true);
-                }
-            }
-        }
-        Platform.runLater(()->ask());
-    }
+    public static void showMarbles(ArrayList<Marble> marbles) throws FileNotFoundException {
+        SceneController.setVisible("#message", true);
+        SceneController.setImage("#marbleShow1", MarbleMapGUI.getMarble(marbles.get(0)));
+        SceneController.setVisible("#marbleShow1", true);
+        if (ClientView.getMarbles().size() > 1) {
+            SceneController.setImage("#marbleShow2", MarbleMapGUI.getMarble(marbles.get(1)));
+            SceneController.setVisible("#marbleShow2", true);
+        } else
+            SceneController.setVisible("#marbleShow2", false);
 
-    public static void showFourMarble(ArrayList<Marble> marbles) throws FileNotFoundException {
-        SceneController.setVisible("#message",true);
-        for(int i=0;i<marbles.size();i++)
-        {
-            if(marbles.get(i).toString().equals("RED"))
-                red=i+1;
-            switch(i){
-                case 0:{
-                    SceneController.setImage("#marbleShow1",MarbleMapGUI.getMarble(marbles.get(i)));
-                    SceneController.setVisible("#marbleShow1",true);
-                    SceneController.setDisable("#marbleShow1",true);
-                }
-                case 1:{
-                    SceneController.setImage("#marbleShow2",MarbleMapGUI.getMarble(marbles.get(i)));
-                    SceneController.setVisible("#marbleShow2",true);
-                    SceneController.setDisable("#marbleShow2",true);
-                }
-                case 2:{
-                    SceneController.setImage("#marbleShow3",MarbleMapGUI.getMarble(marbles.get(i)));
-                    SceneController.setVisible("#marbleShow3",true);
-                    SceneController.setDisable("#marbleShow3",true);
-                }
-                case 3:{
-                    SceneController.setImage("#marbleShow4",MarbleMapGUI.getMarble(marbles.get(i)));
-                    SceneController.setVisible("#marbleShow4",true);
-                    SceneController.setDisable("#marbleShow4",true);
-                }
-            }
-        }
-        Platform.runLater(()->ask());
+        if (ClientView.getMarbles().size() > 2) {
+            SceneController.setImage("#marbleShow3", MarbleMapGUI.getMarble(marbles.get(2)));
+            SceneController.setVisible("#marbleShow3", true);
+        } else
+            SceneController.setVisible("#marbleShow3", false);
+
+        if (ClientView.getMarbles().size() > 3) {
+            SceneController.setImage("#marbleShow4", MarbleMapGUI.getMarble(marbles.get(3)));
+            SceneController.setVisible("#marbleShow4", true);
+        } else
+            SceneController.setVisible("#marbleShow4", false);
+        ask();
     }
 
     public static void ask(){
         disableMarbleShow(true);
-        SceneController.setText("#message","Wanna switch your deposit?");
+        SceneController.setText("#message","Do you want to switch your depots?");
         SceneController.setVisible("#yes",true);
         SceneController.setVisible("#no",true);
     }
 
-    public static void yes(){
+    public static void switchDepots(){
         SceneController.setVisible("#one",true);
         SceneController.setVisible("#two",true);
         SceneController.setVisible("#three",true);
@@ -683,23 +637,11 @@ public class YourTurnSceneController {
             SceneController.setVisible("#five",true);
     }
 
-    private static void chooseMarble(){
-        SceneController.setText("#message","Choose a marble to activate.");
-        disableMarbleShow(false);
-    }
-
-    private void useMarble(){
-        if(ClientView.getMarbles().size() > 0) {
-            ask();
-        }
-        else {
-            message.setVisible(false);
-            yes.setVisible(false);
-            no.setVisible(false);
-            marbleShow1.setVisible(false);
-            marbleShow2.setVisible(false);
-            marbleShow3.setVisible(false);
-            marbleShow4.setVisible(false);
+    public static void chooseMarble(){
+        try {
+            showMarbles(ClientView.getMarbles());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -1386,37 +1328,43 @@ public class YourTurnSceneController {
     }
 
     public static void increaseFaithPointsMessage(int faithPoints, boolean Ludovico, String newMessage){
+        int offsetX = 0;
+        int offsetY = 0;
         int x;
         int y;
+        if(Ludovico){
+            offsetX = 5;
+            offsetY = 7;
+        }
         if(faithPoints < 3){
-            x = 30*faithPoints + 7;
-            y = 107;
+            x = 30*faithPoints + 6 + offsetX;
+            y = 107 + offsetY;
         }
-        else if (faithPoints >= 3 && faithPoints < 5) {
-            x = 67;
-            y = 168 - faithPoints*28;
+        else if (faithPoints < 5) {
+            x = 66 + offsetX;
+            y = 159 + offsetY - 26*faithPoints;
         }
-        else if(faithPoints >= 5 && faithPoints < 10){
-            x = 30*faithPoints - 52;
-            y = 56;
+        else if(faithPoints < 10){
+            x = 30*faithPoints - 54 + offsetX;
+            y = 55 + offsetY;
         }
-        else if (faithPoints >= 10 && faithPoints < 12) {
-            x = 218;
-            y = faithPoints*28 - 200;
+        else if (faithPoints < 12) {
+            x = 216 + offsetX;
+            y = 26*faithPoints - 179 + offsetY;
         }
-        else if(faithPoints >= 12 && faithPoints < 17){
-            x = 30*faithPoints - 112;
-            y = 107;
+        else if(faithPoints < 17){
+            x = 30*faithPoints - 114 + offsetX;
+            y = 107 + offsetY;
         }
-        else if(faithPoints >= 17 && faithPoints < 19){
-            x = 368;
-            y = 555 - 28*faithPoints;
+        else if(faithPoints < 19){
+            x = 366 + offsetX;
+            y = 523 - 26*faithPoints + offsetY;
         }
         else {
             if(faithPoints > 24)
                 faithPoints = 24;
-            x = 30*faithPoints - 172;
-            y = 56;
+            x = 30*faithPoints - 174 + offsetX;
+            y = 55 + offsetY;
         }
         if(Ludovico){
             SceneController.setLayoutX("#croceNera", x);
@@ -1478,7 +1426,6 @@ public class YourTurnSceneController {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        Platform.runLater(()->chooseMarble());
     }
 
     private static void setSwitchedDepot(int depot) throws FileNotFoundException {
