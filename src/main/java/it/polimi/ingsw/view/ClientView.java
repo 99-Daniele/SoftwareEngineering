@@ -138,7 +138,6 @@ public abstract class ClientView extends Application implements Observer {
     public void update(Observable o, Object arg) {
         try {
             Message returnMessage = (Message) arg;
-            System.out.println(returnMessage);
             switch (returnMessage.getMessageType()) {
                 case LOGIN:
                     login_message(returnMessage);

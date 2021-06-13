@@ -111,7 +111,6 @@ public class InitSceneController{
     }
 
     private void resourceButton(Resource r){
-        System.out.println(GUI.getPosition());
         if(GUI.getPosition() == 3){
             if(r1 == null)
                 r1 = r;
@@ -149,7 +148,6 @@ public class InitSceneController{
             e.printStackTrace();
         }
         allInvisible();
-        System.out.println(GUI.getPosition());
         if(GUI.getPosition() != 0) {
             coin.setVisible(true);
             servant.setVisible(true);

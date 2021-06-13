@@ -306,9 +306,9 @@
                   <RadioButton fx:id="player22" layoutX="412.0" layoutY="213.0" mnemonicParsing="false" toggleGroup="$playersChoice" visible="false" />
                </children>
             </Pane>
-            <RadioButton fx:id="one" layoutX="2.0" layoutY="203.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="1" visible="false" />
-            <RadioButton fx:id="two" layoutX="3.0" layoutY="237.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="2" visible="false" />
-            <RadioButton fx:id="three" layoutX="3.0" layoutY="270.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="3" visible="false" />
+            <RadioButton fx:id="one" layoutY="203.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="1" visible="false" textFill="WHITE"/>
+            <RadioButton fx:id="two" layoutY="237.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="2" visible="false" textFill="WHITE"/>
+            <RadioButton fx:id="three" layoutY="270.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="3" visible="false" textFill="WHITE"/>
             <RadioButton fx:id="four" layoutX="38.0" layoutY="624.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="4" visible="false" />
             <RadioButton fx:id="five" layoutX="177.0" layoutY="624.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="5" visible="false" />
             <Pane fx:id="errorPane" layoutX="349.0" layoutY="120.0" prefHeight="345.0" prefWidth="644.0" style="-fx-background-color: white;" visible="false">

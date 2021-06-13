@@ -404,6 +404,9 @@ public class CLI extends ClientView{
                 else
                     System.err.println("Illegal command from player");
                 break;
+            case "-bp":
+                basicPowerRequest();
+                break;
             case "-ep":
                 endPowerRequest();
                 break;

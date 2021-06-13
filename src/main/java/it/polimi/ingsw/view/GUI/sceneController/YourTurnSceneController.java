@@ -311,7 +311,7 @@ public class YourTurnSceneController {
             disableSwitches();
             yes.setVisible(false);
             no.setVisible(false);
-            SceneController.setText("#message", "Choose which marble activate");
+            SceneController.setText("#message", "Choose which marble use");
             disableMarbleShow(false);
         });
         marbleShow1.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
@@ -568,10 +568,15 @@ public class YourTurnSceneController {
         switchCounter.add(i);
         if (switchCounter.size()==2) {
             one.setSelected(false);
+            one.setDisable(true);
             two.setSelected(false);
+            two.setDisable(true);
             three.setSelected(false);
+            three.setDisable(true);
             four.setSelected(false);
+            four.setDisable(true);
             five.setSelected(false);
+            five.setDisable(true);
             try {
                 ClientSocket.sendMessage(new Message_Two_Parameter_Int(MessageType.SWITCH_DEPOT, GUI.getPosition(), switchCounter.get(0), switchCounter.get(1)));
             } catch (IOException e) {
@@ -628,12 +633,19 @@ public class YourTurnSceneController {
 
     public static void switchDepots(){
         SceneController.setVisible("#one",true);
+        SceneController.setDisable("#one", false);
         SceneController.setVisible("#two",true);
+        SceneController.setDisable("#two", false);
         SceneController.setVisible("#three",true);
-        if(ClientView.getWarehouse(GUI.getPosition()).size() >= 4)
-            SceneController.setVisible("#four",true);
-        if(ClientView.getWarehouse(GUI.getPosition()).size() == 5)
-            SceneController.setVisible("#five",true);
+        SceneController.setDisable("#three", false);
+        if(ClientView.getWarehouse(GUI.getPosition()).size() >= 4) {
+            SceneController.setVisible("#four", true);
+            SceneController.setDisable("#four", false);
+        }
+        if(ClientView.getWarehouse(GUI.getPosition()).size() == 5) {
+            SceneController.setVisible("#five", true);
+            SceneController.setDisable("#five", false);
+        }
     }
 
     public static void chooseMarble(){
@@ -1432,14 +1444,22 @@ public class YourTurnSceneController {
             case 2:
                 if (amount == 2)
                     SceneController.setImage("#deposit22", ResourceMapGUI.getResource(r));
+                else
+                    SceneController.setImage("#deposit22", "");
                 if(amount >= 1)
                     SceneController.setImage("#deposit21", ResourceMapGUI.getResource(r));
                 else
                     SceneController.setImage("#deposit21", "");
                 break;
             case 3:
+                if(amount == 3)
+                    SceneController.setImage("#deposit33", ResourceMapGUI.getResource(r));
+                else
+                    SceneController.setImage("#deposit33", "");
                 if (amount >= 2)
                     SceneController.setImage("#deposit32", ResourceMapGUI.getResource(r));
+                else
+                    SceneController.setImage("#deposit32", "");
                 if(amount >= 1)
                     SceneController.setImage("#deposit31", ResourceMapGUI.getResource(r));
                 else
@@ -1448,6 +1468,8 @@ public class YourTurnSceneController {
             case 4:
                 if (amount == 2)
                     SceneController.setImage("#extra12", ResourceMapGUI.getResource(r));
+                else
+                    SceneController.setImage("#extra12", "");
                 if(amount >= 1)
                     SceneController.setImage("#extra11", ResourceMapGUI.getResource(r));
                 else
@@ -1456,6 +1478,8 @@ public class YourTurnSceneController {
             case 5:
                 if (amount == 2)
                     SceneController.setImage("#extra22", ResourceMapGUI.getResource(r));
+                else
+                    SceneController.setImage("#extra22", "");
                 if(amount >= 1)
                     SceneController.setImage("#extra21", ResourceMapGUI.getResource(r));
                 else
@@ -1564,27 +1588,47 @@ public class YourTurnSceneController {
         try {
             if (ClientView.getWarehouse(GUI.getPosition()).get(0).getAmount() == 1)
                 SceneController.setImage("#deposit11", ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(0).getResource()));
+            else
+                SceneController.setImage("#deposit11", "");
             if (ClientView.getWarehouse(GUI.getPosition()).get(1).getAmount() >= 1)
                 SceneController.setImage("#deposit21", ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(1).getResource()));
+            else
+                SceneController.setImage("#deposit21", "");
             if (ClientView.getWarehouse(GUI.getPosition()).get(1).getAmount() == 2)
                 SceneController.setImage("#deposit22", ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(1).getResource()));
+            else
+                SceneController.setImage("#deposit22", "");
             if (ClientView.getWarehouse(GUI.getPosition()).get(2).getAmount() >= 1)
                 SceneController.setImage("#deposit31", ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(2).getResource()));
+            else
+                SceneController.setImage("#deposit31", "");
             if (ClientView.getWarehouse(GUI.getPosition()).get(2).getAmount() >= 2)
                 SceneController.setImage("#deposit32", ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(2).getResource()));
+            else
+                SceneController.setImage("#deposit32", "");
             if (ClientView.getWarehouse(GUI.getPosition()).get(2).getAmount() == 3)
                 SceneController.setImage("#deposit33", ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(2).getResource()));
+            else
+                SceneController.setImage("#deposit33", "");
             if (ClientView.getWarehouse(GUI.getPosition()).size() >= 4) {
                 if (ClientView.getWarehouse(GUI.getPosition()).get(3).getAmount() >= 1)
                     SceneController.setImage("#extra11", ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(3).getResource()));
+                else
+                    SceneController.setImage("#extra11", "");
                 if (ClientView.getWarehouse(GUI.getPosition()).get(3).getAmount() == 2)
                     SceneController.setImage("#extra12", ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(3).getResource()));
+                else
+                    SceneController.setImage("#extra12", "");
             }
             if (ClientView.getWarehouse(GUI.getPosition()).size() == 5) {
                 if (ClientView.getWarehouse(GUI.getPosition()).get(4).getAmount() >= 1)
                     SceneController.setImage("#extra21", ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(4).getResource()));
+                else
+                    SceneController.setImage("#extra21", "");
                 if (ClientView.getWarehouse(GUI.getPosition()).get(4).getAmount() == 2)
                     SceneController.setImage("#extra22", ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(4).getResource()));
+                else
+                    SceneController.setImage("#extra22", "");
             }
             SceneController.setText("#coinAmount", String.valueOf(ClientView.coinAmount(GUI.getPosition())));
             SceneController.setText("#servantAmount", String.valueOf(ClientView.servantAmount(GUI.getPosition())));

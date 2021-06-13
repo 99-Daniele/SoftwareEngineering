@@ -89,7 +89,6 @@ public class GUI extends ClientView {
     public void players_message(Message message) {
         super.players_message(message);
         GUI.position = message.getClientID();
-        System.out.println(GUI.position);
     }
 
     @Override
@@ -139,8 +138,10 @@ public class GUI extends ClientView {
                     setCurrentState(GAME_STATES.END_TURN_STATE);
                     YourTurnSceneController.endTurn();
                 }
-                else
+                else {
+                    setCurrentState(GAME_STATES.TAKE_MARBLE_STATE);
                     YourTurnSceneController.chooseMarble();
+                }
             }
         });
     }
@@ -182,6 +183,7 @@ public class GUI extends ClientView {
                     SceneController.errorMessage("It's your turn");
                 });
         } else {
+            turn = false;
             if (SceneController.isCurrentScene("#radiobutBuyCard"))
                 Platform.runLater(() -> {
                     YourTurnSceneController.notYourTurn();

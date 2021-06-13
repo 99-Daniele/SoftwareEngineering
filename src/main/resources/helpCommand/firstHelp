@@ -5,7 +5,7 @@ takemarble/market/-tm row(r)/column(c) 1/2/3/4              take marbles from ma
 
 card power/-cp 1/2/3                                        activate slot production power
 
-basic power/-bp                                             activate basic production power                                                                                                                                              -->
+basic power/-bp                                             activate basic production power
 
 leader power/-lp 1/2                                        activate leader card production power
 

@@ -171,8 +171,8 @@ public class GameManager {
             throw new IllegalStateException();
         if(!InputController.chosen_correct_marble(chosenMarble, currentState.getMarbles()))
             throw new WrongParametersException();
+        currentState.removeMarble(chosenMarble);
         if (!chosenMarble.useMarble(game)) {
-            currentState.removeMarble(chosenMarble);
             if (currentState.getMarbles().size() == 0) {
                 game.faithTrackMovementAllPlayers();
                 currentState.nextState(this, MessageType.END_TURN);
@@ -204,8 +204,10 @@ public class GameManager {
         else
             leaderCard = currentState.getLeaderCard2();
         game.whiteMarbleConversion(leaderCard);
-        if (currentState.getMarbles().size() == 0)
+        if (currentState.getMarbles().size() == 0) {
+            game.faithTrackMovementAllPlayers();
             currentState.nextState(this, MessageType.END_TURN);
+        }
         else {
             ArrayList<Marble> remainingMarbles = currentState.getMarbles();
             currentState.nextState(this, MessageType.USE_MARBLE);
