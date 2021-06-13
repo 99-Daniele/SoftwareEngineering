@@ -89,5 +89,10 @@
             <Font size="40.0" />
          </font>
       </Label>
+      <ImageView fx:id="calamaio" fitHeight="104.0" fitWidth="119.0" layoutX="945.0" layoutY="144.0" visible="false">
+         <image>
+            <Image url="@../photos/calamaio.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

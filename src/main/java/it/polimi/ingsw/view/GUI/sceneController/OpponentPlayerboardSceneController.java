@@ -83,6 +83,8 @@ public class OpponentPlayerboardSceneController {
     private ImageView pope3;
     @FXML
     private Label croceRossa;
+    @FXML
+    private ImageView calamaio;
 
     public OpponentPlayerboardSceneController(int position){
         this.position = position;
@@ -127,6 +129,8 @@ public class OpponentPlayerboardSceneController {
             setStrongbox();
             setFaithPoints();
             setVictoryPoints();
+            if(position == 0)
+                calamaio.setVisible(true);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

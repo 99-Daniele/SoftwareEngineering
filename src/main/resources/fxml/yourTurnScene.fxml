@@ -209,7 +209,7 @@
                         <Font size="18.0" />
                      </font>
                   </Button>
-                  <Button fx:id="radiobutStrongbox" layoutX="415.0" layoutY="207.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="140.0" text="Strongbox" >
+                  <Button fx:id="radiobutStrongbox" layoutX="415.0" layoutY="207.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="140.0" text="Strongbox">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -233,22 +233,22 @@
             </Label>
             <Button fx:id="yes" layoutX="472.0" layoutY="335.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="72.0" text="YES" visible="false" />
             <Button fx:id="no" layoutX="816.0" layoutY="335.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="72.0" text="NO" visible="false" />
-            <ImageView fx:id="marbleShow1" disable="true" fitHeight="23.0" fitWidth="23.0" layoutX="630.0" layoutY="266.0" visible="false">
+            <ImageView fx:id="marbleShow1" disable="true" fitHeight="30.0" fitWidth="30.0" layoutX="600.0" layoutY="260.0" visible="false">
                <image>
                   <Image url="@../photos/bianca.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="marbleShow2" disable="true" fitHeight="23.0" fitWidth="23.0" layoutX="653.0" layoutY="267.0" visible="false">
+            <ImageView fx:id="marbleShow2" disable="true" fitHeight="30.0" fitWidth="30.0" layoutX="650.0" layoutY="260.0" visible="false">
                <image>
                   <Image url="@../photos/bianca.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="marbleShow3" disable="true" fitHeight="23.0" fitWidth="23.0" layoutX="677.0" layoutY="266.0" visible="false">
+            <ImageView fx:id="marbleShow3" disable="true" fitHeight="30.0" fitWidth="30.0" layoutX="700.0" layoutY="260.0" visible="false">
                <image>
                   <Image url="@../photos/bianca.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="marbleShow4" disable="true" fitHeight="23.0" fitWidth="23.0" layoutX="700.0" layoutY="266.0" visible="false">
+            <ImageView fx:id="marbleShow4" disable="true" fitHeight="30.0" fitWidth="30.0" layoutX="750.0" layoutY="260.0" visible="false">
                <image>
                   <Image url="@../photos/bianca.png" />
                </image>
@@ -306,9 +306,9 @@
                   <RadioButton fx:id="player22" layoutX="412.0" layoutY="213.0" mnemonicParsing="false" toggleGroup="$playersChoice" visible="false" />
                </children>
             </Pane>
-            <RadioButton fx:id="one" layoutY="203.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="1" visible="false" textFill="WHITE"/>
-            <RadioButton fx:id="two" layoutY="237.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="2" visible="false" textFill="WHITE"/>
-            <RadioButton fx:id="three" layoutY="270.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="3" visible="false" textFill="WHITE"/>
+            <RadioButton fx:id="one" layoutY="203.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="1" textFill="WHITE" visible="false" />
+            <RadioButton fx:id="two" layoutY="237.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="2" textFill="WHITE" visible="false" />
+            <RadioButton fx:id="three" layoutY="270.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="3" textFill="WHITE" visible="false" />
             <RadioButton fx:id="four" layoutX="38.0" layoutY="624.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="4" visible="false" />
             <RadioButton fx:id="five" layoutX="177.0" layoutY="624.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="20.0" text="5" visible="false" />
             <Pane fx:id="errorPane" layoutX="349.0" layoutY="120.0" prefHeight="345.0" prefWidth="644.0" style="-fx-background-color: white;" visible="false">
@@ -321,8 +321,15 @@
                   <Button fx:id="okError" layoutX="286.0" layoutY="244.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="79.0" text="OK" />
                </children>
             </Pane>
+            <ImageView fx:id="calamaio" fitHeight="59.0" fitWidth="62.0" layoutX="525.0" layoutY="100.0" visible="false">
+               <image>
+                  <Image url="@../photos/calamaio.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="71.0" fitWidth="62.0" layoutX="537.0" layoutY="98.0" pickOnBounds="true" preserveRatio="true" visible="false" />
          </children>
       </AnchorPane>
+      <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
    </children>
    <padding>
       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

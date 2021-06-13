@@ -249,6 +249,8 @@ public class YourTurnSceneController {
     private Pane errorPane;
     @FXML
     private Button okError;
+    @FXML
+    private ImageView calamaio;
 
     private ArrayList<Integer> switchCounter=new ArrayList<>(2);
 
@@ -413,6 +415,8 @@ public class YourTurnSceneController {
                 radiobutOtherPlayboard.setVisible(false);
                 setFaithPoints(true);
             }
+            if(GUI.getPosition() == 0)
+                calamaio.setVisible(true);
             setMessages();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
