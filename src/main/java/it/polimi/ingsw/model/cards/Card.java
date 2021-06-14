@@ -1,8 +1,8 @@
 package it.polimi.ingsw.model.cards;
 
-import it.polimi.ingsw.view.model_view.Card_View;
+import it.polimi.ingsw.view.model_view.CardView;
 
-public abstract class Card implements Card_View {
+public abstract class Card implements CardView {
 
     private final int victoryPoints;
     private final int cardID;

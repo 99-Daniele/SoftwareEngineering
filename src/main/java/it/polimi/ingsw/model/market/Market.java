@@ -3,14 +3,14 @@ package it.polimi.ingsw.model.market;
 import it.polimi.ingsw.exceptions.WrongParametersException;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 import it.polimi.ingsw.view.CLI.ColorAnsi;
-import it.polimi.ingsw.view.model_view.Market_View;
+import it.polimi.ingsw.view.model_view.MarketView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 /**
  * Market is the market of Game.
  */
-public class Market implements Serializable, Market_View {
+public class Market implements Serializable, MarketView {
     private static final int row = 3;
     private static final int column = 4;
     private final Marble[][] marketTray;

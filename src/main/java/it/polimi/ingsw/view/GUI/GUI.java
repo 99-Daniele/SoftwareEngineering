@@ -1,7 +1,7 @@
 package it.polimi.ingsw.view.GUI;
 
 import it.polimi.ingsw.App;
-import it.polimi.ingsw.model.games.states.GAME_STATES;
+import it.polimi.ingsw.model.games.states.GameStates;
 import it.polimi.ingsw.network.client.ClientSocket;
 import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.view.ClientView;
@@ -97,7 +97,7 @@ public class GUI extends ClientView {
 
     @Override
     public void leader_card_choice(Message message){
-        Message_Four_Parameter_Int m = (Message_Four_Parameter_Int) message;
+        MessageFourParameterInt m = (MessageFourParameterInt) message;
         Platform.runLater(() -> {
             SceneController.changeRootPane("/fxml/initScene");
             try {
@@ -113,31 +113,31 @@ public class GUI extends ClientView {
         Platform.runLater(() -> {
             if (SceneController.isCurrentScene("#nicknameLabel"))
                 NicknameSceneController.waitPlayers();
-            else if(isState(GAME_STATES.BUY_CARD_STATE) || isState(GAME_STATES.END_TURN_STATE)) {
-                setCurrentState(GAME_STATES.END_TURN_STATE);
+            else if(isState(GameStates.BUY_CARD_STATE) || isState(GameStates.END_TURN_STATE)) {
+                setCurrentState(GameStates.END_TURN_STATE);
                 YourTurnSceneController.endTurn();
             }
-            else if(isState(GAME_STATES.FIRST_POWER_STATE) || ClientView.isState(GAME_STATES.ACTIVATE_PRODUCTION_STATE)){
-                setCurrentState(GAME_STATES.ACTIVATE_PRODUCTION_STATE);
+            else if(isState(GameStates.FIRST_POWER_STATE) || ClientView.isState(GameStates.ACTIVATE_PRODUCTION_STATE)){
+                setCurrentState(GameStates.ACTIVATE_PRODUCTION_STATE);
                 YourTurnSceneController.production();
             }
-            else if(isState(GAME_STATES.TAKE_MARBLE_STATE)){
+            else if(isState(GameStates.TAKE_MARBLE_STATE)){
                 if(getMarbles().size() == 0){
                     SceneController.setVisible("#message", false);
                     SceneController.setVisible("#marbleShow1", false);
-                    setCurrentState(GAME_STATES.END_TURN_STATE);
+                    setCurrentState(GameStates.END_TURN_STATE);
                     YourTurnSceneController.endTurn();
                 }
                 else
                     YourTurnSceneController.chooseMarble();
             }
-            else if(isState(GAME_STATES.WHITE_CONVERSION_CARD_STATE)){
+            else if(isState(GameStates.WHITE_CONVERSION_CARD_STATE)){
                 if(getMarbles().size() == 0){
-                    setCurrentState(GAME_STATES.END_TURN_STATE);
+                    setCurrentState(GameStates.END_TURN_STATE);
                     YourTurnSceneController.endTurn();
                 }
                 else {
-                    setCurrentState(GAME_STATES.TAKE_MARBLE_STATE);
+                    setCurrentState(GameStates.TAKE_MARBLE_STATE);
                     YourTurnSceneController.chooseMarble();
                 }
             }
@@ -146,8 +146,8 @@ public class GUI extends ClientView {
 
     @Override
     public void turn_message(Message message){
-        Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
-        setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
+        MessageOneParameterInt m = (MessageOneParameterInt) message;
+        setCurrentState(GameStates.FIRST_ACTION_STATE);
         Platform.runLater(() -> {
             turn = (m.getPar() == 1);
             if (m.getPar() == 1) {
@@ -163,7 +163,7 @@ public class GUI extends ClientView {
     @Override
     public void end_turn_message(Message message) {
         if (position == 0 && message.getClientID() == getNumOfPlayers() -1) {
-            setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
+            setCurrentState(GameStates.FIRST_ACTION_STATE);
             turn = true;
             if (SceneController.isCurrentScene("#radiobutBuyCard"))
                 Platform.runLater(() -> {
@@ -173,7 +173,7 @@ public class GUI extends ClientView {
                         }
                 );
         } else if (message.getClientID() == position - 1) {
-            setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
+            setCurrentState(GameStates.FIRST_ACTION_STATE);
             turn = true;
             if (SceneController.isCurrentScene("#radiobutBuyCard"))
                 Platform.runLater(() -> {
@@ -197,7 +197,7 @@ public class GUI extends ClientView {
 
     @Override
     public void buy_card_message(Message message){
-        Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        MessageTwoParameterInt m = (MessageTwoParameterInt) message;
         String newMessage = "Player " + getNickname(m.getClientID()) + " bought a new card and inserted it in " +
                 "the " + m.getPar2() + "° slot.";
         super.buy_card_message(message);
@@ -212,7 +212,7 @@ public class GUI extends ClientView {
 
     @Override
     public void card_remove_message(Message message){
-        Message_Four_Parameter_Int m = (Message_Four_Parameter_Int) message;
+        MessageFourParameterInt m = (MessageFourParameterInt) message;
         String newMessage;
         super.card_remove_message(message);
         if(getNumOfPlayers() == 1 && m.getClientID() == 1)
@@ -226,7 +226,7 @@ public class GUI extends ClientView {
 
     @Override
     public void market_change(Message message){
-        Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        MessageTwoParameterInt m = (MessageTwoParameterInt) message;
         String newMessage;
         if (m.getPar1() == 0) {
             newMessage = "Player " + getNickname(m.getClientID()) + " has chosen row " + m.getPar2() + " of the market";
@@ -241,7 +241,7 @@ public class GUI extends ClientView {
 
     @Override
     public void faith_points_message(Message message) {
-        Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
+        MessageOneParameterInt m = (MessageOneParameterInt) message;
         String newMessage;
         if (getNumOfPlayers() == 1 && m.getClientID() == 1)
             newMessage = "Ludovico has increased his faith points. Now it has " + m.getPar();
@@ -265,7 +265,7 @@ public class GUI extends ClientView {
 
     @Override
     public void increase_warehouse_message(Message message){
-        Message_One_Int_One_Resource m = (Message_One_Int_One_Resource) message;
+        MessageOneIntOneResource m = (MessageOneIntOneResource) message;
         String newMessage;
         if(m.getPar1() != -1)
             newMessage = "Player " + getNickname(m.getClientID()) + " has inserted 1 " + m.getResource().toString()
@@ -286,7 +286,7 @@ public class GUI extends ClientView {
 
     @Override
     public void switch_depot_message(Message message){
-        Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        MessageTwoParameterInt m = (MessageTwoParameterInt) message;
         String newMessage = "Player " + getNickname(m.getClientID()) + " has switched its " + m.getPar1()
                 + "° depot with its " + m.getPar2() + "° depot";
         super.switch_depot_message(message);
@@ -303,7 +303,7 @@ public class GUI extends ClientView {
 
     @Override
     public void leader_card_activation_message(Message message){
-        Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
+        MessageOneParameterInt m = (MessageOneParameterInt) message;
         String newMessage = "Player " + getNickname(m.getClientID()) + " has activated a leader card";
         super.leader_card_activation_message(message);
         if(m.getClientID() != position) {
@@ -319,7 +319,7 @@ public class GUI extends ClientView {
 
     @Override
     public void extra_depot_message(Message message){
-        Message_One_Int_One_Resource m = (Message_One_Int_One_Resource) message;
+        MessageOneIntOneResource m = (MessageOneIntOneResource) message;
         String newMessage = "Player " + getNickname(m.getClientID()) + " has a new extra depot of " + m.getResource().toString();
         super.extra_depot_message(message);
         if(SceneController.isCurrentScene("#radiobutBuyCard"))
@@ -329,7 +329,7 @@ public class GUI extends ClientView {
 
     @Override
     public void leader_card_discard_message(Message message){
-        Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
+        MessageOneParameterInt m = (MessageOneParameterInt) message;
         String newMessage = "Player " + getNickname(m.getClientID()) + " has discarded one leader card";
         super.leader_card_discard_message(message);
         if(m.getClientID() != position) {
@@ -345,9 +345,9 @@ public class GUI extends ClientView {
 
     @Override
     public void take_marble_message(Message message) {
-        Message_ArrayList_Marble m = (Message_ArrayList_Marble) message;
+        MessageArrayListMarble m = (MessageArrayListMarble) message;
         super.take_marble_message(message);
-        setCurrentState(GAME_STATES.TAKE_MARBLE_STATE);
+        setCurrentState(GameStates.TAKE_MARBLE_STATE);
         Platform.runLater(() -> {
             try {
                 YourTurnSceneController.showMarbles(m.getMarbles());
@@ -360,7 +360,7 @@ public class GUI extends ClientView {
     @Override
     public void endProductionMessage(Message message) {
         String newMessage = "Player " + getNickname(message.getClientID()) + " has activated production powers";
-        setCurrentState(GAME_STATES.END_TURN_STATE);
+        setCurrentState(GameStates.END_TURN_STATE);
         if(SceneController.isCurrentScene("#radiobutBuyCard"))
             Platform.runLater(() -> {
                 SceneController.addMessage(newMessage);
@@ -378,7 +378,7 @@ public class GUI extends ClientView {
 
     @Override
     public void white_conversion_card_message(Message message){
-        ClientView.setCurrentState(GAME_STATES.WHITE_CONVERSION_CARD_STATE);
+        ClientView.setCurrentState(GameStates.WHITE_CONVERSION_CARD_STATE);
         SceneController.setVisible("#message", false);
         SceneController.setVisible("#marbleShow1", false);
         SceneController.setVisible("#marbleShow2", false);
@@ -389,7 +389,7 @@ public class GUI extends ClientView {
 
     @Override
     public void vatican_report_message(Message message) {
-        Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        MessageTwoParameterInt m = (MessageTwoParameterInt) message;
         String newMessage;
         super.vatican_report_message(message);
         if(getNumOfPlayers() == 1 && m.getPar1() == 1) {
@@ -408,13 +408,13 @@ public class GUI extends ClientView {
 
     @Override
     public void chosen_slot_message(Message message){
-        Message_Three_Parameter_Int m = (Message_Three_Parameter_Int) message;
+        MessageThreeParameterInt m = (MessageThreeParameterInt) message;
         YourTurnSceneController.choseSlotMessage(m.getPar1(), m.getPar2(), m.getPar3());
     }
 
     @Override
     public void quit_message(Message message) {
-        Message_One_Parameter_String m = (Message_One_Parameter_String) message;
+        MessageOneParameterString m = (MessageOneParameterString) message;
         String quitMessage;
         if (getNumOfPlayers() != 0) {
             quitMessage = "Player " + m.getPar() + " disconnected. Game ended.";
@@ -428,7 +428,7 @@ public class GUI extends ClientView {
 
     @Override
     public void end_game_message(Message message) {
-        Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        MessageTwoParameterInt m = (MessageTwoParameterInt) message;
         String endMessage;
         if(getNumOfPlayers() == 1 && m.getClientID() == 1){
             endMessage = "Game ended. Ludovico win.";
@@ -472,7 +472,7 @@ public class GUI extends ClientView {
     @Override
     public void empty_deck_error() {
         String errorMessage = "You have chosen an empty deck";
-        setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
+        setCurrentState(GameStates.FIRST_ACTION_STATE);
         Platform.runLater(() -> {
             if(!SceneController.isCurrentScene("#radiobutBuyCard"))
                 SceneController.changeRootPane("/fxml/yourTurnScene");
@@ -488,12 +488,12 @@ public class GUI extends ClientView {
             if(!SceneController.isCurrentScene("#radiobutBuyCard"))
                 SceneController.changeRootPane("/fxml/yourTurnScene");
             SceneController.errorMessage(errorMessage);
-            if(isState(GAME_STATES.FIRST_POWER_STATE)){
-                setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
+            if(isState(GameStates.FIRST_POWER_STATE)){
+                setCurrentState(GameStates.FIRST_ACTION_STATE);
                 YourTurnSceneController.disableProductions();
                 YourTurnSceneController.yourTurn();
             }
-            else if(isState(GAME_STATES.ACTIVATE_PRODUCTION_STATE)){
+            else if(isState(GameStates.ACTIVATE_PRODUCTION_STATE)){
                 YourTurnSceneController.production();
             }
         });
@@ -506,8 +506,8 @@ public class GUI extends ClientView {
             if(!SceneController.isCurrentScene("#radiobutBuyCard"))
                 SceneController.changeRootPane("/fxml/yourTurnScene");
             SceneController.errorMessage(errorMessage);
-            if(isState(GAME_STATES.FIRST_POWER_STATE)){
-                setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
+            if(isState(GameStates.FIRST_POWER_STATE)){
+                setCurrentState(GameStates.FIRST_ACTION_STATE);
                 YourTurnSceneController.disableProductions();
                 YourTurnSceneController.yourTurn();
             }
@@ -530,7 +530,7 @@ public class GUI extends ClientView {
     @Override
     public void full_slot_error() {
         String errorMessage = "You can't insert this card in any slot";
-        setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
+        setCurrentState(GameStates.FIRST_ACTION_STATE);
         Platform.runLater(() -> {
             if(!SceneController.isCurrentScene("#radiobutBuyCard"))
                 SceneController.changeRootPane("/fxml/yourTurnScene");
@@ -566,16 +566,16 @@ public class GUI extends ClientView {
             if(!SceneController.isCurrentScene("#radiobutBuyCard"))
                 SceneController.changeRootPane("/fxml/yourTurnScene");
             SceneController.errorMessage(errorMessage);
-            if(isState(GAME_STATES.BUY_CARD_STATE)) {
-                setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
+            if(isState(GameStates.BUY_CARD_STATE)) {
+                setCurrentState(GameStates.FIRST_ACTION_STATE);
                 YourTurnSceneController.yourTurn();
             }
-            else if(isState(GAME_STATES.FIRST_POWER_STATE)){
-                setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
+            else if(isState(GameStates.FIRST_POWER_STATE)){
+                setCurrentState(GameStates.FIRST_ACTION_STATE);
                 YourTurnSceneController.disableProductions();
                 YourTurnSceneController.yourTurn();
             }
-            else if(isState(GAME_STATES.ACTIVATE_PRODUCTION_STATE)){
+            else if(isState(GameStates.ACTIVATE_PRODUCTION_STATE)){
                 YourTurnSceneController.production();
             }
         });

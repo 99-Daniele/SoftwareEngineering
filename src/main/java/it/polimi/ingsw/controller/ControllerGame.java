@@ -19,12 +19,12 @@ public class ControllerGame implements Observer {
     private GameManager gameManager;
     private TurnController turnController;
     private LinkedList<View> views;
-    private GAME_STARTING_STATES state;
+    private GameStartingState state;
     private final ArrayList<ArrayList<LeaderCard>> leaderCards;
 
     public ControllerGame() {
         views = new LinkedList<>();
-        state = GAME_STARTING_STATES.WAITING_NUM_PLAYERS;
+        state = GameStartingState.WAITING_NUM_PLAYERS;
         leaderCards = new ArrayList<>();
     }
 
@@ -36,7 +36,7 @@ public class ControllerGame implements Observer {
             System.out.println("GAME ENDED");
         gameManager = null;
         views = new LinkedList<>();
-        state = GAME_STARTING_STATES.WAITING_NUM_PLAYERS;
+        state = GameStartingState.WAITING_NUM_PLAYERS;
         ControllerConnection.newGame();
     }
 
@@ -103,7 +103,7 @@ public class ControllerGame implements Observer {
             removeView(view, nickName);
             resetControllerGame();
         }
-        else if (state != GAME_STARTING_STATES.START_GAME) {
+        else if (state != GameStartingState.START_GAME) {
             removeView(view, nickName);
             for (View otherView : views)
                 otherView.exit(nickName);
@@ -226,7 +226,7 @@ public class ControllerGame implements Observer {
      */
     private synchronized void addPlayer(View view, Message loginMessage){
         try {
-            Message_One_Parameter_String m = (Message_One_Parameter_String) loginMessage;
+            MessageOneParameterString m = (MessageOneParameterString) loginMessage;
             String nickName = m.getPar();
             addPlayer(view, nickName);
         } catch (ClassCastException e) {
@@ -239,7 +239,7 @@ public class ControllerGame implements Observer {
      * @param nickName is player's chosen nickName.
      */
     private synchronized void addPlayer(View view, String nickName){
-        if (state != GAME_STARTING_STATES.WAITING_PLAYERS && state != GAME_STARTING_STATES.WAITING_NUM_PLAYERS) {
+        if (state != GameStartingState.WAITING_PLAYERS && state != GameStartingState.WAITING_NUM_PLAYERS) {
             view.errorMessage(ErrorType.ILLEGAL_OPERATION);
             return;
         }
@@ -262,7 +262,7 @@ public class ControllerGame implements Observer {
      * sends a login message to player.
      */
     private synchronized void createNewPlayer(View view, String nickName) throws AlreadyTakenNicknameException {
-        if (state == GAME_STARTING_STATES.WAITING_NUM_PLAYERS) {
+        if (state == GameStartingState.WAITING_NUM_PLAYERS) {
             view.login(0);
         } else {
             gameManager.createPlayer(view, nickName);
@@ -278,11 +278,11 @@ public class ControllerGame implements Observer {
      */
     public synchronized void newGame(Message numPlayerMessage)
             throws WrongParametersException, IllegalStateException{
-        Message_One_Parameter_Int m = (Message_One_Parameter_Int) numPlayerMessage;
+        MessageOneParameterInt m = (MessageOneParameterInt) numPlayerMessage;
         int numPlayers = m.getPar();
         if (!InputController.num_players_check(numPlayers))
             throw new WrongParametersException();
-        if (state != GAME_STARTING_STATES.WAITING_NUM_PLAYERS)
+        if (state != GameStartingState.WAITING_NUM_PLAYERS)
             throw new IllegalStateException();
         else {
             try {
@@ -290,7 +290,7 @@ public class ControllerGame implements Observer {
                 turnController = new TurnController(numPlayers);
                 gameManager.createPlayer(views.get(0), views.get(0).getNickname());
                 if (numPlayers > 1) {
-                    state = GAME_STARTING_STATES.WAITING_PLAYERS;
+                    state = GameStartingState.WAITING_PLAYERS;
                 }
                 ControllerConnection.newGame();
                 views.get(0).ok();
@@ -313,7 +313,7 @@ public class ControllerGame implements Observer {
         }
         views = newViewsPosition;
         System.out.println("NEW GAME STARTED -> PLAYERS: " + views);
-        state = GAME_STARTING_STATES.WAITING_PLAYERS_CHOICES;
+        state = GameStartingState.WAITING_PLAYERS_CHOICES;
     }
 
     /**
@@ -349,7 +349,7 @@ public class ControllerGame implements Observer {
      * sends to all players that each one of them have made all choices. Now game could start.
      */
     public void playersReady(){
-        state = GAME_STARTING_STATES.START_GAME;
+        state = GameStartingState.START_GAME;
         System.out.println("All players have made their choice.");
         for(View view: views)
             view.startGame();
@@ -368,9 +368,9 @@ public class ControllerGame implements Observer {
      * @throws IllegalStateException if player has send this message during a wrong phases.
      */
     private void leaderCardHandler(Message message) throws IllegalStateException, WrongParametersException {
-        Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        MessageTwoParameterInt m = (MessageTwoParameterInt) message;
         int viewID = m.getClientID();
-        if(state != GAME_STARTING_STATES.WAITING_PLAYERS_CHOICES)
+        if(state != GameStartingState.WAITING_PLAYERS_CHOICES)
             throw new IllegalStateException();
         if(!InputController.leader_card_check(m.getPar1(), m.getPar2(),  leaderCards.get(viewID)))
             throw new WrongParametersException();
@@ -384,9 +384,9 @@ public class ControllerGame implements Observer {
      * sent by the first or fourth player.
      */
     private void oneResourceHandle(Message message) throws IllegalStateException {
-        Message_One_Int_One_Resource m = (Message_One_Int_One_Resource) message;
+        MessageOneIntOneResource m = (MessageOneIntOneResource) message;
         int viewID = m.getClientID();
-        if(viewID != 1 && viewID != 2 || state != GAME_STARTING_STATES.WAITING_PLAYERS_CHOICES)
+        if(viewID != 1 && viewID != 2 || state != GameStartingState.WAITING_PLAYERS_CHOICES)
             throw new IllegalStateException();
         gameManager.oneResourceHandle(viewID, m.getResource());
         views.get(viewID).ok();
@@ -398,9 +398,9 @@ public class ControllerGame implements Observer {
      * sent by the first, second or third player.
      */
     private void twoResourceHandle(Message message) throws IllegalStateException {
-        Message_Two_Resource m = (Message_Two_Resource) message;
+        MessageTwoResource m = (MessageTwoResource) message;
         int viewID = m.getClientID();
-        if(viewID != 3 || state != GAME_STARTING_STATES.WAITING_PLAYERS_CHOICES)
+        if(viewID != 3 || state != GameStartingState.WAITING_PLAYERS_CHOICES)
             throw new IllegalStateException();
         gameManager.twoResourceHandle(viewID, m.getR1(), m.getR2());
         views.get(viewID).ok();
@@ -416,7 +416,7 @@ public class ControllerGame implements Observer {
      */
     private void buyCardHandler(Message message)
             throws IllegalStateException, WrongParametersException, EmptyDevelopmentCardDeckException, ImpossibleDevelopmentCardAdditionException, InsufficientResourceException {
-        Message_Three_Parameter_Int m = (Message_Three_Parameter_Int) message;
+        MessageThreeParameterInt m = (MessageThreeParameterInt) message;
         int viewID = m.getClientID();
         if(gameManager.buyCardHandler(m.getPar1(), m.getPar2(), m.getPar3()))
             views.get(viewID).ok();
@@ -440,7 +440,7 @@ public class ControllerGame implements Observer {
      */
     private void chosenSlotHandler(Message message)
             throws IllegalStateException, WrongParametersException, EmptyDevelopmentCardDeckException, ImpossibleDevelopmentCardAdditionException, InsufficientResourceException {
-        Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
+        MessageOneParameterInt m = (MessageOneParameterInt) message;
         int viewID = m.getClientID();
         int chosenSlot = m.getPar();
         gameManager.chosenSlotHandler(chosenSlot);
@@ -453,7 +453,7 @@ public class ControllerGame implements Observer {
      * @throws IllegalStateException if player has send this message during a wrong phases.
      */
     private void takeMarbleHandler(Message message) throws IllegalStateException, WrongParametersException {
-        Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        MessageTwoParameterInt m = (MessageTwoParameterInt) message;
         int viewID = m.getClientID();
         Marble[] marbles = gameManager.takeMarbleHandler(m.getPar1(), m.getPar2());
         views.get(viewID).chosen_marble(marbles);
@@ -466,7 +466,7 @@ public class ControllerGame implements Observer {
      */
     private void useMarbleHandler(Message message)
             throws IllegalStateException, WrongParametersException {
-        Message_One_Parameter_Marble m = (Message_One_Parameter_Marble) message;
+        MessageOneParameterMarble m = (MessageOneParameterMarble) message;
         int viewID = m.getClientID();
         if(gameManager.useMarbleHandler(m.getMarble()))
             views.get(viewID).ok();
@@ -486,7 +486,7 @@ public class ControllerGame implements Observer {
      * @throws IllegalStateException if player has send this message during a wrong phases.
      */
     private void whiteConversionCardHandler(Message message) throws IllegalStateException, WrongParametersException {
-        Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
+        MessageOneParameterInt m = (MessageOneParameterInt) message;
         int viewID = m.getClientID();
         gameManager.whiteConversionCardHandler(m.getPar());
         views.get(viewID).ok();
@@ -499,7 +499,7 @@ public class ControllerGame implements Observer {
      * @throws ImpossibleSwitchDepotException if switch is not possible.
      */
     private void switchHandler(Message message) throws IllegalStateException, WrongParametersException, ImpossibleSwitchDepotException {
-        Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        MessageTwoParameterInt m = (MessageTwoParameterInt) message;
         int viewID = m.getClientID();
         gameManager.switchHandler(m.getPar1(), m.getPar2());
         views.get(viewID).ok();
@@ -513,7 +513,7 @@ public class ControllerGame implements Observer {
      */
     private void developmentCardPowerHandler(Message message)
             throws IllegalStateException, WrongParametersException, InsufficientResourceException {
-        Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        MessageTwoParameterInt m = (MessageTwoParameterInt) message;
         int viewID = m.getClientID();
         try {
             gameManager.developmentCardPowerHandler(m.getPar1(), m.getPar2());
@@ -533,7 +533,7 @@ public class ControllerGame implements Observer {
      */
     private void basicPowerHandler(Message message)
             throws InsufficientResourceException, IllegalStateException, WrongParametersException {
-        Message_Three_Resource_One_Int m = (Message_Three_Resource_One_Int) message;
+        MessageThreeResourceOneInt m = (MessageThreeResourceOneInt) message;
         int viewID = m.getClientID();
         try {
             gameManager.basicPowerHandler(m.getResource1(), m.getResource2(), m.getResource3(), m.getPar());
@@ -551,7 +551,7 @@ public class ControllerGame implements Observer {
      */
     private void leaderCardPowerHandler(Message message)
             throws InsufficientResourceException, IllegalStateException, WrongParametersException {
-        Message_One_Resource_Two_Int m = (Message_One_Resource_Two_Int) message;
+        MessageOneResourceTwoInt m = (MessageOneResourceTwoInt) message;
         int viewID = m.getClientID();
         try {
             gameManager.leaderCardPowerHandler(m.getPar1(), m.getResource(), m.getPar2());
@@ -582,7 +582,7 @@ public class ControllerGame implements Observer {
      */
     private void leaderActivationHandler(Message message)
             throws InsufficientResourceException, AlreadyDiscardLeaderCardException, ActiveLeaderCardException, InsufficientCardsException, IllegalStateException, WrongParametersException {
-        Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
+        MessageOneParameterInt m = (MessageOneParameterInt) message;
         int viewID = m.getClientID();
         gameManager.leaderActivationHandler(m.getPar());
         views.get(viewID).ok();
@@ -597,7 +597,7 @@ public class ControllerGame implements Observer {
      */
     private void leaderDiscardHandler(Message message)
             throws ActiveLeaderCardException, AlreadyDiscardLeaderCardException, IllegalStateException, WrongParametersException {
-        Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
+        MessageOneParameterInt m = (MessageOneParameterInt) message;
         int viewID = m.getClientID();
         gameManager.leaderDiscardHandler(m.getPar());
         views.get(viewID).ok();

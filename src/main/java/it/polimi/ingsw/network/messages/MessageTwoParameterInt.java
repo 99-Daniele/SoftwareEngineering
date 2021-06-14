@@ -1,11 +1,11 @@
 package it.polimi.ingsw.network.messages;
 
-public class Message_Two_Parameter_Int extends Message {
+public class MessageTwoParameterInt extends Message {
 
     private final int par1;
     private final int par2;
 
-    public Message_Two_Parameter_Int(MessageType messageType, int clientID,int par, int par2) {
+    public MessageTwoParameterInt(MessageType messageType, int clientID, int par, int par2) {
         super(messageType, clientID);
         this.par1 = par;
         this.par2 = par2;

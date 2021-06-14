@@ -22,8 +22,8 @@ public class ActivateProductionState implements GameState {
     }
 
     @Override
-    public boolean isRightState(GAME_STATES state) {
-        return state == GAME_STATES.ACTIVATE_PRODUCTION_STATE;
+    public boolean isRightState(GameStates state) {
+        return state == GameStates.ACTIVATE_PRODUCTION_STATE;
     }
 
     @Override

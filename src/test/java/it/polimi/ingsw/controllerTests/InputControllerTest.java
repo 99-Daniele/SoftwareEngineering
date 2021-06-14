@@ -24,8 +24,8 @@ public class InputControllerTest {
     @Test
     void correctLoginCheck(){
 
-        Message_One_Parameter_String m1 = new Message_One_Parameter_String(MessageType.LOGIN, 0, null);
-        Message_One_Parameter_String m2 = new Message_One_Parameter_String(MessageType.LOGIN, 1, "Daniele");
+        MessageOneParameterString m1 = new MessageOneParameterString(MessageType.LOGIN, 0, null);
+        MessageOneParameterString m2 = new MessageOneParameterString(MessageType.LOGIN, 1, "Daniele");
         assertFalse(InputController.login_check(m1.getPar()));
         assertTrue(InputController.login_check(m2.getPar()));
     }

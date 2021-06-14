@@ -3,11 +3,8 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.model.cards.leaderCards.LeaderCard;
 import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.network.messages.ErrorType;
-import it.polimi.ingsw.view.model_view.Game_View;
 
 import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
 
 public interface View{
 

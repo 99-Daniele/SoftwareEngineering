@@ -1,10 +1,10 @@
 package it.polimi.ingsw.network.messages;
 
-public class Message_One_Parameter_Int extends Message {
+public class MessageOneParameterInt extends Message {
 
     private final int par;
 
-    public Message_One_Parameter_Int(MessageType messageType, int clientID, int par) {
+    public MessageOneParameterInt(MessageType messageType, int clientID, int par) {
         super(messageType, clientID);
         this.par = par;
     }

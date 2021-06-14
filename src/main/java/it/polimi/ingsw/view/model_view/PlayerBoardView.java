@@ -4,18 +4,16 @@ import it.polimi.ingsw.model.resourceContainers.Resource;
 
 import java.util.ArrayList;
 
-import static java.util.Collections.swap;
-
-public class PlayerBoard_View {
+public class PlayerBoardView {
 
     private final String nickName;
-    private Warehouse_Strongbox_View warehouse_strongbox;
-    private Cards_Slots_View cards_slots;
+    private WarehouseStrongboxView warehouse_strongbox;
+    private CardsSlotsView cards_slots;
 
-    public PlayerBoard_View(String nickName) {
+    public PlayerBoardView(String nickName) {
         this.nickName = nickName;
-        this.warehouse_strongbox = new Warehouse_Strongbox_View();
-        this.cards_slots = new Cards_Slots_View();
+        this.warehouse_strongbox = new WarehouseStrongboxView();
+        this.cards_slots = new CardsSlotsView();
     }
 
     public String getNickName() {
@@ -54,11 +52,11 @@ public class PlayerBoard_View {
         return cards_slots.isLeaderCardActive(leaderCard);
     }
 
-    public Warehouse_Strongbox_View getWarehouse_strongbox() {
+    public WarehouseStrongboxView getWarehouse_strongbox() {
         return warehouse_strongbox;
     }
 
-    public Cards_Slots_View getCards_slots() {
+    public CardsSlotsView getCards_slots() {
         return cards_slots;
     }
 
@@ -90,7 +88,7 @@ public class PlayerBoard_View {
         printLeaderCards();
     }
 
-    public ArrayList<Resource_Container_View> getWarehouse(){
+    public ArrayList<ResourceContainerView> getWarehouse(){
         return warehouse_strongbox.getWarehouse();
     }
 

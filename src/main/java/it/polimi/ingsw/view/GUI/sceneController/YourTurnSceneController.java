@@ -1,7 +1,6 @@
 package it.polimi.ingsw.view.GUI.sceneController;
 
-import it.polimi.ingsw.model.cards.Card;
-import it.polimi.ingsw.model.games.states.GAME_STATES;
+import it.polimi.ingsw.model.games.states.GameStates;
 import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 import it.polimi.ingsw.network.client.ClientSocket;
@@ -13,15 +12,12 @@ import it.polimi.ingsw.parser.ResourceMapGUI;
 import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.GUI.GUI;
 import it.polimi.ingsw.view.GUI.SceneController;
-import it.polimi.ingsw.view.GUI.sceneController.OpponentPlayerboardSceneController;
-import it.polimi.ingsw.view.model_view.Game_View;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -29,7 +25,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import java.io.*;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 
@@ -323,28 +318,28 @@ public class YourTurnSceneController {
         });
         marbleShow1.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             try {
-                ClientSocket.sendMessage(new Message_One_Parameter_Marble(MessageType.USE_MARBLE, GUI.getPosition(), ClientView.getMarbles().remove(0)));
+                ClientSocket.sendMessage(new MessageOneParameterMarble(MessageType.USE_MARBLE, GUI.getPosition(), ClientView.getMarbles().remove(0)));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
         marbleShow2.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             try {
-                ClientSocket.sendMessage(new Message_One_Parameter_Marble(MessageType.USE_MARBLE, GUI.getPosition(), ClientView.getMarbles().remove(1)));
+                ClientSocket.sendMessage(new MessageOneParameterMarble(MessageType.USE_MARBLE, GUI.getPosition(), ClientView.getMarbles().remove(1)));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
         marbleShow3.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             try {
-                ClientSocket.sendMessage(new Message_One_Parameter_Marble(MessageType.USE_MARBLE, GUI.getPosition(), ClientView.getMarbles().remove(2)));
+                ClientSocket.sendMessage(new MessageOneParameterMarble(MessageType.USE_MARBLE, GUI.getPosition(), ClientView.getMarbles().remove(2)));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
         marbleShow4.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent ->{
             try {
-                ClientSocket.sendMessage(new Message_One_Parameter_Marble(MessageType.USE_MARBLE, GUI.getPosition(), ClientView.getMarbles().remove(3)));
+                ClientSocket.sendMessage(new MessageOneParameterMarble(MessageType.USE_MARBLE, GUI.getPosition(), ClientView.getMarbles().remove(3)));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -589,7 +584,7 @@ public class YourTurnSceneController {
             yes.setDisable(false);
             no.setDisable(false);
             try {
-                ClientSocket.sendMessage(new Message_Two_Parameter_Int(MessageType.SWITCH_DEPOT, GUI.getPosition(), switchCounter.get(0), switchCounter.get(1)));
+                ClientSocket.sendMessage(new MessageTwoParameterInt(MessageType.SWITCH_DEPOT, GUI.getPosition(), switchCounter.get(0), switchCounter.get(1)));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -670,7 +665,7 @@ public class YourTurnSceneController {
     private void take_market_marble_row(int i) {
         disableMarketButton();
         try {
-            ClientSocket.sendMessage(new Message_Two_Parameter_Int(MessageType.TAKE_MARBLE, GUI.getPosition(), 0, i));
+            ClientSocket.sendMessage(new MessageTwoParameterInt(MessageType.TAKE_MARBLE, GUI.getPosition(), 0, i));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -679,7 +674,7 @@ public class YourTurnSceneController {
     private void take_market_marble_column(int i) {
         disableMarketButton();
         try {
-            ClientSocket.sendMessage(new Message_Two_Parameter_Int(MessageType.TAKE_MARBLE, GUI.getPosition(), 1, i));
+            ClientSocket.sendMessage(new MessageTwoParameterInt(MessageType.TAKE_MARBLE, GUI.getPosition(), 1, i));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -824,15 +819,15 @@ public class YourTurnSceneController {
 
     private void activProducButton() {
         radiobutActivProduc.setSelected(false);
-        if(ClientView.isState(GAME_STATES.FIRST_ACTION_STATE))
-            ClientView.setCurrentState(GAME_STATES.FIRST_POWER_STATE);
+        if(ClientView.isState(GameStates.FIRST_ACTION_STATE))
+            ClientView.setCurrentState(GameStates.FIRST_POWER_STATE);
         disableAllButton();
         enableProductionsButton();
     }
 
     private void basicProduction(){
         basePanel.setVisible(true);
-        Message_Three_Resource_One_Int messageToSend = new Message_Three_Resource_One_Int(MessageType.BASIC_POWER, GUI.getPosition());
+        MessageThreeResourceOneInt messageToSend = new MessageThreeResourceOneInt(MessageType.BASIC_POWER, GUI.getPosition());
         coin1.setOnMouseClicked(MouseEvent -> {
             choseResource(Resource.COIN, messageToSend);
         });
@@ -851,7 +846,7 @@ public class YourTurnSceneController {
         panelBuy.setVisible(true);
         radiobutWarehouse.setOnMouseClicked(mouseEvent1 -> {
             panelBuy.setVisible(false);
-            Message message = new Message_Two_Parameter_Int(MessageType.DEVELOPMENT_CARD_POWER, GUI.getPosition(), slot, 0);
+            Message message = new MessageTwoParameterInt(MessageType.DEVELOPMENT_CARD_POWER, GUI.getPosition(), slot, 0);
             try {
                 ClientSocket.sendMessage(message);
             } catch (IOException e) {
@@ -860,7 +855,7 @@ public class YourTurnSceneController {
         });
         radiobutStrongbox.setOnMouseClicked(mouseEvent1 -> {
             panelBuy.setVisible(false);
-            Message message = new Message_Two_Parameter_Int(MessageType.DEVELOPMENT_CARD_POWER, GUI.getPosition(), slot, 1);
+            Message message = new MessageTwoParameterInt(MessageType.DEVELOPMENT_CARD_POWER, GUI.getPosition(), slot, 1);
             try {
                 ClientSocket.sendMessage(message);
             } catch (IOException e) {
@@ -871,7 +866,7 @@ public class YourTurnSceneController {
 
     private void leaderProduction(int leader) {
         basePanel.setVisible(true);
-        Message_One_Resource_Two_Int messageToSend = new Message_One_Resource_Two_Int(MessageType.LEADER_CARD_POWER, GUI.getPosition(), leader);
+        MessageOneResourceTwoInt messageToSend = new MessageOneResourceTwoInt(MessageType.LEADER_CARD_POWER, GUI.getPosition(), leader);
         coin1.setOnMouseClicked(MouseEvent -> {
             choseResource(Resource.COIN, messageToSend);
         });
@@ -886,7 +881,7 @@ public class YourTurnSceneController {
         });
     }
 
-    private void choseResource(Resource resource, Message_Three_Resource_One_Int messageToSend) {
+    private void choseResource(Resource resource, MessageThreeResourceOneInt messageToSend) {
         if (messageToSend.getResource1() == null)
             messageToSend.setResource1(resource);
         else if (messageToSend.getResource2() == null) {
@@ -919,7 +914,7 @@ public class YourTurnSceneController {
         }
     }
 
-    private void choseResource(Resource resource, Message_One_Resource_Two_Int messageToSend) {
+    private void choseResource(Resource resource, MessageOneResourceTwoInt messageToSend) {
         messageToSend.setResource(resource);
         basePanel.setVisible(false);
         panelBuy.setVisible(true);
@@ -958,7 +953,7 @@ public class YourTurnSceneController {
         radiobutEndProd.setDisable(true);
         radiobutEndProd.setSelected(false);
         disableProductionButton();
-        ClientView.setCurrentState(GAME_STATES.END_TURN_STATE);
+        ClientView.setCurrentState(GameStates.END_TURN_STATE);
         Message message = new Message(MessageType.END_PRODUCTION, GUI.getPosition());
         try{
             ClientSocket.sendMessage(message);
@@ -969,7 +964,7 @@ public class YourTurnSceneController {
 
     private void endTurnButton(){
         radiobutEndTurn.setSelected(false);
-        if(ClientView.isState(GAME_STATES.END_TURN_STATE)) {
+        if(ClientView.isState(GameStates.END_TURN_STATE)) {
             Message message = new Message(MessageType.END_TURN, GUI.getPosition());
             try {
                 ClientSocket.sendMessage(message);
@@ -1042,7 +1037,7 @@ public class YourTurnSceneController {
 
     private void buyCardButton() {
         radiobutBuyCard.setSelected(false);
-        ClientView.setCurrentState(GAME_STATES.BUY_CARD_STATE);
+        ClientView.setCurrentState(GameStates.BUY_CARD_STATE);
         disableAllButton();
         setDisableAllDecks(false);
         if(ClientView.getDevelopmentCards().get(0) != -1) {
@@ -1112,7 +1107,7 @@ public class YourTurnSceneController {
         panelBuy.setVisible(true);
         radiobutWarehouse.setOnMouseClicked(mouseEvent1 -> {
             panelBuy.setVisible(false);
-            Message message = new Message_Three_Parameter_Int(MessageType.BUY_CARD, GUI.getPosition(), row, column, 0);
+            Message message = new MessageThreeParameterInt(MessageType.BUY_CARD, GUI.getPosition(), row, column, 0);
             try {
                 ClientSocket.sendMessage(message);
             } catch (IOException e) {
@@ -1121,7 +1116,7 @@ public class YourTurnSceneController {
         });
         radiobutStrongbox.setOnMouseClicked(mouseEvent1 -> {
             panelBuy.setVisible(false);
-            Message message = new Message_Three_Parameter_Int(MessageType.BUY_CARD, GUI.getPosition(), row, column, 1);
+            Message message = new MessageThreeParameterInt(MessageType.BUY_CARD, GUI.getPosition(), row, column, 1);
             try {
                 ClientSocket.sendMessage(message);
             } catch (IOException e) {
@@ -1132,13 +1127,13 @@ public class YourTurnSceneController {
 
     private void choseSlot(int slot){
         try {
-            if (ClientView.isState(GAME_STATES.BUY_CARD_STATE)) {
-                ClientSocket.sendMessage(new Message_One_Parameter_Int(MessageType.CHOSEN_SLOT, GUI.getPosition(), slot));
+            if (ClientView.isState(GameStates.BUY_CARD_STATE)) {
+                ClientSocket.sendMessage(new MessageOneParameterInt(MessageType.CHOSEN_SLOT, GUI.getPosition(), slot));
                 chooseSlot1.setVisible(false);
                 chooseSlot2.setVisible(false);
                 chooseSlot3.setVisible(false);
             }
-            if(ClientView.isState(GAME_STATES.FIRST_POWER_STATE) || ClientView.isState(GAME_STATES.ACTIVATE_PRODUCTION_STATE)){
+            if(ClientView.isState(GameStates.FIRST_POWER_STATE) || ClientView.isState(GameStates.ACTIVATE_PRODUCTION_STATE)){
                 if(slot == 1)
                     chooseSlot1.setDisable(true);
                 else if(slot == 2)
@@ -1154,30 +1149,30 @@ public class YourTurnSceneController {
 
     private void choseLeader(int leader){
         try {
-            if (ClientView.isState(GAME_STATES.WHITE_CONVERSION_CARD_STATE)) {
-                ClientSocket.sendMessage(new Message_One_Parameter_Int(MessageType.WHITE_CONVERSION_CARD, GUI.getPosition(), leader));
+            if (ClientView.isState(GameStates.WHITE_CONVERSION_CARD_STATE)) {
+                ClientSocket.sendMessage(new MessageOneParameterInt(MessageType.WHITE_CONVERSION_CARD, GUI.getPosition(), leader));
                 chooseLeader1.setVisible(false);
                 chooseLeader2.setVisible(false);
             }
-            if(ClientView.isState(GAME_STATES.FIRST_POWER_STATE) || ClientView.isState(GAME_STATES.ACTIVATE_PRODUCTION_STATE)){
+            if(ClientView.isState(GameStates.FIRST_POWER_STATE) || ClientView.isState(GameStates.ACTIVATE_PRODUCTION_STATE)){
                 if(leader == 1)
                     chooseLeader1.setDisable(true);
                 else
                     chooseLeader2.setDisable(true);
                 leaderProduction(leader);
             }
-            if(ClientView.isState(GAME_STATES.FIRST_ACTION_STATE) || ClientView.isState(GAME_STATES.END_TURN_STATE)){
+            if(ClientView.isState(GameStates.FIRST_ACTION_STATE) || ClientView.isState(GameStates.END_TURN_STATE)){
                 if(radiobutActLeader.isSelected()) {
                     radiobutActLeader.setSelected(false);
-                    ClientSocket.sendMessage(new Message_One_Parameter_Int(MessageType.LEADER_CARD_ACTIVATION, GUI.getPosition(), leader));
+                    ClientSocket.sendMessage(new MessageOneParameterInt(MessageType.LEADER_CARD_ACTIVATION, GUI.getPosition(), leader));
                 }
                 else if(radiobutDiscardLeader.isSelected()){
                     radiobutDiscardLeader.setSelected(false);
-                    ClientSocket.sendMessage(new Message_One_Parameter_Int(MessageType.LEADER_CARD_DISCARD, GUI.getPosition(), leader));
+                    ClientSocket.sendMessage(new MessageOneParameterInt(MessageType.LEADER_CARD_DISCARD, GUI.getPosition(), leader));
                 }
                 chooseLeader1.setVisible(false);
                 chooseLeader2.setVisible(false);
-                if (ClientView.isState(GAME_STATES.FIRST_ACTION_STATE))
+                if (ClientView.isState(GameStates.FIRST_ACTION_STATE))
                     enableAllButton();
                 else
                     enableEndTurnButton();

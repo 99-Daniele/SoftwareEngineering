@@ -12,7 +12,7 @@ public interface GameState {
 
     void nextState (GameManager gameManager, MessageType wantedMessage);
 
-    boolean isRightState (GAME_STATES state);
+    boolean isRightState (GameStates state);
 
     ArrayList<LeaderCard> getLeaderCards(int position);
 

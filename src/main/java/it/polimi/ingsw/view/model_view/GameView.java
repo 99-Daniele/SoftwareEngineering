@@ -5,12 +5,12 @@ import it.polimi.ingsw.model.resourceContainers.Resource;
 
 import java.util.ArrayList;
 
-public class Game_View {
+public class GameView {
 
-    private ArrayList<PlayerBoard_View> players = new ArrayList<>();
-    private FaithTrack_View faithTrack;
-    private Market_View market;
-    private Decks_View decks;
+    private ArrayList<PlayerBoardView> players = new ArrayList<>();
+    private FaithTrackView faithTrack;
+    private MarketView market;
+    private DecksView decks;
     private ArrayList<Marble> chosenMarbles;
     private boolean startGame;
 
@@ -32,7 +32,7 @@ public class Game_View {
 
     public ArrayList<String> getNickNames(){
         ArrayList<String> nickNames = new ArrayList<>();
-        for(PlayerBoard_View player: players)
+        for(PlayerBoardView player: players)
             nickNames.add(player.getNickName());
         if(players.size() == 1)
             nickNames.add("LorenzoIlMagnifico");
@@ -43,7 +43,7 @@ public class Game_View {
         return players.size();
     }
 
-    public PlayerBoard_View getPlayer(int player){
+    public PlayerBoardView getPlayer(int player){
         return players.get(player);
     }
 
@@ -52,42 +52,42 @@ public class Game_View {
     }
 
     public void addPlayer(String newPlayer){
-        players.add(new PlayerBoard_View(newPlayer));
+        players.add(new PlayerBoardView(newPlayer));
     }
 
-    public FaithTrack_View getFaithTrack() {
+    public FaithTrackView getFaithTrack() {
         return faithTrack;
     }
 
-    public Market_View getMarket() {
+    public MarketView getMarket() {
         return market;
     }
 
-    public Decks_View getDecks() {
+    public DecksView getDecks() {
         return decks;
     }
 
-    public Warehouse_Strongbox_View getWarehouseStrongbox(int viewID){
+    public WarehouseStrongboxView getWarehouseStrongbox(int viewID){
         return players.get(viewID).getWarehouse_strongbox();
     }
 
-    public Cards_Slots_View getSlotCards(int viewID){
+    public CardsSlotsView getSlotCards(int viewID){
         return players.get(viewID).getCards_slots();
     }
 
-    public void setMarket(Market_View market){
+    public void setMarket(MarketView market){
         this.market = market;
     }
 
     public void setFirstDeckCards(ArrayList<Integer> cards){
-        decks = new Decks_View(cards);
+        decks = new DecksView(cards);
     }
 
     public void initFaithTrack(){
         if(players.size() > 1)
-            faithTrack = new FaithTrack_View(players.size(), getNickNames());
+            faithTrack = new FaithTrackView(players.size(), getNickNames());
         else
-            faithTrack = new FaithTrack_View(2, getNickNames());
+            faithTrack = new FaithTrackView(2, getNickNames());
     }
 
     public void increaseFaithPoints(int viewID, int faithPoints){
@@ -174,7 +174,7 @@ public class Game_View {
         players.get(viewID).discardLeaderCard(chosenLeaderCard);
     }
 
-    public ArrayList<Resource_Container_View> getWarehouse(int viewID){
+    public ArrayList<ResourceContainerView> getWarehouse(int viewID){
         return players.get(viewID).getWarehouse();
     }
 

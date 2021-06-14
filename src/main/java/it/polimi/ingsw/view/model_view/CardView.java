@@ -1,6 +1,6 @@
 package it.polimi.ingsw.view.model_view;
 
-public interface Card_View {
+public interface CardView {
 
     void print();
 

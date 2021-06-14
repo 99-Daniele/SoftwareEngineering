@@ -111,7 +111,7 @@ public class VirtualView extends Observable implements View, Observer{
                         notifyObservers(message);
                         break;
                     case LOGIN:
-                        nickName = ((Message_One_Parameter_String) message).getPar();
+                        nickName = ((MessageOneParameterString) message).getPar();
                     default:
                         printMessage(message);
                         setChanged();
@@ -135,7 +135,7 @@ public class VirtualView extends Observable implements View, Observer{
     @Override
     public void allPlayerConnected(int position, int numPLayer, ArrayList<String> nickNames) {
         viewID = position;
-        Message message = new Message_ArrayList_String(MessageType.PLAYERS, position, nickNames);
+        Message message = new MessageArrayListString(MessageType.PLAYERS, position, nickNames);
         sendMessage(message);
     }
 
@@ -151,13 +151,13 @@ public class VirtualView extends Observable implements View, Observer{
         int cardID_2 = leaderCards.get(1).getCardID();
         int cardID_3 = leaderCards.get(2).getCardID();
         int cardID_4 = leaderCards.get(3).getCardID();
-        Message message = new Message_Four_Parameter_Int(MessageType.LEADER_CARD, viewID, cardID_1, cardID_2, cardID_3, cardID_4);
+        Message message = new MessageFourParameterInt(MessageType.LEADER_CARD, viewID, cardID_1, cardID_2, cardID_3, cardID_4);
         sendMessage(message);
     }
 
     @Override
     public void exit(String nickName){
-        Message quitMessage = new Message_One_Parameter_String(MessageType.QUIT, viewID, nickName);
+        Message quitMessage = new MessageOneParameterString(MessageType.QUIT, viewID, nickName);
         sendMessage(quitMessage);
     }
 
@@ -171,9 +171,9 @@ public class VirtualView extends Observable implements View, Observer{
     public void isMyTurn(boolean turn){
         Message turnMessage;
         if (turn) {
-            turnMessage = new Message_One_Parameter_Int(MessageType.TURN, viewID, 1);
+            turnMessage = new MessageOneParameterInt(MessageType.TURN, viewID, 1);
         } else {
-            turnMessage = new Message_One_Parameter_Int(MessageType.TURN, viewID, 2);
+            turnMessage = new MessageOneParameterInt(MessageType.TURN, viewID, 2);
         }
         sendMessage(turnMessage);
     }
@@ -187,7 +187,7 @@ public class VirtualView extends Observable implements View, Observer{
             thirdSlot = availableSlots.get(2);
         else
             thirdSlot = -1;
-        Message message = new Message_Three_Parameter_Int(MessageType.CHOSEN_SLOT, viewID, firstSlot, secondSlot, thirdSlot);
+        Message message = new MessageThreeParameterInt(MessageType.CHOSEN_SLOT, viewID, firstSlot, secondSlot, thirdSlot);
         sendMessage(message);
     }
 
@@ -195,7 +195,7 @@ public class VirtualView extends Observable implements View, Observer{
     public void chosen_marble(Marble[] marbles){
         ArrayList<Marble> chosenMarbles = new ArrayList<>();
         Collections.addAll(chosenMarbles, marbles);
-        Message message = new Message_ArrayList_Marble(MessageType.TAKE_MARBLE, viewID, chosenMarbles);
+        Message message = new MessageArrayListMarble(MessageType.TAKE_MARBLE, viewID, chosenMarbles);
         sendMessage(message);
     }
 
@@ -203,7 +203,7 @@ public class VirtualView extends Observable implements View, Observer{
     public void choseWhiteConversionCard(LeaderCard[] leaderCards){
         int leaderCard1 = leaderCards[0].getCardID();
         int leaderCard2 = leaderCards[1].getCardID();
-        Message message = new Message_Two_Parameter_Int(MessageType.WHITE_CONVERSION_CARD, viewID, leaderCard1, leaderCard2);
+        Message message = new MessageTwoParameterInt(MessageType.WHITE_CONVERSION_CARD, viewID, leaderCard1, leaderCard2);
         sendMessage(message);
     }
 

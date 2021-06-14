@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model.games.states;
 
-import it.polimi.ingsw.controller.ControllerGame;
 import it.polimi.ingsw.model.cards.leaderCards.LeaderCard;
 import it.polimi.ingsw.model.games.GameManager;
 import it.polimi.ingsw.model.market.Marble;
@@ -30,8 +29,8 @@ public class FirstActionState implements GameState {
     }
 
     @Override
-    public boolean isRightState(GAME_STATES state) {
-        return state == GAME_STATES.FIRST_ACTION_STATE;
+    public boolean isRightState(GameStates state) {
+        return state == GameStates.FIRST_ACTION_STATE;
     }
 
     @Override

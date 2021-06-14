@@ -4,11 +4,11 @@ import it.polimi.ingsw.view.CLI.ColorAnsi;
 
 import java.util.ArrayList;
 
-public class FaithTrack_View {
+public class FaithTrackView {
 
     private ArrayList<String[][]> faithTracks;
 
-    public FaithTrack_View(int numPlayers, ArrayList<String> nickNames) {
+    public FaithTrackView(int numPlayers, ArrayList<String> nickNames) {
         faithTracks = new ArrayList<>();
         for (int i = 0; i < numPlayers; i++) {
             faithTracks.add(new String[5][52]);

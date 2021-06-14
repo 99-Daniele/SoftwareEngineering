@@ -2,14 +2,14 @@ package it.polimi.ingsw.network.messages;
 
 import it.polimi.ingsw.model.resourceContainers.Resource;
 
-public class Message_Three_Resource_One_Int extends Message{
+public class MessageThreeResourceOneInt extends Message{
 
     private Resource resource1;
     private Resource resource2;
     private Resource resource3;
     private int par;
 
-    public Message_Three_Resource_One_Int( MessageType messageType, int clientID, Resource resourceDeleted1, Resource resourceDeleted2, Resource resourceObtained, int par) {
+    public MessageThreeResourceOneInt(MessageType messageType, int clientID, Resource resourceDeleted1, Resource resourceDeleted2, Resource resourceObtained, int par) {
         super(messageType, clientID);
         this.resource1 = resourceDeleted1;
         this.resource2 = resourceDeleted2;
@@ -17,7 +17,7 @@ public class Message_Three_Resource_One_Int extends Message{
         this.par = par;
     }
 
-    public Message_Three_Resource_One_Int( MessageType messageType, int clientID) {
+    public MessageThreeResourceOneInt(MessageType messageType, int clientID) {
         super(messageType, clientID);
     }
 

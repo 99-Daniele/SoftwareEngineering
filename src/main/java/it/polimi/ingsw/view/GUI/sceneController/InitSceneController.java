@@ -118,7 +118,7 @@ public class InitSceneController{
                 allInvisible();
                 resourceLabel.setVisible(true);
                 resourceLabel.setText("WAITING OTHER PLAYERS CHOICES");
-                Message m = new Message_Two_Resource(MessageType.TWO_FIRST_RESOURCE, GUI.getPosition(), r1, r);
+                Message m = new MessageTwoResource(MessageType.TWO_FIRST_RESOURCE, GUI.getPosition(), r1, r);
                 try {
                     ClientSocket.sendMessage(m);
                 } catch (IOException e) {
@@ -130,7 +130,7 @@ public class InitSceneController{
             allInvisible();
             resourceLabel.setVisible(true);
             resourceLabel.setText("WAITING OTHER PLAYERS CHOICES");
-            Message m = new Message_One_Int_One_Resource(MessageType.ONE_FIRST_RESOURCE, GUI.getPosition(), r, 1);
+            Message m = new MessageOneIntOneResource(MessageType.ONE_FIRST_RESOURCE, GUI.getPosition(), r, 1);
             try {
                 ClientSocket.sendMessage(m);
             } catch (IOException e) {
@@ -141,7 +141,7 @@ public class InitSceneController{
 
     private void startButton() {
         ClientView.setLeaderCard(GUI.getPosition(), chosenCard1, chosenCard2);
-        Message message = new Message_Two_Parameter_Int(MessageType.LEADER_CARD, GUI.getPosition(), chosenCard1, chosenCard2);
+        Message message = new MessageTwoParameterInt(MessageType.LEADER_CARD, GUI.getPosition(), chosenCard1, chosenCard2);
         try {
             ClientSocket.sendMessage(message);
         } catch (IOException e) {

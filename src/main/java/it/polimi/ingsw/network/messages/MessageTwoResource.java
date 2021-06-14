@@ -2,12 +2,12 @@ package it.polimi.ingsw.network.messages;
 
 import it.polimi.ingsw.model.resourceContainers.Resource;
 
-public class Message_Two_Resource extends Message{
+public class MessageTwoResource extends Message{
 
     private final Resource r1;
     private final Resource r2;
 
-    public Message_Two_Resource(MessageType messageType, int clientID, Resource r1, Resource r2) {
+    public MessageTwoResource(MessageType messageType, int clientID, Resource r1, Resource r2) {
         super(messageType, clientID);
         this.r1 = r1;
         this.r2 = r2;

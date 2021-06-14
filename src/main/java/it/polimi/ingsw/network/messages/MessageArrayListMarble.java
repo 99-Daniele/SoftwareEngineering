@@ -4,11 +4,11 @@ import it.polimi.ingsw.model.market.Marble;
 
 import java.util.ArrayList;
 
-public class Message_ArrayList_Marble extends Message{
+public class MessageArrayListMarble extends Message{
 
     private ArrayList<Marble> marbles;
 
-    public Message_ArrayList_Marble(MessageType messageType, int clientID, ArrayList<Marble> marbles) {
+    public MessageArrayListMarble(MessageType messageType, int clientID, ArrayList<Marble> marbles) {
         super(messageType, clientID);
         this.marbles = marbles;
     }

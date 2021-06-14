@@ -6,7 +6,7 @@ import it.polimi.ingsw.view.CLI.ColorAnsi;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class Cards_Slots_View {
+public class CardsSlotsView {
 
     private LinkedList<Integer> firstSlot;
     private LinkedList<Integer> secondSlot;
@@ -16,7 +16,7 @@ public class Cards_Slots_View {
     private int secondLeaderCard;
     private boolean secondActive;
 
-    public Cards_Slots_View(){
+    public CardsSlotsView(){
         firstSlot = new LinkedList<>();
         secondSlot = new LinkedList<>();
         thirdSlot = new LinkedList<>();

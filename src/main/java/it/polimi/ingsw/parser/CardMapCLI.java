@@ -1,7 +1,7 @@
 package it.polimi.ingsw.parser;
 
 import it.polimi.ingsw.model.cards.developmentCards.DevelopmentCard;
-import it.polimi.ingsw.view.model_view.Card_View;
+import it.polimi.ingsw.view.model_view.CardView;
 import it.polimi.ingsw.model.cards.leaderCards.LeaderCard;
 
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import java.util.HashMap;
 public class CardMapCLI {
 
     private static CardMapCLI cardParser;
-    private static HashMap<Integer, Card_View> cardMap = new HashMap<>();
+    private static HashMap<Integer, CardView> cardMap = new HashMap<>();
 
     private CardMapCLI() {
         DevelopmentCardsParser developmentCardsParser = new DevelopmentCardsParser();
@@ -83,7 +83,7 @@ public class CardMapCLI {
         cardMap.put(64, leaderCards.get(15));
     }
 
-    public static Card_View getCard(int cardID){
+    public static CardView getCard(int cardID){
         if(cardParser == null)
             cardParser = new CardMapCLI();
         return cardMap.get(cardID);

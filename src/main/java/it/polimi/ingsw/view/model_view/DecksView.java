@@ -4,13 +4,13 @@ import it.polimi.ingsw.parser.CardMapCLI;
 
 import java.util.*;
 
-public class Decks_View {
+public class DecksView {
 
     private List<Integer> firstLevelCards;
     private List<Integer> secondLevelCards;
     private List<Integer> thirdLevelCards;
 
-    public Decks_View(ArrayList<Integer> initialCards){
+    public DecksView(ArrayList<Integer> initialCards){
         firstLevelCards =  initialCards.subList(0, 4);
         secondLevelCards =  initialCards.subList(4, 8);
         thirdLevelCards =  initialCards.subList(8, 12);

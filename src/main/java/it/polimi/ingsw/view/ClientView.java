@@ -1,12 +1,12 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.model.games.states.GAME_STATES;
+import it.polimi.ingsw.model.games.states.GameStates;
 import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.network.client.ClientSocket;
 import it.polimi.ingsw.network.messages.*;
-import it.polimi.ingsw.view.model_view.Game_View;
-import it.polimi.ingsw.view.model_view.Market_View;
-import it.polimi.ingsw.view.model_view.Resource_Container_View;
+import it.polimi.ingsw.view.model_view.GameView;
+import it.polimi.ingsw.view.model_view.MarketView;
+import it.polimi.ingsw.view.model_view.ResourceContainerView;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -17,13 +17,13 @@ import java.util.Observer;
 
 public abstract class ClientView extends Application implements Observer {
 
-    private static Game_View game;
-    private static GAME_STATES currentState;
+    private static GameView game;
+    private static GameStates currentState;
     private static ArrayList<String> serverMessages = new ArrayList<>();
 
     public ClientView() {
-        game = new Game_View();
-        currentState = GAME_STATES.FIRST_ACTION_STATE;
+        game = new GameView();
+        currentState = GameStates.FIRST_ACTION_STATE;
     }
 
     public void launchGUI(){}
@@ -43,19 +43,19 @@ public abstract class ClientView extends Application implements Observer {
         System.exit(1);
     }
 
-    public Game_View getGame() {
+    public GameView getGame() {
         return game;
     }
 
-    public static GAME_STATES getCurrentState() {
+    public static GameStates getCurrentState() {
         return currentState;
     }
 
-    public static boolean isState(GAME_STATES state){
+    public static boolean isState(GameStates state){
         return  currentState  == state;
     }
 
-    public static void setCurrentState(GAME_STATES currentState) {
+    public static void setCurrentState(GameStates currentState) {
         ClientView.currentState = currentState;
     }
 
@@ -83,7 +83,7 @@ public abstract class ClientView extends Application implements Observer {
         return game.getNickname(player);
     }
 
-    public static Market_View getMarket(){
+    public static MarketView getMarket(){
         return game.getMarket();
     }
 
@@ -107,7 +107,7 @@ public abstract class ClientView extends Application implements Observer {
         return game.getDecks().getDevelopmentCards();
     }
 
-    public static ArrayList<Resource_Container_View> getWarehouse(int position){
+    public static ArrayList<ResourceContainerView> getWarehouse(int position){
         return game.getWarehouse(position);
     }
 
@@ -246,7 +246,7 @@ public abstract class ClientView extends Application implements Observer {
     public abstract void new_player_message(Message message);
 
     public void players_message(Message message){
-        Message_ArrayList_String m = (Message_ArrayList_String) message;
+        MessageArrayListString m = (MessageArrayListString) message;
         game.setPlayers(m.getNickNames());
     }
 
@@ -261,12 +261,12 @@ public abstract class ClientView extends Application implements Observer {
     }
 
     public void market_message(Message message){
-        Message_Market m = (Message_Market) message;
+        MessageMarket m = (MessageMarket) message;
         game.setMarket(m.getMarket());
     }
 
     public void deckBoard_message(Message message){
-        Message_ArrayList_Int m = (Message_ArrayList_Int) message;
+        MessageArrayListInt m = (MessageArrayListInt) message;
         game.setFirstDeckCards(m.getParams());
     }
 
@@ -275,10 +275,10 @@ public abstract class ClientView extends Application implements Observer {
     public void ok_message() throws IOException, InterruptedException{
         switch (getCurrentState()){
             case BUY_CARD_STATE:
-                setCurrentState(GAME_STATES.END_TURN_STATE);
+                setCurrentState(GameStates.END_TURN_STATE);
                 break;
             case FIRST_POWER_STATE:
-                setCurrentState(GAME_STATES.ACTIVATE_PRODUCTION_STATE);
+                setCurrentState(GameStates.ACTIVATE_PRODUCTION_STATE);
                 break;
         }
     }
@@ -288,24 +288,24 @@ public abstract class ClientView extends Application implements Observer {
     public abstract void end_turn_message(Message message) throws InterruptedException, IOException;
 
     public void buy_card_message(Message message){
-        Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        MessageTwoParameterInt m = (MessageTwoParameterInt) message;
         game.addDevelopmentCard(m.getClientID(), m.getPar1(), m.getPar2());
     }
 
     public void card_remove_message(Message message){
-        Message_Four_Parameter_Int m = (Message_Four_Parameter_Int) message;
+        MessageFourParameterInt m = (MessageFourParameterInt) message;
         game.replaceCard(m.getPar1(), m.getPar2(), m.getPar4());
     }
 
     public void resource_amount_message(Message message) {
-        Message_One_Resource_Two_Int m = (Message_One_Resource_Two_Int) message;
+        MessageOneResourceTwoInt m = (MessageOneResourceTwoInt) message;
         game.newAmount(m.getClientID(), m.getResource(), m.getPar1(), m.getPar2());
     }
 
     public abstract void endProductionMessage(Message message);
 
     public void market_change(Message message){
-        Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        MessageTwoParameterInt m = (MessageTwoParameterInt) message;
         if (m.getPar1() == 0) {
             game.slideRow(m.getPar2());
         } else {
@@ -316,46 +316,46 @@ public abstract class ClientView extends Application implements Observer {
     public abstract void white_conversion_card_message(Message message) throws IOException;
 
     public void faith_points_message(Message message){
-        Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
+        MessageOneParameterInt m = (MessageOneParameterInt) message;
         game.increaseFaithPoints(m.getClientID(), m.getPar());
     }
 
     public void increase_warehouse_message(Message message){
-        Message_One_Int_One_Resource m = (Message_One_Int_One_Resource) message;
+        MessageOneIntOneResource m = (MessageOneIntOneResource) message;
         if(m.getPar1() != -1) {
             game.increaseWarehouse(m.getClientID(), m.getResource(), m.getPar1());
         }
     }
 
     public void switch_depot_message(Message message){
-        Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        MessageTwoParameterInt m = (MessageTwoParameterInt) message;
         game.switchDepot(m.getClientID(), m.getPar1(), m.getPar2());
     }
 
     public void vatican_report_message(Message message){
-        Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        MessageTwoParameterInt m = (MessageTwoParameterInt) message;
         game.increaseVictoryPoints(m.getClientID(), m.getPar2());
     }
 
     public void leader_card_activation_message(Message message){
-        Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
+        MessageOneParameterInt m = (MessageOneParameterInt) message;
         game.addLeaderCard(m.getClientID(), m.getPar());
     }
 
     public void extra_depot_message(Message message){
-        Message_One_Int_One_Resource m = (Message_One_Int_One_Resource) message;
+        MessageOneIntOneResource m = (MessageOneIntOneResource) message;
         game.addExtraDepot(m.getClientID(), m.getResource());
     }
 
     public void leader_card_discard_message(Message message) {
-        Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
+        MessageOneParameterInt m = (MessageOneParameterInt) message;
         game.discardLeaderCard(m.getClientID(), m.getPar());
     }
 
     public abstract void chosen_slot_message(Message message) throws IOException;
 
     public void take_marble_message(Message message) {
-        Message_ArrayList_Marble m = (Message_ArrayList_Marble) message;
+        MessageArrayListMarble m = (MessageArrayListMarble) message;
         game.setChosenMarbles(m.getMarbles());
     }
 

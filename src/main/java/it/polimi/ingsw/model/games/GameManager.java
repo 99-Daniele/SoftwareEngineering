@@ -4,7 +4,7 @@ import it.polimi.ingsw.controller.ControllerGame;
 import it.polimi.ingsw.controller.InputController;
 import it.polimi.ingsw.model.games.states.FirstActionState;
 import it.polimi.ingsw.model.games.states.GameState;
-import it.polimi.ingsw.model.games.states.GAME_STATES;
+import it.polimi.ingsw.model.games.states.GameStates;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.exceptions.IllegalStateException;
 import it.polimi.ingsw.model.cards.leaderCards.LeaderCard;
@@ -110,7 +110,7 @@ public class GameManager {
 
     public boolean buyCardHandler(int row, int column, int choice)
             throws IllegalStateException, WrongParametersException, EmptyDevelopmentCardDeckException, ImpossibleDevelopmentCardAdditionException, InsufficientResourceException {
-        if (!currentState.isRightState(GAME_STATES.FIRST_ACTION_STATE))
+        if (!currentState.isRightState(GameStates.FIRST_ACTION_STATE))
             throw new IllegalStateException();
         if (!InputController.buy_card_check(row, column, choice))
             throw new WrongParametersException();
@@ -137,7 +137,7 @@ public class GameManager {
 
     public void chosenSlotHandler(int slot)
             throws IllegalStateException, WrongParametersException, EmptyDevelopmentCardDeckException, ImpossibleDevelopmentCardAdditionException, InsufficientResourceException {
-        if (!currentState.isRightState(GAME_STATES.BUY_CARD_STATE))
+        if (!currentState.isRightState(GameStates.BUY_CARD_STATE))
             throw new IllegalStateException();
         if (!InputController.chosen_slot_check(slot, currentState.getAvailableSlots()))
             throw new WrongParametersException();
@@ -154,7 +154,7 @@ public class GameManager {
     }
 
     public Marble[] takeMarbleHandler(int choice, int index) throws IllegalStateException, WrongParametersException {
-        if (!currentState.isRightState(GAME_STATES.FIRST_ACTION_STATE))
+        if (!currentState.isRightState(GameStates.FIRST_ACTION_STATE))
             throw new IllegalStateException();
         if (!InputController.taken_marbles_check(choice, index))
             throw new WrongParametersException();
@@ -167,7 +167,7 @@ public class GameManager {
 
     public boolean useMarbleHandler(Marble chosenMarble)
             throws IllegalStateException,  WrongParametersException {
-        if (!currentState.isRightState(GAME_STATES.TAKE_MARBLE_STATE))
+        if (!currentState.isRightState(GameStates.TAKE_MARBLE_STATE))
             throw new IllegalStateException();
         if(!InputController.chosen_correct_marble(chosenMarble, currentState.getMarbles()))
             throw new WrongParametersException();
@@ -194,7 +194,7 @@ public class GameManager {
     }
 
     public void whiteConversionCardHandler(int chosenLeaderCard) throws IllegalStateException, WrongParametersException {
-        if (!currentState.isRightState(GAME_STATES.WHITE_CONVERSION_CARD_STATE))
+        if (!currentState.isRightState(GameStates.WHITE_CONVERSION_CARD_STATE))
             throw new IllegalStateException();
         if (!InputController.white_conversion_card_check(chosenLeaderCard))
             throw new WrongParametersException();
@@ -216,7 +216,7 @@ public class GameManager {
     }
 
     public void switchHandler(int depot1, int depot2) throws IllegalStateException, WrongParametersException, ImpossibleSwitchDepotException {
-        if (!currentState.isRightState(GAME_STATES.TAKE_MARBLE_STATE))
+        if (!currentState.isRightState(GameStates.TAKE_MARBLE_STATE))
             throw new IllegalStateException();
         if (!InputController.switch_depot_check(depot1, depot2))
             throw new WrongParametersException();
@@ -226,9 +226,9 @@ public class GameManager {
     public void developmentCardPowerHandler(int chosenSlot, int choice)
             throws IllegalStateException, WrongParametersException, InsufficientResourceException, NoSuchProductionPowerException, AlreadyUsedProductionPowerException {
         Strongbox s;
-        if (currentState.isRightState(GAME_STATES.FIRST_ACTION_STATE))
+        if (currentState.isRightState(GameStates.FIRST_ACTION_STATE))
             s = new Strongbox();
-        else if (currentState.isRightState(GAME_STATES.ACTIVATE_PRODUCTION_STATE))
+        else if (currentState.isRightState(GameStates.ACTIVATE_PRODUCTION_STATE))
             s = currentState.getStrongbox();
         else
             throw new IllegalStateException();
@@ -245,9 +245,9 @@ public class GameManager {
     public void basicPowerHandler(Resource r1, Resource r2, Resource r3, int choice)
             throws InsufficientResourceException, IllegalStateException, WrongParametersException, AlreadyUsedProductionPowerException {
         Strongbox s;
-        if (currentState.isRightState(GAME_STATES.FIRST_ACTION_STATE))
+        if (currentState.isRightState(GameStates.FIRST_ACTION_STATE))
             s = new Strongbox();
-        else if (currentState.isRightState(GAME_STATES.ACTIVATE_PRODUCTION_STATE))
+        else if (currentState.isRightState(GameStates.ACTIVATE_PRODUCTION_STATE))
             s = currentState.getStrongbox();
         else
             throw new IllegalStateException();
@@ -264,9 +264,9 @@ public class GameManager {
     public void leaderCardPowerHandler(int chosenLeaderCard, Resource r, int choice)
             throws InsufficientResourceException, IllegalStateException, WrongParametersException, NoSuchProductionPowerException, AlreadyUsedProductionPowerException {
         Strongbox s;
-        if (currentState.isRightState(GAME_STATES.FIRST_ACTION_STATE))
+        if (currentState.isRightState(GameStates.FIRST_ACTION_STATE))
             s = new Strongbox();
-        else if (currentState.isRightState(GAME_STATES.ACTIVATE_PRODUCTION_STATE))
+        else if (currentState.isRightState(GameStates.ACTIVATE_PRODUCTION_STATE))
             s = currentState.getStrongbox();
         else
             throw new IllegalStateException();
@@ -281,7 +281,7 @@ public class GameManager {
     }
 
     public void endProductionHandler() throws IllegalStateException {
-        if (!currentState.isRightState(GAME_STATES.ACTIVATE_PRODUCTION_STATE))
+        if (!currentState.isRightState(GameStates.ACTIVATE_PRODUCTION_STATE))
             throw new IllegalStateException();
         Strongbox s = currentState.getStrongbox();
         game.increaseCurrentPlayerStrongbox(s);
@@ -292,9 +292,9 @@ public class GameManager {
             throws InsufficientResourceException, AlreadyDiscardLeaderCardException, ActiveLeaderCardException, InsufficientCardsException, IllegalStateException, WrongParametersException {
         if(!InputController.leader_card_activation(chosenLeaderCard))
             throw new WrongParametersException();
-        if (currentState.isRightState(GAME_STATES.FIRST_ACTION_STATE))
+        if (currentState.isRightState(GameStates.FIRST_ACTION_STATE))
             currentState.nextState(this, MessageType.BUY_CARD);
-        else if (currentState.isRightState(GAME_STATES.END_TURN_STATE))
+        else if (currentState.isRightState(GameStates.END_TURN_STATE))
             currentState.nextState(this, MessageType.END_TURN);
         else
             throw new IllegalStateException();
@@ -305,9 +305,9 @@ public class GameManager {
             throws ActiveLeaderCardException, AlreadyDiscardLeaderCardException, IllegalStateException, WrongParametersException {
         if(!InputController.leader_card_discard(chosenLeaderCard))
             throw new WrongParametersException();
-        if (currentState.isRightState(GAME_STATES.FIRST_ACTION_STATE))
+        if (currentState.isRightState(GameStates.FIRST_ACTION_STATE))
             currentState.nextState(this, MessageType.BUY_CARD);
-        else if (currentState.isRightState(GAME_STATES.END_TURN_STATE))
+        else if (currentState.isRightState(GameStates.END_TURN_STATE))
             currentState.nextState(this, MessageType.END_TURN);
         else
             throw new IllegalStateException();
@@ -315,7 +315,7 @@ public class GameManager {
     }
 
     public void endTurnHandler() throws IllegalStateException {
-        if(!currentState.isRightState(GAME_STATES.END_TURN_STATE))
+        if(!currentState.isRightState(GameStates.END_TURN_STATE))
             throw new IllegalStateException();
         currentState.nextState(this, MessageType.BUY_CARD);
         if(game.isEndGame())

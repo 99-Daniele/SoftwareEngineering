@@ -2,8 +2,8 @@ package it.polimi.ingsw.view.GUI.sceneController;
 
 import it.polimi.ingsw.network.client.ClientSocket;
 import it.polimi.ingsw.network.messages.MessageType;
-import it.polimi.ingsw.network.messages.Message_One_Parameter_Int;
-import it.polimi.ingsw.network.messages.Message_One_Parameter_String;
+import it.polimi.ingsw.network.messages.MessageOneParameterInt;
+import it.polimi.ingsw.network.messages.MessageOneParameterString;
 import it.polimi.ingsw.view.GUI.GUI;
 import it.polimi.ingsw.view.GUI.SceneController;
 import javafx.fxml.FXML;
@@ -64,7 +64,7 @@ public class NicknameSceneController{
             try {
                 int num = Integer.parseInt(playerNumber.getText());
                 if(num >= 1 && num <= 4) {
-                    ClientSocket.sendMessage(new Message_One_Parameter_Int(MessageType.NUM_PLAYERS, GUI.getPosition(), num));
+                    ClientSocket.sendMessage(new MessageOneParameterInt(MessageType.NUM_PLAYERS, GUI.getPosition(), num));
                     goNext.setVisible(false);
                 }
                 else {
@@ -83,7 +83,7 @@ public class NicknameSceneController{
         else {
             String username = nickname.getText();
             if(!username.isBlank()){
-                ClientSocket.sendMessage(new Message_One_Parameter_String(MessageType.LOGIN, GUI.getPosition(), username));
+                ClientSocket.sendMessage(new MessageOneParameterString(MessageType.LOGIN, GUI.getPosition(), username));
                 goNext.setVisible(false);
             }
             else {

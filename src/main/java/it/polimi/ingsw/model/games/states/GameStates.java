@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.games.states;
 
-public enum GAME_STATES {
+public enum GameStates {
 
     FIRST_ACTION_STATE,
     TAKE_MARBLE_STATE,

@@ -4,7 +4,7 @@ import it.polimi.ingsw.model.market.Marble;
 
 import java.util.ArrayList;
 
-public interface Market_View {
+public interface MarketView {
 
     void slideColumn(int selectedColumn);
 

@@ -6,23 +6,23 @@ import java.util.ArrayList;
 
 import static java.util.Collections.swap;
 
-public class Warehouse_Strongbox_View {
+public class WarehouseStrongboxView {
 
-    private ArrayList<Resource_Container_View> depots;
-    private final Resource_Container_View coin;
-    private final Resource_Container_View shield;
-    private final Resource_Container_View servant;
-    private final Resource_Container_View stone;
+    private ArrayList<ResourceContainerView> depots;
+    private final ResourceContainerView coin;
+    private final ResourceContainerView shield;
+    private final ResourceContainerView servant;
+    private final ResourceContainerView stone;
 
-    public Warehouse_Strongbox_View() {
+    public WarehouseStrongboxView() {
         depots = new ArrayList<>(3);
-        depots.add(new Resource_Container_View());
-        depots.add(new Resource_Container_View());
-        depots.add(new Resource_Container_View());
-        coin = new Resource_Container_View(Resource.COIN);
-        shield = new Resource_Container_View(Resource.SHIELD);
-        servant = new Resource_Container_View(Resource.SERVANT);
-        stone = new Resource_Container_View(Resource.STONE);
+        depots.add(new ResourceContainerView());
+        depots.add(new ResourceContainerView());
+        depots.add(new ResourceContainerView());
+        coin = new ResourceContainerView(Resource.COIN);
+        shield = new ResourceContainerView(Resource.SHIELD);
+        servant = new ResourceContainerView(Resource.SERVANT);
+        stone = new ResourceContainerView(Resource.STONE);
     }
 
     public void increaseWarehouse(Resource resource, int depot){
@@ -42,7 +42,7 @@ public class Warehouse_Strongbox_View {
     }
 
     public void addExtraDepot(Resource r){
-        depots.add(new Resource_Container_View(r));
+        depots.add(new ResourceContainerView(r));
     }
 
     private void strongboxHandler(Resource r, int strongboxAmount){
@@ -145,7 +145,7 @@ public class Warehouse_Strongbox_View {
         }
     }
 
-    public ArrayList<Resource_Container_View> getWarehouse(){
+    public ArrayList<ResourceContainerView> getWarehouse(){
         return depots;
     }
 

@@ -29,73 +29,73 @@ public class GameStateTest {
 
         ControllerGame controllerGame = new ControllerGame();
         GameManager gameManager = new GameManager(1, controllerGame);
-        assertTrue(gameManager.getCurrentState().isRightState(GAME_STATES.FIRST_ACTION_STATE));
+        assertTrue(gameManager.getCurrentState().isRightState(GameStates.FIRST_ACTION_STATE));
 
         gameManager.getCurrentState().nextState(gameManager, MessageType.USE_MARBLE);
-        assertTrue(gameManager.getCurrentState().isRightState(GAME_STATES.TAKE_MARBLE_STATE));
+        assertTrue(gameManager.getCurrentState().isRightState(GameStates.TAKE_MARBLE_STATE));
 
         gameManager.getCurrentState().nextState(gameManager, MessageType.USE_MARBLE);
-        assertTrue(gameManager.getCurrentState().isRightState(GAME_STATES.TAKE_MARBLE_STATE));
+        assertTrue(gameManager.getCurrentState().isRightState(GameStates.TAKE_MARBLE_STATE));
 
         gameManager.getCurrentState().nextState(gameManager, MessageType.WHITE_CONVERSION_CARD);
-        assertTrue(gameManager.getCurrentState().isRightState(GAME_STATES.WHITE_CONVERSION_CARD_STATE));
+        assertTrue(gameManager.getCurrentState().isRightState(GameStates.WHITE_CONVERSION_CARD_STATE));
 
         gameManager.getCurrentState().nextState(gameManager, MessageType.USE_MARBLE);
-        assertTrue(gameManager.getCurrentState().isRightState(GAME_STATES.TAKE_MARBLE_STATE));
+        assertTrue(gameManager.getCurrentState().isRightState(GameStates.TAKE_MARBLE_STATE));
 
         gameManager.getCurrentState().nextState(gameManager, MessageType.SWITCH_DEPOT);
-        assertTrue(gameManager.getCurrentState().isRightState(GAME_STATES.TAKE_MARBLE_STATE));
+        assertTrue(gameManager.getCurrentState().isRightState(GameStates.TAKE_MARBLE_STATE));
 
         gameManager.getCurrentState().nextState(gameManager, MessageType.END_TURN);
-        assertTrue(gameManager.getCurrentState().isRightState(GAME_STATES.END_TURN_STATE));
+        assertTrue(gameManager.getCurrentState().isRightState(GameStates.END_TURN_STATE));
 
         gameManager.getCurrentState().nextState(gameManager, MessageType.END_TURN);
-        assertTrue(gameManager.getCurrentState().isRightState(GAME_STATES.END_TURN_STATE));
+        assertTrue(gameManager.getCurrentState().isRightState(GameStates.END_TURN_STATE));
 
         gameManager.getCurrentState().nextState(gameManager, MessageType.END_TURN);
-        assertTrue(gameManager.getCurrentState().isRightState(GAME_STATES.END_TURN_STATE));
+        assertTrue(gameManager.getCurrentState().isRightState(GameStates.END_TURN_STATE));
 
         gameManager.getCurrentState().nextState(gameManager, MessageType.BUY_CARD);
-        assertTrue(gameManager.getCurrentState().isRightState(GAME_STATES.FIRST_ACTION_STATE));
+        assertTrue(gameManager.getCurrentState().isRightState(GameStates.FIRST_ACTION_STATE));
 
         gameManager.getCurrentState().nextState(gameManager, MessageType.END_TURN);
-        assertTrue(gameManager.getCurrentState().isRightState(GAME_STATES.END_TURN_STATE));
+        assertTrue(gameManager.getCurrentState().isRightState(GameStates.END_TURN_STATE));
 
         gameManager.getCurrentState().nextState(gameManager, MessageType.BUY_CARD);
-        assertTrue(gameManager.getCurrentState().isRightState(GAME_STATES.FIRST_ACTION_STATE));
+        assertTrue(gameManager.getCurrentState().isRightState(GameStates.FIRST_ACTION_STATE));
 
         gameManager.getCurrentState().nextState(gameManager, MessageType.CHOSEN_SLOT);
-        assertTrue(gameManager.getCurrentState().isRightState(GAME_STATES.BUY_CARD_STATE));
+        assertTrue(gameManager.getCurrentState().isRightState(GameStates.BUY_CARD_STATE));
 
         gameManager.getCurrentState().nextState(gameManager, MessageType.END_TURN);
-        assertTrue(gameManager.getCurrentState().isRightState(GAME_STATES.END_TURN_STATE));
+        assertTrue(gameManager.getCurrentState().isRightState(GameStates.END_TURN_STATE));
 
         gameManager.getCurrentState().nextState(gameManager, MessageType.BUY_CARD);
-        assertTrue(gameManager.getCurrentState().isRightState(GAME_STATES.FIRST_ACTION_STATE));
+        assertTrue(gameManager.getCurrentState().isRightState(GameStates.FIRST_ACTION_STATE));
 
         gameManager.getCurrentState().nextState(gameManager, MessageType.BUY_CARD);
-        assertTrue(gameManager.getCurrentState().isRightState(GAME_STATES.FIRST_ACTION_STATE));
+        assertTrue(gameManager.getCurrentState().isRightState(GameStates.FIRST_ACTION_STATE));
 
         gameManager.getCurrentState().nextState(gameManager, MessageType.END_PRODUCTION);
-        assertTrue(gameManager.getCurrentState().isRightState(GAME_STATES.ACTIVATE_PRODUCTION_STATE));
+        assertTrue(gameManager.getCurrentState().isRightState(GameStates.ACTIVATE_PRODUCTION_STATE));
 
         gameManager.getCurrentState().nextState(gameManager, MessageType.DEVELOPMENT_CARD_POWER);
-        assertTrue(gameManager.getCurrentState().isRightState(GAME_STATES.ACTIVATE_PRODUCTION_STATE));
+        assertTrue(gameManager.getCurrentState().isRightState(GameStates.ACTIVATE_PRODUCTION_STATE));
 
         gameManager.getCurrentState().nextState(gameManager, MessageType.BASIC_POWER);
-        assertTrue(gameManager.getCurrentState().isRightState(GAME_STATES.ACTIVATE_PRODUCTION_STATE));
+        assertTrue(gameManager.getCurrentState().isRightState(GameStates.ACTIVATE_PRODUCTION_STATE));
 
         gameManager.getCurrentState().nextState(gameManager, MessageType.LEADER_CARD_POWER);
-        assertTrue(gameManager.getCurrentState().isRightState(GAME_STATES.ACTIVATE_PRODUCTION_STATE));
+        assertTrue(gameManager.getCurrentState().isRightState(GameStates.ACTIVATE_PRODUCTION_STATE));
 
         gameManager.getCurrentState().nextState(gameManager, MessageType.END_TURN);
-        assertTrue(gameManager.getCurrentState().isRightState(GAME_STATES.END_TURN_STATE));
+        assertTrue(gameManager.getCurrentState().isRightState(GameStates.END_TURN_STATE));
 
         gameManager.getCurrentState().nextState(gameManager, MessageType.BASIC_POWER);
-        assertTrue(gameManager.getCurrentState().isRightState(GAME_STATES.FIRST_ACTION_STATE));
+        assertTrue(gameManager.getCurrentState().isRightState(GameStates.FIRST_ACTION_STATE));
 
         gameManager.getCurrentState().nextState(gameManager, MessageType.END_TURN);
-        assertTrue(gameManager.getCurrentState().isRightState(GAME_STATES.END_TURN_STATE));
+        assertTrue(gameManager.getCurrentState().isRightState(GameStates.END_TURN_STATE));
     }
 
     /**
@@ -111,12 +111,12 @@ public class GameStateTest {
         GameState s5 = new ActivateProductionState();
         GameState s6 = new EndTurnState();
 
-        assertTrue(s1.isRightState(GAME_STATES.FIRST_ACTION_STATE));
-        assertTrue(s2.isRightState(GAME_STATES.BUY_CARD_STATE));
-        assertTrue(s3.isRightState(GAME_STATES.TAKE_MARBLE_STATE));
-        assertTrue(s4.isRightState(GAME_STATES.WHITE_CONVERSION_CARD_STATE));
-        assertTrue(s5.isRightState(GAME_STATES.ACTIVATE_PRODUCTION_STATE));
-        assertTrue(s6.isRightState(GAME_STATES.END_TURN_STATE));
+        assertTrue(s1.isRightState(GameStates.FIRST_ACTION_STATE));
+        assertTrue(s2.isRightState(GameStates.BUY_CARD_STATE));
+        assertTrue(s3.isRightState(GameStates.TAKE_MARBLE_STATE));
+        assertTrue(s4.isRightState(GameStates.WHITE_CONVERSION_CARD_STATE));
+        assertTrue(s5.isRightState(GameStates.ACTIVATE_PRODUCTION_STATE));
+        assertTrue(s6.isRightState(GameStates.END_TURN_STATE));
 
         Strongbox s = new Strongbox();
 

@@ -3,17 +3,17 @@ package it.polimi.ingsw.view.model_view;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 import it.polimi.ingsw.view.CLI.ColorAnsi;
 
-public class Resource_Container_View {
+public class ResourceContainerView {
 
     private Resource resource;
     private int amount;
 
-    public Resource_Container_View() {
+    public ResourceContainerView() {
         this.resource = Resource.COIN;
         this.amount = 0;
     }
 
-    public Resource_Container_View(Resource resource) {
+    public ResourceContainerView(Resource resource) {
         this.resource = resource;
         this.amount = 0;
     }

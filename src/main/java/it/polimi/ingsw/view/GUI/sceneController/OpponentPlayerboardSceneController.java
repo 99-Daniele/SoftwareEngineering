@@ -1,8 +1,7 @@
 package it.polimi.ingsw.view.GUI.sceneController;
 
-import it.polimi.ingsw.model.games.states.GAME_STATES;
+import it.polimi.ingsw.model.games.states.GameStates;
 import it.polimi.ingsw.parser.CardMapGUI;
-import it.polimi.ingsw.parser.MarbleMapGUI;
 import it.polimi.ingsw.parser.ResourceMapGUI;
 import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.GUI.GUI;
@@ -15,7 +14,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
@@ -101,9 +99,9 @@ public class OpponentPlayerboardSceneController {
             SceneController.changeRootPane("/fxml/yourTurnScene");
             if (!GUI.isMyTurn())
                 YourTurnSceneController.notYourTurn();
-            if(ClientView.isState(GAME_STATES.END_TURN_STATE))
+            if(ClientView.isState(GameStates.END_TURN_STATE))
                 YourTurnSceneController.endTurn();
-            if(ClientView.isState(GAME_STATES.ACTIVATE_PRODUCTION_STATE))
+            if(ClientView.isState(GameStates.ACTIVATE_PRODUCTION_STATE))
                 YourTurnSceneController.production();
         });
     }

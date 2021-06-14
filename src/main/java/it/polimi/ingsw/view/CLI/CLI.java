@@ -1,7 +1,7 @@
 package it.polimi.ingsw.view.CLI;
 
 import it.polimi.ingsw.App;
-import it.polimi.ingsw.model.games.states.GAME_STATES;
+import it.polimi.ingsw.model.games.states.GameStates;
 import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 import it.polimi.ingsw.network.client.ClientSocket;
@@ -140,7 +140,7 @@ public class CLI extends ClientView{
             if (username == null || username.isBlank() || username.equals(""))
                 System.err.println("Insert a valid username");
             else {
-                ClientSocket.sendMessage(new Message_One_Parameter_String(MessageType.LOGIN, position, username));
+                ClientSocket.sendMessage(new MessageOneParameterString(MessageType.LOGIN, position, username));
                 break;
             }
         }
@@ -161,7 +161,7 @@ public class CLI extends ClientView{
                 if (playerNumber < 1 || playerNumber > 4)
                     System.err.println("You have inserted a wrong number (1 - 4)");
                 else {
-                    ClientSocket.sendMessage(new Message_One_Parameter_Int(MessageType.NUM_PLAYERS, position, playerNumber));
+                    ClientSocket.sendMessage(new MessageOneParameterInt(MessageType.NUM_PLAYERS, position, playerNumber));
                     break;
                 }
             } catch (NumberFormatException | IOException e) {
@@ -178,7 +178,7 @@ public class CLI extends ClientView{
     }
 
     private void choseLeaderCards() {
-        Message_Four_Parameter_Int m = (Message_Four_Parameter_Int) receivedMessage;
+        MessageFourParameterInt m = (MessageFourParameterInt) receivedMessage;
         int card1;
         int card2;
         while (true) {
@@ -203,7 +203,7 @@ public class CLI extends ClientView{
                     System.err.println("You can't chose two same cards.");
                 else {
                     ClientView.setLeaderCard(position, card1, card2);
-                    ClientSocket.sendMessage(new Message_Two_Parameter_Int(MessageType.LEADER_CARD, position, card1, card2));
+                    ClientSocket.sendMessage(new MessageTwoParameterInt(MessageType.LEADER_CARD, position, card1, card2));
                     chose_first_resources();
                     break;
                 }
@@ -221,20 +221,20 @@ public class CLI extends ClientView{
             case 1: {
                 System.out.println("You are the 2nd player. You gain 1 resource.");
                 Resource r = choseResource("Chose the resource:");
-                ClientSocket.sendMessage(new Message_One_Int_One_Resource(MessageType.ONE_FIRST_RESOURCE, position, r, 1));
+                ClientSocket.sendMessage(new MessageOneIntOneResource(MessageType.ONE_FIRST_RESOURCE, position, r, 1));
             }
                 break;
             case 2: {
                 System.out.println("You are the 3rd player. You gain 1 resource and 1 faith point.");
                 Resource r = choseResource("Chose the resource:");
-                ClientSocket.sendMessage(new Message_One_Int_One_Resource(MessageType.ONE_FIRST_RESOURCE, position, r, 1));
+                ClientSocket.sendMessage(new MessageOneIntOneResource(MessageType.ONE_FIRST_RESOURCE, position, r, 1));
             }
                 break;
             case 3: {
                 System.out.println("You are the 4th player. You gain 2 resources and 1 faith point.");
                 Resource r1 = choseResource("Chose first resource:");
                 Resource r2 = choseResource("Chose second resource:");
-                ClientSocket.sendMessage(new Message_Two_Resource(MessageType.TWO_FIRST_RESOURCE, position, r1, r2));
+                ClientSocket.sendMessage(new MessageTwoResource(MessageType.TWO_FIRST_RESOURCE, position, r1, r2));
             }
                 break;
         }
@@ -373,32 +373,32 @@ public class CLI extends ClientView{
                 ClientSocket.sendMessage(new Message(MessageType.TURN, position));
                 break;
             case "-sm":
-                CLI_Printer.printMarket(super.getGame());
+                CLIPrinter.printMarket(super.getGame());
                 break;
             case "-sf":
-                CLI_Printer.printFaithTrack(super.getGame());
+                CLIPrinter.printFaithTrack(super.getGame());
                 break;
             case "-sd":
-                CLI_Printer.printDecks(super.getGame());
+                CLIPrinter.printDecks(super.getGame());
                 break;
             case "-smp":
-                CLI_Printer.printPlayerBoard(super.getGame(), position);
+                CLIPrinter.printPlayerBoard(super.getGame(), position);
                 break;
             case "-smw":
-                CLI_Printer.printWarehouse(super.getGame(), position);
+                CLIPrinter.printWarehouse(super.getGame(), position);
                 break;
             case "-sms":
-                CLI_Printer.printStrongbox(super.getGame(), position);
+                CLIPrinter.printStrongbox(super.getGame(), position);
                 break;
             case "-smc":
-                CLI_Printer.printCardSlot(super.getGame(), position);
+                CLIPrinter.printCardSlot(super.getGame(), position);
                 break;
             case "-sml":
-                CLI_Printer.printLeaderCard(super.getGame(), position);
+                CLIPrinter.printLeaderCard(super.getGame(), position);
                 break;
             case"-smb":
-                if(isState(GAME_STATES.TAKE_MARBLE_STATE) && getMarbles().size() > 0)
-                    CLI_Printer.printMarbles(super.getGame(), getMarbles());
+                if(isState(GameStates.TAKE_MARBLE_STATE) && getMarbles().size() > 0)
+                    CLIPrinter.printMarbles(super.getGame(), getMarbles());
                 else
                     System.err.println("Illegal command from player");
                 break;
@@ -418,18 +418,18 @@ public class CLI extends ClientView{
     }
 
     private void endPowerRequest() throws IOException {
-        if(isState(GAME_STATES.ACTIVATE_PRODUCTION_STATE)) {
+        if(isState(GameStates.ACTIVATE_PRODUCTION_STATE)) {
             ClientSocket.sendMessage(new Message(MessageType.END_PRODUCTION, position));
-            setCurrentState(GAME_STATES.END_TURN_STATE);
+            setCurrentState(GameStates.END_TURN_STATE);
         }
         else
             System.err.println("You can't do this operation at this moment");
     }
 
     private void endTurnRequest() throws IOException {
-        if(isState(GAME_STATES.END_TURN_STATE)) {
+        if(isState(GameStates.END_TURN_STATE)) {
             ClientSocket.sendMessage(new Message(MessageType.END_TURN, position));
-            setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
+            setCurrentState(GameStates.FIRST_ACTION_STATE);
         }
         else
             System.err.println("You can't do this operation at this moment");
@@ -496,20 +496,20 @@ public class CLI extends ClientView{
         switch (request){
             case "market":
             case "m":
-                CLI_Printer.printMarket(super.getGame());
+                CLIPrinter.printMarket(super.getGame());
                 break;
             case "faithtrack":
             case "f":
-                CLI_Printer.printFaithTrack(super.getGame());
+                CLIPrinter.printFaithTrack(super.getGame());
                 break;
             case "decks":
             case "d":
-                CLI_Printer.printDecks(super.getGame());
+                CLIPrinter.printDecks(super.getGame());
                 break;
             case "marbles":
             case "mb":
-                if(isState(GAME_STATES.TAKE_MARBLE_STATE) && getMarbles().size() > 0)
-                    CLI_Printer.printMarbles(super.getGame(), getMarbles());
+                if(isState(GameStates.TAKE_MARBLE_STATE) && getMarbles().size() > 0)
+                    CLIPrinter.printMarbles(super.getGame(), getMarbles());
                 else
                     System.err.println("Illegal command from player");
                 break;
@@ -528,8 +528,8 @@ public class CLI extends ClientView{
         Marble chosenMarble = correct_marble(marble, marbles);
         if (chosenMarble != null){
             if(marbles.size() == 0)
-                setCurrentState(GAME_STATES.END_TURN_STATE);
-            Message message = new Message_One_Parameter_Marble(MessageType.USE_MARBLE, position, chosenMarble);
+                setCurrentState(GameStates.END_TURN_STATE);
+            Message message = new MessageOneParameterMarble(MessageType.USE_MARBLE, position, chosenMarble);
             ClientSocket.sendMessage(message);
             waitMessage();
             if(receivedMessage.getMessageType() == MessageType.WHITE_CONVERSION_CARD)
@@ -556,7 +556,7 @@ public class CLI extends ClientView{
                 if (leaderCard < 1 || leaderCard > 2)
                     System.err.println("You have inserted a wrong number (1 - 2)");
                 else {
-                    Message returnMessage = new Message_One_Parameter_Int(MessageType.WHITE_CONVERSION_CARD, position, leaderCard);
+                    Message returnMessage = new MessageOneParameterInt(MessageType.WHITE_CONVERSION_CARD, position, leaderCard);
                     ClientSocket.sendMessage(returnMessage);
                     break;
                 }
@@ -571,7 +571,7 @@ public class CLI extends ClientView{
         if (leaderCard < 1 || leaderCard > 2)
             System.err.println("You have inserted a wrong number (1 - 2)");
         else
-            ClientSocket.sendMessage(new Message_One_Parameter_Int(MessageType.LEADER_CARD_ACTIVATION, position, leaderCard));
+            ClientSocket.sendMessage(new MessageOneParameterInt(MessageType.LEADER_CARD_ACTIVATION, position, leaderCard));
     }
 
     private void leaderDiscardRequest(String leader) throws IOException {
@@ -580,7 +580,7 @@ public class CLI extends ClientView{
             System.err.println("You have inserted a wrong number (1 - 2)");
         else {
             discardLeaderCard(position, leaderCard);
-            ClientSocket.sendMessage(new Message_One_Parameter_Int(MessageType.LEADER_CARD_DISCARD, position, leaderCard));
+            ClientSocket.sendMessage(new MessageOneParameterInt(MessageType.LEADER_CARD_DISCARD, position, leaderCard));
         }
     }
 
@@ -690,23 +690,23 @@ public class CLI extends ClientView{
             case "playerboard":
             case "board":
             case "p":
-                CLI_Printer.printPlayerBoard(super.getGame(), position);
+                CLIPrinter.printPlayerBoard(super.getGame(), position);
                 break;
             case "warehouse":
             case "wh":
-                CLI_Printer.printWarehouse(super.getGame(), position);
+                CLIPrinter.printWarehouse(super.getGame(), position);
                 break;
             case "strongbox":
             case "sb":
-                CLI_Printer.printStrongbox(super.getGame(), position);
+                CLIPrinter.printStrongbox(super.getGame(), position);
                 break;
             case "cards":
             case "c":
-                CLI_Printer.printCardSlot(super.getGame(), position);
+                CLIPrinter.printCardSlot(super.getGame(), position);
                 break;
             case "leader":
             case "l":
-                CLI_Printer.printLeaderCard(super.getGame(), position);
+                CLIPrinter.printLeaderCard(super.getGame(), position);
                 break;
             default:
                 System.err.println("Illegal command from player");
@@ -720,7 +720,7 @@ public class CLI extends ClientView{
             if(player < 1 || player > getNumOfPlayers())
                 System.err.println("You have inserted a wrong number (1 - " + getNumOfPlayers() + ")");
             else
-                CLI_Printer.printPlayerBoard(super.getGame(), player-1);
+                CLIPrinter.printPlayerBoard(super.getGame(), player-1);
         } catch (NumberFormatException e){
             System.err.println("You have to insert one number!");
         }
@@ -732,7 +732,7 @@ public class CLI extends ClientView{
             if(player < 1 || player > getNumOfPlayers())
                 System.err.println("You have inserted a wrong number (1 - " + getNumOfPlayers() + ")");
             else
-                CLI_Printer.printWarehouse(super.getGame(), player-1);
+                CLIPrinter.printWarehouse(super.getGame(), player-1);
         } catch (NumberFormatException e){
             System.err.println("You have to insert one number!");
         }
@@ -744,7 +744,7 @@ public class CLI extends ClientView{
             if(player < 1 || player > getNumOfPlayers())
                 System.err.println("You have inserted a wrong number (1 - " + getNumOfPlayers() + ")");
             else
-                CLI_Printer.printStrongbox(super.getGame(), player -1);
+                CLIPrinter.printStrongbox(super.getGame(), player -1);
         } catch (NumberFormatException e){
             System.err.println("You have to insert one number!");
         }
@@ -756,7 +756,7 @@ public class CLI extends ClientView{
             if(player < 1 || player > getNumOfPlayers())
                 System.err.println("You have inserted a wrong number (1 - " + getNumOfPlayers() + ")");
             else
-                CLI_Printer.printCardSlot(super.getGame(), player-1);
+                CLIPrinter.printCardSlot(super.getGame(), player-1);
         } catch (NumberFormatException e){
             System.err.println("You have to insert one number!");
         }
@@ -768,14 +768,14 @@ public class CLI extends ClientView{
             if(player < 1 || player > getNumOfPlayers())
                 System.err.println("You have inserted a wrong number (1 - " + getNumOfPlayers() + ")");
             else
-                CLI_Printer.printLeaderCard(super.getGame(), player-1);
+                CLIPrinter.printLeaderCard(super.getGame(), player-1);
         } catch (NumberFormatException e){
             System.err.println("You have to insert one number!");
         }
     }
 
     private void buyCardRequest(ArrayList<String> command) throws IOException {
-        if(isState(GAME_STATES.FIRST_ACTION_STATE)) {
+        if(isState(GameStates.FIRST_ACTION_STATE)) {
             try {
                 int cardID = Integer.parseInt(command.get(1));
                 if (cardID < 1 || cardID > 48)
@@ -787,17 +787,17 @@ public class CLI extends ClientView{
                         return;
                     }
                     int choice = choseWarehouseStrongbox();
-                    setCurrentState(GAME_STATES.BUY_CARD_STATE);
-                    Message message = new Message_Three_Parameter_Int(MessageType.BUY_CARD, position, rowColumn[0], rowColumn[1], choice);
+                    setCurrentState(GameStates.BUY_CARD_STATE);
+                    Message message = new MessageThreeParameterInt(MessageType.BUY_CARD, position, rowColumn[0], rowColumn[1], choice);
                     ClientSocket.sendMessage(message);
                     waitMessage();
                     if (receivedMessage.getMessageType() == MessageType.CHOSEN_SLOT)
                         choseSlotRequest();
                     else if (receivedMessage.getMessageType() == MessageType.OK) {
-                        CLI_Printer.printCardSlot(super.getGame(), position);
-                        setCurrentState(GAME_STATES.END_TURN_STATE);
+                        CLIPrinter.printCardSlot(super.getGame(), position);
+                        setCurrentState(GameStates.END_TURN_STATE);
                     } else {
-                        setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
+                        setCurrentState(GameStates.FIRST_ACTION_STATE);
                     }
                 }
             } catch (NumberFormatException | InterruptedException e) {
@@ -809,8 +809,8 @@ public class CLI extends ClientView{
     }
 
     private void choseSlotRequest() throws IOException {
-        Message_Three_Parameter_Int m = (Message_Three_Parameter_Int) receivedMessage;
-        CLI_Printer.printCardSlot(super.getGame(), position);
+        MessageThreeParameterInt m = (MessageThreeParameterInt) receivedMessage;
+        CLIPrinter.printCardSlot(super.getGame(), position);
         while (true){
             try {
                 System.out.println("\nChose one slot:");
@@ -818,14 +818,14 @@ public class CLI extends ClientView{
                 if (chosenSlot != m.getPar1() && chosenSlot != m.getPar2() && chosenSlot != m.getPar3())
                     System.err.println("You have chosen a wrong slot");
                 else {
-                    ClientSocket.sendMessage(new Message_One_Parameter_Int(MessageType.CHOSEN_SLOT, position, chosenSlot));
+                    ClientSocket.sendMessage(new MessageOneParameterInt(MessageType.CHOSEN_SLOT, position, chosenSlot));
                     waitMessage();
                     if(receivedMessage.getMessageType() == MessageType.OK) {
-                        CLI_Printer.printCardSlot(super.getGame(), position);
-                        setCurrentState(GAME_STATES.END_TURN_STATE);
+                        CLIPrinter.printCardSlot(super.getGame(), position);
+                        setCurrentState(GameStates.END_TURN_STATE);
                     }
                     else
-                        setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
+                        setCurrentState(GameStates.FIRST_ACTION_STATE);
                     break;
                 }
             } catch (NumberFormatException | InterruptedException e) {
@@ -835,23 +835,23 @@ public class CLI extends ClientView{
     }
 
     private void takeMarbleRequest(ArrayList<String> command) throws IOException {
-        if(isState(GAME_STATES.FIRST_ACTION_STATE)) {
+        if(isState(GameStates.FIRST_ACTION_STATE)) {
             try {
                 if (command.get(1).equals("row") || command.get(1).equals("r")) {
                     int index = Integer.parseInt(command.get(2));
                     if (index < 1 || index > 3)
                         System.err.println("You have inserted a wrong number (1 - 3)");
                     else {
-                        setCurrentState(GAME_STATES.TAKE_MARBLE_STATE);
-                        ClientSocket.sendMessage(new Message_Two_Parameter_Int(MessageType.TAKE_MARBLE, position, 0, index));
+                        setCurrentState(GameStates.TAKE_MARBLE_STATE);
+                        ClientSocket.sendMessage(new MessageTwoParameterInt(MessageType.TAKE_MARBLE, position, 0, index));
                     }
                 } else if (command.get(1).equals("column") || command.get(1).equals("c")) {
                     int index = Integer.parseInt(command.get(2));
                     if (index < 1 || index > 4)
                         System.err.println("You have inserted a wrong number (1 - 4)");
                     else {
-                        setCurrentState(GAME_STATES.TAKE_MARBLE_STATE);
-                        ClientSocket.sendMessage(new Message_Two_Parameter_Int(MessageType.TAKE_MARBLE, position, 1, index));
+                        setCurrentState(GameStates.TAKE_MARBLE_STATE);
+                        ClientSocket.sendMessage(new MessageTwoParameterInt(MessageType.TAKE_MARBLE, position, 1, index));
                     }
                 } else
                     System.err.println("Illegal command from player");
@@ -864,7 +864,7 @@ public class CLI extends ClientView{
     }
 
     private void switchRequest(ArrayList<String> command) throws IOException {
-        if(isState(GAME_STATES.TAKE_MARBLE_STATE)) {
+        if(isState(GameStates.TAKE_MARBLE_STATE)) {
             try {
                 int depot1 = Integer.parseInt(command.get(1));
                 int depot2 = Integer.parseInt(command.get(2));
@@ -873,7 +873,7 @@ public class CLI extends ClientView{
                 else if (depot2 < 1 || depot2 > 5)
                     System.err.println("You have inserted a wrong number (1 - 5)");
                 else
-                    ClientSocket.sendMessage(new Message_Two_Parameter_Int(MessageType.SWITCH_DEPOT, position, depot1, depot2));
+                    ClientSocket.sendMessage(new MessageTwoParameterInt(MessageType.SWITCH_DEPOT, position, depot1, depot2));
             } catch (NumberFormatException e) {
                 System.err.println("Illegal command from player");
             }
@@ -883,13 +883,13 @@ public class CLI extends ClientView{
     }
 
     private void cardPowerRequest(ArrayList<String> command) throws IOException {
-        if (isState(GAME_STATES.FIRST_ACTION_STATE) || isState(GAME_STATES.ACTIVATE_PRODUCTION_STATE)) {
+        if (isState(GameStates.FIRST_ACTION_STATE) || isState(GameStates.ACTIVATE_PRODUCTION_STATE)) {
             try {
                 int slot = Integer.parseInt(command.get(1));
                 int choice = choseWarehouseStrongbox();
-                if (isState(GAME_STATES.FIRST_ACTION_STATE))
-                    setCurrentState(GAME_STATES.FIRST_POWER_STATE);
-                Message message = new Message_Two_Parameter_Int(MessageType.DEVELOPMENT_CARD_POWER, position, slot, choice);
+                if (isState(GameStates.FIRST_ACTION_STATE))
+                    setCurrentState(GameStates.FIRST_POWER_STATE);
+                Message message = new MessageTwoParameterInt(MessageType.DEVELOPMENT_CARD_POWER, position, slot, choice);
                 ClientSocket.sendMessage(message);
             } catch (NumberFormatException e) {
                 System.err.println("Illegal command from player");
@@ -899,14 +899,14 @@ public class CLI extends ClientView{
     }
 
     private void leaderPowerRequest(ArrayList<String> command) throws IOException {
-        if (isState(GAME_STATES.FIRST_ACTION_STATE) || isState(GAME_STATES.ACTIVATE_PRODUCTION_STATE)) {
+        if (isState(GameStates.FIRST_ACTION_STATE) || isState(GameStates.ACTIVATE_PRODUCTION_STATE)) {
             try {
                 int slot = Integer.parseInt(command.get(1));
                 Resource r = choseResource("Which resource you want to gain?");
                 int choice = choseWarehouseStrongbox();
-                if (isState(GAME_STATES.FIRST_ACTION_STATE))
-                    setCurrentState(GAME_STATES.FIRST_POWER_STATE);
-                Message message = new Message_One_Resource_Two_Int(MessageType.LEADER_CARD_POWER, position, r, slot, choice);
+                if (isState(GameStates.FIRST_ACTION_STATE))
+                    setCurrentState(GameStates.FIRST_POWER_STATE);
+                Message message = new MessageOneResourceTwoInt(MessageType.LEADER_CARD_POWER, position, r, slot, choice);
                 ClientSocket.sendMessage(message);
             } catch (NumberFormatException e) {
                 System.err.println("Illegal command from player");
@@ -916,14 +916,14 @@ public class CLI extends ClientView{
     }
 
     private void basicPowerRequest() throws IOException {
-        if(isState(GAME_STATES.FIRST_ACTION_STATE) || isState(GAME_STATES.ACTIVATE_PRODUCTION_STATE)) {
+        if(isState(GameStates.FIRST_ACTION_STATE) || isState(GameStates.ACTIVATE_PRODUCTION_STATE)) {
             Resource r1 = choseResource("Which resource you want to decrease?");
             Resource r2 = choseResource("Which resource you want to decrease?");
             Resource r3 = choseResource("Which resource you want to gain?");
             int choice = choseWarehouseStrongbox();
-            if (isState(GAME_STATES.FIRST_ACTION_STATE))
-                setCurrentState(GAME_STATES.FIRST_POWER_STATE);
-            Message message = new Message_Three_Resource_One_Int(MessageType.BASIC_POWER, position, r1, r2, r3, choice);
+            if (isState(GameStates.FIRST_ACTION_STATE))
+                setCurrentState(GameStates.FIRST_POWER_STATE);
+            Message message = new MessageThreeResourceOneInt(MessageType.BASIC_POWER, position, r1, r2, r3, choice);
             ClientSocket.sendMessage(message);
         }
         else
@@ -941,7 +941,7 @@ public class CLI extends ClientView{
 
     @Override
     public void new_player_message(Message message){
-        Message_One_Parameter_String m = (Message_One_Parameter_String) message;
+        MessageOneParameterString m = (MessageOneParameterString) message;
         if (m.getClientID() != this.position) {
             System.out.println("New player: " + m.getPar());
         }
@@ -950,7 +950,7 @@ public class CLI extends ClientView{
     @Override
     public void players_message(Message message){
         super.players_message(message);
-        Message_ArrayList_String m = (Message_ArrayList_String) message;
+        MessageArrayListString m = (MessageArrayListString) message;
         System.out.println("All players connected.\nPlayers: " + m.getNickNames());
         this.position = m.getClientID();
         System.out.println("You are the " + (position + 1) + "° player");
@@ -966,18 +966,18 @@ public class CLI extends ClientView{
 
     @Override
     public void leader_card_choice(Message message) {
-        Message_Four_Parameter_Int m = (Message_Four_Parameter_Int) message;
-        CLI_Printer.printCard(m.getPar1());
-        CLI_Printer.printCard(m.getPar2());
-        CLI_Printer.printCard(m.getPar3());
-        CLI_Printer.printCard(m.getPar4());
+        MessageFourParameterInt m = (MessageFourParameterInt) message;
+        CLIPrinter.printCard(m.getPar1());
+        CLIPrinter.printCard(m.getPar2());
+        CLIPrinter.printCard(m.getPar3());
+        CLIPrinter.printCard(m.getPar4());
         notifyMessage(m);
     }
 
     @Override
     public void turn_message(Message message){
-        Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
-        setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
+        MessageOneParameterInt m = (MessageOneParameterInt) message;
+        setCurrentState(GameStates.FIRST_ACTION_STATE);
         if (m.getPar() == 1) {
             turn = true;
             System.out.println("It's your turn");
@@ -1006,7 +1006,7 @@ public class CLI extends ClientView{
 
     @Override
     public void buy_card_message(Message message) {
-        Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        MessageTwoParameterInt m = (MessageTwoParameterInt) message;
         if(m.getClientID() != position)
             System.out.println("Player " + getNickname(m.getClientID()) + " bought a new card and inserted it in " +
                 "the " + m.getPar2() + "° slot.");
@@ -1015,7 +1015,7 @@ public class CLI extends ClientView{
 
     @Override
     public void card_remove_message(Message message) {
-        Message_Four_Parameter_Int m = (Message_Four_Parameter_Int) message;
+        MessageFourParameterInt m = (MessageFourParameterInt) message;
         if(getNumOfPlayers() == 1 && m.getClientID() == 1)
             System.out.println("Ludovico has removed one deck card from row " + (m.getPar1() +1 + " and" +
                     " column " + (m.getPar2() +1)));
@@ -1030,21 +1030,21 @@ public class CLI extends ClientView{
         if(message.getClientID() != position)
             System.out.println("Player " + getNickname(message.getClientID()) + " has activated production powers");
         else
-            CLI_Printer.printWarehouseStrongbox(super.getGame(), position);
+            CLIPrinter.printWarehouseStrongbox(super.getGame(), position);
     }
 
     @Override
     public void market_change(Message message) {
-        Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        MessageTwoParameterInt m = (MessageTwoParameterInt) message;
         if (m.getPar1() == 0) {
             if(m.getClientID() != position) {
                 System.out.println("Player " + getNickname(m.getClientID()) + " has chosen row " + m.getPar2() + " of the market");
-                CLI_Printer.printRowMarket(super.getGame(), m.getPar2());
+                CLIPrinter.printRowMarket(super.getGame(), m.getPar2());
             }
         } else {
             if(m.getClientID() != position) {
                 System.out.println("Player " + getNickname(m.getClientID()) + " has chosen column " + m.getPar2() + " of the market");
-                CLI_Printer.printColumnMarket(super.getGame(), m.getPar2());
+                CLIPrinter.printColumnMarket(super.getGame(), m.getPar2());
             }
         }
         super.market_change(message);
@@ -1052,7 +1052,7 @@ public class CLI extends ClientView{
 
     @Override
     public void faith_points_message(Message message){
-        Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
+        MessageOneParameterInt m = (MessageOneParameterInt) message;
         String serverMessage;
         if(m.getClientID() != position) {
             if (getNumOfPlayers() == 1 && m.getClientID() == 1)
@@ -1069,7 +1069,7 @@ public class CLI extends ClientView{
 
     @Override
     public void increase_warehouse_message(Message message){
-        Message_One_Int_One_Resource m = (Message_One_Int_One_Resource) message;
+        MessageOneIntOneResource m = (MessageOneIntOneResource) message;
         super.increase_warehouse_message(message);
         String serverMessage;
         if(m.getPar1() != -1) {
@@ -1082,7 +1082,7 @@ public class CLI extends ClientView{
                     addServerMessage(serverMessage);
             }
             else
-                CLI_Printer.printWarehouse(super.getGame(), position);
+                CLIPrinter.printWarehouse(super.getGame(), position);
         }
         else if(m.getClientID() != position) {
             serverMessage = "Player " + getNickname(m.getClientID()) + " has discarded 1 " + Resource.printResource(m.getResource())
@@ -1096,18 +1096,18 @@ public class CLI extends ClientView{
 
     @Override
     public void switch_depot_message(Message message){
-        Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        MessageTwoParameterInt m = (MessageTwoParameterInt) message;
         super.switch_depot_message(message);
         if(m.getClientID() != position)
             System.out.println("Player " + getNickname(m.getClientID()) + " has switched its " + m.getPar1()
                 + "° depot with its " + m.getPar2() + "° depot.");
         else
-            CLI_Printer.printWarehouse(super.getGame(), position);
+            CLIPrinter.printWarehouse(super.getGame(), position);
     }
 
     @Override
     public void vatican_report_message(Message message){
-        Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        MessageTwoParameterInt m = (MessageTwoParameterInt) message;
         if(getNumOfPlayers() == 1 && m.getPar1() == 1)
             System.out.println("Ludovico activated Vatican Report." +
                     " Now you have " + m.getPar2() + " victory points from Vatican Report");
@@ -1119,7 +1119,7 @@ public class CLI extends ClientView{
 
     @Override
     public void leader_card_activation_message(Message message){
-        Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
+        MessageOneParameterInt m = (MessageOneParameterInt) message;
         if(m.getClientID() != position) {
             System.out.println("Player " + getNickname(m.getClientID()) + " has activated a leader card");
         }
@@ -1128,18 +1128,18 @@ public class CLI extends ClientView{
 
     @Override
     public void extra_depot_message(Message message){
-        Message_One_Int_One_Resource m = (Message_One_Int_One_Resource) message;
+        MessageOneIntOneResource m = (MessageOneIntOneResource) message;
         super.extra_depot_message(message);
         if(m.getClientID() != position) {
             System.out.println("Player " + getNickname(m.getClientID()) + " has a new extra depot of " + Resource.printResource(m.getResource()));
         }
         else
-            CLI_Printer.printWarehouse(super.getGame(), position);
+            CLIPrinter.printWarehouse(super.getGame(), position);
     }
 
     @Override
     public void leader_card_discard_message(Message message){
-        Message_One_Parameter_Int m = (Message_One_Parameter_Int) message;
+        MessageOneParameterInt m = (MessageOneParameterInt) message;
         if(m.getClientID() != position) {
             System.out.println("Player " + getNickname(m.getClientID()) + " has discarded one leader card");
         }
@@ -1149,20 +1149,20 @@ public class CLI extends ClientView{
 
     @Override
     public void ok_message() {
-        if (getCurrentState() != GAME_STATES.BUY_CARD_STATE)
+        if (getCurrentState() != GameStates.BUY_CARD_STATE)
             System.out.println("Request successfully completed.\n");
-        if (isState(GAME_STATES.TAKE_MARBLE_STATE)) {
+        if (isState(GameStates.TAKE_MARBLE_STATE)) {
             if(getMarbles().size() == 0)
-                setCurrentState(GAME_STATES.END_TURN_STATE);
+                setCurrentState(GameStates.END_TURN_STATE);
         }
-        if(isState(GAME_STATES.FIRST_POWER_STATE))
-            setCurrentState(GAME_STATES.ACTIVATE_PRODUCTION_STATE);
+        if(isState(GameStates.FIRST_POWER_STATE))
+            setCurrentState(GameStates.ACTIVATE_PRODUCTION_STATE);
         notifyMessage(new Message(MessageType.OK, position));
     }
 
     @Override
     public void chosen_slot_message(Message message){
-        Message_Three_Parameter_Int m = (Message_Three_Parameter_Int) message;
+        MessageThreeParameterInt m = (MessageThreeParameterInt) message;
         if(m.getPar3() == -1)
             System.out.println("You can insert your card in this slots: " + m.getPar1() + ", " + m.getPar2());
         else
@@ -1172,22 +1172,22 @@ public class CLI extends ClientView{
 
     @Override
     public void take_marble_message(Message message) {
-        Message_ArrayList_Marble m = (Message_ArrayList_Marble) message;
+        MessageArrayListMarble m = (MessageArrayListMarble) message;
         super.take_marble_message(message);
         System.out.println("You have chosen this marbles: ");
-        CLI_Printer.printMarbles(super.getGame(), m.getMarbles());
+        CLIPrinter.printMarbles(super.getGame(), m.getMarbles());
     }
 
     @Override
     public void white_conversion_card_message(Message message) {
-        CLI_Printer.printLeaderCard(getGame(), position);
+        CLIPrinter.printLeaderCard(getGame(), position);
         System.out.println("You have chosen a white marble and you have two active WhiteConversionCard. Chose one of them");
         notifyMessage(message);
     }
 
     @Override
     public void quit_message(Message message) {
-        Message_One_Parameter_String m = (Message_One_Parameter_String) message;
+        MessageOneParameterString m = (MessageOneParameterString) message;
         if (getNumOfPlayers() != 0) {
             System.out.println("Player " + m.getPar() + " disconnected. Game ended.");
             System.out.println("\nExit.\n");
@@ -1201,7 +1201,7 @@ public class CLI extends ClientView{
 
     @Override
     public void end_game_message(Message message){
-        Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        MessageTwoParameterInt m = (MessageTwoParameterInt) message;
         if(getNumOfPlayers() == 1 && m.getClientID() == 1){
             System.out.println("Game ended. Ludovico win.");
         }
@@ -1243,8 +1243,8 @@ public class CLI extends ClientView{
 
     @Override
     public void wrong_power_error() {
-        if(isState(GAME_STATES.FIRST_POWER_STATE))
-            setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
+        if(isState(GameStates.FIRST_POWER_STATE))
+            setCurrentState(GameStates.FIRST_ACTION_STATE);
         System.err.println("You can't activate this production power");
     }
 
@@ -1271,8 +1271,8 @@ public class CLI extends ClientView{
 
     @Override
     public void not_enough_resource_error() {
-        if(isState(GAME_STATES.FIRST_POWER_STATE)) {
-            setCurrentState(GAME_STATES.FIRST_ACTION_STATE);
+        if(isState(GameStates.FIRST_POWER_STATE)) {
+            setCurrentState(GameStates.FIRST_ACTION_STATE);
         }
         System.err.println("You have not enough resources to do this operation");
         notifyMessage(new ErrorMessage(position, ErrorType.NOT_ENOUGH_RESOURCES));

@@ -2,11 +2,11 @@ package it.polimi.ingsw.network.messages;
 
 import java.util.ArrayList;
 
-public class Message_ArrayList_String extends Message{
+public class MessageArrayListString extends Message{
 
     private final ArrayList<String> nickNames;
 
-    public Message_ArrayList_String(MessageType messageType, int clientID, ArrayList<String> nickNames) {
+    public MessageArrayListString(MessageType messageType, int clientID, ArrayList<String> nickNames) {
         super(messageType, clientID);
         this.nickNames = nickNames;
     }

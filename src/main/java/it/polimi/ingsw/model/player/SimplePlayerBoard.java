@@ -2,7 +2,7 @@ package it.polimi.ingsw.model.player;
 
 import it.polimi.ingsw.network.messages.Message;
 import it.polimi.ingsw.network.messages.MessageType;
-import it.polimi.ingsw.network.messages.Message_One_Parameter_Int;
+import it.polimi.ingsw.network.messages.MessageOneParameterInt;
 
 import java.util.Observable;
 
@@ -19,7 +19,7 @@ public class SimplePlayerBoard extends Observable {
 
     public void increaseFaithPoints(int faithPoints) {
         this.faithPoints += faithPoints;
-        Message message_one_parameter_int=new Message_One_Parameter_Int(MessageType.FAITH_POINTS_INCREASE,1, this.faithPoints);
+        Message message_one_parameter_int=new MessageOneParameterInt(MessageType.FAITH_POINTS_INCREASE,1, this.faithPoints);
         setChanged();
         notifyObservers(message_one_parameter_int);
     }

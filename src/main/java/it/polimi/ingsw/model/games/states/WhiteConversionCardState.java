@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model.games.states;
 
-import it.polimi.ingsw.controller.ControllerGame;
 import it.polimi.ingsw.model.cards.leaderCards.LeaderCard;
 import it.polimi.ingsw.model.games.GameManager;
 import it.polimi.ingsw.model.market.Marble;
@@ -25,8 +24,8 @@ public class WhiteConversionCardState implements GameState {
     }
 
     @Override
-    public boolean isRightState(GAME_STATES state) {
-        return state == GAME_STATES.WHITE_CONVERSION_CARD_STATE;
+    public boolean isRightState(GameStates state) {
+        return state == GameStates.WHITE_CONVERSION_CARD_STATE;
     }
 
     @Override
