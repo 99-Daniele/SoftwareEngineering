@@ -36,8 +36,7 @@ public abstract class ClientView extends Application implements Observer {
     @Override
     public void start(Stage stage) throws Exception {}
 
-    @Override
-    public void stop(){
+    public static void endGame(){
         ClientSocket.setDisconnected();
         ClientSocket.disconnect();
         System.exit(1);
@@ -225,6 +224,9 @@ public abstract class ClientView extends Application implements Observer {
                 case ERR:
                     error_message(returnMessage);
                     break;
+                case EXIT:
+                    disconnectMessage();
+                    break;
                 default:
                     System.err.println("\nUnexpected message from Server.");
                     break;
@@ -246,6 +248,10 @@ public abstract class ClientView extends Application implements Observer {
 
     public void startGame(){
         game.startGame();
+    }
+
+    public boolean isGameStarted(){
+        return game.isStartGame();
     }
 
     public void market_message(Message message){
@@ -421,4 +427,6 @@ public abstract class ClientView extends Application implements Observer {
     public abstract void already_active_error();
 
     public abstract void already_discard_error();
+
+    public abstract void disconnectMessage();
 }

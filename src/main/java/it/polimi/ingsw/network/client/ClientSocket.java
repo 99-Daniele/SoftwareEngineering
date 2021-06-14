@@ -1,6 +1,7 @@
 package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.network.messages.*;
+import it.polimi.ingsw.view.ClientView;
 
 import java.io.*;
 import java.net.Socket;
@@ -163,7 +164,8 @@ public class ClientSocket extends Observable{
             System.err.println("\nClient no longer connected to the Server");
             connected = false;
             disconnect();
-            System.exit(0);
+            setChanged();
+            notifyObservers(new Message(MessageType.EXIT, 0));
         }
     }
 }

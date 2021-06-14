@@ -42,4 +42,5 @@ public enum MessageType {
     PONG,
     OK,
     ERR,
+    EXIT
 }

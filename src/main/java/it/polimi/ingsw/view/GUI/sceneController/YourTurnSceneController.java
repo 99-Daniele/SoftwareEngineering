@@ -76,6 +76,8 @@ public class YourTurnSceneController {
     @FXML
     private RadioButton radiobutEndTurn;
     @FXML
+    private RadioButton radiobutEndGame;
+    @FXML
     private ImageView card11;
     @FXML
     private ImageView card12;
@@ -267,6 +269,7 @@ public class YourTurnSceneController {
         radiobutOtherPlayboard.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> otherPlayerboardButton());
         radiobutEndProd.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> endProductionButton());
         radiobutEndTurn.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> endTurnButton());
+        radiobutEndGame.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> ClientView.endGame());
         chooseBase.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             chooseBase.setDisable(true);
             basicProduction();
@@ -306,6 +309,8 @@ public class YourTurnSceneController {
         chooseLeader2.setOnMouseClicked(mouseEvent -> choseLeader(2));
         okError.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> errorPane.setVisible(false));
         yes.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            yes.setDisable(true);
+            no.setDisable(true);
             switchCounter = new ArrayList<>(2);
             switchDepots();
         });
@@ -581,6 +586,8 @@ public class YourTurnSceneController {
             four.setDisable(true);
             five.setSelected(false);
             five.setDisable(true);
+            yes.setDisable(false);
+            no.setDisable(false);
             try {
                 ClientSocket.sendMessage(new Message_Two_Parameter_Int(MessageType.SWITCH_DEPOT, GUI.getPosition(), switchCounter.get(0), switchCounter.get(1)));
             } catch (IOException e) {
@@ -628,27 +635,27 @@ public class YourTurnSceneController {
         ask();
     }
 
-    public static void ask(){
+    private static void ask(){
         disableMarbleShow(true);
         SceneController.setText("#message","Do you want to switch your depots?");
         SceneController.setVisible("#yes",true);
         SceneController.setVisible("#no",true);
     }
 
-    public static void switchDepots(){
-        SceneController.setVisible("#one",true);
-        SceneController.setDisable("#one", false);
-        SceneController.setVisible("#two",true);
-        SceneController.setDisable("#two", false);
-        SceneController.setVisible("#three",true);
-        SceneController.setDisable("#three", false);
+    private void switchDepots(){
+        one.setVisible(true);
+        one.setDisable(false);
+        two.setVisible(true);
+        two.setDisable(false);
+        three.setVisible(true);
+        three.setDisable(false);
         if(ClientView.getWarehouse(GUI.getPosition()).size() >= 4) {
-            SceneController.setVisible("#four", true);
-            SceneController.setDisable("#four", false);
+            four.setVisible(true);
+            four.setDisable(false);
         }
         if(ClientView.getWarehouse(GUI.getPosition()).size() == 5) {
-            SceneController.setVisible("#five", true);
-            SceneController.setDisable("#five", false);
+            five.setVisible(true);
+            five.setDisable(false);
         }
     }
 
@@ -1706,41 +1713,4 @@ public class YourTurnSceneController {
         SceneController.setDisable("#radiobutEndTurn", true);
         SceneController.setDisable("#radiobutEndProd", true);
     }
-
-/*
-    public void update() {
-        Task<Void> task = new Task<Void>() {
-            String a = "Initial text";
-
-            @Override
-            public Void call() throws Exception {
-                int i = 0;
-
-                while (true) {
-
-                    if (i > 4)
-                        a = "I is bigger than 4";
-
-                    if (i > 10)
-                        a = "I is bigger than 10";
-
-                    Platform.runLater(() -> {
-                        testo.setText(a);
-                        // If you want to you can also move the text here
-                        testo.relocate(10, 10);
-                    });
-
-                    i++;
-                    Thread.sleep(1000);
-                }
-            }
-        };
-        Thread th = new Thread(task);
-        th.setDaemon(true);
-        th.start();
-
-    }
-
- */
-
 }

@@ -69,6 +69,11 @@ public class GUI extends ClientView {
     }
 
     @Override
+    public void stop(){
+        endGame();
+    }
+
+    @Override
     public void login_message(Message message) {
         Platform.runLater(() -> {
             try {
@@ -421,14 +426,10 @@ public class GUI extends ClientView {
         if (getNumOfPlayers() != 0) {
             quitMessage = "Player " + m.getPar() + " disconnected. Game ended.";
         }
-        else if (m.getPar() != null)
-            quitMessage = "Player " + m.getPar() + " disconnected before game is started";
         else
-            quitMessage = "One player disconnected before game is started";
+            return;
         Platform.runLater(() -> {
-            if(!SceneController.isCurrentScene("#radiobutBuyCard"))
-                SceneController.changeRootPane("/fxml/yourTurnScene");
-            SceneController.errorMessage(quitMessage);
+            quitPhase(quitMessage);
         });
     }
 
@@ -445,9 +446,7 @@ public class GUI extends ClientView {
                     + " total resources.";
         }
         Platform.runLater(() -> {
-            if(!SceneController.isCurrentScene("#radiobutBuyCard"))
-                SceneController.changeRootPane("/fxml/yourTurnScene");
-            SceneController.errorMessage(endMessage);
+            quitPhase(endMessage);
         });
     }
 
@@ -527,7 +526,7 @@ public class GUI extends ClientView {
 
     @Override
     public void not_enough_cards_error() {
-        String errorMessage = "You don't have enough development cards\n to activate this leader card";
+        String errorMessage = "You don't have enough development cards to activate this leader card";
         Platform.runLater(() -> {
             if(!SceneController.isCurrentScene("#radiobutBuyCard"))
                 SceneController.changeRootPane("/fxml/yourTurnScene");
@@ -607,5 +606,28 @@ public class GUI extends ClientView {
                 SceneController.changeRootPane("/fxml/yourTurnScene");
             SceneController.errorMessage(errorMessage);
         });
+    }
+
+    @Override
+    public void disconnectMessage() {
+        String disconnectMessage = "You have been disconnected from Server. Game ended.";
+        Platform.runLater(() -> quitPhase(disconnectMessage));
+    }
+
+    private void quitPhase(String quitMessage) {
+        SceneController.changeRootPane("/fxml/yourTurnScene");
+        SceneController.errorMessage(quitMessage);
+        SceneController.setDisable("#radiobutBuyCard", true);
+        SceneController.setDisable("#radiobutTakeMarble", true);
+        SceneController.setDisable("#radiobutActivProduc", true);
+        SceneController.setDisable("#radiobutActLeader", true);
+        SceneController.setDisable("#radiobutDiscardLeader", true);
+        SceneController.setDisable("#radiobutEndProd", true);
+        SceneController.setDisable("#radiobutEndTurn", true);
+        if(super.isGameStarted())
+            SceneController.setDisable("#radiobutOtherPlayboard", false);
+        else
+            SceneController.setDisable("#radiobutOtherPlayboard", true);
+        SceneController.setVisible("#radiobutEndGame", true);
     }
 }

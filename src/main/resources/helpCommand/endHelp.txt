@@ -1,4 +1,7 @@
 
+end game          exit
+
+
 see playerboard/see board/see p/-sp 1/2/3/4         print other playerboard
 
 see my playerboard/see my p/-smp                    print your playerboard

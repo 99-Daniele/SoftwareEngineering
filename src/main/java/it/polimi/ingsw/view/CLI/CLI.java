@@ -63,11 +63,11 @@ public class CLI extends ClientView{
     private void connectToServer() throws IOException {
         while (true) {
             System.out.println("\nEnter hostname [localhost]: ");
-            String hostName = stdIn.readLine();
+            String hostName = readLine();
             if (hostName == null || hostName.isBlank() || hostName.equals(""))
                 hostName = "localhost";
             System.out.println("Enter port [12460]: ");
-            String portNumber = stdIn.readLine();
+            String portNumber = readLine();
             if (portNumber == null || portNumber.isBlank() || portNumber.equals(""))
                 portNumber = "12460";
             try {
@@ -129,7 +129,6 @@ public class CLI extends ClientView{
                 username();
                 choseLeaderCards();
             } catch (IOException | InterruptedException e) {
-                e.printStackTrace();
             }
         });
         inputThread.start();
@@ -139,7 +138,7 @@ public class CLI extends ClientView{
     private void username() throws IOException, InterruptedException {
         while (true) {
             System.out.println("\nEnter username: ");
-            String username = stdIn.readLine();
+            String username = readLine();
             if (username == null || username.isBlank() || username.equals(""))
                 System.err.println("Insert a valid username");
             else {
@@ -160,7 +159,7 @@ public class CLI extends ClientView{
         while (true) {
             try {
                 System.out.println("How many players are going to play? 1 to 4");
-                int playerNumber = Integer.parseInt(stdIn.readLine());
+                int playerNumber = Integer.parseInt(readLine());
                 if (playerNumber < 1 || playerNumber > 4)
                     System.err.println("You have inserted a wrong number (1 - 4)");
                 else {
@@ -187,7 +186,7 @@ public class CLI extends ClientView{
         while (true) {
             try {
                 System.out.println("Chose the first leader card:");
-                card1 = Integer.parseInt(stdIn.readLine());
+                card1 = Integer.parseInt(readLine());
                 if (card1 != m.getPar1() && card1 != m.getPar2() && card1 != m.getPar3() && card1 != m.getPar4())
                     System.err.println("You have selected a wrong card");
                 else
@@ -199,7 +198,7 @@ public class CLI extends ClientView{
         while (true) {
             try {
                 System.out.println("Chose the second leader card:");
-                card2 = Integer.parseInt(stdIn.readLine());
+                card2 = Integer.parseInt(readLine());
                 if (card2 != m.getPar1() && card2 != m.getPar2() && card2 != m.getPar3() && card2 != m.getPar4())
                     System.err.println("You have selected a wrong card");
                 else if (card1 == card2)
@@ -241,14 +240,13 @@ public class CLI extends ClientView{
             }
                 break;
         }
-        super.startGame();
     }
 
     private Resource choseResource(String text) throws IOException {
         while (true) {
             System.out.println(text);
             System.out.println("COIN(CO) / SHIELD(SH) / SERVANT/(SE) / STONE(ST)");
-            Resource r = correctResource(stdIn.readLine());
+            Resource r = correctResource(readLine());
             if(r != null)
                 return r;
             else
@@ -280,7 +278,7 @@ public class CLI extends ClientView{
         while (true) {
             System.out.println("Where do you want to take the resources from?");
             System.out.println("WAREHOUSE(W) / STRONGBOX(S)");
-            String choice = stdIn.readLine();
+            String choice = readLine();
             choice = choice.toUpperCase(Locale.ROOT);
             if(choice.equals("WAREHOUSE") || choice.equals("W"))
                 return 0;
@@ -305,7 +303,7 @@ public class CLI extends ClientView{
     private void readCommand() throws IOException, InterruptedException {
         while (true){
             ArrayList<String> command = new ArrayList<>();
-            String line = stdIn.readLine();
+            String line = readLine();
             int j = 0;
             for(int i = 0; i < line.length(); i++){
                 if(line.charAt(i) == ' ' ) {
@@ -554,7 +552,7 @@ public class CLI extends ClientView{
     private void whiteConversionRequest() throws IOException {
         while (true){
             try {
-                int leaderCard = Integer.parseInt(stdIn.readLine());
+                int leaderCard = Integer.parseInt(readLine());
                 if (leaderCard < 1 || leaderCard > 2)
                     System.err.println("You have inserted a wrong number (1 - 2)");
                 else {
@@ -819,7 +817,7 @@ public class CLI extends ClientView{
         while (true){
             try {
                 System.out.println("\nChose one slot:");
-                int chosenSlot = Integer.parseInt(stdIn.readLine());
+                int chosenSlot = Integer.parseInt(readLine());
                 if (chosenSlot != m.getPar1() && chosenSlot != m.getPar2() && chosenSlot != m.getPar3())
                     System.err.println("You have chosen a wrong slot");
                 else {
@@ -963,6 +961,7 @@ public class CLI extends ClientView{
 
     @Override
     public void start_game_message() throws IOException {
+        super.startGame();
         System.out.println("All players have made their choices. Game started");
         ClientSocket.sendMessage(new Message(MessageType.TURN, position));
     }
@@ -1177,9 +1176,12 @@ public class CLI extends ClientView{
     public void quit_message(Message message) {
         Message_One_Parameter_String m = (Message_One_Parameter_String) message;
         if (getNumOfPlayers() != 0) {
+            inputThread.interrupt();
             System.out.println("Player " + m.getPar() + " disconnected. Game ended.");
-            System.out.println("You can still see the state of the game.\nPrint \"end game\" to finish");
-            endGameRequest();
+            if(super.isGameStarted())
+                System.out.println("You can still see the state of the game.\nPrint \"end game\" to finish");
+            else
+                endGameRequest();
         }
         else if (m.getPar() != null)
             System.out.println("Player " + m.getPar() + " disconnected before game is started");
@@ -1190,6 +1192,7 @@ public class CLI extends ClientView{
     @Override
     public void end_game_message(Message message){
         Message_Two_Parameter_Int m = (Message_Two_Parameter_Int) message;
+        inputThread.interrupt();
         if(getNumOfPlayers() == 1 && m.getClientID() == 1){
             System.out.println("Game ended. Ludovico win.");
         }
@@ -1198,13 +1201,15 @@ public class CLI extends ClientView{
                     + " It made " + m.getPar1() + " victory points and " + m.getPar2()
                     + " total resources.");
         }
-        System.out.println("You can still see the state of the game.\nPrint \"end game\" to finish");
-        endGameRequest();
+        if(super.isGameStarted())
+            System.out.println("You can still see the state of the game.\nPrint \"end game\" to finish");
+        else
+            endGameRequest();
     }
 
     private void endGameRequest(){
-        System.out.println("\nDisconnecting.\n");
-        super.stop();
+        System.out.println("\nExit.\n");
+        endGame();
     }
 
     @Override
@@ -1281,6 +1286,15 @@ public class CLI extends ClientView{
         System.err.println("You discard this leader card previously");
     }
 
+    @Override
+    public void disconnectMessage() {
+        inputThread.interrupt();
+        if(super.isGameStarted())
+            System.out.println("You can still see the state of the game.\nPrint \"end game\" to finish");
+        else
+            endGameRequest();
+    }
+
     private void waitMessage() throws InterruptedException {
         receivedMessage = null;
         while (receivedMessage == null) {
@@ -1295,5 +1309,17 @@ public class CLI extends ClientView{
         synchronized (lock){
             lock.notifyAll();
         }
+    }
+
+    private String readLine() throws IOException {
+        while (!stdIn.ready()){
+            try {
+                inputThread.sleep(200);
+            } catch (InterruptedException e) {
+                startCLI();
+            }
+            return stdIn.readLine();
+        }
+        return null;
     }
 }

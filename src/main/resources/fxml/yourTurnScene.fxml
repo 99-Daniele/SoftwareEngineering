@@ -23,6 +23,11 @@
                   <Image url="@../photos/Masters_of_Renaissance_PlayerBoard(11_2020)-1.png" />
                </image>
             </ImageView>
+            <ImageView fx:id="calamaio" fitHeight="59.0" fitWidth="62.0" layoutX="525.0" layoutY="100.0" visible="false">
+               <image>
+                  <Image url="@../photos/calamaio.png" />
+               </image>
+            </ImageView>
             <ImageView fx:id="leader1" fitHeight="166.0" fitWidth="108.0" layoutY="451.0" />
             <ImageView fx:id="card13" fitHeight="159.0" fitWidth="99.0" layoutX="600.0" layoutY="42.0" />
             <ImageView fx:id="card33" fitHeight="159.0" fitWidth="99.0" layoutX="825.0" layoutY="42.0" />
@@ -191,6 +196,7 @@
             <ImageView fx:id="marbleExt" fitHeight="23.0" fitWidth="23.0" layoutX="1189.0" layoutY="74.0">
             </ImageView>
             <RadioButton fx:id="radiobutOtherPlayboard" layoutX="279.0" layoutY="628.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="222.0" text="SEE OTHER PLAYERBOARD" toggleGroup="$mainAction" />
+            <RadioButton fx:id="radiobutEndGame" visible="false" layoutX="450.0" layoutY="595.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="222.0" text="END GAME" toggleGroup="$mainAction" />
             <ImageView fx:id="leader2" disable="true" fitHeight="166.0" fitWidth="108.0" layoutX="134.0" layoutY="451.0">
             </ImageView>
             <ImageView fx:id="extra11" fitHeight="20.0" fitWidth="20.0" layoutX="25.0" layoutY="584.0" pickOnBounds="true" preserveRatio="true" />
@@ -321,15 +327,9 @@
                   <Button fx:id="okError" layoutX="286.0" layoutY="244.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="79.0" text="OK" />
                </children>
             </Pane>
-            <ImageView fx:id="calamaio" fitHeight="59.0" fitWidth="62.0" layoutX="525.0" layoutY="100.0" visible="false">
-               <image>
-                  <Image url="@../photos/calamaio.png" />
-               </image>
-            </ImageView>
             <ImageView fitHeight="71.0" fitWidth="62.0" layoutX="537.0" layoutY="98.0" pickOnBounds="true" preserveRatio="true" visible="false" />
          </children>
       </AnchorPane>
-      <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
    </children>
    <padding>
       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
