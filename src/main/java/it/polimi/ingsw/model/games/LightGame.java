@@ -20,8 +20,6 @@ public interface LightGame {
 
     void faithTrackMovement();
 
-    void faithTrackMovementAllPlayers();
-
     boolean isActiveWhiteConversionCard(int chosenLeaderCard);
 
     void whiteMarbleConversion(LeaderCard leaderCard);

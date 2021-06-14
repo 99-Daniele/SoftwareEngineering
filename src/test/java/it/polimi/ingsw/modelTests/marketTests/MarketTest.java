@@ -1,7 +1,5 @@
 package it.polimi.ingsw.modelTests.marketTests;
 
-import it.polimi.ingsw.exceptions.WrongParametersException;
-
 import it.polimi.ingsw.model.market.*;
 
 import org.junit.jupiter.api.Test;
@@ -15,10 +13,9 @@ public class MarketTest {
     /**
      * checking if a column remain unchanged after a different column has been slided.
      * checking if a column change after being slided.
-     * @throws ArrayIndexOutOfBoundsException activated when the selectedColumn or selectedRow doesn't exist in the market.
      */
     @Test
-    void slideColumnMarketTest() throws WrongParametersException {
+    void slideColumnMarketTest() {
         Market market = new Market();
         assertNotNull(market);
 
@@ -48,10 +45,9 @@ public class MarketTest {
     /**
      * checking if a row remain unchanged after a different row has been slided.
      * checking if a row change after being slided.
-     * @throws ArrayIndexOutOfBoundsException activated when the selectedColumn or selectedRow doesn't exist in the market.
      */
     @Test
-    public void slideRowMarketTest() throws WrongParametersException {
+    public void slideRowMarketTest() {
         Market market = new Market();
         assertNotNull(market);
 
@@ -77,10 +73,9 @@ public class MarketTest {
 
     /**
      * checking if the market has been prepared with the correct amount of Marbles and color of Marbles.
-     * @throws ArrayIndexOutOfBoundsException activated when the selectedColumn or selectedRow doesn't exist in the market.
      */
     @Test
-    void marketCreationTest() throws WrongParametersException {
+    void marketCreationTest() {
         Market market = new Market();
         Marble[] selectedRow;
         int red = 0;
@@ -123,10 +118,9 @@ public class MarketTest {
     /**
      * checking if the licit action are being executed correctly,
      * then checking if an exception is being thrown after a prohibited action has been made.
-     * @throws ArrayIndexOutOfBoundsException activated when the selectedColumn or selectedRow doesn't exist in the market.
      */
     @Test
-    void wrongIndexSelectedTest() throws WrongParametersException {
+    void wrongIndexSelectedTest() {
         Market market = new Market();
         assertNotNull(market);
 

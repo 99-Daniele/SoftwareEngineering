@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class MessageArrayListInt extends Message{
 
-    private ArrayList<Integer> params;
+    private final ArrayList<Integer> params;
 
     public MessageArrayListInt(MessageType messageType, int clientID, ArrayList<Integer>params) {
         super(messageType, clientID);

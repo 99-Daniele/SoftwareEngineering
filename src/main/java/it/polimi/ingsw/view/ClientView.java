@@ -19,7 +19,7 @@ public abstract class ClientView extends Application implements Observer {
 
     private static GameView game;
     private static GameStates currentState;
-    private static ArrayList<String> serverMessages = new ArrayList<>();
+    private static final ArrayList<String> serverMessages = new ArrayList<>();
 
     public ClientView() {
         game = new GameView();
@@ -35,7 +35,7 @@ public abstract class ClientView extends Application implements Observer {
     public void launchCLI(String hostname, int port){}
 
     @Override
-    public void start(Stage stage) throws Exception {}
+    public void start(Stage stage) {}
 
     public static void endGame(){
         ClientSocket.setDisconnected();
@@ -96,7 +96,7 @@ public abstract class ClientView extends Application implements Observer {
     }
 
     public static boolean isSlotEmpty(int player, int slot){
-        return game.isSlotEmpty(player, slot);
+        return !game.isSlotEmpty(player, slot);
     }
 
     public static ArrayList<Integer> getSlotCards(int position){
@@ -237,7 +237,7 @@ public abstract class ClientView extends Application implements Observer {
                     System.err.println("\nUnexpected message from Server.");
                     break;
             }
-        } catch (IOException | InterruptedException | ClassCastException e) {
+        } catch (IOException | ClassCastException ignored) {
         }
     }
 
@@ -257,7 +257,7 @@ public abstract class ClientView extends Application implements Observer {
     }
 
     public boolean isGameStarted(){
-        return game.isStartGame();
+        return !game.isStartGame();
     }
 
     public void marketMessage(Message message){
@@ -270,9 +270,9 @@ public abstract class ClientView extends Application implements Observer {
         game.setFirstDeckCards(m.getParams());
     }
 
-    public abstract void leaderCardChoice(Message message) throws IOException, InterruptedException;
+    public abstract void leaderCardChoice(Message message);
 
-    public void okMessage() throws IOException, InterruptedException{
+    public void okMessage() {
         switch (getCurrentState()){
             case BUY_CARD_STATE:
                 setCurrentState(GameStates.END_TURN_STATE);
@@ -283,9 +283,9 @@ public abstract class ClientView extends Application implements Observer {
         }
     }
 
-    public abstract void turnMessage(Message message) throws InterruptedException, IOException;
+    public abstract void turnMessage(Message message);
 
-    public abstract void endTurnMessage(Message message) throws InterruptedException, IOException;
+    public abstract void endTurnMessage(Message message);
 
     public void buyCardMessage(Message message){
         MessageTwoParameterInt m = (MessageTwoParameterInt) message;
@@ -313,7 +313,7 @@ public abstract class ClientView extends Application implements Observer {
         }
     }
 
-    public abstract void whiteConversionCardMessage(Message message) throws IOException;
+    public abstract void whiteConversionCardMessage(Message message);
 
     public void faithPointsMessage(Message message){
         MessageOneParameterInt m = (MessageOneParameterInt) message;
@@ -352,7 +352,7 @@ public abstract class ClientView extends Application implements Observer {
         game.discardLeaderCard(m.getClientID(), m.getPar());
     }
 
-    public abstract void chosenSlotMessage(Message message) throws IOException;
+    public abstract void chosenSlotMessage(Message message);
 
     public void takeMarbleMessage(Message message) {
         MessageArrayListMarble m = (MessageArrayListMarble) message;
@@ -363,7 +363,7 @@ public abstract class ClientView extends Application implements Observer {
 
     public abstract void endGameMessage(Message message);
 
-    public void errorMessage(Message message) throws IOException, InterruptedException{
+    public void errorMessage(Message message) {
         ErrorMessage m = (ErrorMessage) message;
         switch (m.getErrorType()){
             case ALREADY_TAKEN_NICKNAME:

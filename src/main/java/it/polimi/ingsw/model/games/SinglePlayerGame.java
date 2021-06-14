@@ -107,15 +107,8 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame {
      * this method increase ludovico faith points and then looks if ludovico reached the pope space and if true
      * check it out if player is in the vatican section and increase his victory points.
      */
-    @Override
     public void LorenzoFaithTrackMovement(int faithPoints){
         LorenzoIlMagnifico.increaseFaithPoints(faithPoints);
-        LorenzoPopeSpace();
-    }
-
-    @Override
-    public void faithTrackMovementAllPlayers() {
-        super.faithTrackMovement();
         LorenzoPopeSpace();
     }
 

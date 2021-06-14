@@ -122,10 +122,6 @@ public class GameView {
         return decks.getRowColumn(cardID);
     }
 
-    public String getNickName(int viewID) {
-        return players.get(viewID).getNickName();
-    }
-
     public void increaseWarehouse(int viewID, Resource resource, int depot){
         players.get(viewID).increaseWarehouse(resource, depot-1);
     }

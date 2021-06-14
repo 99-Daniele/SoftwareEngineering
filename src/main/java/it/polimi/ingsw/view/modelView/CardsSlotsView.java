@@ -8,9 +8,9 @@ import java.util.LinkedList;
 
 public class CardsSlotsView {
 
-    private LinkedList<Integer> firstSlot;
-    private LinkedList<Integer> secondSlot;
-    private LinkedList<Integer> thirdSlot;
+    private final LinkedList<Integer> firstSlot;
+    private final LinkedList<Integer> secondSlot;
+    private final LinkedList<Integer> thirdSlot;
     private int firstLeaderCard;
     private boolean firstActive;
     private int secondLeaderCard;

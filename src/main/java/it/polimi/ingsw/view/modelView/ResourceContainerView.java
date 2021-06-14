@@ -43,8 +43,6 @@ public class ResourceContainerView {
         amount = 1;
     }
 
-    public void print(){};
-
     public void printCliWarehouse() {
         switch (resource) {
             case COIN:

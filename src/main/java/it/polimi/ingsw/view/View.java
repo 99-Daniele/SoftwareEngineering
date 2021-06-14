@@ -12,7 +12,7 @@ public interface View{
 
     void login(int viewID);
 
-    void allPlayerConnected(int position, int numPLayer, ArrayList<String> nickNames);
+    void allPlayerConnected(int position, ArrayList<String> nickNames);
 
     void startGame();
 

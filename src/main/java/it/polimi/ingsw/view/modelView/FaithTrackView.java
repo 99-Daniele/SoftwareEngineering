@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class FaithTrackView {
 
-    private ArrayList<String[][]> faithTracks;
+    private final ArrayList<String[][]> faithTracks;
 
     public FaithTrackView(int numPlayers, ArrayList<String> nickNames) {
         faithTracks = new ArrayList<>();
@@ -21,7 +21,7 @@ public class FaithTrackView {
         for(int y=0;y<51;y+=2) {
             if ((y>=10 && y<=14) || (y>=24 && y<=30 ) || (y>=38 && y<=46))
                 faithTrack[2][y]=ColorAnsi.ANSI_RED.escape()+"║"+ColorAnsi.RESET;
-            else if((y>=16 && y<=18) || (y>=32 && y<=34 ) || (y>=48 && y<=50))
+            else if(y >= 16 && y <= 18 || y >= 32 && y <= 34 || y >= 48)
                 faithTrack[2][y]=ColorAnsi.ANSI_YELLOW.escape()+"║"+ColorAnsi.RESET;
             else
                 faithTrack[2][y]="║";

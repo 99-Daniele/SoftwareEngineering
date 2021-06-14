@@ -162,7 +162,7 @@ class GameTest {
     }
 
     /**
-     * this test verifies if players have made all thier choices
+     * this test verifies if players have made all their choices
      */
     @Test
     void allPlayersReady(){
@@ -671,7 +671,7 @@ class GameTest {
     }
 
     /**
-     * this test verify the correct update of available slots after buy DevelomentCards
+     * this test verify the correct update of available slots after buy DevelopmentCards
      */
     @Test
     void findRightSlotsAfterBuyDevelopmentCard()

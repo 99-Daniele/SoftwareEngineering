@@ -19,5 +19,4 @@ public abstract class Marble implements Serializable {
 
     public abstract String toStringAbb();
 
-    public abstract String colorString();
 }

@@ -12,7 +12,7 @@ public class ServerSocket implements Runnable {
 
     private final Socket socket;
     private ControllerGame controllerGame;
-    private VirtualView virtualView;
+    private final VirtualView virtualView;
 
     public ServerSocket(Socket socket) throws IOException {
         this.socket = socket;
@@ -27,12 +27,12 @@ public class ServerSocket implements Runnable {
                     controllerGame = ControllerConnection.ConnectionPlayers();
                     controllerGame.addView(virtualView);
                     break;
-                } catch (FullGameException e) {}
+                } catch (FullGameException ignored) {}
             }
             virtualView.addObserver(controllerGame);
             virtualView.join();
             disconnect(virtualView.getNickname());
-        } catch (IOException | InterruptedException e) {
+        } catch (InterruptedException e) {
             disconnect(virtualView.getNickname());
         }
     }
@@ -42,7 +42,7 @@ public class ServerSocket implements Runnable {
             if (!socket.isClosed()) {
                 socket.close();
             }
-        } catch (IOException e) {
+        } catch (IOException ignored) {
         }
     }
 

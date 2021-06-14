@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.market;
 
 import it.polimi.ingsw.model.games.LightGame;
-import it.polimi.ingsw.view.CLI.ColorAnsi;
 
 /**
  * RedMarble is the Marble which increase player faith points by 1.
@@ -27,11 +26,6 @@ public class RedMarble extends Marble {
     @Override
     public String toStringAbb() {
         return "R";
-    }
-
-    @Override
-    public String colorString() {
-        return ColorAnsi.ANSI_RED.escape() + "RED" + ColorAnsi.RESET;
     }
 
 }

@@ -12,7 +12,6 @@ public abstract class Card implements CardView {
         this.cardID = cardID;
     }
 
-    @Override
     public int getVictoryPoints(){return victoryPoints;}
 
     @Override

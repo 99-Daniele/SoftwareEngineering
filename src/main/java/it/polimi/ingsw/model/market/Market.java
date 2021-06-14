@@ -92,7 +92,6 @@ public class Market implements Serializable, MarketView {
      *
      * @param selectedColumn this is the column where the caller wants all the marbles.
      * @return a vector of Marble.
-     * @throws WrongParametersException activated when the selectedColumn doesn't exist in the market.
      */
     public Marble[] getColumnMarbles(int selectedColumn) {
         Marble[] marketCopy = new Marble[row];
@@ -107,7 +106,6 @@ public class Market implements Serializable, MarketView {
      *
      * @param selectedRow this is the row where the caller wants all the marbles.
      * @return a vector of Marbles.
-     * @throws WrongParametersException activated when the selectedRow doesn't exist in the market.
      */
     public Marble[] getRowMarbles(int selectedRow) {
         Marble[] marketCopy = new Marble[column];
@@ -158,7 +156,7 @@ public class Market implements Serializable, MarketView {
     @Override
     public void printMarketCli() {
         System.out.println("\nMARKET:");
-        String s[] = new String[13];
+        String[] s = new String[13];
         int i = 0;
         for (int x = 0; x < 3; x++) {
             for (int y = 0; y < 4; y++) {
@@ -344,8 +342,7 @@ public class Market implements Serializable, MarketView {
     public void printMarbles(ArrayList<Marble> marbles) {
         String[] s = new String[marbles.size()];
         int i = 0;
-        for (int x = 0; x < marbles.size(); x++) {
-            Marble m = marbles.get(x);
+        for (Marble m : marbles) {
             s[i] = fromMarbleToString(m);
             i++;
         }

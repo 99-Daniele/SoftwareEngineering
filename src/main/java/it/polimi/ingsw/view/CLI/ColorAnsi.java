@@ -10,7 +10,7 @@ public enum ColorAnsi {
 
     public static final String RESET = "\u001B[0m";
 
-    private String escape;
+    private final String escape;
 
     ColorAnsi(String escape) {
         this.escape = escape;

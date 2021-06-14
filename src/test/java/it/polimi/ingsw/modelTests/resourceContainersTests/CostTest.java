@@ -13,8 +13,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CostTest {
 
-    Resource r1 = Resource.COIN;
-    Resource r2 = Resource.SERVANT;
+    final Resource r1 = Resource.COIN;
+    final Resource r2 = Resource.SERVANT;
 
     /**
      * this test verifies the correct calculation of the num of resource.
@@ -117,7 +117,7 @@ class CostTest {
         c.addResource(r1, 1);
         c.addResource(r2, 2);
 
-        assertTrue(w.increaseResource(r1) == 0);
+        assertEquals(0, w.increaseResource(r1));
         s.increaseResourceType(r1, 2);
         s.increaseResourceType(r2, 1);
 

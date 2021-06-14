@@ -8,7 +8,7 @@ import static java.util.Collections.swap;
 
 public class WarehouseStrongboxView {
 
-    private ArrayList<ResourceContainerView> depots;
+    private final ArrayList<ResourceContainerView> depots;
     private final ResourceContainerView coin;
     private final ResourceContainerView shield;
     private final ResourceContainerView servant;

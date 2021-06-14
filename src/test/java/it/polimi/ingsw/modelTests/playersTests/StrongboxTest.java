@@ -13,10 +13,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class StrongboxTest {
 
-    Resource r1 = Resource.COIN;
-    Resource r2 = Resource.SERVANT;
-    Resource r3 = Resource.STONE;
-    Resource r4 = Resource.SHIELD;
+    final Resource r1 = Resource.COIN;
+    final Resource r2 = Resource.SERVANT;
+    final Resource r3 = Resource.STONE;
+    final Resource r4 = Resource.SHIELD;
 
     /**
      * this test verifies the correct calculation of the num of resource.

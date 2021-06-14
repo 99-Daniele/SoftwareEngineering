@@ -14,9 +14,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayerBoardTest {
 
-    Resource r1 = Resource.COIN;
-    Resource r2 = Resource.SHIELD;
-    Resource r3 = Resource.STONE;
+    final Resource r1 = Resource.COIN;
+    final Resource r2 = Resource.SHIELD;
+    final Resource r3 = Resource.STONE;
 
     /**
      * this test tries to buy an expensive development card if there isn't any active DiscountCard
@@ -373,7 +373,6 @@ public class PlayerBoardTest {
 
         PlayerBoard p = new PlayerBoard("p1");
         Cost c = new Cost();
-        LeaderRequirements l = new LeaderRequirements();
         LeaderCard card = new AdditionalProductionPowerCard(r1, c, 1, 0);
         p.addLeaderCard(card, card);
         p.activateLeaderCard(1);
@@ -396,7 +395,6 @@ public class PlayerBoardTest {
         p.increaseWarehouse(r1);
 
         Cost c = new Cost();
-        LeaderRequirements l = new LeaderRequirements();
         LeaderCard card = new AdditionalProductionPowerCard(r1, c, 1, 0);
         p.addLeaderCard(card, card);
         p.activateLeaderCard(1);
@@ -654,7 +652,7 @@ public class PlayerBoardTest {
      * this test calculates the sum of resources amount in PlayerBoard
      */
     @Test
-    void sumTotalResource() throws InsufficientResourceException, NoSuchProductionPowerException {
+    void sumTotalResource() throws InsufficientResourceException {
 
         PlayerBoard p = new PlayerBoard("p1");
         assertEquals(0, p.sumTotalResource());

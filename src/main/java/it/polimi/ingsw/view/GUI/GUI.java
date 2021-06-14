@@ -10,7 +10,7 @@ import it.polimi.ingsw.view.GUI.sceneController.NicknameSceneController;
 import it.polimi.ingsw.view.GUI.sceneController.YourTurnSceneController;
 import javafx.application.Platform;
 import javafx.stage.Stage;
-import java.io.FileNotFoundException;
+
 import java.io.IOException;
 
 
@@ -47,7 +47,7 @@ public class GUI extends ClientView {
     }
 
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) {
         Platform.runLater(() -> {
             try {
                 if (connected) {
@@ -62,7 +62,7 @@ public class GUI extends ClientView {
     }
 
     @Override
-    public void stop() throws Exception {
+    public void stop() {
         endGame();
     }
 
@@ -75,7 +75,7 @@ public class GUI extends ClientView {
                 } else {
                     NicknameSceneController.waitPlayers();
                 }
-            } catch (NullPointerException e){}
+            } catch (NullPointerException ignored){}
         });
     }
 
@@ -100,11 +100,7 @@ public class GUI extends ClientView {
         MessageFourParameterInt m = (MessageFourParameterInt) message;
         Platform.runLater(() -> {
             SceneController.changeRootPane("/fxml/initScene");
-            try {
-                InitSceneController.askLeaders(m.getPar1(), m.getPar2(), m.getPar3(), m.getPar4());
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            InitSceneController.askLeaders(m.getPar1(), m.getPar2(), m.getPar3(), m.getPar4());
         });
     }
 
@@ -348,13 +344,7 @@ public class GUI extends ClientView {
         MessageArrayListMarble m = (MessageArrayListMarble) message;
         super.takeMarbleMessage(message);
         setCurrentState(GameStates.TAKE_MARBLE_STATE);
-        Platform.runLater(() -> {
-            try {
-                YourTurnSceneController.showMarbles(m.getMarbles());
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        });
+        Platform.runLater(() -> YourTurnSceneController.showMarbles(m.getMarbles()));
     }
 
     @Override
@@ -421,9 +411,7 @@ public class GUI extends ClientView {
         }
         else
             return;
-        Platform.runLater(() -> {
-            quitPhase(quitMessage);
-        });
+        Platform.runLater(() -> quitPhase(quitMessage));
     }
 
     @Override
@@ -438,9 +426,7 @@ public class GUI extends ClientView {
                     + m.getPar1() + " victory points and " + m.getPar2()
                     + " total resources.";
         }
-        Platform.runLater(() -> {
-            quitPhase(endMessage);
-        });
+        Platform.runLater(() -> quitPhase(endMessage));
     }
 
     @Override
@@ -611,10 +597,7 @@ public class GUI extends ClientView {
         SceneController.setDisable("#radiobutDiscardLeader", true);
         SceneController.setDisable("#radiobutEndProd", true);
         SceneController.setDisable("#radiobutEndTurn", true);
-        if(super.isGameStarted())
-            SceneController.setDisable("#radiobutOtherPlayboard", false);
-        else
-            SceneController.setDisable("#radiobutOtherPlayboard", true);
+        SceneController.setDisable("#radiobutOtherPlayboard", super.isGameStarted());
         SceneController.setVisible("#radiobutEndGame", true);
     }
 }

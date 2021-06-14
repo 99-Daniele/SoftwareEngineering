@@ -14,12 +14,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
-import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Objects;
 
 public class OpponentPlayerboardSceneController {
 
-    private int position;
+    private final int position;
 
     @FXML
     private Button goBack;
@@ -107,31 +107,27 @@ public class OpponentPlayerboardSceneController {
     }
 
     private void showPlayerboard(){
-        try {
-            setCard(leader1, ClientView.getLeaderCards(position).get(0));
-            setCard(leader2, ClientView.getLeaderCards(position).get(1));
-            setCard(slot11, ClientView.getSlotCards(position).get(0));
-            setCard(slot12, ClientView.getSlotCards(position).get(1));
-            setCard(slot13, ClientView.getSlotCards(position).get(2));
-            setCard(slot21, ClientView.getSlotCards(position).get(3));
-            setCard(slot22, ClientView.getSlotCards(position).get(4));
-            setCard(slot23, ClientView.getSlotCards(position).get(5));
-            setCard(slot31, ClientView.getSlotCards(position).get(6));
-            setCard(slot32, ClientView.getSlotCards(position).get(7));
-            setCard(slot33, ClientView.getSlotCards(position).get(8));
-            setFirstDepot();
-            setSecondDepot();
-            setThirdDepot();
-            setExtraDepot1();
-            setExtraDepot2();
-            setStrongbox();
-            setFaithPoints();
-            setVictoryPoints();
-            if(position == 0)
-                calamaio.setVisible(true);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        setCard(leader1, ClientView.getLeaderCards(position).get(0));
+        setCard(leader2, ClientView.getLeaderCards(position).get(1));
+        setCard(slot11, ClientView.getSlotCards(position).get(0));
+        setCard(slot12, ClientView.getSlotCards(position).get(1));
+        setCard(slot13, ClientView.getSlotCards(position).get(2));
+        setCard(slot21, ClientView.getSlotCards(position).get(3));
+        setCard(slot22, ClientView.getSlotCards(position).get(4));
+        setCard(slot23, ClientView.getSlotCards(position).get(5));
+        setCard(slot31, ClientView.getSlotCards(position).get(6));
+        setCard(slot32, ClientView.getSlotCards(position).get(7));
+        setCard(slot33, ClientView.getSlotCards(position).get(8));
+        setFirstDepot();
+        setSecondDepot();
+        setThirdDepot();
+        setExtraDepot1();
+        setExtraDepot2();
+        setStrongbox();
+        setFaithPoints();
+        setVictoryPoints();
+        if(position == 0)
+            calamaio.setVisible(true);
     }
 
     private void setImage(ImageView image, String file){
@@ -139,30 +135,30 @@ public class OpponentPlayerboardSceneController {
             image.setImage(null);
         else {
             InputStream fis = SceneController.class.getResourceAsStream(file);
-            image.setImage(new Image(fis));
+            image.setImage(new Image(Objects.requireNonNull(fis)));
         }
     }
 
-    private void setCard(ImageView image, int cardID) throws FileNotFoundException {
+    private void setCard(ImageView image, int cardID) {
         if (cardID != -1)
             setImage(image, CardMapGUI.getCard(cardID));
         else
             setImage(image, "");
     }
 
-    private void setFirstDepot() throws FileNotFoundException {
+    private void setFirstDepot() {
         if(ClientView.getWarehouse(position).get(0).getAmount() == 1)
             setImage(deposit11, ResourceMapGUI.getResource(ClientView.getWarehouse(position).get(0).getResource()));
     }
 
-    private void setSecondDepot() throws FileNotFoundException {
+    private void setSecondDepot() {
         if(ClientView.getWarehouse(position).get(1).getAmount() >= 1)
             setImage(deposit21, ResourceMapGUI.getResource(ClientView.getWarehouse(position).get(1).getResource()));
         if(ClientView.getWarehouse(position).get(1).getAmount() == 2)
             setImage(deposit22, ResourceMapGUI.getResource(ClientView.getWarehouse(position).get(1).getResource()));
     }
 
-    private void setThirdDepot() throws FileNotFoundException {
+    private void setThirdDepot() {
         if(ClientView.getWarehouse(position).get(2).getAmount() >= 1)
             setImage(deposit31, ResourceMapGUI.getResource(ClientView.getWarehouse(position).get(2).getResource()));
         if(ClientView.getWarehouse(position).get(2).getAmount() >= 2)
@@ -171,7 +167,7 @@ public class OpponentPlayerboardSceneController {
             setImage(deposit33, ResourceMapGUI.getResource(ClientView.getWarehouse(position).get(2).getResource()));
     }
 
-    private void setExtraDepot1() throws FileNotFoundException {
+    private void setExtraDepot1() {
         if(ClientView.getWarehouse(position).size() >= 4){
             if(ClientView.getWarehouse(position).get(3).getAmount() >= 1)
                 setImage(extraResource11, ResourceMapGUI.getResource(ClientView.getWarehouse(position).get(3).getResource()));
@@ -180,7 +176,7 @@ public class OpponentPlayerboardSceneController {
         }
     }
 
-    private void setExtraDepot2() throws FileNotFoundException {
+    private void setExtraDepot2() {
         if(ClientView.getWarehouse(position).size() == 5){
             if(ClientView.getWarehouse(position).get(4).getAmount() >= 1)
                 setImage(extraResource21, ResourceMapGUI.getResource(ClientView.getWarehouse(position).get(4).getResource()));

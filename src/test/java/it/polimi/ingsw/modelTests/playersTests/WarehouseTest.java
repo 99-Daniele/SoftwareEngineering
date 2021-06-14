@@ -8,16 +8,14 @@ import it.polimi.ingsw.model.resourceContainers.Cost;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class WarehouseTest {
 
-    Resource r1 = Resource.COIN;
-    Resource r2 = Resource.SERVANT;
-    Resource r3 = Resource.STONE;
-    Resource r4 = Resource.SHIELD;
+    final Resource r1 = Resource.COIN;
+    final Resource r2 = Resource.SERVANT;
+    final Resource r3 = Resource.STONE;
+    final Resource r4 = Resource.SHIELD;
 
     /**
      * this test verifies the correct construction of Warehouse

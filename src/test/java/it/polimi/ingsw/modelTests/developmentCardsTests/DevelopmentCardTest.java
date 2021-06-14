@@ -14,15 +14,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class DevelopmentCardTest {
     //indicate the cost to buy a card
-    Cost cost=new Cost();
+    final Cost cost=new Cost();
     //indicate the cost to activate a card.
-    Cost required=new Cost();
+    final Cost required=new Cost();
     //indicate the resources you receive when activating a card
-    Cost given=new Cost();
-    Warehouse warehouse=new Warehouse();
-    Strongbox strongbox=new Strongbox();
-    int cardID = 0;
-    DevelopmentCard developmentCard=new DevelopmentCard(Color.GREEN, 2, cost, 3, required, given, 3, cardID);
+    final Cost given=new Cost();
+    final Warehouse warehouse=new Warehouse();
+    final Strongbox strongbox=new Strongbox();
+    final int cardID = 0;
+    final DevelopmentCard developmentCard=new DevelopmentCard(Color.GREEN, 2, cost, 3, required, given, 3, cardID);
 
     /**
      * control if every get method in the class return the correct value.

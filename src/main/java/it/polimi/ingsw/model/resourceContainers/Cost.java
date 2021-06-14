@@ -2,8 +2,7 @@ package it.polimi.ingsw.model.resourceContainers;
 
 import it.polimi.ingsw.exceptions.InsufficientResourceException;
 
-import it.polimi.ingsw.model.player.Strongbox;
-import it.polimi.ingsw.model.player.Warehouse;
+import it.polimi.ingsw.model.player.*;
 
 import java.util.ArrayList;
 

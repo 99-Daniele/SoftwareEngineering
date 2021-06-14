@@ -55,7 +55,7 @@ public class ClientSocket extends Observable{
             threadOut = new Thread(() -> {
                 try {
                     receiveMessage();
-                } catch (InterruptedException | IOException e) {
+                } catch (IOException e) {
                     brutalDisconnection();
                 }
             });
@@ -75,7 +75,7 @@ public class ClientSocket extends Observable{
             long initTime = System.currentTimeMillis();
             synchronized (pingLock) {
                 pingLock.wait(30000);
-                if (isTimePassed(initTime, System.currentTimeMillis(), 30000))
+                if (isTimePassed(initTime, System.currentTimeMillis()))
                     throw new IOException();
             }
         }
@@ -84,7 +84,7 @@ public class ClientSocket extends Observable{
     /**
      * constantly wait for Server input and handle it by return a new message to Server or notifying other thread.
      */
-    private void receiveMessage() throws IOException, InterruptedException {
+    private void receiveMessage() throws IOException {
         while (true) {
             try {
                 Message returnMessage = (Message) in.readObject();
@@ -131,11 +131,10 @@ public class ClientSocket extends Observable{
     /**
      * @param initTime is the time in milliseconds from which start counting.
      * @param currentTime is the current time in milliseconds.
-     * @param delta is the delta to compare @param currentTime and @param initTime.
      * @return if @param delta seconds have passed.
      */
-    private boolean isTimePassed(long initTime, long currentTime, int delta){
-        return ((currentTime - initTime) >= delta);
+    private boolean isTimePassed(long initTime, long currentTime){
+        return ((currentTime - initTime) >= 30000);
     }
 
     public static void setDisconnected(){
@@ -150,14 +149,14 @@ public class ClientSocket extends Observable{
         try {
             in.close();
             out.close();
-        } catch (IOException | RuntimeException e) {
+        } catch (IOException | RuntimeException ignored) {
         }
     }
 
     private void brutalDisconnection(){
         try {
             TimeUnit.MILLISECONDS.sleep(100);
-        } catch (InterruptedException interruptedException) {
+        } catch (InterruptedException ignored) {
         }
         if(connected) {
             System.err.println("\nClient no longer connected to the Server");

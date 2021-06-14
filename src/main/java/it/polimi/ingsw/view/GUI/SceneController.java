@@ -16,14 +16,11 @@ import javafx.stage.Stage;
 
 import java.io.*;
 import java.net.URL;
+import java.util.Objects;
 
 public class SceneController {
 
     private static Scene scene;
-
-    public static Scene getScene() {
-        return scene;
-    }
 
     public static boolean isCurrentScene(String selector){
         try {
@@ -93,13 +90,13 @@ public class SceneController {
         textField.clear();
     }
 
-    public static void setImage(String selector, String file) throws FileNotFoundException {
+    public static void setImage(String selector, String file) {
         ImageView imageView = (ImageView) scene.lookup(selector);
         if(file.equals(""))
             imageView.setImage(null);
         else {
             InputStream fis = SceneController.class.getResourceAsStream(file);
-            imageView.setImage(new Image(fis));
+            imageView.setImage(new Image(Objects.requireNonNull(fis)));
         }
     }
 

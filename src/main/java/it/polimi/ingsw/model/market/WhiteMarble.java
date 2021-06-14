@@ -4,7 +4,6 @@ import it.polimi.ingsw.exceptions.AlreadyDiscardLeaderCardException;
 
 import it.polimi.ingsw.model.games.LightGame;
 import it.polimi.ingsw.model.cards.leaderCards.LeaderCard;
-import it.polimi.ingsw.view.CLI.ColorAnsi;
 
 /**
  * WhiteMarble is the Marble which can be converted into ResourceMable if player has at least one active WhiteConversionCard.
@@ -52,8 +51,4 @@ public class WhiteMarble extends Marble {
         return "W";
     }
 
-    @Override
-    public String colorString() {
-        return "WHITE" + ColorAnsi.RESET;
-    }
 }

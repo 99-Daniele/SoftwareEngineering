@@ -7,8 +7,8 @@ import java.util.ArrayList;
 public class PlayerBoardView {
 
     private final String nickName;
-    private WarehouseStrongboxView warehouseStrongboxView;
-    private CardsSlotsView cardsSlotsView;
+    private final WarehouseStrongboxView warehouseStrongboxView;
+    private final CardsSlotsView cardsSlotsView;
 
     public PlayerBoardView(String nickName) {
         this.nickName = nickName;

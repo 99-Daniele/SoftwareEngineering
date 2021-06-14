@@ -50,7 +50,7 @@ public class VirtualView extends Observable implements View, Observer{
         }
     }
 
-    public void join() throws InterruptedException, IOException {
+    public void join() throws InterruptedException {
         pingThread.join();
         inThread.join();
     }
@@ -133,7 +133,7 @@ public class VirtualView extends Observable implements View, Observer{
     }
 
     @Override
-    public void allPlayerConnected(int position, int numPLayer, ArrayList<String> nickNames) {
+    public void allPlayerConnected(int position, ArrayList<String> nickNames) {
         viewID = position;
         Message message = new MessageArrayListString(MessageType.PLAYERS, position, nickNames);
         sendMessage(message);
@@ -250,7 +250,7 @@ public class VirtualView extends Observable implements View, Observer{
         try {
             in.close();
             out.close();
-        } catch (IOException e) {
+        } catch (IOException ignored) {
         }
     }
 
@@ -272,6 +272,6 @@ public class VirtualView extends Observable implements View, Observer{
     private void waitAMoment(){
         try {
             TimeUnit.MILLISECONDS.sleep(100);
-        } catch (InterruptedException e) {}
+        } catch (InterruptedException ignored) {}
     }
 }

@@ -1,8 +1,6 @@
 package it.polimi.ingsw.view.GUI.sceneController;
 
 import it.polimi.ingsw.App;
-import it.polimi.ingsw.network.client.ClientSocket;
-import it.polimi.ingsw.view.GUI.GUI;
 import it.polimi.ingsw.view.GUI.SceneController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -12,8 +10,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
-import java.util.concurrent.ExecutionException;
 
 
 public class ConnectionSceneController{
@@ -31,16 +27,10 @@ public class ConnectionSceneController{
 
     @FXML
     public void initialize(){
-        connect.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-            try {
-                connectButton();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+        connect.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> connectButton());
     }
 
-    private void connectButton() throws IOException {
+    private void connectButton() {
         try {
             String address = serverAddress.getText();
             int portNumber;

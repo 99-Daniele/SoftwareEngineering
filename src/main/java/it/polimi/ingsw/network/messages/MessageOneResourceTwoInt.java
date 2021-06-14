@@ -5,7 +5,7 @@ import it.polimi.ingsw.model.resourceContainers.Resource;
 public class MessageOneResourceTwoInt extends Message{
 
     private Resource resource;
-    private int par1;
+    private final int par1;
     private int par2;
 
     public MessageOneResourceTwoInt(MessageType messageType, int clientID, Resource resource, int par1, int par2) {

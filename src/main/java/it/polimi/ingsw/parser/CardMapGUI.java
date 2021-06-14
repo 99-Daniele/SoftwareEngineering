@@ -5,7 +5,7 @@ import java.util.HashMap;
 public class CardMapGUI {
 
     private static CardMapGUI cardParser;
-    private static HashMap<Integer, String> cardMap = new HashMap<>();
+    private static final HashMap<Integer, String> cardMap = new HashMap<>();
 
     private CardMapGUI() {
         cardMap.put(1, "/photos/Masters of Renaissance_Cards_FRONT_3mmBleed_1-1-1.png");

@@ -14,8 +14,6 @@ public interface GameState {
 
     boolean isRightState (GameStates state);
 
-    ArrayList<LeaderCard> getLeaderCards(int position);
-
     Strongbox getStrongbox();
 
     void setStrongbox(Strongbox s);

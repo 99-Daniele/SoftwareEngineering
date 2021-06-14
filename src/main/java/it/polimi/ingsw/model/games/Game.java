@@ -10,6 +10,7 @@ import it.polimi.ingsw.model.resourceContainers.Resource;
 import it.polimi.ingsw.exceptions.*;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -119,7 +120,7 @@ public class Game extends Observable implements LightGame{
                 } catch (EmptyDevelopmentCardDeckException e) {
                     e.printStackTrace();
                 }
-                currentDeckCards.add(card.getCardID());
+                currentDeckCards.add(Objects.requireNonNull(card).getCardID());
             }
         }
         Message m = new MessageArrayListInt(MessageType.DECKBOARD, currentPlayer, currentDeckCards);
@@ -258,6 +259,7 @@ public class Game extends Observable implements LightGame{
      * at the end if there are any discarded marbles, increase faith points of other players by the amount of them and
      * calls fatihTrackMovementExceptCurrentPlayer() method.
      */
+    @SuppressWarnings("JavaDoc")
     public Marble[] takeMarketMarble(boolean isRow, int choice){
         Marble [] marbles;
         if(isRow) {
@@ -358,7 +360,6 @@ public class Game extends Observable implements LightGame{
      * the player is in or beyond the pope space.
      * if it's true it increases the victory points of all the players in the vatican section.
      */
-    @Override
     public void faithTrackMovement(){
         faithTrack.victoryPointsFaithTrack(players.get(currentPlayer).getVictoryPoints(), players.get(currentPlayer).getFaithPoints());
         if(faithTrack.reachPope(players.get(currentPlayer).getFaithPoints())){
@@ -434,7 +435,6 @@ public class Game extends Observable implements LightGame{
      * the players are in or beyond the pope space.
      * if it's true it increases the victory points of all the players in the vatican section.
      */
-    @Override
     public void faithTrackMovementAllPlayers(){
         int flag = -1;
         for(int i = 0; i < players.size(); i++) {
@@ -600,7 +600,7 @@ public class Game extends Observable implements LightGame{
         } catch (AlreadyDiscardLeaderCardException e) {
             e.printStackTrace();
         }
-        if(r!=leaderCard.getResource()) {
+        if(r!= Objects.requireNonNull(leaderCard).getResource()) {
             int par=players.get(currentPlayer).getWarehouse().getNumOfResource(r);
             int par1=players.get(currentPlayer).getStrongbox().getNumOfResource(r);
             message = new MessageOneResourceTwoInt(MessageType.RESOURCE_AMOUNT, currentPlayer,r,par,par1);
@@ -784,12 +784,6 @@ public class Game extends Observable implements LightGame{
      */
     public int getNumOfPlayers(){
         return numOfPlayers;
-    }
-
-    public void LorenzoFaithTrackMovement(int faithPoints){
-        Message message=new MessageOneParameterInt(MessageType.FAITH_POINTS_INCREASE,1, faithPoints);
-        setChanged();
-        notifyObservers(message);
     }
 
     public void discardNotify(Deck colorDeck){

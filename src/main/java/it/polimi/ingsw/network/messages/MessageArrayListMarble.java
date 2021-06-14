@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class MessageArrayListMarble extends Message{
 
-    private ArrayList<Marble> marbles;
+    private final ArrayList<Marble> marbles;
 
     public MessageArrayListMarble(MessageType messageType, int clientID, ArrayList<Marble> marbles) {
         super(messageType, clientID);

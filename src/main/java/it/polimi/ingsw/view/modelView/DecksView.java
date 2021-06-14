@@ -6,9 +6,9 @@ import java.util.*;
 
 public class DecksView {
 
-    private List<Integer> firstLevelCards;
-    private List<Integer> secondLevelCards;
-    private List<Integer> thirdLevelCards;
+    private final List<Integer> firstLevelCards;
+    private final List<Integer> secondLevelCards;
+    private final List<Integer> thirdLevelCards;
 
     public DecksView(ArrayList<Integer> initialCards){
         firstLevelCards =  initialCards.subList(0, 4);

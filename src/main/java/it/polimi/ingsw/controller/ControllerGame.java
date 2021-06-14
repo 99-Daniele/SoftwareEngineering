@@ -294,7 +294,7 @@ public class ControllerGame implements Observer {
                 }
                 ControllerConnection.newGame();
                 views.get(0).ok();
-            } catch (AlreadyTakenNicknameException e) {}
+            } catch (AlreadyTakenNicknameException ignored) {}
         }
     }
 
@@ -323,7 +323,7 @@ public class ControllerGame implements Observer {
      * sends to each players an ordered list of nickNames of other player.
      */
     public void sendNickNames(int player, int numPlayers, ArrayList<String> nickNames){
-        views.get(player).allPlayerConnected(player, numPlayers, nickNames);
+        views.get(player).allPlayerConnected(player, nickNames);
     }
 
     /**

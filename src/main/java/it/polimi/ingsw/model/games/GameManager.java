@@ -158,7 +158,7 @@ public class GameManager {
             throw new IllegalStateException();
         if (!InputController.takenMarblesCheck(choice, index))
             throw new WrongParametersException();
-        boolean row = choice == 0 ? true : false;
+        boolean row = choice == 0;
         Marble[] marbles = game.takeMarketMarble(row, index);
         currentState.nextState(this, MessageType.USE_MARBLE);
         currentState.setMarbles(marbles);
@@ -188,7 +188,7 @@ public class GameManager {
                 currentState.setLeaderCards(whiteConversionCards);
                 currentState.setMarbles(remainingMarbles);
                 controllerGame.choseWhiteConversionCard(game.getCurrentPosition(), whiteConversionCards);
-            } catch (AlreadyDiscardLeaderCardException e) {}
+            } catch (AlreadyDiscardLeaderCardException ignored) {}
             return false;
         }
     }

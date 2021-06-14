@@ -7,7 +7,7 @@ import java.util.LinkedList;
  */
 public class ControllerConnection {
 
-    private static LinkedList<ControllerGame> controllerGames = new LinkedList<>();
+    private static final LinkedList<ControllerGame> controllerGames = new LinkedList<>();
     private static final Object lock = new Object();
 
     /**

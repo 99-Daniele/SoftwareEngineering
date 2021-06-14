@@ -126,7 +126,7 @@ public class CLI extends ClientView{
             try {
                 username();
                 choseLeaderCards();
-            } catch (IOException | InterruptedException e) {
+            } catch (IOException | InterruptedException ignored) {
             }
         });
         inputThread.start();
@@ -359,7 +359,7 @@ public class CLI extends ClientView{
                     break;
             }
         }
-        BufferedReader br = new BufferedReader(new FileReader(file));
+        BufferedReader br = new BufferedReader(new FileReader(Objects.requireNonNull(file)));
         String line;
         while ((line = br.readLine()) != null) {
             System.out.println(line);
@@ -1059,7 +1059,7 @@ public class CLI extends ClientView{
                 serverMessage = "Ludovico has increased his faith points. Now it has " + m.getPar();
             else
                 serverMessage = "Player " + getNickname(m.getClientID()) + " has increased its faith points. Now it has " + m.getPar();
-            if(super.isGameStarted())
+            if(!super.isGameStarted())
                 System.out.println(serverMessage);
             else
                 addServerMessage(serverMessage);
@@ -1076,7 +1076,7 @@ public class CLI extends ClientView{
             if(m.getClientID() != position) {
                 serverMessage = "Player " + getNickname(m.getClientID()) + " has inserted 1 " + Resource.printResource(m.getResource())
                         + " in its " + m.getPar1() + "° depot";
-                if(super.isGameStarted())
+                if(!super.isGameStarted())
                     System.out.println(serverMessage);
                 else
                     addServerMessage(serverMessage);
@@ -1087,7 +1087,7 @@ public class CLI extends ClientView{
         else if(m.getClientID() != position) {
             serverMessage = "Player " + getNickname(m.getClientID()) + " has discarded 1 " + Resource.printResource(m.getResource())
                     + " marble";
-            if(super.isGameStarted())
+            if(!super.isGameStarted())
                 System.out.println(serverMessage);
             else
                 addServerMessage(serverMessage);

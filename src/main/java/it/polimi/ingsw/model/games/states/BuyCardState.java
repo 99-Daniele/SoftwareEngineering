@@ -29,11 +29,6 @@ public class BuyCardState implements GameState {
     }
 
     @Override
-    public ArrayList<LeaderCard> getLeaderCards(int position) {
-        return null;
-    }
-
-    @Override
     public Strongbox getStrongbox() {
         return null;
     }

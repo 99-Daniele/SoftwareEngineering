@@ -10,7 +10,7 @@ import java.util.HashMap;
 public class CardMapCLI {
 
     private static CardMapCLI cardParser;
-    private static HashMap<Integer, CardView> cardMap = new HashMap<>();
+    private static final HashMap<Integer, CardView> cardMap = new HashMap<>();
 
     private CardMapCLI() {
         DevelopmentCardsParser developmentCardsParser = new DevelopmentCardsParser();

@@ -6,12 +6,8 @@ import it.polimi.ingsw.view.CLI.CLI;
 import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.GUI.GUI;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.concurrent.ExecutionException;
 
 public class App {
 
@@ -51,7 +47,7 @@ public class App {
         client.addObserver(clientView);
     }
 
-    public static void startClient(String hostname, int port) throws UnknownHostException, IOException {
+    public static void startClient(String hostname, int port) throws IOException {
         client.start(new Socket(hostname, port));
     }
 }

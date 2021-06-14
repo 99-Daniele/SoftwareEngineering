@@ -1,6 +1,5 @@
 package it.polimi.ingsw.parser;
 
-import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 
 import java.util.HashMap;
@@ -8,7 +7,7 @@ import java.util.HashMap;
 public class ResourceMapGUI {
 
     private static ResourceMapGUI resourceParser;
-    private static HashMap<Resource, String> resourceMap = new HashMap<>();
+    private static final HashMap<Resource, String> resourceMap = new HashMap<>();
 
     private ResourceMapGUI(){
         resourceMap.put(Resource.COIN, "/photos/coin.png");

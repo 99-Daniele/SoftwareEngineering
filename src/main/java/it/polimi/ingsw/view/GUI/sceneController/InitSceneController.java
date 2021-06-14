@@ -13,7 +13,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class InitSceneController{
@@ -78,7 +77,7 @@ public class InitSceneController{
         start.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> startButton());
     }
 
-    public static void askLeaders(int card1, int card2, int card3, int card4) throws FileNotFoundException{
+    public static void askLeaders(int card1, int card2, int card3, int card4) {
         SceneController.setImage("#leader1", CardMapGUI.getCard(card1));
         SceneController.setImage("#leader2", CardMapGUI.getCard(card2));
         SceneController.setImage("#leader3", CardMapGUI.getCard(card3));

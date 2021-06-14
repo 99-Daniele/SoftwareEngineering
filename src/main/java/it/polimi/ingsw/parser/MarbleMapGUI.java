@@ -7,7 +7,7 @@ import java.util.HashMap;
 public class MarbleMapGUI {
 
     private static MarbleMapGUI marbleParser;
-    private static HashMap<String, String> marbleMap = new HashMap<>();
+    private static final HashMap<String, String> marbleMap = new HashMap<>();
     private MarbleMapGUI(){
         marbleMap.put("RED","/photos/rossa.png");
         marbleMap.put("PURPLE","/photos/viola.png");

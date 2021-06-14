@@ -9,6 +9,4 @@ public interface CardView {
     int getCardID();
 
     int getLevel();
-
-    int getVictoryPoints();
 }
