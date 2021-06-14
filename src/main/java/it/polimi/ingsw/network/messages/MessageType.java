@@ -41,6 +41,5 @@ public enum MessageType {
     PING,
     PONG,
     OK,
-    ERR,
-    EXIT
+    ERR
 }

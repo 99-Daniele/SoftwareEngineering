@@ -19,6 +19,7 @@ public abstract class ClientView extends Application implements Observer {
 
     private static Game_View game;
     private static GAME_STATES currentState;
+    private static ArrayList<String> serverMessages = new ArrayList<>();
 
     public ClientView() {
         game = new Game_View();
@@ -56,6 +57,14 @@ public abstract class ClientView extends Application implements Observer {
 
     public static void setCurrentState(GAME_STATES currentState) {
         ClientView.currentState = currentState;
+    }
+
+    public static ArrayList<String> getServerMessages() {
+        return serverMessages;
+    }
+
+    public static void addServerMessage(String message){
+        serverMessages.add(0, message);
     }
 
     public int[] getRowColumn(int cardID){
@@ -223,9 +232,6 @@ public abstract class ClientView extends Application implements Observer {
                     break;
                 case ERR:
                     error_message(returnMessage);
-                    break;
-                case EXIT:
-                    disconnectMessage();
                     break;
                 default:
                     System.err.println("\nUnexpected message from Server.");
@@ -428,5 +434,4 @@ public abstract class ClientView extends Application implements Observer {
 
     public abstract void already_discard_error();
 
-    public abstract void disconnectMessage();
 }
