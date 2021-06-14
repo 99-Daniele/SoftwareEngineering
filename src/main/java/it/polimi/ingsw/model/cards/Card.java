@@ -2,6 +2,9 @@ package it.polimi.ingsw.model.cards;
 
 import it.polimi.ingsw.view.modelView.CardView;
 
+/**
+ * Card is the abstract class which is inherited by DevelopmentCard or LeaderCard.
+ */
 public abstract class Card implements CardView {
 
     private final int victoryPoints;

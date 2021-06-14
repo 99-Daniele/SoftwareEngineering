@@ -49,23 +49,25 @@ public class DevelopmentCard extends Card {
     }
 
     /**
-     * this method allows to buy a new card from the deck.
      * @param w is player's warehouse.
      * @param s is player's strongbox.
      * @param choice if 1, indicate that the resources in warehouse will be the first to be decreased. Else, strongbox is the first.
      * @throws InsufficientResourceException thrown when there aren't enough resources.
+     *
+     * this method allows to buy a new card from the deck.
      */
     public void buyCard(Warehouse w, Strongbox s, int choice) throws InsufficientResourceException {
         controlDiscardResource(w,s,choice,false);
     }
 
     /**
-     * this method active the production of a this card.
      * @param w is player's warehouse.
      * @param s is player's strongbox.
      * @param choice if 1, indicate that the resources in warehouse will be the first to be decreased. Else, strongbox is the first.
      * @return the faith points of the card.
      * @throws InsufficientResourceException thrown when there aren't enough resources.
+     *
+     * this method active the production of a this card.
      */
     public int activateProduction(Warehouse w, Strongbox s, int choice) throws InsufficientResourceException{
         controlDiscardResource(w,s,choice,true);
@@ -74,7 +76,8 @@ public class DevelopmentCard extends Card {
     }
 
     /**
-     *
+     * @param s is a strongbox which summarize all resources of production powers given to the player.
+     * @return how many faith points are given by the production power.
      */
     public int increaseProductionResource(Strongbox s){
         productionPowerResourceGiven.increaseResource(s);
@@ -82,12 +85,13 @@ public class DevelopmentCard extends Card {
     }
 
     /**
-     * this method control if there are enough resources in warehouse or strongbox. If yes, discard the resources.
      * @param w is player's warehouse.
      * @param s is player's strongbox.
      * @param choice if 1, indicate that the resources in warehouse will be the first to be decreased. Else, strongbox is the first.
      * @param isPowerProduction if true indicate that i want to active a card. Else, i want to buy a card.
      * @throws InsufficientResourceException thrown when there aren't enough resources.
+     *
+     * this method control if there are enough resources in warehouse or strongbox. If yes, discard the resources.
      */
     public void controlDiscardResource(Warehouse w, Strongbox s, int choice, boolean isPowerProduction)
             throws InsufficientResourceException {
@@ -98,9 +102,10 @@ public class DevelopmentCard extends Card {
     }
 
     /**
-     * this method allows to decrease by 1 unit the amount of a selected resource.
      * @param resource the specific resource.
      * @return true if the operation of decreasing by 1 unit a selected resource is successful, else false.
+     *
+     * this method allows to decrease by 1 unit the amount of a selected resource.
      */
     public boolean discount(Resource resource){
         if(resourceCost.getNumOfResource(resource) > 0) {
@@ -111,8 +116,9 @@ public class DevelopmentCard extends Card {
     }
 
     /**
-     * this method allows to increase by 1 unit the amount of a selected resource.
      * @param resource indicates the resource that i want to decrease the amount of.
+     *
+     * this method allows to increase by 1 unit the amount of a selected resource.
      */
     public void recount(Resource resource){
         resourceCost.recount(resource);
@@ -130,6 +136,9 @@ public class DevelopmentCard extends Card {
         return resourceCost;
     }
 
+    /**
+     * CLI representation of Development Card.
+     */
     @Override
     public void print() {
         System.out.println("\nDEVELOPMENT_CARD:\nCOLOR: " + Color.print(color) + "\nLEVEL: " + level +
@@ -139,6 +148,9 @@ public class DevelopmentCard extends Card {
         super.print();
     }
 
+    /**
+     * CLI representation of small info of Development Card
+     */
     @Override
     public void printSmallInfo() {
         System.out.println("\nCOLOR: " + Color.print(color));

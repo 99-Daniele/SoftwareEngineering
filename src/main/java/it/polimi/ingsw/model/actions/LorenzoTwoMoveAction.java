@@ -9,6 +9,7 @@ public class LorenzoTwoMoveAction extends Action {
 
     /**
      * @param game is SinglePlayerGame.
+     *
      * this method move ludovico in FaithTrack by 2 and move the action to last position.
      */
     @Override

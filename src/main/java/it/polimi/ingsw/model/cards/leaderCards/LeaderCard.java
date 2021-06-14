@@ -24,8 +24,9 @@ public abstract class LeaderCard extends Card {
      * @param resource stands for the effect resource of this card.
      * @param resourceCost stands for the resources required to activate the card.
      * @param victoryPoints stands for the victory given by activating this card.
-     * activate is initialized at false.
      * @param cardID is the cardID.
+     *
+     * active is initialized at false.
      */
     public LeaderCard(Resource resource, Cost resourceCost, int victoryPoints, int cardID) {
         super(victoryPoints, cardID);
@@ -38,8 +39,9 @@ public abstract class LeaderCard extends Card {
      * @param resource stands for the effect resource of this card.
      * @param leaderRequirements stands for the resources required to activate the card.
      * @param victoryPoints stands for the victory given by activating this card.
-     * activate is initialized at false.
      * @param cardID is the cardID.
+     *
+     * active is initialized at false.
      */
     public LeaderCard(Resource resource, LeaderRequirements leaderRequirements, int victoryPoints, int cardID) {
         super(victoryPoints, cardID);this.resource = resource;
@@ -65,13 +67,13 @@ public abstract class LeaderCard extends Card {
         return active;
     }
 
-
     /**
      * @param w is player's warehouse.
      * @param s is player's strongbox.
      * @param l summarizes player's development cards.
      * @throws InsufficientResourceException if player has not enough resources.
      * @throws InsufficientCardsException if player has not enough cards.
+     *
      * this method only evaluates if player has enough resources or enough cards, based on leaderCard requirement,
      * without doing anything.
      */
@@ -103,6 +105,7 @@ public abstract class LeaderCard extends Card {
      * @param choice is player's choice about which between warehouse and strongbox has priority to be decreased.
      * @param resource is player's choice about the extra resource given.
      * @return 0 in standard method.
+     *
      * this is the standard method of additionalProductionPower() which will be @Override by the specific card.
      */
     public int additionalProductionPower(Warehouse w, Strongbox s, int choice, Resource resource) throws InsufficientResourceException, NoSuchProductionPowerException {
@@ -114,6 +117,7 @@ public abstract class LeaderCard extends Card {
      * @param s is player's strongbox.
      * @param choice is player's choice about which between warehouse and strongbox has priority to be decreased.
      * @throws InsufficientResourceException if player has not enough resources.
+     *
      * this is the standard method of decreaseProductionPowerResources() which will be @Override by the specific card.
      */
     public void decreaseProductionPowerResources(Warehouse w, Strongbox s, int choice) throws InsufficientResourceException, NoSuchProductionPowerException {
@@ -122,6 +126,7 @@ public abstract class LeaderCard extends Card {
 
     /**
      * @return false in standard method.
+     *
      * this is the standard method of whiteConversion() which will be @Override by the specific card.
      */
     public boolean whiteConversion(){
@@ -131,6 +136,7 @@ public abstract class LeaderCard extends Card {
     /**
      * @param card is DevelopmentCard to be decreased by 1.
      * @return false in standard method.
+     *
      * this is the standard method of discount() which will be @Override by the specific card.
      */
     public boolean discount(DevelopmentCard card){
@@ -139,10 +145,14 @@ public abstract class LeaderCard extends Card {
 
     /**
      * @param card is DevelopmentCard to be increased by 1.
+     *
      * this is the standard method of recount() which will be @Override by the specific card.
      */
     public void recount(DevelopmentCard card){}
 
+    /**
+     * CLI representation of Leader Card.
+     */
     @Override
     public void print() {
         System.out.println("RESOURCE: " + fromResourceToString(resource));
@@ -153,6 +163,10 @@ public abstract class LeaderCard extends Card {
         super.print();
     }
 
+    /**
+     * @param r is one resource.
+     * @return Warehouse resource CLI representation.
+     */
     private String fromResourceToString(Resource r){
         switch (r){
             case COIN:

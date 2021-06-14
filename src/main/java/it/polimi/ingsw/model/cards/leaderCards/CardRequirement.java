@@ -86,6 +86,9 @@ public class CardRequirement {
         return true;
     }
 
+    /**
+     * @return CLI representation of Card Requirement
+     */
     @Override
     public String toString() {
         String s1 = numOfCards + "";

@@ -62,7 +62,7 @@ public class GameManager {
     public void startGame(){
         controllerGame.startGame();
         for(int i = 0; i < game.getNumOfPlayers(); i++){
-            controllerGame.sendNickNames(i, game.getNumOfPlayers(), game.getPlayersNickname());
+            controllerGame.sendNickNames(i, game.getPlayersNickname());
         }
         for(int i = 0; i < game.getNumOfPlayers(); i++){
             controllerGame.sendLeaderCards(i, game.casualLeaderCards());

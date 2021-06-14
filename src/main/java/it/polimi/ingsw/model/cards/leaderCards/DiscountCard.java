@@ -30,13 +30,13 @@ public class DiscountCard extends LeaderCard {
 
     /**
      * @param card is DevelopmentCard to be increased by 1.
+     *
      * this method can only be called after a discount() call.
      */
     @Override
     public void recount(DevelopmentCard card) {
        card.recount(this.getResource());
     }
-
 
     @Override
     public void print() {

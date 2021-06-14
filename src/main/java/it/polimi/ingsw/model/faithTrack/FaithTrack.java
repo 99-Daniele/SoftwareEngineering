@@ -53,9 +53,10 @@ public class FaithTrack {
     }
 
     /**
-     * method that set the value of my victory points related the position in the faith track.
      * @param victoryPoints are the victory points of the player.
      * @param playerFaithPoints are the player's faith points which describe the position in the faith track.
+     *
+     * method that set the value of my victory points related the position in the faith track.
      */
     public void victoryPointsFaithTrack(VictoryPoints victoryPoints, int playerFaithPoints){
         for(Section section:faithTrackVictoryPointsSection)
@@ -68,9 +69,10 @@ public class FaithTrack {
     }
 
     /**
-     * method that increase my victory points if i am in or beyond the vatican section and there is the pope.
      * @param victoryPoints are the victory points of the player.
      * @param playerFaithTrackPoints are the player's faith points which describe the position in the faith track.
+     *
+     * method that increase my victory points if i am in or beyond the vatican section and there is the pope.
      */
     public void victoryPointsVaticanReport (VictoryPoints victoryPoints, int playerFaithTrackPoints){
         if(remainingPopes!=0)
@@ -80,7 +82,6 @@ public class FaithTrack {
     }
 
     /**
-     *
      * @param FaithTrackPoints are the player's faith points which describe the position in the faith track.
      * @return true if in or beyond pope space.
      */

@@ -29,6 +29,7 @@ public class ExtraDepotCard extends LeaderCard {
      * @param l summarizes player's development cards.
      * @throws InsufficientResourceException if player has not enough resources.
      * @throws InsufficientCardsException if player has not enough cards.
+     *
      * this method firstly calls the super method activateCard() and then, if not exceptions are thrown, create a new
      * ExtraDepot in player's warehouse.
      */

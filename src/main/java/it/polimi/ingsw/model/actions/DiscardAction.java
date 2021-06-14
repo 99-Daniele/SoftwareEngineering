@@ -16,6 +16,7 @@ public class DiscardAction extends Action {
 
     /**
      * @param game is a SinglePlayerGame.
+     *
      * this method discard the two lowest level cards with this.color and move the action to last position.
      */
     @Override

@@ -59,6 +59,7 @@ public class ControllerGame implements Observer {
     /**
      * @param view is a new view tries to connect to ControllerGame.
      * @throws FullGameException if Game has fulled its number of players.
+     *
      * add @param view to views, and if player has already chose his nickName, create a new player.
      */
     public synchronized void addView(View view) throws FullGameException{
@@ -73,6 +74,7 @@ public class ControllerGame implements Observer {
     /**
      * @param view is the view of disconnecting player.
      * @param nickName is the nickName of the player.
+     *
      * delete player from Game and from views, and if there are no remaining views, reset ControllerGame.
      */
     public synchronized void removeView(View view, String nickName) {
@@ -90,6 +92,7 @@ public class ControllerGame implements Observer {
     /**
      * @param view is the view of disconnecting player.
      * @param nickName is the nickName of the player.
+     *
      * if player disconnect before game started, only informs other player. Instead, if player has already started,
      * informs player to disconnect.
      */
@@ -119,6 +122,7 @@ public class ControllerGame implements Observer {
     /**
      * @param o is one view observed by ControllerGame.
      * @param arg is one message from player.
+     *
      * updates when player send one message to Server. If game is already started, firstly valuates if its effectively player's
      * turn, and then proceeds to handle his request.
      */
@@ -258,6 +262,7 @@ public class ControllerGame implements Observer {
      * @param view is player's view trying to logging in.
      * @param nickName is player's chosen nickName.
      * @throws AlreadyTakenNicknameException if nickName was already taken by another player.
+     *
      * If it's the first player, simply send a LOGIN message with clientID as 0. Otherwise create the player and then
      * sends a login message to player.
      */
@@ -274,6 +279,7 @@ public class ControllerGame implements Observer {
      * @param numPlayerMessage is a message of NUM_PLAYERS.
      * @throws WrongParametersException if player has chosen a wrong number of players.
      * @throws IllegalStateException if player has send this message during a wrong phases.
+     *
      * creates a new GameManager and a new TurnController of @param numPlayers and adds the first player to game.
      */
     public synchronized void newGame(Message numPlayerMessage)
@@ -318,17 +324,18 @@ public class ControllerGame implements Observer {
 
     /**
      * @param player is one player.
-     * @param numPlayers is the num of players.
      * @param nickNames are players nickNames.
+     *
      * sends to each players an ordered list of nickNames of other player.
      */
-    public void sendNickNames(int player, int numPlayers, ArrayList<String> nickNames){
+    public void sendNickNames(int player, ArrayList<String> nickNames){
         views.get(player).allPlayerConnected(player, nickNames);
     }
 
     /**
      * @param player is one player.
      * @param leaderCards are 4 casual leaderCards.
+     *
      * sends to each player 4 different casual leaderCards.
      */
     public void sendLeaderCards(int player, ArrayList<LeaderCard> leaderCards){
@@ -338,6 +345,7 @@ public class ControllerGame implements Observer {
 
     /**
      * @param m is one TURN message.
+     *
      * answers player with a new TURN message specifying if it's his turn or not.
      */
     public void isMyTurn(Message m) {
@@ -380,7 +388,8 @@ public class ControllerGame implements Observer {
 
     /**
      * @param message is message with player's chosen first resource.
-     * @throws IllegalStateException if player has send this message during a wrong phases or if this message has been
+     * @throws IllegalStateException if player has send this message during a wrong phases or if this message has been.
+     *
      * sent by the first or fourth player.
      */
     private void oneResourceHandle(Message message) throws IllegalStateException {
@@ -394,7 +403,8 @@ public class ControllerGame implements Observer {
 
     /**
      * @param message is message with player's chosen first two resource.
-     * @throws IllegalStateException if player has send this message during a wrong phases or if this message has been
+     * @throws IllegalStateException if player has send this message during a wrong phases or if this message has been.
+     *
      * sent by the first, second or third player.
      */
     private void twoResourceHandle(Message message) throws IllegalStateException {
@@ -605,6 +615,7 @@ public class ControllerGame implements Observer {
 
     /**
      * @throws IllegalStateException if player has send this message during a wrong phases.
+     *
      * if game is ended, proceeds to end game procedure, otherwise go to the next turn.
      */
     private void endTurnHandler() throws IllegalStateException {
@@ -618,6 +629,7 @@ public class ControllerGame implements Observer {
     /**
      * @param errorType is the type of error committed by player.
      * @param viewID is the player.
+     *
      * send to player an error message.
      */
     private void errorHandler(ErrorType errorType, int viewID){

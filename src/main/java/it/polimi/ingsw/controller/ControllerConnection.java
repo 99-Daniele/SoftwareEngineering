@@ -13,6 +13,7 @@ public class ControllerConnection {
     /**
      * @return the matched ControllerGame
      * @throws InterruptedException if a waiting thread is interrupted.
+     *
      * When a view tries to connect to Server, the ControllerConnection finds if there is any game where the number of
      * player is not maxed, or if there is any game where the number of players has not yet been chosen.
      */

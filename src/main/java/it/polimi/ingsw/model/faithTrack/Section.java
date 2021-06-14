@@ -29,9 +29,10 @@ public class Section {
     }
 
     /**
-     * method that return if the player is in the section.
      * @param playerFaithPoints is the value of the player's faith points.
      * @return a boolean that is true if the value of the player's faith points is inside the section or false if not.
+     *
+     * method that return if the player is in the section.
      */
     public boolean isPlayerInSection(int playerFaithPoints){
         return playerFaithPoints >= firstSpace && playerFaithPoints <= lastSpace;

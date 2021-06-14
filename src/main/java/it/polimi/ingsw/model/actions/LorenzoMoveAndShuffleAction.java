@@ -9,6 +9,7 @@ public class LorenzoMoveAndShuffleAction extends Action {
 
     /**
      * @param game is SinglePlayerGame.
+     *
      * this method move ludovico in FaithTrack by 1 and shuffle actions.
      */
     @Override

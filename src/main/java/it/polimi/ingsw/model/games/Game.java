@@ -55,7 +55,7 @@ public class Game extends Observable implements LightGame{
     }
 
     /**
-     * this method method creates all 12 decks and all 48 DevelopmentCards parsing by Json file.
+     * this method method creates all 12 decks and all 48 DevelopmentCards through DevelopmentCardParser.
      * then add each card to is correct deck and prepare all decks.
      */
     private void createDecks(){
@@ -85,6 +85,10 @@ public class Game extends Observable implements LightGame{
         }
     }
 
+    /**
+     * this method method creates all 16 LeaderCards LeaderCardParser.
+     * then add each card to leaderCards.
+     */
     private void createLeaderCards(){
         LeaderCardsParser leaderCardsParser = new LeaderCardsParser();
         leaderCards = leaderCardsParser.getLeaderCards();
@@ -104,12 +108,18 @@ public class Game extends Observable implements LightGame{
         notifyObservers(m);
     }
 
+    /**
+     * method which notify observers of the new generated market.
+     */
     public void notifyMarket(){
         Message m = new MessageMarket(MessageType.MARKET, currentPlayer, market);
         setChanged();
         notifyObservers(m);
     }
 
+    /**
+     * method which notify observers of the new generated 16 DevelopmentCards, the first one of each deck.
+     */
     public void notifyDeckCards(){
         ArrayList<Integer> currentDeckCards = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
@@ -128,6 +138,11 @@ public class Game extends Observable implements LightGame{
         notifyObservers(m);
     }
 
+    /**
+     * @param nickName is nickname of quitting player
+     *
+     * delete the quitting player from game.
+     */
     public void deletePlayer(String nickName){
         PlayerBoard quitPlayer = null;
         for (PlayerBoard player: players) {
@@ -143,6 +158,9 @@ public class Game extends Observable implements LightGame{
         }
     }
 
+    /**
+     * mix all players to casual positions.
+     */
     private void shufflePlayers(){
         ArrayList<PlayerBoard> newPlayersPosition = new ArrayList<>();
         for(int count = players.size(); count > 0; count --){
@@ -175,6 +193,9 @@ public class Game extends Observable implements LightGame{
         return faithTrack;
     }
 
+    /**
+     * @return the list of players nicknames ordered by position.
+     */
     public ArrayList<String> getPlayersNickname(){
         ArrayList<String> nickNames = new ArrayList<>();
         for (PlayerBoard player: players)
@@ -198,12 +219,16 @@ public class Game extends Observable implements LightGame{
     /**
      * @param card1 is the LeaderCard chosen to be added to one player.
      * @param card2 is the LeaderCard chosen to be added to one player.
-     * @param player is the player which has chosen his leader cards
+     * @param player is the player which has chosen his leader cards.
      */
     public void selectPlayerLeaderCards(LeaderCard card1, LeaderCard card2, int player){
         players.get(player).addLeaderCard(card1, card2);
     }
 
+    /**
+     * @param player is player sending chosen leader card message.
+     * @return if player already selected his leader cards before.
+     */
     public boolean alreadySelectedLeaderCards(int player){
         try {
             players.get(player).getLeaderCard(1);
@@ -213,6 +238,10 @@ public class Game extends Observable implements LightGame{
         }
     }
 
+    /**
+     * @param player is player sending chosen resources.
+     * @return if player already selected his resources before.
+     */
     public boolean alreadySelectedResource(int player){
         switch (player){
             case 0:
@@ -226,10 +255,16 @@ public class Game extends Observable implements LightGame{
         return false;
     }
 
+    /**
+     * @return if game has now the right num of players.
+     */
     public boolean allPlayersConnected(){
         return players.size() == numOfPlayers;
     }
 
+    /**
+     * @return if all players have made all their leader cards and resources choices.
+     */
     public boolean allPlayersReady(){
         for (int i = 0; i < players.size(); i++){
             if(!alreadySelectedLeaderCards(i) || !alreadySelectedResource(i))
@@ -254,12 +289,11 @@ public class Game extends Observable implements LightGame{
     /**
      * @param isRow is true if current player has selected a market row, is false if current player has selected a market column.
      * @param choice is current player's choice of market row or column.
-     * @throws WrongParametersException if current player has inserted wrong parameters.
+     *
      * this method return marbles selected by players and ask the order to play them.
      * at the end if there are any discarded marbles, increase faith points of other players by the amount of them and
      * calls fatihTrackMovementExceptCurrentPlayer() method.
      */
-    @SuppressWarnings("JavaDoc")
     public Marble[] takeMarketMarble(boolean isRow, int choice){
         Marble [] marbles;
         if(isRow) {
@@ -297,6 +331,10 @@ public class Game extends Observable implements LightGame{
         return depot != -1;
     }
 
+    /**
+     * @param resource
+     * @param player
+     */
     public void firstIncreaseWarehouse(Resource resource, int player){
         Message message=new MessageOneIntOneResource(MessageType.INCREASE_WAREHOUSE,player,resource, 1);
         players.get(player).increaseWarehouse(resource);

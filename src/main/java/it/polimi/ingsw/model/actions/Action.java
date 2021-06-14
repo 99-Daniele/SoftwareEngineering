@@ -9,6 +9,7 @@ public abstract class Action {
 
     /**
      * @param game is a SinglePlayerGame.
+     *
      * this method is the standard method of actionTrigger() which will be override by inherited classes.
      */
     public abstract void actionTrigger(LightSinglePlayerGame game);

@@ -27,6 +27,7 @@ public class AdditionalProductionPowerCard extends LeaderCard {
      * @param s is player's strongbox.
      * @param choice is player's choice about which between warehouse and strongbox has priority to be decreased.
      * @throws InsufficientResourceException if player has not enough resources.
+     *
      * this method only decreases player resources by 1 this.resource.
      */
     @Override
@@ -59,6 +60,7 @@ public class AdditionalProductionPowerCard extends LeaderCard {
      * @param resource is player's choice about the extra resource given.
      * @throws InsufficientResourceException if player has not enough resources.
      * @return the faith points given by the additional production power.
+     *
      * this method decrease by 1 this.resource and increase by 1 @param resource.
      */
     @Override
