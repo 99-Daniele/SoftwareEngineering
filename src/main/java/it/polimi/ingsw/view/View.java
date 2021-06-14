@@ -18,9 +18,9 @@ public interface View{
 
     void choseLeaderCards(ArrayList <LeaderCard> leaderCards);
 
-    void available_slot(ArrayList<Integer> availableSlots);
+    void availableSlot(ArrayList<Integer> availableSlots);
 
-    void chosen_marble(Marble[] marbles);
+    void chosenMarble(Marble[] marbles);
 
     void choseWhiteConversionCard(LeaderCard[] leaderCards);
 

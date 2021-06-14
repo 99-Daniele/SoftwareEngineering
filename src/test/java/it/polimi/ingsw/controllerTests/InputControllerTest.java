@@ -26,8 +26,8 @@ public class InputControllerTest {
 
         MessageOneParameterString m1 = new MessageOneParameterString(MessageType.LOGIN, 0, null);
         MessageOneParameterString m2 = new MessageOneParameterString(MessageType.LOGIN, 1, "Daniele");
-        assertFalse(InputController.login_check(m1.getPar()));
-        assertTrue(InputController.login_check(m2.getPar()));
+        assertFalse(InputController.loginCheck(m1.getPar()));
+        assertTrue(InputController.loginCheck(m2.getPar()));
     }
 
     /**
@@ -36,9 +36,9 @@ public class InputControllerTest {
     @Test
     void correctNumPlayersCheck(){
 
-        assertFalse(InputController.num_players_check(0));
-        assertFalse(InputController.num_players_check(5));
-        assertTrue(InputController.num_players_check(3));
+        assertFalse(InputController.numPlayersCheck(0));
+        assertFalse(InputController.numPlayersCheck(5));
+        assertTrue(InputController.numPlayersCheck(3));
     }
 
     /**
@@ -53,13 +53,13 @@ public class InputControllerTest {
         leaderCards.add((LeaderCard) CardMapCLI.getCard(64));
         leaderCards.add((LeaderCard) CardMapCLI.getCard(57));
 
-        assertFalse(InputController.leader_card_check(10, 74, leaderCards));
-        assertFalse(InputController.leader_card_check(51, 64, leaderCards));
-        assertFalse(InputController.leader_card_check(51, 64, leaderCards));
-        assertFalse(InputController.leader_card_check(53, 56, leaderCards));
-        assertFalse(InputController.leader_card_check(51, 51, leaderCards));
-        assertFalse(InputController.leader_card_check(53, 53, leaderCards));
-        assertTrue(InputController.leader_card_check(49, 57, leaderCards));
+        assertFalse(InputController.leaderCardCheck(10, 74, leaderCards));
+        assertFalse(InputController.leaderCardCheck(51, 64, leaderCards));
+        assertFalse(InputController.leaderCardCheck(51, 64, leaderCards));
+        assertFalse(InputController.leaderCardCheck(53, 56, leaderCards));
+        assertFalse(InputController.leaderCardCheck(51, 51, leaderCards));
+        assertFalse(InputController.leaderCardCheck(53, 53, leaderCards));
+        assertTrue(InputController.leaderCardCheck(49, 57, leaderCards));
     }
 
     /**
@@ -68,10 +68,10 @@ public class InputControllerTest {
     @Test
     void correctTakeMarbleCheck(){
 
-        assertFalse(InputController.taken_marbles_check(2, 3));
-        assertFalse(InputController.taken_marbles_check(0, 0));
-        assertFalse(InputController.taken_marbles_check(1, 5));
-        assertTrue(InputController.taken_marbles_check(0, 3));
+        assertFalse(InputController.takenMarblesCheck(2, 3));
+        assertFalse(InputController.takenMarblesCheck(0, 0));
+        assertFalse(InputController.takenMarblesCheck(1, 5));
+        assertTrue(InputController.takenMarblesCheck(0, 3));
     }
 
     /**
@@ -80,12 +80,12 @@ public class InputControllerTest {
     @Test
     void correctSwitchDepotCheck(){
 
-        assertFalse(InputController.switch_depot_check(0, 7));
-        assertFalse(InputController.switch_depot_check(0, 4));
-        assertFalse(InputController.switch_depot_check(1, 6));
-        assertFalse(InputController.switch_depot_check(4, 4));
-        assertFalse(InputController.switch_depot_check(0, 0));
-        assertTrue(InputController.switch_depot_check(3, 4));
+        assertFalse(InputController.switchDepotCheck(0, 7));
+        assertFalse(InputController.switchDepotCheck(0, 4));
+        assertFalse(InputController.switchDepotCheck(1, 6));
+        assertFalse(InputController.switchDepotCheck(4, 4));
+        assertFalse(InputController.switchDepotCheck(0, 0));
+        assertTrue(InputController.switchDepotCheck(3, 4));
     }
 
     /**
@@ -94,14 +94,14 @@ public class InputControllerTest {
     @Test
     void correctBuyCardCheck(){
 
-        assertFalse(InputController.buy_card_check(0, 5, 2));
-        assertFalse(InputController.buy_card_check(0, 4, 2));
-        assertFalse(InputController.buy_card_check(1, 5, 2));
-        assertFalse(InputController.buy_card_check(0, 5, 0));
-        assertFalse(InputController.buy_card_check(1, 4, 2));
-        assertFalse(InputController.buy_card_check(0, 3, 1));
-        assertFalse(InputController.buy_card_check(1, 0, 1));
-        assertTrue(InputController.buy_card_check(1, 3, 0));
+        assertFalse(InputController.buyCardCheck(0, 5, 2));
+        assertFalse(InputController.buyCardCheck(0, 4, 2));
+        assertFalse(InputController.buyCardCheck(1, 5, 2));
+        assertFalse(InputController.buyCardCheck(0, 5, 0));
+        assertFalse(InputController.buyCardCheck(1, 4, 2));
+        assertFalse(InputController.buyCardCheck(0, 3, 1));
+        assertFalse(InputController.buyCardCheck(1, 0, 1));
+        assertTrue(InputController.buyCardCheck(1, 3, 0));
     }
 
     /**
@@ -117,36 +117,36 @@ public class InputControllerTest {
 
         slots1.add(1);
         slots1.add(2);
-        assertFalse(InputController.chosen_slot_check(0, slots1));
-        assertFalse(InputController.chosen_slot_check(5, slots1));
-        assertFalse(InputController.chosen_slot_check(3, slots1));
-        assertTrue(InputController.chosen_slot_check(1, slots1));
-        assertTrue(InputController.chosen_slot_check(2, slots1));
+        assertFalse(InputController.chosenSlotCheck(0, slots1));
+        assertFalse(InputController.chosenSlotCheck(5, slots1));
+        assertFalse(InputController.chosenSlotCheck(3, slots1));
+        assertTrue(InputController.chosenSlotCheck(1, slots1));
+        assertTrue(InputController.chosenSlotCheck(2, slots1));
 
         slots2.add(1);
         slots2.add(3);
-        assertFalse(InputController.chosen_slot_check(0, slots2));
-        assertFalse(InputController.chosen_slot_check(5, slots2));
-        assertFalse(InputController.chosen_slot_check(2, slots2));
-        assertTrue(InputController.chosen_slot_check(1, slots2));
-        assertTrue(InputController.chosen_slot_check(3, slots2));
+        assertFalse(InputController.chosenSlotCheck(0, slots2));
+        assertFalse(InputController.chosenSlotCheck(5, slots2));
+        assertFalse(InputController.chosenSlotCheck(2, slots2));
+        assertTrue(InputController.chosenSlotCheck(1, slots2));
+        assertTrue(InputController.chosenSlotCheck(3, slots2));
 
         slots3.add(2);
         slots3.add(3);
-        assertFalse(InputController.chosen_slot_check(0, slots3));
-        assertFalse(InputController.chosen_slot_check(5, slots3));
-        assertFalse(InputController.chosen_slot_check(1, slots3));
-        assertTrue(InputController.chosen_slot_check(3, slots3));
-        assertTrue(InputController.chosen_slot_check(2, slots3));
+        assertFalse(InputController.chosenSlotCheck(0, slots3));
+        assertFalse(InputController.chosenSlotCheck(5, slots3));
+        assertFalse(InputController.chosenSlotCheck(1, slots3));
+        assertTrue(InputController.chosenSlotCheck(3, slots3));
+        assertTrue(InputController.chosenSlotCheck(2, slots3));
 
         slots4.add(1);
         slots4.add(2);
         slots4.add(3);
-        assertFalse(InputController.chosen_slot_check(0, slots4));
-        assertFalse(InputController.chosen_slot_check(5, slots4));
-        assertTrue(InputController.chosen_slot_check(1, slots4));
-        assertTrue(InputController.chosen_slot_check(2, slots4));
-        assertTrue(InputController.chosen_slot_check(3, slots4));
+        assertFalse(InputController.chosenSlotCheck(0, slots4));
+        assertFalse(InputController.chosenSlotCheck(5, slots4));
+        assertTrue(InputController.chosenSlotCheck(1, slots4));
+        assertTrue(InputController.chosenSlotCheck(2, slots4));
+        assertTrue(InputController.chosenSlotCheck(3, slots4));
     }
 
     /**
@@ -156,15 +156,15 @@ public class InputControllerTest {
     void correctDevelopmentCardPowerCheck(){
 
         ArrayList<Integer> chosenSlot = new ArrayList<>();
-        assertFalse(InputController.development_card_power_check(0, 2));
-        assertFalse(InputController.development_card_power_check(0, 0));
-        assertFalse(InputController.development_card_power_check(1, 2));
-        assertTrue(InputController.development_card_power_check(3, 0));
-        assertTrue(InputController.already_used_development_card_power_check(3, chosenSlot));
+        assertFalse(InputController.developmentCardPowerCheck(0, 2));
+        assertFalse(InputController.developmentCardPowerCheck(0, 0));
+        assertFalse(InputController.developmentCardPowerCheck(1, 2));
+        assertTrue(InputController.developmentCardPowerCheck(3, 0));
+        assertTrue(InputController.alreadyUsedDevelopmentCardPowerCheck(3, chosenSlot));
         chosenSlot.add(3);
-        assertFalse(InputController.already_used_development_card_power_check(3, chosenSlot));
-        assertTrue(InputController.already_used_development_card_power_check(1, chosenSlot));
-        assertTrue(InputController.already_used_development_card_power_check(2, chosenSlot));
+        assertFalse(InputController.alreadyUsedDevelopmentCardPowerCheck(3, chosenSlot));
+        assertTrue(InputController.alreadyUsedDevelopmentCardPowerCheck(1, chosenSlot));
+        assertTrue(InputController.alreadyUsedDevelopmentCardPowerCheck(2, chosenSlot));
     }
 
     /**
@@ -173,9 +173,9 @@ public class InputControllerTest {
     @Test
     void correctBasicPowerCheck(){
 
-        assertFalse(InputController.basic_power_check(2));
-        assertTrue(InputController.basic_power_check(0));
-        assertTrue(InputController.basic_power_check(1));
+        assertFalse(InputController.basicPowerCheck(2));
+        assertTrue(InputController.basicPowerCheck(0));
+        assertTrue(InputController.basicPowerCheck(1));
     }
 
     /**
@@ -185,14 +185,14 @@ public class InputControllerTest {
     void correctLeaderCardPowerCheck(){
 
         ArrayList<Integer> chosenLeaderCards = new ArrayList<>();
-        assertFalse(InputController.leader_card_power_check(0, 2));
-        assertFalse(InputController.leader_card_power_check(0, 0));
-        assertFalse(InputController.leader_card_power_check(1, 2));
-        assertTrue(InputController.leader_card_power_check(2, 0));
-        assertTrue(InputController.already_used_leader_card_power_check(2, chosenLeaderCards));
+        assertFalse(InputController.leaderCardPowerCheck(0, 2));
+        assertFalse(InputController.leaderCardPowerCheck(0, 0));
+        assertFalse(InputController.leaderCardPowerCheck(1, 2));
+        assertTrue(InputController.leaderCardPowerCheck(2, 0));
+        assertTrue(InputController.alreadyUsedLeaderCardPowerCheck(2, chosenLeaderCards));
         chosenLeaderCards.add(2);
-        assertFalse(InputController.already_used_leader_card_power_check(2, chosenLeaderCards));
-        assertTrue(InputController.already_used_leader_card_power_check(1, chosenLeaderCards));
+        assertFalse(InputController.alreadyUsedLeaderCardPowerCheck(2, chosenLeaderCards));
+        assertTrue(InputController.alreadyUsedLeaderCardPowerCheck(1, chosenLeaderCards));
     }
 
     /**
@@ -201,9 +201,9 @@ public class InputControllerTest {
     @Test
     void correctWhiteConversionCardCheck(){
 
-        assertFalse(InputController.white_conversion_card_check(0));
-        assertTrue(InputController.white_conversion_card_check(1));
-        assertTrue(InputController.white_conversion_card_check(2));
+        assertFalse(InputController.whiteConversionCardCheck(0));
+        assertTrue(InputController.whiteConversionCardCheck(1));
+        assertTrue(InputController.whiteConversionCardCheck(2));
     }
 
     /**
@@ -218,12 +218,12 @@ public class InputControllerTest {
         marbles.add(new ResourceMarble(Resource.COIN));
         marbles.add(new ResourceMarble(Resource.SERVANT));
 
-        assertFalse(InputController.chosen_correct_marble(new ResourceMarble(Resource.STONE), marbles));
-        assertFalse(InputController.chosen_correct_marble(new ResourceMarble(Resource.SHIELD), marbles));
-        assertTrue(InputController.chosen_correct_marble(new WhiteMarble(), marbles));
-        assertTrue(InputController.chosen_correct_marble(new ResourceMarble(Resource.COIN), marbles));
-        assertTrue(InputController.chosen_correct_marble(new ResourceMarble(Resource.SERVANT), marbles));
-        assertTrue(InputController.chosen_correct_marble(new RedMarble(), marbles));
+        assertFalse(InputController.chosenCorrectMarble(new ResourceMarble(Resource.STONE), marbles));
+        assertFalse(InputController.chosenCorrectMarble(new ResourceMarble(Resource.SHIELD), marbles));
+        assertTrue(InputController.chosenCorrectMarble(new WhiteMarble(), marbles));
+        assertTrue(InputController.chosenCorrectMarble(new ResourceMarble(Resource.COIN), marbles));
+        assertTrue(InputController.chosenCorrectMarble(new ResourceMarble(Resource.SERVANT), marbles));
+        assertTrue(InputController.chosenCorrectMarble(new RedMarble(), marbles));
     }
 
     /**
@@ -232,9 +232,9 @@ public class InputControllerTest {
     @Test
     void correctLeaderCardActivationCheck(){
 
-        assertFalse(InputController.leader_card_activation(0));
-        assertTrue(InputController.leader_card_activation(1));
-        assertTrue(InputController.leader_card_activation(2));
+        assertFalse(InputController.leaderCardActivation(0));
+        assertTrue(InputController.leaderCardActivation(1));
+        assertTrue(InputController.leaderCardActivation(2));
     }
 
     /**
@@ -243,9 +243,9 @@ public class InputControllerTest {
     @Test
     void correctLeaderCardDiscardCheck(){
 
-        assertFalse(InputController.leader_card_discard(0));
-        assertTrue(InputController.leader_card_discard(1));
-        assertTrue(InputController.leader_card_discard(2));
+        assertFalse(InputController.leaderCardDiscard(0));
+        assertTrue(InputController.leaderCardDiscard(1));
+        assertTrue(InputController.leaderCardDiscard(2));
     }
 
 }

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.model_view;
+package it.polimi.ingsw.view.modelView;
 
 import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.model.resourceContainers.Resource;
@@ -68,11 +68,11 @@ public class GameView {
     }
 
     public WarehouseStrongboxView getWarehouseStrongbox(int viewID){
-        return players.get(viewID).getWarehouse_strongbox();
+        return players.get(viewID).getWarehouseStrongboxView();
     }
 
     public CardsSlotsView getSlotCards(int viewID){
-        return players.get(viewID).getCards_slots();
+        return players.get(viewID).getCardsSlotsView();
     }
 
     public void setMarket(MarketView market){
@@ -118,8 +118,8 @@ public class GameView {
         decks.replaceCard(row, column, cardID);
     }
 
-    public int[] get_Row_Column(int cardID){
-        return decks.get_Row_Column(cardID);
+    public int[] getRowColumn(int cardID){
+        return decks.getRowColumn(cardID);
     }
 
     public String getNickName(int viewID) {
@@ -163,7 +163,7 @@ public class GameView {
     }
 
     public boolean isSlotEmpty(int viewID, int slot){
-        return players.get(viewID).getCards_slots().isSlotEmpty(slot);
+        return players.get(viewID).getCardsSlotsView().isSlotEmpty(slot);
     }
 
     public void addDevelopmentCard(int viewID, int cardID, int slot){

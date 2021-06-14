@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.model_view;
+package it.polimi.ingsw.view.modelView;
 
 import it.polimi.ingsw.parser.CardMapCLI;
 
@@ -36,32 +36,32 @@ public class DecksView {
         }
     }
 
-    public int[] get_Row_Column(int cardID){
-        final int[] card_coordinates = new int[2];
+    public int[] getRowColumn(int cardID){
+        final int[] cardCoordinates = new int[2];
         for(int i = 0; i < 4; i++){
             if(firstLevelCards.get(i) == cardID) {
-                card_coordinates[0] = 1;
-                card_coordinates[1] = i+1;
-                return card_coordinates;
+                cardCoordinates[0] = 1;
+                cardCoordinates[1] = i+1;
+                return cardCoordinates;
             }
         }
         for(int i = 0; i < 4; i++){
             if(secondLevelCards.get(i) == cardID) {
-                card_coordinates[0] = 2;
-                card_coordinates[1] = i+1;
-                return card_coordinates;
+                cardCoordinates[0] = 2;
+                cardCoordinates[1] = i+1;
+                return cardCoordinates;
             }
         }
         for(int i = 0; i < 4; i++){
             if(thirdLevelCards.get(i) == cardID) {
-                card_coordinates[0] = 3;
-                card_coordinates[1] = i+1;
-                return card_coordinates;
+                cardCoordinates[0] = 3;
+                cardCoordinates[1] = i+1;
+                return cardCoordinates;
             }
         }
-        card_coordinates[0] = -1;
-        card_coordinates[1] = -1;
-        return card_coordinates;
+        cardCoordinates[0] = -1;
+        cardCoordinates[1] = -1;
+        return cardCoordinates;
     }
 
     public void print() {

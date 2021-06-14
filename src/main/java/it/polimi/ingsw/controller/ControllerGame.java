@@ -243,7 +243,7 @@ public class ControllerGame implements Observer {
             view.errorMessage(ErrorType.ILLEGAL_OPERATION);
             return;
         }
-        if (!InputController.login_check(nickName)) {
+        if (!InputController.loginCheck(nickName)) {
             view.errorMessage(ErrorType.WRONG_PARAMETERS);
             return;
         }
@@ -280,7 +280,7 @@ public class ControllerGame implements Observer {
             throws WrongParametersException, IllegalStateException{
         MessageOneParameterInt m = (MessageOneParameterInt) numPlayerMessage;
         int numPlayers = m.getPar();
-        if (!InputController.num_players_check(numPlayers))
+        if (!InputController.numPlayersCheck(numPlayers))
             throw new WrongParametersException();
         if (state != GameStartingState.WAITING_NUM_PLAYERS)
             throw new IllegalStateException();
@@ -372,7 +372,7 @@ public class ControllerGame implements Observer {
         int viewID = m.getClientID();
         if(state != GameStartingState.WAITING_PLAYERS_CHOICES)
             throw new IllegalStateException();
-        if(!InputController.leader_card_check(m.getPar1(), m.getPar2(),  leaderCards.get(viewID)))
+        if(!InputController.leaderCardCheck(m.getPar1(), m.getPar2(),  leaderCards.get(viewID)))
             throw new WrongParametersException();
         gameManager.leaderCardHandler(viewID, m.getPar1(), m.getPar2(), leaderCards.get(viewID));
         views.get(viewID).ok();
@@ -427,7 +427,7 @@ public class ControllerGame implements Observer {
      * @param slots are a list of available slots.
      */
     public void choseSlot(int currentPlayer, ArrayList<Integer> slots){
-        views.get(currentPlayer).available_slot(slots);
+        views.get(currentPlayer).availableSlot(slots);
     }
 
     /**
@@ -456,7 +456,7 @@ public class ControllerGame implements Observer {
         MessageTwoParameterInt m = (MessageTwoParameterInt) message;
         int viewID = m.getClientID();
         Marble[] marbles = gameManager.takeMarbleHandler(m.getPar1(), m.getPar2());
-        views.get(viewID).chosen_marble(marbles);
+        views.get(viewID).chosenMarble(marbles);
     }
 
     /**

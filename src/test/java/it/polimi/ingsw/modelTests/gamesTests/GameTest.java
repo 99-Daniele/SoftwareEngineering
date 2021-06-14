@@ -5,7 +5,7 @@ import it.polimi.ingsw.model.cards.leaderCards.*;
 import it.polimi.ingsw.exceptions.*;
 
 import it.polimi.ingsw.model.market.Marble;
-import it.polimi.ingsw.view.model_view.CardView;
+import it.polimi.ingsw.view.modelView.CardView;
 import it.polimi.ingsw.model.cards.developmentCards.Color;
 import it.polimi.ingsw.model.games.Game;
 

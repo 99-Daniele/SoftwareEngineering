@@ -1,6 +1,6 @@
 package it.polimi.ingsw.network.messages;
 
-import it.polimi.ingsw.view.model_view.MarketView;
+import it.polimi.ingsw.view.modelView.MarketView;
 
 public class MessageMarket extends Message{
 

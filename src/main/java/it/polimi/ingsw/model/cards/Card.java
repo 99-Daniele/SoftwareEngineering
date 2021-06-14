@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.cards;
 
-import it.polimi.ingsw.view.model_view.CardView;
+import it.polimi.ingsw.view.modelView.CardView;
 
 public abstract class Card implements CardView {
 

@@ -88,9 +88,9 @@ public class ClientSocket extends Observable{
         while (true) {
             try {
                 Message returnMessage = (Message) in.readObject();
-                wake_up();
+                wakeUp();
                 if(returnMessage.getMessageType() == MessageType.PING){
-                    ping_message();
+                    pingMessage();
                 }
                 else {
                     Thread thread = new Thread(() -> {
@@ -105,13 +105,13 @@ public class ClientSocket extends Observable{
         }
     }
 
-    private void wake_up() {
+    private void wakeUp() {
         synchronized (pingLock) {
             pingLock.notifyAll();
         }
     }
 
-    private void ping_message() throws IOException {
+    private void pingMessage() throws IOException {
         Message ping = new Message(MessageType.PONG, 0);
         sendMessage(ping);
     }

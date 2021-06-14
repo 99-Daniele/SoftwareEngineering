@@ -3,7 +3,7 @@ package it.polimi.ingsw.model.market;
 import it.polimi.ingsw.exceptions.WrongParametersException;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 import it.polimi.ingsw.view.CLI.ColorAnsi;
-import it.polimi.ingsw.view.model_view.MarketView;
+import it.polimi.ingsw.view.modelView.MarketView;
 
 import java.io.Serializable;
 import java.util.ArrayList;

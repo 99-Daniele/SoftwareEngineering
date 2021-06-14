@@ -147,11 +147,11 @@ public class VirtualView extends Observable implements View, Observer{
 
     @Override
     public void choseLeaderCards(ArrayList<LeaderCard> leaderCards){
-        int cardID_1 = leaderCards.get(0).getCardID();
-        int cardID_2 = leaderCards.get(1).getCardID();
-        int cardID_3 = leaderCards.get(2).getCardID();
-        int cardID_4 = leaderCards.get(3).getCardID();
-        Message message = new MessageFourParameterInt(MessageType.LEADER_CARD, viewID, cardID_1, cardID_2, cardID_3, cardID_4);
+        int cardID1 = leaderCards.get(0).getCardID();
+        int cardID2 = leaderCards.get(1).getCardID();
+        int cardID3 = leaderCards.get(2).getCardID();
+        int cardID4 = leaderCards.get(3).getCardID();
+        Message message = new MessageFourParameterInt(MessageType.LEADER_CARD, viewID, cardID1, cardID2, cardID3, cardID4);
         sendMessage(message);
     }
 
@@ -179,7 +179,7 @@ public class VirtualView extends Observable implements View, Observer{
     }
 
     @Override
-    public void available_slot(ArrayList<Integer> availableSlots){
+    public void availableSlot(ArrayList<Integer> availableSlots){
         int firstSlot = availableSlots.get(0);
         int secondSlot = availableSlots.get(1);
         int thirdSlot;
@@ -192,7 +192,7 @@ public class VirtualView extends Observable implements View, Observer{
     }
 
     @Override
-    public void chosen_marble(Marble[] marbles){
+    public void chosenMarble(Marble[] marbles){
         ArrayList<Marble> chosenMarbles = new ArrayList<>();
         Collections.addAll(chosenMarbles, marbles);
         Message message = new MessageArrayListMarble(MessageType.TAKE_MARBLE, viewID, chosenMarbles);

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.parser;
 
 import it.polimi.ingsw.model.cards.developmentCards.DevelopmentCard;
-import it.polimi.ingsw.view.model_view.CardView;
+import it.polimi.ingsw.view.modelView.CardView;
 import it.polimi.ingsw.model.cards.leaderCards.LeaderCard;
 
 import java.util.ArrayList;

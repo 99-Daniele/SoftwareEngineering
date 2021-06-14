@@ -271,31 +271,31 @@ public class YourTurnSceneController {
         });
         row1.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             row1.setSelected(false);
-            take_market_marble_row(3);
+            takeMarketMarbleRow(3);
         });
         row2.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             row2.setSelected(false);
-            take_market_marble_row(2);
+            takeMarketMarbleRow(2);
         });
         row3.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             row3.setSelected(false);
-            take_market_marble_row(1);
+            takeMarketMarbleRow(1);
         });
         column1.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             column1.setSelected(false);
-            take_market_marble_column(1);
+            takeMarketMarbleColumn(1);
         });
         column2.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             column2.setSelected(false);
-            take_market_marble_column(2);
+            takeMarketMarbleColumn(2);
         });
         column3.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             column3.setSelected(false);
-            take_market_marble_column(3);
+            takeMarketMarbleColumn(3);
         });
         column4.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             column4.setSelected(false);
-            take_market_marble_column(4);
+            takeMarketMarbleColumn(4);
         });
         chooseSlot1.setOnMouseClicked(mouseEvent -> choseSlot(1));
         chooseSlot2.setOnMouseClicked(mouseEvent -> choseSlot(2));
@@ -662,7 +662,7 @@ public class YourTurnSceneController {
         }
     }
 
-    private void take_market_marble_row(int i) {
+    private void takeMarketMarbleRow(int i) {
         disableMarketButton();
         try {
             ClientSocket.sendMessage(new MessageTwoParameterInt(MessageType.TAKE_MARBLE, GUI.getPosition(), 0, i));
@@ -671,7 +671,7 @@ public class YourTurnSceneController {
         }
     }
 
-    private void take_market_marble_column(int i) {
+    private void takeMarketMarbleColumn(int i) {
         disableMarketButton();
         try {
             ClientSocket.sendMessage(new MessageTwoParameterInt(MessageType.TAKE_MARBLE, GUI.getPosition(), 1, i));
@@ -1197,7 +1197,7 @@ public class YourTurnSceneController {
         card43.setDisable(b);
     }
 
-    public static void buy_card_message(int slot, int cardID, String newMessage) {
+    public static void buyCardMessage(int slot, int cardID, String newMessage) {
         try {
             switch (slot) {
                 case 1:

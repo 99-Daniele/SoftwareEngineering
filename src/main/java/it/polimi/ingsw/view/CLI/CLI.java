@@ -204,7 +204,7 @@ public class CLI extends ClientView{
                 else {
                     ClientView.setLeaderCard(position, card1, card2);
                     ClientSocket.sendMessage(new MessageTwoParameterInt(MessageType.LEADER_CARD, position, card1, card2));
-                    chose_first_resources();
+                    choseFirstResources();
                     break;
                 }
             } catch (NumberFormatException | IOException e) {
@@ -213,7 +213,7 @@ public class CLI extends ClientView{
         }
     }
 
-    private void chose_first_resources() throws IOException {
+    private void choseFirstResources() throws IOException {
         switch (position) {
             case 0:
                 System.out.println("You are the 1st player. Wait for the other players to make their choices...");
@@ -525,7 +525,7 @@ public class CLI extends ClientView{
             return;
         }
         marble = marble.toUpperCase();
-        Marble chosenMarble = correct_marble(marble, marbles);
+        Marble chosenMarble = correctMarble(marble, marbles);
         if (chosenMarble != null){
             if(marbles.size() == 0)
                 setCurrentState(GameStates.END_TURN_STATE);
@@ -539,7 +539,7 @@ public class CLI extends ClientView{
             System.err.println("You have chosen a wrong marble");
     }
 
-    private Marble correct_marble(String input, ArrayList<Marble> marbles){
+    private Marble correctMarble(String input, ArrayList<Marble> marbles){
         for(int i = 0; i < marbles.size(); i++){
             if(input.equals(marbles.get(i).toString()))
                 return marbles.remove(i);
@@ -931,7 +931,7 @@ public class CLI extends ClientView{
     }
 
     @Override
-    public void login_message(Message message) {
+    public void loginMessage(Message message) {
         notifyMessage(message);
         if(message.getClientID() == 0)
             System.out.println("You are the first player");
@@ -940,7 +940,7 @@ public class CLI extends ClientView{
     }
 
     @Override
-    public void new_player_message(Message message){
+    public void newPlayerMessage(Message message){
         MessageOneParameterString m = (MessageOneParameterString) message;
         if (m.getClientID() != this.position) {
             System.out.println("New player: " + m.getPar());
@@ -948,8 +948,8 @@ public class CLI extends ClientView{
     }
 
     @Override
-    public void players_message(Message message){
-        super.players_message(message);
+    public void playersMessage(Message message){
+        super.playersMessage(message);
         MessageArrayListString m = (MessageArrayListString) message;
         System.out.println("All players connected.\nPlayers: " + m.getNickNames());
         this.position = m.getClientID();
@@ -957,7 +957,7 @@ public class CLI extends ClientView{
     }
 
     @Override
-    public void start_game_message() throws IOException {
+    public void startGameMessage() throws IOException {
         super.startGame();
         startCLI();
         System.out.println("All players have made their choices. Game started");
@@ -965,7 +965,7 @@ public class CLI extends ClientView{
     }
 
     @Override
-    public void leader_card_choice(Message message) {
+    public void leaderCardChoice(Message message) {
         MessageFourParameterInt m = (MessageFourParameterInt) message;
         CLIPrinter.printCard(m.getPar1());
         CLIPrinter.printCard(m.getPar2());
@@ -975,7 +975,7 @@ public class CLI extends ClientView{
     }
 
     @Override
-    public void turn_message(Message message){
+    public void turnMessage(Message message){
         MessageOneParameterInt m = (MessageOneParameterInt) message;
         setCurrentState(GameStates.FIRST_ACTION_STATE);
         if (m.getPar() == 1) {
@@ -989,7 +989,7 @@ public class CLI extends ClientView{
     }
 
     @Override
-    public void end_turn_message(Message message) {
+    public void endTurnMessage(Message message) {
         if (message.getClientID() != position) {
             System.out.println("Player " + getNickname(message.getClientID()) + " has finished his turn.");
         }
@@ -1005,16 +1005,16 @@ public class CLI extends ClientView{
     }
 
     @Override
-    public void buy_card_message(Message message) {
+    public void buyCardMessage(Message message) {
         MessageTwoParameterInt m = (MessageTwoParameterInt) message;
         if(m.getClientID() != position)
             System.out.println("Player " + getNickname(m.getClientID()) + " bought a new card and inserted it in " +
                 "the " + m.getPar2() + "° slot.");
-        super.buy_card_message(message);
+        super.buyCardMessage(message);
     }
 
     @Override
-    public void card_remove_message(Message message) {
+    public void cardRemoveMessage(Message message) {
         MessageFourParameterInt m = (MessageFourParameterInt) message;
         if(getNumOfPlayers() == 1 && m.getClientID() == 1)
             System.out.println("Ludovico has removed one deck card from row " + (m.getPar1() +1 + " and" +
@@ -1022,7 +1022,7 @@ public class CLI extends ClientView{
         else if(m.getClientID() != position)
             System.out.println("Deck card from row " + (m.getPar1()+1) + " and column "
                     + (m.getPar2() +1) + " has been removed");
-        super.card_remove_message(message);
+        super.cardRemoveMessage(message);
     }
 
     @Override
@@ -1034,7 +1034,7 @@ public class CLI extends ClientView{
     }
 
     @Override
-    public void market_change(Message message) {
+    public void marketChange(Message message) {
         MessageTwoParameterInt m = (MessageTwoParameterInt) message;
         if (m.getPar1() == 0) {
             if(m.getClientID() != position) {
@@ -1047,11 +1047,11 @@ public class CLI extends ClientView{
                 CLIPrinter.printColumnMarket(super.getGame(), m.getPar2());
             }
         }
-        super.market_change(message);
+        super.marketChange(message);
     }
 
     @Override
-    public void faith_points_message(Message message){
+    public void faithPointsMessage(Message message){
         MessageOneParameterInt m = (MessageOneParameterInt) message;
         String serverMessage;
         if(m.getClientID() != position) {
@@ -1064,13 +1064,13 @@ public class CLI extends ClientView{
             else
                 addServerMessage(serverMessage);
         }
-        super.faith_points_message(message);
+        super.faithPointsMessage(message);
     }
 
     @Override
-    public void increase_warehouse_message(Message message){
+    public void increaseWarehouseMessage(Message message){
         MessageOneIntOneResource m = (MessageOneIntOneResource) message;
-        super.increase_warehouse_message(message);
+        super.increaseWarehouseMessage(message);
         String serverMessage;
         if(m.getPar1() != -1) {
             if(m.getClientID() != position) {
@@ -1095,9 +1095,9 @@ public class CLI extends ClientView{
     }
 
     @Override
-    public void switch_depot_message(Message message){
+    public void switchDepotMessage(Message message){
         MessageTwoParameterInt m = (MessageTwoParameterInt) message;
-        super.switch_depot_message(message);
+        super.switchDepotMessage(message);
         if(m.getClientID() != position)
             System.out.println("Player " + getNickname(m.getClientID()) + " has switched its " + m.getPar1()
                 + "° depot with its " + m.getPar2() + "° depot.");
@@ -1106,7 +1106,7 @@ public class CLI extends ClientView{
     }
 
     @Override
-    public void vatican_report_message(Message message){
+    public void vaticanReportMessage(Message message){
         MessageTwoParameterInt m = (MessageTwoParameterInt) message;
         if(getNumOfPlayers() == 1 && m.getPar1() == 1)
             System.out.println("Ludovico activated Vatican Report." +
@@ -1114,22 +1114,22 @@ public class CLI extends ClientView{
         else if(m.getClientID() == position)
             System.out.println("Player " + getNickname(m.getPar1()) + " activated Vatican Report." +
                     " Now you have " + m.getPar2() + " victory points from Vatican Report");
-        super.vatican_report_message(message);
+        super.vaticanReportMessage(message);
     }
 
     @Override
-    public void leader_card_activation_message(Message message){
+    public void leaderCardActivationMessage(Message message){
         MessageOneParameterInt m = (MessageOneParameterInt) message;
         if(m.getClientID() != position) {
             System.out.println("Player " + getNickname(m.getClientID()) + " has activated a leader card");
         }
-        super.leader_card_activation_message(message);
+        super.leaderCardActivationMessage(message);
     }
 
     @Override
-    public void extra_depot_message(Message message){
+    public void extraDepotMessage(Message message){
         MessageOneIntOneResource m = (MessageOneIntOneResource) message;
-        super.extra_depot_message(message);
+        super.extraDepotMessage(message);
         if(m.getClientID() != position) {
             System.out.println("Player " + getNickname(m.getClientID()) + " has a new extra depot of " + Resource.printResource(m.getResource()));
         }
@@ -1138,17 +1138,17 @@ public class CLI extends ClientView{
     }
 
     @Override
-    public void leader_card_discard_message(Message message){
+    public void leaderCardDiscardMessage(Message message){
         MessageOneParameterInt m = (MessageOneParameterInt) message;
         if(m.getClientID() != position) {
             System.out.println("Player " + getNickname(m.getClientID()) + " has discarded one leader card");
         }
         else
-            super.leader_card_discard_message(message);
+            super.leaderCardDiscardMessage(message);
     }
 
     @Override
-    public void ok_message() {
+    public void okMessage() {
         if (getCurrentState() != GameStates.BUY_CARD_STATE)
             System.out.println("Request successfully completed.\n");
         if (isState(GameStates.TAKE_MARBLE_STATE)) {
@@ -1161,7 +1161,7 @@ public class CLI extends ClientView{
     }
 
     @Override
-    public void chosen_slot_message(Message message){
+    public void chosenSlotMessage(Message message){
         MessageThreeParameterInt m = (MessageThreeParameterInt) message;
         if(m.getPar3() == -1)
             System.out.println("You can insert your card in this slots: " + m.getPar1() + ", " + m.getPar2());
@@ -1171,22 +1171,22 @@ public class CLI extends ClientView{
     }
 
     @Override
-    public void take_marble_message(Message message) {
+    public void takeMarbleMessage(Message message) {
         MessageArrayListMarble m = (MessageArrayListMarble) message;
-        super.take_marble_message(message);
+        super.takeMarbleMessage(message);
         System.out.println("You have chosen this marbles: ");
         CLIPrinter.printMarbles(super.getGame(), m.getMarbles());
     }
 
     @Override
-    public void white_conversion_card_message(Message message) {
+    public void whiteConversionCardMessage(Message message) {
         CLIPrinter.printLeaderCard(getGame(), position);
         System.out.println("You have chosen a white marble and you have two active WhiteConversionCard. Chose one of them");
         notifyMessage(message);
     }
 
     @Override
-    public void quit_message(Message message) {
+    public void quitMessage(Message message) {
         MessageOneParameterString m = (MessageOneParameterString) message;
         if (getNumOfPlayers() != 0) {
             System.out.println("Player " + m.getPar() + " disconnected. Game ended.");
@@ -1200,7 +1200,7 @@ public class CLI extends ClientView{
     }
 
     @Override
-    public void end_game_message(Message message){
+    public void endGameMessage(Message message){
         MessageTwoParameterInt m = (MessageTwoParameterInt) message;
         if(getNumOfPlayers() == 1 && m.getClientID() == 1){
             System.out.println("Game ended. Ludovico win.");
@@ -1215,62 +1215,62 @@ public class CLI extends ClientView{
     }
 
     @Override
-    public void already_taken_nickName_error() {
+    public void alreadyTakenNickNameError() {
         System.err.println("Nickname already taken. Chose a different one");
         notifyMessage(new ErrorMessage(position, ErrorType.ALREADY_TAKEN_NICKNAME));
     }
 
     @Override
-    public void wrong_parameters_error() {
+    public void wrongParametersError() {
         System.err.println("You have inserted wrong parameters");
     }
 
     @Override
-    public void wrong_turn_error(){
+    public void wrongTurnError(){
         System.err.println("It's not your turn");
     }
 
     @Override
-    public void empty_deck_error() {
+    public void emptyDeckError() {
         System.err.println("You have chosen an empty deck");
         notifyMessage(new ErrorMessage(position, ErrorType.EMPTY_DECK));
     }
 
     @Override
-    public void empty_slot_error() {
+    public void emptySlotError() {
         System.err.println("You have no cards in this slot");
     }
 
     @Override
-    public void wrong_power_error() {
+    public void wrongPowerError() {
         if(isState(GameStates.FIRST_POWER_STATE))
             setCurrentState(GameStates.FIRST_ACTION_STATE);
         System.err.println("You can't activate this production power");
     }
 
     @Override
-    public void not_enough_cards_error() {
+    public void notEnoughCardsError() {
         System.err.println("You don't have enough development cards to activate this leader card");
     }
 
     @Override
-    public void full_slot_error() {
+    public void fullSlotError() {
         System.err.println("You can't insert this card in any slot");
         notifyMessage(new ErrorMessage(position, ErrorType.FULL_SLOT));
     }
 
     @Override
-    public void illegal_operation_error() {
+    public void illegalOperationError() {
         System.err.println("You can't do this operation at this moment");
     }
 
     @Override
-    public void impossible_switch_error() {
+    public void impossibleSwitchError() {
         System.err.println("You can't switch this depots");
     }
 
     @Override
-    public void not_enough_resource_error() {
+    public void notEnoughResourceError() {
         if(isState(GameStates.FIRST_POWER_STATE)) {
             setCurrentState(GameStates.FIRST_ACTION_STATE);
         }
@@ -1279,12 +1279,12 @@ public class CLI extends ClientView{
     }
 
     @Override
-    public void already_active_error() {
+    public void alreadyActiveError() {
         System.err.println("You activated this leader card previously");
     }
 
     @Override
-    public void already_discard_error() {
+    public void alreadyDiscardError() {
         System.err.println("You discard this leader card previously");
     }
 

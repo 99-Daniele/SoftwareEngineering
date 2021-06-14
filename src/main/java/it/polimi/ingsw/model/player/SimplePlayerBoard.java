@@ -19,9 +19,9 @@ public class SimplePlayerBoard extends Observable {
 
     public void increaseFaithPoints(int faithPoints) {
         this.faithPoints += faithPoints;
-        Message message_one_parameter_int=new MessageOneParameterInt(MessageType.FAITH_POINTS_INCREASE,1, this.faithPoints);
+        Message message=new MessageOneParameterInt(MessageType.FAITH_POINTS_INCREASE,1, this.faithPoints);
         setChanged();
-        notifyObservers(message_one_parameter_int);
+        notifyObservers(message);
     }
 
 }

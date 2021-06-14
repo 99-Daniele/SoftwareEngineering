@@ -4,9 +4,9 @@ import it.polimi.ingsw.model.games.states.GameStates;
 import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.network.client.ClientSocket;
 import it.polimi.ingsw.network.messages.*;
-import it.polimi.ingsw.view.model_view.GameView;
-import it.polimi.ingsw.view.model_view.MarketView;
-import it.polimi.ingsw.view.model_view.ResourceContainerView;
+import it.polimi.ingsw.view.modelView.GameView;
+import it.polimi.ingsw.view.modelView.MarketView;
+import it.polimi.ingsw.view.modelView.ResourceContainerView;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -68,7 +68,7 @@ public abstract class ClientView extends Application implements Observer {
     }
 
     public int[] getRowColumn(int cardID){
-        return game.get_Row_Column(cardID);
+        return game.getRowColumn(cardID);
     }
 
     public static void discardLeaderCard(int position, int chosenLeaderCard){
@@ -148,90 +148,90 @@ public abstract class ClientView extends Application implements Observer {
             Message returnMessage = (Message) arg;
             switch (returnMessage.getMessageType()) {
                 case LOGIN:
-                    login_message(returnMessage);
+                    loginMessage(returnMessage);
                     break;
                 case NEW_PLAYER:
-                    new_player_message(returnMessage);
+                    newPlayerMessage(returnMessage);
                     break;
                 case PLAYERS:
-                    players_message(returnMessage);
+                    playersMessage(returnMessage);
                     break;
                 case LEADER_CARD:
-                    leader_card_choice(returnMessage);
+                    leaderCardChoice(returnMessage);
                     break;
                 case START_GAME:
-                    start_game_message();
+                    startGameMessage();
                     break;
                 case MARKET:
-                    market_message(returnMessage);
+                    marketMessage(returnMessage);
                     break;
                 case DECKBOARD:
-                    deckBoard_message(returnMessage);
+                    deckBoardMessage(returnMessage);
                     break;
                 case OK:
-                    ok_message();
+                    okMessage();
                     break;
                 case PONG:
                     break;
                 case TURN:
-                    turn_message(returnMessage);
+                    turnMessage(returnMessage);
                     break;
                 case END_TURN:
-                    end_turn_message(returnMessage);
+                    endTurnMessage(returnMessage);
                     break;
                 case BUY_CARD:
-                    buy_card_message(returnMessage);
+                    buyCardMessage(returnMessage);
                     break;
                 case CHOSEN_SLOT:
-                    chosen_slot_message(returnMessage);
+                    chosenSlotMessage(returnMessage);
                     break;
                 case CARD_REMOVE:
-                    card_remove_message(returnMessage);
+                    cardRemoveMessage(returnMessage);
                     break;
                 case RESOURCE_AMOUNT:
-                    resource_amount_message(returnMessage);
+                    resourceAmountMessage(returnMessage);
                     break;
                 case END_PRODUCTION:
                     endProductionMessage(returnMessage);
                     break;
                 case TAKE_MARBLE:
-                    take_marble_message(returnMessage);
+                    takeMarbleMessage(returnMessage);
                     break;
                 case MARKET_CHANGE:
-                    market_change(returnMessage);
+                    marketChange(returnMessage);
                     break;
                 case WHITE_CONVERSION_CARD:
-                    white_conversion_card_message(returnMessage);
+                    whiteConversionCardMessage(returnMessage);
                     break;
                 case FAITH_POINTS_INCREASE:
-                    faith_points_message(returnMessage);
+                    faithPointsMessage(returnMessage);
                     break;
                 case VATICAN_REPORT:
-                    vatican_report_message(returnMessage);
+                    vaticanReportMessage(returnMessage);
                     break;
                 case INCREASE_WAREHOUSE:
-                    increase_warehouse_message(returnMessage);
+                    increaseWarehouseMessage(returnMessage);
                     break;
                 case SWITCH_DEPOT:
-                    switch_depot_message(returnMessage);
+                    switchDepotMessage(returnMessage);
                     break;
                 case LEADER_CARD_ACTIVATION:
-                    leader_card_activation_message(returnMessage);
+                    leaderCardActivationMessage(returnMessage);
                     break;
                 case EXTRA_DEPOT:
-                    extra_depot_message(returnMessage);
+                    extraDepotMessage(returnMessage);
                     break;
                 case LEADER_CARD_DISCARD:
-                    leader_card_discard_message(returnMessage);
+                    leaderCardDiscardMessage(returnMessage);
                     break;
                 case QUIT:
-                    quit_message(returnMessage);
+                    quitMessage(returnMessage);
                     break;
                 case END_GAME:
-                    end_game_message(returnMessage);
+                    endGameMessage(returnMessage);
                     break;
                 case ERR:
-                    error_message(returnMessage);
+                    errorMessage(returnMessage);
                     break;
                 default:
                     System.err.println("\nUnexpected message from Server.");
@@ -241,16 +241,16 @@ public abstract class ClientView extends Application implements Observer {
         }
     }
 
-    public abstract void login_message(Message message);
+    public abstract void loginMessage(Message message);
 
-    public abstract void new_player_message(Message message);
+    public abstract void newPlayerMessage(Message message);
 
-    public void players_message(Message message){
+    public void playersMessage(Message message){
         MessageArrayListString m = (MessageArrayListString) message;
         game.setPlayers(m.getNickNames());
     }
 
-    public abstract void start_game_message() throws IOException;
+    public abstract void startGameMessage() throws IOException;
 
     public void startGame(){
         game.startGame();
@@ -260,19 +260,19 @@ public abstract class ClientView extends Application implements Observer {
         return game.isStartGame();
     }
 
-    public void market_message(Message message){
+    public void marketMessage(Message message){
         MessageMarket m = (MessageMarket) message;
         game.setMarket(m.getMarket());
     }
 
-    public void deckBoard_message(Message message){
+    public void deckBoardMessage(Message message){
         MessageArrayListInt m = (MessageArrayListInt) message;
         game.setFirstDeckCards(m.getParams());
     }
 
-    public abstract void leader_card_choice(Message message) throws IOException, InterruptedException;
+    public abstract void leaderCardChoice(Message message) throws IOException, InterruptedException;
 
-    public void ok_message() throws IOException, InterruptedException{
+    public void okMessage() throws IOException, InterruptedException{
         switch (getCurrentState()){
             case BUY_CARD_STATE:
                 setCurrentState(GameStates.END_TURN_STATE);
@@ -283,28 +283,28 @@ public abstract class ClientView extends Application implements Observer {
         }
     }
 
-    public abstract void turn_message(Message message) throws InterruptedException, IOException;
+    public abstract void turnMessage(Message message) throws InterruptedException, IOException;
 
-    public abstract void end_turn_message(Message message) throws InterruptedException, IOException;
+    public abstract void endTurnMessage(Message message) throws InterruptedException, IOException;
 
-    public void buy_card_message(Message message){
+    public void buyCardMessage(Message message){
         MessageTwoParameterInt m = (MessageTwoParameterInt) message;
         game.addDevelopmentCard(m.getClientID(), m.getPar1(), m.getPar2());
     }
 
-    public void card_remove_message(Message message){
+    public void cardRemoveMessage(Message message){
         MessageFourParameterInt m = (MessageFourParameterInt) message;
         game.replaceCard(m.getPar1(), m.getPar2(), m.getPar4());
     }
 
-    public void resource_amount_message(Message message) {
+    public void resourceAmountMessage(Message message) {
         MessageOneResourceTwoInt m = (MessageOneResourceTwoInt) message;
         game.newAmount(m.getClientID(), m.getResource(), m.getPar1(), m.getPar2());
     }
 
     public abstract void endProductionMessage(Message message);
 
-    public void market_change(Message message){
+    public void marketChange(Message message){
         MessageTwoParameterInt m = (MessageTwoParameterInt) message;
         if (m.getPar1() == 0) {
             game.slideRow(m.getPar2());
@@ -313,125 +313,125 @@ public abstract class ClientView extends Application implements Observer {
         }
     }
 
-    public abstract void white_conversion_card_message(Message message) throws IOException;
+    public abstract void whiteConversionCardMessage(Message message) throws IOException;
 
-    public void faith_points_message(Message message){
+    public void faithPointsMessage(Message message){
         MessageOneParameterInt m = (MessageOneParameterInt) message;
         game.increaseFaithPoints(m.getClientID(), m.getPar());
     }
 
-    public void increase_warehouse_message(Message message){
+    public void increaseWarehouseMessage(Message message){
         MessageOneIntOneResource m = (MessageOneIntOneResource) message;
         if(m.getPar1() != -1) {
             game.increaseWarehouse(m.getClientID(), m.getResource(), m.getPar1());
         }
     }
 
-    public void switch_depot_message(Message message){
+    public void switchDepotMessage(Message message){
         MessageTwoParameterInt m = (MessageTwoParameterInt) message;
         game.switchDepot(m.getClientID(), m.getPar1(), m.getPar2());
     }
 
-    public void vatican_report_message(Message message){
+    public void vaticanReportMessage(Message message){
         MessageTwoParameterInt m = (MessageTwoParameterInt) message;
         game.increaseVictoryPoints(m.getClientID(), m.getPar2());
     }
 
-    public void leader_card_activation_message(Message message){
+    public void leaderCardActivationMessage(Message message){
         MessageOneParameterInt m = (MessageOneParameterInt) message;
         game.addLeaderCard(m.getClientID(), m.getPar());
     }
 
-    public void extra_depot_message(Message message){
+    public void extraDepotMessage(Message message){
         MessageOneIntOneResource m = (MessageOneIntOneResource) message;
         game.addExtraDepot(m.getClientID(), m.getResource());
     }
 
-    public void leader_card_discard_message(Message message) {
+    public void leaderCardDiscardMessage(Message message) {
         MessageOneParameterInt m = (MessageOneParameterInt) message;
         game.discardLeaderCard(m.getClientID(), m.getPar());
     }
 
-    public abstract void chosen_slot_message(Message message) throws IOException;
+    public abstract void chosenSlotMessage(Message message) throws IOException;
 
-    public void take_marble_message(Message message) {
+    public void takeMarbleMessage(Message message) {
         MessageArrayListMarble m = (MessageArrayListMarble) message;
         game.setChosenMarbles(m.getMarbles());
     }
 
-    public abstract void quit_message(Message message);
+    public abstract void quitMessage(Message message);
 
-    public abstract void end_game_message(Message message);
+    public abstract void endGameMessage(Message message);
 
-    public void error_message(Message message) throws IOException, InterruptedException{
+    public void errorMessage(Message message) throws IOException, InterruptedException{
         ErrorMessage m = (ErrorMessage) message;
         switch (m.getErrorType()){
             case ALREADY_TAKEN_NICKNAME:
-                already_taken_nickName_error();
+                alreadyTakenNickNameError();
                 break;
             case WRONG_PARAMETERS:
-                wrong_parameters_error();
+                wrongParametersError();
                 break;
             case NOT_YOUR_TURN:
-                wrong_turn_error();
+                wrongTurnError();
                 break;
             case FULL_SLOT:
-                full_slot_error();
+                fullSlotError();
                 break;
             case EMPTY_DECK:
-                empty_deck_error();
+                emptyDeckError();
                 break;
             case EMPTY_SLOT:
-                empty_slot_error();
+                emptySlotError();
                 break;
             case WRONG_POWER:
-                wrong_power_error();
+                wrongPowerError();
                 break;
             case NOT_ENOUGH_CARDS:
-                not_enough_cards_error();
+                notEnoughCardsError();
                 break;
             case ILLEGAL_OPERATION:
-                illegal_operation_error();
+                illegalOperationError();
                 break;
             case IMPOSSIBLE_SWITCH:
-                impossible_switch_error();
+                impossibleSwitchError();
                 break;
             case NOT_ENOUGH_RESOURCES:
-                not_enough_resource_error();
+                notEnoughResourceError();
                 break;
             case ALREADY_ACTIVE_LEADER_CARD:
-                already_active_error();
+                alreadyActiveError();
                 break;
             case ALREADY_DISCARD_LEADER_CARD:
-                already_discard_error();
+                alreadyDiscardError();
                 break;
         }
     }
 
-    public abstract void already_taken_nickName_error() ;
+    public abstract void alreadyTakenNickNameError() ;
 
-    public abstract void wrong_parameters_error();
+    public abstract void wrongParametersError();
 
-    public abstract void wrong_turn_error();
+    public abstract void wrongTurnError();
 
-    public abstract void empty_deck_error() ;
+    public abstract void emptyDeckError() ;
 
-    public abstract void empty_slot_error();
+    public abstract void emptySlotError();
 
-    public abstract void wrong_power_error();
+    public abstract void wrongPowerError();
 
-    public abstract void not_enough_cards_error() ;
+    public abstract void notEnoughCardsError() ;
 
-    public abstract void full_slot_error();
+    public abstract void fullSlotError();
 
-    public abstract void illegal_operation_error();
+    public abstract void illegalOperationError();
 
-    public abstract void impossible_switch_error();
+    public abstract void impossibleSwitchError();
 
-    public abstract void not_enough_resource_error();
+    public abstract void notEnoughResourceError();
 
-    public abstract void already_active_error();
+    public abstract void alreadyActiveError();
 
-    public abstract void already_discard_error();
+    public abstract void alreadyDiscardError();
 
 }

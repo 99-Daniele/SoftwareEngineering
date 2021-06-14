@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.model_view;
+package it.polimi.ingsw.view.modelView;
 
 import it.polimi.ingsw.model.market.Marble;
 

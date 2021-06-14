@@ -14,7 +14,7 @@ public class InputController {
      * @param nickName is player's nickName.
      * @return if nickName is null, or with length == 0, or full of blanks.
      */
-    public static boolean login_check(String nickName){
+    public static boolean loginCheck(String nickName){
         return (nickName != null && nickName.length() != 0 && !nickName.isBlank());
     }
 
@@ -22,7 +22,7 @@ public class InputController {
      * @param numPlayers is game num of players.
      * @return if @param numPlayers is inferior than 1 or more than 4.
      */
-    public static boolean num_players_check(int numPlayers) {
+    public static boolean numPlayersCheck(int numPlayers) {
         return numPlayers >= 1 && numPlayers <= 4;
     }
 
@@ -32,7 +32,7 @@ public class InputController {
      * @param leaderCards are a list of leader cards
      * @return if player has chosen two different cards that are contained in @param leaderCards.
      */
-    public static boolean leader_card_check(int card1, int card2, ArrayList<LeaderCard> leaderCards){
+    public static boolean leaderCardCheck(int card1, int card2, ArrayList<LeaderCard> leaderCards){
         int count = 0;
         if(card1 == card2)
             return false;
@@ -48,7 +48,7 @@ public class InputController {
      * @param index is chosen index.
      * @return if @param choice is 0 or 1 and @param index is less than 1 or more than 3 or 4 based on @param choice.
      */
-    public static boolean taken_marbles_check(int choice, int index) {
+    public static boolean takenMarblesCheck(int choice, int index) {
         if (choice == 0) {
             return index >= 1 && index <= 3;
         } else if (choice == 1) {
@@ -62,7 +62,7 @@ public class InputController {
      * @param depot2 is one chosen depot.
      * @return if @param depot1 equals @param depot2 and both of them are less than 1 or more than 5.
      */
-    public static boolean switch_depot_check(int depot1, int depot2){
+    public static boolean switchDepotCheck(int depot1, int depot2){
         if(depot1 == depot2)
             return false;
         else if(depot1 < 1 || depot1 > 5)
@@ -77,7 +77,7 @@ public class InputController {
      * @return if @param row is less than 1 or more than 3, @param column less than 1 or more than 4, @param warehouse is
      * 0 or 1.
      */
-    public static boolean buy_card_check(int row, int column, int warehouse) {
+    public static boolean buyCardCheck(int row, int column, int warehouse) {
         if (row < 1 || row > 3) {
             return false;
         } else if (column < 1 || column > 4) {
@@ -90,7 +90,7 @@ public class InputController {
      * @param slots are player's available slots.
      * @return if @param slots contains @param chosenSlot.
      */
-    public static boolean chosen_slot_check(int chosenSlot, ArrayList<Integer> slots){
+    public static boolean chosenSlotCheck(int chosenSlot, ArrayList<Integer> slots){
         return slots.contains(chosenSlot);
     }
 
@@ -99,13 +99,13 @@ public class InputController {
      * @param warehouse is player's choice if gave priority to warehouse.
      * @return if @param chosenSlot is less than 1 or more than 2 and @param warehouse is 0 or 1.
      */
-    public static boolean development_card_power_check(int chosenSlot, int warehouse) {
+    public static boolean developmentCardPowerCheck(int chosenSlot, int warehouse) {
         if (chosenSlot < 1 || chosenSlot > 3)
             return false;
         else return warehouse == 0 || warehouse == 1;
     }
 
-    public static boolean already_used_development_card_power_check(int chosenSlot, ArrayList<Integer> chosenCards){
+    public static boolean alreadyUsedDevelopmentCardPowerCheck(int chosenSlot, ArrayList<Integer> chosenCards){
         return chosenCards == null || !chosenCards.contains(chosenSlot);
     }
 
@@ -113,7 +113,7 @@ public class InputController {
      * @param warehouse is player's choice if gave priority to warehouse.
      * @return if @param warehouse is 0 or 1.
      */
-    public static boolean basic_power_check(int warehouse){
+    public static boolean basicPowerCheck(int warehouse){
         return (warehouse == 0 || warehouse == 1);
     }
 
@@ -122,13 +122,13 @@ public class InputController {
      * @param warehouse is player's choice if gave priority to warehouse.
      * @return if @param chosenLeaderCard is 1 or 2 and @param warehouse is 0 or 1.
      */
-    public static boolean leader_card_power_check(int chosenLeaderCard, int warehouse){
+    public static boolean leaderCardPowerCheck(int chosenLeaderCard, int warehouse){
         if(chosenLeaderCard != 1 && chosenLeaderCard != 2)
             return false;
         return warehouse == 0 || warehouse == 1;
     }
 
-    public static boolean already_used_leader_card_power_check(int chosenLeaderCard, ArrayList<Integer> chosenCards){
+    public static boolean alreadyUsedLeaderCardPowerCheck(int chosenLeaderCard, ArrayList<Integer> chosenCards){
         return chosenCards == null || !chosenCards.contains(chosenLeaderCard);
     }
 
@@ -136,7 +136,7 @@ public class InputController {
      * @param chosenLeaderCard is player's chosen leader card.
      * @return if @param chosenLeaderCard is 1 or 2.
      */
-    public static boolean white_conversion_card_check(int chosenLeaderCard){
+    public static boolean whiteConversionCardCheck(int chosenLeaderCard){
         return chosenLeaderCard == 1 || chosenLeaderCard == 2;
     }
 
@@ -145,7 +145,7 @@ public class InputController {
      * @param remainingMarbles are a list of available marbles.
      * @return if @param remainingMarbles contains @param chosenMarble.
      */
-    public static boolean chosen_correct_marble(Marble chosenMarble, ArrayList<Marble> remainingMarbles) {
+    public static boolean chosenCorrectMarble(Marble chosenMarble, ArrayList<Marble> remainingMarbles) {
         for (Marble marble : remainingMarbles) {
             if (marble.toString().equals(chosenMarble.toString())) {
                 return true;
@@ -158,7 +158,7 @@ public class InputController {
      * @param chosenLeaderCard is player's chosen leader card.
      * @return if @param chosenLeaderCard is 1 or 2.
      */
-    public static boolean leader_card_activation(int chosenLeaderCard){
+    public static boolean leaderCardActivation(int chosenLeaderCard){
         return chosenLeaderCard == 1 || chosenLeaderCard == 2;
     }
 
@@ -166,7 +166,7 @@ public class InputController {
      * @param chosenLeaderCard is player's chosen leader card.
      * @return if @param chosenLeaderCard is 1 or 2.
      */
-    public static boolean leader_card_discard(int chosenLeaderCard){
+    public static boolean leaderCardDiscard(int chosenLeaderCard){
         return chosenLeaderCard == 1 || chosenLeaderCard == 2;
     }
 }
