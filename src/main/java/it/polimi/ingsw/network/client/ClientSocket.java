@@ -93,11 +93,8 @@ public class ClientSocket extends Observable{
                     pingMessage();
                 }
                 else {
-                    Thread thread = new Thread(() -> {
-                        setChanged();
-                        notifyObservers(returnMessage);
-                    });
-                    thread.start();
+                    setChanged();
+                    notifyObservers(returnMessage);
                 }
             } catch (ClassNotFoundException | ClassCastException e) {
                 System.err.println("\nUnexpected message from Server.");

@@ -99,9 +99,9 @@ public class OpponentPlayerboardSceneController {
             SceneController.changeRootPane("/fxml/yourTurnScene");
             if (!GUI.isMyTurn())
                 YourTurnSceneController.notYourTurn();
-            if(ClientView.isState(GameStates.END_TURN_STATE))
+            else if(ClientView.isState(GameStates.END_TURN_STATE))
                 YourTurnSceneController.endTurn();
-            if(ClientView.isState(GameStates.ACTIVATE_PRODUCTION_STATE))
+            else if(ClientView.isState(GameStates.ACTIVATE_PRODUCTION_STATE))
                 YourTurnSceneController.production();
         });
     }
