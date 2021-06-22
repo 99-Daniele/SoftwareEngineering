@@ -1,5 +1,8 @@
 package it.polimi.ingsw.network.messages;
 
+/**
+ * MessageTwoParameterInt is a type of Message with two int params.
+ */
 public class MessageTwoParameterInt extends Message {
 
     private final int par1;

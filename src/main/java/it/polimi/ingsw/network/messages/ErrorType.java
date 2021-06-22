@@ -1,5 +1,8 @@
 package it.polimi.ingsw.network.messages;
 
+/**
+ * ErrorType is an enumeration of all type of error messages sent from Server to Client.
+ */
 public enum ErrorType {
 
     ALREADY_TAKEN_NICKNAME,

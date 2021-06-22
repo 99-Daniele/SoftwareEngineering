@@ -1,7 +1,7 @@
 package it.polimi.ingsw.network.messages;
 
 /**
- * MessageType is an enumeration which represents all type of different Messages.
+ * MessageType is an enumeration of all type of messages sent from Server to Client.
  */
 public enum MessageType {
 

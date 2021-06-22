@@ -1,5 +1,8 @@
 package it.polimi.ingsw.network.messages;
 
+/**
+ * MessageThreeParameterInt is a type of Message with three int params.
+ */
 public class MessageThreeParameterInt extends Message{
 
     private final int par1;

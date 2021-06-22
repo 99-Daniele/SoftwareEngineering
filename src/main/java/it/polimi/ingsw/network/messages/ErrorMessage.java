@@ -1,5 +1,8 @@
 package it.polimi.ingsw.network.messages;
 
+/**
+ * ErrorMessage is a type of Message where messageType is ERR.
+ */
 public class ErrorMessage extends Message{
 
     private final ErrorType errorType;

@@ -2,6 +2,9 @@ package it.polimi.ingsw.network.messages;
 
 import it.polimi.ingsw.view.modelView.MarketView;
 
+/**
+ * MessageMarket is a type of Message with MarketView param.
+ */
 public class MessageMarket extends Message{
 
     private final MarketView market;

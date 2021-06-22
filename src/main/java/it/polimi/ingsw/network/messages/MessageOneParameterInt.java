@@ -1,5 +1,8 @@
 package it.polimi.ingsw.network.messages;
 
+/**
+ * MessageOneParameterInt is a type of Message with one int param.
+ */
 public class MessageOneParameterInt extends Message {
 
     private final int par;

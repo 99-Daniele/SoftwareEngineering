@@ -1,7 +1,7 @@
 package it.polimi.ingsw.controller;
 
 /**
- * GAME_STARTING_STATES are an enumeration of the states of game before it is started.
+ * GameStartingState is an enumeration of the states of game before it is started.
  */
 public enum GameStartingState {
 

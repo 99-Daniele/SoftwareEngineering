@@ -2,6 +2,9 @@ package it.polimi.ingsw.network.messages;
 
 import it.polimi.ingsw.model.market.Marble;
 
+/**
+ * MessageOneParameterMarble is a type of Message with one marble param.
+ */
 public class MessageOneParameterMarble extends Message{
     private final Marble marble;
 

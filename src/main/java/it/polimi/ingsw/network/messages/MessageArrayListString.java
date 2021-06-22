@@ -2,6 +2,9 @@ package it.polimi.ingsw.network.messages;
 
 import java.util.ArrayList;
 
+/**
+ * MessageArrayListString is a type of Message with an String ArrayList param.
+ */
 public class MessageArrayListString extends Message{
 
     private final ArrayList<String> nickNames;

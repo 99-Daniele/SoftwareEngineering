@@ -2,6 +2,9 @@ package it.polimi.ingsw.network.messages;
 
 import it.polimi.ingsw.model.resourceContainers.Resource;
 
+/**
+ * MessageTwoParameterResource is a type of Message with two resources params.
+ */
 public class MessageTwoResource extends Message{
 
     private final Resource r1;

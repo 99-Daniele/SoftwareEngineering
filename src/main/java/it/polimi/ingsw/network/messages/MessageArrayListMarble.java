@@ -4,6 +4,9 @@ import it.polimi.ingsw.model.market.Marble;
 
 import java.util.ArrayList;
 
+/**
+ * MessageArrayListMarble is a type of Message with a Marble ArrayList param.
+ */
 public class MessageArrayListMarble extends Message{
 
     private final ArrayList<Marble> marbles;

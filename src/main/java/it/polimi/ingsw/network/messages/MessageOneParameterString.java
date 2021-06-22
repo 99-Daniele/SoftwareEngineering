@@ -1,5 +1,8 @@
 package it.polimi.ingsw.network.messages;
 
+/**
+ * MessageOneParameterString is a type of Message with one string param.
+ */
 public class MessageOneParameterString extends Message{
 
     private final String par;

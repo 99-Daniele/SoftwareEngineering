@@ -2,6 +2,9 @@ package it.polimi.ingsw.network.messages;
 
 import java.util.ArrayList;
 
+/**
+ * MessageArrayListInt is a type of Message with an Integer ArrayList param.
+ */
 public class MessageArrayListInt extends Message{
 
     private final ArrayList<Integer> params;

@@ -2,6 +2,9 @@ package it.polimi.ingsw.network.messages;
 
 import it.polimi.ingsw.model.resourceContainers.Resource;
 
+/**
+ * MessageOneIntOneResource is a type of Message with one int and one resource params.
+ */
 public class MessageOneIntOneResource extends Message{
 
     private final int par1;
