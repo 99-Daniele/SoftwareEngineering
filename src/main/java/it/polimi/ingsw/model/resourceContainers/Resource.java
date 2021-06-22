@@ -12,6 +12,10 @@ public enum Resource {
     SHIELD,
     STONE;
 
+    /**
+     * @param resource is a resource.
+     * @return a CLI representation of @param resource.
+     */
     public static String printResource(Resource resource){
         switch (resource){
             case SERVANT:

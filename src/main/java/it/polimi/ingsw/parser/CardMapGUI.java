@@ -2,6 +2,9 @@ package it.polimi.ingsw.parser;
 
 import java.util.HashMap;
 
+/**
+ * CardMapGUI is an HashMap which converts a CardID to file string of chosen card.
+ */
 public class CardMapGUI {
 
     private static CardMapGUI cardParser;

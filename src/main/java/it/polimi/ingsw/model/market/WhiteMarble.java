@@ -14,6 +14,7 @@ public class WhiteMarble extends Marble {
     /**
      * @param game is Game.
      * @return true if player has to chose which LeaderCard use to convert, otherwise @return false.
+     *
      * this method verifies if there are two active WhiteConversionCard and in case, @return true.
      * if there is only one active WhiteConversionCard increase player's warehouse by card resource and in case it
      * isn't possible, increase other players faith points by 1.
@@ -29,14 +30,21 @@ public class WhiteMarble extends Marble {
         return false;
     }
 
+    /**
+     * @param game is Game.
+     * @param chosenLeaderCard is the chosen LeaderCard.
+     * @return false if @param chosenLeaderCard is not a WhiteConversionCard or is not active, otherwise @return true.
+     *
+     * this method firstly verifies if the chosen LeaderCard ia an active whiteConversionCard and then increse player
+     * warehouse by LeaderCard resource.
+     */
     private boolean useWhiteConversionCard(LightGame game, int chosenLeaderCard){
         if(!(game.isActiveWhiteConversionCard(chosenLeaderCard)))
             return false;
         try {
             LeaderCard card = game.getCurrentPlayerLeaderCard(chosenLeaderCard);
             game.whiteMarbleConversion(card);
-        } catch (AlreadyDiscardLeaderCardException e) {
-            e.printStackTrace();
+        } catch (AlreadyDiscardLeaderCardException ignored) {
         }
         return true;
     }

@@ -50,9 +50,12 @@ public class SlotDevelopmentCards {
      * @param choice is player's choice.
      * @return faith points given by activate production power of last added card.
      * @throws InsufficientResourceException if player has not enough resources.
+     * @throws NoSuchProductionPowerException if slot is empty.
+     *
      * this method calls activateProduction() of the last added card in SlotDevelopmentCards.
      */
-    public int activateProductionActiveCard(Warehouse w, Strongbox s, int choice) throws InsufficientResourceException, NoSuchProductionPowerException {
+    public int activateProductionActiveCard(Warehouse w, Strongbox s, int choice)
+            throws InsufficientResourceException, NoSuchProductionPowerException {
         if(isEmpty())
             throw new NoSuchProductionPowerException();
         return developmentCards.getLast().activateProduction(w, s, choice);
@@ -61,6 +64,7 @@ public class SlotDevelopmentCards {
     /**
      * @param s is a strongbox.
      * @return faith points given by last card production power.
+     *
      * this method increase @param s by resource given by this slot last card production power.
      */
     public int increaseProductionPowerResource(Strongbox s){
@@ -84,7 +88,8 @@ public class SlotDevelopmentCards {
      * @param s is player's strongbox.
      * @param choice is player's choice about which between warehouse and strongbox has the priority to be decreased.
      * @throws InsufficientResourceException if player has not enough resources to activate all production powers together.
-     * @throws NoSuchProductionPowerException if player the SlotDevelopmentCards is empty.
+     * @throws NoSuchProductionPowerException if slot is empty.
+     *
      * this method reduces @param w and @param s resources by slot last card production power required resources.
      */
     public void removeProductionPowerResource(Warehouse w, Strongbox s, int choice)
@@ -96,6 +101,7 @@ public class SlotDevelopmentCards {
 
     /**
      * @return 1 if slotDevelopmentCards is empty, or @return level +1 of last added DevelopmentCard.
+     *
      * this method @return the required level of a DevelopmentCard which can be added in SlotDevelopmentCards.
      */
     private int getRequiredLevel(){
@@ -106,6 +112,7 @@ public class SlotDevelopmentCards {
 
     /**
      * @param leaderRequirements is current player's summary of owned cards.
+     *
      * this method calls addCardRequirement method of LeaderRequirements for each DevelopmentCard in SlotDevelopmentCards.
      */
     public void updateLeaderRequirements(LeaderRequirements leaderRequirements){

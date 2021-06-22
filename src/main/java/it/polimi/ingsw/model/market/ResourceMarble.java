@@ -17,6 +17,7 @@ public class ResourceMarble extends Marble {
     /**
      * @param game is Game.
      * @return false because marble can't be converted.
+     *
      * this method increase Warehouse of this.resource. If it isn't possible, increase other player faith points by 1.
      */
     @Override

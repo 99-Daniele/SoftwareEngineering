@@ -1,16 +1,17 @@
 package it.polimi.ingsw.model.market;
 
-import it.polimi.ingsw.exceptions.WrongParametersException;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 import it.polimi.ingsw.view.CLI.ColorAnsi;
 import it.polimi.ingsw.view.modelView.MarketView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+
 /**
  * Market is the market of Game.
  */
 public class Market implements Serializable, MarketView {
+
     private static final int row = 3;
     private static final int column = 4;
     private final Marble[][] marketTray;
@@ -39,13 +40,13 @@ public class Market implements Serializable, MarketView {
     }
 
     /**
-     * this private method set the cell of the market to a specific Marble.
-     *
-     * @param i           row of the market.
-     * @param j           column of the market.
-     * @param random      number of the marble(0 = RED, 1=YELLOW, 2=BLUE, 3=GREY, 4=PURPLE, 5=WHITE).
-     * @param numOfMarble vector of the amount of marble for each color.
+     * @param i is the row of the market.
+     * @param j is the column of the market.
+     * @param random is the number of the marble(0 = RED, 1=YELLOW, 2=BLUE, 3=GREY, 4=PURPLE, 5=WHITE).
+     * @param numOfMarble is a vector of the amount of marble for each color.
      * @return true if there are still Marble of that color left, else false.
+     *
+     * this private method set the cell of the market to a specific Marble.
      */
     private boolean setCell(int i, int j, int random, int[] numOfMarble) {
         if (numOfMarble[random] > 0) {
@@ -68,9 +69,9 @@ public class Market implements Serializable, MarketView {
     }
 
     /**
-     * this private method set the marble that is situated in the side slide.
-     *
      * @param numOfMarbles contains the amount of marble for each color.
+     *
+     * this private method set the marble that is situated in the side slide.
      */
     private void externalMarbleSet(int[] numOfMarbles) {
         if (numOfMarbles[0] > 0)
@@ -88,10 +89,10 @@ public class Market implements Serializable, MarketView {
     }
 
     /**
-     * this method allows the caller to get all the marbles inside a selected column.
-     *
      * @param selectedColumn this is the column where the caller wants all the marbles.
      * @return a vector of Marble.
+     *
+     * this method allows the caller to get all the marbles inside a selected column.
      */
     public Marble[] getColumnMarbles(int selectedColumn) {
         Marble[] marketCopy = new Marble[row];
@@ -102,10 +103,10 @@ public class Market implements Serializable, MarketView {
     }
 
     /**
-     * this method allows the caller to get all the marbles inside a selected row.
-     *
      * @param selectedRow this is the row where the caller wants all the marbles.
      * @return a vector of Marbles.
+     *
+     * this method allows the caller to get all the marbles inside a selected row.
      */
     public Marble[] getRowMarbles(int selectedRow) {
         Marble[] marketCopy = new Marble[column];
@@ -121,11 +122,11 @@ public class Market implements Serializable, MarketView {
     }
 
     /**
+     * @param selectedColumn number of column that will be slided.
+     *
      * this method allows the caller to slide the selected column(of the market)of one position upwards,
      * the last marble of the column gets out of the matrix and will placed to the side slide,
      * the current element on the side slide gets placed to the first slot of the column.
-     *
-     * @param selectedColumn number of column that will be slided.
      */
     public void slideColumn(int selectedColumn){
         Marble marble;
@@ -138,11 +139,11 @@ public class Market implements Serializable, MarketView {
     }
 
     /**
+     * @param selectedRow number of the row that will be slided.
+     *
      * this method allows the caller to slide the selected row of the market of one position to the left,
      * the first marble of the column gets out of the matrix and will placed to the side slide,
      * the current element in the side slide gets placed to the last slot of the row.
-     *
-     * @param selectedRow number of the row that will be slided.
      */
     @Override
     public void slideRow(int selectedRow) {
@@ -153,6 +154,9 @@ public class Market implements Serializable, MarketView {
         marketTray[selectedRow - 1][column - 1] = marble;
     }
 
+    /**
+     * print Market in CLI mode with ASCII art.
+     */
     @Override
     public void printMarketCli() {
         System.out.println("\nMARKET:");
@@ -169,6 +173,11 @@ public class Market implements Serializable, MarketView {
         creationTable(s);
     }
 
+    /**
+     * @param s summarize in which order print marbles.
+     *
+     * print market.
+     */
     private void creationTable(String[] s) {
         String[][] tabella = new String[7][17];
         for (int x = 0; x < 7; x += 2) {
@@ -243,6 +252,11 @@ public class Market implements Serializable, MarketView {
         }
     }
 
+    /**
+     * @param row is a row of the market.
+     *
+     * print a Market row in CLI mode with ASCII art.
+     */
     public void printRow(int row) {
         row--;
         String[] s = new String[4];
@@ -255,6 +269,12 @@ public class Market implements Serializable, MarketView {
         creationRow(s);
     }
 
+
+    /**
+     * @param s summarize in which order print marbles.
+     *
+     * print market row.
+     */
     private void creationRow(String[] s) {
         String[][] tabella = new String[3][s.length * 4 + 1];
         for (int y = 0; y < s.length * 4 + 1; y += 4)
@@ -290,6 +310,11 @@ public class Market implements Serializable, MarketView {
         }
     }
 
+    /**
+     * @param column is a row of the market.
+     *
+     * print a Market column in CLI mode with ASCII art.
+     */
     public void printColumn(int column) {
         column--;
         String[] s = new String[3];
@@ -302,6 +327,11 @@ public class Market implements Serializable, MarketView {
         creationColumn(s);
     }
 
+    /**
+     * @param s summarize in which order print marbles.
+     *
+     * print market column.
+     */
     private void creationColumn(String[] s) {
         String[][] tabella = new String[7][5];
         for (int x = 1; x < 7; x++)
@@ -338,6 +368,11 @@ public class Market implements Serializable, MarketView {
         }
     }
 
+    /**
+     * @param marbles are player's chosen marbles.
+     *
+     * print marbles as a Market row.
+     */
     @Override
     public void printMarbles(ArrayList<Marble> marbles) {
         String[] s = new String[marbles.size()];
@@ -354,6 +389,10 @@ public class Market implements Serializable, MarketView {
         return marketTray[row][column];
     }
 
+    /**
+     * @param m is one marble.
+     * @return CLI representation of marble.
+     */
     private String fromMarbleToString(Marble m) {
         String s1 = m.toStringAbb();
         switch (s1) {

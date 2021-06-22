@@ -38,6 +38,7 @@ public abstract class Depot{
 
     /**
      * @param amount set the new amount of Depot. @param amount is previously verified to be less than maxAmount.
+     *
      * if @param amount == 0 also set Depot as empty.
      */
     public void setAmount(int amount) {
@@ -49,8 +50,9 @@ public abstract class Depot{
     }
 
     /**
-     * this method increase the amount of resource in this Depot by 1.
      * @return false if Depot was already full before the call of the method, otherwise @return true.
+     *
+     * this method increase the amount of resource in this Depot by 1.
      */
     public boolean increaseAmount(){
         if(this.amount + 1 <= maxAmount) {

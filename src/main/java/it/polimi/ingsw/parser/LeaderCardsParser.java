@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
+/**
+ * LeaderCardParser is a JSON Parser of AdditionalProductionPowerCard.JSON, DiscountCard.JSON, ExtraDepotCard.JSON and
+ * WhiteConversionCard.JSON files.
+ */
 public class LeaderCardsParser {
 
     private final ArrayList<LeaderCard> leaderCards = new ArrayList<>(16);

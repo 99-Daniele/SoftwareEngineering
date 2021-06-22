@@ -7,6 +7,9 @@ import it.polimi.ingsw.model.cards.leaderCards.LeaderCard;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * CardMapCLI is an HashMap which converts a CardID to a CardView object.
+ */
 public class CardMapCLI {
 
     private static CardMapCLI cardParser;

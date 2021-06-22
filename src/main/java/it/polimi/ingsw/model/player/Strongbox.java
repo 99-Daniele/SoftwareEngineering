@@ -27,6 +27,7 @@ public class Strongbox {
     /**
      * @param resource stands for the type of resource to increase.
      * @param amount stands for the amount of @param resource to increase.
+     *
      * this method firstly verifies if already exist ResourceContainer which contains @param resource and, if not,
      * create a new one, and increase.
      */
@@ -65,6 +66,7 @@ public class Strongbox {
 
     /**
      * @return a copy of Strongbox.
+     *
      * create a new Strongbox which is a copy of this.Strongbox.
      */
     public Strongbox copyThisStrongbox(){

@@ -33,6 +33,9 @@ public class ClientSocket extends Observable{
     }
 
     /**
+     * @param socket is the socket connect with ServerSocket
+     * @throws IOException if connection crash at any moment.
+     *
      * start threadIn and threadOut.
      * threadIn firstly login player and then constantly waits user inputs from System.in
      * threadOut constantly waits Server inputs.
@@ -64,11 +67,9 @@ public class ClientSocket extends Observable{
     }
 
     /**
-     * send to Server a TURN message and wait until a message return by Server.
-     * if thread is awaken cause 10 seconds passed, send another TURN request to Server.
-     * if after 30 seconds Server didn't return any message, connection with Server is considered as lost.
+     * @throws IOException if the connection with Server breaks during waiting.
      *
-     * @throws InterruptedException if the connection with Server breaks during waiting.
+     * wait messages from Server. After 30 seconds if Server has not sent any message, connection with Server is considered as lost.
      */
     private void receivePing() throws InterruptedException, IOException {
         while (true) {
@@ -82,7 +83,7 @@ public class ClientSocket extends Observable{
     }
 
     /**
-     * constantly wait for Server input and handle it by return a new message to Server or notifying other thread.
+     * constantly wait for Server input and handle it by return a new message to Server or notifying ClientView.
      */
     private void receiveMessage() throws IOException {
         while (true) {
@@ -102,23 +103,29 @@ public class ClientSocket extends Observable{
         }
     }
 
+    /**
+     * wake pingLock thread when message arrives from Server.
+     */
     private void wakeUp() {
         synchronized (pingLock) {
             pingLock.notifyAll();
         }
     }
 
+    /**
+     * @throws IOException if connection crash at any moment.
+     *
+     * send to Server a PONG message after PING.
+     */
     private void pingMessage() throws IOException {
         Message ping = new Message(MessageType.PONG, 0);
         sendMessage(ping);
     }
 
     /**
-     * send @param message to Server and wait until a OK message return by Server.
-     * if thread is awaken before 10 seconds but not for a OK message return, send another @param message to Server.
-     * if thread is awaken cause 10 seconds passed, send another @param message to Server.
-     * after 30 seconds Server didn't send any, connection with Server is considered as lost.
-     * @param message is the message to send to Server
+     * @param message is the message to send to Server.
+     *
+     * send @param message to Server.
      */
     public static void sendMessage(Message message) throws IOException{
         out.flush();
@@ -128,7 +135,7 @@ public class ClientSocket extends Observable{
     /**
      * @param initTime is the time in milliseconds from which start counting.
      * @param currentTime is the current time in milliseconds.
-     * @return if @param delta seconds have passed.
+     * @return if 30 seconds have passed.
      */
     private boolean isTimePassed(long initTime, long currentTime){
         return ((currentTime - initTime) >= 30000);
@@ -139,7 +146,7 @@ public class ClientSocket extends Observable{
     }
 
     /**
-     * close inputStream, outputStream and socket connection with Server.
+     * close inputStream and outputStream with Server.
      */
     public static void disconnect() {
         connected = false;
@@ -150,6 +157,9 @@ public class ClientSocket extends Observable{
         }
     }
 
+    /**
+     * this method is called when Client brutally lost Server connection. Inform Client and then disconnect.
+     */
     private void brutalDisconnection(){
         try {
             TimeUnit.MILLISECONDS.sleep(100);

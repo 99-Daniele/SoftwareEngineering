@@ -4,6 +4,9 @@ import it.polimi.ingsw.model.resourceContainers.Resource;
 
 import java.util.HashMap;
 
+/**
+ * ResourceMapGUI is an HashMap which converts a resource to file string of chosen resource.
+ */
 public class ResourceMapGUI {
 
     private static ResourceMapGUI resourceParser;

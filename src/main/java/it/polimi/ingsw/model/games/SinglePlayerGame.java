@@ -29,6 +29,9 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame {
         prepareActions();
     }
 
+    /**
+     * @param o is the observer that is added to the observers of game and Ludovico.
+     */
     @Override
     public synchronized void addObserver(Observer o) {
         super.addObserver(o);
@@ -60,17 +63,13 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame {
         shuffleActions();
     }
 
+    /**
+     * trigger the first available action for Ludovico.
+     */
     @Override
     public void nextPlayer() {
-        triggerFirstAction();
-        super.nextPlayer();
-    }
-
-    /**
-     * this method trigger the first action.
-     */
-    public void triggerFirstAction() {
         actions.get(0).actionTrigger(this);
+        super.nextPlayer();
     }
 
     /**
@@ -97,6 +96,9 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame {
         actions = newActions;
     }
 
+    /**
+     * increase Ludovico faith points by 1 when player discard a marble.
+     */
     @Override
     public void increaseOneFaithPointOtherPlayers() {
         LorenzoIlMagnifico.increaseFaithPoints(1);
@@ -104,15 +106,12 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame {
 
     /**
      * @param faithPoints is the amount of faith points given by action.
+     *
      * this method increase ludovico faith points and then looks if ludovico reached the pope space and if true
      * check it out if player is in the vatican section and increase his victory points.
      */
     public void LorenzoFaithTrackMovement(int faithPoints){
         LorenzoIlMagnifico.increaseFaithPoints(faithPoints);
-        LorenzoPopeSpace();
-    }
-
-    private void LorenzoPopeSpace(){
         if (getFaithTrack().reachPope(LorenzoIlMagnifico.getFaithPoints())) {
             getFaithTrack().victoryPointsVaticanReport(getPlayer(0).getVictoryPoints(),getPlayer(0).getFaithPoints());
             getFaithTrack().DecreaseRemainingPope();
@@ -122,6 +121,7 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame {
 
     /**
      * @param color stands for the kind of DevelopmentCards to discard from his deck.
+     *
      * this method receives the deck and remove the card if possible otherwise it asks a new deck and remove the card.
      * If during discarding there are not anymore DevelopmentCards, method do nothing.
      */
@@ -152,7 +152,7 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame {
     }
 
     /**
-     * @return player if he win the SinglePlayerGame
+     * @return 0 if player has seven DevelopmentCards or has reached the end of the faithTrack, otherwise return 1.
      */
     @Override
     public int endGame() {

@@ -3,6 +3,10 @@ package it.polimi.ingsw.network.server;
 import java.io.IOException;
 import java.net.Socket;
 
+/**
+ * Server class is a multiple games server.
+ * port could be selected at hte beginning or be default one (12460)
+ */
 public class Server {
 
     private final int port;
@@ -15,6 +19,9 @@ public class Server {
         this.port=port;
     }
 
+    /**
+     * start Server thread which constantly accept Client connections.
+     */
     public void startServer() {
         java.net.ServerSocket serverSocket;
         try {
@@ -31,7 +38,7 @@ public class Server {
                 Thread thread = new Thread(new ServerSocket(socket));
                 thread.start();
             } catch (IOException e) {
-                System.err.println(e.getMessage()); //si attiva se serversocket viene chiuso
+                System.err.println(e.getMessage());
             }
         }
     }

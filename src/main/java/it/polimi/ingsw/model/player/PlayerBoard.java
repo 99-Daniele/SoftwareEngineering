@@ -24,6 +24,7 @@ public class PlayerBoard extends SimplePlayerBoard{
 
     /**
      * @param nickname is player chosen nickname which was previously verified to be unique among other players.
+     *
      * the constructor call SimplePlayerBoard constructor, and then initialized nickname, Warehouse, Strongbox, the 3
      * SlotDevelopmentCards, the list of LeaderCards and the VictoryPoints.
      */
@@ -42,7 +43,6 @@ public class PlayerBoard extends SimplePlayerBoard{
     public String getNickname() {
         return nickname;
     }
-
 
     public VictoryPoints getVictoryPoints() {
         return victoryPoints;
@@ -79,6 +79,7 @@ public class PlayerBoard extends SimplePlayerBoard{
      * @param slot is player's choice about in which slot @param card will be inserted.
      * @param choice is player's choice about which between warehouse and strongbox has the priority to be decreased.
      * @throws InsufficientResourceException if player has not enough resources to buy @param card.
+     *
      * if exists active DiscountCard @param card resourceCost could be discounted. In case player has still not enough.
      * resources, @param card resourceCost return to original and card is not bought by player.
      */
@@ -116,6 +117,7 @@ public class PlayerBoard extends SimplePlayerBoard{
     /**
      * @param card is DevelopmentCard to buy.
      * @return an ArrayList </Integer> of slots where @card can be inserted.
+     *
      * for each slot verifies if @param card has the required level and in case add to @param slots.
      */
     public ArrayList<Integer> findAvailableSlot(DevelopmentCard card){
@@ -133,6 +135,7 @@ public class PlayerBoard extends SimplePlayerBoard{
      * @param choice is player's choice about which between warehouse and strongbox has the priority to be decreased.
      * @throws InsufficientResourceException if player has not enough resources to activate all production powers together.
      * @throws NoSuchProductionPowerException if player has chosen an empty SlotDevelopmentCards.
+     *
      * this method remove player resources by the amount required by the chosen card and increase @param s by the amount
      * given by card production power.
      */
@@ -145,6 +148,7 @@ public class PlayerBoard extends SimplePlayerBoard{
 
     /**
      * @param s is a strongbox.
+     *
      * this method increase this.strongbox by the amount contained in @param s.
      */
     public void increaseStrongbox(Strongbox s){
@@ -168,6 +172,7 @@ public class PlayerBoard extends SimplePlayerBoard{
      * @param r2 is a resource to be decreased by current player resources.
      * @param choice is player's choice about which between warehouse and strongbox has the priority to be decreased.
      * @throws InsufficientResourceException if player has not enough resources to activate all production powers together.
+     *
      * this method decreases resources by 1 @param r1 and 1 @param r2.
      */
     public void activateBasicProduction(Resource r1, Resource r2, int choice) throws InsufficientResourceException {
@@ -186,6 +191,7 @@ public class PlayerBoard extends SimplePlayerBoard{
      * @param choice is player's choice about which between warehouse and strongbox has the priority to be decreased.
      * @throws InsufficientResourceException if player has not enough resources to activate all production powers together.
      * @throws NoSuchProductionPowerException if player has chosen a not active or not existing AdditionalProductionPower.
+     *
      * this method remove player resources by the 1 resource required by the chosen card.
      */
     public void activateAdditionalProductionPower(int chosenAdditionalCard, int choice)
@@ -201,6 +207,7 @@ public class PlayerBoard extends SimplePlayerBoard{
      * @param r2 is player's choice to a resource to be removed.
      * @param w is a warehouse.
      * @param s is a strongbox.
+     *
      * this method decrease firstly @param w and then, if necessary, @param s.
      */
     private void decreaseWarehouseResource(Resource r1, Resource r2, Warehouse w, Strongbox s){
@@ -215,6 +222,7 @@ public class PlayerBoard extends SimplePlayerBoard{
      * @param r2 is player's choice to a resource to be removed.
      * @param w is a warehouse.
      * @param s is a strongbox.
+     *
      * this method decrease firstly @param s and then, if necessary, @param w.
      */
     private void decreaseStrongboxResource(Resource r1, Resource r2, Warehouse w, Strongbox s){
@@ -271,6 +279,7 @@ public class PlayerBoard extends SimplePlayerBoard{
     /**
      * @param chosenLeaderCard is the position of one player's LeaderCard.
      * @return true if the chosen LeaderCard is an active WhiteConversionCard.
+     *
      * if it isn't an active WhiteConversionCard or even not exist a LeaderCard, @return false.
      */
     public boolean isWhiteConversionLeaderCardActive(int chosenLeaderCard){
@@ -309,7 +318,8 @@ public class PlayerBoard extends SimplePlayerBoard{
 
     /**
      * @return the victory points earned by the amount of resources.
-     * this method calculate the sum of total
+     *
+     * this method calculate the sum of total resources divided by 5.
      */
     private int victoryPointsByAmountOfResource(){
         return sumTotalResource()/5;

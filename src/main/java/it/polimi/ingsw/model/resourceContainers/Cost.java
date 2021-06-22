@@ -42,6 +42,7 @@ public class Cost {
 
     /**
      * @param strongbox is player's strongbox.
+     *
      * this method increases @param strongbox resources by an amount equal to Cost.
      * Cost remain unchanged.
      */
@@ -57,6 +58,7 @@ public class Cost {
      * @param choice refers to a player's choice. If @param choice == 1, the player has chosen to firstly decreased
      * resource from @param warehouse and then, if necessary, from @param strongbox, vice versa if @param choice == 2.
      * @throws InsufficientResourceException if player has not enough resources.
+     *
      * this method, firstly evaluates if the player has enough resources and then decreases his resources for an
      * amount equal to Cost.
      * Cost remain unchanged.
@@ -76,6 +78,7 @@ public class Cost {
     /**
      * @param warehouse is player's Warehouse.
      * @param strongbox is player's Strongbox.
+     *
      * this method firstly decreased resource from @param warehouse and then, if necessary, from @param strongbox.
      * Cost remain unchanged.
      */
@@ -94,6 +97,7 @@ public class Cost {
     /**
      * @param warehouse is player's Warehouse.
      * @param strongbox is player's Strongbox.
+     *
      * this method firstly decreased resource from @param strongbox and then, if necessary, from @param warehouse.
      * Cost remain unchanged.
      */

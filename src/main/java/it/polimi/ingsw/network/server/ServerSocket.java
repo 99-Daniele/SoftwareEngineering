@@ -8,6 +8,10 @@ import it.polimi.ingsw.view.VirtualView;
 import java.io.IOException;
 import java.net.Socket;
 
+/**
+ * ServerSocket handle Client - Server socket connection and then create a new VirtualView for Client and associates
+ * to correct ControllerGame.
+ */
 public class ServerSocket implements Runnable {
 
     private final Socket socket;
@@ -19,6 +23,9 @@ public class ServerSocket implements Runnable {
         this.virtualView = new VirtualView(socket);
     }
 
+    /**
+     * start VirtualView and then find its associated ControllerGame. Then add ControllerGame to VirtualView observers.
+     */
     public void run() {
         try {
             virtualView.start();
@@ -37,6 +44,9 @@ public class ServerSocket implements Runnable {
         }
     }
 
+    /**
+     * close Socket CConnection if not previously closed.
+     */
     private void closeConnections(){
         try {
             if (!socket.isClosed()) {
@@ -46,6 +56,11 @@ public class ServerSocket implements Runnable {
         }
     }
 
+    /**
+     * @param nickName is player nickName.
+     *
+     * inform ControllerGame that player has disconnected from Game and then close Socket connection.
+     */
     private void disconnect(String nickName){
         controllerGame.quitGame(virtualView, nickName);
         closeConnections();

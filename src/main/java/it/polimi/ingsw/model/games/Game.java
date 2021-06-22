@@ -332,8 +332,8 @@ public class Game extends Observable implements LightGame{
     }
 
     /**
-     * @param resource
-     * @param player
+     * @param resource is a chosen resource.
+     * @param player is one player who have to chose one resource before starting game.
      */
     public void firstIncreaseWarehouse(Resource resource, int player){
         Message message=new MessageOneIntOneResource(MessageType.INCREASE_WAREHOUSE,player,resource, 1);
@@ -348,6 +348,12 @@ public class Game extends Observable implements LightGame{
         }
     }
 
+    /**
+     * @param resource1 is a chosen resource.
+     * @param resource2 is a chosen resource.
+     *
+     * this method increase the warehouse of 4th player by the two chosen resources before starting game.
+     */
     public void firstDoubleIncreaseWarehouse(Resource resource1, Resource resource2){
         Message message;
         if(resource1 == resource2)
@@ -387,6 +393,11 @@ public class Game extends Observable implements LightGame{
         }
     }
 
+    /**
+     * @param i is one player.
+     *
+     * send to each player how many faith points it have after an increase.
+     */
     private void faithPointsIncreaseNotify(int i){
         Message message=new MessageOneParameterInt(MessageType.FAITH_POINTS_INCREASE,i, players.get(i).getFaithPoints());
         setChanged();
@@ -409,6 +420,12 @@ public class Game extends Observable implements LightGame{
         }
     }
 
+    /**
+     * @param i is one player.
+     * @param notifyPlayer is the player who activated vatican report.
+     *
+     * send to each player which player has activated vatican report and how many victory points they have earned.
+     */
     public void faithTrackNotify(int i, int notifyPlayer){
         int victoryPoints = players.get(i).getVictoryPoints().getVictoryPointsByVaticanReport();
         Message m = new MessageTwoParameterInt(MessageType.VATICAN_REPORT, i, notifyPlayer, victoryPoints);
@@ -521,6 +538,7 @@ public class Game extends Observable implements LightGame{
      * @throws InsufficientResourceException if player has not enough resources.
      * @throws ImpossibleDevelopmentCardAdditionException if is not possible to add the card in player's slots.
      * @throws EmptyDevelopmentCardDeckException if player has chosen an empty deck.
+     *
      * this method firstly verifies if buying is possible and then remove DevelopmentCard from the deck
      * where it was contained.
      */
@@ -561,6 +579,7 @@ public class Game extends Observable implements LightGame{
      * @param choice is player's choice about which between warehouse and strongbox has the priority to be decreased.
      * @throws InsufficientResourceException if player has not enough resources to activate all production powers together.
      * @throws NoSuchProductionPowerException if player has chosen an empty SlotDevelopmentCards.
+     *
      * this method remove player resources by the amount required by the chosen card and increase @param s by the amount
      * given by card production power.
      */
@@ -598,6 +617,7 @@ public class Game extends Observable implements LightGame{
      * @param s is a strongbox.
      * @param choice is player's choice about which between warehouse and strongbox has the priority to be decreased.
      * @throws InsufficientResourceException if player has not enough resources to activate all production powers together.
+     *
      * this method remove player resources by 1 @param r1 and 1 @param r2 and increase @param s by 1 @param r3.
      */
     public void basicProductionPower(Resource r1, Resource r2, Resource r3, Strongbox s, int choice)
@@ -621,6 +641,7 @@ public class Game extends Observable implements LightGame{
      * @param choice is player's choice about which between warehouse and strongbox has the priority to be decreased.
      * @throws InsufficientResourceException if player has not enough resources to activate all production powers together.
      * @throws NoSuchProductionPowerException if player has chosen a not active or not existing AdditionalProductionPower.
+     *
      * this method remove player resources by the 1 resource required by the chosen card and increase @param s by the 1
      * resource given by card production power.
      */
@@ -654,6 +675,7 @@ public class Game extends Observable implements LightGame{
 
     /**
      * @param s is a strongbox.
+     *
      * this method increase current player strongbox by the amount contained in @param s.
      */
     public void increaseCurrentPlayerStrongbox(Strongbox s){
@@ -772,6 +794,7 @@ public class Game extends Observable implements LightGame{
 
     /**
      * @return the position of the winner of the game.
+     *
      * this method find the player with more victory points.
      * in case more players have both max victory points, find which one has more amount of resources.
      */
@@ -796,12 +819,20 @@ public class Game extends Observable implements LightGame{
         return winner;
     }
 
+    /**
+     * @param winner is the winner of the game.
+     * @param maxVictoryPoints are winner's victory points.
+     * @param maxNumOfResources are winner's amount of resources.
+     */
     public void endGameNotify(int winner, int maxVictoryPoints, int maxNumOfResources){
         Message endGame = new MessageTwoParameterInt(MessageType.END_GAME, winner, maxVictoryPoints, maxNumOfResources);
         setChanged();
         notifyObservers(endGame);
     }
 
+    /**
+     * @param winner is the winner of the game
+     */
     public void endGameNotify(int winner){
         int maxVictoryPoints = players.get(winner).sumVictoryPoints();
         int maxNumOfResources = players.get(winner).sumTotalResource();
@@ -824,6 +855,12 @@ public class Game extends Observable implements LightGame{
         return numOfPlayers;
     }
 
+    /**
+     * @param colorDeck is one deck of development cards.
+     *
+     * this method notifies player that Ludovico has discarded one DevelopmentCard. It sends the new DevelopmentCard of the deck
+     * or -1 if deck is now empty.
+     */
     public void discardNotify(Deck colorDeck){
         Message message;
         if(colorDeck.isEmpty()){
@@ -841,5 +878,4 @@ public class Game extends Observable implements LightGame{
         setChanged();
         notifyObservers(message);
     }
-
 }

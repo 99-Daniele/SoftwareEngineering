@@ -8,6 +8,9 @@ import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
+/**
+ * DevelopmentCardParser is a JSON Parser of DevelopmentCard.JSON file
+ */
 public class DevelopmentCardsParser {
 
     private final DevelopmentCard[] developmentCards;

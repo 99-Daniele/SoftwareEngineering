@@ -36,6 +36,7 @@ public class Warehouse{
 
     /**
      * @param resource stands for the resource of new ExtraDepot which has to be added in extraDepots.
+     *
      * if extraDepots wasn't previously initialized, it creates a new ArrayList</ExtraDepot>.
      */
     public void addExtraDepot(Resource resource){
@@ -60,6 +61,7 @@ public class Warehouse{
     /**
      * @param resource stands for the type of resource to count in extraDepots.
      * @return the count of @param resource in extraDepots.
+     *
      * for each ExtraDepot in extraDepots evaluates if contains @param resource and in case @return its amount.
      * if @param resource is not in extraDepots @return 0.
      */
@@ -74,6 +76,7 @@ public class Warehouse{
     /**
      * @param resource stands for the type of resource to count in warehouseDepots.
      * @return the count of @param resource in warehouseDepots.
+     *
      * for each WarehouseDepot in warehouseDepots evaluates if contains @param resource and in case @return its amount.
      * if @param resource is not in warehouseDepots @return 0.
      */
@@ -112,6 +115,7 @@ public class Warehouse{
     /**
      * @param resource stands for the type of resource to increase by 1 in warehouseDepots.
      * @return in which depot @param resource is increased, otherwise @return -1.
+     *
      * the method increases in the correct WarehouseDepot, otherwise in the first empty WarehouseDepot.
      */
     private int increaseWarehouseDepot(Resource resource){
@@ -149,6 +153,7 @@ public class Warehouse{
     /**
      * @param resource stands for the type of resource to increase by 1 in Warehouse.
      * @return in which depot @param resource is increased, otherwise @return -1.
+     *
      * the method increases in the correct ExtraDepot, otherwise in the correct WarehouseDepot,
      * otherwise in the first empty WarehouseDepot.
      */
@@ -195,7 +200,8 @@ public class Warehouse{
      * @param resource stands for the type of resource to decrease in Warehouse.
      * @param amount stands for the amount of @param resource to decrease.
      * @return 0 if in Warehouse there are enough resources, otherwise @return the amount of not decreased resource.
-     * the method firstly decreases in warehouseDepots and, if necessary, in extraDepots.
+     *
+     * this method firstly decreases in warehouseDepots and, if necessary, in extraDepots.
      */
     public int decreaseResource(Resource resource, int amount){
         if(amount == 0)
@@ -242,10 +248,11 @@ public class Warehouse{
     }
 
     /**
-     * this method switch two different WarehouseDepot.
      * @param depot1 stands for position of the first WarehouseDepot in warehouseDepots to switch.
      * @param depot2 stands for position of the second WarehouseDepot in warehouseDepots to switch.
      * @throws ImpossibleSwitchDepotException if the switch is not possible.
+     *
+     * this method switch two different WarehouseDepot.
      */
     private void switchWarehouseDepots(int depot1, int depot2) throws ImpossibleSwitchDepotException{
         int amount1 = warehouseDepots[depot1].getAmount();
@@ -268,10 +275,11 @@ public class Warehouse{
     }
 
     /**
-     * this method switch an ExtraDepot with an empty WarehouseDepot.
      * @param extraDepotPos stands for position of the ExtraDepot in extraDepots to switch.
      * @param warehouseDepotPos stands for position of the empty WarehouseDepot in warehouseDepots to switch.
      * @throws ImpossibleSwitchDepotException if the switch is not possible.
+     *
+     *      * this method switch an ExtraDepot with an empty WarehouseDepot.
      */
     private void switchExtraDepotWithEmptyWarehouseDepot(int extraDepotPos, int warehouseDepotPos) throws ImpossibleSwitchDepotException{
         for (int i = 0; i < 3; i++){
@@ -296,10 +304,11 @@ public class Warehouse{
     }
 
     /**
-     * this method switch a WarehouseDepot with an ExtraDepot.
      * @param warehouseDepotPos stands for position of the WarehouseDepot in warehouseDepots to switch.
      * @param extraDepotPos stands for position of the ExtraDepot in extraDepots to switch.
      * @throws ImpossibleSwitchDepotException if thw switch is not possible.
+     *
+     * this method switch a WarehouseDepot with an ExtraDepot.
      */
     private void switchWarehouseDepotWithExtraDepot(int warehouseDepotPos, int extraDepotPos) throws ImpossibleSwitchDepotException{
         extraDepotPos -= 3;
@@ -330,10 +339,11 @@ public class Warehouse{
     }
 
     /**
-     * this method switch two Depot.
      * @param depot1 stands for position of the first Depot in Warehouse to switch.
      * @param depot2 stands for position of the second Depot in Warehouse to switch.
      * @throws ImpossibleSwitchDepotException if the switch is not possible.
+     *
+     * this method switch two Depot.
      * if @param is 0 stands for the first WarehouseDepot, 1 for the second one, 2 for the third one,
      * 3 for the first ExtraDepot, 4 for the second ExtraDepot.
      */
@@ -360,6 +370,7 @@ public class Warehouse{
 
     /**
      * @return a copy of Warehouse.
+     *
      * create a new Warehouse and firstly copies this.resource of third WarehouseDepot, than of second, than of first,
      * at the end of ExtraDepot, if exist.
      */
@@ -375,6 +386,7 @@ public class Warehouse{
     /**
      * @param w is Warehouse which is copying this.Warehouse.
      * @param depot stands for position in warehouseDepots.
+     *
      * this method evaluates which resource is contained in @param depot WarehouseDepot and increase @param w
      */
     private void copySpecificWarehouseDepot(Warehouse w, int depot){
@@ -403,6 +415,7 @@ public class Warehouse{
 
     /**
      * @param w is Warehouse which is copying this.Warehouse.
+     *
      * this method evaluates if exist resources in ExtraDepot and, in case, increase @param w with that resource
      * by its amount in this.Warehouse.
      */
