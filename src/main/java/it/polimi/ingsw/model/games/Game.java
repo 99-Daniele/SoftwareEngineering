@@ -545,8 +545,6 @@ public class Game extends Observable implements LightGame{
     public void buyDevelopmentCardFromMarket(int deckRow, int deckColumn, int choice, int slot)
             throws InsufficientResourceException, ImpossibleDevelopmentCardAdditionException, EmptyDevelopmentCardDeckException {
         DevelopmentCard card = deck[deckRow][deckColumn].getFirstCard();
-        if(!(players.get(currentPlayer).isBuyable(card)))
-            throw new InsufficientResourceException();
         players.get(currentPlayer).buyDevelopmentCard(card, slot, choice);
         deck[deckRow][deckColumn].removeDevelopmentCard();
         Message message = new MessageTwoParameterInt(MessageType.BUY_CARD,currentPlayer, card.getCardID(), slot);
@@ -562,8 +560,7 @@ public class Game extends Observable implements LightGame{
         setChanged();
         notifyObservers(message);
         for(Resource resource: Resource.values()) {
-            if(card.getResourceCost().getNumOfResource(resource)!=0)
-            {
+            if(card.getResourceCost().getNumOfResource(resource)!=0) {
                 int par=players.get(currentPlayer).getWarehouse().getNumOfResource(resource);
                 int par1=players.get(currentPlayer).getStrongbox().getNumOfResource(resource);
                 message = new MessageOneResourceTwoInt(MessageType.RESOURCE_AMOUNT, currentPlayer,resource,par,par1);

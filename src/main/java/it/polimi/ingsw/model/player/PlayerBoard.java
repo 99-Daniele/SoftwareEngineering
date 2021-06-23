@@ -85,33 +85,36 @@ public class PlayerBoard extends SimplePlayerBoard{
      */
     public void buyDevelopmentCard(DevelopmentCard card, int slot, int choice)
             throws InsufficientResourceException, ImpossibleDevelopmentCardAdditionException {
-        boolean discount1 = false;
-        boolean discount2 = false;
-        if(leaderCards.size() > 0)
-            discount1 = leaderCards.get(0).discount(card);
-        if(leaderCards.size() > 1)
-            discount2 = leaderCards.get(1).discount(card);
         if(isBuyable(card)){
             if(!(slotDevelopmentCards[slot -1].addDevelopmentCard(card)))
                 throw new ImpossibleDevelopmentCardAdditionException();
             card.buyCard(warehouse, strongbox, choice);
             victoryPoints.increaseVictoryPointsByCards(card.getVictoryPoints());
         }
-        else {
-            if (discount1)
-                leaderCards.get(0).recount(card);
-            if (discount2)
-                leaderCards.get(1).recount(card);
+        else
             throw new InsufficientResourceException();
-        }
     }
 
     /**
      * @param card is DevelopmentCard to buy.
      * @return true if player has enough resources.
      */
-    public boolean isBuyable(DevelopmentCard card){
-        return card.isBuyable(warehouse, strongbox);
+    private boolean isBuyable(DevelopmentCard card){
+        boolean discount1 = false;
+        boolean discount2 = false;
+        if(leaderCards.size() > 0)
+            discount1 = leaderCards.get(0).discount(card);
+        if(leaderCards.size() > 1)
+            discount2 = leaderCards.get(1).discount(card);
+        if(card.isBuyable(warehouse, strongbox))
+            return true;
+        else {
+            if (discount1)
+                leaderCards.get(0).recount(card);
+            if (discount2)
+                leaderCards.get(1).recount(card);
+            return false;
+        }
     }
 
     /**
