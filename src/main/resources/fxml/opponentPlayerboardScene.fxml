@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="728.0" prefWidth="1180.0" xmlns="http://javafx.com/javafx/16"
+<AnchorPane prefHeight="728.0" prefWidth="1180.0" xmlns="http://javafx.com/javafx/1"
             xmlns:fx="http://javafx.com/fxml/1">
     <ImageView fitHeight="1034.0" fitWidth="686.0" layoutX="211.0" layoutY="-134.0" rotate="-90.0">
         <Image url="@../photos/Masters_of_Renaissance_PlayerBoard(11_2020)-1.png"/>

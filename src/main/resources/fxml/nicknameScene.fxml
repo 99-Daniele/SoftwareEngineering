@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="540.0" prefWidth="1193.0" xmlns="http://javafx.com/javafx/16"
+<AnchorPane prefHeight="540.0" prefWidth="1193.0" xmlns="http://javafx.com/javafx/1"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="it.polimi.ingsw.view.GUI.sceneController.NicknameSceneController">
     <Label fx:id="nicknameLabel" layoutX="645.0" layoutY="147.0" text="INSERT NICKNAME">

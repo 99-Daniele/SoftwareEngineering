@@ -24,6 +24,24 @@ public class App {
      * if args represent a GUI client, new GUI is created and launched.
      */
     public static void main(String[] args) {
+
+        // TODO:
+        // Pls get number of args
+        // use switch on that number.
+
+        // TODD2: if no parms, does NOT star with any message!
+        int paramCount = args.length;
+        ClientView gui;
+
+        switch (paramCount){
+            // TODO: finire...
+            case  0:
+                gui = new GUI();
+                gui.launchGUI();
+                return;
+
+        }
+
         if (args.length >= 1 && (args[0].equals("--server") || args[0].equals("-s"))) {
             Server server;
             if (args.length >= 3 && (args[1].equals("--port") || args[1].equals("-p"))) {
@@ -34,7 +52,7 @@ public class App {
             server.startServer();
         }
         else if (args.length >= 1 && (args[0].equals("--gui") || args[0].equals("-g"))) {
-            ClientView gui = new GUI();
+            gui = new GUI();
             if (args.length > 4 && (args[1].equals("--hostname") || args[1].equals("-h")) &&
                     (args[3].equals("--port") || args[3].equals("-p"))) {
                 gui.launchGUI(args[2], Integer.parseInt(args[4]));
