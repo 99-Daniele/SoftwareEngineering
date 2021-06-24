@@ -415,7 +415,8 @@ public class GUI extends ClientView {
     }
 
     @Override
-    public void endGameMessage(Message message) {
+    public void
+    endGameMessage(Message message) {
         MessageTwoParameterInt m = (MessageTwoParameterInt) message;
         String endMessage;
         if(getNumOfPlayers() == 1 && m.getClientID() == 1){
@@ -588,6 +589,7 @@ public class GUI extends ClientView {
     }
 
     private void quitPhase(String quitMessage) {
+        System.out.println("QUIT");
         SceneController.changeRootPane("/fxml/yourTurnScene");
         SceneController.errorMessage(quitMessage);
         SceneController.setDisable("#radiobutBuyCard", true);

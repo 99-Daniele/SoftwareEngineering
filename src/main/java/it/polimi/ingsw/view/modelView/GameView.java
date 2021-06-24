@@ -190,6 +190,8 @@ public class GameView {
         return players.get(viewID).servantAmount();
     }
 
+    public boolean isSecondDepot(int viewID){return players.get(viewID).isSecondDepot();}
+
     public int getFaithPoints(int viewID){return faithTrack.getFaithPoints(viewID);}
 
     public int getVictoryPoints(int viewID){return faithTrack.getVictoryPoints(viewID);}

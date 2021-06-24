@@ -13,6 +13,7 @@ public class WarehouseStrongboxView {
     private final ResourceContainerView shield;
     private final ResourceContainerView servant;
     private final ResourceContainerView stone;
+    private boolean secondDepot = false;
 
     public WarehouseStrongboxView() {
         depots = new ArrayList<>(3);
@@ -41,8 +42,9 @@ public class WarehouseStrongboxView {
         swap(depots, depot1, depot2);
     }
 
-    public void addExtraDepot(Resource r){
+    public void addExtraDepot(Resource r, boolean secondDepot){
         depots.add(new ResourceContainerView(r));
+        this.secondDepot = secondDepot;
     }
 
     private void strongboxHandler(Resource r, int strongboxAmount){
@@ -104,7 +106,7 @@ public class WarehouseStrongboxView {
         return depots.size() >= 4;
     }
 
-    private boolean existExtraDepot2(){
+    public boolean existExtraDepot2(){
         return depots.size() == 5;
     }
 
@@ -163,5 +165,9 @@ public class WarehouseStrongboxView {
 
     public int servantAmount(){
         return servant.getAmount();
+    }
+
+    public boolean isSecondDepot() {
+        return secondDepot;
     }
 }

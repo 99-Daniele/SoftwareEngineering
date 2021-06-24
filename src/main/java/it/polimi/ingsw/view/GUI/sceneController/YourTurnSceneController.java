@@ -457,10 +457,18 @@ public class YourTurnSceneController {
 
     private void setExtraDepot1() {
         if (ClientView.getWarehouse(GUI.getPosition()).size() >= 4) {
-            if (ClientView.getWarehouse(GUI.getPosition()).get(3).getAmount() >= 1)
-                setImage(extra11, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(3).getResource()));
-            if (ClientView.getWarehouse(GUI.getPosition()).get(3).getAmount() == 2)
-                setImage(extra12, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(3).getResource()));
+            if (ClientView.getWarehouse(GUI.getPosition()).get(3).getAmount() >= 1) {
+                if(ClientView.isSecondDepot(GUI.getPosition()))
+                    setImage(extra21, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(3).getResource()));
+                else
+                    setImage(extra11, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(3).getResource()));
+            }
+            if (ClientView.getWarehouse(GUI.getPosition()).get(3).getAmount() == 2) {
+                if(ClientView.isSecondDepot(GUI.getPosition()))
+                    setImage(extra22, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(3).getResource()));
+                else
+                    setImage(extra12, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(3).getResource()));
+            }
         }
     }
 
@@ -642,6 +650,8 @@ public class YourTurnSceneController {
         if(ClientView.getWarehouse(GUI.getPosition()).size() >= 4) {
             four.setVisible(true);
             four.setDisable(false);
+            if(ClientView.isSecondDepot(GUI.getPosition()))
+                four.setLayoutX(177.0);
         }
         if(ClientView.getWarehouse(GUI.getPosition()).size() == 5) {
             five.setVisible(true);
@@ -1371,10 +1381,18 @@ public class YourTurnSceneController {
                     SceneController.setImage("#deposit33", ResourceMapGUI.getResource(r));
                 break;
             case 4:
-                if(amount == 1)
-                    SceneController.setImage("#extra11", ResourceMapGUI.getResource(r));
-                else
-                    SceneController.setImage("#extra12", ResourceMapGUI.getResource(r));
+                if(amount == 1) {
+                    if(ClientView.isSecondDepot(GUI.getPosition()))
+                        SceneController.setImage("#extra21", ResourceMapGUI.getResource(r));
+                    else
+                        SceneController.setImage("#extra11", ResourceMapGUI.getResource(r));
+                }
+                else {
+                    if(ClientView.isSecondDepot(GUI.getPosition()))
+                        SceneController.setImage("#extra22", ResourceMapGUI.getResource(r));
+                    else
+                        SceneController.setImage("#extra12", ResourceMapGUI.getResource(r));
+                };
                 break;
             case 5:
                 if(amount == 1)
@@ -1427,14 +1445,24 @@ public class YourTurnSceneController {
                     SceneController.setImage("#deposit31", "");
                 break;
             case 4:
+                String selector1;
+                String selector2;
+                if(ClientView.isSecondDepot(GUI.getPosition())){
+                    selector1 = "#extra21";
+                    selector2 = "#extra22";
+                }
+                else {
+                    selector1 = "#extra11";
+                    selector2 = "#extra12";
+                }
                 if (amount == 2)
-                    SceneController.setImage("#extra12", ResourceMapGUI.getResource(r));
+                    SceneController.setImage(selector1, ResourceMapGUI.getResource(r));
                 else
-                    SceneController.setImage("#extra12", "");
+                    SceneController.setImage(selector1, "");
                 if(amount >= 1)
-                    SceneController.setImage("#extra11", ResourceMapGUI.getResource(r));
+                    SceneController.setImage(selector2, ResourceMapGUI.getResource(r));
                 else
-                    SceneController.setImage("#extra11", "");
+                    SceneController.setImage(selector2, "");
                 break;
             case 5:
                 if (amount == 2)
@@ -1559,14 +1587,24 @@ public class YourTurnSceneController {
         else
             SceneController.setImage("#deposit33", "");
         if (ClientView.getWarehouse(GUI.getPosition()).size() >= 4) {
+            String selector1;
+            String selector2;
+            if(ClientView.isSecondDepot(GUI.getPosition())){
+                selector1 = "#extra21";
+                selector2 = "#extra22";
+            }
+            else {
+                selector1 = "#extra11";
+                selector2 = "#extra12";
+            }
             if (ClientView.getWarehouse(GUI.getPosition()).get(3).getAmount() >= 1)
-                SceneController.setImage("#extra11", ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(3).getResource()));
+                SceneController.setImage(selector1, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(3).getResource()));
             else
-                SceneController.setImage("#extra11", "");
+                SceneController.setImage(selector1, "");
             if (ClientView.getWarehouse(GUI.getPosition()).get(3).getAmount() == 2)
-                SceneController.setImage("#extra12", ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(3).getResource()));
+                SceneController.setImage(selector2, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(3).getResource()));
             else
-                SceneController.setImage("#extra12", "");
+                SceneController.setImage(selector2, "");
         }
         if (ClientView.getWarehouse(GUI.getPosition()).size() == 5) {
             if (ClientView.getWarehouse(GUI.getPosition()).get(4).getAmount() >= 1)

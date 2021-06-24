@@ -22,13 +22,13 @@ public class CardsSlotsView {
         thirdSlot = new LinkedList<>();
         firstLeaderCard = -1;
         secondLeaderCard = -1;
+        firstActive = false;
+        secondActive = false;
     }
 
     public void setLeaderCards(int firstLeaderCard, int secondLeaderCard){
         this.firstLeaderCard = firstLeaderCard;
-        firstActive = false;
         this.secondLeaderCard = secondLeaderCard;
-        secondActive = false;
     }
 
     public void addLeaderCard(int leaderCard){

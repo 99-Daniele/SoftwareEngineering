@@ -67,7 +67,6 @@ public class VirtualView extends Observable implements View, Observer{
     }
 
     private void ping() throws InterruptedException, IOException {
-        TimeUnit.SECONDS.sleep(1);
         long initTime = System.currentTimeMillis();
         long interTime = initTime;
         Message message = new Message(MessageType.PING, viewID);
@@ -77,11 +76,12 @@ public class VirtualView extends Observable implements View, Observer{
                 lock.wait(10000);
                 if (isTimePassed(initTime, System.currentTimeMillis(), 30000)) {
                     throw new IOException();
-                } else if (!(isTimePassed(interTime, System.currentTimeMillis(), 10000))) {
-                    TimeUnit.SECONDS.sleep(10 - (System.currentTimeMillis() - interTime)/10000);
-                    initTime = System.currentTimeMillis();
-                    interTime = initTime;
-                } else {
+                }
+                else {
+                    if (!(isTimePassed(interTime, System.currentTimeMillis(), 10000))) {
+                        TimeUnit.SECONDS.sleep(10 - (System.currentTimeMillis() - interTime) / 10000);
+                        initTime = System.currentTimeMillis();
+                    }
                     interTime = System.currentTimeMillis();
                     sendMessage(message);
                 }
@@ -103,6 +103,21 @@ public class VirtualView extends Observable implements View, Observer{
                         }
                         break;
                     case ERR:
+                    case OK:
+                    case QUIT:
+                    case MARKET:
+                    case PLAYERS:
+                    case END_GAME:
+                    case DECKBOARD:
+                    case NEW_PLAYER:
+                    case START_GAME:
+                    case CARD_REMOVE:
+                    case EXTRA_DEPOT:
+                    case MARKET_CHANGE:
+                    case VATICAN_REPORT:
+                    case RESOURCE_AMOUNT:
+                    case INCREASE_WAREHOUSE:
+                    case FAITH_POINTS_INCREASE:
                         printMessage(message);
                         errorMessage(ErrorType.ILLEGAL_OPERATION);
                         break;

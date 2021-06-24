@@ -33,7 +33,7 @@ public class PlayerBoardView {
     }
 
     public void addExtraDepot(Resource r){
-        warehouseStrongboxView.addExtraDepot(r);
+        warehouseStrongboxView.addExtraDepot(r, cardsSlotsView.isLeaderCardActive(2) && !warehouseStrongboxView.existExtraDepot2());
     }
 
     public void setLeaderCards(int firstLeaderCard, int secondLeaderCard){
@@ -107,4 +107,6 @@ public class PlayerBoardView {
     public int servantAmount(){
         return warehouseStrongboxView.servantAmount();
     }
+
+    public boolean isSecondDepot(){return warehouseStrongboxView.isSecondDepot();}
 }

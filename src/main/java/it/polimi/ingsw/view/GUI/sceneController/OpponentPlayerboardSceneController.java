@@ -101,8 +101,6 @@ public class OpponentPlayerboardSceneController {
                 YourTurnSceneController.notYourTurn();
             else if(ClientView.isState(GameStates.END_TURN_STATE))
                 YourTurnSceneController.endTurn();
-            else if(ClientView.isState(GameStates.ACTIVATE_PRODUCTION_STATE))
-                YourTurnSceneController.production();
         });
     }
 
@@ -169,10 +167,18 @@ public class OpponentPlayerboardSceneController {
 
     private void setExtraDepot1() {
         if(ClientView.getWarehouse(position).size() >= 4){
-            if(ClientView.getWarehouse(position).get(3).getAmount() >= 1)
-                setImage(extraResource11, ResourceMapGUI.getResource(ClientView.getWarehouse(position).get(3).getResource()));
-            if(ClientView.getWarehouse(position).get(3).getAmount() == 2)
-                setImage(extraResource12, ResourceMapGUI.getResource(ClientView.getWarehouse(position).get(3).getResource()));
+            if(ClientView.getWarehouse(position).get(3).getAmount() >= 1) {
+                if(ClientView.isSecondDepot(position))
+                    setImage(extraResource21, ResourceMapGUI.getResource(ClientView.getWarehouse(position).get(3).getResource()));
+                else
+                    setImage(extraResource11, ResourceMapGUI.getResource(ClientView.getWarehouse(position).get(3).getResource()));
+            }
+            if(ClientView.getWarehouse(position).get(3).getAmount() == 2){
+                if(ClientView.isSecondDepot(position))
+                    setImage(extraResource22, ResourceMapGUI.getResource(ClientView.getWarehouse(position).get(3).getResource()));
+                else
+                    setImage(extraResource12, ResourceMapGUI.getResource(ClientView.getWarehouse(position).get(3).getResource()));
+            }
         }
     }
 
