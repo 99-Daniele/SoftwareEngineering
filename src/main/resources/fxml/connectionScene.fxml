@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
+<AnchorPane xmlns="http://javafx.com/javafx/1" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="it.polimi.ingsw.view.GUI.sceneController.ConnectionSceneController">
     <TextField fx:id="serverPort" alignment="CENTER" layoutX="601.0" layoutY="517.0" prefHeight="46.0" prefWidth="338.0"
                text="12460">
