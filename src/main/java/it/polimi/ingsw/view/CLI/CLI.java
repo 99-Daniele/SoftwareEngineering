@@ -418,6 +418,10 @@ public class CLI extends ClientView{
     }
 
     private void endPowerRequest() throws IOException {
+        if(!turn) {
+            System.err.println("It's not your turn");
+            return;
+        }
         if(isState(GameStates.ACTIVATE_PRODUCTION_STATE)) {
             ClientSocket.sendMessage(new Message(MessageType.END_PRODUCTION, position));
             setCurrentState(GameStates.END_TURN_STATE);
@@ -427,6 +431,10 @@ public class CLI extends ClientView{
     }
 
     private void endTurnRequest() throws IOException {
+        if(!turn) {
+            System.err.println("It's not your turn");
+            return;
+        }
         if(isState(GameStates.END_TURN_STATE)) {
             ClientSocket.sendMessage(new Message(MessageType.END_TURN, position));
             setCurrentState(GameStates.FIRST_ACTION_STATE);
@@ -567,6 +575,10 @@ public class CLI extends ClientView{
     }
 
     private void leaderActiveRequest(String leader) throws IOException {
+        if(!turn) {
+            System.err.println("It's not your turn");
+            return;
+        }
         int leaderCard = Integer.parseInt(leader);
         if (leaderCard < 1 || leaderCard > 2)
             System.err.println("You have inserted a wrong number (1 - 2)");
@@ -575,6 +587,10 @@ public class CLI extends ClientView{
     }
 
     private void leaderDiscardRequest(String leader) throws IOException {
+        if(!turn) {
+            System.err.println("It's not your turn");
+            return;
+        }
         int leaderCard = Integer.parseInt(leader);
         if (leaderCard < 1 || leaderCard > 2)
             System.err.println("You have inserted a wrong number (1 - 2)");
@@ -775,6 +791,10 @@ public class CLI extends ClientView{
     }
 
     private void buyCardRequest(ArrayList<String> command) throws IOException {
+        if(!turn) {
+            System.err.println("It's not your turn");
+            return;
+        }
         if(isState(GameStates.FIRST_ACTION_STATE)) {
             try {
                 int cardID = Integer.parseInt(command.get(1));
@@ -835,6 +855,10 @@ public class CLI extends ClientView{
     }
 
     private void takeMarbleRequest(ArrayList<String> command) throws IOException {
+        if(!turn) {
+            System.err.println("It's not your turn");
+            return;
+        }
         if(isState(GameStates.FIRST_ACTION_STATE)) {
             try {
                 if (command.get(1).equals("row") || command.get(1).equals("r")) {
@@ -864,6 +888,10 @@ public class CLI extends ClientView{
     }
 
     private void switchRequest(ArrayList<String> command) throws IOException {
+        if(!turn) {
+            System.err.println("It's not your turn");
+            return;
+        }
         if(isState(GameStates.TAKE_MARBLE_STATE)) {
             try {
                 int depot1 = Integer.parseInt(command.get(1));
@@ -883,6 +911,10 @@ public class CLI extends ClientView{
     }
 
     private void cardPowerRequest(ArrayList<String> command) throws IOException {
+        if(!turn) {
+            System.err.println("It's not your turn");
+            return;
+        }
         if (isState(GameStates.FIRST_ACTION_STATE) || isState(GameStates.ACTIVATE_PRODUCTION_STATE)) {
             try {
                 int slot = Integer.parseInt(command.get(1));
@@ -899,6 +931,10 @@ public class CLI extends ClientView{
     }
 
     private void leaderPowerRequest(ArrayList<String> command) throws IOException {
+        if(!turn) {
+            System.err.println("It's not your turn");
+            return;
+        }
         if (isState(GameStates.FIRST_ACTION_STATE) || isState(GameStates.ACTIVATE_PRODUCTION_STATE)) {
             try {
                 int slot = Integer.parseInt(command.get(1));
@@ -916,6 +952,10 @@ public class CLI extends ClientView{
     }
 
     private void basicPowerRequest() throws IOException {
+        if(!turn) {
+            System.err.println("It's not your turn");
+            return;
+        }
         if(isState(GameStates.FIRST_ACTION_STATE) || isState(GameStates.ACTIVATE_PRODUCTION_STATE)) {
             Resource r1 = choseResource("Which resource you want to decrease?");
             Resource r2 = choseResource("Which resource you want to decrease?");
@@ -993,6 +1033,8 @@ public class CLI extends ClientView{
         if (message.getClientID() != position) {
             System.out.println("Player " + getNickname(message.getClientID()) + " has finished his turn.");
         }
+        else
+            System.out.println("You finished your turn.");
         if (position == 0) {
             if (message.getClientID() == getNumOfPlayers() - 1) {
                 turn = true;
@@ -1002,6 +1044,8 @@ public class CLI extends ClientView{
             turn = true;
             System.out.println("It's your turn");
         }
+        else
+            turn = false;
     }
 
     @Override
@@ -1297,9 +1341,9 @@ public class CLI extends ClientView{
         }
     }
 
-    private void notifyMessage(Message message){
+    private void notifyMessage(Message message) {
         receivedMessage = message;
-        synchronized (lock){
+        synchronized (lock) {
             lock.notifyAll();
         }
     }

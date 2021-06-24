@@ -47,8 +47,6 @@ public class GameManager {
     public synchronized void createPlayer(View view, String nickName) throws AlreadyTakenNicknameException{
         game.createPlayer(nickName);
         game.addObserver((VirtualView) view);
-        if(game.allPlayersConnected())
-            startGame();
     }
 
     public void deletePlayer(String nickName){
@@ -60,6 +58,8 @@ public class GameManager {
     }
 
     public void startGame(){
+        if(!game.allPlayersConnected())
+            return;
         controllerGame.startGame();
         for(int i = 0; i < game.getNumOfPlayers(); i++){
             controllerGame.sendNickNames(i, game.getPlayersNickname());

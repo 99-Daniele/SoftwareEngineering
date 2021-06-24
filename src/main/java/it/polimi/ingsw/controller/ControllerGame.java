@@ -272,6 +272,7 @@ public class ControllerGame implements Observer {
         } else {
             gameManager.createPlayer(view, nickName);
             view.login(views.size() - 1);
+            gameManager.startGame();
         }
     }
 
@@ -300,6 +301,7 @@ public class ControllerGame implements Observer {
                 }
                 ControllerConnection.newGame();
                 views.get(0).ok();
+                gameManager.startGame();
             } catch (AlreadyTakenNicknameException ignored) {}
         }
     }
