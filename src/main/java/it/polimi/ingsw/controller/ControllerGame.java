@@ -28,6 +28,10 @@ public class ControllerGame implements Observer {
         leaderCards = new ArrayList<>();
     }
 
+    public GameStartingState getState() {
+        return state;
+    }
+
     /**
      * When all players disconnected, ControllerGame is reset to the initial configuration.
      */
@@ -638,4 +642,3 @@ public class ControllerGame implements Observer {
         views.get(viewID).errorMessage(errorType);
     }
 }
-
