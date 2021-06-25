@@ -1,3 +1,4 @@
+
 package it.polimi.ingsw.view.GUI;
 
 import it.polimi.ingsw.view.GUI.sceneController.OpponentPlayerboardSceneController;
@@ -11,6 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -34,14 +36,11 @@ public class SceneController {
     }
 
     public static void setScene(Stage stage,  String fxml) throws IOException {
-        int screenWidth = (int) Screen.getPrimary().getBounds().getWidth();
-        int screenHeight = (int) Screen.getPrimary().getBounds().getHeight();
-        scene = new Scene(loadFXML(fxml), screenWidth, screenHeight);
+        StackPane pane = new StackPane(loadFXML(fxml));
+        scene = new Scene(pane, Double.MAX_VALUE, Double.MAX_VALUE);
         stage.setMaximized(true);
         stage.setScene(scene);
         stage.show();
-        stage.setWidth(screenWidth);
-        stage.setHeight(screenHeight);
     }
 
     public static void changeRootPane(String fxml) {
