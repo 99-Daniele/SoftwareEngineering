@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.resourceContainers.Resource;
 import it.polimi.ingsw.network.client.ClientSocket;
 import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.view.ClientView;
+import it.polimi.ingsw.view.GUI.SceneController;
 
 import java.io.*;
 import java.net.UnknownHostException;
@@ -223,20 +224,20 @@ public class CLI extends ClientView{
                 Resource r = choseResource("Chose the resource:");
                 ClientSocket.sendMessage(new MessageOneIntOneResource(MessageType.ONE_FIRST_RESOURCE, position, r, 1));
             }
-                break;
+            break;
             case 2: {
                 System.out.println("You are the 3rd player. You gain 1 resource and 1 faith point.");
                 Resource r = choseResource("Chose the resource:");
                 ClientSocket.sendMessage(new MessageOneIntOneResource(MessageType.ONE_FIRST_RESOURCE, position, r, 1));
             }
-                break;
+            break;
             case 3: {
                 System.out.println("You are the 4th player. You gain 2 resources and 1 faith point.");
                 Resource r1 = choseResource("Chose first resource:");
                 Resource r2 = choseResource("Chose second resource:");
                 ClientSocket.sendMessage(new MessageTwoResource(MessageType.TWO_FIRST_RESOURCE, position, r1, r2));
             }
-                break;
+            break;
         }
     }
 
@@ -340,26 +341,30 @@ public class CLI extends ClientView{
     private void helpRequest() throws IOException {
         String file = null;
         if(!turn)
-            file = "src/main/resources/helpCommand/notTurnHelp.txt";
+            file = "/helpCommand/notTurnHelp.txt";
         else {
             switch (getCurrentState()) {
                 case FIRST_ACTION_STATE:
                 case BUY_CARD_STATE:
-                    file = "src/main/resources/helpCommand/firstHelp";
+                    file = "/helpCommand/firstHelp";
                     break;
                 case TAKE_MARBLE_STATE:
-                    file = "src/main/resources/helpCommand/marbleHelp";
+                    file = "/helpCommand/marbleHelp";
                     break;
                 case FIRST_POWER_STATE:
                 case ACTIVATE_PRODUCTION_STATE:
-                    file = "src/main/resources/helpCommand/powerHelp.txt";
+                    file = "/helpCommand/powerHelp.txt";
                     break;
                 case END_TURN_STATE:
-                    file = "src/main/resources/helpCommand/endTurnHelp";
+                    file = "/helpCommand/endTurnHelp";
+                    break;
+                case END_GAME_STATE:
+                    file = "helpCommand/endHelp.txt";
                     break;
             }
         }
-        BufferedReader br = new BufferedReader(new FileReader(Objects.requireNonNull(file)));
+        InputStream in = getClass().getResourceAsStream(file);
+        BufferedReader br = new BufferedReader(new InputStreamReader(in));
         String line;
         while ((line = br.readLine()) != null) {
             System.out.println(line);
@@ -1053,7 +1058,7 @@ public class CLI extends ClientView{
         MessageTwoParameterInt m = (MessageTwoParameterInt) message;
         if(m.getClientID() != position)
             System.out.println("Player " + getNickname(m.getClientID()) + " bought a new card and inserted it in " +
-                "the " + m.getPar2() + "° slot.");
+                    "the " + m.getPar2() + "° slot.");
         super.buyCardMessage(message);
     }
 
@@ -1144,7 +1149,7 @@ public class CLI extends ClientView{
         super.switchDepotMessage(message);
         if(m.getClientID() != position)
             System.out.println("Player " + getNickname(m.getClientID()) + " has switched its " + m.getPar1()
-                + "° depot with its " + m.getPar2() + "° depot.");
+                    + "° depot with its " + m.getPar2() + "° depot.");
         else
             CLIPrinter.printWarehouse(super.getGame(), position);
     }
