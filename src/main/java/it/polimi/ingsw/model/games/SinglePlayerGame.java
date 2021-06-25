@@ -101,7 +101,7 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame {
      */
     @Override
     public void increaseOneFaithPointOtherPlayers() {
-        LorenzoIlMagnifico.increaseFaithPoints(1);
+        LorenzoFaithTrackMovement(1);
     }
 
     /**
