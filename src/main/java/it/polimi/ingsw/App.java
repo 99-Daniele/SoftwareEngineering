@@ -25,48 +25,119 @@ public class App {
      */
     public static void main(String[] args) {
 
-        // TODO:
-        // Pls get number of args
-        // use switch on that number.
+        // TODO:if no params, does NOT star with any message!
 
-        // TODD2: if no parms, does NOT star with any message!
         int paramCount = args.length;
         ClientView gui;
 
         switch (paramCount){
-            // TODO: finire...
-            case  0:
-                gui = new GUI();
-                gui.launchGUI();
+            case 1:
+                oneParamStart(args[0]);
                 return;
-
+            case 3:
+                threeParamStart(args);
+                return;
+            case 5:
+                fiveParamStart(args);
+                return;
+            default:
+                startGUI();
         }
+    }
 
-        if (args.length >= 1 && (args[0].equals("--server") || args[0].equals("-s"))) {
-            Server server;
-            if (args.length >= 3 && (args[1].equals("--port") || args[1].equals("-p"))) {
-                server = new Server(Integer.parseInt(args[2]));
-            } else {
-                server = new Server();
-            }
+    private static void oneParamStart(String param){
+        switch (param){
+            case "--server":
+            case "-s":
+                startServer();
+                break;
+            case "--cli":
+            case "-c":
+                startCLI();
+                break;
+            default:
+                startGUI();
+                break;
+        }
+    }
+
+    private static void threeParamStart(String[] params){
+        switch (params[0]){
+            case "--server":
+            case "-s":
+                if(!startServer(params[1], params[2]))
+                    startGUI();
+                break;
+            default:
+                startGUI();
+                break;
+        }
+    }
+
+    private static void fiveParamStart(String[] params){
+        switch (params[0]){
+            case "--cli":
+            case "-c":
+                if(!startCLI(params[1], params[2], params[3], params[4]))
+                    startGUI();
+                break;
+            default:
+                if(!startGUI(params[1], params[2], params[3], params[4]))
+                    startGUI();
+                break;
+        }
+    }
+
+    private static void startServer(){
+        Server server = new Server();
+        server.startServer();
+    }
+
+    private static boolean startServer(String param, String portNumber){
+        if(!param.equals("--port") && !param.equals("-p"))
+            return false;
+        try {
+            Server server = new Server(Integer.parseInt(portNumber));
             server.startServer();
+            return true;
+        } catch (NumberFormatException e){
+            return false;
         }
-        else if (args.length >= 1 && (args[0].equals("--gui") || args[0].equals("-g"))) {
-            gui = new GUI();
-            if (args.length > 4 && (args[1].equals("--hostname") || args[1].equals("-h")) &&
-                    (args[3].equals("--port") || args[3].equals("-p"))) {
-                gui.launchGUI(args[2], Integer.parseInt(args[4]));
-            }
-            else
-                gui.launchGUI();
-        } else if (args.length >= 1 && (args[0].equals("--cli") || args[0].equals("-c"))) {
+    }
+
+    private static void startGUI(){
+        ClientView gui = new GUI();
+        gui.launchGUI();
+    }
+
+    private static boolean startGUI(String param1, String hostname, String param2, String portNumber){
+        if((!param1.equals("--hostname") && !param1.equals("-h"))
+            || (!param2.equals("--port") && !param2.equals("-p")))
+            return false;
+        try {
+            ClientView gui = new GUI();
+            gui.launchGUI(hostname, Integer.parseInt(portNumber));
+            return true;
+        } catch (NumberFormatException e){
+            return false;
+        }
+    }
+
+    private static void startCLI(){
+        ClientView cli = new CLI();
+        cli.launchCLI();
+    }
+
+    private static boolean startCLI(String param1, String hostname, String param2, String portNumber){
+        if((!param1.equals("--hostname") && !param1.equals("-h"))
+                || (!param2.equals("--port") && !param2.equals("-p")))
+            return false;
+        try {
             ClientView cli = new CLI();
-            if (args.length > 4 && (args[1].equals("--hostname") || args[1].equals("-h")) &&
-                    (args[3].equals("--port") || args[3].equals("-p"))) {
-                cli.launchCLI(args[2], Integer.parseInt(args[4]));
-            }
-            else
-                cli.launchCLI();
+            cli.launchCLI(hostname, Integer.parseInt(portNumber));
+            return true;
+        } catch (NumberFormatException e){
+            return false;
         }
     }
 
