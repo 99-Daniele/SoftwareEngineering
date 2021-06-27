@@ -1,5 +1,8 @@
 package it.polimi.ingsw.view.CLI;
 
+/**
+ * ColorAnsi is the enumeration of different CLI colors.
+ */
 public enum ColorAnsi {
     ANSI_RED("\033[0;31m"),
     ANSI_CYAN ( "\033[0;36m"),
