@@ -14,7 +14,9 @@ import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
 
-
+/**
+ * NicknameSceneController handle the nickname and num player choices scene of GUI.
+ */
 public class NicknameSceneController{
 
     private boolean nickNameError = true;
@@ -35,6 +37,7 @@ public class NicknameSceneController{
     private Button goNext;
     @FXML
     private Button ok;
+
     @FXML
     public void initialize() {
         goNext.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
@@ -59,6 +62,12 @@ public class NicknameSceneController{
         });
     }
 
+    /**
+     * @throws IOException if Client lost Server connection.
+     *
+     * if player has not chosen nickName send to a new nickname message to Server. Instead if nickname label is invisible,
+     * sned a new num player message to Server.
+     */
     private void goNextButton() throws IOException {
         if(!nicknameLabel.isVisible()) {
             try {
@@ -94,6 +103,9 @@ public class NicknameSceneController{
         }
     }
 
+    /**
+     * modifies the scene after Server send a login message with clientID = 0.
+     */
     public static void askNumPlayer(){
         SceneController.setVisible("#nickname", false);
         SceneController.setVisible("#nicknameLabel", false);
@@ -102,6 +114,9 @@ public class NicknameSceneController{
         SceneController.setVisible("#goNext", true);
     }
 
+    /**
+     * modifies the scene after Server send a login message with clientID != 0 or an ok message after num player message.
+     */
     public static void waitPlayers(){
         SceneController.setVisible("#nickname", false);
         SceneController.setVisible("#nicknameLabel", false);
@@ -110,12 +125,18 @@ public class NicknameSceneController{
         SceneController.setVisible("#waitingLabel", true);
     }
 
+    /**
+     * display an error message due to already taken nickname by player.
+     */
     public static void alreadyTakenNickName(){
         SceneController.setText("#errorLabel", "NICKNAME ALREADY CHOSEN BY ANOTHER PLAYER");
         error();
         SceneController.clearText("#nickname");
     }
 
+    /**
+     * make labels invisible except error label which display an error message.
+     */
     private static void error(){
         SceneController.setVisible("#nickname", false);
         SceneController.setVisible("#nicknameLabel", false);

@@ -17,6 +17,9 @@ import javafx.scene.input.MouseEvent;
 import java.io.InputStream;
 import java.util.Objects;
 
+/**
+ * OpponentPlayerboardSceneController handle the display of other playerboard
+ */
 public class OpponentPlayerboardSceneController {
 
     private final int position;
@@ -94,6 +97,9 @@ public class OpponentPlayerboardSceneController {
         goBack.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> goBackButton());
     }
 
+    /**
+     * return to YourTurnScene and set different sets based on current game state.
+     */
     private void goBackButton() {
         Platform.runLater(() -> {
             SceneController.changeRootPane("/fxml/yourTurnScene");
@@ -104,6 +110,9 @@ public class OpponentPlayerboardSceneController {
         });
     }
 
+    /**
+     * displayer other playerboard.
+     */
     private void showPlayerboard(){
         setCard(leader1, ClientView.getLeaderCards(position).get(0));
         setCard(leader2, ClientView.getLeaderCards(position).get(1));
@@ -128,6 +137,12 @@ public class OpponentPlayerboardSceneController {
             calamaio.setVisible(true);
     }
 
+    /**
+     * @param image one of ImageView.
+     * @param file is the new image.
+     *
+     * if @param file equals "" set @param image to null, otherwise load by @param file.
+     */
     private void setImage(ImageView image, String file){
         if(file.equals(""))
             image.setImage(null);
@@ -137,6 +152,12 @@ public class OpponentPlayerboardSceneController {
         }
     }
 
+    /**
+     * @param image is one DevelopmentCards ImageView.
+     * @param cardID is one DevelopmentCards cardID.
+     *
+     * if @param cardID = -1 set @param image to null, otherwise convert @param cardID to CardView and then set @param image.
+     */
     private void setCard(ImageView image, int cardID) {
         if (cardID != -1)
             setImage(image, CardMapGUI.getCard(cardID));
@@ -144,11 +165,17 @@ public class OpponentPlayerboardSceneController {
             setImage(image, "");
     }
 
+    /**
+     * set first depot resource image.
+     */
     private void setFirstDepot() {
         if(ClientView.getWarehouse(position).get(0).getAmount() == 1)
             setImage(deposit11, ResourceMapGUI.getResource(ClientView.getWarehouse(position).get(0).getResource()));
     }
 
+    /**
+     * set second depot resource images.
+     */
     private void setSecondDepot() {
         if(ClientView.getWarehouse(position).get(1).getAmount() >= 1)
             setImage(deposit21, ResourceMapGUI.getResource(ClientView.getWarehouse(position).get(1).getResource()));
@@ -156,6 +183,9 @@ public class OpponentPlayerboardSceneController {
             setImage(deposit22, ResourceMapGUI.getResource(ClientView.getWarehouse(position).get(1).getResource()));
     }
 
+    /**
+     * set third depot resource images.
+     */
     private void setThirdDepot() {
         if(ClientView.getWarehouse(position).get(2).getAmount() >= 1)
             setImage(deposit31, ResourceMapGUI.getResource(ClientView.getWarehouse(position).get(2).getResource()));
@@ -165,6 +195,9 @@ public class OpponentPlayerboardSceneController {
             setImage(deposit33, ResourceMapGUI.getResource(ClientView.getWarehouse(position).get(2).getResource()));
     }
 
+    /**
+     * set first extra depot resource images.
+     */
     private void setExtraDepot1() {
         if(ClientView.getWarehouse(position).size() >= 4){
             if(ClientView.getWarehouse(position).get(3).getAmount() >= 1) {
@@ -182,6 +215,9 @@ public class OpponentPlayerboardSceneController {
         }
     }
 
+    /**
+     * set second extra depot resource images.
+     */
     private void setExtraDepot2() {
         if(ClientView.getWarehouse(position).size() == 5){
             if(ClientView.getWarehouse(position).get(4).getAmount() >= 1)
@@ -191,6 +227,9 @@ public class OpponentPlayerboardSceneController {
         }
     }
 
+    /**
+     * set strongbox resources amount.
+     */
     private void setStrongbox(){
         coinAmount.setText(String.valueOf(ClientView.coinAmount(position)));
         servantAmount.setText(String.valueOf(ClientView.servantAmount(position)));
@@ -198,6 +237,9 @@ public class OpponentPlayerboardSceneController {
         stoneAmount.setText(String.valueOf(ClientView.stoneAmount(position)));
     }
 
+    /**
+     * set redCross position in faithTrakc
+     */
     private void setFaithPoints() {
         int faithPoints = ClientView.getFaithPoints(position);
         if(faithPoints < 3){
@@ -231,6 +273,9 @@ public class OpponentPlayerboardSceneController {
         }
     }
 
+    /**
+     * set vatican report tiles.
+     */
     private void setVictoryPoints() {
         int victoryPoints = ClientView.getVictoryPoints(position);
         switch (ClientView.getCurrentPope()) {

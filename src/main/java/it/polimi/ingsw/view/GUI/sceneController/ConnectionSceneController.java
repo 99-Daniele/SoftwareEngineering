@@ -11,7 +11,9 @@ import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
 
-
+/**
+ * ConnectionSceneController handle the connection scene of GUI.
+ */
 public class ConnectionSceneController{
 
     @FXML
@@ -30,6 +32,9 @@ public class ConnectionSceneController{
         connect.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> connectButton());
     }
 
+    /**
+     * if player clicks on connect button tries to connect by player's chosen hostname and port address.
+     */
     private void connectButton() {
         try {
             String address = serverAddress.getText();
@@ -48,6 +53,9 @@ public class ConnectionSceneController{
         }
     }
 
+    /**
+     * display to player and error message due to failed connection.
+     */
     private void errorConnection(){
         serverPort.clear();
         serverAddress.clear();

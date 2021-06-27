@@ -15,6 +15,9 @@ import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
 
+/**
+ * InitSceneController handle the chosen LeaderCards and resources scene of GUI.
+ */
 public class InitSceneController{
 
     private static int card1;
@@ -77,6 +80,14 @@ public class InitSceneController{
         start.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> startButton());
     }
 
+    /**
+     * @param card1 is cardID of one LeaderCard.
+     * @param card2 is cardID of one LeaderCard.
+     * @param card3 is cardID of one LeaderCard.
+     * @param card4 is cardID of one LeaderCard.
+     *
+     * set LeaderCards ImageView to received from Server LeaderCards.
+     */
     public static void askLeaders(int card1, int card2, int card3, int card4) {
         SceneController.setImage("#leader1", CardMapGUI.getCard(card1));
         SceneController.setImage("#leader2", CardMapGUI.getCard(card2));
@@ -88,6 +99,13 @@ public class InitSceneController{
         InitSceneController.card4 = card4;
     }
 
+    /**
+     * @param leaderButton is one of 4 button refers to one chosen LeaderCard
+     * @param card is the referred card to @param leaderButton.
+     *
+     * set chosenCard1 or chosenCard2 as @param card. if player has chosen 2 LeaderCards before, remove the first chosen
+     * LeaderCard from the 2 chosen LeaderCards and add the new chosen LeaderCard.
+     */
     private void leaderButton(Button leaderButton, int card){
         leaderButton.setDisable(true);
         if(chosenCard1 == 0)
@@ -109,6 +127,12 @@ public class InitSceneController{
         }
     }
 
+    /**
+     * @param r is one chosen resource.
+     *
+     * send to Server a new first chosen resource message whit r as param. But if it's the fourth player (Gui.getPosition = 3)
+     * send only when player chooses 2 resources.
+     */
     private void resourceButton(Resource r){
         if(GUI.getPosition() == 3){
             if(r1 == null)
@@ -138,6 +162,10 @@ public class InitSceneController{
         }
     }
 
+    /**
+     * send to Server a new leader choices message and in case it's not the first player (GUI.getPosition = 0), make
+     * resources visible.
+     */
     private void startButton() {
         ClientView.setLeaderCard(GUI.getPosition(), chosenCard1, chosenCard2);
         Message message = new MessageTwoParameterInt(MessageType.LEADER_CARD, GUI.getPosition(), chosenCard1, chosenCard2);
@@ -163,6 +191,9 @@ public class InitSceneController{
         resourceLabel.setVisible(true);
     }
 
+    /**
+     * make all nodes invisible.
+     */
     private void allInvisible(){
         resourceLabel.setVisible(false);
         leader1.setVisible(false);
