@@ -79,41 +79,38 @@ public class PlayerBoard extends SimplePlayerBoard{
      * @param slot is player's choice about in which slot @param card will be inserted.
      * @param choice is player's choice about which between warehouse and strongbox has the priority to be decreased.
      * @throws InsufficientResourceException if player has not enough resources to buy @param card.
+     * @throws ImpossibleDevelopmentCardAdditionException if player has not available slots where insert the card.
      *
      * if exists active DiscountCard @param card resourceCost could be discounted. In case player has still not enough.
      * resources, @param card resourceCost return to original and card is not bought by player.
      */
     public void buyDevelopmentCard(DevelopmentCard card, int slot, int choice)
             throws InsufficientResourceException, ImpossibleDevelopmentCardAdditionException {
-        if(isBuyable(card)){
-            if(!(slotDevelopmentCards[slot -1].addDevelopmentCard(card)))
-                throw new ImpossibleDevelopmentCardAdditionException();
-            card.buyCard(warehouse, strongbox, choice);
-            victoryPoints.increaseVictoryPointsByCards(card.getVictoryPoints());
-        }
-        else
-            throw new InsufficientResourceException();
-    }
-
-    /**
-     * @param card is DevelopmentCard to buy.
-     * @return true if player has enough resources.
-     */
-    private boolean isBuyable(DevelopmentCard card){
         boolean discount1 = false;
         boolean discount2 = false;
         if(leaderCards.size() > 0)
             discount1 = leaderCards.get(0).discount(card);
         if(leaderCards.size() > 1)
             discount2 = leaderCards.get(1).discount(card);
-        if(card.isBuyable(warehouse, strongbox))
-            return true;
+        if(card.isBuyable(warehouse, strongbox)){
+            if(!(slotDevelopmentCards[slot -1].addDevelopmentCard(card))) {
+                if (discount1)
+                    leaderCards.get(0).recount(card);
+                if (discount2)
+                    leaderCards.get(1).recount(card);
+                throw new ImpossibleDevelopmentCardAdditionException();
+            }
+            else {
+                card.buyCard(warehouse, strongbox, choice);
+                victoryPoints.increaseVictoryPointsByCards(card.getVictoryPoints());
+            }
+        }
         else {
             if (discount1)
                 leaderCards.get(0).recount(card);
             if (discount2)
                 leaderCards.get(1).recount(card);
-            return false;
+            throw new InsufficientResourceException();
         }
     }
 

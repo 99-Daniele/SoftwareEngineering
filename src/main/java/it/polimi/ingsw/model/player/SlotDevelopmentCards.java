@@ -14,14 +14,9 @@ import java.util.LinkedList;
 public class SlotDevelopmentCards {
 
     private final LinkedList<DevelopmentCard> developmentCards = new LinkedList<>();
-    private boolean empty;
-
-    public SlotDevelopmentCards() {
-        empty = true;
-    }
 
     private boolean isEmpty() {
-        return empty;
+        return developmentCards.size() == 0;
     }
 
     /**
@@ -40,7 +35,6 @@ public class SlotDevelopmentCards {
         if(!haveRequiredLevel(card))
             return false;
         developmentCards.add(card);
-        empty = false;
         return true;
     }
 

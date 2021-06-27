@@ -24,12 +24,7 @@ public class App {
      * if args represent a GUI client, new GUI is created and launched.
      */
     public static void main(String[] args) {
-
-        // TODO:if no params, does NOT star with any message!
-
         int paramCount = args.length;
-        ClientView gui;
-
         switch (paramCount){
             case 1:
                 oneParamStart(args[0]);
