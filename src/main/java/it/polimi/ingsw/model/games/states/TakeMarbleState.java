@@ -9,10 +9,21 @@ import it.polimi.ingsw.network.messages.MessageType;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * TakeMarbleState is one of game states.
+ * In this state current player can only send use marble or switch messages, any other message will be discarded.
+ * This state saves the chosen marbles to avoid player uses wrong ones.
+ */
 public class TakeMarbleState implements GameState {
 
     private ArrayList<Marble> marbles = new ArrayList<>();
 
+    /**
+     * @param gameManager is the GameManager of the game.
+     * @param wantedMessage is the type of message Server wants from Client.
+     *
+     * if @param wantedMessage = WHITE_CONVERSION_CARD switch to WhiteConversionCardState, in any other case go to EndTurnState.
+     */
     @Override
     public void nextState(GameManager gameManager, MessageType wantedMessage) {
         if(wantedMessage == MessageType.WHITE_CONVERSION_CARD)

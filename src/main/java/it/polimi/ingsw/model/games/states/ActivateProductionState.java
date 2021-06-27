@@ -8,6 +8,13 @@ import it.polimi.ingsw.network.messages.MessageType;
 
 import java.util.ArrayList;
 
+/**
+ * ActivateProductionState is one of game states.
+ * In this state current player can only send new production messages or end production message, any other message will
+ * be discarded.
+ * This state saves the Strongbox which resumes player's given resources and player's chosen production powers to avoid
+ * it use one twice.
+ */
 public class ActivateProductionState implements GameState {
 
     private Strongbox s;
@@ -15,6 +22,12 @@ public class ActivateProductionState implements GameState {
     private boolean basicPower = false;
     private final ArrayList<Integer> chosenLeaderCards = new ArrayList<>();
 
+    /**
+     * @param gameManager is the GameManager of the game.
+     * @param wantedMessage is the type of message Server wants from Client.
+     *
+     * this state remains the same until an END_TURN message is required. Inn that case switch to EndTurnState.
+     */
     @Override
     public void nextState(GameManager gameManager, MessageType wantedMessage) {
         if(wantedMessage == MessageType.END_TURN)

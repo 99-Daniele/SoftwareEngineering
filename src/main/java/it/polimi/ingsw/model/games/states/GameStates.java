@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model.games.states;
 
+/**
+ * GameStates is an enumeration of the different states of game during one turn.
+ */
 public enum GameStates {
 
     FIRST_ACTION_STATE,

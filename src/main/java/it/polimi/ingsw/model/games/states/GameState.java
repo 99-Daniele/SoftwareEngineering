@@ -8,10 +8,24 @@ import it.polimi.ingsw.network.messages.MessageType;
 
 import java.util.ArrayList;
 
+/**
+ * GameState is the generic interface for game state.
+ * All methods could be override by different game state classes.
+ */
 public interface GameState {
 
+    /**
+     * @param gameManager is the GameManager of the game.
+     * @param wantedMessage is the type of message Server wants from Client.
+     *
+     * this method switch @param gameManager currentStare to the next state of the game, based on @param wantedMessage.
+     */
     void nextState (GameManager gameManager, MessageType wantedMessage);
 
+    /**
+     * @param state is one game state.
+     * @return if @param state is the current state of the game.
+     */
     boolean isRightState (GameStates state);
 
     Strongbox getStrongbox();
@@ -59,5 +73,4 @@ public interface GameState {
     void setMarbles(ArrayList<Marble> marbles);
 
     void removeMarble(Marble m);
-
 }

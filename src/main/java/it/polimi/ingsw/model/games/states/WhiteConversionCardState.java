@@ -9,12 +9,24 @@ import it.polimi.ingsw.network.messages.MessageType;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * WhiteConversuibState is one of game states.
+ * In this state current player can only send white conversion messages, any other message will be discarded.
+ * This state saves the chosen marbles and player's leader cards.
+ */
 public class WhiteConversionCardState implements GameState {
 
     private LeaderCard leaderCard1;
     private LeaderCard leaderCard2;
     private ArrayList<Marble> marbles = new ArrayList<>();
 
+    /**
+     *
+     * @param gameManager is the GameManager of the game.
+     * @param wantedMessage is the type of message Server wants from Client.
+     *
+     * if @param wantedMessage = USE_MARBLE return to TakeMarbleState, in any other case go to EndTurnState.
+     */
     @Override
     public void nextState(GameManager gameManager, MessageType wantedMessage) {
         if(wantedMessage == MessageType.USE_MARBLE)

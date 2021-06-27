@@ -8,8 +8,19 @@ import it.polimi.ingsw.network.messages.MessageType;
 
 import java.util.ArrayList;
 
+/**
+ * EndTurnState is one of game states.
+ * In this state current player can only send end turn message or discard leader message or activate leader message,
+ * any other message will be discarded.
+ */
 public class EndTurnState implements GameState {
 
+    /**
+     * @param gameManager is the GameManager of the game.
+     * @param wantedMessage is the type of message Server wants from Client.
+     *
+     * this state remains the same until an END_TURN message is required. Inn that case switch to EndTurnState.
+     */
     @Override
     public void nextState(GameManager gameManager, MessageType wantedMessage) {
         if(wantedMessage != MessageType.END_TURN)

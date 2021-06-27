@@ -8,8 +8,18 @@ import it.polimi.ingsw.network.messages.MessageType;
 
 import java.util.ArrayList;
 
+/**
+ * FirstActionState is one of game states.
+ * In this state current player can only send messages about the first action of its turn, any other message will be discarded.
+ */
 public class FirstActionState implements GameState {
 
+    /**
+     * @param gameManager is the GameManager of the game.
+     * @param wantedMessage is the type of message Server wants from Client.
+     *
+     * based on different @param wantedMessage go to a different game state.
+     */
     @Override
     public void nextState(GameManager gameManager, MessageType wantedMessage){
         switch (wantedMessage){

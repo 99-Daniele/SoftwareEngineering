@@ -8,6 +8,12 @@ import it.polimi.ingsw.network.messages.MessageType;
 
 import java.util.ArrayList;
 
+/**
+ * BuyCardState is one of game states.
+ * In this state current player can only send chosen slot message, any other message will be discarded.
+ * This state saves player's chosen deck row and column, choice about which between strongbox and warehouse has the priority
+ * to be decreased, and the available slots where player could insert the chosen card, to avoid it choices a wrong slot.
+ */
 public class BuyCardState implements GameState {
 
     private int row;
@@ -15,6 +21,12 @@ public class BuyCardState implements GameState {
     private int choice;
     private ArrayList<Integer> availableSlots = new ArrayList<>();
 
+    /**
+     * @param gameManager is the GameManager of the game.
+     * @param wantedMessage is the type of message Server wants from Client.
+     *
+     * if @param wantedMessage = BUY_CARD switch to FirstActionState, in any other case go to EndTurnState.
+     */
     @Override
     public void nextState(GameManager gameManager, MessageType wantedMessage) {
         if(wantedMessage == MessageType.BUY_CARD)
