@@ -7,7 +7,6 @@ import it.polimi.ingsw.model.resourceContainers.Resource;
 import it.polimi.ingsw.network.client.ClientSocket;
 import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.view.ClientView;
-import it.polimi.ingsw.view.GUI.SceneController;
 
 import java.io.*;
 import java.net.UnknownHostException;
@@ -1108,7 +1107,7 @@ public class CLI extends ClientView{
                 serverMessage = "Ludovico has increased his faith points. Now it has " + m.getPar();
             else
                 serverMessage = "Player " + getNickname(m.getClientID()) + " has increased its faith points. Now it has " + m.getPar();
-            if(!super.isGameStarted())
+            if(super.isGameStarted())
                 System.out.println(serverMessage);
             else
                 addServerMessage(serverMessage);
@@ -1125,7 +1124,7 @@ public class CLI extends ClientView{
             if(m.getClientID() != position) {
                 serverMessage = "Player " + getNickname(m.getClientID()) + " has inserted 1 " + Resource.printResource(m.getResource())
                         + " in its " + m.getPar1() + "° depot";
-                if(!super.isGameStarted())
+                if(super.isGameStarted())
                     System.out.println(serverMessage);
                 else
                     addServerMessage(serverMessage);
@@ -1136,7 +1135,7 @@ public class CLI extends ClientView{
         else if(m.getClientID() != position) {
             serverMessage = "Player " + getNickname(m.getClientID()) + " has discarded 1 " + Resource.printResource(m.getResource())
                     + " marble";
-            if(!super.isGameStarted())
+            if(super.isGameStarted())
                 System.out.println(serverMessage);
             else
                 addServerMessage(serverMessage);
@@ -1237,10 +1236,17 @@ public class CLI extends ClientView{
     @Override
     public void quitMessage(Message message) {
         MessageOneParameterString m = (MessageOneParameterString) message;
-        if (getNumOfPlayers() != 0) {
+        if(m.getClientID() == -1){
+            System.err.println("\nClient no longer connected to the Server");
+            System.out.println("\nExit.\n");
+            endGame();
+            System.exit(1);
+        }
+        else if (getNumOfPlayers() != 0) {
             System.out.println("Player " + m.getPar() + " disconnected. Game ended.");
             System.out.println("\nExit.\n");
             endGame();
+            System.exit(1);
         }
         else if (m.getPar() != null)
             System.out.println("Player " + m.getPar() + " disconnected before game is started");

@@ -166,10 +166,10 @@ public class ClientSocket extends Observable{
         } catch (InterruptedException ignored) {
         }
         if(connected) {
-            System.err.println("\nClient no longer connected to the Server");
             connected = false;
             disconnect();
-            System.exit(0);
+            setChanged();
+            notifyObservers(new MessageOneParameterString(MessageType.QUIT, -1, null));
         }
     }
 }

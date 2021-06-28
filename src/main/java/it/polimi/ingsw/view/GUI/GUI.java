@@ -64,6 +64,7 @@ public class GUI extends ClientView {
     @Override
     public void stop() {
         endGame();
+        System.exit(1);
     }
 
     @Override
@@ -406,9 +407,10 @@ public class GUI extends ClientView {
     public void quitMessage(Message message) {
         MessageOneParameterString m = (MessageOneParameterString) message;
         String quitMessage;
-        if (getNumOfPlayers() != 0) {
+        if(m.getClientID() == -1)
+            quitMessage = "Client no longer connected to the Server.";
+        else if (getNumOfPlayers() != 0)
             quitMessage = "Player " + m.getPar() + " disconnected. Game ended.";
-        }
         else
             return;
         Platform.runLater(() -> quitPhase(quitMessage));
@@ -588,18 +590,11 @@ public class GUI extends ClientView {
         });
     }
 
-    private void quitPhase(String quitMessage) {
-        System.out.println("QUIT");
+    private static void quitPhase(String quitMessage) {
+        setCurrentState(GameStates.END_GAME_STATE);
+        endGame();
         SceneController.changeRootPane("/fxml/yourTurnScene");
         SceneController.errorMessage(quitMessage);
-        SceneController.setDisable("#radiobutBuyCard", true);
-        SceneController.setDisable("#radiobutTakeMarble", true);
-        SceneController.setDisable("#radiobutActivProduc", true);
-        SceneController.setDisable("#radiobutActLeader", true);
-        SceneController.setDisable("#radiobutDiscardLeader", true);
-        SceneController.setDisable("#radiobutEndProd", true);
-        SceneController.setDisable("#radiobutEndTurn", true);
-        SceneController.setDisable("#radiobutOtherPlayboard", super.isGameStarted());
-        SceneController.setVisible("#radiobutEndGame", true);
+        YourTurnSceneController.endGame();
     }
 }

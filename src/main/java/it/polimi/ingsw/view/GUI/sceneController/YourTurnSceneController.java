@@ -263,7 +263,7 @@ public class YourTurnSceneController {
         radiobutOtherPlayboard.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> otherPlayerboardButton());
         radiobutEndProd.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> endProductionButton());
         radiobutEndTurn.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> endTurnButton());
-        radiobutEndGame.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> ClientView.endGame());
+        radiobutEndGame.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> System.exit(1));
         chooseBase.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             chooseBase.setDisable(true);
             basicProduction();
@@ -1684,5 +1684,17 @@ public class YourTurnSceneController {
         SceneController.setDisable("#radiobutDiscardLeader", true);
         SceneController.setDisable("#radiobutEndTurn", true);
         SceneController.setDisable("#radiobutEndProd", true);
+    }
+
+    public static void endGame(){
+        SceneController.setDisable("#radiobutBuyCard", true);
+        SceneController.setDisable("#radiobutTakeMarble", true);
+        SceneController.setDisable("#radiobutActivProduc", true);
+        SceneController.setDisable("#radiobutActLeader", true);
+        SceneController.setDisable("#radiobutDiscardLeader", true);
+        SceneController.setDisable("#radiobutEndProd", true);
+        SceneController.setDisable("#radiobutEndTurn", true);
+        SceneController.setVisible("#radiobutOtherPlayboard", ClientView.getNumOfPlayers() > 1);
+        SceneController.setVisible("#radiobutEndGame", true);
     }
 }

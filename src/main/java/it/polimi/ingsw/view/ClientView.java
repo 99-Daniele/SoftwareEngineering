@@ -40,7 +40,6 @@ public abstract class ClientView extends Application implements Observer {
     public static void endGame(){
         ClientSocket.setDisconnected();
         ClientSocket.disconnect();
-        System.exit(1);
     }
 
     public GameView getGame() {
@@ -258,8 +257,8 @@ public abstract class ClientView extends Application implements Observer {
         game.startGame();
     }
 
-    public boolean isGameStarted(){
-        return !game.isStartGame();
+    public static boolean isGameStarted(){
+        return game.isStartGame();
     }
 
     public void marketMessage(Message message){

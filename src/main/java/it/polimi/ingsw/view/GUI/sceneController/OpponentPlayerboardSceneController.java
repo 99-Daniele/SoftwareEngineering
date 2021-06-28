@@ -103,7 +103,9 @@ public class OpponentPlayerboardSceneController {
     private void goBackButton() {
         Platform.runLater(() -> {
             SceneController.changeRootPane("/fxml/yourTurnScene");
-            if (!GUI.isMyTurn())
+            if(ClientView.isState(GameStates.END_GAME_STATE))
+                YourTurnSceneController.endGame();
+            else if(!GUI.isMyTurn())
                 YourTurnSceneController.notYourTurn();
             else if(ClientView.isState(GameStates.END_TURN_STATE))
                 YourTurnSceneController.endTurn();
