@@ -3,6 +3,9 @@ package it.polimi.ingsw.view.modelView;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 import it.polimi.ingsw.view.CLI.ColorAnsi;
 
+/**
+ * ResourceContainerView is the View version of ResourceContainer Model class.
+ */
 public class ResourceContainerView {
 
     private Resource resource;
@@ -43,6 +46,9 @@ public class ResourceContainerView {
         amount = 1;
     }
 
+    /**
+     * CLI printer like a Warehouse depot.
+     */
     public void printCliWarehouse() {
         switch (resource) {
             case COIN:
@@ -64,6 +70,9 @@ public class ResourceContainerView {
         }
     }
 
+    /**
+     * CLI printer like a Strongbox.
+     */
     public void printCliStrongbox(){
         switch (resource) {
             case COIN:

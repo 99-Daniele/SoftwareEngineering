@@ -453,7 +453,7 @@ public class GameManager {
      */
     public void leaderActivationHandler(int chosenLeaderCard)
             throws InsufficientResourceException, AlreadyDiscardLeaderCardException, ActiveLeaderCardException, InsufficientCardsException, IllegalStateException, WrongParametersException {
-        if(!InputController.leaderCardActivation(chosenLeaderCard))
+        if(!InputController.leaderCardChoice(chosenLeaderCard))
             throw new WrongParametersException();
         if (currentState.isRightState(GameStates.FIRST_ACTION_STATE))
             currentState.nextState(this, MessageType.BUY_CARD);
@@ -474,7 +474,7 @@ public class GameManager {
      */
     public void leaderDiscardHandler(int chosenLeaderCard)
             throws ActiveLeaderCardException, AlreadyDiscardLeaderCardException, IllegalStateException, WrongParametersException {
-        if(!InputController.leaderCardDiscard(chosenLeaderCard))
+        if(!InputController.leaderCardChoice(chosenLeaderCard))
             throw new WrongParametersException();
         if (!currentState.isRightState(GameStates.FIRST_ACTION_STATE) && !currentState.isRightState(GameStates.END_TURN_STATE))
             throw new IllegalStateException();

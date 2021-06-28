@@ -4,6 +4,9 @@ import it.polimi.ingsw.model.market.Marble;
 
 import java.util.ArrayList;
 
+/**
+ * CardView is the generic interface of Market.
+ */
 public interface MarketView {
 
     void slideColumn(int selectedColumn);

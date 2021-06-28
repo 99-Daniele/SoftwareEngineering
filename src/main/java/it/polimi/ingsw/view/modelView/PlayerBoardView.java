@@ -4,6 +4,9 @@ import it.polimi.ingsw.model.resourceContainers.Resource;
 
 import java.util.ArrayList;
 
+/**
+ * PlayerBoardView is the View version of PlayerBoard Model class.
+ */
 public class PlayerBoardView {
 
     private final String nickName;
@@ -80,6 +83,9 @@ public class PlayerBoardView {
         cardsSlotsView.printCliLeaderCard();
     }
 
+    /**
+     * CLI printer of Warehouse, Strongbox, DevelopmentCards and LeaderCards.
+     */
     public void printCliAllPlayerBoard(){
         System.out.println(nickName);
         warehouseStrongboxView.printCliWarehouse();

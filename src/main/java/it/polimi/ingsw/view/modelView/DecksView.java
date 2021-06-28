@@ -4,6 +4,10 @@ import it.polimi.ingsw.parser.CardMapCLI;
 
 import java.util.*;
 
+/**
+ * DecksView is the View version of Decks Model class.
+ * In this case all DevelopmentCards are coded by Integer and are saved only the 16 or less buyable cards, divided by level.
+ */
 public class DecksView {
 
     private final List<Integer> firstLevelCards;
@@ -11,11 +15,14 @@ public class DecksView {
     private final List<Integer> thirdLevelCards;
 
     public DecksView(ArrayList<Integer> initialCards){
-        firstLevelCards =  initialCards.subList(0, 4);
-        secondLevelCards =  initialCards.subList(4, 8);
-        thirdLevelCards =  initialCards.subList(8, 12);
+        firstLevelCards = initialCards.subList(0, 4);
+        secondLevelCards = initialCards.subList(4, 8);
+        thirdLevelCards = initialCards.subList(8, 12);
     }
 
+    /**
+     * @return a list of all DevelopmentCards.
+     */
     public ArrayList<Integer> getDevelopmentCards(){
         ArrayList<Integer> developmentCards = new ArrayList<>();
         developmentCards.addAll(firstLevelCards);
@@ -24,18 +31,26 @@ public class DecksView {
         return developmentCards;
     }
 
+    /**
+     * @param row is deck row.
+     * @param column is deck column.
+     * @param cardID is new DevelopmentCard's cardID.
+     *
+     * if cardID = -1 the deck is empty.
+     */
     public void replaceCard(int row, int column, int cardID){
-        if(row == 0){
+        if(row == 0)
             firstLevelCards.set(column, cardID);
-        }
-        else if(row == 1){
+        else if (row == 1)
             secondLevelCards.set(column, cardID);
-        }
-        else{
+        else
             thirdLevelCards.set(column, cardID);
-        }
     }
 
+    /**
+     * @param cardID is DevelopmentCard's cardID.
+     * @return the row and the column of the selected DevelopmentCard.
+     */
     public int[] getRowColumn(int cardID){
         final int[] cardCoordinates = new int[2];
         for(int i = 0; i < 4; i++){
@@ -64,6 +79,9 @@ public class DecksView {
         return cardCoordinates;
     }
 
+    /**
+     * CLI print of all DevelopmentCards.
+     */
     public void print() {
         System.out.println("\nDEVELOPMENT_CARDS:");
         for (int j = 0; j < 4; j++) {
@@ -87,6 +105,5 @@ public class DecksView {
             else
                 CardMapCLI.getCard(thirdLevelCards.get(j)).print();
         }
-
     }
 }

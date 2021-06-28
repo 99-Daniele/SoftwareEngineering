@@ -158,15 +158,7 @@ public class InputController {
      * @param chosenLeaderCard is player's chosen leader card.
      * @return if @param chosenLeaderCard is 1 or 2.
      */
-    public static boolean leaderCardActivation(int chosenLeaderCard){
-        return chosenLeaderCard == 1 || chosenLeaderCard == 2;
-    }
-
-    /**
-     * @param chosenLeaderCard is player's chosen leader card.
-     * @return if @param chosenLeaderCard is 1 or 2.
-     */
-    public static boolean leaderCardDiscard(int chosenLeaderCard){
+    public static boolean leaderCardChoice(int chosenLeaderCard){
         return chosenLeaderCard == 1 || chosenLeaderCard == 2;
     }
 }

@@ -6,6 +6,10 @@ import it.polimi.ingsw.view.CLI.ColorAnsi;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+/**
+ * CardSlotView is the View version of SlotDevelopmentCards Model class.
+ * In this case all LeaderCards and DevelopmentCards are coded by Integer.
+ */
 public class CardsSlotsView {
 
     private final LinkedList<Integer> firstSlot;
@@ -31,6 +35,11 @@ public class CardsSlotsView {
         this.secondLeaderCard = secondLeaderCard;
     }
 
+    /**
+     * @param leaderCard is one LeaderCard.
+     *
+     * add @param leaderCard to player LeaderCards and activate the chosen one.
+     */
     public void addLeaderCard(int leaderCard){
         if(firstLeaderCard == -1) {
             firstLeaderCard = leaderCard;
@@ -44,6 +53,13 @@ public class CardsSlotsView {
             activateLeaderCard(leaderCard);
     }
 
+    /**
+     * @param leaderCard is one LeaderCard
+     *
+     * if the first LeaderCard was already activated, activate the second one.
+     * if the first LeaderCard is not active and player has chosen to activate the second one, switch the LeaderCards
+     * and activate the first one (which was the second one before).
+     */
     private void activateLeaderCard(int leaderCard){
         if(secondLeaderCard == leaderCard && !firstActive){
             int temp = firstLeaderCard;
@@ -55,6 +71,11 @@ public class CardsSlotsView {
         firstActive = true;
     }
 
+    /**
+     * @return a list of 9 player's DevelopmentCards.
+     *
+     * for any missing DevelpmentCards add "-1".
+     */
     public ArrayList<Integer> getDevelopmentCards() {
         ArrayList<Integer> cards = new ArrayList<>();
         for(int i = 0; i < 3; i++){
@@ -78,6 +99,9 @@ public class CardsSlotsView {
         return cards;
     }
 
+    /**
+     * @return player's LeaderCards.
+     */
     public ArrayList<Integer> getLeaderCards(){
         ArrayList<Integer> leaderCards = new ArrayList<>();
         leaderCards.add(firstLeaderCard);
@@ -85,6 +109,10 @@ public class CardsSlotsView {
         return leaderCards;
     }
 
+    /**
+     * @param leaderCard is one player's LeaderCard (1 or 2).
+     * @return if @param leaderCard is active.
+     */
     public boolean isLeaderCardActive(int leaderCard){
         if(leaderCard == 1)
             return firstActive;
@@ -92,6 +120,10 @@ public class CardsSlotsView {
             return secondActive;
     }
 
+    /**
+     * @param slot is one player's slot (1 or 3).
+     * @return if @param slot is empty.
+     */
     public boolean isSlotEmpty(int slot){
         switch (slot){
             case 1:
@@ -105,6 +137,10 @@ public class CardsSlotsView {
         }
     }
 
+    /**
+     * @param cardID is DevelopmentCard's cardID.
+     * @param slot is player's chosen slot to insert the card.
+     */
     public void addDevelopmentCard(int cardID, int slot){
         if(slot == 1)
             firstSlot.add(cardID);
@@ -114,6 +150,11 @@ public class CardsSlotsView {
             thirdSlot.add(cardID);
     }
 
+    /**
+     * @param chosenLeaderCard is one player's LeaderCard (1 or 2).
+     *
+     * in case player has chosen to discard the first LeaderCard, switch the LeaderCards and set the second one as "-1".
+     */
     public void discardLeaderCard(int chosenLeaderCard){
         if(firstLeaderCard == chosenLeaderCard){
             firstLeaderCard = secondLeaderCard;
@@ -123,6 +164,9 @@ public class CardsSlotsView {
         secondActive = false;
     }
 
+    /**
+     * CLI representation of CardsSlotView.
+     */
     public void printCliSlot(){
         System.out.println("\nDEVELOPMENT_CARDS:");
         System.out.println("First slot:");
@@ -139,6 +183,12 @@ public class CardsSlotsView {
         }
     }
 
+    /**
+     * @param slot is one slot.
+     *
+     * print DevelopmentCards of @param slot. In case there are more than one, the last one is printed entirely while
+     * the other ones only small information (color and victory points).
+     */
     private void printSlot(LinkedList <Integer> slot){
         CardMapCLI.getCard(slot.getLast()).print();
         for(int i = slot.size() - 2; i >= 0; i--) {
@@ -147,6 +197,9 @@ public class CardsSlotsView {
         }
     }
 
+    /**
+     * print player's LeaderCards.
+     */
     public void printCliLeaderCard(){
         System.out.println("\nLEADER_CARDS: ");
         if(firstLeaderCard != -1) {

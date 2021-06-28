@@ -6,6 +6,10 @@ import java.util.ArrayList;
 
 import static java.util.Collections.swap;
 
+/**
+ * WarehouseStrongbox is the View version of Warehouse and Strongbox Model classes combined.
+ * In this case all depots and all Strongbox resources are coded as ResourceContainerView.
+ */
 public class WarehouseStrongboxView {
 
     private final ArrayList<ResourceContainerView> depots;
@@ -26,6 +30,12 @@ public class WarehouseStrongboxView {
         stone = new ResourceContainerView(Resource.STONE);
     }
 
+    /**
+     * @param resource is the increased resource.
+     * @param depot is which depot has been increased.
+     *
+     * if @param depot is empty set new resource.
+     */
     public void increaseWarehouse(Resource resource, int depot){
         if(depots.get(depot).getAmount() > 0)
             depots.get(depot).increase();
@@ -33,20 +43,41 @@ public class WarehouseStrongboxView {
             depots.get(depot).setNewResource(resource);
     }
 
+    /**
+     * @param resource is one resource
+     * @param warehouseAmount is warehouse amount of @param resource
+     * @param strongboxAmount is strongbox amount of @param resource.
+     *
+     * firstly set warehouse resources and then set strongbox amount.
+     */
     public void newAmount(Resource resource, int warehouseAmount, int strongboxAmount){
         warehouseHandler(resource, warehouseAmount);
         strongboxHandler(resource, strongboxAmount);
     }
 
+    /**
+     * @param depot1 is one depot.
+     * @param depot2 is one depot.
+     *
+     * swap chosen depots.
+     */
     public void switchDepot(int depot1, int depot2) {
         swap(depots, depot1, depot2);
     }
 
+    /**
+     * @param r is the new extra depot resource.
+     * @param secondDepot refers if new activated ExtraDepotCard is the player's second LeaderCard activated.
+     */
     public void addExtraDepot(Resource r, boolean secondDepot){
         depots.add(new ResourceContainerView(r));
         this.secondDepot = secondDepot;
     }
 
+    /**
+     * @param r is one resource
+     * @param strongboxAmount is strongbow amount of @param resource.
+     */
     private void strongboxHandler(Resource r, int strongboxAmount){
         switch (r){
             case COIN:
@@ -64,6 +95,16 @@ public class WarehouseStrongboxView {
         }
     }
 
+    /**
+     * @param r is one resource
+     * @param warehouseAmount is warehouse amount of @param resource.
+     *
+     * firstly calculates the difference between @param warehouseAmount and an eventually extra depot amount.Then find if
+     * exists a warehouse depot with @param r. If exist and difference is >= 0 set this depot amount to difference. Instead
+     * if this difference is < 0 set warehouse amount as 0 and decrease extra depot amount by difference.
+     * instead if there isn't any warehouse depot with @param r and the difference is negative, simply decrease extra
+     * depot amount by difference
+     */
     private void warehouseHandler(Resource r, int warehouseAmount){
         int difference = warehouseAmount - extraDepotAmount(r);
         int warehouseDepot = rightDepot(r);
@@ -79,6 +120,12 @@ public class WarehouseStrongboxView {
             decreaseExtraDepot(r, (-difference));
     }
 
+    /**
+     * @param r is one resource
+     * @param amount is the amount of decreased @param resource.
+     *
+     * find the right extra depot of @param r and decrease its resource by @param amount.
+     */
     private void decreaseExtraDepot(Resource r, int amount){
         if(existExtraDepot1() && depots.get(3).getResource() == r)
             depots.get(3).decrease(amount);
@@ -86,6 +133,10 @@ public class WarehouseStrongboxView {
             depots.get(4).decrease(amount);
     }
 
+    /**
+     * @param r is one resource
+     * @return the position of warehouse depot which contains @param r. If there isn't any warehouse depot, @return -1.
+     */
     private int rightDepot(Resource r){
         for(int i = 0; i < 3; i++){
             if(depots.get(i).getAmount() > 0 && depots.get(i).getResource() == r)
@@ -94,6 +145,12 @@ public class WarehouseStrongboxView {
         return -1;
     }
 
+    /**
+     * @param r is one resource
+     * @return extra depot amount of @param r.
+     *
+     * if there isn't any extra depot of @param r @return 0.
+     */
     private int extraDepotAmount(Resource r){
         if(existExtraDepot1() && depots.get(3).getResource() == r)
             return depots.get(3).getAmount();
@@ -110,11 +167,17 @@ public class WarehouseStrongboxView {
         return depots.size() == 5;
     }
 
+    /**
+     * CLI printer of Warehouse and STrongobox.
+     */
     public void printCLIWarehouseStrongbox(){
         printCliWarehouse();
         printCliStrongbox();
     }
 
+    /**
+     * CLI printer of Warehouse.
+     */
     public void printCliWarehouse(){
         System.out.println("WAREHOUSE:");
         for (int i=0;i<3;i++) {
@@ -125,6 +188,9 @@ public class WarehouseStrongboxView {
         printCliExtraDepot();
     }
 
+    /**
+     * CLI printer of Strongbox.
+     */
     public void printCliStrongbox(){
         System.out.println("STRONGBOX:");
         coin.printCliStrongbox();
@@ -133,6 +199,9 @@ public class WarehouseStrongboxView {
         stone.printCliStrongbox();
     }
 
+    /**
+     * CLI printer of extra depots, if existing.
+     */
     public void printCliExtraDepot(){
         if (existExtraDepot1()) {
             System.out.println("EXTRA DEPOTS:");

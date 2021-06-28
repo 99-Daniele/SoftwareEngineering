@@ -5,6 +5,9 @@ import it.polimi.ingsw.model.resourceContainers.Resource;
 
 import java.util.ArrayList;
 
+/**
+ * GameView is the View version of Game Model class.
+ */
 public class GameView {
 
     private ArrayList<PlayerBoardView> players = new ArrayList<>();
@@ -14,6 +17,11 @@ public class GameView {
     private ArrayList<Marble> chosenMarbles;
     private boolean startGame;
 
+    /**
+     * @param players is the list of player's nicknames.
+     *
+     * set players and init their faithTrack. Then start the game.
+     */
     public void setPlayers(ArrayList<String> players){
         this.players = new ArrayList<>();
         for (String player: players)
@@ -30,6 +38,9 @@ public class GameView {
         startGame = true;
     }
 
+    /**
+     * @return the list of player's nicknames. In case it's single player add "LorenzoIlMagnifico" to player' list.
+     */
     public ArrayList<String> getNickNames(){
         ArrayList<String> nickNames = new ArrayList<>();
         for(PlayerBoardView player: players)
@@ -83,6 +94,9 @@ public class GameView {
         decks = new DecksView(cards);
     }
 
+    /**
+     * create player's faithTracks. In case it's single player also create Lorenzo faithTrack.
+     */
     public void initFaithTrack(){
         if(players.size() > 1)
             faithTrack = new FaithTrackView(players.size(), getNickNames());

@@ -227,25 +227,13 @@ public class InputControllerTest {
     }
 
     /**
-     * test the correct check of leader card activation message.
+     * test the correct check of leader card activation or discard message.
      */
     @Test
-    void correctLeaderCardActivationCheck(){
+    void correctLeaderCardChoiceCheck(){
 
-        assertFalse(InputController.leaderCardActivation(0));
-        assertTrue(InputController.leaderCardActivation(1));
-        assertTrue(InputController.leaderCardActivation(2));
+        assertFalse(InputController.leaderCardChoice(0));
+        assertTrue(InputController.leaderCardChoice(1));
+        assertTrue(InputController.leaderCardChoice(2));
     }
-
-    /**
-     * test the correct check of leader card discard message.
-     */
-    @Test
-    void correctLeaderCardDiscardCheck(){
-
-        assertFalse(InputController.leaderCardDiscard(0));
-        assertTrue(InputController.leaderCardDiscard(1));
-        assertTrue(InputController.leaderCardDiscard(2));
-    }
-
 }

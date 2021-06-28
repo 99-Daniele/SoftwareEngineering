@@ -4,6 +4,10 @@ import it.polimi.ingsw.view.CLI.ColorAnsi;
 
 import java.util.ArrayList;
 
+/**
+ * FaithTrackView is the View version of FaithTrack Model class.
+ * In this case every player's faithTrack is coded as String[][].
+ */
 public class FaithTrackView {
 
     private final ArrayList<String[][]> faithTracks;
@@ -16,6 +20,12 @@ public class FaithTrackView {
         }
     }
 
+    /**
+     * @param player is one player.
+     * @param nickName is @param player's nickname.
+     *
+     * create player's faithTrack CLI representation.
+     */
     private void createFaithTracks(int player, String nickName){
         String[][] faithTrack = faithTracks.get(player);
         for(int y=0;y<51;y+=2) {
@@ -81,6 +91,10 @@ public class FaithTrackView {
         faithTrack[4][0] = " ";
     }
 
+    /**
+     * @param player is one player
+     * @return player's color based on his position.
+     */
     private String playerColor(int player){
         switch (player){
             case 0:
@@ -95,6 +109,12 @@ public class FaithTrackView {
         return null;
     }
 
+    /**
+     * @param player is one player.
+     * @param newFaithPoints is the new amount of @param player faithPoints.
+     *
+     * replace old faithPoints with " " and add in the right position a new "●".
+     */
     public void increaseFaithPoints(int player, int newFaithPoints){
         String[][] faithTrack = faithTracks.get(player);
         for (int y=1;y<51;y+=2) {
@@ -105,6 +125,13 @@ public class FaithTrackView {
         faithTrack[2][newFaithPoints*2 + 1] = playerColor(player) + "●" + ColorAnsi.RESET;
     }
 
+    /**
+     * @param player is one player.
+     * @param victoryPoints is @param player total victory points by VaticanReport.
+     *
+     * if first pope victory points are missing set that with @param victoryPoints, in case is the second or third calculates
+     * how many effectively are and set that.
+     */
     public void increaseVictoryPoints(int player, int victoryPoints){
         String[][] faithTrack = faithTracks.get(player);
         if(!faithTrack[4][33].equals(" ")){
@@ -120,12 +147,20 @@ public class FaithTrackView {
         }
     }
 
+    /**
+     * print in CLI FaithTrack.
+     */
     public void printCli(){
         System.out.println("\nFAITH TRACK:\n");
         for(int i = 0; i < faithTracks.size(); i++)
             printFaithTrack(i);
     }
 
+    /**
+     * @param player is one player.
+     *
+     * print @param player faithTrack in CLI.
+     */
     private void printFaithTrack(int player){
         String[][] faithTrack = faithTracks.get(player);
         for (int x=0;x<5;x++) {
@@ -142,6 +177,10 @@ public class FaithTrackView {
         }
     }
 
+    /**
+     * @param player is one player
+     * @return @param player's faith points.
+     */
     public int getFaithPoints(int player){
         String[][] faithTrack = faithTracks.get(player);
         for (int y = 0; y < 25; y++){
@@ -151,6 +190,10 @@ public class FaithTrackView {
         return 0;
     }
 
+    /**
+     * @param player is one player
+     * @return @param player's victory points.
+     */
     public int getVictoryPoints(int player){
         String[][] faithTrack = faithTracks.get(player);
         int victoryPoints = 0;
@@ -163,6 +206,9 @@ public class FaithTrackView {
         return victoryPoints;
     }
 
+    /**
+     * @return how many Vatican Report has been activated during this game.
+     */
     public int getCurrentPope(){
         String[][] faithTrack = faithTracks.get(0);
         if(!faithTrack[4][49].equals(" "))
