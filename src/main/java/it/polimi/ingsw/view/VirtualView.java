@@ -11,6 +11,15 @@ import java.net.Socket;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * VirtualView implements View. Observes Game class and it's observed vy ControllerGame class.
+ * pingThread evaluates if Client is still connected to the Server.
+ * inThread constantly received messages from Client.
+ * out and in are Client-Server serializable objects streams.
+ * nickname is player's chosen nickname.
+ * viewID is player's position in the game.
+ * connected is true if Client is theoretically connected to Server.
+ */
 public class VirtualView extends Observable implements View, Observer{
 
     private Thread pingThread;
@@ -28,6 +37,11 @@ public class VirtualView extends Observable implements View, Observer{
         this.connected = true;
     }
 
+    /**
+     * start pingThread and inThread.
+     * inThread constantly interpret received Client messages.
+     * pingThread constantly evaluates if Client is still connected to Server.
+     */
     public void start() {
         if (pingThread == null)
             pingThread = new Thread(() -> {
@@ -60,12 +74,24 @@ public class VirtualView extends Observable implements View, Observer{
         return nickName;
     }
 
+    /**
+     * @param viewID is player's vieID.
+     *
+     * send to player a LOGIN message with his position in the game.
+     */
     @Override
     public void login(int viewID){
         this.viewID = viewID;
         sendMessage(new Message(MessageType.LOGIN, viewID));
     }
 
+    /**
+     * @throws InterruptedException if wit is interrupted
+     * @throws IOException if Client isn't connected anymore.
+     *
+     * send PING message to Client every 10 seconds. if Client has not answer with PONG message 3 times in a row and
+     * any has not sent any message for 30 second, connection with Client is considered as lost.
+     */
     private void ping() throws InterruptedException, IOException {
         long initTime = System.currentTimeMillis();
         long interTime = initTime;
@@ -89,6 +115,15 @@ public class VirtualView extends Observable implements View, Observer{
         }
     }
 
+    /**
+     * @throws IOException if Client isn't connected anymore.
+     *
+     * interpret messages received from Client.
+     * in case of PING message answer Client with a PONG message
+     * in case of PONG message wake up pingThread.
+     * in case of unexpected message print an error message.
+     * in any other case inform ControllerGame of received message from Client.
+     */
     private void receiveMessage() throws IOException {
         while (true) {
             try {
@@ -147,6 +182,12 @@ public class VirtualView extends Observable implements View, Observer{
         return ((currentTime - initTime) >= delta);
     }
 
+    /**
+     * @param position is player's position in the game.
+     * @param nickNames is a list of player's nicknames.
+     *
+     * send to player a PLAYERS message with the list of player's nicknames adn hi snew position.
+     */
     @Override
     public void allPlayerConnected(int position, ArrayList<String> nickNames) {
         viewID = position;
@@ -154,12 +195,18 @@ public class VirtualView extends Observable implements View, Observer{
         sendMessage(message);
     }
 
+    /**
+     * send to player a START_GAME message.
+     */
     @Override
     public void startGame(){
         Message message = new Message(MessageType.START_GAME, viewID);
         sendMessage(message);
     }
 
+    /**
+     * @param leaderCards is a list of 4 LeaderCards which player can chose.
+     */
     @Override
     public void choseLeaderCards(ArrayList<LeaderCard> leaderCards){
         int cardID1 = leaderCards.get(0).getCardID();
@@ -170,18 +217,31 @@ public class VirtualView extends Observable implements View, Observer{
         sendMessage(message);
     }
 
+    /**
+     * @param nickName is nickname of quitting player.
+     *
+     * send to player a QUIT message with @param player.
+     */
     @Override
     public void exit(String nickName){
         Message quitMessage = new MessageOneParameterString(MessageType.QUIT, viewID, nickName);
         sendMessage(quitMessage);
     }
 
+    /**
+     * send to player an OK message.
+     */
     @Override
     public void ok(){
         Message okMessage = new Message(MessageType.OK, viewID);
         sendMessage(okMessage);
     }
 
+    /**
+     * @param turn refers to if it's player turn or not.
+     *
+     * send to player a TURN message with param = 1 if it's his turn or = 2 if not.
+     */
     @Override
     public void isMyTurn(boolean turn){
         Message turnMessage;
@@ -193,6 +253,11 @@ public class VirtualView extends Observable implements View, Observer{
         sendMessage(turnMessage);
     }
 
+    /**
+     * @param availableSlots is a list of available slots where insert the buying DevelopmentCard.
+     *
+     * send to player a CHOSEN_SLOT message with @param availableSlots.
+     */
     @Override
     public void availableSlot(ArrayList<Integer> availableSlots){
         int firstSlot = availableSlots.get(0);
@@ -206,6 +271,11 @@ public class VirtualView extends Observable implements View, Observer{
         sendMessage(message);
     }
 
+    /**
+     * @param marbles is an array of player's chosen marbles.
+     *
+     * send to player a TAKE_MARBLE message with @param marbles as arrayList.
+     */
     @Override
     public void chosenMarble(Marble[] marbles){
         ArrayList<Marble> chosenMarbles = new ArrayList<>();
@@ -214,6 +284,11 @@ public class VirtualView extends Observable implements View, Observer{
         sendMessage(message);
     }
 
+    /**
+     * @param leaderCards are player's LeaderCards
+     *
+     * send to player a QHITE_CONVERSION_CARD message with @param leaderCards.
+     */
     @Override
     public void choseWhiteConversionCard(LeaderCard[] leaderCards){
         int leaderCard1 = leaderCards[0].getCardID();
@@ -222,6 +297,11 @@ public class VirtualView extends Observable implements View, Observer{
         sendMessage(message);
     }
 
+    /**
+     * @param nickName is nickname of quitting player.
+     *
+     * send to player a QUIT message and close connections.
+     */
     public void quit(String nickName){
         connected = false;
         System.out.println(this.nickName + " is disconnected");
@@ -229,6 +309,11 @@ public class VirtualView extends Observable implements View, Observer{
         disconnect();
     }
 
+    /**
+     * @param message is one message.
+     *
+     * send to player @param message.
+     */
     public void sendMessage(Message message){
         try {
             out.flush();
@@ -238,6 +323,11 @@ public class VirtualView extends Observable implements View, Observer{
         }
     }
 
+    /**
+     * @param message summarize winner info.
+     *
+     * send to player @param message.
+     */
     public void endGame(Message message){
         connected = false;
         System.out.println(nickName + " is disconnected");
@@ -245,12 +335,20 @@ public class VirtualView extends Observable implements View, Observer{
         disconnect();
     }
 
+    /**
+     * @param errorType is the type of error to be communicated to player.
+     *
+     * send to player an error message with @param errorType. In case of ALREADY_TAKEN_NICKNAME also set nickname as null.
+     */
     public void errorMessage(ErrorType errorType){
         if(errorType == ErrorType.ALREADY_TAKEN_NICKNAME)
             nickName = null;
         sendMessage(new ErrorMessage( viewID, errorType));
     }
 
+    /**
+     * interrupt pingThread and inThread and then close connections.
+     */
     private void disconnect(){
         if(connected) {
             if (nickName == null)
@@ -274,6 +372,12 @@ public class VirtualView extends Observable implements View, Observer{
         return nickName;
     }
 
+    /**
+     * @param o is game class.
+     * @param arg is message.
+     *
+     * any received message from Game is sent to player.
+     */
     @Override
     public void update(Observable o, Object arg) {
         Message message = (Message) arg;

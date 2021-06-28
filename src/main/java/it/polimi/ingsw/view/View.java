@@ -6,6 +6,9 @@ import it.polimi.ingsw.network.messages.ErrorType;
 
 import java.util.ArrayList;
 
+/**
+ * View is the generic interface of player's view.
+ */
 public interface View{
 
     String getNickname();

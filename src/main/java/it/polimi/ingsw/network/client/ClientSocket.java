@@ -8,16 +8,10 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
- * threadIn is the thread which receive input from System.in
+ * connectedThread is the thread which evaluates if Client is still connected to Server.
  * threadOut is the thread which receive input from Server.
- * turnTimer is a timer which ask server if it's player's turn every 10 seconds. Furthermore certificate that connection
- * still remains.
- * socket is the socket which connect Client and Server.
  * out and in are Client-Server serializable objects streams.
- * quit is true when user decides to quit.
- * ok summarize Server sent OK messages.
- * turn summarize Server sent TURN messages.
- * lock is a Lock for thread.wait()
+ * connected is true if Client is theoretically connected to Server.
  */
 public class ClientSocket extends Observable{
 
