@@ -1124,7 +1124,7 @@ public class CLI extends ClientView{
             if(m.getClientID() != position) {
                 serverMessage = "Player " + getNickname(m.getClientID()) + " has inserted 1 " + Resource.printResource(m.getResource())
                         + " in its " + m.getPar1() + "° depot";
-                if(super.isGameStarted())
+                if(isGameStarted())
                     System.out.println(serverMessage);
                 else
                     addServerMessage(serverMessage);
@@ -1135,7 +1135,7 @@ public class CLI extends ClientView{
         else if(m.getClientID() != position) {
             serverMessage = "Player " + getNickname(m.getClientID()) + " has discarded 1 " + Resource.printResource(m.getResource())
                     + " marble";
-            if(super.isGameStarted())
+            if(isGameStarted())
                 System.out.println(serverMessage);
             else
                 addServerMessage(serverMessage);
@@ -1238,8 +1238,8 @@ public class CLI extends ClientView{
         MessageOneParameterString m = (MessageOneParameterString) message;
         if(m.getClientID() == -1){
             System.err.println("\nClient no longer connected to the Server");
-            System.out.println("\nExit.\n");
             endGame();
+            System.out.println("\nExit.\n");
             System.exit(1);
         }
         else if (getNumOfPlayers() != 0) {

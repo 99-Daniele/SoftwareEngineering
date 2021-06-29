@@ -40,6 +40,11 @@ public class App {
         }
     }
 
+    /**
+     * @param param is parameter inserted by user in main.
+     *
+     * in case user select server or CLI mode, launch them. In any other cases launch GUI.
+     */
     private static void oneParamStart(String param){
         switch (param){
             case "--server":
@@ -56,12 +61,16 @@ public class App {
         }
     }
 
+    /**
+     * @param params are parameters inserted by user in main.
+     *
+     * in case user select server, create and start it. In any other cases launch GUI.
+     */
     private static void threeParamStart(String[] params){
         switch (params[0]){
             case "--server":
             case "-s":
-                if(!startServer(params[1], params[2]))
-                    startGUI();
+                startServer(params[1], params[2]);
                 break;
             default:
                 startGUI();
@@ -69,6 +78,11 @@ public class App {
         }
     }
 
+    /**
+     * @param params are parameters inserted by user in main.
+     *
+     * in case user select CLI mode, launch it. In any other cases launch GUI.
+     */
     private static void fiveParamStart(String[] params){
         switch (params[0]){
             case "--cli":
@@ -83,28 +97,51 @@ public class App {
         }
     }
 
+    /**
+     * create and start a new Server on default port 12460.
+     */
     private static void startServer(){
         Server server = new Server();
         server.startServer();
     }
 
-    private static boolean startServer(String param, String portNumber){
-        if(!param.equals("--port") && !param.equals("-p"))
-            return false;
-        try {
-            Server server = new Server(Integer.parseInt(portNumber));
+    /**
+     * @param param is one parameter inserted by user in main.
+     * @param portNumber is the port number inserted by user in main parameters.
+     *
+     * if user has inserted wrong parameters create a new default Server and start it.
+     */
+    private static void startServer(String param, String portNumber){
+        Server server;
+        if(!param.equals("--port") && !param.equals("-p")){
+            server = new Server();
             server.startServer();
-            return true;
+        }
+        try {
+            server = new Server(Integer.parseInt(portNumber));
+            server.startServer();
         } catch (NumberFormatException e){
-            return false;
+            server = new Server();
+            server.startServer();
         }
     }
 
+    /**
+     * launch GUI with any connection with Server.
+     */
     private static void startGUI(){
         ClientView gui = new GUI();
         gui.launchGUI();
     }
 
+    /**
+     * @param param1 is one parameter inserted by user in main.
+     * @param hostname is the hostname inserted by user in main parameters.
+     * @param param2 is one parameter inserted by user in main.
+     * @param portNumber is the portNumber inserted by user in main.
+     * @return false if connection with Server @param hostname on port @param portNumber fails or user hs inserted wrong
+     * parameters.
+     */
     private static boolean startGUI(String param1, String hostname, String param2, String portNumber){
         if((!param1.equals("--hostname") && !param1.equals("-h"))
             || (!param2.equals("--port") && !param2.equals("-p")))
@@ -118,11 +155,22 @@ public class App {
         }
     }
 
+    /**
+     * launch CLI with any connection with Server.
+     */
     private static void startCLI(){
         ClientView cli = new CLI();
         cli.launchCLI();
     }
 
+    /**
+     * @param param1 is one parameter inserted by user in main.
+     * @param hostname is the hostname inserted by user in main parameters.
+     * @param param2 is one parameter inserted by user in main.
+     * @param portNumber is the portNumber inserted by user in main.
+     * @return false if connection with Server @param hostname on port @param portNumber fails or user hs inserted wrong
+     * parameters.
+     */
     private static boolean startCLI(String param1, String hostname, String param2, String portNumber){
         if((!param1.equals("--hostname") && !param1.equals("-h"))
                 || (!param2.equals("--port") && !param2.equals("-p")))
