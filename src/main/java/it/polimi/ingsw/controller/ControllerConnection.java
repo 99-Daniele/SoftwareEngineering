@@ -8,7 +8,6 @@ import java.util.LinkedList;
 public class ControllerConnection {
 
     private static final LinkedList<ControllerGame> controllerGames = new LinkedList<>();
-    private static final Object lock = new Object();
 
     /**
      * @return the matched ControllerGame
@@ -17,12 +16,10 @@ public class ControllerConnection {
      * When a view tries to connect to Server, the ControllerConnection finds if there is any game where the number of
      * player is not maxed, or if there is any game where the number of players has not yet been chosen.
      */
-    public static ControllerGame ConnectionPlayers() throws InterruptedException {
+    public static synchronized ControllerGame ConnectionPlayers() throws InterruptedException {
         for (ControllerGame controllerGame : controllerGames) {
             while (controllerGame.getCurrentNumPlayers() == 1 && controllerGame.getMaxNumPlayers() == 0) {
-                synchronized (lock) {
-                    lock.wait();
-                }
+                ControllerConnection.class.wait();
             }
             if (controllerGame.getCurrentNumPlayers() < controllerGame.getMaxNumPlayers())
                 return controllerGame;
@@ -34,9 +31,7 @@ public class ControllerConnection {
     /**
      * this method is called by ControllerGame when first player decides the number of players.
      */
-    public static void newGame() {
-        synchronized (lock) {
-            lock.notifyAll();
-        }
+    public synchronized static void newGame() {
+        ControllerConnection.class.notifyAll();
     }
 }
