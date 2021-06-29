@@ -18,7 +18,7 @@ import java.io.InputStream;
 import java.util.Objects;
 
 /**
- * OpponentPlayerboardSceneController handle the display of other playerboard
+ * OpponentPlayerboardSceneController handle the display of other playerboard.
  */
 public class OpponentPlayerboardSceneController {
 
@@ -113,7 +113,7 @@ public class OpponentPlayerboardSceneController {
     }
 
     /**
-     * displayer other playerboard.
+     * display other playerboard.
      */
     private void showPlayerboard(){
         setCard(leader1, ClientView.getLeaderCards(position).get(0));
@@ -240,7 +240,7 @@ public class OpponentPlayerboardSceneController {
     }
 
     /**
-     * set redCross position in faithTrakc
+     * set redCross position in faithTrack
      */
     private void setFaithPoints() {
         int faithPoints = ClientView.getFaithPoints(position);

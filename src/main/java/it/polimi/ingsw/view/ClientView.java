@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+/**
+ * ClientView is View on Client. It his an abstract class which could be override by CLI or GUI.
+ */
 public abstract class ClientView extends Application implements Observer {
 
     private static GameView game;
@@ -37,6 +40,9 @@ public abstract class ClientView extends Application implements Observer {
     @Override
     public void start(Stage stage) {}
 
+    /**
+     * disconnect from Server.
+     */
     public static void endGame(){
         ClientSocket.setDisconnected();
         ClientSocket.disconnect();
@@ -114,7 +120,6 @@ public abstract class ClientView extends Application implements Observer {
         return game.getChosenMarbles();
     }
 
-
     public static int coinAmount(int position){
         return game.coinAmount(position);
     }
@@ -143,6 +148,10 @@ public abstract class ClientView extends Application implements Observer {
         return game.getNumOfPlayers();
     }
 
+    /**
+     * @param o is ClientSocket.
+     * @param arg is one message received from Server.
+     */
     @Override
     public void update(Observable o, Object arg) {
         try {
@@ -246,6 +255,11 @@ public abstract class ClientView extends Application implements Observer {
 
     public abstract void newPlayerMessage(Message message);
 
+    /**
+     * @param message is a PLAYERS message.
+     *
+     * set received player's nicknames.
+     */
     public void playersMessage(Message message){
         MessageArrayListString m = (MessageArrayListString) message;
         game.setPlayers(m.getNickNames());
@@ -261,11 +275,21 @@ public abstract class ClientView extends Application implements Observer {
         return game.isStartGame();
     }
 
+    /**
+     * @param message is a MARKET message.
+     *
+     * set received market.
+     */
     public void marketMessage(Message message){
         MessageMarket m = (MessageMarket) message;
         game.setMarket(m.getMarket());
     }
 
+    /**
+     * @param message is a DECKBOARD message.
+     *
+     * set received list of 16 first DevelopmentCards.
+     */
     public void deckBoardMessage(Message message){
         MessageArrayListInt m = (MessageArrayListInt) message;
         game.setFirstDeckCards(m.getParams());
@@ -288,16 +312,31 @@ public abstract class ClientView extends Application implements Observer {
 
     public abstract void endTurnMessage(Message message);
 
+    /**
+     * @param message is a BUY_CARD message.
+     *
+     * add to selected player received DevelopmentCards.
+     */
     public void buyCardMessage(Message message){
         MessageTwoParameterInt m = (MessageTwoParameterInt) message;
         game.addDevelopmentCard(m.getClientID(), m.getPar1(), m.getPar2());
     }
 
+    /**
+     * @param message is CARD_REMOVE message.
+     *
+     * replace card on selected row and column with received DevelopmentCards.
+     */
     public void cardRemoveMessage(Message message){
         MessageFourParameterInt m = (MessageFourParameterInt) message;
         game.replaceCard(m.getPar1(), m.getPar2(), m.getPar4());
     }
 
+    /**
+     * @param message is NEW_AMOUNT message.
+     *
+     * set warehouse and strongbox amount of selected resource.
+     */
     public void resourceAmountMessage(Message message) {
         MessageOneResourceTwoInt m = (MessageOneResourceTwoInt) message;
         game.newAmount(m.getClientID(), m.getResource(), m.getPar1(), m.getPar2());
@@ -305,6 +344,11 @@ public abstract class ClientView extends Application implements Observer {
 
     public abstract void endProductionMessage(Message message);
 
+    /**
+     * @param message is MARKET_CHANGE message.
+     *
+     * slide selected market row or column.
+     */
     public void marketChange(Message message){
         MessageTwoParameterInt m = (MessageTwoParameterInt) message;
         if (m.getPar1() == 0) {
@@ -316,11 +360,21 @@ public abstract class ClientView extends Application implements Observer {
 
     public abstract void whiteConversionCardMessage(Message message);
 
+    /**
+     * @param message is FAITH_POINTS_INCREASE message.
+     *
+     * set selected player received faith points.
+     */
     public void faithPointsMessage(Message message){
         MessageOneParameterInt m = (MessageOneParameterInt) message;
         game.increaseFaithPoints(m.getClientID(), m.getPar());
     }
 
+    /**
+     * @param message is INCREASE_WAREHOUSE message.
+     *
+     * increase selected player warehouse by received resource.
+     */
     public void increaseWarehouseMessage(Message message){
         MessageOneIntOneResource m = (MessageOneIntOneResource) message;
         if(m.getPar1() != -1) {
@@ -328,26 +382,51 @@ public abstract class ClientView extends Application implements Observer {
         }
     }
 
+    /**
+     * @param message is SWITCH_DEPOT message.
+     *
+     * switch sleected depots.
+     */
     public void switchDepotMessage(Message message){
         MessageTwoParameterInt m = (MessageTwoParameterInt) message;
         game.switchDepot(m.getClientID(), m.getPar1(), m.getPar2());
     }
 
+    /**
+     * @param message is VATICAN_REPORT message.
+     *
+     * set selected player received victory points.
+     */
     public void vaticanReportMessage(Message message){
         MessageTwoParameterInt m = (MessageTwoParameterInt) message;
         game.increaseVictoryPoints(m.getClientID(), m.getPar2());
     }
 
+    /**
+     * @param message is LEADER_ACTIVATION message.
+     *
+     * add received LeaderCard to selected player.
+     */
     public void leaderCardActivationMessage(Message message){
         MessageOneParameterInt m = (MessageOneParameterInt) message;
         game.addLeaderCard(m.getClientID(), m.getPar());
     }
 
+    /**
+     * @param message is EXTRA_DEPOT message.
+     *
+     * add new ExtraDepot of received resource to selected player.
+     */
     public void extraDepotMessage(Message message){
         MessageOneIntOneResource m = (MessageOneIntOneResource) message;
         game.addExtraDepot(m.getClientID(), m.getResource());
     }
 
+    /**
+     * @param message is LEADER_ACTIVATION message.
+     *
+     * remove received LeaderCard to selected player.
+     */
     public void leaderCardDiscardMessage(Message message) {
         MessageOneParameterInt m = (MessageOneParameterInt) message;
         game.discardLeaderCard(m.getClientID(), m.getPar());
@@ -355,6 +434,11 @@ public abstract class ClientView extends Application implements Observer {
 
     public abstract void chosenSlotMessage(Message message);
 
+    /**
+     * @param message is TAKE_MARBLE message.
+     *
+     * set received marbles.
+     */
     public void takeMarbleMessage(Message message) {
         MessageArrayListMarble m = (MessageArrayListMarble) message;
         game.setChosenMarbles(m.getMarbles());
@@ -364,6 +448,9 @@ public abstract class ClientView extends Application implements Observer {
 
     public abstract void endGameMessage(Message message);
 
+    /**
+     * @param message is an ERR message.
+     */
     public void errorMessage(Message message) {
         ErrorMessage m = (ErrorMessage) message;
         switch (m.getErrorType()){
@@ -434,5 +521,4 @@ public abstract class ClientView extends Application implements Observer {
     public abstract void alreadyActiveError();
 
     public abstract void alreadyDiscardError();
-
 }

@@ -28,7 +28,9 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Objects;
 
-
+/**
+ * YourTurnSceneController handle the display of player's board.
+ */
 public class YourTurnSceneController {
 
     @FXML
@@ -250,6 +252,9 @@ public class YourTurnSceneController {
 
     private ArrayList<Integer> switchCounter=new ArrayList<>(2);
 
+    /**
+     * handle all buttons actions and show current state playerboard.
+     */
     @FXML
     public void initialize() {
         showPlayerboard();
@@ -355,11 +360,20 @@ public class YourTurnSceneController {
             clickedSwitch(5));
     }
 
+    /**
+     * @return true if one of both LeaderCards are still not activated or discarded.
+     */
     private static boolean leaderCardAvailable(){
         return ((!ClientView.isLeaderCardActive(GUI.getPosition(), 1) && ClientView.getLeaderCards(GUI.getPosition()).get(0) != -1)
                     || (!ClientView.isLeaderCardActive(GUI.getPosition(), 2) && ClientView.getLeaderCards(GUI.getPosition()).get(1) != -1));
     }
 
+    /**
+     * show current player's board.
+     * if LeaderCard is not activated set his opacity as 0,5.
+     * if it's single player game, make radiobutOtherPlayboard invisible.
+     * if player is the first one, make calamaio visible.
+     */
     private void showPlayerboard() {
         setCard(card11, ClientView.getDevelopmentCards().get(0));
         setCard(card21, ClientView.getDevelopmentCards().get(1));
@@ -418,6 +432,12 @@ public class YourTurnSceneController {
         setMessages();
     }
 
+    /**
+     * @param image one of ImageView.
+     * @param file is the new image.
+     *
+     * if @param file equals "" set @param image to null, otherwise load by @param file.
+     */
     private void setImage(ImageView image, String file){
         if(file.equals(""))
             image.setImage(null);
@@ -427,6 +447,12 @@ public class YourTurnSceneController {
         }
     }
 
+    /**
+     * @param image is one DevelopmentCards ImageView.
+     * @param cardID is one DevelopmentCards cardID.
+     *
+     * if @param cardID = -1 set @param image to null, otherwise convert @param cardID to CardView and then set @param image.
+     */
     private void setCard(ImageView image, int cardID) {
         if (cardID != -1)
             setImage(image, CardMapGUI.getCard(cardID));
@@ -434,11 +460,17 @@ public class YourTurnSceneController {
             setImage(image, "");
     }
 
+    /**
+     * set first depot resource image.
+     */
     private void setFirstDepot() {
         if (ClientView.getWarehouse(GUI.getPosition()).get(0).getAmount() == 1)
             setImage(deposit11, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(0).getResource()));
     }
 
+    /**
+     * set second depot resource images.
+     */
     private void setSecondDepot() {
         if (ClientView.getWarehouse(GUI.getPosition()).get(1).getAmount() >= 1)
             setImage(deposit21, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(1).getResource()));
@@ -446,6 +478,9 @@ public class YourTurnSceneController {
             setImage(deposit22, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(1).getResource()));
     }
 
+    /**
+     * set third depot resource images.
+     */
     private void setThirdDepot() {
         if (ClientView.getWarehouse(GUI.getPosition()).get(2).getAmount() >= 1)
             setImage(deposit31, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(2).getResource()));
@@ -455,6 +490,9 @@ public class YourTurnSceneController {
             setImage(deposit33, ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(2).getResource()));
     }
 
+    /**
+     * set first extra depot resource images.
+     */
     private void setExtraDepot1() {
         if (ClientView.getWarehouse(GUI.getPosition()).size() >= 4) {
             if (ClientView.getWarehouse(GUI.getPosition()).get(3).getAmount() >= 1) {
@@ -472,6 +510,9 @@ public class YourTurnSceneController {
         }
     }
 
+    /**
+     * set second extra depot resource images.
+     */
     private void setExtraDepot2() {
         if (ClientView.getWarehouse(GUI.getPosition()).size() == 5) {
             if (ClientView.getWarehouse(GUI.getPosition()).get(4).getAmount() >= 1)
@@ -481,6 +522,9 @@ public class YourTurnSceneController {
         }
     }
 
+    /**
+     * set strongbox resources amount.
+     */
     private void setStrongbox() {
         coinAmount.setText(String.valueOf(ClientView.coinAmount(GUI.getPosition())));
         servantAmount.setText(String.valueOf(ClientView.servantAmount(GUI.getPosition())));
@@ -488,6 +532,9 @@ public class YourTurnSceneController {
         stoneAmount.setText(String.valueOf(ClientView.stoneAmount(GUI.getPosition())));
     }
 
+    /**
+     * set redCross position in faithTrack
+     */
     private void setFaithPoints(boolean Ludovico) {
         int faithPoints;
         int offsetX = 0;
@@ -543,6 +590,9 @@ public class YourTurnSceneController {
         }
     }
 
+    /**
+     * set vatican report tiles.
+     */
     private void setVictoryPoints() {
         int victoryPoints = ClientView.getVictoryPoints(GUI.getPosition());
         switch (ClientView.getCurrentPope()) {
@@ -566,11 +616,19 @@ public class YourTurnSceneController {
         }
     }
 
+    /**
+     * set messages received from Server.
+     */
     private void setMessages(){
         for (String message: GUI.getServerMessages())
             display.getChildren().add(new Label(message));
     }
 
+    /**
+     * @param i is one warehouse or extra depot (1 to 5).
+     *
+     * if it's the second clicked depot send to Server a new SWITCH message.
+     */
     private void clickedSwitch(int i){
         switchCounter.add(i);
         if (switchCounter.size()==2) {
@@ -594,6 +652,11 @@ public class YourTurnSceneController {
         }
     }
 
+    /**
+     * @param disabled refers to if marble has to be disabled or not.
+     *
+     * set showing marbles as @param disabled.
+     */
     private static void disableMarbleShow(Boolean disabled){
         SceneController.setDisable("#marbleShow1", disabled);
         SceneController.setDisable("#marbleShow2", disabled);
@@ -601,6 +664,9 @@ public class YourTurnSceneController {
         SceneController.setDisable("#marbleShow4", disabled);
     }
 
+    /**
+     * make all depots button as disabled.
+     */
     private void disableSwitches(){
         one.setVisible(false);
         two.setVisible(false);
@@ -609,7 +675,11 @@ public class YourTurnSceneController {
         five.setVisible(false);
     }
 
-    public static void showMarbles(ArrayList<Marble> marbles) {
+    /**
+     * show current saved chosen marbles.
+     */
+    public static void chooseMarble() {
+        ArrayList<Marble> marbles = ClientView.getMarbles();
         SceneController.setVisible("#message", true);
         SceneController.setImage("#marbleShow1", MarbleMapGUI.getMarble(marbles.get(0)));
         SceneController.setVisible("#marbleShow1", true);
@@ -633,6 +703,9 @@ public class YourTurnSceneController {
         ask();
     }
 
+    /**
+     * display switch question to player and make yes or no buttons visible.
+     */
     private static void ask(){
         disableMarbleShow(true);
         SceneController.setText("#message","Do you want to switch your depots?");
@@ -640,6 +713,10 @@ public class YourTurnSceneController {
         SceneController.setVisible("#no",true);
     }
 
+    /**
+     * make depots buttons visible and enabled.
+     * in case there are any active ExtraDepotCard also add buttons for their depots.
+     */
     private void switchDepots(){
         one.setVisible(true);
         one.setDisable(false);
@@ -659,10 +736,11 @@ public class YourTurnSceneController {
         }
     }
 
-    public static void chooseMarble(){
-        showMarbles(ClientView.getMarbles());
-    }
-
+    /**
+     * @param i is one market row.
+     *
+     * send to Server a new TAKE_MARBLE message with @param i as row.
+     */
     private void takeMarketMarbleRow(int i) {
         disableMarketButton();
         try {
@@ -672,6 +750,11 @@ public class YourTurnSceneController {
         }
     }
 
+    /**
+     * @param i is one market column.
+     *
+     * send to Server a new TAKE_MARBLE message with @param i as column.
+     */
     private void takeMarketMarbleColumn(int i) {
         disableMarketButton();
         try {
@@ -681,6 +764,9 @@ public class YourTurnSceneController {
         }
     }
 
+    /**
+     * disable all row and column buttons.
+     */
     private void disableMarketButton(){
         row1.setDisable(true);
         row2.setDisable(true);
@@ -691,6 +777,9 @@ public class YourTurnSceneController {
         column4.setDisable(true);
     }
 
+    /**
+     * handle radiobutOtherPlayboard clicking based on game number of players.
+     */
     private void otherPlayerboardButton() {
         radiobutOtherPlayboard.setSelected(false);
         if(GUI.getNumOfPlayers() == 2){
@@ -703,6 +792,9 @@ public class YourTurnSceneController {
             fourPlayersOtherPlayerboard();
     }
 
+    /**
+     * show other player's board.
+     */
     private void twoPlayersOtherPlayerboard(){
         final OpponentPlayerboardSceneController[] opsc = new OpponentPlayerboardSceneController[1];
         if(GUI.getPosition() == 0)
@@ -713,6 +805,9 @@ public class YourTurnSceneController {
                 SceneController.changeRootPane(opsc[0], "/fxml/opponentPlayerboardScene"));
     }
 
+    /**
+     * show otherPlayers pane with second and third player buttons to allow player to chose one of them.
+     */
     private void threePlayersOtherPlayerboard(){
         final OpponentPlayerboardSceneController[] opsc = new OpponentPlayerboardSceneController[1];
         disableAllButton();
@@ -753,6 +848,9 @@ public class YourTurnSceneController {
         });
     }
 
+    /**
+     * show otherPlayers pane with second, third and fourth player buttons to allow player to chose one of them.
+     */
     private void fourPlayersOtherPlayerboard(){
         final OpponentPlayerboardSceneController[] opsc = new OpponentPlayerboardSceneController[1];
         disableAllButton();
@@ -810,6 +908,9 @@ public class YourTurnSceneController {
         });
     }
 
+    /**
+     * make visible LeaderCards buttons if LeaderCard is not active or discarded.
+     */
     private void choseLeaderButton(){
         disableAllButton();
         if(!ClientView.isLeaderCardActive(GUI.getPosition(), 1) && ClientView.getLeaderCards(GUI.getPosition()).get(0) != -1)
@@ -818,6 +919,9 @@ public class YourTurnSceneController {
             chooseLeader2.setVisible(true);
     }
 
+    /**
+     * enable all production buttons and set currentState as FIRST_POWER_STATE.
+     */
     private void activProducButton() {
         radiobutActivProduc.setSelected(false);
         if(ClientView.isState(GameStates.FIRST_ACTION_STATE))
@@ -826,6 +930,10 @@ public class YourTurnSceneController {
         enableProductionsButton();
     }
 
+    /**
+     * show pane with 4 resource which player can chose 3 times: the first two for the decreasing resource and the last
+     * one for the gaining resource.
+     */
     private void basicProduction(){
         basePanel.setVisible(true);
         MessageThreeResourceOneInt messageToSend = new MessageThreeResourceOneInt(MessageType.BASIC_POWER, GUI.getPosition());
@@ -835,6 +943,12 @@ public class YourTurnSceneController {
         stone1.setOnMouseClicked(MouseEvent -> choseResource(Resource.STONE, messageToSend));
     }
 
+    /**
+     * @param slot is one slot of DevelopmentCards.
+     *
+     * show warehouse_strongbox panel to allow player to chose which between warehouse and strongbox has the priority to
+     * be decreased. Then send to Server a new DEVELOPMENT_CARD_POWER message.
+     */
     private void cardProduction(int slot) {
         panelBuy.setVisible(true);
         radiobutWarehouse.setOnMouseClicked(mouseEvent1 -> {
@@ -857,6 +971,11 @@ public class YourTurnSceneController {
         });
     }
 
+    /**
+     * @param leader is one LeaderCard.
+     *
+     * show pane with 4 resource to allow player to chose one resource.
+     */
     private void leaderProduction(int leader) {
         basePanel.setVisible(true);
         MessageOneResourceTwoInt messageToSend = new MessageOneResourceTwoInt(MessageType.LEADER_CARD_POWER, GUI.getPosition(), leader);
@@ -866,6 +985,13 @@ public class YourTurnSceneController {
         stone1.setOnMouseClicked(MouseEvent -> choseResource(Resource.STONE, messageToSend));
     }
 
+    /**
+     * @param resource is one resource
+     * @param messageToSend is one message which has to be delivered to Server.
+     *
+     * after the third resource choice, show warehouse_strongbox panel to allow player to chose which between warehouse
+     * and strongbox has the priority to be decreased. Then send to Server a new BASIC_POWER message.
+     */
     private void choseResource(Resource resource, MessageThreeResourceOneInt messageToSend) {
         if (messageToSend.getResource1() == null)
             messageToSend.setResource1(resource);
@@ -899,6 +1025,13 @@ public class YourTurnSceneController {
         }
     }
 
+    /**
+     * @param resource is one resource
+     * @param messageToSend is one message which has to be delivered to Server.
+     *
+     * after the resource choice, show warehouse_strongbox panel to allow player to chose which between warehouse
+     * and strongbox has the priority to be decreased. Then send to Server a new LEADER_CARD_POWER message.
+     */
     private void choseResource(Resource resource, MessageOneResourceTwoInt messageToSend) {
         messageToSend.setResource(resource);
         basePanel.setVisible(false);
@@ -923,6 +1056,9 @@ public class YourTurnSceneController {
         });
     }
 
+    /**
+     * enable all market row and column buttons.
+     */
     private void takeMarbleButton() {
         disableAllButton();
         row1.setDisable(false);
@@ -934,6 +1070,9 @@ public class YourTurnSceneController {
         column4.setDisable(false);
     }
 
+    /**
+     * send to Server an END_PRODUCTION message.
+     */
     private void endProductionButton(){
         radiobutEndProd.setDisable(true);
         radiobutEndProd.setSelected(false);
@@ -947,6 +1086,9 @@ public class YourTurnSceneController {
         }
     }
 
+    /**
+     * send to Server an END_TURN message.
+     */
     private void endTurnButton(){
         radiobutEndTurn.setSelected(false);
         if(ClientView.isState(GameStates.END_TURN_STATE)) {
@@ -960,6 +1102,9 @@ public class YourTurnSceneController {
         }
     }
 
+    /**
+     * enable all action buttons.
+     */
     private void enableAllButton() {
         radiobutBuyCard.setDisable(false);
         radiobutActLeader.setDisable(false);
@@ -969,6 +1114,12 @@ public class YourTurnSceneController {
         radiobutTakeMarble.setDisable(false);
     }
 
+    /**
+     * enable production buttons.
+     * basic button is always visible.
+     * card button is visible only if selected slot has at least one DevelopmentCard.
+     * leader button is visible only if LeaderCard is active.
+     */
     private void enableProductionsButton() {
         if (ClientView.isSlotEmpty(GUI.getPosition(), 1)) {
             chooseSlot1.setVisible(true);
@@ -994,12 +1145,18 @@ public class YourTurnSceneController {
         }
     }
 
+    /**
+     * enable end turn button.
+     */
     private void enableEndTurnButton(){
         radiobutEndTurn.setDisable(false);
         radiobutActLeader.setDisable(false);
         radiobutDiscardLeader.setDisable(false);
     }
 
+    /**
+     * disable all action buttons.
+     */
     private void disableAllButton() {
         radiobutEndProd.setDisable(true);
         radiobutBuyCard.setDisable(true);
@@ -1011,6 +1168,9 @@ public class YourTurnSceneController {
         radiobutEndTurn.setDisable(true);
     }
 
+    /**
+     * disable all production buttons.
+     */
     private void disableProductionButton(){
         chooseSlot1.setVisible(false);
         chooseSlot2.setVisible(false);
@@ -1020,6 +1180,10 @@ public class YourTurnSceneController {
         chooseLeader2.setVisible(false);
     }
 
+    /**
+     * for all DevelopmentCards if deck is not empty enable card.
+     * set currentState as BUY_CARD_STATE.
+     */
     private void buyCardButton() {
         radiobutBuyCard.setSelected(false);
         ClientView.setCurrentState(GameStates.BUY_CARD_STATE);
@@ -1087,6 +1251,13 @@ public class YourTurnSceneController {
             card43.setDisable(true);
     }
 
+    /**
+     * @param column is player's chosen DevelopmentCard column.
+     * @param row is player's chosen DevelopmentCard row.
+     *
+     * show warehouse_strongbox panel to allow player to chose which between warehousv and strongbox has the priority to
+     *  be decreased. Then send to Server a new BUY_CARD message.
+     */
     private void deckEvent(int column, int row) {
         setDisableAllDecks(true);
         panelBuy.setVisible(true);
@@ -1110,6 +1281,12 @@ public class YourTurnSceneController {
         });
     }
 
+    /**
+     * @param slot is one DevelopmentCard slot.
+     *
+     * if currentState is BUY_CARD_STATE send to Server a new CHOSEN_SLOT message.
+     * if currentState is FIRST_POWER_STATE or ACTIVATE_PRODUCTION_STATE start a new cardProduction procedure.
+     */
     private void choseSlot(int slot){
         try {
             if (ClientView.isState(GameStates.BUY_CARD_STATE)) {
@@ -1132,6 +1309,13 @@ public class YourTurnSceneController {
         }
     }
 
+    /**
+     * @param leader is one LeaederCard
+     *
+     * if currentState is WHITE_CONVERSION_CARD_STATE send to Server a new WHITE_CONVERSION message.
+     * if currentState is FIRST_POWER_STATE or ACTIVATE_PRODUCTION_STATE start a new leaderProduction procedure.
+     * if currenyState is FIRST_ACTION_STATE or END_TURN_STATE send to Server a new ACTIVE_LEADER or DISCARD_LEADER message.
+     */
     private void choseLeader(int leader){
         try {
             if (ClientView.isState(GameStates.WHITE_CONVERSION_CARD_STATE)) {
@@ -1167,6 +1351,11 @@ public class YourTurnSceneController {
         }
     }
 
+    /**
+     * @param b is disabled or not.
+     *
+     * make all DevelopmentCards disabled or not based on @param b.
+     */
     private void setDisableAllDecks(boolean b) {
         card11.setDisable(b);
         card12.setDisable(b);
@@ -1182,6 +1371,13 @@ public class YourTurnSceneController {
         card43.setDisable(b);
     }
 
+    /**
+     * @param slot is DevelopmentCard's slot.
+     * @param cardID is DevelopmentCard's cardID.
+     * @param newMessage is the message received from Server.
+     *
+     * when receiving a BUY_CARD message from Server, add received DevelopmentCard and add message.
+     */
     public static void buyCardMessage(int slot, int cardID, String newMessage) {
         switch (slot) {
             case 1:
@@ -1216,6 +1412,14 @@ public class YourTurnSceneController {
         SceneController.addMessage(newMessage);
     }
 
+    /**
+     * @param row is one decks row.
+     * @param column is one decks column.
+     * @param cardID is the new DevelopmentCard's cardID.
+     * @param newMessage is the message received from Server.
+     *
+     * when receiving a CARD_REMOVE message from Server, replace received DevelopmentCard and add message.
+     */
     public static void cardRemoveMessage(int row, int column, int cardID, String newMessage){
         String cardFile;
         if(cardID == -1)
@@ -1259,6 +1463,13 @@ public class YourTurnSceneController {
         SceneController.addMessage(newMessage);
     }
 
+    /**
+     * @param row is true for wor and false for column.
+     * @param index is selected row or column.
+     * @param newMessage is the message received from Server.
+     *
+     * when receiving a MARKET_CHANGE message from Server, slide market row or column and add message.
+     */
     public static void marketChangeMessage(boolean row, int index, String newMessage){
         if (row) {
             switch (index) {
@@ -1309,6 +1520,13 @@ public class YourTurnSceneController {
         SceneController.setImage("#marbleExt", MarbleMapGUI.getMarble(ClientView.getMarket().getExternalMarble()));
     }
 
+    /**
+     * @param faithPoints is player's faithPoints.
+     * @param Ludovico refers if Ludovico has increased his faith points.
+     * @param newMessage is the message received from Server.
+     *
+     * when receiving a FAITH_POINTS_INCREASE message from Server, move red or black cross and add message.
+     */
     public static void increaseFaithPointsMessage(int faithPoints, boolean Ludovico, String newMessage){
         int offsetX = 0;
         int offsetY = 0;
@@ -1359,6 +1577,12 @@ public class YourTurnSceneController {
         SceneController.addMessage(newMessage);
     }
 
+    /**
+     * @param depot is one Warehouse or Extra depot.
+     * @param newMessage is the message received from Server.
+     *
+     * when receiving a INCREASE_WAREHOUSE message from Server, add resource to Warehouse and add message.
+     */
     public static void increaseWarehouseMessage(int depot, String newMessage){
         Resource r = ClientView.getWarehouse(GUI.getPosition()).get(depot - 1).getResource();
         int amount = ClientView.getWarehouse(GUI.getPosition()).get(depot - 1).getAmount();
@@ -1404,12 +1628,24 @@ public class YourTurnSceneController {
         SceneController.addMessage(newMessage);
     }
 
+    /**
+     * @param depot1 is one Warehouse or Extra depot.
+     * @param depot2 is one Warehouse or Extra depot.
+     * @param newMessage is the message received from Server.
+     *
+     * when receiving a SWITCH_DEPOT message from Server, swap depots, set thier resources and add message.
+     */
     public static void switchDepotMessage(int depot1, int depot2, String newMessage){
         setSwitchedDepot(depot1);
         setSwitchedDepot(depot2);
         SceneController.addMessage(newMessage);
     }
 
+    /**
+     * @param depot is one Warehouse or Extra depot.
+     *
+     * set @param depot with saved data.
+     */
     private static void setSwitchedDepot(int depot) {
         Resource r = ClientView.getWarehouse(GUI.getPosition()).get(depot - 1).getResource();
         int amount = ClientView.getWarehouse(GUI.getPosition()).get(depot - 1).getAmount();
@@ -1477,6 +1713,11 @@ public class YourTurnSceneController {
         }
     }
 
+    /**
+     * @param newMessage is the message received from Server.
+     *
+     * when receiving a LEADER_ACTIVATION message from Server, change LeaderCard opacity and add message.
+     */
     public static void leaderCardActivationMessage(String newMessage){
         SceneController.setImage("#leader1", CardMapGUI.getCard(ClientView.getLeaderCards(GUI.getPosition()).get(0)));
         SceneController.setImage("#leader2", CardMapGUI.getCard(ClientView.getLeaderCards(GUI.getPosition()).get(1)));
@@ -1495,6 +1736,11 @@ public class YourTurnSceneController {
         SceneController.addMessage(newMessage);
     }
 
+    /**
+     * @param newMessage is the message received from Server.
+     *
+     * when receiving a LEADER_DISCARD message from Server, remove one LeaderCard and add message.
+     */
     public static void leaderCardDiscardMessage(String newMessage){
         if(ClientView.getLeaderCards(GUI.getPosition()).get(0) != -1)
             SceneController.setImage("#leader1", CardMapGUI.getCard(ClientView.getLeaderCards(GUI.getPosition()).get(0)));
@@ -1512,6 +1758,11 @@ public class YourTurnSceneController {
         }
     }
 
+    /**
+     * @param newMessage is the message received from Server.
+     *
+     * when receiving a VATICAN_REPORT message from Server, add Vatican report tiles and add message.
+     */
     public static void vaticanReportMessage(String newMessage){
         int victoryPoints = ClientView.getVictoryPoints(GUI.getPosition());
         switch (ClientView.getCurrentPope()){
@@ -1537,6 +1788,9 @@ public class YourTurnSceneController {
         SceneController.addMessage(newMessage);
     }
 
+    /**
+     * disable all buttons and enable LeaderCards.
+     */
     public static void whiteConversionMessage(){
         notYourTurn();
         SceneController.setDisable("#radiobutOtherPlayboard", true);
@@ -1544,6 +1798,13 @@ public class YourTurnSceneController {
         SceneController.setVisible("#chooseLeader2", true);
     }
 
+    /**
+     * @param slot1 is one available slot.
+     * @param slot2 is one available slot.
+     * @param slot3 is one available slot.
+     *
+     * didable all buttons and enable available slots buttons.
+     */
     public static void choseSlotMessage(int slot1, int slot2, int slot3){
         notYourTurn();
         SceneController.setDisable("#radiobutOtherPlayboard", true);
@@ -1561,6 +1822,9 @@ public class YourTurnSceneController {
         }
     }
 
+    /**
+     * modify warehouse and strongbox resource based on saved one on Client.
+     */
     public static void modifiedResource() {
         if (ClientView.getWarehouse(GUI.getPosition()).get(0).getAmount() == 1)
             SceneController.setImage("#deposit11", ResourceMapGUI.getResource(ClientView.getWarehouse(GUI.getPosition()).get(0).getResource()));
@@ -1622,6 +1886,10 @@ public class YourTurnSceneController {
         SceneController.setText("#stoneAmount", String.valueOf(ClientView.stoneAmount(GUI.getPosition())));
     }
 
+    /**
+     * enable all action buttons.
+     * in case it's not possible activate or discard leader anymore, disable their buttons.
+     */
     public static void yourTurn(){
         SceneController.setDisable("#radiobutTakeMarble", false);
         SceneController.setDisable("#radiobutBuyCard", false);
@@ -1637,6 +1905,9 @@ public class YourTurnSceneController {
         }
     }
 
+    /**
+     * disable all production buttons.
+     */
     public static void disableProductions(){
         SceneController.setVisible("#chooseSlot1", false);
         SceneController.setVisible("#chooseSlot2", false);
@@ -1646,6 +1917,9 @@ public class YourTurnSceneController {
         SceneController.setVisible("#chooseLeader2", false);
     }
 
+    /**
+     * disable all action buttons and enable end production button.
+     */
     public static void production(){
         SceneController.setDisable("#radiobutTakeMarble", true);
         SceneController.setDisable("#radiobutBuyCard", true);
@@ -1656,6 +1930,10 @@ public class YourTurnSceneController {
         SceneController.setDisable("#radiobutOtherPlayboard", false);
     }
 
+    /**
+     * disable all action buttons and enable end turn button.
+     * in case it's still possible activate or discard leader, enable their buttons.
+     */
     public static void endTurn(){
         SceneController.setDisable("#radiobutTakeMarble", true);
         SceneController.setDisable("#radiobutBuyCard", true);
@@ -1676,6 +1954,9 @@ public class YourTurnSceneController {
         }
     }
 
+    /**
+     * disable all buttons except radiobutOtherPlayboard.
+     */
     public static void notYourTurn(){
         SceneController.setDisable("#radiobutTakeMarble", true);
         SceneController.setDisable("#radiobutBuyCard", true);
@@ -1686,6 +1967,9 @@ public class YourTurnSceneController {
         SceneController.setDisable("#radiobutEndProd", true);
     }
 
+    /**
+     * disable all buttons except radiobutOtherPlayboard and end game buttons.
+     */
     public static void endGame(){
         SceneController.setDisable("#radiobutBuyCard", true);
         SceneController.setDisable("#radiobutTakeMarble", true);
