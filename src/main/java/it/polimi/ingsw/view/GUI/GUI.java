@@ -5,9 +5,8 @@ import it.polimi.ingsw.model.games.states.GameStates;
 import it.polimi.ingsw.network.client.ClientSocket;
 import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.view.ClientView;
-import it.polimi.ingsw.view.GUI.sceneController.InitSceneController;
-import it.polimi.ingsw.view.GUI.sceneController.NicknameSceneController;
-import it.polimi.ingsw.view.GUI.sceneController.YourTurnSceneController;
+import it.polimi.ingsw.view.GUI.sceneController.*;
+
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
@@ -15,7 +14,7 @@ import java.io.IOException;
 
 
 /**
- * CLI is the command line interface of ClientView.
+ * GUI is the  graphic interface of ClientView.
  * position is player's position in game.
  * turn refers to if it's player's turn or not.
  * connected refers to if player connect to Server or not.

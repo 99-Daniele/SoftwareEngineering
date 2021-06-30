@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.cards.leaderCards;
 
-import it.polimi.ingsw.model.resourceContainers.Cost;
-import it.polimi.ingsw.model.resourceContainers.Resource;
+import it.polimi.ingsw.model.resourceContainers.*;
 
 /**
  * WhiteConversionCard is a type of LeaderCard with the effect to convert a WhiteMarble into ResourceMarble.

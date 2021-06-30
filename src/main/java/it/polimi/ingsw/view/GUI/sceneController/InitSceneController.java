@@ -5,11 +5,10 @@ import it.polimi.ingsw.network.client.ClientSocket;
 import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.parser.CardMapGUI;
 import it.polimi.ingsw.view.ClientView;
-import it.polimi.ingsw.view.GUI.GUI;
-import it.polimi.ingsw.view.GUI.SceneController;
+import it.polimi.ingsw.view.GUI.*;
+
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 

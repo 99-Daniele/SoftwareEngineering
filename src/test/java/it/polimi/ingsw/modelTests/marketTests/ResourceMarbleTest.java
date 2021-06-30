@@ -3,11 +3,9 @@ package it.polimi.ingsw.modelTests.marketTests;
 import it.polimi.ingsw.exceptions.AlreadyTakenNicknameException;
 
 import it.polimi.ingsw.model.games.Game;
-import it.polimi.ingsw.model.market.Marble;
-import it.polimi.ingsw.model.market.ResourceMarble;
+import it.polimi.ingsw.model.market.*;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -29,36 +27,36 @@ public class ResourceMarbleTest {
 
         game.getPlayer(1).increaseFaithPoints(3);
         game.getPlayer(2).increaseFaithPoints(3);
-        Assertions.assertEquals(0, game.getPlayer(0).getFaithPoints());
-        Assertions.assertEquals(3, game.getPlayer(1).getFaithPoints());
-        Assertions.assertEquals(3, game.getPlayer(2).getFaithPoints());
+        assertEquals(0, game.getPlayer(0).getFaithPoints());
+        assertEquals(3, game.getPlayer(1).getFaithPoints());
+        assertEquals(3, game.getPlayer(2).getFaithPoints());
 
         assertFalse(resourceMarble.useMarble(game));
         assertFalse(resourceMarble2.useMarble(game));
         assertFalse(resourceMarble2.useMarble(game));
 
-        Assertions.assertEquals(3,game.getCurrentPlayer().sumTotalResource());
-        Assertions.assertEquals(3, game.getPlayer(1).getFaithPoints());
-        Assertions.assertEquals(3, game.getPlayer(2).getFaithPoints());
-        Assertions.assertEquals(0, game.getPlayer(1).getVictoryPoints().getVictoryPointsByFaithTrack());
-        Assertions.assertEquals(0, game.getPlayer(2).getVictoryPoints().getVictoryPointsByFaithTrack());
+        assertEquals(3,game.getCurrentPlayer().sumTotalResource());
+        assertEquals(3, game.getPlayer(1).getFaithPoints());
+        assertEquals(3, game.getPlayer(2).getFaithPoints());
+        assertEquals(0, game.getPlayer(1).getVictoryPoints().getVictoryPointsByFaithTrack());
+        assertEquals(0, game.getPlayer(2).getVictoryPoints().getVictoryPointsByFaithTrack());
 
         assertFalse(resourceMarble2.useMarble(game));
-        Assertions.assertEquals(3,game.getCurrentPlayer().sumTotalResource());
-        Assertions.assertEquals(4, game.getPlayer(1).getFaithPoints());
-        Assertions.assertEquals(4, game.getPlayer(2).getFaithPoints());
-        Assertions.assertEquals(0, game.getPlayer(1).getVictoryPoints().getVictoryPointsByFaithTrack());
-        Assertions.assertEquals(0, game.getPlayer(2).getVictoryPoints().getVictoryPointsByFaithTrack());
+        assertEquals(3,game.getCurrentPlayer().sumTotalResource());
+        assertEquals(4, game.getPlayer(1).getFaithPoints());
+        assertEquals(4, game.getPlayer(2).getFaithPoints());
+        assertEquals(0, game.getPlayer(1).getVictoryPoints().getVictoryPointsByFaithTrack());
+        assertEquals(0, game.getPlayer(2).getVictoryPoints().getVictoryPointsByFaithTrack());
         /*
          this resource can't be increased in current player's warehouse. So other players increase their faith points,
          but not their victory points
          */
 
         game.faithTrackMovementAllPlayers();
-        Assertions.assertEquals(4, game.getPlayer(1).getFaithPoints());
-        Assertions.assertEquals(4, game.getPlayer(2).getFaithPoints());
-        Assertions.assertEquals(1, game.getPlayer(1).getVictoryPoints().getVictoryPointsByFaithTrack());
-        Assertions.assertEquals(1, game.getPlayer(2).getVictoryPoints().getVictoryPointsByFaithTrack());
+        assertEquals(4, game.getPlayer(1).getFaithPoints());
+        assertEquals(4, game.getPlayer(2).getFaithPoints());
+        assertEquals(1, game.getPlayer(1).getVictoryPoints().getVictoryPointsByFaithTrack());
+        assertEquals(1, game.getPlayer(2).getVictoryPoints().getVictoryPointsByFaithTrack());
         /*
          only after faithTrackMovementAllPlayer() other player victoryPoints could increased
          */

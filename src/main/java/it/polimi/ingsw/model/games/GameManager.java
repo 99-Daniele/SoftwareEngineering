@@ -1,11 +1,7 @@
 package it.polimi.ingsw.model.games;
 
-import it.polimi.ingsw.controller.ControllerGame;
-import it.polimi.ingsw.controller.GameStartingState;
-import it.polimi.ingsw.controller.InputController;
-import it.polimi.ingsw.model.games.states.FirstActionState;
-import it.polimi.ingsw.model.games.states.GameState;
-import it.polimi.ingsw.model.games.states.GameStates;
+import it.polimi.ingsw.controller.*;
+import it.polimi.ingsw.model.games.states.*;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.exceptions.IllegalStateException;
 import it.polimi.ingsw.model.cards.leaderCards.LeaderCard;
@@ -13,8 +9,7 @@ import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.model.player.Strongbox;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 import it.polimi.ingsw.network.messages.*;
-import it.polimi.ingsw.view.View;
-import it.polimi.ingsw.view.VirtualView;
+import it.polimi.ingsw.view.*;
 
 import java.util.ArrayList;
 

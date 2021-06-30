@@ -1,8 +1,7 @@
 package it.polimi.ingsw.modelTests.resourceContainersTests;
 
+import it.polimi.ingsw.model.resourceContainers.*;
 
-import it.polimi.ingsw.model.resourceContainers.Resource;
-import it.polimi.ingsw.model.resourceContainers.ResourceContainer;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

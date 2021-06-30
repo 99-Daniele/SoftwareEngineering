@@ -2,14 +2,11 @@ package it.polimi.ingsw.modelTests.resourceContainersTests;
 
 import it.polimi.ingsw.exceptions.InsufficientResourceException;
 
+import it.polimi.ingsw.model.player.*;
+import it.polimi.ingsw.model.resourceContainers.*;
 
-import it.polimi.ingsw.model.player.Strongbox;
-import it.polimi.ingsw.model.player.Warehouse;
-import it.polimi.ingsw.model.resourceContainers.Cost;
-import it.polimi.ingsw.model.resourceContainers.Resource;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-
 
 class CostTest {
 

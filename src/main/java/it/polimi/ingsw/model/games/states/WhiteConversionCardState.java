@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * WhiteConversuibState is one of game states.
+ * WhiteConversionState is one of game states.
  * In this state current player can only send white conversion messages, any other message will be discarded.
  * This state saves the chosen marbles and player's leader cards.
  */

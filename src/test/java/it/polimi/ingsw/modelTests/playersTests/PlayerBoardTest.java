@@ -1,14 +1,11 @@
 package it.polimi.ingsw.modelTests.playersTests;
 
-import it.polimi.ingsw.model.cards.developmentCards.Color;
-import it.polimi.ingsw.model.cards.developmentCards.DevelopmentCard;
+import it.polimi.ingsw.model.cards.developmentCards.*;
 import it.polimi.ingsw.model.cards.leaderCards.*;
 import it.polimi.ingsw.exceptions.*;
+import it.polimi.ingsw.model.player.*;
+import it.polimi.ingsw.model.resourceContainers.*;
 
-import it.polimi.ingsw.model.player.PlayerBoard;
-import it.polimi.ingsw.model.player.Strongbox;
-import it.polimi.ingsw.model.resourceContainers.Cost;
-import it.polimi.ingsw.model.resourceContainers.Resource;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

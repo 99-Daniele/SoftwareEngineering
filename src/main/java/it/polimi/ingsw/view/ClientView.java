@@ -4,9 +4,8 @@ import it.polimi.ingsw.model.games.states.GameStates;
 import it.polimi.ingsw.model.market.Marble;
 import it.polimi.ingsw.network.client.ClientSocket;
 import it.polimi.ingsw.network.messages.*;
-import it.polimi.ingsw.view.modelView.GameView;
-import it.polimi.ingsw.view.modelView.MarketView;
-import it.polimi.ingsw.view.modelView.ResourceContainerView;
+import it.polimi.ingsw.view.modelView.*;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 

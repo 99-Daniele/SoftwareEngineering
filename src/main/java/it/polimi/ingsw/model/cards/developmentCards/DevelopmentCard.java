@@ -1,12 +1,10 @@
 package it.polimi.ingsw.model.cards.developmentCards;
 
-import it.polimi.ingsw.model.cards.Card;
 import it.polimi.ingsw.exceptions.InsufficientResourceException;
 
-import it.polimi.ingsw.model.player.Strongbox;
-import it.polimi.ingsw.model.player.Warehouse;
-import it.polimi.ingsw.model.resourceContainers.Cost;
-import it.polimi.ingsw.model.resourceContainers.Resource;
+import it.polimi.ingsw.model.player.*;
+import it.polimi.ingsw.model.cards.Card;
+import it.polimi.ingsw.model.resourceContainers.*;
 
 /**
  * DevelopmentCard is one of 48 cards buyable by players.

@@ -2,12 +2,10 @@ package it.polimi.ingsw.modelTests.playersTests;
 
 import it.polimi.ingsw.exceptions.*;
 
-import it.polimi.ingsw.model.player.Strongbox;
-import it.polimi.ingsw.model.player.Warehouse;
-import it.polimi.ingsw.model.resourceContainers.Cost;
-import it.polimi.ingsw.model.resourceContainers.Resource;
-import org.junit.jupiter.api.Test;
+import it.polimi.ingsw.model.player.*;
+import it.polimi.ingsw.model.resourceContainers.*;
 
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class WarehouseTest {

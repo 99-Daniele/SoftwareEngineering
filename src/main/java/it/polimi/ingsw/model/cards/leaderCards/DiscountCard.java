@@ -1,8 +1,7 @@
 package it.polimi.ingsw.model.cards.leaderCards;
 
 import it.polimi.ingsw.model.cards.developmentCards.DevelopmentCard;
-import it.polimi.ingsw.model.resourceContainers.Cost;
-import it.polimi.ingsw.model.resourceContainers.Resource;
+import it.polimi.ingsw.model.resourceContainers.*;
 
 /**
  * DiscountCard is a type of LeaderCard with the effect to discount by 1 specific resource the buying of a DevelopmentCard.

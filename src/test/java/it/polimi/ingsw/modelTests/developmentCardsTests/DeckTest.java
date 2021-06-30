@@ -1,15 +1,13 @@
 package it.polimi.ingsw.modelTests.developmentCardsTests;
 
-import it.polimi.ingsw.model.cards.developmentCards.Deck;
-import it.polimi.ingsw.model.cards.developmentCards.Color;
+import it.polimi.ingsw.exceptions.EmptyDevelopmentCardDeckException;
 
+import it.polimi.ingsw.model.cards.developmentCards.*;
 import it.polimi.ingsw.model.cards.developmentCards.DevelopmentCard;
-import it.polimi.ingsw.model.resourceContainers.Cost;
-import it.polimi.ingsw.model.resourceContainers.Resource;
+import it.polimi.ingsw.model.resourceContainers.*;
+
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-
-import it.polimi.ingsw.exceptions.EmptyDevelopmentCardDeckException;
 
 public class DeckTest {
     

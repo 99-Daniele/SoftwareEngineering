@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.cards.leaderCards;
 
-import it.polimi.ingsw.model.cards.developmentCards.Color;
-import it.polimi.ingsw.model.cards.developmentCards.DevelopmentCard;
+import it.polimi.ingsw.model.cards.developmentCards.*;
 
 import java.util.ArrayList;
 

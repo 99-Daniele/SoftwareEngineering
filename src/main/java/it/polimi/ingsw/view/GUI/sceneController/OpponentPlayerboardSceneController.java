@@ -4,14 +4,12 @@ import it.polimi.ingsw.model.games.states.GameStates;
 import it.polimi.ingsw.parser.CardMapGUI;
 import it.polimi.ingsw.parser.ResourceMapGUI;
 import it.polimi.ingsw.view.ClientView;
-import it.polimi.ingsw.view.GUI.GUI;
-import it.polimi.ingsw.view.GUI.SceneController;
+import it.polimi.ingsw.view.GUI.*;
+
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.control.*;
+import javafx.scene.image.*;
 import javafx.scene.input.MouseEvent;
 
 import java.io.InputStream;

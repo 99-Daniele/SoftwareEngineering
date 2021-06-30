@@ -1,11 +1,9 @@
 package it.polimi.ingsw.modelTests.depotsTests;
 
-
 import it.polimi.ingsw.model.player.depots.ExtraDepot;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 
 import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.Test;
 
 public class ExtraDepotTest {

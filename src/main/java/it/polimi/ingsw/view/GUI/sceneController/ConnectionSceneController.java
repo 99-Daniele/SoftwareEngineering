@@ -2,11 +2,10 @@ package it.polimi.ingsw.view.GUI.sceneController;
 
 import it.polimi.ingsw.App;
 import it.polimi.ingsw.view.GUI.SceneController;
+
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;

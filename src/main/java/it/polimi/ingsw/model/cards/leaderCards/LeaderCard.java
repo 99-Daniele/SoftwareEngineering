@@ -4,8 +4,7 @@ import it.polimi.ingsw.exceptions.*;
 
 import it.polimi.ingsw.model.cards.Card;
 import it.polimi.ingsw.model.cards.developmentCards.DevelopmentCard;
-import it.polimi.ingsw.model.player.Strongbox;
-import it.polimi.ingsw.model.player.Warehouse;
+import it.polimi.ingsw.model.player.*;
 import it.polimi.ingsw.model.resourceContainers.*;
 import it.polimi.ingsw.view.CLI.ColorAnsi;
 

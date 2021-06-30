@@ -3,7 +3,6 @@ package it.polimi.ingsw.view.modelView;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 
 import java.util.ArrayList;
-
 import static java.util.Collections.swap;
 
 /**

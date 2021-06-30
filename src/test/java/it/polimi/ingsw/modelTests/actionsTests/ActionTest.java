@@ -1,9 +1,6 @@
 package it.polimi.ingsw.modelTests.actionsTests;
 
-import it.polimi.ingsw.model.actions.Action;
-import it.polimi.ingsw.model.actions.DiscardAction;
-import it.polimi.ingsw.model.actions.LorenzoMoveAndShuffleAction;
-import it.polimi.ingsw.model.actions.LorenzoTwoMoveAction;
+import it.polimi.ingsw.model.actions.*;
 import it.polimi.ingsw.model.cards.developmentCards.Color;
 import it.polimi.ingsw.model.games.SinglePlayerGame;
 

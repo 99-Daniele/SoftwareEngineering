@@ -1,8 +1,6 @@
 package it.polimi.ingsw.model.player;
 
-import it.polimi.ingsw.network.messages.Message;
-import it.polimi.ingsw.network.messages.MessageType;
-import it.polimi.ingsw.network.messages.MessageOneParameterInt;
+import it.polimi.ingsw.network.messages.*;
 
 import java.util.Observable;
 

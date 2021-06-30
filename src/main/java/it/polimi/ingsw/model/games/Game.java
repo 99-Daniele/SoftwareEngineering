@@ -8,13 +8,12 @@ import it.polimi.ingsw.parser.*;
 import it.polimi.ingsw.model.player.*;
 import it.polimi.ingsw.model.resourceContainers.Resource;
 import it.polimi.ingsw.exceptions.*;
+import it.polimi.ingsw.network.messages.*;
 
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Observable;
 import java.util.Observer;
-
-import it.polimi.ingsw.network.messages.*;
 
 /**
  * Game is main class which handle all different phases of a match.

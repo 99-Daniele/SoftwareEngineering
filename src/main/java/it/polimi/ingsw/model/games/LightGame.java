@@ -1,9 +1,9 @@
 package it.polimi.ingsw.model.games;
 
-import it.polimi.ingsw.exceptions.AlreadyDiscardLeaderCardException;
-
 import it.polimi.ingsw.model.cards.leaderCards.LeaderCard;
 import it.polimi.ingsw.model.resourceContainers.Resource;
+
+import it.polimi.ingsw.exceptions.AlreadyDiscardLeaderCardException;
 
 /**
  * LightGame is a lighter version of Game class which includes only the method useful for operations of marbles.

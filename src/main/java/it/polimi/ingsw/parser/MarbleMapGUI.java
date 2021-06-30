@@ -20,6 +20,7 @@ public class MarbleMapGUI {
         marbleMap.put("GREY","/photos/grigio.png");
         marbleMap.put("YELLOW","/photos/gialla.png");
     }
+
     public static String getMarble(Marble marbleID){
         if(marbleParser == null)
             marbleParser = new MarbleMapGUI();

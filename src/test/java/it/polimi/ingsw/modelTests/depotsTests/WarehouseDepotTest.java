@@ -3,7 +3,6 @@ package it.polimi.ingsw.modelTests.depotsTests;
 import it.polimi.ingsw.model.player.depots.WarehouseDepot;
 
 import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.Test;
 
 public class WarehouseDepotTest {

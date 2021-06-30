@@ -1,15 +1,11 @@
 package it.polimi.ingsw.view.GUI.sceneController;
 
 import it.polimi.ingsw.network.client.ClientSocket;
-import it.polimi.ingsw.network.messages.MessageType;
-import it.polimi.ingsw.network.messages.MessageOneParameterInt;
-import it.polimi.ingsw.network.messages.MessageOneParameterString;
-import it.polimi.ingsw.view.GUI.GUI;
-import it.polimi.ingsw.view.GUI.SceneController;
+import it.polimi.ingsw.network.messages.*;
+import it.polimi.ingsw.view.GUI.*;
+
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
