@@ -23,7 +23,6 @@ public class Section {
         return victoryPointValue;
     }
 
-
     public int getLastSpace(){
         return lastSpace;
     }

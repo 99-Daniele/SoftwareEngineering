@@ -122,41 +122,6 @@ public class StrongboxTest {
     }
 
     /**
-     * this test verifies the correct copying of Strongbox
-     */
-    @Test
-    void correctWarehouseCopyWithExtraDepot(){
-
-        Strongbox s1 = new Strongbox();
-        Strongbox s2;
-
-        s1.increaseResourceType(r1, 2);
-        s1.increaseResourceType(r2, 1);
-        s1.increaseResourceType(r3, 4);
-        s1.increaseResourceType(r4, 2);
-        assertEquals(2, s1.getNumOfResource(r1));
-        assertEquals(1, s1.getNumOfResource(r2));
-        assertEquals(4, s1.getNumOfResource(r3));
-        assertEquals(2, s1.getNumOfResource(r4));
-
-        s2 = s1.copyThisStrongbox();
-        assertEquals(2, s1.getNumOfResource(r1));
-        assertEquals(1, s1.getNumOfResource(r2));
-        assertEquals(4, s1.getNumOfResource(r3));
-        assertEquals(2, s1.getNumOfResource(r4));
-
-        s1.increaseResourceType(r2, 1);
-        s2.increaseResourceType(r2, 3);
-        assertEquals(2, s1.getNumOfResource(r2));
-        assertEquals(4, s2.getNumOfResource(r2));
-
-        assertEquals(1, s1.decreaseResourceType(r2, 3));
-        assertEquals(0, s2.decreaseResourceType(r2, 3));
-        assertEquals(0, s1.getNumOfResource(r2));
-        assertEquals(1, s2.getNumOfResource(r2));
-    }
-
-    /**
      * this test calculates the sum of all resource in Strongbox
      */
     @Test

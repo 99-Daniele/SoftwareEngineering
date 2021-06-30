@@ -65,19 +65,6 @@ public class Strongbox {
     }
 
     /**
-     * @return a copy of Strongbox.
-     *
-     * create a new Strongbox which is a copy of this.Strongbox.
-     */
-    public Strongbox copyThisStrongbox(){
-        Strongbox s = new Strongbox();
-        for(Resource resource: Resource.values()){
-            s.increaseResourceType(resource, this.getNumOfResource(resource));
-        }
-        return s;
-    }
-
-    /**
      * @return the sum of all resource in the Strongbox.
      */
     public int sumStrongboxResource(){
