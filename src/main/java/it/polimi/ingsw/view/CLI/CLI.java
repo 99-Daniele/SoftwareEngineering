@@ -12,6 +12,14 @@ import java.io.*;
 import java.net.UnknownHostException;
 import java.util.*;
 
+/**
+ * CLI is the command line interface of ClientView.
+ * inputThread constantly received System.in input from user.
+ * stdIn is the BufferedReader which buffer user input.
+ * receivedMessage is the last message received from Server.
+ * position is player's position in game.
+ * turn refers to if it's player's turn or not.
+ */
 public class CLI extends ClientView{
 
     private Thread inputThread;
@@ -26,6 +34,10 @@ public class CLI extends ClientView{
         turn = false;
     }
 
+    /**
+     * create a new ClientSocket and add this as observer. Then connect to Server, print logo and login.
+     * this launch a new CLI without any info about server connection.
+     */
     @Override
     public void launchCLI(){
         App.createClient(this);
@@ -42,6 +54,10 @@ public class CLI extends ClientView{
         }
     }
 
+    /**
+     * create a new ClientSocket and add this as observer. Then connect to Server, print logo and login.
+     * this launch a CLI with info about server connection.
+     */
     @Override
     public void launchCLI(String hostname, int port){
         App.createClient(this);
@@ -58,6 +74,12 @@ public class CLI extends ClientView{
         }
     }
 
+
+    /**
+     * @throws IOException if occurs a problem with readLine.
+     *
+     * ask player Server hostname and port number. Then try to connect and in case fail ask again to player.
+     */
     private void connectToServer() throws IOException {
         while (true) {
             System.out.println("\nEnter hostname [localhost]: ");
@@ -82,6 +104,13 @@ public class CLI extends ClientView{
         }
     }
 
+    /**
+     * @param hostname is Server's hostname.
+     * @param port is portNumber.
+     * @throws IOException if occurs a problem with readLine.
+     *
+     * try to connect to @param hostname Server on @param port. In case fail directly ask to player new connection info.
+     */
     private void connectToServer(String hostname, int port) throws IOException {
         try {
             App.startClient(hostname, port);
@@ -97,6 +126,9 @@ public class CLI extends ClientView{
         connectToServer();
     }
 
+    /**
+     * print Master of Renaissance logo.
+     */
     private void printLogo(){
         System.out.println("" +
                 "8b     d8    d888b     d888888b  888888888  888888888  888888b                                                      \n" +
@@ -121,6 +153,11 @@ public class CLI extends ClientView{
                 "888  888  888888888  88     d88  88     88  888  d888888b   d888888b   88     88  88     d88    d8888888  888888888 \n");
     }
 
+    /**
+     * @throws InterruptedException if connection with Server crash at any moment.
+     *
+     * ask to player an username and when Server reply with 4 LeaderCards, make player choice two of them.
+     */
     private void login() throws InterruptedException {
         inputThread = new Thread(() -> {
             try {
@@ -133,6 +170,15 @@ public class CLI extends ClientView{
         inputThread.join();
     }
 
+    /**
+     * @throws IOException if occurs a problem with readLine.
+     * @throws InterruptedException if connection with Server crash at any moment.
+     *
+     * ask player to insert a valid username and then send to Server a new LOGIN message.
+     * then wait Server answer: in case it's an ALREADY_TAKEN_NICKNAME ask player again another username, in case it's a
+     * LOGIN message, verifies if receiving clientID = 0 and in this case start a numPlayers procedure, in any other cases
+     * wait other players.
+     */
     private void username() throws IOException, InterruptedException {
         while (true) {
             System.out.println("\nEnter username: ");
@@ -153,6 +199,13 @@ public class CLI extends ClientView{
             waitMessage();
     }
 
+    /**
+     * @throws InterruptedException if connection with Server crash at any moment.
+     *
+     * ask player to insert a valid number (1 to 4) for number of players of the game and send a new NUM_PLAYERS message to Server.
+     * then wait Server answer: in case it's an ERR message ask player again another num of players, in case it's an
+     * OK message wait other players.
+     */
     private void numPlayers() throws InterruptedException {
         while (true) {
             try {
@@ -177,6 +230,10 @@ public class CLI extends ClientView{
         }
     }
 
+    /**
+     * ask player to chose between four LeaderCards, which have been converted from four integer received from Server message.
+     * then set chosen LeaderCards,  send to Server a new LEADER_CARD message and start a new choseResource procedure.
+     */
     private void choseLeaderCards() {
         MessageFourParameterInt m = (MessageFourParameterInt) receivedMessage;
         int card1;
@@ -213,6 +270,13 @@ public class CLI extends ClientView{
         }
     }
 
+    /**
+     * @throws IOException if occurs a problem with readLine.
+     *
+     * in case it's the first player, do nothing.
+     * in case it's the second or third player, ask him to chose one resource and send ONE_FIRST_RESOURCE message to Server.
+     * in case it's fourth player, ask him to chose two resource and send TWO_FIRST_RESOURCE message to Server.
+     */
     private void choseFirstResources() throws IOException {
         switch (position) {
             case 0:
@@ -240,10 +304,18 @@ public class CLI extends ClientView{
         }
     }
 
+    /**
+     * @param text is the printed text.
+     * @return player's chosen resource.
+     * @throws IOException if occurs a problem with readLine.
+     *
+     * ask player to chose one resource.
+     */
     private Resource choseResource(String text) throws IOException {
         while (true) {
             System.out.println(text);
-            System.out.println("COIN(CO) / SHIELD(SH) / SERVANT/(SE) / STONE(ST)");
+            System.out.println(Resource.printResource(Resource.COIN) + " / " + Resource.printResource(Resource.SHIELD)
+                    + " / " + Resource.printResource(Resource.SERVANT) + " / " + Resource.printResource(Resource.STONE));
             Resource r = correctResource(stdIn.readLine());
             if(r != null)
                 return r;
@@ -252,6 +324,12 @@ public class CLI extends ClientView{
         }
     }
 
+    /**
+     * @param resource is player's input.
+     * @return player's chosen resource or null.
+     *
+     * convert @param resource to resource. In case player has inserted a wrong input @return null.
+     */
     private Resource correctResource(String resource){
         resource = resource.toUpperCase(Locale.ROOT);
         switch (resource){
@@ -272,6 +350,12 @@ public class CLI extends ClientView{
         }
     }
 
+    /**
+     * @return player's choice about which between warehouse or strongbox has the priority to be decreased (0 or 1).
+     * @throws IOException if occurs a problem with readLine.
+     *
+     * ask player to chose between warehouse and strongbox.
+     */
     private int choseWarehouseStrongbox() throws IOException {
         while (true) {
             System.out.println("Where do you want to take the resources from?");
@@ -287,6 +371,9 @@ public class CLI extends ClientView{
         }
     }
 
+    /**
+     * print all player's received message at that moment and start to read any command from player.
+     */
     private void startCLI() {
         for(int i = getServerMessages().size() - 1; i >= 0; i--)
             System.out.println(getServerMessages().get(i));
@@ -300,6 +387,12 @@ public class CLI extends ClientView{
         inputThread.start();
     }
 
+    /**
+     * @throws IOException if occurs a problem with readLine.
+     * @throws InterruptedException if connection with Server crash at any moment.
+     *
+     * constantly interpret any player command.
+     */
     private void readCommand() throws IOException, InterruptedException {
         while (true){
             ArrayList<String> command = new ArrayList<>();
@@ -316,6 +409,13 @@ public class CLI extends ClientView{
         }
     }
 
+    /**
+     * @param command is player's command input.
+     * @throws IOException if occurs a problem with readLine.
+     * @throws InterruptedException if connection with Server crash at any moment.
+     *
+     * command interpret of player input.
+     */
     private void commandInterpreter(ArrayList<String> command) throws IOException, InterruptedException {
         if(command.get(0).equals("help")  || command.get(0).equals("-h")){
             helpRequest();
@@ -323,7 +423,7 @@ public class CLI extends ClientView{
         }
         switch (command.size()){
             case 1:
-                oneCommandRequest(command);
+                oneCommandRequest(command.get(0));
                 break;
             case 2:
                 twoCommandRequest(command);
@@ -337,6 +437,11 @@ public class CLI extends ClientView{
         }
     }
 
+    /**
+     * @throws IOException if occurs a problem with file readLine.
+     *
+     * print a different help file which summarize all possible commands based on different states of the game.
+     */
     private void helpRequest() throws IOException {
         String file = null;
         if(!turn)
@@ -370,8 +475,14 @@ public class CLI extends ClientView{
         }
     }
 
-    private void oneCommandRequest(ArrayList<String> command) throws IOException {
-        switch (command.get(0)){
+    /**
+     * @param command is player's command input.
+     * @throws IOException if occurs a problem with readLine.
+     *
+     * switch all possible one string command and start different procedure for anyone of them.
+     */
+    private void oneCommandRequest(String command) throws IOException {
+        switch (command){
             case "turn":
             case "-tu":
                 ClientSocket.sendMessage(new Message(MessageType.TURN, position));
@@ -421,6 +532,11 @@ public class CLI extends ClientView{
         }
     }
 
+    /**
+     * @throws IOException if occurs a problem with readLine.
+     *
+     * in case it's player's turn and currentState is ACTIVATE_PRODUCTION_STATE, send a new END_PRODUCTION message to Server.
+     */
     private void endPowerRequest() throws IOException {
         if(!turn) {
             System.err.println("It's not your turn");
@@ -434,6 +550,11 @@ public class CLI extends ClientView{
             System.err.println("You can't do this operation at this moment");
     }
 
+    /**
+     * @throws IOException if occurs a problem with readLine.
+     *
+     * in case it's player's turn and currentState is END_TURN_STATE, send a new END_TURN message to Server.
+     */
     private void endTurnRequest() throws IOException {
         if(!turn) {
             System.err.println("It's not your turn");
@@ -447,6 +568,12 @@ public class CLI extends ClientView{
             System.err.println("You can't do this operation at this moment");
     }
 
+    /**
+     * @param command is player's command input.
+     * @throws IOException if occurs a problem with readLine.
+     *
+     * switch all possible two string command and start different procedure for anyone of them.
+     */
     private void twoCommandRequest(ArrayList<String> command) throws IOException, InterruptedException {
         switch (command.get(0)){
             case "see":
@@ -470,7 +597,7 @@ public class CLI extends ClientView{
             case "usemarble":
             case "marble":
             case "-um":
-                useMarbleRequest(command.get(1), getMarbles());
+                useMarbleRequest(command.get(1));
                 break;
             case "buycard":
             case "buy":
@@ -504,6 +631,11 @@ public class CLI extends ClientView{
         }
     }
 
+    /**
+     * @param request is player's "see" request.
+     *
+     * print player's chosen game object.
+     */
     private void seeRequest(String request){
         switch (request){
             case "market":
@@ -531,15 +663,23 @@ public class CLI extends ClientView{
         }
     }
 
-    private void useMarbleRequest(String marble, ArrayList<Marble> marbles) throws IOException, InterruptedException {
-        if(marbles == null){
+    /**
+     * @param marble is player's chosen marble.
+     * @throws IOException if occurs a problem with readLine.
+     * @throws InterruptedException if connection with Server crash at any moment.
+     *
+     * if exists chosen marbles, send a new USE_MARBLE message to Server.
+     * then wait Server answer and in case it's a WHITE_CONVERSION_CARD message start a new whiteConversion procedure.
+     */
+    private void useMarbleRequest(String marble) throws IOException, InterruptedException {
+        if(ClientView.getMarbles() == null){
             System.err.println("You can't do this operation at this moment");
             return;
         }
         marble = marble.toUpperCase();
-        Marble chosenMarble = correctMarble(marble, marbles);
+        Marble chosenMarble = correctMarble(marble, ClientView.getMarbles());
         if (chosenMarble != null){
-            if(marbles.size() == 0)
+            if(ClientView.getMarbles().size() == 0)
                 setCurrentState(GameStates.END_TURN_STATE);
             Message message = new MessageOneParameterMarble(MessageType.USE_MARBLE, position, chosenMarble);
             ClientSocket.sendMessage(message);
@@ -551,6 +691,11 @@ public class CLI extends ClientView{
             System.err.println("You have chosen a wrong marble");
     }
 
+    /**
+     * @param input is player's input.
+     * @param marbles is a list of marbles which player could chose.
+     * @return player's chosen marbles.
+     */
     private Marble correctMarble(String input, ArrayList<Marble> marbles){
         for(int i = 0; i < marbles.size(); i++){
             if(input.equals(marbles.get(i).toString()))
@@ -561,6 +706,11 @@ public class CLI extends ClientView{
         return null;
     }
 
+    /**
+     * @throws IOException if occurs a problem with readLine.
+     *
+     * ask to player which of his two active WhiteConversionCad want to use to convert chosen white marble.
+     */
     private void whiteConversionRequest() throws IOException {
         while (true){
             try {
@@ -578,6 +728,12 @@ public class CLI extends ClientView{
         }
     }
 
+    /**
+     * @param leader is one player's LeaderCard.
+     * @throws IOException if occurs a problem with readLine.
+     *
+     * send a new LEADER_CARD_ACTIVATION message to Server.
+     */
     private void leaderActiveRequest(String leader) throws IOException {
         if(!turn) {
             System.err.println("It's not your turn");
@@ -590,6 +746,12 @@ public class CLI extends ClientView{
             ClientSocket.sendMessage(new MessageOneParameterInt(MessageType.LEADER_CARD_ACTIVATION, position, leaderCard));
     }
 
+    /**
+     * @param leader is one player's LeaderCard.
+     * @throws IOException if occurs a problem with readLine.
+     *
+     * send a new LEADER_CARD_DISCARD message to Server.
+     */
     private void leaderDiscardRequest(String leader) throws IOException {
         if(!turn) {
             System.err.println("It's not your turn");
@@ -604,6 +766,12 @@ public class CLI extends ClientView{
         }
     }
 
+    /**
+     * @param command is player's input.
+     * @throws IOException if occurs a problem with readLine.
+     *
+     * handle end request from player.
+     */
     private void endRequest(String command) throws IOException {
         switch (command) {
             case "power":
@@ -618,6 +786,12 @@ public class CLI extends ClientView{
         }
     }
 
+    /**
+     * @param command is player's command input.
+     * @throws IOException if occurs a problem with readLine.
+     *
+     * switch all possible three string command and start different procedure for anyone of them.
+     */
     private void threeCommandRequest(ArrayList<String> command) throws IOException {
         switch (command.get(0)){
             case "see":
@@ -668,6 +842,11 @@ public class CLI extends ClientView{
         }
     }
 
+    /**
+     * @param command is player's "see" request.
+     *
+     * print player's chosen game object.
+     */
     private void seeRequest(ArrayList<String> command){
         try {
             switch (command.get(1)) {
@@ -705,6 +884,11 @@ public class CLI extends ClientView{
         }
     }
 
+    /**
+     * @param command is player's "seeMy" request.
+     *
+     * print player's chosen game object of his playerboard.
+     */
     private void seeMyRequest(String command){
         switch (command){
             case "playerboard":
@@ -734,6 +918,11 @@ public class CLI extends ClientView{
         }
     }
 
+    /**
+     * @param board is chosen player to see board.
+     *
+     * print chosen playerboard.
+     */
     private void seePlayerBoardRequest(String board){
         try {
             int player = Integer.parseInt(board);
@@ -746,6 +935,11 @@ public class CLI extends ClientView{
         }
     }
 
+    /**
+     * @param warehouse is chosen player to see warehouse.
+     *
+     * print chosen warehouse.
+     */
     private void seeWarehouseRequest(String warehouse){
         try {
             int player = Integer.parseInt(warehouse);
@@ -758,6 +952,11 @@ public class CLI extends ClientView{
         }
     }
 
+    /**
+     * @param strongbox is chosen player to see strongbox.
+     *
+     * print chosen strongbox.
+     */
     private void seeStrongboxRequest(String strongbox){
         try {
             int player = Integer.parseInt(strongbox);
@@ -770,6 +969,11 @@ public class CLI extends ClientView{
         }
     }
 
+    /**
+     * @param cards is chosen player to see DevelopmentCards.
+     *
+     * print chosen player's DevelopmentCards.
+     */
     private void seeCardsRequest(String cards){
         try {
             int player = Integer.parseInt(cards);
@@ -782,6 +986,11 @@ public class CLI extends ClientView{
         }
     }
 
+    /**
+     * @param leader is chosen player to see LeaderCards.
+     *
+     * print chosen player's LeaderCards
+     */
     private void seeLeaderRequest(String leader){
         try {
             int player = Integer.parseInt(leader);
@@ -794,6 +1003,14 @@ public class CLI extends ClientView{
         }
     }
 
+    /**
+     * @param command is player's input.
+     * @throws IOException if occurs a problem with readLine.
+     *
+     * if it's player's turn and currentState is FIRST_ACTION_STATE send a new BUY_CARD message to Server.
+     * then wait Server answer: in case it's a CHOSEN_SLOT message start a new chosenSlot procedure, in case it's OK set
+     * currentState to END_TURN_STATE, in case of ERR return to FIRST_ACTION_STATE.
+     */
     private void buyCardRequest(ArrayList<String> command) throws IOException {
         if(!turn) {
             System.err.println("It's not your turn");
@@ -832,6 +1049,12 @@ public class CLI extends ClientView{
             System.err.println("You can't do this operation at this moment");
     }
 
+    /**
+     * @throws IOException if occurs a problem with readLine.
+     *
+     * ask player to chose one available slot and send a new CHOSEN_SLOT message to Server.
+     * then wait Server answer: in case of OK set currentState to END_TURN_STATE, in case of ERR return to FIRST_ACTION_STATE.
+     */
     private void choseSlotRequest() throws IOException {
         MessageThreeParameterInt m = (MessageThreeParameterInt) receivedMessage;
         CLIPrinter.printCardSlot(super.getGame(), position);
@@ -858,6 +1081,13 @@ public class CLI extends ClientView{
         }
     }
 
+    /**
+     * @param command is player's input.
+     * @throws IOException if occurs a problem with readLine.
+     *
+     * if it's player's turn and currentState is FIRST_ACTION_STATE, send a new TAKE_MARBLE message to Server and set
+     * currentState as TAKE_MARBLE_STATE.
+     */
     private void takeMarbleRequest(ArrayList<String> command) throws IOException {
         if(!turn) {
             System.err.println("It's not your turn");
@@ -891,6 +1121,12 @@ public class CLI extends ClientView{
             System.err.println("You can't do this operation at this moment");
     }
 
+    /**
+     * @param command is player's input.
+     * @throws IOException if occurs a problem with readLine.
+     *
+     * if it's player's turn and currentState is TAKE_MARBLE_STATE send a new SWITCH_DEPOT message to Server.
+     */
     private void switchRequest(ArrayList<String> command) throws IOException {
         if(!turn) {
             System.err.println("It's not your turn");
@@ -914,6 +1150,14 @@ public class CLI extends ClientView{
             System.err.println("You can't do this operation at this moment");
     }
 
+    /**
+     * @param command is player's input.
+     * @throws IOException if occurs a problem with readLine.
+     *
+     * if it's player's turn and currentState is FIRST_ACTION_STATE or ACTIVATE_PRODUCTION_STATE send a new
+     * DEVELOPMENT_CARD_POWER message to Server and, in case currentState is FIRST_ACTION_STATE, set currentState as
+     * FIRST_POWER_STATE.
+     */
     private void cardPowerRequest(ArrayList<String> command) throws IOException {
         if(!turn) {
             System.err.println("It's not your turn");
@@ -934,6 +1178,14 @@ public class CLI extends ClientView{
             System.err.println("You can't do this operation at this moment");
     }
 
+    /**
+     * @param command is player's input.
+     * @throws IOException if occurs a problem with readLine.
+     *
+     * if it's player's turn and currentState is FIRST_ACTION_STATE or ACTIVATE_PRODUCTION_STATE send a new
+     * LEADER_CARD_POWER message to Server and, in case currentState is FIRST_ACTION_STATE, set currentState as
+     * FIRST_POWER_STATE.
+     */
     private void leaderPowerRequest(ArrayList<String> command) throws IOException {
         if(!turn) {
             System.err.println("It's not your turn");
@@ -955,6 +1207,13 @@ public class CLI extends ClientView{
             System.err.println("You can't do this operation at this moment");
     }
 
+    /**
+     * @throws IOException if occurs a problem with readLine.
+     *
+     * if it's player's turn and currentState is FIRST_ACTION_STATE or ACTIVATE_PRODUCTION_STATE, ask player to chose
+     * 3 resource, then send a new BASIC_POWER message to Server and, in case currentState is FIRST_ACTION_STATE, set
+     * currentState as FIRST_POWER_STATE.
+     */
     private void basicPowerRequest() throws IOException {
         if(!turn) {
             System.err.println("It's not your turn");
@@ -974,6 +1233,9 @@ public class CLI extends ClientView{
             System.err.println("You can't do this operation at this moment");
     }
 
+    /**
+     * @param message is a LOGIN message.
+     */
     @Override
     public void loginMessage(Message message) {
         notifyMessage(message);
@@ -983,6 +1245,9 @@ public class CLI extends ClientView{
             System.out.println("Waiting other players...");
     }
 
+    /**
+     * @param message is a NEW_PLAYER message.
+     */
     @Override
     public void newPlayerMessage(Message message){
         MessageOneParameterString m = (MessageOneParameterString) message;
@@ -991,6 +1256,9 @@ public class CLI extends ClientView{
         }
     }
 
+    /**
+     * @param message is a PLAYERS message.
+     */
     @Override
     public void playersMessage(Message message){
         super.playersMessage(message);
@@ -1000,6 +1268,9 @@ public class CLI extends ClientView{
         System.out.println("You are the " + (position + 1) + "° player");
     }
 
+    /**
+     * after game started send to Server a new TURN message.
+     */
     @Override
     public void startGameMessage() throws IOException {
         super.startGame();
@@ -1008,6 +1279,11 @@ public class CLI extends ClientView{
         ClientSocket.sendMessage(new Message(MessageType.TURN, position));
     }
 
+    /**
+     * @param message is a LEADER_CHOICE message.
+     *
+     * print received LeaderCards and notify the received message.
+     */
     @Override
     public void leaderCardChoice(Message message) {
         MessageFourParameterInt m = (MessageFourParameterInt) message;
@@ -1018,6 +1294,11 @@ public class CLI extends ClientView{
         notifyMessage(m);
     }
 
+    /**
+     * @param message is a TURN message.
+     *
+     * if param = 1 it's player turn and set turn as true, otherwise set turn as false.
+     */
     @Override
     public void turnMessage(Message message){
         MessageOneParameterInt m = (MessageOneParameterInt) message;
@@ -1032,6 +1313,12 @@ public class CLI extends ClientView{
         }
     }
 
+    /**
+     * @param message is a END_TURN message.
+     *
+     * if player has just finished it's turn simply set turn as false. Instead if it wasn't player's turn, evaluates if now
+     * it's him turn and in case set turn as true.
+     */
     @Override
     public void endTurnMessage(Message message) {
         if (message.getClientID() != position) {
@@ -1052,6 +1339,9 @@ public class CLI extends ClientView{
             turn = false;
     }
 
+    /**
+     * @param message is a BUY_CARD message.
+     */
     @Override
     public void buyCardMessage(Message message) {
         MessageTwoParameterInt m = (MessageTwoParameterInt) message;
@@ -1061,6 +1351,9 @@ public class CLI extends ClientView{
         super.buyCardMessage(message);
     }
 
+    /**
+     * @param message is a CARD_REMOVE message.
+     */
     @Override
     public void cardRemoveMessage(Message message) {
         MessageFourParameterInt m = (MessageFourParameterInt) message;
@@ -1073,6 +1366,9 @@ public class CLI extends ClientView{
         super.cardRemoveMessage(message);
     }
 
+    /**
+     * @param message is a END_PRODUCTION message.
+     */
     @Override
     public void endProductionMessage(Message message) {
         if(message.getClientID() != position)
@@ -1081,6 +1377,9 @@ public class CLI extends ClientView{
             CLIPrinter.printWarehouseStrongbox(super.getGame(), position);
     }
 
+    /**
+     * @param message is a MARKET_CHANGE message.
+     */
     @Override
     public void marketChange(Message message) {
         MessageTwoParameterInt m = (MessageTwoParameterInt) message;
@@ -1098,6 +1397,9 @@ public class CLI extends ClientView{
         super.marketChange(message);
     }
 
+    /**
+     * @param message is a FAITH_POINTS_INCREASE message.
+     */
     @Override
     public void faithPointsMessage(Message message){
         MessageOneParameterInt m = (MessageOneParameterInt) message;
@@ -1107,7 +1409,7 @@ public class CLI extends ClientView{
                 serverMessage = "Ludovico has increased his faith points. Now it has " + m.getPar();
             else
                 serverMessage = "Player " + getNickname(m.getClientID()) + " has increased its faith points. Now it has " + m.getPar();
-            if(super.isGameStarted())
+            if(isGameStarted())
                 System.out.println(serverMessage);
             else
                 addServerMessage(serverMessage);
@@ -1115,6 +1417,9 @@ public class CLI extends ClientView{
         super.faithPointsMessage(message);
     }
 
+    /**
+     * @param message is a INCREASE_WAREHOUSE message.
+     */
     @Override
     public void increaseWarehouseMessage(Message message){
         MessageOneIntOneResource m = (MessageOneIntOneResource) message;
@@ -1142,6 +1447,9 @@ public class CLI extends ClientView{
         }
     }
 
+    /**
+     * @param message is a SWITCH_DEPOT message.
+     */
     @Override
     public void switchDepotMessage(Message message){
         MessageTwoParameterInt m = (MessageTwoParameterInt) message;
@@ -1153,6 +1461,9 @@ public class CLI extends ClientView{
             CLIPrinter.printWarehouse(super.getGame(), position);
     }
 
+    /**
+     * @param message is a VATCAN_REPORT message.
+     */
     @Override
     public void vaticanReportMessage(Message message){
         MessageTwoParameterInt m = (MessageTwoParameterInt) message;
@@ -1165,6 +1476,9 @@ public class CLI extends ClientView{
         super.vaticanReportMessage(message);
     }
 
+    /**
+     * @param message is a LEADER_ACTIVATION message.
+     */
     @Override
     public void leaderCardActivationMessage(Message message){
         MessageOneParameterInt m = (MessageOneParameterInt) message;
@@ -1174,6 +1488,9 @@ public class CLI extends ClientView{
         super.leaderCardActivationMessage(message);
     }
 
+    /**
+     * @param message is a EXTRA_DEPOT message.
+     */
     @Override
     public void extraDepotMessage(Message message){
         MessageOneIntOneResource m = (MessageOneIntOneResource) message;
@@ -1185,6 +1502,9 @@ public class CLI extends ClientView{
             CLIPrinter.printWarehouse(super.getGame(), position);
     }
 
+    /**
+     * @param message is a LEADER_DISCARD message.
+     */
     @Override
     public void leaderCardDiscardMessage(Message message){
         MessageOneParameterInt m = (MessageOneParameterInt) message;
@@ -1195,6 +1515,11 @@ public class CLI extends ClientView{
             super.leaderCardDiscardMessage(message);
     }
 
+    /**
+     * if currentState is TAKE_MARBLE_STATE and there are no remaining marbles to be chosen, set currentState as END_TURN_STATE.
+     * if currentState is FIRST_POWER_STATE, set currentState as ACTIVATE_PRODUCTION_STATE.
+     * notify the received message.
+     */
     @Override
     public void okMessage() {
         if (getCurrentState() != GameStates.BUY_CARD_STATE)
@@ -1208,6 +1533,11 @@ public class CLI extends ClientView{
         notifyMessage(new Message(MessageType.OK, position));
     }
 
+    /**
+     * @param message is a CHOSEN_SLOT message.
+     *
+     * notify the received message.
+     */
     @Override
     public void chosenSlotMessage(Message message){
         MessageThreeParameterInt m = (MessageThreeParameterInt) message;
@@ -1218,6 +1548,9 @@ public class CLI extends ClientView{
         notifyMessage(message);
     }
 
+    /**
+     * @param message is a TAKE_MARBLE message.
+     */
     @Override
     public void takeMarbleMessage(Message message) {
         MessageArrayListMarble m = (MessageArrayListMarble) message;
@@ -1226,6 +1559,11 @@ public class CLI extends ClientView{
         CLIPrinter.printMarbles(super.getGame(), m.getMarbles());
     }
 
+    /**
+     * @param message is a WHITE_CONVERSION message.
+     *
+     * notify the received message.
+     */
     @Override
     public void whiteConversionCardMessage(Message message) {
         CLIPrinter.printLeaderCard(getGame(), position);
@@ -1233,18 +1571,25 @@ public class CLI extends ClientView{
         notifyMessage(message);
     }
 
+    /**
+     * @param message is a QUIT message.
+     *
+     * this message could be received if another player disconnect or if Client disconnect from Server.
+     * in case game already started, print a disconnection message and exit.
+     * in case game is not started yet, simply print a disconnection message but game still remain active.
+     */
     @Override
     public void quitMessage(Message message) {
         MessageOneParameterString m = (MessageOneParameterString) message;
         if(m.getClientID() == -1){
             System.err.println("\nClient no longer connected to the Server");
             endGame();
-            System.out.println("\nExit.\n");
+            System.out.println("Exit.\n");
             System.exit(1);
         }
         else if (getNumOfPlayers() != 0) {
             System.out.println("Player " + m.getPar() + " disconnected. Game ended.");
-            System.out.println("\nExit.\n");
+            System.out.println("Exit.\n");
             endGame();
             System.exit(1);
         }
@@ -1254,6 +1599,11 @@ public class CLI extends ClientView{
             System.out.println("One player disconnected before game is started");
     }
 
+    /**
+     * @param message is a END_GAME message.
+     *
+     * print info about winner victory points and resource and exit.
+     */
     @Override
     public void endGameMessage(Message message){
         MessageTwoParameterInt m = (MessageTwoParameterInt) message;
@@ -1265,10 +1615,14 @@ public class CLI extends ClientView{
                     + " It made " + m.getPar1() + " victory points and " + m.getPar2()
                     + " total resources.");
         }
-        System.out.println("\nExit.\n");
+        System.out.println("Exit.\n");
         endGame();
+        System.exit(1);
     }
 
+    /**
+     * notify the received error message
+     */
     @Override
     public void alreadyTakenNickNameError() {
         System.err.println("Nickname already taken. Chose a different one");
@@ -1285,17 +1639,28 @@ public class CLI extends ClientView{
         System.err.println("It's not your turn");
     }
 
+    /**
+     * notify the received error message
+     */
     @Override
     public void emptyDeckError() {
         System.err.println("You have chosen an empty deck");
         notifyMessage(new ErrorMessage(position, ErrorType.EMPTY_DECK));
     }
 
+    /**
+     * if currentState is FIRST_POWER_STATE, set currentState as FIRST_ACTION_STATE
+     */
     @Override
     public void emptySlotError() {
+        if(isState(GameStates.FIRST_POWER_STATE))
+            setCurrentState(GameStates.FIRST_ACTION_STATE);
         System.err.println("You have no cards in this slot");
     }
 
+    /**
+     * if currentState is FIRST_POWER_STATE, set currentState as FIRST_ACTION_STATE
+     */
     @Override
     public void wrongPowerError() {
         if(isState(GameStates.FIRST_POWER_STATE))
@@ -1308,6 +1673,9 @@ public class CLI extends ClientView{
         System.err.println("You don't have enough development cards to activate this leader card");
     }
 
+    /**
+     * notify the received error message
+     */
     @Override
     public void fullSlotError() {
         System.err.println("You can't insert this card in any slot");
@@ -1324,11 +1692,14 @@ public class CLI extends ClientView{
         System.err.println("You can't switch this depots");
     }
 
+    /**
+     * if currentState is FIRST_POWER_STATE, set currentState as FIRST_ACTION_STATE
+     * notify the received error message
+     */
     @Override
     public void notEnoughResourceError() {
-        if(isState(GameStates.FIRST_POWER_STATE)) {
+        if(isState(GameStates.FIRST_POWER_STATE))
             setCurrentState(GameStates.FIRST_ACTION_STATE);
-        }
         System.err.println("You have not enough resources to do this operation");
         notifyMessage(new ErrorMessage(position, ErrorType.NOT_ENOUGH_RESOURCES));
     }
@@ -1343,6 +1714,11 @@ public class CLI extends ClientView{
         System.err.println("You discard this leader card previously");
     }
 
+    /**
+     * @throws InterruptedException if connection with Server crash at any moment.
+     *
+     * set receivedMessage as null and until there isn't any received message wait.
+     */
     private void waitMessage() throws InterruptedException {
         receivedMessage = null;
         while (receivedMessage == null) {
@@ -1352,6 +1728,11 @@ public class CLI extends ClientView{
         }
     }
 
+    /**
+     * @param message is a received message from Server.
+     *
+     * set receivedMessage as @param message and wake up inputThread.
+     */
     private void notifyMessage(Message message) {
         receivedMessage = message;
         synchronized (lock) {
