@@ -141,6 +141,19 @@ public class MarketTest {
                 assertFalse(false);
         }
     }
+
+    /**
+     * this test verifies the correct get of marketTray and marble
+     */
+    @Test
+    void correctGetMarbleAndMarketTray(){
+
+        Market market = new Market();
+        Marble[][] marketTray = market.getMarketTray();
+
+        assertSame(marketTray[0][0], market.getMarble(0,0));
+        assertSame(marketTray[2][3], market.getMarble(2,3));
+    }
 }
 
 

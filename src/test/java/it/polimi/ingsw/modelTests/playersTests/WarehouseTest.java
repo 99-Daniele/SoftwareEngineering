@@ -379,6 +379,28 @@ public class WarehouseTest {
     }
 
     /**
+     * this test tries to switch a WarehouseDepot with a not existing ExtraDepot
+     */
+    @Test
+    void incorrectNotExistingExtraDepot(){
+
+        Warehouse w = new Warehouse();
+        assertFalse(w.existExtraDepot());
+
+        ImpossibleSwitchDepotException thrown =
+                assertThrows(ImpossibleSwitchDepotException.class, () -> w.switchDepots(3, 1));
+        String expectedMessage = "You can't switch this depots";
+        String actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+
+        thrown =
+                assertThrows(ImpossibleSwitchDepotException.class, () -> w.switchDepots(1, 4));
+        expectedMessage = "You can't switch this depots";
+        actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    /**
      * this test tries to switch ExtraDepot with an empty WarehouseDepot, where ExtraDepot has getAmount() > maxAmount
      * of WarehouseDepot
      */

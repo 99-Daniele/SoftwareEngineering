@@ -71,6 +71,12 @@ public class GameStateTest {
         gameManager.getCurrentState().nextState(gameManager, MessageType.BUY_CARD);
         assertTrue(gameManager.getCurrentState().isRightState(GameStates.FIRST_ACTION_STATE));
 
+        gameManager.getCurrentState().nextState(gameManager, MessageType.CHOSEN_SLOT);
+        assertTrue(gameManager.getCurrentState().isRightState(GameStates.BUY_CARD_STATE));
+
+        gameManager.getCurrentState().nextState(gameManager, MessageType.BUY_CARD);
+        assertTrue(gameManager.getCurrentState().isRightState(GameStates.FIRST_ACTION_STATE));
+
         gameManager.getCurrentState().nextState(gameManager, MessageType.END_PRODUCTION);
         assertTrue(gameManager.getCurrentState().isRightState(GameStates.ACTIVATE_PRODUCTION_STATE));
 
@@ -250,6 +256,52 @@ public class GameStateTest {
         assertSame(marbles1[0], s4.getMarbles().get(0));
         assertNull(s5.getMarbles());
         assertNull(s6.getMarbles());
+
+        s1.addDevelopmentCardSlot(1);
+        s2.addDevelopmentCardSlot(1);
+        s3.addDevelopmentCardSlot(1);
+        s4.addDevelopmentCardSlot(1);
+        s5.addDevelopmentCardSlot(1);
+        s6.addDevelopmentCardSlot(1);
+
+        assertNull(s1.getChosenSlots());
+        assertNull(s2.getChosenSlots());
+        assertNull(s3.getChosenSlots());
+        assertNull(s4.getChosenSlots());
+        assertNotNull(s5.getChosenSlots());
+        assertEquals(1, s5.getChosenSlots().size());
+        assertEquals(1, s5.getChosenSlots().get(0));
+        assertNull(s6.getChosenSlots());
+
+        s1.setBasicPower();
+        s2.setBasicPower();
+        s3.setBasicPower();
+        s4.setBasicPower();
+        s5.setBasicPower();
+        s6.setBasicPower();
+
+        assertFalse(s1.isBasicPower());
+        assertFalse(s2.isBasicPower());
+        assertFalse(s3.isBasicPower());
+        assertFalse(s4.isBasicPower());
+        assertTrue(s5.isBasicPower());
+        assertFalse(s6.isBasicPower());
+
+        s1.addLeaderCard(2);
+        s2.addLeaderCard(2);
+        s3.addLeaderCard(2);
+        s4.addLeaderCard(2);
+        s5.addLeaderCard(2);
+        s6.addLeaderCard(2);
+
+        assertNull(s1.getChosenLeaderCards());
+        assertNull(s2.getChosenLeaderCards());
+        assertNull(s3.getChosenLeaderCards());
+        assertNull(s4.getChosenLeaderCards());
+        assertNotNull(s5.getChosenLeaderCards());
+        assertEquals(1, s5.getChosenLeaderCards().size());
+        assertEquals(2, s5.getChosenLeaderCards().get(0));
+        assertNull(s6.getChosenLeaderCards());
     }
 
     /**
@@ -272,15 +324,31 @@ public class GameStateTest {
 
         GameState s1 = new TakeMarbleState();
         GameState s2 = new WhiteConversionCardState();
+        GameState s3 = new BuyCardState();
+        GameState s4 = new ActivateProductionState();
+        GameState s5 = new FirstActionState();
+        GameState s6 = new EndTurnState();
 
         s1.setMarbles(marbles);
         s2.setMarbles(marbles2);
+        s3.setMarbles(marbles);
+        s4.setMarbles(marbles);
+        s5.setMarbles(marbles);
+        s6.setMarbles(marbles);
 
         assertEquals(4, s1.getMarbles().size());
         assertEquals(4, s2.getMarbles().size());
+        assertNull(s3.getMarbles());
+        assertNull(s4.getMarbles());
+        assertNull(s5.getMarbles());
+        assertNull(s6.getMarbles());
 
         s1.removeMarble(new WhiteMarble());
         s2.removeMarble(new RedMarble());
+        s3.removeMarble(new WhiteMarble());
+        s4.removeMarble(new WhiteMarble());
+        s5.removeMarble(new WhiteMarble());
+        s6.removeMarble(new WhiteMarble());
 
         assertEquals(3, s1.getMarbles().size());
         assertEquals(3, s2.getMarbles().size());

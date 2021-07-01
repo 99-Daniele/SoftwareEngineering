@@ -78,4 +78,15 @@ public class WhiteMarbleTest {
          only after faithTrackMovementAllPlayer() other player victoryPoints could increased
          */
     }
+
+    /**
+     * this test verifies the correct toString
+     */
+    @Test
+    void correctToString(){
+
+        Marble w = new WhiteMarble();
+        assertEquals("W", w.toStringAbb());
+        assertEquals("WHITE", w.toString());
+    }
 }

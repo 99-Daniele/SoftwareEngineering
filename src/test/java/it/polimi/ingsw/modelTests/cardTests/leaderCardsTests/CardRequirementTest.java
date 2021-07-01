@@ -1,4 +1,4 @@
-package it.polimi.ingsw.modelTests.leaderCardsTests;
+package it.polimi.ingsw.modelTests.cardTests.leaderCardsTests;
 
 import it.polimi.ingsw.model.cards.developmentCards.*;
 import it.polimi.ingsw.model.cards.leaderCards.CardRequirement;
@@ -80,6 +80,35 @@ public class CardRequirementTest {
 
         cardRequirement1.increaseNumOfCards();
         assertEquals(4, cardRequirement1.getNumOfCards());
+    }
+
+    /**
+     * this test verifies the correct get of level
+     */
+    @Test
+    void correctGetLevels(){
+
+        CardRequirement cardRequirement = new CardRequirement(Color.YELLOW, 1, 2);
+        assertEquals(1, cardRequirement.getLevels().size());
+        assertEquals(2, cardRequirement.getLevels().get(0));
+
+
+        Resource r1 = Resource.COIN;
+        Cost c1 = new Cost();
+        c1.addResource(r1, 1);
+        Cost c2 = new Cost();
+        Cost c3 = new Cost();
+        int cardID = 0;
+        DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 1, c2, c3, 1, cardID);
+
+        CardRequirement cardRequirement2 = new CardRequirement(developmentCard);
+        assertEquals(1, cardRequirement2.getLevels().size());
+        assertEquals(1, cardRequirement2.getLevels().get(0));
+
+        cardRequirement2.addLevel(3);
+        assertEquals(2, cardRequirement2.getLevels().size());
+        assertEquals(1, cardRequirement2.getLevels().get(0));
+        assertEquals(3, cardRequirement2.getLevels().get(1));
     }
 
     /**

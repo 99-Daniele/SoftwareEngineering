@@ -1116,23 +1116,48 @@ public class GameTest {
         Cost c2 = new Cost();
         Cost c3 = new Cost();
         int cardID = 0;
-        c3.addResource(Resource.COIN, 1);
+        c3.addResource(Resource.COIN, 2);
         DevelopmentCard developmentCard = new DevelopmentCard(Color.BLUE, 1, c1, 4, c2, c3, 0, cardID);
+        game.nextPlayer();
         game.getPlayer(3).buyDevelopmentCard(developmentCard, 1, 1);
 
         Strongbox s = new Strongbox();
         game.getPlayer(3).activateDevelopmentCardProductionPower(1, s, 0);
         game.increaseCurrentPlayerStrongbox(s);
-        game.nextPlayer();
 
         assertEquals(4, game.getPlayer(2).sumVictoryPoints());
         assertEquals(4, game.getPlayer(3).sumVictoryPoints());
 
-        assertEquals(1, game.getPlayer(2).sumTotalResource());
-        assertEquals(0, game.getPlayer(3).sumTotalResource());
+        assertEquals(0, game.getPlayer(2).sumTotalResource());
+        assertEquals(2, game.getPlayer(3).sumTotalResource());
 
         int winner2 = game.endGame();
 
-        assertSame(2, winner2);
+        assertSame(3, winner2);
+    }
+
+    /**
+     * this test verifies the correct switch depots
+     */
+    @Test
+    void correctSwitchDepots() throws AlreadyTakenNicknameException, ImpossibleSwitchDepotException {
+
+        Game game = new Game(2);
+        game.createPlayer("Daniele");
+        game.increaseWarehouse(Resource.COIN);
+        assertEquals(1, game.getCurrentPlayer().getWarehouse().getNumOfResource(Resource.COIN));
+        game.switchDepots(1, 2);
+        assertEquals(1, game.getCurrentPlayer().getWarehouse().getNumOfResource(Resource.COIN));
+    }
+
+    /**
+     * this test verifies the correct get of currentPosition and numPlayers
+     */
+    @Test
+    void getPositionAndNumPLayers(){
+
+        Game game = new Game(2);
+        assertEquals(0, game.getCurrentPosition());
+        assertEquals(2, game.getNumOfPlayers());
     }
 }

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.modelTests.developmentCardsTests;
+package it.polimi.ingsw.modelTests.cardTests.developmentCardsTests;
 
 import it.polimi.ingsw.exceptions.EmptyDevelopmentCardDeckException;
 

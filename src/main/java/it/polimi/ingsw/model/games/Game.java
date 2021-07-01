@@ -365,9 +365,7 @@ public class Game extends Observable implements LightGame{
         if(resource1 == resource2){
             try {
                 players.get(3).switchDepots(0, 1);
-            } catch (ImpossibleSwitchDepotException e) {
-                e.printStackTrace();
-            }
+            } catch (ImpossibleSwitchDepotException ignored) { }
         }
         message=new MessageOneIntOneResource(MessageType.INCREASE_WAREHOUSE,3, resource2, 2);
         players.get(3).increaseWarehouse(resource2);
@@ -652,9 +650,7 @@ public class Game extends Observable implements LightGame{
         LeaderCard leaderCard=null;
         try {
             leaderCard=getCurrentPlayerLeaderCard(chosenAdditionalPowerCard);
-        } catch (AlreadyDiscardLeaderCardException e) {
-            e.printStackTrace();
-        }
+        } catch (AlreadyDiscardLeaderCardException ignored) { }
         if(r!= Objects.requireNonNull(leaderCard).getResource()) {
             int par=players.get(currentPlayer).getWarehouse().getNumOfResource(r);
             int par1=players.get(currentPlayer).getStrongbox().getNumOfResource(r);

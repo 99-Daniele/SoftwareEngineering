@@ -1,4 +1,4 @@
-package it.polimi.ingsw.modelTests.leaderCardsTests;
+package it.polimi.ingsw.modelTests.cardTests.leaderCardsTests;
 
 import it.polimi.ingsw.model.cards.developmentCards.*;
 import it.polimi.ingsw.model.cards.leaderCards.*;

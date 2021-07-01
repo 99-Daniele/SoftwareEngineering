@@ -45,8 +45,7 @@ public class WhiteMarble extends Marble {
         try {
             LeaderCard card = game.getCurrentPlayerLeaderCard(chosenLeaderCard);
             game.whiteMarbleConversion(card);
-        } catch (AlreadyDiscardLeaderCardException ignored) {
-        }
+        } catch (AlreadyDiscardLeaderCardException ignored) { }
         return true;
     }
 

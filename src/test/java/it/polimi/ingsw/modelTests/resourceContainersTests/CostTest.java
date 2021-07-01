@@ -298,5 +298,23 @@ public class CostTest {
         c.recount(r1);
         assertEquals(1, c.getNumOfResource(r1));
     }
+
+    /**
+     * this test verifies the correct get of ResourceContainer
+     */
+    @Test
+    void correctGetResourceContainer(){
+
+        Cost c = new Cost();
+
+        assertNull(c.getResourceContainer(Resource.COIN));
+        assertNull(c.getResourceContainer(Resource.STONE));
+        assertNull(c.getResourceContainer(Resource.SERVANT));
+        assertNull(c.getResourceContainer(Resource.SHIELD));
+
+        c.addResource(Resource.COIN, 1);
+
+        assertNotNull(c.getResourceContainer(Resource.COIN));
+    }
 }
 

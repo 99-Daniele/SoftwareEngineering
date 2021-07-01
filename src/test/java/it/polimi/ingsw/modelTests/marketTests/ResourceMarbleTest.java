@@ -61,4 +61,28 @@ public class ResourceMarbleTest {
          only after faithTrackMovementAllPlayer() other player victoryPoints could increased
          */
     }
+
+    /**
+     * this test verifies the correct toString
+     */
+    @Test
+    void correctToString(){
+
+        Marble y = new ResourceMarble(Resource.COIN);
+        assertEquals("Y", y.toStringAbb());
+        assertEquals("YELLOW", y.toString());
+
+        Marble b = new ResourceMarble(Resource.SHIELD);
+        assertEquals("B", b.toStringAbb());
+        assertEquals("BLUE", b.toString());
+
+        Marble p = new ResourceMarble(Resource.SERVANT);
+        assertEquals("P", p.toStringAbb());
+        assertEquals("PURPLE", p.toString());
+
+        Marble g = new ResourceMarble(Resource.STONE);
+        assertEquals("G", g.toStringAbb());
+        assertEquals("GREY", g.toString());
+
+    }
 }

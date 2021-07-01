@@ -37,4 +37,15 @@ public class RedMarbleTest {
         assertEquals(7,game.getCurrentPlayer().getFaithPoints());
         assertEquals(2,game.getCurrentPlayer().getVictoryPoints().getVictoryPointsByFaithTrack());
     }
+
+    /**
+     * this test verifies the correct toString
+     */
+    @Test
+    void correctToString(){
+
+        Marble r = new RedMarble();
+        assertEquals("R", r.toStringAbb());
+        assertEquals("RED", r.toString());
+    }
 }

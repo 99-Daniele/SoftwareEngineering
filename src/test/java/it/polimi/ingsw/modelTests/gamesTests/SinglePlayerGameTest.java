@@ -3,6 +3,7 @@ package it.polimi.ingsw.modelTests.gamesTests;
 import it.polimi.ingsw.exceptions.*;
 
 import it.polimi.ingsw.model.cards.developmentCards.DevelopmentCard;
+import it.polimi.ingsw.model.games.Game;
 import it.polimi.ingsw.model.games.SinglePlayerGame;
 import it.polimi.ingsw.model.cards.developmentCards.Color;
 import it.polimi.ingsw.model.resourceContainers.Cost;
@@ -39,12 +40,16 @@ public class SinglePlayerGameTest {
         assertEquals(0, singlePlayerGame.getCurrentPlayer().getFaithPoints());
         assertEquals(0, singlePlayerGame.getCurrentPlayer().getVictoryPoints().getVictoryPointsByVaticanReport());
 
+        singlePlayerGame.getCurrentPlayer().increaseFaithPoints(10);
         singlePlayerGame.LorenzoFaithTrackMovement(10);
-        assertEquals(0, singlePlayerGame.getCurrentPlayer().getVictoryPoints().getVictoryPointsByVaticanReport());
+        assertEquals(2, singlePlayerGame.getCurrentPlayer().getVictoryPoints().getVictoryPointsByVaticanReport());
 
-        singlePlayerGame.getCurrentPlayer().increaseFaithPoints(13);
-        singlePlayerGame.LorenzoFaithTrackMovement(10);
-        assertEquals(3, singlePlayerGame.getCurrentPlayer().getVictoryPoints().getVictoryPointsByVaticanReport());
+        singlePlayerGame.LorenzoFaithTrackMovement(13);
+        assertEquals(2, singlePlayerGame.getCurrentPlayer().getVictoryPoints().getVictoryPointsByVaticanReport());
+
+        singlePlayerGame.getCurrentPlayer().increaseFaithPoints(10);
+        singlePlayerGame.increaseOneFaithPointOtherPlayers();
+        assertEquals(6, singlePlayerGame.getCurrentPlayer().getVictoryPoints().getVictoryPointsByVaticanReport());
     }
 
     /**
@@ -130,5 +135,18 @@ public class SinglePlayerGameTest {
 
         int winner = singlePlayerGame.endGame();
         assertEquals(1, winner);
+    }
+
+    /**
+     * this test verifies the correct next player overriding
+     */
+    @Test
+    void correctNextPlayer(){
+
+        Game game = new SinglePlayerGame();
+        assertEquals(0, game.getCurrentPosition());
+
+        game.nextPlayer();
+        assertEquals(0, game.getCurrentPosition());
     }
 }
