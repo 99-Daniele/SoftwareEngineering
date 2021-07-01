@@ -3,10 +3,10 @@ package it.polimi.ingsw.model.cards.leaderCards;
 import it.polimi.ingsw.exceptions.*;
 
 import it.polimi.ingsw.model.cards.Card;
+import it.polimi.ingsw.model.cards.developmentCards.Color;
 import it.polimi.ingsw.model.cards.developmentCards.DevelopmentCard;
 import it.polimi.ingsw.model.player.*;
 import it.polimi.ingsw.model.resourceContainers.*;
-import it.polimi.ingsw.view.CLI.ColorAnsi;
 
 /**
  * LeaderCard is one of 16 cards created at the beginning by Game. It has 4 standard methods which will be @Override
@@ -55,11 +55,15 @@ public abstract class LeaderCard extends Card {
     /**
      * @return 0 if LeaderCard is not active, otherwise @return its victory points.
      */
-    @Override
-    public int getVictoryPoints() {
+    public int getCurrentVictoryPoints() {
         if(isActive())
             return super.getVictoryPoints();
         return 0;
+    }
+
+    @Override
+    public int getVictoryPoints() {
+        return super.getVictoryPoints();
     }
 
     public boolean isActive() {
@@ -149,40 +153,13 @@ public abstract class LeaderCard extends Card {
      */
     public void recount(DevelopmentCard card){}
 
-    /**
-     * CLI representation of Leader Card.
-     */
     @Override
-    public void print() {
-        System.out.println("RESOURCE: " + fromResourceToString(resource));
-        if(resourceCost != null)
-            System.out.println("RESOURCE_COST: " + resourceCost);
-        else if(leaderRequirements != null)
-            System.out.println("LEADER_REQUIREMENTS: " + leaderRequirements);
-        super.print();
-    }
-
-    /**
-     * @param r is one resource.
-     * @return Warehouse resource CLI representation.
-     */
-    private String fromResourceToString(Resource r){
-        switch (r){
-            case COIN:
-                return ColorAnsi.ANSI_YELLOW.escape() + "●" + ColorAnsi.RESET;
-            case SHIELD:
-                return ColorAnsi.ANSI_CYAN.escape() + "●" + ColorAnsi.RESET;
-            case SERVANT:
-                return ColorAnsi.ANSI_PURPLE.escape() + "●" + ColorAnsi.RESET;
-            case STONE:
-                return ColorAnsi.ANSI_WHITE.escape() + "●" + ColorAnsi.RESET;
-            default:
-                return "";
-        }
+    public Cost getResourceCost() {
+        return resourceCost;
     }
 
     @Override
-    public int getLevel() {
-        return 0;
+    public LeaderRequirements getLeaderRequirements() {
+        return leaderRequirements;
     }
 }

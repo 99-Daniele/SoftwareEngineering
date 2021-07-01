@@ -1,5 +1,9 @@
 package it.polimi.ingsw.model.cards;
 
+import it.polimi.ingsw.model.cards.developmentCards.Color;
+import it.polimi.ingsw.model.cards.leaderCards.LeaderRequirements;
+import it.polimi.ingsw.model.resourceContainers.Cost;
+import it.polimi.ingsw.model.resourceContainers.Resource;
 import it.polimi.ingsw.view.modelView.CardView;
 
 /**
@@ -15,6 +19,16 @@ public abstract class Card implements CardView {
         this.cardID = cardID;
     }
 
+    @Override
+    public Resource getResource() {
+        return null;
+    }
+
+    @Override
+    public LeaderRequirements getLeaderRequirements() {
+        return null;
+    }
+
     public int getVictoryPoints(){return victoryPoints;}
 
     @Override
@@ -23,12 +37,27 @@ public abstract class Card implements CardView {
     }
 
     @Override
-    public void print() {
-        System.out.println("VICTORY_POINTS: " + victoryPoints + "\nCARD_ID: " + cardID + "\n");
+    public Color getColor() {
+        return null;
     }
 
     @Override
-    public void printSmallInfo() {
-        System.out.println("VICTORY_POINTS: " + victoryPoints + "\n");
+    public Cost getProductionPowerResourceRequired() {
+        return null;
+    }
+
+    @Override
+    public Cost getProductionPowerResourceGiven() {
+        return null;
+    }
+
+    @Override
+    public int getFaithPointsGiven() {
+        return 0;
+    }
+
+    @Override
+    public int getLevel() {
+        return 0;
     }
 }

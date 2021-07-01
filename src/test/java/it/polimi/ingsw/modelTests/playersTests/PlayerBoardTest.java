@@ -323,7 +323,7 @@ public class PlayerBoardTest {
         PlayerBoard p = new PlayerBoard("p1");
 
         InsufficientResourceException thrown =
-                assertThrows(InsufficientResourceException.class, () -> p.activateBasicProduction(r1, r2, 1));
+                assertThrows(InsufficientResourceException.class, () -> p.activateBasicProduction(r1, r2, 0));
 
         String expectedMessage = "You don't have enough resources to do this operation.";
         String actualMessage = thrown.getMessage();
@@ -341,7 +341,7 @@ public class PlayerBoardTest {
         p.increaseWarehouse(r2);
         assertEquals(2, p.sumTotalResource());
 
-        p.activateBasicProduction(r1, r2, 2);
+        p.activateBasicProduction(r1, r2, 1);
         assertEquals(0, p.sumTotalResource());
     }
 
@@ -660,7 +660,7 @@ public class PlayerBoardTest {
 
         assertEquals(3, p.sumTotalResource());
 
-        p.activateBasicProduction(r1, r2, 1);
+        p.activateBasicProduction(r1, r2, 0);
 
         assertEquals(1, p.sumTotalResource());
     }

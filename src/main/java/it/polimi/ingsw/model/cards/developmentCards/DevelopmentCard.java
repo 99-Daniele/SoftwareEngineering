@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.cards.developmentCards;
 
 import it.polimi.ingsw.exceptions.InsufficientResourceException;
 
+import it.polimi.ingsw.model.cards.leaderCards.LeaderRequirements;
 import it.polimi.ingsw.model.player.*;
 import it.polimi.ingsw.model.cards.Card;
 import it.polimi.ingsw.model.resourceContainers.*;
@@ -134,24 +135,7 @@ public class DevelopmentCard extends Card {
         return resourceCost;
     }
 
-    /**
-     * CLI representation of Development Card.
-     */
-    @Override
-    public void print() {
-        System.out.println("\nDEVELOPMENT_CARD:\nCOLOR: " + Color.print(color) + "\nLEVEL: " + level +
-                "\nRESOURCE_COST: " + resourceCost.toString() + "\nPRODUCTION_POWER_RESOURCE_REQUIRED: " +
-                productionPowerResourceRequired.toString() + "\nPRODUCTION_POWER_RESOURCE_GIVEN: " +
-                productionPowerResourceGiven.toString() + "\nFAITH_POINTS_GIVEN: " + faithPointsGiven);
-        super.print();
-    }
-
-    /**
-     * CLI representation of small info of Development Card
-     */
-    @Override
-    public void printSmallInfo() {
-        System.out.println("\nCOLOR: " + Color.print(color));
-        super.printSmallInfo();
+    public int getFaithPointsGiven() {
+        return faithPointsGiven;
     }
 }

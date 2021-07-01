@@ -1128,11 +1128,11 @@ public class YourTurnSceneController {
         }
         chooseBase.setVisible(true);
         chooseBase.setDisable(false);
-        if (ClientView.isLeaderCardActive(GUI.getPosition(), 1)) {
+        if (ClientView.isAdditionalPowerCard(GUI.getPosition(), 1)) {
             chooseLeader1.setVisible(true);
             chooseLeader1.setDisable(false);
         }
-        if (ClientView.isLeaderCardActive(GUI.getPosition(), 2)) {
+        if (ClientView.isAdditionalPowerCard(GUI.getPosition(), 2)) {
             chooseLeader2.setVisible(true);
             chooseLeader2.setDisable(false);
         }

@@ -55,6 +55,10 @@ public class PlayerBoardView {
         return cardsSlotsView.isLeaderCardActive(leaderCard);
     }
 
+    public boolean isAdditionalPowerCard(int leaderCard){
+        return cardsSlotsView.isAdditionalPowerCard(leaderCard);
+    }
+
     public WarehouseStrongboxView getWarehouseStrongboxView() {
         return warehouseStrongboxView;
     }

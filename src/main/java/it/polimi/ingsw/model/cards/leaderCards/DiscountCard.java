@@ -36,10 +36,4 @@ public class DiscountCard extends LeaderCard {
     public void recount(DevelopmentCard card) {
        card.recount(this.getResource());
     }
-
-    @Override
-    public void print() {
-        System.out.println("\nDISCOUNT_CARD");
-        super.print();
-    }
 }

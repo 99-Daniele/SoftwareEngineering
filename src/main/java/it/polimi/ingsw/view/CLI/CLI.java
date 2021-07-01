@@ -314,8 +314,8 @@ public class CLI extends ClientView{
     private Resource choseResource(String text) throws IOException {
         while (true) {
             System.out.println(text);
-            System.out.println(Resource.printResource(Resource.COIN) + " / " + Resource.printResource(Resource.SHIELD)
-                    + " / " + Resource.printResource(Resource.SERVANT) + " / " + Resource.printResource(Resource.STONE));
+            System.out.println(CLIPrinter.printResource(Resource.COIN) + " / " + CLIPrinter.printResource(Resource.SHIELD)
+                    + " / " + CLIPrinter.printResource(Resource.SERVANT) + " / " + CLIPrinter.printResource(Resource.STONE));
             Resource r = correctResource(stdIn.readLine());
             if(r != null)
                 return r;
@@ -513,7 +513,7 @@ public class CLI extends ClientView{
                 break;
             case"-smb":
                 if(isState(GameStates.TAKE_MARBLE_STATE) && getMarbles().size() > 0)
-                    CLIPrinter.printMarbles(super.getGame(), getMarbles());
+                    CLIPrinter.printMarbles(getMarbles());
                 else
                     System.err.println("Illegal command from player");
                 break;
@@ -653,7 +653,7 @@ public class CLI extends ClientView{
             case "marbles":
             case "mb":
                 if(isState(GameStates.TAKE_MARBLE_STATE) && getMarbles().size() > 0)
-                    CLIPrinter.printMarbles(super.getGame(), getMarbles());
+                    CLIPrinter.printMarbles(getMarbles());
                 else
                     System.err.println("Illegal command from player");
                 break;
@@ -1287,10 +1287,10 @@ public class CLI extends ClientView{
     @Override
     public void leaderCardChoice(Message message) {
         MessageFourParameterInt m = (MessageFourParameterInt) message;
-        CLIPrinter.printCard(m.getPar1());
-        CLIPrinter.printCard(m.getPar2());
-        CLIPrinter.printCard(m.getPar3());
-        CLIPrinter.printCard(m.getPar4());
+        CLIPrinter.printLeaderCard(m.getPar1());
+        CLIPrinter.printLeaderCard(m.getPar2());
+        CLIPrinter.printLeaderCard(m.getPar3());
+        CLIPrinter.printLeaderCard(m.getPar4());
         notifyMessage(m);
     }
 
@@ -1427,7 +1427,7 @@ public class CLI extends ClientView{
         String serverMessage;
         if(m.getPar1() != -1) {
             if(m.getClientID() != position) {
-                serverMessage = "Player " + getNickname(m.getClientID()) + " has inserted 1 " + Resource.printResource(m.getResource())
+                serverMessage = "Player " + getNickname(m.getClientID()) + " has inserted 1 " + CLIPrinter.printResource(m.getResource())
                         + " in its " + m.getPar1() + "° depot";
                 if(isGameStarted())
                     System.out.println(serverMessage);
@@ -1438,7 +1438,7 @@ public class CLI extends ClientView{
                 CLIPrinter.printWarehouse(super.getGame(), position);
         }
         else if(m.getClientID() != position) {
-            serverMessage = "Player " + getNickname(m.getClientID()) + " has discarded 1 " + Resource.printResource(m.getResource())
+            serverMessage = "Player " + getNickname(m.getClientID()) + " has discarded 1 " + CLIPrinter.printResource(m.getResource())
                     + " marble";
             if(isGameStarted())
                 System.out.println(serverMessage);
@@ -1496,7 +1496,7 @@ public class CLI extends ClientView{
         MessageOneIntOneResource m = (MessageOneIntOneResource) message;
         super.extraDepotMessage(message);
         if(m.getClientID() != position) {
-            System.out.println("Player " + getNickname(m.getClientID()) + " has a new extra depot of " + Resource.printResource(m.getResource()));
+            System.out.println("Player " + getNickname(m.getClientID()) + " has a new extra depot of " + CLIPrinter.printResource(m.getResource()));
         }
         else
             CLIPrinter.printWarehouse(super.getGame(), position);
@@ -1556,7 +1556,7 @@ public class CLI extends ClientView{
         MessageArrayListMarble m = (MessageArrayListMarble) message;
         super.takeMarbleMessage(message);
         System.out.println("You have chosen this marbles: ");
-        CLIPrinter.printMarbles(super.getGame(), m.getMarbles());
+        CLIPrinter.printMarbles(m.getMarbles());
     }
 
     /**

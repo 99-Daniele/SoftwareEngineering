@@ -11,22 +11,4 @@ public enum Resource {
     SERVANT,
     SHIELD,
     STONE;
-
-    /**
-     * @param resource is a resource.
-     * @return a CLI representation of @param resource.
-     */
-    public static String printResource(Resource resource){
-        switch (resource){
-            case SERVANT:
-                return ColorAnsi.ANSI_PURPLE.escape() + resource + ColorAnsi.RESET;
-            case SHIELD:
-                return ColorAnsi.ANSI_CYAN.escape() + resource + ColorAnsi.RESET;
-            case STONE:
-                return ColorAnsi.ANSI_WHITE.escape() + resource + ColorAnsi.RESET;
-            case COIN:
-                return ColorAnsi.ANSI_YELLOW.escape() + resource + ColorAnsi.RESET;
-        }
-        return null;
-    }
 }

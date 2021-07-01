@@ -1,6 +1,9 @@
 package it.polimi.ingsw.view.modelView;
 
+import it.polimi.ingsw.model.cards.developmentCards.DevelopmentCard;
+import it.polimi.ingsw.model.cards.leaderCards.LeaderCard;
 import it.polimi.ingsw.parser.CardMapCLI;
+import it.polimi.ingsw.view.CLI.CLIPrinter;
 import it.polimi.ingsw.view.CLI.ColorAnsi;
 
 import java.util.ArrayList;
@@ -121,6 +124,17 @@ public class CardsSlotsView {
     }
 
     /**
+     * @param leaderCard is one player's LeaderCard (1 or 2).
+     * @return if @param leaderCard is an active AdditionalProductionPowerCard.
+     */
+    public boolean isAdditionalPowerCard(int leaderCard){
+        if(leaderCard == 1)
+            return firstLeaderCard >= 61 && firstActive;
+        else
+            return secondLeaderCard >= 61 && secondActive;
+    }
+
+    /**
      * @param slot is one player's slot (1 or 3).
      * @return if @param slot is empty.
      */
@@ -190,10 +204,10 @@ public class CardsSlotsView {
      * the other ones only small information (color and victory points).
      */
     private void printSlot(LinkedList <Integer> slot){
-        CardMapCLI.getCard(slot.getLast()).print();
+        CLIPrinter.printDevelopmentCard(slot.getLast());
         for(int i = slot.size() - 2; i >= 0; i--) {
             System.out.println("CARD " + (i+1) + ": ");
-            CardMapCLI.getCard(slot.get(i)).printSmallInfo();
+            CLIPrinter.printDevelopmentCardSmallInfo(slot.getLast());
         }
     }
 
@@ -203,14 +217,14 @@ public class CardsSlotsView {
     public void printCliLeaderCard(){
         System.out.println("\nLEADER_CARDS: ");
         if(firstLeaderCard != -1) {
-            CardMapCLI.getCard(firstLeaderCard).print();
+            CLIPrinter.printLeaderCard(firstLeaderCard);
             if(firstActive)
                 System.out.println("ACTIVE: " + ColorAnsi.ANSI_GREEN.escape() + "TRUE" + ColorAnsi.RESET);
             else
                 System.out.println("ACTIVE: " + ColorAnsi.ANSI_RED.escape() + "FALSE" + ColorAnsi.RESET);
         }
         if (secondLeaderCard != -1) {
-            CardMapCLI.getCard(secondLeaderCard).print();
+            CLIPrinter.printLeaderCard(secondLeaderCard);
             if(secondActive)
                 System.out.println("ACTIVE: " + ColorAnsi.ANSI_GREEN.escape() + "TRUE" + ColorAnsi.RESET);
             else

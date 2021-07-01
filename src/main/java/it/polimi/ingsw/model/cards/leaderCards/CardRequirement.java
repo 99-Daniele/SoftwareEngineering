@@ -49,6 +49,10 @@ public class CardRequirement {
         return numOfCards;
     }
 
+    public ArrayList<Integer> getLevels() {
+        return levels;
+    }
+
     /**
      * this method increase the number of cards by 1 unit.
      */
@@ -83,50 +87,5 @@ public class CardRequirement {
                 return false;
         }
         return true;
-    }
-
-    /**
-     * @return CLI representation of Card Requirement
-     */
-    @Override
-    public String toString() {
-        String s1 = numOfCards + "";
-        String s2 = null;
-        switch (color) {
-            case BLUE:
-                s2 = (ColorAnsi.ANSI_CYAN.escape() + " █ " + ColorAnsi.RESET);
-                break;
-            case GREEN:
-                s2 = (ColorAnsi.ANSI_GREEN.escape() + " █ " + ColorAnsi.RESET);
-                break;
-            case PURPLE:
-                s2 = (ColorAnsi.ANSI_PURPLE.escape() + " █ " + ColorAnsi.RESET);
-                break;
-            case YELLOW:
-                s2 = (ColorAnsi.ANSI_YELLOW.escape() + " █ " + ColorAnsi.RESET);
-                break;
-        }
-        String s3 = null;
-        if(numOfCards > 1){
-            switch (color) {
-                case BLUE:
-                    s3 = (ColorAnsi.ANSI_CYAN.escape() + "█" + ColorAnsi.RESET);
-                    break;
-                case GREEN:
-                    s3 = (ColorAnsi.ANSI_GREEN.escape() + "█" + ColorAnsi.RESET);
-                    break;
-                case PURPLE:
-                    s3 = (ColorAnsi.ANSI_PURPLE.escape() + "█" + ColorAnsi.RESET);
-                    break;
-                case YELLOW:
-                    s3 = (ColorAnsi.ANSI_YELLOW.escape() + "█" + ColorAnsi.RESET);
-                    break;
-            }
-        }
-        else if(levels.get(0) == 2)
-            s3 = "lvl 2";
-        else
-            s3 = "";
-        return s1 + s2 + s3;
     }
 }

@@ -155,9 +155,15 @@ public class Cost {
         addResource(resource, 1);
     }
 
-    @Override
-    public String toString() {
-        return resourceContainers.toString();
+    /**
+     * @param resource is one resource
+     * @return the resourceContainer in resourceContainers which contains @param resource. If there isn't any one @return null.
+     */
+    public ResourceContainer getResourceContainer(Resource resource){
+        for(ResourceContainer resourceContainer: resourceContainers)
+            if(resourceContainer.getResource() == resource)
+                return resourceContainer;
+        return null;
     }
 
 }

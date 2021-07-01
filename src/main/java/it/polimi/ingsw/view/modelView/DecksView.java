@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.modelView;
 
 import it.polimi.ingsw.parser.CardMapCLI;
+import it.polimi.ingsw.view.CLI.CLIPrinter;
 
 import java.util.*;
 
@@ -87,23 +88,23 @@ public class DecksView {
         for (int j = 0; j < 4; j++) {
             System.out.println("Deck " + 1 + " - " + (j + 1) + ":");
             if (firstLevelCards.get(j) == -1)
-                System.out.println("empty");
+                System.out.println("\nEMPTY\n");
             else
-                CardMapCLI.getCard(firstLevelCards.get(j)).print();
+                CLIPrinter.printDevelopmentCard(firstLevelCards.get(j));
         }
         for (int j = 0; j < 4; j++) {
             System.out.println("Deck " + 2 + " - " + (j + 1));
             if (secondLevelCards.get(j) == -1)
-                System.out.println("empty");
+                System.out.println("\nEMPTY\n");
             else
-                CardMapCLI.getCard(secondLevelCards.get(j)).print();
+                CLIPrinter.printDevelopmentCard(secondLevelCards.get(j));
         }
         for (int j = 0; j < 4; j++) {
             System.out.println("Deck " + 3 + " - " + (j + 1));
             if (thirdLevelCards.get(j) == -1)
-                System.out.println("empty");
+                System.out.println("\nEMPTY\n");
             else
-                CardMapCLI.getCard(thirdLevelCards.get(j)).print();
+                CLIPrinter.printDevelopmentCard(thirdLevelCards.get(j));
         }
     }
 }

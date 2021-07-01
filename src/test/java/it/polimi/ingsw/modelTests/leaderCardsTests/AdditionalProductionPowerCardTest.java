@@ -23,7 +23,7 @@ public class AdditionalProductionPowerCardTest {
         Cost c = new Cost();
         LeaderCard card = new AdditionalProductionPowerCard(r1, c, 2, 1);
 
-        assertEquals(0, card.getVictoryPoints());
+        assertEquals(0, card.getCurrentVictoryPoints());
 
         Warehouse w = new Warehouse();
         Strongbox s = new Strongbox();

@@ -13,13 +13,7 @@ public interface MarketView {
 
     void slideRow(int selectedRow);
 
-    void printMarketCli();
-
-    void printRow(int row);
-
-    void printColumn(int column);
-
-    void printMarbles(ArrayList<Marble> marbles);
+    Marble[][] getMarketTray();
 
     Marble getMarble(int row, int column);
 

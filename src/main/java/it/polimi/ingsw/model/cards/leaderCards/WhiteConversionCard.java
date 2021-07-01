@@ -22,10 +22,4 @@ public class WhiteConversionCard extends LeaderCard {
     public boolean whiteConversion() {
         return isActive();
     }
-
-    @Override
-    public void print() {
-        System.out.println("\nWHITE_CONVERSION_CARD");
-        super.print();
-    }
 }

@@ -50,27 +50,4 @@ public class ResourceContainer {
             return temp;
         }
     }
-
-    public String toString() {
-        return (print());
-    }
-
-    public String print(){
-        String s = "";
-        switch (resource) {
-            case COIN:
-                s = (ColorAnsi.ANSI_YELLOW.escape() + "● " + ColorAnsi.RESET+amount);
-                break;
-            case SERVANT:
-                s = (ColorAnsi.ANSI_PURPLE.escape() + "● " + ColorAnsi.RESET+amount);
-                break;
-            case SHIELD:
-                s = (ColorAnsi.ANSI_CYAN.escape() + "● " + ColorAnsi.RESET+amount);
-                break;
-            case STONE:
-                s = (ColorAnsi.ANSI_WHITE.escape() + "● " + ColorAnsi.RESET+amount);
-                break;
-        }
-        return s;
-    }
 }

@@ -23,7 +23,7 @@ public class DiscountCardTest {
         Cost c = new Cost();
         LeaderCard card = new DiscountCard(r1, c, 2, 0);
 
-        assertEquals(0, card.getVictoryPoints());
+        assertEquals(0, card.getCurrentVictoryPoints());
 
         Warehouse w = new Warehouse();
         Strongbox s = new Strongbox();

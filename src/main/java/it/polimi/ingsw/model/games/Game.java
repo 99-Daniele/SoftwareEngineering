@@ -160,7 +160,7 @@ public class Game extends Observable implements LightGame{
     /**
      * mix all players to casual positions.
      */
-    private void shufflePlayers(){
+    public void shufflePlayers(){
         ArrayList<PlayerBoard> newPlayersPosition = new ArrayList<>();
         for(int count = players.size(); count > 0; count --){
             int i = (int) (Math.random() * count);

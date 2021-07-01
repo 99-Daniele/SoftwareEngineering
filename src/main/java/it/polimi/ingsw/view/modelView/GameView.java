@@ -172,6 +172,10 @@ public class GameView {
         return players.get(player).isLeaderCardActive(leaderCard);
     }
 
+    public boolean isAdditionalPowerCard(int player, int leaderCard){
+        return players.get(player).isAdditionalPowerCard(leaderCard);
+    }
+
     public boolean isSlotEmpty(int viewID, int slot){
         return players.get(viewID).getCardsSlotsView().isSlotEmpty(slot);
     }

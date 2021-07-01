@@ -150,6 +150,5 @@ public class ActivateProductionState implements GameState {
 
     @Override
     public void removeMarble(Marble m) {
-
     }
 }

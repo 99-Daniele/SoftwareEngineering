@@ -245,7 +245,7 @@ public class PlayerBoard extends SimplePlayerBoard{
             throw new AlreadyDiscardLeaderCardException();
         LeaderRequirements leaderRequirements = createMyLeaderRequirements();
         boolean extraDepot = leaderCards.get(chosenLeaderCard -1).activateCard(warehouse, strongbox, leaderRequirements);
-        victoryPoints.increaseVictoryPointsByCards(leaderCards.get(chosenLeaderCard -1).getVictoryPoints());
+        victoryPoints.increaseVictoryPointsByCards(leaderCards.get(chosenLeaderCard -1).getCurrentVictoryPoints());
         if(chosenLeaderCard == 2 && !leaderCards.get(0).isActive())
             swap(leaderCards, 0, 1);
         return extraDepot;

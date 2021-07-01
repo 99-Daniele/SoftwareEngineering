@@ -79,8 +79,4 @@ public class LeaderRequirements {
         return new CardRequirement(color, 0, 0);
     }
 
-    @Override
-    public String toString() {
-        return cardRequirements.toString();
-    }
 }

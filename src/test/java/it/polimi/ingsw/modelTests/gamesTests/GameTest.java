@@ -68,6 +68,8 @@ public class GameTest {
             assertFalse(game.allPlayersConnected());
             game.createPlayer("Daniela");
             assertTrue(game.allPlayersConnected());
+            game.shufflePlayers();
+            assertTrue(game.allPlayersConnected());
         } catch (AlreadyTakenNicknameException e) {
             e.printStackTrace();
         }
@@ -297,24 +299,27 @@ public class GameTest {
         assertEquals(16, leaderCards.size());
 
         assertSame(Resource.SERVANT, leaderCards.get(0).getResource());
-        assertEquals(0, leaderCards.get(0).getVictoryPoints());
+        assertEquals(0, leaderCards.get(0).getCurrentVictoryPoints());
+        assertEquals(2, leaderCards.get(0).getVictoryPoints());
         assertFalse(leaderCards.get(0).isActive());
         assertTrue(leaderCards.get(0).getCardID() > 48);
         assertTrue(leaderCards.get(0).getCardID() < 65);
 
         assertSame(Resource.COIN, leaderCards.get(15).getResource());
-        assertEquals(0, leaderCards.get(15).getVictoryPoints());
+        assertEquals(0, leaderCards.get(15).getCurrentVictoryPoints());
+        assertEquals(4, leaderCards.get(15).getVictoryPoints());
         assertFalse(leaderCards.get(15).isActive());
         assertTrue(leaderCards.get(15).getCardID() > 48);
         assertTrue(leaderCards.get(15).getCardID() < 65);
 
         assertSame(Resource.SERVANT, leaderCards.get(5).getResource());
-        assertEquals(0, leaderCards.get(5).getVictoryPoints());
+        assertEquals(0, leaderCards.get(5).getCurrentVictoryPoints());
+        assertEquals(3, leaderCards.get(5).getVictoryPoints());
         assertFalse(leaderCards.get(5).isActive());
         assertTrue(leaderCards.get(5).getCardID() > 48);
         assertTrue(leaderCards.get(5).getCardID() < 65);
         /*
-         victory points are set at 0 because cards are not active.
+         current victory points are set at 0 because cards are not active.
          */
     }
 
