@@ -10,7 +10,7 @@ import it.polimi.ingsw.model.resourceContainers.Cost;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-class SinglePlayerGameTest {
+public class SinglePlayerGameTest {
 
     /**
      * test that controls the case in which if there aren't enough cards in the deck it takes the cards from the deck whit

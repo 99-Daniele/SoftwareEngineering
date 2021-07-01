@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-class GameTest {
+public class GameTest {
 
     /**
      * this test tries to create a player with an already taken nickname.

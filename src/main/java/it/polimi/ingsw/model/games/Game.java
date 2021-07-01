@@ -520,7 +520,7 @@ public class Game extends Observable implements LightGame{
     /**
      * @param deckRow is the row of the chosen deck.
      * @param deckColumn is the column of the chosen deck.
-     * @return an ArrayList </Integer> of slots where @card can be inserted.
+     * @return an ArrayList Integer of slots where @card can be inserted.
      * @throws EmptyDevelopmentCardDeckException if player has chosen an empty deck.
      */
     public ArrayList<Integer> findAvailableSlots(int deckRow, int deckColumn)

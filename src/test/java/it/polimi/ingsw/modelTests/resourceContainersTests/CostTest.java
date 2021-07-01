@@ -8,7 +8,7 @@ import it.polimi.ingsw.model.resourceContainers.*;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-class CostTest {
+public class CostTest {
 
     final Resource r1 = Resource.COIN;
     final Resource r2 = Resource.SERVANT;
