@@ -21,7 +21,7 @@ public class ControllerGame implements Observer {
     private TurnController turnController;
     private LinkedList<View> views;
     private GameStartingState state;
-    private final ArrayList<ArrayList<LeaderCard>> leaderCards;
+    private ArrayList<ArrayList<LeaderCard>> leaderCards;
 
     public ControllerGame() {
         views = new LinkedList<>();
@@ -41,6 +41,7 @@ public class ControllerGame implements Observer {
             System.out.println("GAME ENDED");
         gameManager = null;
         views = new LinkedList<>();
+        leaderCards = null;
         state = GameStartingState.WAITING_NUM_PLAYERS;
         ControllerConnection.newGame();
     }

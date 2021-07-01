@@ -53,22 +53,22 @@
         <Button fx:id="chooseSlot3" layoutX="475.0" layoutY="371.0" mnemonicParsing="false" text="Choose slot" visible="false" />
         <Label layoutX="601.0" prefHeight="37.0" prefWidth="222.0" text="DECKS">
             <font>
-                <Font name="Bell MT" size="24.0" />
+                <Font name="SansSerif Regular" size="24.0" />
             </font>
         </Label>
         <Label layoutX="1046.0" prefHeight="37.0" prefWidth="222.0" text="MARKET">
             <font>
-                <Font name="Bell MT" size="24.0" />
+                <Font name="SansSerif Regular" size="24.0" />
             </font>
         </Label>
         <Label layoutY="414.0" prefHeight="35.0" prefWidth="216.0" text="LEADER CARDS">
             <font>
-                <Font name="Bell MT" size="24.0" />
+                <Font name="SansSerif Regular" size="24.0" />
             </font>
         </Label>
         <Label layoutX="-6.0" layoutY="1.0" prefHeight="35.0" prefWidth="237.0" text="PLAYERBOARD">
             <font>
-                <Font name="Bell MT" size="24.0" />
+                <Font name="SansSerif Regular" size="24.0" />
             </font>
         </Label>
         <RadioButton fx:id="radiobutBuyCard" layoutX="279.0" layoutY="478.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="115.0" text="BUY CARD">
@@ -77,12 +77,12 @@
             </toggleGroup>
         </RadioButton>
         <RadioButton fx:id="radiobutTakeMarble" layoutX="450.0" layoutY="521.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="108.0" text="TAKE MARBLE" toggleGroup="$mainAction" />
-        <RadioButton fx:id="radiobutActivProduc" layoutX="279.0" layoutY="521.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="171.0" text="ACTIVATE PRODUCTION" toggleGroup="$mainAction" />
-        <RadioButton fx:id="radiobutActLeader" layoutX="279.0" layoutY="558.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="183.0" text="ACTIVATE LEADER CARD" toggleGroup="$mainAction" />
+        <RadioButton fx:id="radiobutActivProduc" layoutX="279.0" layoutY="521.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="163.0" text="ACTIVATE PRODUCTION" toggleGroup="$mainAction" />
+        <RadioButton fx:id="radiobutActLeader" layoutX="279.0" layoutY="558.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="163.0" text="ACTIVATE LEADER CARD" toggleGroup="$mainAction" />
         <RadioButton fx:id="radiobutDiscardLeader" layoutX="279.0" layoutY="595.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="171.0" text="DISCARD LEADER CARD" toggleGroup="$mainAction" />
         <Label layoutX="279.0" layoutY="420.0" prefHeight="30.0" prefWidth="258.0" text="CHOOSE AN ACTION:">
             <font>
-                <Font name="Bell MT" size="24.0" />
+                <Font name="SansSerif Regular" size="24.0" />
             </font>
         </Label>
         <Button fx:id="chooseLeader1" layoutX="17.0" layoutY="624.0" mnemonicParsing="false" text="Choose card" visible="false" />
@@ -188,7 +188,7 @@
         </ImageView>
         <ImageView fx:id="marbleExt" fitHeight="23.0" fitWidth="23.0" layoutX="1189.0" layoutY="74.0">
         </ImageView>
-        <RadioButton fx:id="radiobutOtherPlayboard" layoutX="279.0" layoutY="628.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="222.0" text="SEE OTHER PLAYERBOARD" toggleGroup="$mainAction" />
+        <RadioButton fx:id="radiobutOtherPlayboard" layoutX="279.0" layoutY="628.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="171.0" text="SEE OTHER PLAYERBOARD" toggleGroup="$mainAction" />
         <RadioButton fx:id="radiobutEndGame" layoutX="450.0" layoutY="595.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="222.0" text="END GAME" toggleGroup="$mainAction" visible="false" />
         <ImageView fx:id="leader2" disable="true" fitHeight="166.0" fitWidth="108.0" layoutX="134.0" layoutY="451.0">
         </ImageView>
@@ -220,7 +220,7 @@
         </Label>
         <Label fx:id="message" alignment="TOP_CENTER" layoutX="344.0" layoutY="118.0" prefHeight="345.0" prefWidth="644.0" style="-fx-background-color: white;" textAlignment="CENTER" visible="false" wrapText="true">
             <font>
-                <Font name="Bell MT" size="36.0" />
+                <Font name="SansSerif Regular" size="36.0" />
             </font>
         </Label>
         <Button fx:id="yes" layoutX="472.0" layoutY="335.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="72.0" text="YES" visible="false" />

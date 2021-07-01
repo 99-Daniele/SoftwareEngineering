@@ -17,10 +17,12 @@ public class ServerSocket implements Runnable {
     private final Socket socket;
     private ControllerGame controllerGame;
     private final VirtualView virtualView;
+    private Object lock;
 
-    public ServerSocket(Socket socket) throws IOException {
+    public ServerSocket(Socket socket, Object lock) throws IOException {
         this.socket = socket;
         this.virtualView = new VirtualView(socket);
+        this.lock=lock;
     }
 
     /**
@@ -31,8 +33,10 @@ public class ServerSocket implements Runnable {
             virtualView.start();
             while (true) {
                 try {
-                    controllerGame = ControllerConnection.ConnectionPlayers();
-                    controllerGame.addView(virtualView);
+                    synchronized (lock) {
+                        controllerGame = ControllerConnection.ConnectionPlayers();
+                        controllerGame.addView(virtualView);
+                    }
                     break;
                 } catch (FullGameException ignored) {}
             }
