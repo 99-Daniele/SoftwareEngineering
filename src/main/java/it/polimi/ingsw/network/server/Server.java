@@ -10,6 +10,7 @@ import java.net.Socket;
 public class Server {
 
     private final int port;
+    private Object lock= new Object();
 
     public Server(){
         port = 12460;
@@ -35,7 +36,7 @@ public class Server {
             try {
                 Socket socket = serverSocket.accept();
                 System.out.println("\nNew Client\n");
-                Thread thread = new Thread(new ServerSocket(socket));
+                Thread thread = new Thread(new ServerSocket(socket, lock));
                 thread.start();
             } catch (IOException e) {
                 System.err.println(e.getMessage());
