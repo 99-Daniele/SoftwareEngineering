@@ -77,7 +77,7 @@ public class SinglePlayerGame extends Game implements LightSinglePlayerGame {
     }
 
     /**
-     * this method shuffle actions, creating a new ArrayList</Action>.
+     * this method shuffle actions, creating a new ArrayList Action.
      * for each action remove a random one from actions and add to newActions, then set actions as newActions.
      */
     @Override

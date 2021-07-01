@@ -8,7 +8,7 @@ import it.polimi.ingsw.model.player.depots.*;
 import java.util.ArrayList;
 
 /**
- * Warehouse is player's warehouse. It has two attributes: a WarehouseDepot[3] warehouseDepots and an ArrayList</ExtraDepot>
+ * Warehouse is player's warehouse. It has two attributes: a WarehouseDepot[3] warehouseDepots and an ArrayList ExtraDepot
  * which is initialized after player actives an ExtraDepotLeaderCard.
  */
 public class Warehouse{
@@ -36,7 +36,7 @@ public class Warehouse{
     /**
      * @param resource stands for the resource of new ExtraDepot which has to be added in extraDepots.
      *
-     * if extraDepots wasn't previously initialized, it creates a new ArrayList</ExtraDepot>.
+     * if extraDepots wasn't previously initialized, it creates a new ArrayList ExtraDepot.
      */
     public void addExtraDepot(Resource resource){
         ExtraDepot extraDepot = new ExtraDepot(resource);

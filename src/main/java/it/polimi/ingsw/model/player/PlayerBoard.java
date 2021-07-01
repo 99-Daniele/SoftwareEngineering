@@ -115,7 +115,7 @@ public class PlayerBoard extends SimplePlayerBoard{
 
     /**
      * @param card is DevelopmentCard to buy.
-     * @return an ArrayList </Integer> of slots where @card can be inserted.
+     * @return an ArrayList Integer of slots where @card can be inserted.
      *
      * for each slot verifies if @param card has the required level and in case add to @param slots.
      */
