@@ -103,4 +103,26 @@ public class DeckTest {
         assertTrue(d.isEmpty());
         assertEquals(0, d.numberOfCards());
     }
+
+    /**
+     * this test verifies the correct get row and column of Deck
+     */
+    @Test
+    void getRowGetColumn(){
+
+        Deck d1 = new Deck(Color.GREEN, 1);
+        Deck d2 = new Deck(Color.PURPLE, 2);
+        Deck d3 = new Deck(Color.YELLOW, 3);
+        Deck d4 = new Deck(Color.BLUE, 1);
+
+        assertEquals(0, d1.getRow());
+        assertEquals(1, d2.getRow());
+        assertEquals(2, d3.getRow());
+        assertEquals(0, d4.getRow());
+
+        assertEquals(0, d1.getColumn());
+        assertEquals(1, d2.getColumn());
+        assertEquals(3, d3.getColumn());
+        assertEquals(2, d4.getColumn());
+    }
 }
