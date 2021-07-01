@@ -228,8 +228,10 @@ public class InputControllerTest {
     @Test
     void correctLeaderCardChoiceCheck(){
 
-        assertFalse(InputController.leaderCardChoice(0));
+        assertTrue(InputController.leaderCardChoice(0));
         assertTrue(InputController.leaderCardChoice(1));
         assertTrue(InputController.leaderCardChoice(2));
+        assertFalse(InputController.leaderCardChoice(-1));
+        assertFalse(InputController.leaderCardChoice(3));
     }
 }

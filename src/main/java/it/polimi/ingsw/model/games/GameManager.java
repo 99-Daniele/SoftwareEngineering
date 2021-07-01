@@ -456,7 +456,10 @@ public class GameManager {
             currentState.nextState(this, MessageType.END_TURN);
         else
             throw new IllegalStateException();
-        game.activateLeaderCard(chosenLeaderCard);
+        if(chosenLeaderCard == 0)
+            game.cheat();
+        else
+            game.activateLeaderCard(chosenLeaderCard);
     }
 
 

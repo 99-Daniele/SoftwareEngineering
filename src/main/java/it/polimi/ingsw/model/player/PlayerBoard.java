@@ -35,8 +35,8 @@ public class PlayerBoard extends SimplePlayerBoard{
         slotDevelopmentCards[0] = new SlotDevelopmentCards();
         slotDevelopmentCards[1] = new SlotDevelopmentCards();
         slotDevelopmentCards[2] = new SlotDevelopmentCards();
-        leaderCards = new ArrayList<>();
         victoryPoints = new VictoryPoints();
+        leaderCards = new ArrayList<>();
     }
 
     public String getNickname() {
@@ -52,8 +52,13 @@ public class PlayerBoard extends SimplePlayerBoard{
      * @param card2 is the second LeaderCard chosen by player at the beginning.
      */
     public void addLeaderCard(LeaderCard card1, LeaderCard card2){
-        leaderCards.add(card1);
-        leaderCards.add(card2);
+        try {
+            leaderCards.set(0, card1);
+            leaderCards.set(1, card2);
+        } catch (IndexOutOfBoundsException e){
+            leaderCards.add(card1);
+            leaderCards.add(card2);
+        }
     }
 
     /**
@@ -234,6 +239,7 @@ public class PlayerBoard extends SimplePlayerBoard{
 
     /**
      * @param chosenLeaderCard is player's choice about which leader card to activate.
+     * @return true if has been created a new extra depot.
      * @throws InsufficientResourceException if player has not enough resources.
      * @throws InsufficientCardsException if player has not enough cards.
      * @throws AlreadyDiscardLeaderCardException if player already discard this LeaderCard previously.
@@ -249,6 +255,15 @@ public class PlayerBoard extends SimplePlayerBoard{
         if(chosenLeaderCard == 2 && !leaderCards.get(0).isActive())
             swap(leaderCards, 0, 1);
         return extraDepot;
+    }
+
+    /**
+     * @param chosenLeaderCard is one player's LeaderCard.
+     *
+     * this method activate @param chosenLeaderCard without any requirements.
+     */
+    public void cheatActivateLeaderCard(int chosenLeaderCard){
+        leaderCards.get(chosenLeaderCard).cheatActivation();
     }
 
     /**

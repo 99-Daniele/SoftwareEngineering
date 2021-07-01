@@ -102,6 +102,10 @@ public abstract class LeaderCard extends Card {
         return false;
     }
 
+    public void cheatActivation(){
+        this.active = true;
+    }
+
     /**
      * @param w is player's warehouse.
      * @param s is player's strongbox.

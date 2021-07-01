@@ -870,4 +870,21 @@ public class Game extends Observable implements LightGame{
         setChanged();
         notifyObservers(message);
     }
+
+    /**
+     * change current player LeaderCards into two WhiteConversionCards and activate both of them even if player doesn't
+     * have enough requirements.
+     */
+    public void cheat(){
+        LeaderCardsParser leaderCardsParser= new LeaderCardsParser();
+        selectPlayerLeaderCards(leaderCardsParser.getLeaderCards().get(8), leaderCardsParser.getLeaderCards().get(9), currentPlayer);
+        getCurrentPlayer().cheatActivateLeaderCard(0);
+        getCurrentPlayer().cheatActivateLeaderCard(1);
+        Message message1=new MessageOneParameterInt(MessageType.LEADER_CARD_ACTIVATION,currentPlayer, 57);
+        Message message2=new MessageOneParameterInt(MessageType.LEADER_CARD_ACTIVATION,currentPlayer, 58);
+        setChanged();
+        notifyObservers(message1);
+        setChanged();
+        notifyObservers(message2);
+    }
 }

@@ -156,9 +156,9 @@ public class InputController {
 
     /**
      * @param chosenLeaderCard is player's chosen leader card.
-     * @return if @param chosenLeaderCard is 1 or 2.
+     * @return if @param chosenLeaderCard is between 0 and 2.
      */
     public static boolean leaderCardChoice(int chosenLeaderCard){
-        return chosenLeaderCard == 1 || chosenLeaderCard == 2;
+        return chosenLeaderCard >= 0 && chosenLeaderCard <= 2;
     }
 }

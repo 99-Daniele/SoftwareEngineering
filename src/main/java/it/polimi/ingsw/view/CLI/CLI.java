@@ -271,7 +271,7 @@ public class CLI extends ClientView{
     }
 
     /**
-     * @throws IOException if occurs a problem with readLine.
+     * @throws IOException if occurs a problem with readLine or sendMessage.
      *
      * in case it's the first player, do nothing.
      * in case it's the second or third player, ask him to chose one resource and send ONE_FIRST_RESOURCE message to Server.
@@ -388,7 +388,7 @@ public class CLI extends ClientView{
     }
 
     /**
-     * @throws IOException if occurs a problem with readLine.
+     * @throws IOException if occurs a problem with readLine or sendMessage.
      * @throws InterruptedException if connection with Server crash at any moment.
      *
      * constantly interpret any player command.
@@ -411,7 +411,7 @@ public class CLI extends ClientView{
 
     /**
      * @param command is player's command input.
-     * @throws IOException if occurs a problem with readLine.
+     * @throws IOException if occurs a problem with readLine or sendMessage.
      * @throws InterruptedException if connection with Server crash at any moment.
      *
      * command interpret of player input.
@@ -438,7 +438,7 @@ public class CLI extends ClientView{
     }
 
     /**
-     * @throws IOException if occurs a problem with file readLine.
+     * @throws IOException if occurs a problem with file readLine or sendMessage.
      *
      * print a different help file which summarize all possible commands based on different states of the game.
      */
@@ -477,7 +477,7 @@ public class CLI extends ClientView{
 
     /**
      * @param command is player's command input.
-     * @throws IOException if occurs a problem with readLine.
+     * @throws IOException if occurs a problem with readLine or sendMessage.
      *
      * switch all possible one string command and start different procedure for anyone of them.
      */
@@ -526,6 +526,9 @@ public class CLI extends ClientView{
             case "-et":
                 endTurnRequest();
                 break;
+            case "-cheat":
+                cheatRequest();
+                break;
             default:
                 System.err.println("Illegal command from player");
                 break;
@@ -533,7 +536,7 @@ public class CLI extends ClientView{
     }
 
     /**
-     * @throws IOException if occurs a problem with readLine.
+     * @throws IOException if occurs a problem with readLine or sendMessage.
      *
      * in case it's player's turn and currentState is ACTIVATE_PRODUCTION_STATE, send a new END_PRODUCTION message to Server.
      */
@@ -551,7 +554,7 @@ public class CLI extends ClientView{
     }
 
     /**
-     * @throws IOException if occurs a problem with readLine.
+     * @throws IOException if occurs a problem with readLine or sendMessage.
      *
      * in case it's player's turn and currentState is END_TURN_STATE, send a new END_TURN message to Server.
      */
@@ -569,8 +572,27 @@ public class CLI extends ClientView{
     }
 
     /**
+     * @throws IOException if occurs a problem with readLine or sendMessage.
+     *
+     * this command cheats the game. Send to server a new LEADER_ACTIVATION with leaderCard = 0. In this case Server
+     * change player's LeaderCard with two WhiteConversionCard and active them without having enough requirements.
+     */
+    private void cheatRequest() throws IOException{
+        if(!turn) {
+            System.err.println("It's not your turn");
+            return;
+        }
+        if(isState(GameStates.FIRST_ACTION_STATE) || isState(GameStates.END_TURN_STATE)) {
+            ClientView.setLeaderCard(position, 57, 58);
+            ClientSocket.sendMessage(new MessageOneParameterInt(MessageType.LEADER_CARD_ACTIVATION, position, 0));
+        }
+        else
+            System.err.println("You can't do this operation at this moment");
+    }
+
+    /**
      * @param command is player's command input.
-     * @throws IOException if occurs a problem with readLine.
+     * @throws IOException if occurs a problem with readLine or sendMessage.
      *
      * switch all possible two string command and start different procedure for anyone of them.
      */
@@ -665,7 +687,7 @@ public class CLI extends ClientView{
 
     /**
      * @param marble is player's chosen marble.
-     * @throws IOException if occurs a problem with readLine.
+     * @throws IOException if occurs a problem with sendMessage or sendMessage.
      * @throws InterruptedException if connection with Server crash at any moment.
      *
      * if exists chosen marbles, send a new USE_MARBLE message to Server.
@@ -707,7 +729,7 @@ public class CLI extends ClientView{
     }
 
     /**
-     * @throws IOException if occurs a problem with readLine.
+     * @throws IOException if occurs a problem with readLine or sendMessage.
      *
      * ask to player which of his two active WhiteConversionCad want to use to convert chosen white marble.
      */
@@ -730,45 +752,54 @@ public class CLI extends ClientView{
 
     /**
      * @param leader is one player's LeaderCard.
-     * @throws IOException if occurs a problem with readLine.
+     * @throws IOException if occurs a problem with readLine or sendMessage.
      *
-     * send a new LEADER_CARD_ACTIVATION message to Server.
+     * it it's player's turn and currentState is FIRST_ACTION_STATE or END_TURN_STATE, send a new LEADER_CARD_ACTIVATION
+     * message to Server.
      */
     private void leaderActiveRequest(String leader) throws IOException {
         if(!turn) {
             System.err.println("It's not your turn");
             return;
         }
-        int leaderCard = Integer.parseInt(leader);
-        if (leaderCard < 1 || leaderCard > 2)
-            System.err.println("You have inserted a wrong number (1 - 2)");
+        if(isState(GameStates.FIRST_ACTION_STATE) || isState(GameStates.END_TURN_STATE)) {
+            int leaderCard = Integer.parseInt(leader);
+            if (leaderCard < 1 || leaderCard > 2)
+                System.err.println("You have inserted a wrong number (1 - 2)");
+            else
+                ClientSocket.sendMessage(new MessageOneParameterInt(MessageType.LEADER_CARD_ACTIVATION, position, leaderCard));
+        }
         else
-            ClientSocket.sendMessage(new MessageOneParameterInt(MessageType.LEADER_CARD_ACTIVATION, position, leaderCard));
+            System.err.println("You can't do this operation at this moment");
     }
 
     /**
      * @param leader is one player's LeaderCard.
-     * @throws IOException if occurs a problem with readLine.
+     * @throws IOException if occurs a problem with readLine or sendMessage.
      *
-     * send a new LEADER_CARD_DISCARD message to Server.
+     * it it's player's turn and currentState is FIRST_ACTION_STATE or END_TURN_STATE, send a new LEADER_CARD_DISCARDN
+     * message to Server.
      */
     private void leaderDiscardRequest(String leader) throws IOException {
-        if(!turn) {
+        if (!turn) {
             System.err.println("It's not your turn");
             return;
         }
-        int leaderCard = Integer.parseInt(leader);
-        if (leaderCard < 1 || leaderCard > 2)
-            System.err.println("You have inserted a wrong number (1 - 2)");
-        else {
-            discardLeaderCard(position, leaderCard);
-            ClientSocket.sendMessage(new MessageOneParameterInt(MessageType.LEADER_CARD_DISCARD, position, leaderCard));
-        }
+        if (isState(GameStates.FIRST_ACTION_STATE) || isState(GameStates.END_TURN_STATE)) {
+            int leaderCard = Integer.parseInt(leader);
+            if (leaderCard < 1 || leaderCard > 2)
+                System.err.println("You have inserted a wrong number (1 - 2)");
+            else {
+                discardLeaderCard(position, leaderCard);
+                ClientSocket.sendMessage(new MessageOneParameterInt(MessageType.LEADER_CARD_DISCARD, position, leaderCard));
+            }
+        } else
+            System.err.println("You can't do this operation at this moment");
     }
 
     /**
      * @param command is player's input.
-     * @throws IOException if occurs a problem with readLine.
+     * @throws IOException if occurs a problem with readLine or sendMessage.
      *
      * handle end request from player.
      */
@@ -788,7 +819,7 @@ public class CLI extends ClientView{
 
     /**
      * @param command is player's command input.
-     * @throws IOException if occurs a problem with readLine.
+     * @throws IOException if occurs a problem with readLine or sendMessage.
      *
      * switch all possible three string command and start different procedure for anyone of them.
      */
@@ -1005,7 +1036,7 @@ public class CLI extends ClientView{
 
     /**
      * @param command is player's input.
-     * @throws IOException if occurs a problem with readLine.
+     * @throws IOException if occurs a problem with readLine or sendMessage.
      *
      * if it's player's turn and currentState is FIRST_ACTION_STATE send a new BUY_CARD message to Server.
      * then wait Server answer: in case it's a CHOSEN_SLOT message start a new chosenSlot procedure, in case it's OK set
@@ -1050,7 +1081,7 @@ public class CLI extends ClientView{
     }
 
     /**
-     * @throws IOException if occurs a problem with readLine.
+     * @throws IOException if occurs a problem with readLine or sendMessage.
      *
      * ask player to chose one available slot and send a new CHOSEN_SLOT message to Server.
      * then wait Server answer: in case of OK set currentState to END_TURN_STATE, in case of ERR return to FIRST_ACTION_STATE.
@@ -1083,7 +1114,7 @@ public class CLI extends ClientView{
 
     /**
      * @param command is player's input.
-     * @throws IOException if occurs a problem with readLine.
+     * @throws IOException if occurs a problem with readLine or sendMessage.
      *
      * if it's player's turn and currentState is FIRST_ACTION_STATE, send a new TAKE_MARBLE message to Server and set
      * currentState as TAKE_MARBLE_STATE.
@@ -1123,7 +1154,7 @@ public class CLI extends ClientView{
 
     /**
      * @param command is player's input.
-     * @throws IOException if occurs a problem with readLine.
+     * @throws IOException if occurs a problem with readLine or sendMessage.
      *
      * if it's player's turn and currentState is TAKE_MARBLE_STATE send a new SWITCH_DEPOT message to Server.
      */
@@ -1152,7 +1183,7 @@ public class CLI extends ClientView{
 
     /**
      * @param command is player's input.
-     * @throws IOException if occurs a problem with readLine.
+     * @throws IOException if occurs a problem with readLine or sendMessage.
      *
      * if it's player's turn and currentState is FIRST_ACTION_STATE or ACTIVATE_PRODUCTION_STATE send a new
      * DEVELOPMENT_CARD_POWER message to Server and, in case currentState is FIRST_ACTION_STATE, set currentState as
@@ -1180,7 +1211,7 @@ public class CLI extends ClientView{
 
     /**
      * @param command is player's input.
-     * @throws IOException if occurs a problem with readLine.
+     * @throws IOException if occurs a problem with readLine or sendMessage.
      *
      * if it's player's turn and currentState is FIRST_ACTION_STATE or ACTIVATE_PRODUCTION_STATE send a new
      * LEADER_CARD_POWER message to Server and, in case currentState is FIRST_ACTION_STATE, set currentState as
@@ -1208,7 +1239,7 @@ public class CLI extends ClientView{
     }
 
     /**
-     * @throws IOException if occurs a problem with readLine.
+     * @throws IOException if occurs a problem with readLine or sendMessage.
      *
      * if it's player's turn and currentState is FIRST_ACTION_STATE or ACTIVATE_PRODUCTION_STATE, ask player to chose
      * 3 resource, then send a new BASIC_POWER message to Server and, in case currentState is FIRST_ACTION_STATE, set
@@ -1269,6 +1300,8 @@ public class CLI extends ClientView{
     }
 
     /**
+     * @throws IOException if occurs a problem with readLine or sendMessage.
+     *
      * after game started send to Server a new TURN message.
      */
     @Override
