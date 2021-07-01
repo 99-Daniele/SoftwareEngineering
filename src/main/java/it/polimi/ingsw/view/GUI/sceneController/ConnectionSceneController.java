@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.GUI.sceneController;
 
 import it.polimi.ingsw.App;
+import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.GUI.SceneController;
 
 import javafx.application.Platform;

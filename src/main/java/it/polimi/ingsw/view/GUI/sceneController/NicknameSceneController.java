@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.GUI.sceneController;
 
 import it.polimi.ingsw.network.client.ClientSocket;
 import it.polimi.ingsw.network.messages.*;
+import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.GUI.*;
 
 import javafx.fxml.FXML;

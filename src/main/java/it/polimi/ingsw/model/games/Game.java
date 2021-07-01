@@ -862,9 +862,7 @@ public class Game extends Observable implements LightGame{
             int cardID = -1;
             try {
                 cardID = colorDeck.getFirstCard().getCardID();
-            } catch (EmptyDevelopmentCardDeckException e) {
-                e.printStackTrace();
-            }
+            } catch (EmptyDevelopmentCardDeckException ignored) {}
             message = new MessageFourParameterInt(MessageType.CARD_REMOVE,1,colorDeck.getRow(),colorDeck.getColumn(),0, cardID);
         }
         setChanged();

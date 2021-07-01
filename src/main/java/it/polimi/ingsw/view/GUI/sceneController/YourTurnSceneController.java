@@ -242,6 +242,8 @@ public class YourTurnSceneController {
     private Button okError;
     @FXML
     private ImageView calamaio;
+    @FXML
+    private RadioButton radiobutCheat;
 
     private ArrayList<Integer> switchCounter=new ArrayList<>(2);
 
@@ -257,6 +259,17 @@ public class YourTurnSceneController {
         if(leaderCardAvailable()) {
             radiobutActLeader.setOnMouseClicked(mouseEvent -> choseLeaderButton());
             radiobutDiscardLeader.setOnMouseClicked(mouseEvent -> choseLeaderButton());
+        }
+        if(ClientView.isDevelopers()){
+            radiobutCheat.setVisible(true);
+            radiobutCheat.setOnMouseClicked(mouseEvent -> {
+                try {
+                    cheat();
+                    radiobutCheat.setVisible(false);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
         }
         radiobutOtherPlayboard.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> otherPlayerboardButton());
         radiobutEndProd.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> endProductionButton());
@@ -1105,6 +1118,7 @@ public class YourTurnSceneController {
         radiobutDiscardLeader.setDisable(false);
         radiobutOtherPlayboard.setDisable(false);
         radiobutTakeMarble.setDisable(false);
+        radiobutCheat.setDisable(false);
     }
 
     /**
@@ -1145,6 +1159,7 @@ public class YourTurnSceneController {
         radiobutEndTurn.setDisable(false);
         radiobutActLeader.setDisable(false);
         radiobutDiscardLeader.setDisable(false);
+        radiobutCheat.setDisable(false);
     }
 
     /**
@@ -1159,6 +1174,7 @@ public class YourTurnSceneController {
         radiobutOtherPlayboard.setDisable(true);
         radiobutTakeMarble.setDisable(true);
         radiobutEndTurn.setDisable(true);
+        radiobutCheat.setDisable(true);
     }
 
     /**
@@ -1365,6 +1381,19 @@ public class YourTurnSceneController {
     }
 
     /**
+     * @throws IOException if occurs a problem with readLine or sendMessage.
+     *
+     * this command cheats the game. Send to server a new LEADER_ACTIVATION with leaderCard = 0. In this case Server
+     * change player's LeaderCard with two WhiteConversionCard and active them without having enough requirements.
+     */
+    private void cheat() throws IOException {
+        setCard(leader1, 57);
+        setCard(leader2, 58);
+        ClientView.setLeaderCard(GUI.getPosition(), 57, 58);
+        ClientSocket.sendMessage(new MessageOneParameterInt(MessageType.LEADER_CARD_ACTIVATION, GUI.getPosition(), 0));
+    }
+
+    /**
      * @param slot is DevelopmentCard's slot.
      * @param cardID is DevelopmentCard's cardID.
      * @param newMessage is the message received from Server.
@@ -1402,6 +1431,7 @@ public class YourTurnSceneController {
         SceneController.setDisable("#radiobutDiscardLeader", false);
         SceneController.setDisable("#radiobutOtherPlayboard", false);
         SceneController.setDisable("#radiobutEndTurn", false);
+        SceneController.setDisable("#radiobutCheat", false);
         SceneController.addMessage(newMessage);
     }
 
@@ -1726,6 +1756,7 @@ public class YourTurnSceneController {
             SceneController.setDisable("#radiobutActLeader", false);
             SceneController.setDisable("#radiobutDiscardLeader", false);
         }
+        SceneController.setDisable("#radiobutCheat", false);
         SceneController.addMessage(newMessage);
     }
 
@@ -1749,6 +1780,7 @@ public class YourTurnSceneController {
             SceneController.setDisable("#radiobutActLeader", false);
             SceneController.setDisable("#radiobutDiscardLeader", false);
         }
+        SceneController.setDisable("#radiobutCheat", false);
     }
 
     /**
@@ -1896,6 +1928,7 @@ public class YourTurnSceneController {
             SceneController.setDisable("#radiobutActLeader", false);
             SceneController.setDisable("#radiobutDiscardLeader", false);
         }
+        SceneController.setDisable("#radiobutCheat", false);
     }
 
     /**
@@ -1921,6 +1954,7 @@ public class YourTurnSceneController {
         SceneController.setDisable("#radiobutDiscardLeader", true);
         SceneController.setDisable("#radiobutEndProd", false);
         SceneController.setDisable("#radiobutOtherPlayboard", false);
+        SceneController.setDisable("#radiobutCheat", true);
     }
 
     /**
@@ -1941,6 +1975,7 @@ public class YourTurnSceneController {
             SceneController.setDisable("#radiobutActLeader", false);
             SceneController.setDisable("#radiobutDiscardLeader", false);
         }
+        SceneController.setDisable("#radiobutCheat", false);
         if(GUI.getNumOfPlayers() > 1){
             SceneController.setVisible("#radiobutOtherPlayboard", true);
             SceneController.setDisable("#radiobutOtherPlayboard", false);
@@ -1958,6 +1993,7 @@ public class YourTurnSceneController {
         SceneController.setDisable("#radiobutDiscardLeader", true);
         SceneController.setDisable("#radiobutEndTurn", true);
         SceneController.setDisable("#radiobutEndProd", true);
+        SceneController.setDisable("#radiobutCheat", true);
     }
 
     /**
@@ -1973,5 +2009,6 @@ public class YourTurnSceneController {
         SceneController.setDisable("#radiobutEndTurn", true);
         SceneController.setVisible("#radiobutOtherPlayboard", ClientView.getNumOfPlayers() > 1);
         SceneController.setVisible("#radiobutEndGame", true);
+        SceneController.setVisible("#radiobutCheat", false);
     }
 }

@@ -22,6 +22,7 @@ public abstract class ClientView extends Application implements Observer {
     private static GameView game;
     private static GameStates currentState;
     private static final ArrayList<String> serverMessages = new ArrayList<>();
+    private static boolean developers;
 
     public ClientView() {
         game = new GameView();
@@ -35,6 +36,14 @@ public abstract class ClientView extends Application implements Observer {
     public void launchCLI(){}
 
     public void launchCLI(String hostname, int port){}
+
+    public static boolean isDevelopers() {
+        return developers;
+    }
+
+    public static void setDevelopers() {
+        developers = true;
+    }
 
     @Override
     public void start(Stage stage) {}

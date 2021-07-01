@@ -51,9 +51,17 @@ public class App {
             case "-s":
                 startServer();
                 break;
+            case "--devcli":
+            case "-dc":
+                startDevCLI();
+                break;
             case "--cli":
             case "-c":
                 startCLI();
+                break;
+            case "--devgui":
+            case "-dg":
+                startDevGUI();
                 break;
             default:
                 startGUI();
@@ -85,10 +93,20 @@ public class App {
      */
     private static void fiveParamStart(String[] params){
         switch (params[0]){
+            case "--devcli":
+            case "-dc":
+                if(!startDevCLI(params[1], params[2], params[3], params[4]))
+                    startDevGUI();
+                break;
             case "--cli":
             case "-c":
                 if(!startCLI(params[1], params[2], params[3], params[4]))
                     startGUI();
+                break;
+            case "--devgui":
+            case "-dg":
+                if(!startDevGUI(params[1], params[2], params[3], params[4]))
+                    startDevGUI();
                 break;
             default:
                 if(!startGUI(params[1], params[2], params[3], params[4]))
@@ -135,6 +153,15 @@ public class App {
     }
 
     /**
+     * launch GUI in DevelopersMode with any connection with Server
+     */
+    private static void startDevGUI(){
+        ClientView gui = new GUI();
+        ClientView.setDevelopers();
+        gui.launchGUI();
+    }
+
+    /**
      * @param param1 is one parameter inserted by user in main.
      * @param hostname is the hostname inserted by user in main parameters.
      * @param param2 is one parameter inserted by user in main.
@@ -156,10 +183,41 @@ public class App {
     }
 
     /**
+     * @param param1 is one parameter inserted by user in main.
+     * @param hostname is the hostname inserted by user in main parameters.
+     * @param param2 is one parameter inserted by user in main.
+     * @param portNumber is the portNumber inserted by user in main.
+     * @return false if connection with Server @param hostname on port @param portNumber fails or user hs inserted wrong
+     * parameters.
+     */
+    private static boolean startDevGUI(String param1, String hostname, String param2, String portNumber){
+        if((!param1.equals("--hostname") && !param1.equals("-h"))
+                || (!param2.equals("--port") && !param2.equals("-p")))
+            return false;
+        try {
+            ClientView gui = new GUI();
+            ClientView.setDevelopers();
+            gui.launchGUI(hostname, Integer.parseInt(portNumber));
+            return true;
+        } catch (NumberFormatException e){
+            return false;
+        }
+    }
+
+    /**
      * launch CLI with any connection with Server.
      */
     private static void startCLI(){
         ClientView cli = new CLI();
+        cli.launchCLI();
+    }
+
+    /**
+     * launch CLI on DevelopersMode with any connection with Server.
+     */
+    private static void startDevCLI(){
+        ClientView cli = new CLI();
+        ClientView.setDevelopers();
         cli.launchCLI();
     }
 
@@ -177,6 +235,28 @@ public class App {
             return false;
         try {
             ClientView cli = new CLI();
+            cli.launchCLI(hostname, Integer.parseInt(portNumber));
+            return true;
+        } catch (NumberFormatException e){
+            return false;
+        }
+    }
+
+    /**
+     * @param param1 is one parameter inserted by user in main.
+     * @param hostname is the hostname inserted by user in main parameters.
+     * @param param2 is one parameter inserted by user in main.
+     * @param portNumber is the portNumber inserted by user in main.
+     * @return false if connection with Server @param hostname on port @param portNumber fails or user hs inserted wrong
+     * parameters.
+     */
+    private static boolean startDevCLI(String param1, String hostname, String param2, String portNumber){
+        if((!param1.equals("--hostname") && !param1.equals("-h"))
+                || (!param2.equals("--port") && !param2.equals("-p")))
+            return false;
+        try {
+            ClientView cli = new CLI();
+            ClientView.setDevelopers();
             cli.launchCLI(hostname, Integer.parseInt(portNumber));
             return true;
         } catch (NumberFormatException e){

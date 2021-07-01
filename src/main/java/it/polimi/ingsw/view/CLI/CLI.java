@@ -582,6 +582,10 @@ public class CLI extends ClientView{
             System.err.println("It's not your turn");
             return;
         }
+        if(!isDevelopers()){
+            System.err.println("Illegal command from player");
+            return;
+        }
         if(isState(GameStates.FIRST_ACTION_STATE) || isState(GameStates.END_TURN_STATE)) {
             ClientView.setLeaderCard(position, 57, 58);
             ClientSocket.sendMessage(new MessageOneParameterInt(MessageType.LEADER_CARD_ACTIVATION, position, 0));
