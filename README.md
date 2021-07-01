@@ -1,5 +1,5 @@
 # Prova Finale di Ingegneria del Software - AA 2020-2021
-![alt text](https://raw.githubusercontent.com/chenyongzhouking/ingswAM2021-Civati-Cicala-Chen/master/src/main/resources/photos/logo.png?token=APOZOGN6UADNGWXJQS5ZD6DA3YOGK)
+![alt text](https://raw.githubusercontent.com/chenyongzhouking/ingswAM2021-Civati-Cicala-Chen/master/src/main/resources/photos/logo.png?token=APOZOGLGDTRC557T6IYPYO3A3YPVG)
 
 Scopo del progetto è quello di implementare il gioco da tavola "Maestri del Rinascimento" seguendo il pattern architetturale Model View Controller per la realizzazione del modello secondo il paradigma di programmazione orientato agli oggetti. 
 La rete è stata gestita con l'utilizzo delle socket.
@@ -15,6 +15,10 @@ Interazione e gameplay: linea di comando (CLI) e grafica (GUI).
     - __Partite multiple:__ Realizzare il server in modo che possa gestire più partite contemporaneamente,
                             dopo la procedura di creazione della prima partita, i giocatori che accederanno al server verranno gestiti
                             in una sala d’attesa per creare una seconda partita e così via.
+                            
+##### SHELL
+ 
+La CLI funziona con Shell Linux e iOS. Per Windows non funziona perché non si vedono i colori.                          
 ## Esecuzione 
 #### SERVER
 
@@ -48,3 +52,5 @@ Questi comandi sono da aggiungersi a quelli utilizzati per avviare GUI o CLI.
 | ------- | ---
 | -dc / --devcli | CLI
 | -dg / --devgui | GUI
+
+
