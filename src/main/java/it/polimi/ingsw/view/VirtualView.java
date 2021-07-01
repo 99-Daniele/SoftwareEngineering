@@ -25,11 +25,14 @@ public class VirtualView extends Observable implements View, Observer{
     private Thread pingThread;
     private Thread inThread;
     private final Object lock = new Object();
-    private final ObjectInputStream in;
-    private final ObjectOutputStream out;
+    private ObjectInputStream in;
+    private ObjectOutputStream out;
     private String nickName;
     private int viewID;
     private boolean connected;
+
+    public VirtualView(){
+    }
 
     public VirtualView(Socket socket) throws IOException {
         this.in = new ObjectInputStream(socket.getInputStream());
@@ -72,6 +75,10 @@ public class VirtualView extends Observable implements View, Observer{
     @Override
     public String getNickname(){
         return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     /**
@@ -320,7 +327,8 @@ public class VirtualView extends Observable implements View, Observer{
             out.writeObject(message);
         } catch (IOException e) {
             disconnect();
-        }
+        } catch (NullPointerException ignored){}
+        //NullPointerException is ignored because out will be null only for tests to avoid view sending messages.
     }
 
     /**

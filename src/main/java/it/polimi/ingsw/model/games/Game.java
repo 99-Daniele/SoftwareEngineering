@@ -102,7 +102,7 @@ public class Game extends Observable implements LightGame{
             throw new AlreadyTakenNicknameException();
         PlayerBoard player = new PlayerBoard(nickname);
         players.add(player);
-        Message m = new MessageOneParameterString(MessageType.NEW_PLAYER,players.size() -1, nickname);
+        Message m = new MessageOneParameterString(MessageType.NEW_PLAYER, players.size() - 1, nickname);
         setChanged();
         notifyObservers(m);
     }

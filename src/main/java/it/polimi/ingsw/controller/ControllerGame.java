@@ -248,7 +248,7 @@ public class ControllerGame implements Observer {
      * @param view is player's view trying to logging in.
      * @param nickName is player's chosen nickName.
      */
-    private synchronized void addPlayer(View view, String nickName){
+    public synchronized void addPlayer(View view, String nickName){
         if (state != GameStartingState.WAITING_PLAYERS && state != GameStartingState.WAITING_NUM_PLAYERS) {
             view.errorMessage(ErrorType.ILLEGAL_OPERATION);
             return;
@@ -400,7 +400,7 @@ public class ControllerGame implements Observer {
      *
      * sent by the first or fourth player.
      */
-    private void oneResourceHandle(Message message) throws IllegalStateException {
+    public void oneResourceHandle(Message message) throws IllegalStateException {
         MessageOneIntOneResource m = (MessageOneIntOneResource) message;
         int viewID = m.getClientID();
         if(viewID != 1 && viewID != 2 || state != GameStartingState.WAITING_PLAYERS_CHOICES)
@@ -415,7 +415,7 @@ public class ControllerGame implements Observer {
      *
      * sent by the first, second or third player.
      */
-    private void twoResourceHandle(Message message) throws IllegalStateException {
+    public void twoResourceHandle(Message message) throws IllegalStateException {
         MessageTwoResource m = (MessageTwoResource) message;
         int viewID = m.getClientID();
         if(viewID != 3 || state != GameStartingState.WAITING_PLAYERS_CHOICES)

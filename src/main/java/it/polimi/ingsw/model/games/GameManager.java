@@ -37,6 +37,10 @@ public class GameManager {
         currentState = new FirstActionState();
     }
 
+    public ControllerGame getControllerGame() {
+        return controllerGame;
+    }
+
     public GameState getCurrentState(){
         return currentState;
     }
@@ -93,7 +97,7 @@ public class GameManager {
      * start the game.
      */
     public void leaderCardHandler(int player, int card1, int card2, ArrayList<LeaderCard> leaderCards) throws IllegalStateException{
-        if(game.alreadySelectedLeaderCards(player) || controllerGame.getState() == GameStartingState.START_GAME)
+        if(game.alreadySelectedLeaderCards(player) || controllerGame.getState() != GameStartingState.WAITING_PLAYERS_CHOICES)
             throw new IllegalStateException();
         LeaderCard leaderCard1 = chosenLeaderCard(card1, leaderCards);
         LeaderCard leaderCard2 = chosenLeaderCard(card2, leaderCards);
@@ -125,7 +129,8 @@ public class GameManager {
      * start the game.
      */
     public void oneResourceHandle(int player, Resource resource) throws IllegalStateException {
-        if(game.alreadySelectedResource(player) || controllerGame.getState() == GameStartingState.START_GAME)
+        if(game.alreadySelectedResource(player) || controllerGame.getState() != GameStartingState.WAITING_PLAYERS_CHOICES
+            || (player != 1 && player != 2))
             throw new IllegalStateException();
         game.firstIncreaseWarehouse(resource, player);
         if(game.allPlayersReady()) {
@@ -144,7 +149,8 @@ public class GameManager {
      * start the game.
      */
     public void twoResourceHandle(int player, Resource r1, Resource r2) throws IllegalStateException {
-        if(game.alreadySelectedResource(player) || controllerGame.getState() == GameStartingState.START_GAME)
+        if(game.alreadySelectedResource(player) || controllerGame.getState() != GameStartingState.WAITING_PLAYERS_CHOICES
+            || player != 3)
             throw new IllegalStateException();
         game.firstDoubleIncreaseWarehouse(r1, r2);
         if(game.allPlayersReady()) {
