@@ -77,8 +77,8 @@
             </toggleGroup>
         </RadioButton>
         <RadioButton fx:id="radiobutTakeMarble" layoutX="450.0" layoutY="521.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="108.0" text="TAKE MARBLE" toggleGroup="$mainAction" />
-        <RadioButton fx:id="radiobutActivProduc" layoutX="279.0" layoutY="521.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="171.0" text="ACTIVATE PRODUCTION" toggleGroup="$mainAction" />
-        <RadioButton fx:id="radiobutActLeader" layoutX="279.0" layoutY="558.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="183.0" text="ACTIVATE LEADER CARD" toggleGroup="$mainAction" />
+        <RadioButton fx:id="radiobutActivProduc" layoutX="279.0" layoutY="521.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="163.0" text="ACTIVATE PRODUCTION" toggleGroup="$mainAction" />
+        <RadioButton fx:id="radiobutActLeader" layoutX="279.0" layoutY="558.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="163.0" text="ACTIVATE LEADER CARD" toggleGroup="$mainAction" />
         <RadioButton fx:id="radiobutDiscardLeader" layoutX="279.0" layoutY="595.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="171.0" text="DISCARD LEADER CARD" toggleGroup="$mainAction" />
         <Label layoutX="279.0" layoutY="420.0" prefHeight="30.0" prefWidth="258.0" text="CHOOSE AN ACTION:">
             <font>
@@ -188,7 +188,7 @@
         </ImageView>
         <ImageView fx:id="marbleExt" fitHeight="23.0" fitWidth="23.0" layoutX="1189.0" layoutY="74.0">
         </ImageView>
-        <RadioButton fx:id="radiobutOtherPlayboard" layoutX="279.0" layoutY="628.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="222.0" text="SEE OTHER PLAYERBOARD" toggleGroup="$mainAction" />
+        <RadioButton fx:id="radiobutOtherPlayboard" layoutX="279.0" layoutY="628.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="171.0" text="SEE OTHER PLAYERBOARD" toggleGroup="$mainAction" />
         <RadioButton fx:id="radiobutEndGame" layoutX="450.0" layoutY="595.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="222.0" text="END GAME" toggleGroup="$mainAction" visible="false" />
         <ImageView fx:id="leader2" disable="true" fitHeight="166.0" fitWidth="108.0" layoutX="134.0" layoutY="451.0">
         </ImageView>
