@@ -1,3 +1,21 @@
+# Prova Finale di Ingegneria del Software - AA 2020-2021
+![alt text](src\main\resources\photos\logo.png)
+
+Scopo del progetto è quello di implementare il gioco da tavola "Maestri del Rinascimento" seguendo il pattern architetturale Model View Controller per la realizzazione del modello secondo il paradigma di programmazione orientato agli oggetti. 
+La rete è stata gestita con l'utilizzo delle socket.
+
+Interazione e gameplay: linea di comando (CLI) e grafica (GUI).
+## Funzionalità
+
+- Regole Complete
+- CLI
+- GUI
+- Socket
+- 1 FA (Funzionalità Avanzate):
+    - __Partite multiple:__ Realizzare il server in modo che possa gestire più partite contemporaneamente,
+                            dopo la procedura di creazione della prima partita, i giocatori che accederanno al server verranno gestiti
+                            in una sala d’attesa per creare una seconda partita e così via.
+## Esecuzione 
 SERVER
 
 | JAR COMMAND | DESCRIPTION 
