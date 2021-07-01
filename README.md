@@ -1,5 +1,5 @@
 # Prova Finale di Ingegneria del Software - AA 2020-2021
-![alt text](https://raw.githubusercontent.com/chenyongzhouking/ingswAM2021-Civati-Cicala-Chen/master/src/main/resources/photos/logo.png?token=APOZOGKTI6S6W7Q6FE7I6ILA3X5S6)
+![alt text](https://raw.githubusercontent.com/chenyongzhouking/ingswAM2021-Civati-Cicala-Chen/master/src/main/resources/photos/logo.png?token=APOZOGN6UADNGWXJQS5ZD6DA3YOGK)
 
 Scopo del progetto è quello di implementare il gioco da tavola "Maestri del Rinascimento" seguendo il pattern architetturale Model View Controller per la realizzazione del modello secondo il paradigma di programmazione orientato agli oggetti. 
 La rete è stata gestita con l'utilizzo delle socket.
@@ -16,7 +16,7 @@ Interazione e gameplay: linea di comando (CLI) e grafica (GUI).
                             dopo la procedura di creazione della prima partita, i giocatori che accederanno al server verranno gestiti
                             in una sala d’attesa per creare una seconda partita e così via.
 ## Esecuzione 
-####SERVER
+#### SERVER
 
 | JAR COMMAND | DESCRIPTION 
 | ------- | --- 
@@ -24,7 +24,7 @@ Interazione e gameplay: linea di comando (CLI) e grafica (GUI).
 | java -jar shade/AM22.jar  --server / -s  --port / -p  xyzw | create server on port xyzw
 
 
-####CLI
+#### CLI
 
 | JAR COMMAND | DESCRIPTION
 | ------- | --- 
@@ -32,14 +32,15 @@ Interazione e gameplay: linea di comando (CLI) e grafica (GUI).
 | java -jar shade/AM22.jar  --cli / -c  --hostname / -h  "hostname"  --port / -p  xyzw | launch CLI on server "hostname" on port xyzw
 
 
-####GUI
+#### GUI
 
 | JAR COMMAND       | DESCRIPTION   
 | ------- | --- 
 | java -jar shade/AM22.jar  --gui / -g | launch GUI without connection info
 | java -jar shade/AM22.jar  --gui / -g  --hostname / -h  "hostname"  --port / -p  xyzw | launch GUI on server "hostname" on port xyzw
 
-#####PARAMETRI
+##### PARAMETRI
+
 Permette al giocatore di sostituire le due carte Leader in possesso con due carte WhiteMarbleLeader già attive. 
 Questi comandi sono da aggiungersi a quelli utilizzati per avviare GUI o CLI.
 
