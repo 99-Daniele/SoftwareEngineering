@@ -1,5 +1,5 @@
 # Prova Finale di Ingegneria del Software - AA 2020-2021
-![alt text](https://raw.githubusercontent.com/chenyongzhouking/ingswAM2021-Civati-Cicala-Chen/master/src/main/resources/photos/logo.png?token=APOZOGM7XD3Y4HJT4BZ7OHDA3X2TA)
+![alt text](https://raw.githubusercontent.com/chenyongzhouking/ingswAM2021-Civati-Cicala-Chen/master/src/main/resources/photos/logo.png?token=APOZOGLGDTRC557T6IYPYO3A3YPVG)
 
 Scopo del progetto è quello di implementare il gioco da tavola "Maestri del Rinascimento" seguendo il pattern architetturale Model View Controller per la realizzazione del modello secondo il paradigma di programmazione orientato agli oggetti. 
 La rete è stata gestita con l'utilizzo delle socket.
@@ -15,8 +15,12 @@ Interazione e gameplay: linea di comando (CLI) e grafica (GUI).
     - __Partite multiple:__ Realizzare il server in modo che possa gestire più partite contemporaneamente,
                             dopo la procedura di creazione della prima partita, i giocatori che accederanno al server verranno gestiti
                             in una sala d’attesa per creare una seconda partita e così via.
+                            
+##### SHELL
+ 
+La CLI funziona con Shell Linux e iOS. Per Windows non funziona perché non si vedono i colori.                          
 ## Esecuzione 
-SERVER
+#### SERVER
 
 | JAR COMMAND | DESCRIPTION 
 | ------- | --- 
@@ -24,7 +28,7 @@ SERVER
 | java -jar shade/AM22.jar  --server / -s  --port / -p  xyzw | create server on port xyzw
 
 
-CLI
+#### CLI
 
 | JAR COMMAND | DESCRIPTION
 | ------- | --- 
@@ -32,42 +36,21 @@ CLI
 | java -jar shade/AM22.jar  --cli / -c  --hostname / -h  "hostname"  --port / -p  xyzw | launch CLI on server "hostname" on port xyzw
 
 
-GUI
+#### GUI
 
 | JAR COMMAND       | DESCRIPTION   
 | ------- | --- 
 | java -jar shade/AM22.jar  --gui / -g | launch GUI without connection info
 | java -jar shade/AM22.jar  --gui / -g  --hostname / -h  "hostname"  --port / -p  xyzw | launch GUI on server "hostname" on port xyzw
 
-CLI COMMAND HELPER
+##### PARAMETRI
 
-| CMD       | DESCRIPTION     
-| :------------- | :----------: 
-| turn / -tu | ask Server if it's your turn   
-| see playerboard / see board / see p / -sp  1/2/3/4| print the board of player 1/2/3/4
-| see my playerboard / see my p / -smp| print your playerboard
-| see warehouse / see wh / -swh  1/2/3/4| print the warehouse of player 1/2/3/4
-| see my warehouse / see my wh / -smw| print your warehouse
-| see strongbox / see sb / -ssb  1/2/3/4| print the strongbox of player 1/2/3/4
-| see my strongbox / see my sb / -sms| print your strongbox
-| see cards / see c / -sc  1/2/3/4| print the development cards of player 1/2/3/4
-| see my cards / see my c / -smc| print your development cards
-| see leader / see l / -sl  1/2/3/4| print the leader cards of player 1/2/3/4
-| see my leader / see my l / -sml| print your leader cards
-| see market / see m / -sm| print the market
-| see faithtrack / see f / -sf| print the faithTrack
-| see decks / see d  / -sd| print current buyable development cards
-| buy card /buy / -bc  1/2.../47/48  warehouse(w) / strongbox(s)| buy card 1/2.../47/48 taking resources from warehouse/strongbox
-| takemarble / market / -tm  row(r) / column(c)  1/2/3/4| take row/column 1/2/3/4 from market
-| usemarble / marble / -um  red(r) / white(w) / purple(p) / yellow(y) / grey(g) / blue(b)| use one of the chosen marbles
-| whiteconversion / white / -wc  1/2| chose which active WhiteConversionCard use for white marble
-| switch / -sw  1/2/3/4/5  1/2/3/4/5| switch depot 1/2/3/4/5 with depot 1/2/3/4/5
-| card power / -cp  1/2/3  warehouse(w) / strongbox(s)| activate the power of slot 1/2/3 taking resource from warehouse/strongbox
-| basic power / -bp  coin(co) / shield(sh) / stone(st) / servant(se)   coin(co) / shield(sh) / stone(st) / servant(se)   coin(co) / shield(sh) / stone(st) / servant(se)  warehouse(w) / strongbox(s)| activate basic power  deleting first two resource and gaining third resource
-| leader power / -lp  1/2  coin(co) / shield(sh) / stone(st) / servant(se)  warehouse(w)/strongbox(s)| activate the power of AdditionalProductionPower card taking resource from warehouse/strongbox and gaining 1 resource
-| end power / -ep| inform Server that player has ended its production
-| active leader / -al  1/2| activate leader card 1/2
-| discard leader / -dl  1/2| discard leader card 1/2
-| end turn / -et| end your turn
-| help / -h| print help text
-| end game | finish the game
+Permette al giocatore di sostituire le due carte Leader in possesso con due carte WhiteMarbleLeader già attive. 
+Questi comandi sono da aggiungersi a quelli utilizzati per avviare GUI o CLI.
+
+| JAR COMMAND | INTERFACE
+| ------- | ---
+| -dc / --devcli | CLI
+| -dg / --devgui | GUI
+
+
