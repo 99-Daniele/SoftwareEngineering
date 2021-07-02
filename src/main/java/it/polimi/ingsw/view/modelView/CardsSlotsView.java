@@ -207,7 +207,7 @@ public class CardsSlotsView {
         CLIPrinter.printDevelopmentCard(slot.getLast());
         for(int i = slot.size() - 2; i >= 0; i--) {
             System.out.println("CARD " + (i+1) + ": ");
-            CLIPrinter.printDevelopmentCardSmallInfo(slot.getLast());
+            CLIPrinter.printDevelopmentCardSmallInfo(slot.get(i));
         }
     }
 
