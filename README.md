@@ -1,5 +1,5 @@
 # Prova Finale di Ingegneria del Software - AA 2020-2021
-![alt text](https://raw.githubusercontent.com/chenyongzhouking/ingswAM2021-Civati-Cicala-Chen/master/src/main/resources/photos/logo.png?token=APOZOGLGDTRC557T6IYPYO3A3YPVG)
+![alt text](src/main/resources/photos/logo.png)
 
 Scopo del progetto è quello di implementare il gioco da tavola "Maestri del Rinascimento" seguendo il pattern architetturale Model View Controller per la realizzazione del modello secondo il paradigma di programmazione orientato agli oggetti. 
 La rete è stata gestita con l'utilizzo delle socket.
