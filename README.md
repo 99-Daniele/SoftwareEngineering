@@ -32,7 +32,7 @@ La CLI funziona con Shell Linux e iOS. Per Windows non funziona perché non si v
 
 | JAR COMMAND | DESCRIPTION
 | ------- | --- 
-| java -jar shade/AM22.jar  --cli / -c | launch CLI without connection info
+| java -jar shade/AM22.jar  --cli / -c | launch CLI without any connection info
 | java -jar shade/AM22.jar  --cli / -c  --hostname / -h  "hostname"  --port / -p  xyzw | launch CLI on server "hostname" on port xyzw
 
 
@@ -40,17 +40,20 @@ La CLI funziona con Shell Linux e iOS. Per Windows non funziona perché non si v
 
 | JAR COMMAND       | DESCRIPTION   
 | ------- | --- 
-| java -jar shade/AM22.jar  --gui / -g | launch GUI without connection info
+| java -jar shade/AM22.jar  --gui / -g | launch GUI without any connection info
 | java -jar shade/AM22.jar  --gui / -g  --hostname / -h  "hostname"  --port / -p  xyzw | launch GUI on server "hostname" on port xyzw
 
-##### PARAMETRI
+##### CHEAT
 
-Permette al giocatore di sostituire le due carte Leader in possesso con due carte WhiteMarbleLeader già attive. 
-Questi comandi sono da aggiungersi a quelli utilizzati per avviare GUI o CLI.
+Permette al giocatore di sostituire le due carte Leader in possesso con due carte WhiteMarbleConversoinCard già attive,
+tramite un comando "-cheat" per la CLI o il bottone "CHEAT" per la GUI
+Avviare CLI o GUI con i seguenti comandi
 
 | JAR COMMAND | INTERFACE
 | ------- | ---
-| -dc / --devcli | CLI
-| -dg / --devgui | GUI
+| java -jar shade/AM22.jar  --devcli / -dc | CLI
+| java -jar shade/AM22.jar  --devcli / -dc  --hostname / -h  "hostname"  --port / -p  xyzw | |
+| java -jar shade/AM22.jar  --devgui / -dg | GUI
+| java -jar shade/AM22.jar  --devgui / -dg  --hostname / -h  "hostname"  --port / -p  xyzw | |
 
 
