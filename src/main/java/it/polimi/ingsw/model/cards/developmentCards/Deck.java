@@ -44,10 +44,9 @@ public class Deck {
                 return 1;
             case BLUE:
                 return 2;
-            case YELLOW:
+            default:
                 return 3;
         }
-        return -1;
     }
 
     public Color getColor() {

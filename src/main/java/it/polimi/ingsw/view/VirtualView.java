@@ -366,13 +366,14 @@ public class VirtualView extends Observable implements View, Observer{
             waitAMoment();
             connected = false;
         }
-        pingThread.interrupt();
-        inThread.interrupt();
+        try {
+            pingThread.interrupt();
+            inThread.interrupt();
+        } catch (NullPointerException ignored){}
         try {
             in.close();
             out.close();
-        } catch (IOException ignored) {
-        }
+        } catch (IOException | NullPointerException ignored) {}
     }
 
     @Override

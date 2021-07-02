@@ -41,7 +41,7 @@ public class ControllerGame implements Observer {
             System.out.println("GAME ENDED");
         gameManager = null;
         views = new LinkedList<>();
-        leaderCards = null;
+        leaderCards = new ArrayList<>();
         state = GameStartingState.WAITING_NUM_PLAYERS;
         ControllerConnection.newGame();
     }
@@ -112,7 +112,7 @@ public class ControllerGame implements Observer {
             removeView(view, nickName);
             resetControllerGame();
         }
-        else if (state != GameStartingState.START_GAME) {
+        else if (state == GameStartingState.WAITING_PLAYERS) {
             removeView(view, nickName);
             for (View otherView : views)
                 otherView.exit(nickName);
@@ -383,7 +383,7 @@ public class ControllerGame implements Observer {
      * @throws WrongParametersException if player has chosen a wrong leader cards.
      * @throws IllegalStateException if player has send this message during a wrong phases.
      */
-    private void leaderCardHandler(Message message) throws IllegalStateException, WrongParametersException {
+    public void leaderCardHandler(Message message) throws IllegalStateException, WrongParametersException {
         MessageTwoParameterInt m = (MessageTwoParameterInt) message;
         int viewID = m.getClientID();
         if(state != GameStartingState.WAITING_PLAYERS_CHOICES)
@@ -396,8 +396,7 @@ public class ControllerGame implements Observer {
 
     /**
      * @param message is message with player's chosen first resource.
-     * @throws IllegalStateException if player has send this message during a wrong phases or if this message has been.
-     *
+     * @throws IllegalStateException if player has send this message during a wrong phases or if this message has been
      * sent by the first or fourth player.
      */
     public void oneResourceHandle(Message message) throws IllegalStateException {
@@ -411,8 +410,7 @@ public class ControllerGame implements Observer {
 
     /**
      * @param message is message with player's chosen first two resource.
-     * @throws IllegalStateException if player has send this message during a wrong phases or if this message has been.
-     *
+     * @throws IllegalStateException if player has send this message during a wrong phases or if this message has been
      * sent by the first, second or third player.
      */
     public void twoResourceHandle(Message message) throws IllegalStateException {
@@ -432,7 +430,7 @@ public class ControllerGame implements Observer {
      * @throws ImpossibleDevelopmentCardAdditionException if player can't add chosen card to his slots.
      * @throws InsufficientResourceException if player has not enough resources.
      */
-    private void buyCardHandler(Message message)
+    public void buyCardHandler(Message message)
             throws IllegalStateException, WrongParametersException, EmptyDevelopmentCardDeckException, ImpossibleDevelopmentCardAdditionException, InsufficientResourceException {
         MessageThreeParameterInt m = (MessageThreeParameterInt) message;
         int viewID = m.getClientID();
@@ -456,7 +454,7 @@ public class ControllerGame implements Observer {
      * @throws ImpossibleDevelopmentCardAdditionException if player can't add chosen card to his slots.
      * @throws InsufficientResourceException if player has not enough resources.
      */
-    private void chosenSlotHandler(Message message)
+    public void chosenSlotHandler(Message message)
             throws IllegalStateException, WrongParametersException, EmptyDevelopmentCardDeckException, ImpossibleDevelopmentCardAdditionException, InsufficientResourceException {
         MessageOneParameterInt m = (MessageOneParameterInt) message;
         int viewID = m.getClientID();
@@ -470,7 +468,7 @@ public class ControllerGame implements Observer {
      * @throws WrongParametersException if player has chosen a wrong market row or column.
      * @throws IllegalStateException if player has send this message during a wrong phases.
      */
-    private void takeMarbleHandler(Message message) throws IllegalStateException, WrongParametersException {
+    public void takeMarbleHandler(Message message) throws IllegalStateException, WrongParametersException {
         MessageTwoParameterInt m = (MessageTwoParameterInt) message;
         int viewID = m.getClientID();
         Marble[] marbles = gameManager.takeMarbleHandler(m.getPar1(), m.getPar2());
@@ -482,7 +480,7 @@ public class ControllerGame implements Observer {
      * @throws WrongParametersException if player has chosen a wrong number of players.
      * @throws IllegalStateException if player has send this message during a wrong phases.
      */
-    private void useMarbleHandler(Message message)
+    public void useMarbleHandler(Message message)
             throws IllegalStateException, WrongParametersException {
         MessageOneParameterMarble m = (MessageOneParameterMarble) message;
         int viewID = m.getClientID();
@@ -502,8 +500,8 @@ public class ControllerGame implements Observer {
      * @param message is a WHITE_CONVERSION_CARD message.
      * @throws WrongParametersException if player has chosen a wrong number of players.
      * @throws IllegalStateException if player has send this message during a wrong phases.
-     */
-    private void whiteConversionCardHandler(Message message) throws IllegalStateException, WrongParametersException {
+    */
+    public void whiteConversionCardHandler(Message message) throws IllegalStateException, WrongParametersException {
         MessageOneParameterInt m = (MessageOneParameterInt) message;
         int viewID = m.getClientID();
         gameManager.whiteConversionCardHandler(m.getPar());
@@ -516,7 +514,7 @@ public class ControllerGame implements Observer {
      * @throws IllegalStateException if player has send this message during a wrong phases.
      * @throws ImpossibleSwitchDepotException if switch is not possible.
      */
-    private void switchHandler(Message message) throws IllegalStateException, WrongParametersException, ImpossibleSwitchDepotException {
+    public void switchHandler(Message message) throws IllegalStateException, WrongParametersException, ImpossibleSwitchDepotException {
         MessageTwoParameterInt m = (MessageTwoParameterInt) message;
         int viewID = m.getClientID();
         gameManager.switchHandler(m.getPar1(), m.getPar2());
@@ -529,7 +527,7 @@ public class ControllerGame implements Observer {
      * @throws IllegalStateException if player has send this message during a wrong phases.
      * @throws InsufficientResourceException if player has not enough resources.
      */
-    private void developmentCardPowerHandler(Message message)
+    public void developmentCardPowerHandler(Message message)
             throws IllegalStateException, WrongParametersException, InsufficientResourceException {
         MessageTwoParameterInt m = (MessageTwoParameterInt) message;
         int viewID = m.getClientID();
@@ -549,7 +547,7 @@ public class ControllerGame implements Observer {
      * @throws IllegalStateException if player has send this message during a wrong phases.
      * @throws InsufficientResourceException if player has not enough resources.
      */
-    private void basicPowerHandler(Message message)
+    public void basicPowerHandler(Message message)
             throws InsufficientResourceException, IllegalStateException, WrongParametersException {
         MessageThreeResourceOneInt m = (MessageThreeResourceOneInt) message;
         int viewID = m.getClientID();
@@ -567,7 +565,7 @@ public class ControllerGame implements Observer {
      * @throws IllegalStateException if player has send this message during a wrong phases.
      * @throws InsufficientResourceException if player has not enough resources.
      */
-    private void leaderCardPowerHandler(Message message)
+    public void leaderCardPowerHandler(Message message)
             throws InsufficientResourceException, IllegalStateException, WrongParametersException {
         MessageOneResourceTwoInt m = (MessageOneResourceTwoInt) message;
         int viewID = m.getClientID();
@@ -583,7 +581,7 @@ public class ControllerGame implements Observer {
      * @param m is a END_PRODUCTION message.
      * @throws IllegalStateException if player has send this message during a wrong phases.
      */
-    private void endProductionHandler(Message m) throws IllegalStateException {
+    public void endProductionHandler(Message m) throws IllegalStateException {
         int viewID = m.getClientID();
         gameManager.endProductionHandler();
         views.get(viewID).ok();
@@ -598,7 +596,7 @@ public class ControllerGame implements Observer {
      * @throws ActiveLeaderCardException if player previously activated leader card.
      * @throws InsufficientCardsException if player has not enough cards.
      */
-    private void leaderActivationHandler(Message message)
+    public void leaderActivationHandler(Message message)
             throws InsufficientResourceException, AlreadyDiscardLeaderCardException, ActiveLeaderCardException, InsufficientCardsException, IllegalStateException, WrongParametersException {
         MessageOneParameterInt m = (MessageOneParameterInt) message;
         int viewID = m.getClientID();
@@ -613,7 +611,7 @@ public class ControllerGame implements Observer {
      * @throws AlreadyDiscardLeaderCardException if player previously discarded leader card.
      * @throws ActiveLeaderCardException if player previously activated leader card.
      */
-    private void leaderDiscardHandler(Message message)
+    public void leaderDiscardHandler(Message message)
             throws ActiveLeaderCardException, AlreadyDiscardLeaderCardException, IllegalStateException, WrongParametersException {
         MessageOneParameterInt m = (MessageOneParameterInt) message;
         int viewID = m.getClientID();
@@ -626,7 +624,7 @@ public class ControllerGame implements Observer {
      *
      * if game is ended, proceeds to end game procedure, otherwise go to the next turn.
      */
-    private void endTurnHandler() throws IllegalStateException {
+    public void endTurnHandler() throws IllegalStateException {
         gameManager.endTurnHandler();
         if(turnController.isEndGame())
             gameManager.endGame();

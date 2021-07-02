@@ -13,6 +13,7 @@ import it.polimi.ingsw.model.market.ResourceMarble;
 import it.polimi.ingsw.model.market.WhiteMarble;
 import it.polimi.ingsw.model.player.Strongbox;
 import it.polimi.ingsw.model.resourceContainers.Resource;
+import it.polimi.ingsw.network.messages.*;
 import it.polimi.ingsw.parser.CardMapCLI;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.VirtualView;
@@ -139,15 +140,28 @@ public class GameManagerTest {
      * this test tries to select resources two times with the same player
      */
     @Test
-    void twiceFirstResources() throws AlreadyTakenNicknameException, IllegalStateException {
+    void twiceFirstResources() throws AlreadyTakenNicknameException, IllegalStateException, FullGameException, WrongParametersException {
 
         ControllerGame cg = new ControllerGame();
         VirtualView v = new VirtualView();
-        GameManager gm = new GameManager(2, cg);
+        cg.addView(v);
+        GameManager gm = new GameManager(3, cg);
         gm.createPlayer(v, "Daniele");
         gm.createPlayer(v, "Carlo");
+        gm.createPlayer(v, "Giacomo");
         v.setNickName("Daniele");
+        cg.newGame(new MessageOneParameterInt(MessageType.NUM_PLAYERS, 0, 3));
         gm.getControllerGame().startGame();
+
+        ArrayList<LeaderCard> leaderCards = new ArrayList<>();
+        leaderCards.add((LeaderCard) CardMapCLI.getCard(49));
+        leaderCards.add((LeaderCard) CardMapCLI.getCard(57));
+        leaderCards.add((LeaderCard) CardMapCLI.getCard(60));
+        leaderCards.add((LeaderCard) CardMapCLI.getCard(61));
+
+        gm.leaderCardHandler(0, 49, 60, leaderCards);
+        gm.leaderCardHandler(1, 57, 61, leaderCards);
+        gm.leaderCardHandler(2, 60, 61, leaderCards);
 
         gm.oneResourceHandle(1, Resource.COIN);
 
@@ -156,6 +170,11 @@ public class GameManagerTest {
         String expectedMessage = "You can't do this operation at this moment";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
+
+
+        assertSame(gm.getControllerGame().getState(), GameStartingState.WAITING_PLAYERS_CHOICES);
+        gm.oneResourceHandle(2, Resource.STONE);
+        assertSame(gm.getControllerGame().getState(), GameStartingState.START_GAME);
     }
 
     /**
@@ -302,12 +321,13 @@ public class GameManagerTest {
         gm.leaderCardHandler(2, 57, 60, leaderCards);
         gm.leaderCardHandler(1, 60, 61, leaderCards);
 
+        gm.oneResourceHandle(2, Resource.STONE);
         gm.oneResourceHandle(1, Resource.COIN);
-        gm.twoResourceHandle(3, Resource.SHIELD, Resource.SERVANT);
 
         assertSame(gm.getControllerGame().getState(), GameStartingState.WAITING_PLAYERS_CHOICES);
-        gm.oneResourceHandle(2, Resource.STONE);
+        gm.twoResourceHandle(3, Resource.SHIELD, Resource.SERVANT);
         assertSame(gm.getControllerGame().getState(), GameStartingState.START_GAME);
+        gm.endGame();
     }
 
     /**
@@ -333,18 +353,20 @@ public class GameManagerTest {
      * this test tries to buy card with wrong parameters
      */
     @Test
-    void buyCardWrongParameters() throws AlreadyTakenNicknameException {
+    void buyCardWrongParameters() throws FullGameException, WrongParametersException, IllegalStateException {
 
         ControllerGame cg = new ControllerGame();
-        View v = new VirtualView();
-        GameManager gm = new GameManager(1, cg);
-        gm.createPlayer(v, "Daniele");
+        VirtualView v = new VirtualView();
+        v.setNickName("D");
+        cg.addView(v);
+        cg.newGame(new MessageOneParameterInt(MessageType.NUM_PLAYERS, 0, 1));
 
         WrongParametersException thrown =
-                assertThrows(WrongParametersException.class, () -> gm.buyCardHandler(4, 5, 4));
+                assertThrows(WrongParametersException.class, () -> cg.buyCardHandler(new MessageThreeParameterInt(MessageType.BUY_CARD, 0, 4, 3, 5)));
         String expectedMessage = "You have inserted wrong parameters";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
+        cg.update(v, new MessageThreeParameterInt(MessageType.BUY_CARD, 0, 0, 1, 1));
     }
 
     /**
@@ -369,18 +391,25 @@ public class GameManagerTest {
      * this test tries to chose slot to buy card in a wrong game state
      */
     @Test
-    void choseSlotWrongState() throws AlreadyTakenNicknameException {
+    void choseSlotWrongState() throws FullGameException, WrongParametersException, IllegalStateException {
 
         ControllerGame cg = new ControllerGame();
-        View v = new VirtualView();
-        GameManager gm = new GameManager(1, cg);
-        gm.createPlayer(v, "Daniele");
+        VirtualView v = new VirtualView();
+        v.setNickName("D");
+        cg.addView(v);
+        cg.newGame(new MessageOneParameterInt(MessageType.NUM_PLAYERS, 0, 1));
 
         IllegalStateException thrown =
-                assertThrows(IllegalStateException.class, () -> gm.chosenSlotHandler(1));
+                assertThrows(IllegalStateException.class, () -> cg.chosenSlotHandler(new MessageOneParameterInt(MessageType.CHOSEN_SLOT, 0, 1)));
         String expectedMessage = "You can't do this operation at this moment";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
+
+        cg.update(v, new MessageOneParameterInt(MessageType.CHOSEN_SLOT, 0, 1));
+        ArrayList<Integer> slots = new ArrayList<>();
+        slots.add(1);
+        slots.add(3);
+        cg.choseSlot(0, slots);
     }
 
     /**
@@ -456,18 +485,20 @@ public class GameManagerTest {
      * this test tries to take marble with wrong parameters
      */
     @Test
-    void takeMarbleWrongParameters() throws AlreadyTakenNicknameException {
+    void takeMarbleWrongParameters() throws FullGameException, WrongParametersException, IllegalStateException {
 
         ControllerGame cg = new ControllerGame();
-        View v = new VirtualView();
-        GameManager gm = new GameManager(1, cg);
-        gm.createPlayer(v, "Daniele");
+        VirtualView v = new VirtualView();
+        v.setNickName("D");
+        cg.addView(v);
+        cg.newGame(new MessageOneParameterInt(MessageType.NUM_PLAYERS, 0, 1));
 
         WrongParametersException thrown =
-                assertThrows(WrongParametersException.class, () -> gm.takeMarbleHandler(2, 5));
+                assertThrows(WrongParametersException.class, () -> cg.takeMarbleHandler(new MessageTwoParameterInt(MessageType.TAKE_MARBLE, 0, 2, 5)));
         String expectedMessage = "You have inserted wrong parameters";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
+        cg.update(v, new MessageTwoParameterInt(MessageType.TAKE_MARBLE, 0, 2, 5));
     }
 
     /**
@@ -490,18 +521,20 @@ public class GameManagerTest {
      * this test tries to use marble in wrong state
      */
     @Test
-    void useMarbleWrongState() throws AlreadyTakenNicknameException {
+    void useMarbleWrongState() throws WrongParametersException, IllegalStateException, FullGameException {
 
         ControllerGame cg = new ControllerGame();
-        View v = new VirtualView();
-        GameManager gm = new GameManager(1, cg);
-        gm.createPlayer(v, "Daniele");
+        VirtualView v = new VirtualView();
+        v.setNickName("D");
+        cg.addView(v);
+        cg.newGame(new MessageOneParameterInt(MessageType.NUM_PLAYERS, 0, 1));
 
         IllegalStateException thrown =
-                assertThrows(IllegalStateException.class, () -> gm.useMarbleHandler(new WhiteMarble()));
+                assertThrows(IllegalStateException.class, () -> cg.useMarbleHandler(new MessageOneParameterMarble(MessageType.USE_MARBLE, 0, new WhiteMarble())));
         String expectedMessage = "You can't do this operation at this moment";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
+        cg.update(v, new MessageOneParameterMarble(MessageType.USE_MARBLE, 0, new WhiteMarble()));
     }
 
     /**
@@ -576,18 +609,20 @@ public class GameManagerTest {
      * this test tries to white conversion in wrong state
      */
     @Test
-    void whiteConversionWrongState() throws AlreadyTakenNicknameException {
+    void whiteConversionWrongState() throws WrongParametersException, IllegalStateException, FullGameException {
 
         ControllerGame cg = new ControllerGame();
-        View v = new VirtualView();
-        GameManager gm = new GameManager(1, cg);
-        gm.createPlayer(v, "Daniele");
+        VirtualView v = new VirtualView();
+        v.setNickName("D");
+        cg.addView(v);
+        cg.newGame(new MessageOneParameterInt(MessageType.NUM_PLAYERS, 0, 1));
 
         IllegalStateException thrown =
-                assertThrows(IllegalStateException.class, () -> gm.whiteConversionCardHandler(1));
+                assertThrows(IllegalStateException.class, () -> cg.whiteConversionCardHandler(new MessageOneParameterInt(MessageType.WHITE_CONVERSION_CARD, 0, 1)));
         String expectedMessage = "You can't do this operation at this moment";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
+        cg.update(v, new MessageOneParameterInt(MessageType.WHITE_CONVERSION_CARD, 0, 1));
     }
 
     /**
@@ -646,18 +681,20 @@ public class GameManagerTest {
      * this test tries to switch depots in wrong state
      */
     @Test
-    void switchDepotWrongState() throws AlreadyTakenNicknameException {
+    void switchDepotWrongState() throws FullGameException, WrongParametersException, IllegalStateException {
 
         ControllerGame cg = new ControllerGame();
-        View v = new VirtualView();
-        GameManager gm = new GameManager(1, cg);
-        gm.createPlayer(v, "Daniele");
+        VirtualView v = new VirtualView();
+        v.setNickName("D");
+        cg.addView(v);
+        cg.newGame(new MessageOneParameterInt(MessageType.NUM_PLAYERS, 0, 1));
 
         IllegalStateException thrown =
-                assertThrows(IllegalStateException.class, () -> gm.switchHandler(1, 2));
+                assertThrows(IllegalStateException.class, () -> cg.switchHandler(new MessageTwoParameterInt(MessageType.SWITCH_DEPOT, 0, 1, 2)));
         String expectedMessage = "You can't do this operation at this moment";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
+        cg.update(v, new MessageTwoParameterInt(MessageType.SWITCH_DEPOT, 0, 1, 2));
     }
 
     /**
@@ -704,19 +741,20 @@ public class GameManagerTest {
      * this test tries to development card power with wrong parameters
      */
     @Test
-    void cardPowerWrongParameters() throws AlreadyTakenNicknameException{
+    void cardPowerWrongParameters() throws FullGameException, WrongParametersException, IllegalStateException {
 
         ControllerGame cg = new ControllerGame();
-        View v = new VirtualView();
-        GameManager gm = new GameManager(1, cg);
-        gm.createPlayer(v, "Daniele");
-        gm.setCurrentState(new FirstActionState());
+        VirtualView v = new VirtualView();
+        v.setNickName("D");
+        cg.addView(v);
+        cg.newGame(new MessageOneParameterInt(MessageType.NUM_PLAYERS, 0, 1));
 
         WrongParametersException thrown =
-                assertThrows(WrongParametersException.class, () -> gm.developmentCardPowerHandler(4, 3));
+                assertThrows(WrongParametersException.class, () -> cg.developmentCardPowerHandler(new MessageTwoParameterInt(MessageType.DEVELOPMENT_CARD_POWER, 0, 4, 3)));
         String expectedMessage = "You have inserted wrong parameters";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
+        cg.update(v, new MessageTwoParameterInt(MessageType.DEVELOPMENT_CARD_POWER, 0, 4, 3));
     }
 
     /**
@@ -729,11 +767,32 @@ public class GameManagerTest {
         View v = new VirtualView();
         GameManager gm = new GameManager(1, cg);
         gm.createPlayer(v, "Daniele");
-        gm.setCurrentState(new FirstActionState());
+        gm.setCurrentState(new ActivateProductionState());
+
 
         NoSuchProductionPowerException thrown =
                 assertThrows(NoSuchProductionPowerException.class, () -> gm.developmentCardPowerHandler(1, 1));
         String expectedMessage = "You don't have any card to activate this power";
+        String actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    /**
+     * this test tries to use development card power twice
+     */
+    @Test
+    void cardPowerTwice() throws AlreadyTakenNicknameException{
+
+        ControllerGame cg = new ControllerGame();
+        View v = new VirtualView();
+        GameManager gm = new GameManager(1, cg);
+        gm.createPlayer(v, "Daniele");
+        gm.setCurrentState(new ActivateProductionState());
+        gm.getCurrentState().addDevelopmentCardSlot(1);
+
+        AlreadyUsedProductionPowerException thrown =
+                assertThrows(AlreadyUsedProductionPowerException.class, () -> gm.developmentCardPowerHandler(1, 1));
+        String expectedMessage = "You already used this production power";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
@@ -761,20 +820,43 @@ public class GameManagerTest {
      * this test tries to basic power with wrong parameters
      */
     @Test
-    void basicPowerWrongParameters() throws AlreadyTakenNicknameException{
+    void basicPowerWrongParameters() throws FullGameException, WrongParametersException, IllegalStateException {
+
+        ControllerGame cg = new ControllerGame();
+        VirtualView v = new VirtualView();
+        v.setNickName("D");
+        cg.addView(v);
+        cg.newGame(new MessageOneParameterInt(MessageType.NUM_PLAYERS, 0, 1));
+
+        WrongParametersException thrown =
+                assertThrows(WrongParametersException.class, () -> cg.basicPowerHandler(new MessageThreeResourceOneInt(MessageType.BASIC_POWER, 0, Resource.SHIELD, Resource.STONE, Resource.COIN, 2)));
+        String expectedMessage = "You have inserted wrong parameters";
+        String actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+        cg.update(v, new MessageThreeResourceOneInt(MessageType.BASIC_POWER, 0, Resource.SHIELD, Resource.STONE, Resource.COIN, 2));
+    }
+
+    /**
+     * this test tries to use basic power twice
+     */
+    @Test
+    void basicPowerTwice() throws AlreadyTakenNicknameException {
 
         ControllerGame cg = new ControllerGame();
         View v = new VirtualView();
         GameManager gm = new GameManager(1, cg);
         gm.createPlayer(v, "Daniele");
         gm.setCurrentState(new ActivateProductionState());
+        gm.getCurrentState().setBasicPower();
 
-        WrongParametersException thrown =
-                assertThrows(WrongParametersException.class, () -> gm.basicPowerHandler(Resource.SHIELD, Resource.STONE, Resource.COIN, 2));
-        String expectedMessage = "You have inserted wrong parameters";
+        AlreadyUsedProductionPowerException thrown =
+                assertThrows(AlreadyUsedProductionPowerException.class, () -> gm.basicPowerHandler(Resource.SHIELD, Resource.STONE, Resource.COIN, 0));
+        String expectedMessage = "You already used this production power";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
+
     }
+
 
     /**
      * this test tries to leader card power in wrong state
@@ -799,19 +881,20 @@ public class GameManagerTest {
      * this test tries to leader card power with wrong parameters
      */
     @Test
-    void leaderPowerWrongParameters() throws AlreadyTakenNicknameException{
+    void leaderPowerWrongParameters() throws FullGameException, WrongParametersException, IllegalStateException {
 
         ControllerGame cg = new ControllerGame();
-        View v = new VirtualView();
-        GameManager gm = new GameManager(1, cg);
-        gm.createPlayer(v, "Daniele");
-        gm.setCurrentState(new FirstActionState());
+        VirtualView v = new VirtualView();
+        v.setNickName("D");
+        cg.addView(v);
+        cg.newGame(new MessageOneParameterInt(MessageType.NUM_PLAYERS, 0, 1));
 
         WrongParametersException thrown =
-                assertThrows(WrongParametersException.class, () -> gm.leaderCardPowerHandler(4, Resource.COIN, 3));
+                assertThrows(WrongParametersException.class, () -> cg.leaderCardPowerHandler(new MessageOneResourceTwoInt(MessageType.LEADER_CARD_POWER, 0, Resource.COIN, 4, 3)));
         String expectedMessage = "You have inserted wrong parameters";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
+        cg.update(v, new MessageOneResourceTwoInt(MessageType.LEADER_CARD_POWER, 0, Resource.COIN, 4, 3));
     }
 
     /**
@@ -841,22 +924,51 @@ public class GameManagerTest {
     }
 
     /**
-     * this test tries to end production in wrong state
+     * this test tries to leader card power twice
      */
     @Test
-    void endProductionWrongState() throws AlreadyTakenNicknameException {
+    void leaderPowerTwice() throws AlreadyTakenNicknameException, IllegalStateException {
 
         ControllerGame cg = new ControllerGame();
         View v = new VirtualView();
         GameManager gm = new GameManager(1, cg);
         gm.createPlayer(v, "Daniele");
-        gm.setCurrentState(new EndTurnState());
+        ArrayList<LeaderCard> leaderCards = new ArrayList<>();
+        leaderCards.add((LeaderCard) CardMapCLI.getCard(49));
+        leaderCards.add((LeaderCard) CardMapCLI.getCard(57));
+        leaderCards.add((LeaderCard) CardMapCLI.getCard(60));
+        leaderCards.add((LeaderCard) CardMapCLI.getCard(61));
+        gm.getControllerGame().startGame();
+        gm.leaderCardHandler(0, 49, 60, leaderCards);
+        gm.setCurrentState(new ActivateProductionState());
+        gm.getCurrentState().addLeaderCard(1);
+
+        AlreadyUsedProductionPowerException thrown =
+                assertThrows(AlreadyUsedProductionPowerException.class, () -> gm.leaderCardPowerHandler(1, Resource.COIN, 1));
+        String expectedMessage = "You already used this production power";
+        String actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+
+    }
+
+    /**
+     * this test tries to end production in wrong state
+     */
+    @Test
+    void endProductionWrongState() throws WrongParametersException, IllegalStateException, FullGameException {
+
+        ControllerGame cg = new ControllerGame();
+        VirtualView v = new VirtualView();
+        v.setNickName("D");
+        cg.addView(v);
+        cg.newGame(new MessageOneParameterInt(MessageType.NUM_PLAYERS, 0, 1));
 
         IllegalStateException thrown =
-                assertThrows(IllegalStateException.class, () -> gm.endProductionHandler());
+                assertThrows(IllegalStateException.class, () -> cg.endProductionHandler(new Message(MessageType.END_PRODUCTION, 0)));
         String expectedMessage = "You can't do this operation at this moment";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
+        cg.update(v, new Message(MessageType.END_PRODUCTION, 0));
     }
 
     /**
@@ -877,4 +989,192 @@ public class GameManagerTest {
         assertTrue(gm.getCurrentState().isRightState(GameStates.END_TURN_STATE));
     }
 
+    /**
+     * this test tries to activate LeaderCard with wrong parameters
+     */
+    @Test
+    void activateLeaderCardWrongParameters() throws FullGameException, WrongParametersException, IllegalStateException {
+
+        ControllerGame cg = new ControllerGame();
+        VirtualView v = new VirtualView();
+        v.setNickName("D");
+        cg.addView(v);
+        cg.newGame(new MessageOneParameterInt(MessageType.NUM_PLAYERS, 0, 1));
+
+        WrongParametersException thrown =
+                assertThrows(WrongParametersException.class, () -> cg.leaderActivationHandler(new MessageOneParameterInt(MessageType.LEADER_CARD_ACTIVATION, 0, 3)));
+        String expectedMessage = "You have inserted wrong parameters";
+        String actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+        cg.update(v, new MessageOneParameterInt(MessageType.LEADER_CARD_ACTIVATION, 0, 3));
+    }
+
+    /**
+     * this test tries to activate LeaderCard during wrong state of game
+     */
+    @Test
+    void activateLeaderCardWrongState() throws AlreadyTakenNicknameException {
+
+        ControllerGame cg = new ControllerGame();
+        View v = new VirtualView();
+        GameManager gm = new GameManager(1, cg);
+        gm.createPlayer(v, "Daniele");
+        gm.setCurrentState(new TakeMarbleState());
+
+        IllegalStateException thrown =
+                assertThrows(IllegalStateException.class, () -> gm.leaderActivationHandler(1));
+        String expectedMessage = "You can't do this operation at this moment";
+        String actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    /**
+     * this test verifies if state don't change after leader activation in FirstActionState
+     */
+    @Test
+    void leaderActivationFirstAction()
+            throws AlreadyTakenNicknameException, WrongParametersException, IllegalStateException, InsufficientCardsException, AlreadyDiscardLeaderCardException, InsufficientResourceException, ActiveLeaderCardException {
+
+        ControllerGame cg = new ControllerGame();
+        View v = new VirtualView();
+        GameManager gm = new GameManager(1, cg);
+        gm.createPlayer(v, "Daniele");
+
+        assertTrue(gm.getCurrentState().isRightState(GameStates.FIRST_ACTION_STATE));
+        gm.leaderActivationHandler(0);
+        assertTrue(gm.getCurrentState().isRightState(GameStates.FIRST_ACTION_STATE));
+    }
+
+    /**
+     * this test verifies if state don't change after leader activation in EndTurnState
+     */
+    @Test
+    void leaderActivationEndTurn()
+            throws AlreadyTakenNicknameException, IllegalStateException, FullGameException, WrongParametersException {
+
+        ControllerGame cg = new ControllerGame();
+        VirtualView v = new VirtualView();
+        cg.addView(v);
+        v.setNickName("Daniele");
+        GameManager gm = new GameManager(1, cg);
+        gm.createPlayer(v, "Daniele");
+        cg.newGame(new MessageOneParameterInt(MessageType.NUM_PLAYERS, 0, 1));
+
+        ArrayList<LeaderCard> leaderCards = new ArrayList<>();
+        leaderCards.add((LeaderCard) CardMapCLI.getCard(49));
+        leaderCards.add((LeaderCard) CardMapCLI.getCard(57));
+        leaderCards.add((LeaderCard) CardMapCLI.getCard(60));
+        leaderCards.add((LeaderCard) CardMapCLI.getCard(61));
+
+        gm.leaderCardHandler(0, 57, 60, leaderCards);
+        gm.setCurrentState(new EndTurnState());
+
+        assertTrue(gm.getCurrentState().isRightState(GameStates.END_TURN_STATE));
+        InsufficientCardsException thrown =
+                assertThrows(InsufficientCardsException.class, () -> gm.leaderActivationHandler(1));
+        String expectedMessage = "You don't have enough cards to do this operation";
+        String actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+        assertTrue(gm.getCurrentState().isRightState(GameStates.END_TURN_STATE));
+    }
+
+    /**
+     * this test tries to discard leader card with wrong parameters
+     */
+    @Test
+    void discardLeaderWrongParameters() throws FullGameException, WrongParametersException, IllegalStateException, AlreadyDiscardLeaderCardException, ActiveLeaderCardException {
+
+        ControllerGame cg = new ControllerGame();
+        VirtualView v = new VirtualView();
+        v.setNickName("D");
+        cg.addView(v);
+        cg.newGame(new MessageOneParameterInt(MessageType.NUM_PLAYERS, 0, 1));
+
+        WrongParametersException thrown =
+                assertThrows(WrongParametersException.class, () -> cg.leaderDiscardHandler(new MessageOneParameterInt(MessageType.LEADER_CARD_DISCARD, 0 ,0)));
+        String expectedMessage = "You have inserted wrong parameters";
+        String actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+        cg.update(v, new MessageOneParameterInt(MessageType.LEADER_CARD_DISCARD, 0 ,0));
+    }
+
+    /**
+     * this test tries to discard LeaderCard during wrong state of game
+     */
+    @Test
+    void leaderDiscardWrongState() throws AlreadyTakenNicknameException {
+
+        ControllerGame cg = new ControllerGame();
+        View v = new VirtualView();
+        GameManager gm = new GameManager(1, cg);
+        gm.createPlayer(v, "Daniele");
+        gm.setCurrentState(new TakeMarbleState());
+
+        IllegalStateException thrown =
+                assertThrows(IllegalStateException.class, () -> gm.leaderDiscardHandler(1));
+        String expectedMessage = "You can't do this operation at this moment";
+        String actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    /**
+     * this test verifies the correct discard LeaderCard
+     */
+    @Test
+    void correctLeaderDiscard() throws FullGameException, AlreadyTakenNicknameException, WrongParametersException, IllegalStateException, AlreadyDiscardLeaderCardException, ActiveLeaderCardException {
+
+        ControllerGame cg = new ControllerGame();
+        VirtualView v = new VirtualView();
+        cg.addView(v);
+        v.setNickName("Daniele");
+        GameManager gm = new GameManager(1, cg);
+        gm.createPlayer(v, "Daniele");
+        cg.newGame(new MessageOneParameterInt(MessageType.NUM_PLAYERS, 0, 1));
+
+        ArrayList<LeaderCard> leaderCards = new ArrayList<>();
+        leaderCards.add((LeaderCard) CardMapCLI.getCard(49));
+        leaderCards.add((LeaderCard) CardMapCLI.getCard(57));
+        leaderCards.add((LeaderCard) CardMapCLI.getCard(60));
+        leaderCards.add((LeaderCard) CardMapCLI.getCard(61));
+        gm.leaderCardHandler(0, 57, 60, leaderCards);
+
+        gm.leaderDiscardHandler(1);
+    }
+
+    /**
+     * this test tries to end turn during wrong state of game
+     */
+    @Test
+    void endTurnWrongState() throws IllegalStateException, FullGameException, WrongParametersException {
+
+        ControllerGame cg = new ControllerGame();
+        VirtualView v = new VirtualView();
+        v.setNickName("D");
+        cg.addView(v);
+        cg.newGame(new MessageOneParameterInt(MessageType.NUM_PLAYERS, 0, 1));
+
+        IllegalStateException thrown =
+                assertThrows(IllegalStateException.class, () -> cg.endTurnHandler());
+        String expectedMessage = "You can't do this operation at this moment";
+        String actualMessage = thrown.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+        cg.update(v, new Message(MessageType.END_TURN, 0));
+    }
+
+    /**
+     * this test verifies the correct end turn procedure
+     */
+    @Test
+    void correctEndTurn() throws AlreadyTakenNicknameException, IllegalStateException {
+
+        ControllerGame cg = new ControllerGame();
+        View v = new VirtualView();
+        GameManager gm = new GameManager(1, cg);
+        gm.createPlayer(v, "Daniele");
+        gm.setCurrentState(new EndTurnState());
+
+        assertTrue(gm.getCurrentState().isRightState(GameStates.END_TURN_STATE));
+        gm.endTurnHandler();
+        assertTrue(gm.getCurrentState().isRightState(GameStates.FIRST_ACTION_STATE));
+    }
 }

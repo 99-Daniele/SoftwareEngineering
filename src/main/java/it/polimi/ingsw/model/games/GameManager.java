@@ -468,7 +468,6 @@ public class GameManager {
             game.activateLeaderCard(chosenLeaderCard);
     }
 
-
     /**
      * @param chosenLeaderCard is player's chosen LeaderCard.
      * @throws AlreadyDiscardLeaderCardException if player has not enough DevelopmentCards.
@@ -478,7 +477,7 @@ public class GameManager {
      */
     public void leaderDiscardHandler(int chosenLeaderCard)
             throws ActiveLeaderCardException, AlreadyDiscardLeaderCardException, IllegalStateException, WrongParametersException {
-        if(!InputController.leaderCardChoice(chosenLeaderCard))
+        if(!InputController.leaderCardChoice(chosenLeaderCard) || chosenLeaderCard == 0)
             throw new WrongParametersException();
         if (!currentState.isRightState(GameStates.FIRST_ACTION_STATE) && !currentState.isRightState(GameStates.END_TURN_STATE))
             throw new IllegalStateException();

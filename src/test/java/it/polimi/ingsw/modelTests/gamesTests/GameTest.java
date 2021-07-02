@@ -147,6 +147,7 @@ public class GameTest {
             assertFalse(game.alreadySelectedResource(1));
             assertFalse(game.alreadySelectedResource(2));
             assertFalse(game.alreadySelectedResource(3));
+            assertFalse(game.alreadySelectedResource(4));
             game.firstIncreaseWarehouse(Resource.COIN, 1);
             game.firstIncreaseWarehouse(Resource.COIN, 2);
             game.firstDoubleIncreaseWarehouse(Resource.COIN, Resource.COIN);

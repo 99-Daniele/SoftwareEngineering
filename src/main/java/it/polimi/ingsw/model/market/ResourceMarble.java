@@ -36,10 +36,9 @@ public class ResourceMarble extends Marble {
                 return "GREY";
             case SHIELD:
                 return "BLUE";
-            case SERVANT:
+            default:
                 return "PURPLE";
         }
-        return null;
     }
 
     @Override
@@ -51,10 +50,9 @@ public class ResourceMarble extends Marble {
                 return "G";
             case SHIELD:
                 return "B";
-            case SERVANT:
+            default:
                 return "P";
         }
-        return null;
     }
 
 }

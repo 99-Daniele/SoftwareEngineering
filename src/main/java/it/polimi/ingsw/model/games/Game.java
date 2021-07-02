@@ -126,9 +126,7 @@ public class Game extends Observable implements LightGame{
                 DevelopmentCard card = null;
                 try {
                     card = deck[i][j].getFirstCard();
-                } catch (EmptyDevelopmentCardDeckException e) {
-                    e.printStackTrace();
-                }
+                } catch (EmptyDevelopmentCardDeckException ignored) { }
                 currentDeckCards.add(Objects.requireNonNull(card).getCardID());
             }
         }
@@ -152,9 +150,7 @@ public class Game extends Observable implements LightGame{
             return;
         try {
             players.remove(quitPlayer);
-        }catch (IndexOutOfBoundsException | NullPointerException e){
-            e.printStackTrace();
-        }
+        }catch (IndexOutOfBoundsException | NullPointerException ignored){}
     }
 
     /**

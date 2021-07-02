@@ -159,7 +159,7 @@ public class AdditionalProductionPowerCardTest {
         card.activateCard(w, s, l);
 
         InsufficientResourceException thrown =
-                assertThrows(InsufficientResourceException.class, () -> card.decreaseProductionPowerResources(w, s, 1));
+                assertThrows(InsufficientResourceException.class, () -> card.decreaseProductionPowerResources(w, s, 0));
         String expectedMessage = "You don't have enough resources to do this operation.";
         String actualMessage = thrown.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
