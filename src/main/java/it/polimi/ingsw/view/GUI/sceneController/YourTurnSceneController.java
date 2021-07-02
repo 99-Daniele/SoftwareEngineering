@@ -1953,7 +1953,7 @@ public class YourTurnSceneController {
         SceneController.setDisable("#radiobutActLeader", true);
         SceneController.setDisable("#radiobutDiscardLeader", true);
         SceneController.setDisable("#radiobutEndProd", false);
-        SceneController.setDisable("#radiobutOtherPlayboard", false);
+        SceneController.setDisable("#radiobutOtherPlayboard", true);
         SceneController.setDisable("#radiobutCheat", true);
     }
 
