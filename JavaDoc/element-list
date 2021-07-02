@@ -14,10 +14,11 @@ it.polimi.ingsw.model.player
 it.polimi.ingsw.model.player.depots
 it.polimi.ingsw.model.resourceContainers
 it.polimi.ingsw.modelTests.actionsTests
-it.polimi.ingsw.modelTests.depotsTests
+it.polimi.ingsw.modelTests.cardTests
 it.polimi.ingsw.modelTests.cardTests.developmentCardsTests
-it.polimi.ingsw.modelTests.gamesTests
 it.polimi.ingsw.modelTests.cardTests.leaderCardsTests
+it.polimi.ingsw.modelTests.depotsTests
+it.polimi.ingsw.modelTests.gamesTests
 it.polimi.ingsw.modelTests.marketTests
 it.polimi.ingsw.modelTests.playersTests
 it.polimi.ingsw.modelTests.resourceContainersTests
