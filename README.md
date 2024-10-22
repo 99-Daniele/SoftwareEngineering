@@ -56,7 +56,7 @@ Avviare CLI o GUI con i seguenti comandi
 | java -jar shade/AM22.jar  --devgui / -dg | GUI
 | java -jar shade/AM22.jar  --devgui / -dg  --hostname / -h  "hostname"  --port / -p  xyzw | |
 
-###### AUTORI
+## Autori
 
 [Yongzhou Chen](https://github.com/chenyongzhouking)
 
