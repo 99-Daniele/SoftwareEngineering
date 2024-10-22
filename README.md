@@ -58,5 +58,7 @@ Avviare CLI o GUI con i seguenti comandi
 
 Autori
 [Yongzhou Chen](https://github.com/chenyongzhouking)
+
 [Daniele Cicala](https://github.com/99-Daniele)
+
 [Daniele Civati](https://github.com/Civati)
