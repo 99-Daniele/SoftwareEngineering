@@ -1,34 +1,33 @@
-# Prova Finale di Ingegneria del Software - AA 2020-2021
-![alt text](src/main/resources/photos/logo.png)
+# Software Engineering Project
 
-Scopo del progetto è quello di implementare il gioco da tavola "Maestri del Rinascimento" seguendo il pattern architetturale Model View Controller per la realizzazione del modello secondo il paradigma di programmazione orientato agli oggetti. 
-La rete è stata gestita con l'utilizzo delle socket.
+## Introduction
 
-Interazione e gameplay: linea di comando (CLI) e grafica (GUI).
-## Funzionalità
+This project involves the development of an application that simulates the board game "Maestri del Rinascimento." 
 
-- Regole Complete
+It utilizes the Java Model-View-Controller (MVC) pattern and adheres to Object-Oriented Programming principles.
+
+Additionally, a Client-Server architecture is implemented using sockets, enabling efficient communication between components.
+
+User interaction is facilitated through both a Command Line Interface (CLI) and a Graphical User Interface (GUI), providing flexibility and enhancing the overall user experience.
+
+## Features
+
 - CLI
 - GUI
 - Socket
-- 1 FA (Funzionalità Avanzate):
-    - __Partite multiple:__ Realizzare il server in modo che possa gestire più partite contemporaneamente,
-                            dopo la procedura di creazione della prima partita, i giocatori che accederanno al server verranno gestiti
-                            in una sala d’attesa per creare una seconda partita e così via.
-                            
-##### SHELL
- 
-La CLI funziona con Shell Linux e iOS. Per Windows non funziona perché non si vedono i colori.                          
-## Esecuzione 
-#### SERVER
+- Multiple games: Server can handle multiple games at the same time
+
+## Usage
+
+#### SERVER CREATION
 
 | JAR COMMAND | DESCRIPTION 
 | ------- | --- 
-| java -jar shade/AM22.jar  --server / -s | create server on default port 12460
-| java -jar shade/AM22.jar  --server / -s  --port / -p  xyzw | create server on port xyzw
+| java -jar MasterOfRenaissance.jar  --server / -s | create server on default port 12460
+| java -jar MasterOfRenaissance.jar  --server / -s  --port / -p  xyzw | create server on port xyzw
 
 
-#### CLI
+#### CLIENT CREATION WITH CLI
 
 | JAR COMMAND | DESCRIPTION
 | ------- | --- 
@@ -36,18 +35,20 @@ La CLI funziona con Shell Linux e iOS. Per Windows non funziona perché non si v
 | java -jar shade/AM22.jar  --cli / -c  --hostname / -h  "hostname"  --port / -p  xyzw | launch CLI on server "hostname" on port xyzw
 
 
-#### GUI
+#### CLIENT CREATION WITH GUI
 
 | JAR COMMAND       | DESCRIPTION   
 | ------- | --- 
 | java -jar shade/AM22.jar  --gui / -g | launch GUI without any connection info
 | java -jar shade/AM22.jar  --gui / -g  --hostname / -h  "hostname"  --port / -p  xyzw | launch GUI on server "hostname" on port xyzw
 
-##### CHEAT
+#### CLIENT CREATION WITH CHEATS
 
-Permette al giocatore di sostituire le due carte Leader in possesso con due carte WhiteMarbleConversoinCard già attive,
-tramite un comando "-cheat" per la CLI o il bottone "CHEAT" per la GUI
-Avviare CLI o GUI con i seguenti comandi
+When using this command the created game allows user to use cheats.
+
+To use cheat user has to type "-cheat" on CLI or click on "CHEAT" button on GUI.
+
+Activating cheats will substitute the two possesed Leader cards with two WhiteMarbleConversion cards already active.
 
 | JAR COMMAND | INTERFACE
 | ------- | ---
@@ -56,7 +57,7 @@ Avviare CLI o GUI con i seguenti comandi
 | java -jar shade/AM22.jar  --devgui / -dg | GUI
 | java -jar shade/AM22.jar  --devgui / -dg  --hostname / -h  "hostname"  --port / -p  xyzw | |
 
-## Autori
+## Authors
 
 [Yongzhou Chen](https://github.com/chenyongzhouking)
 
